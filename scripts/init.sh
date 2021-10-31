@@ -1,6 +1,8 @@
-xset r rate 250 &
-variety &
-# nitrogen --restore &
+xset r rate 250 &                                   # Set keyboard repeat rate
+
+# Start applications
 picom --experimental-backends &
-wal -i ".wallpapers/current.jpg"
 dropbox &
+variety &
+
+wal -i ".wallpapers/current.jpg"
