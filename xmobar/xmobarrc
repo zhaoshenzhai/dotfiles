@@ -1,0 +1,24 @@
+Config
+{
+    font = "xft:Mono:weight=bold:pixelsize=17:antialias=true:hinting=true",
+    additionalFonts = 
+        [
+            "xft:Mononoki Nerd Font:pixelsize=11:antialias=true:hinting=true"
+        ],
+    bgColor = "#1E2127",
+    fgColor = "#D8DEE9",
+    alpha = 230,
+    position = Top,
+    lowerOnStart = True,
+    commands = 
+        [
+            Run Cpu ["-L","3","-H","50","-l","#D8DEE9","-h","red"] 10,
+            Run Memory ["-t","Mem: <usedratio>%"] 10,
+            Run Swap [] 10,
+            Run BatteryP ["BAT0"] ["-t", "Battery: <left>%"] 50,
+    		Run Date "%a %b %d %Y %H:%M:%S" "date" 10
+        ],
+    sepChar = "%",
+    alignSep = "}{",
+    template = " }%date%{ %cpu% | %memory% | %swap% | %battery%"
+}

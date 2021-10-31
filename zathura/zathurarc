@@ -1,0 +1,21 @@
+set default-fg              "#A6B5C5"
+
+set statusbar-bg            "#1A2128"
+set statusbar-fg            "#13AFAF"
+
+set inputbar-bg             "#141A1F"
+set inputbar-fg             "#A6B5C5"
+
+set page-padding 0
+
+set guioptions none
+
+set dbus-service true
+set synctex true
+set synctex-editor-command "gvim --servername GVIM --remote +%{line} %{input}"
+
+
+set recolor true
+set default-bg rgba(0,0,0,0.5)
+set recolor-lightcolor rgba(0,0,0,0.5)
+set recolor-darkcolor rgba(248, 248, 255, 0.2)

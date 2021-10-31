@@ -1,0 +1,248 @@
+#### Preamble ####
+global !p
+def math():
+	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
+def comment(): 
+	return vim.eval('vimtex#syntax#in_comment()') == '1'
+def env(name):
+	[x,y] = vim.eval("vimtex#env#is_inside('" + name + "')") 
+	return x != '0' and y != '0'
+endglobal
+#### Preamble ####
+
+###########################################################
+
+#### General ####
+snippet { "braces" Ait
+\{$1}$0
+endsnippet
+#### General ####
+
+###########################################################
+
+#### Environments ####
+snippet beg "begin + end environmenet" b
+\begin{$1}
+	$0
+\end{$1}
+endsnippet
+
+snippet eq "begin unnumbered equation" b
+\begin{equation*}
+	$0
+\end{equation*}
+endsnippet
+
+snippet eqn "begin numbered equation" b
+\begin{equation}
+	$0
+\end{equation}
+endsnippet
+
+snippet thm "begin theorem" b
+\begin{theorem}
+	$0
+\end{theorem}
+endsnippet
+
+snippet cor "begin corollary" b
+\begin{corollary}
+	$0
+\end{corollary}
+endsnippet
+
+snippet lem "begin lemma" b
+\begin{lemma}
+	$0
+\end{lemma}
+endsnippet
+
+snippet prp "begin proposition" b
+\begin{proposition}
+	$0
+\end{proposition}
+endsnippet
+
+snippet pro "begin proof" b
+\begin{proof}
+	$0
+\end{proof}
+endsnippet
+#### Environments ####
+
+###########################################################
+
+#### Math ####
+snippet $ "enter math mode" Ai
+\$$1\$$0
+endsnippet
+
+context "math()"
+snippet ( "()" iA
+\l($1\r)$0
+endsnippet
+
+context "math()"
+snippet [ "[]" iA
+\l[$1\r]$0
+endsnippet
+
+context "math()"
+snippet { "{}" iA
+\l\{$1\r\}$0
+endsnippet
+
+context "math()"
+snippet | "||" iA
+\l|$1\r|$0
+endsnippet
+
+context "math()"
+snippet no "||||" iA
+\l\|$1\r\|$0
+endsnippet
+
+context "math()"
+snippet an "<>" iA
+\l\langle$1\r\rangle$0
+endsnippet
+
+context "math()"
+snippet fr "fraction" Ai
+\frac{$1}{$2}$0
+endsnippet
+
+context "math()"
+snippet der "derivative" Ai
+\frac{\d ${1:f}}{\d ${2:x}}$0
+endsnippet
+
+context "math()"
+snippet par "partial derivative" Ai
+\frac{\partial $1}{\partial $2}$0
+endsnippet
+
+context "math()"
+snippet int "integral" Ai
+\int_{$1}^{$2}$4\d ${3:x}$0
+endsnippet
+
+context "math()"
+snippet lim "limit" Ai
+\lim\limits_{${1:n}\to${2:\infty}}$0
+endsnippet
+
+context "math()"
+snippet sum "sum" Ai
+\sum\limits_{$1=${2:0}}^{${3:\infty}}$0
+endsnippet
+
+context "math()"
+snippet prod "product" Ai
+\prod\limits_{$1=${2:0}}^{${3:\infty}}$0
+endsnippet
+
+context "math()"
+snippet incup "big natural indexed union" Ai
+\bigcup\limits_{${1:i}=${2:0}}^{${3:\infty}}$0
+endsnippet
+
+context "math()"
+snippet iacup "big arbirary indexed union" Ai
+\bigcup\limits_{${1:\alpha}\in\mathcal{A}}$0
+endsnippet
+
+context "math()"
+snippet bcup "big union" Ai
+\bigcup
+endsnippet
+
+context "math()"
+snippet incap "big natural indexed intersection" Ai
+\bigcap\limits_{${1:i}=${2:0}}^{${3:\infty}}$0
+endsnippet
+
+context "math()"
+snippet iacap "big arbirary indexed intersection" Ai
+\bigcap\limits_{${1:\alpha}\in\mathcal{A}}$0
+endsnippet
+
+context "math()"
+snippet bcap "big intersection" Ai
+\bigcap
+endsnippet
+
+context "math()"
+snippet mcal "mathcal" Ai
+\mathcal{$1}$0
+endsnippet
+
+context "math()"
+snippet mscr "mathscr" Ai
+\mathscr{$1}$0
+endsnippet
+
+priority 100
+context "math()"
+snippet -> "right arrow" Ai
+\to
+endsnippet
+
+priority 100
+context "math()"
+snippet => "right double arrow" Ai
+\Rightarrow
+endsnippet
+
+priority 200
+context "math()"
+snippet <-> "left right arrow" Ai
+\leftrightarrow
+endsnippet
+
+priority 200
+context "math()"
+snippet <=> "Left right double arrow" Ai
+\Leftrightarrow
+endsnippet
+
+context "math()"
+snippet ~ "tilde" Ai
+\sim
+endsnippet
+
+context "math()"
+snippet A "alpha" i
+\alpha
+endsnippet
+
+context "math()"
+snippet B "beta" i
+\beta
+endsnippet
+
+context "math()"
+snippet G "gamma" i
+\gamma
+endsnippet
+
+context "math()"
+snippet D "delta" i
+\delta
+endsnippet
+
+context "math()"
+snippet E "epsilon" i
+\epsilon
+endsnippet
+
+context "math()"
+snippet P "pi" i
+\pi
+endsnippet
+
+context "math()"
+snippet N "eta" i
+\eta
+endsnippet
+#### Math ####
