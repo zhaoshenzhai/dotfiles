@@ -30,6 +30,7 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'sbdchd/neoformat'                                             " formats code
     Plug 'rakr/vim-one'                                                 " one color scheme
     Plug 'sainnhe/everforest'                                           " everforest color scheme
+    Plug 'dylanaraps/wal.vim'                                           " dynamic colorscheme with wal
     Plug 'easymotion/vim-easymotion'                                    " go to any word quickly
     Plug 'ncm2/ncm2'                                                    " code completion
     Plug 'roxma/nvim-yarp'                                              " framework required for ncm2
@@ -44,9 +45,7 @@ call plug#begin('~/.config/nvim/plugged')
 call plug#end()
 
 " Color scheme
-colorscheme everforest
-set background=dark
-set termguicolors
+colorscheme wal
 highlight Normal ctermbg=NONE guibg=NONE
 highlight NonText ctermbg=NONE guibg=NONE
 highlight LineNr ctermbg=NONE guibg=NONE
