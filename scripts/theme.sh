@@ -1,14 +1,37 @@
-#!/bin/bash
+old_time=$(date -r /home/zhao/.config/scripts/scriptFiles/theme_fixed)
 
-export PATH="$PATH:$HOME/bin"
-export PATH="/home/zhao/.local/bin:$PATH"
-export PATH="/home/zhao/.config/scripts:$PATH"
-export PATH=/usr/zhao/sbin:/usr/zhao/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin;
+run_variety() {
+    if [ $fixed -eq 0 ]; then
+        variety -n
+    fi
+}
 
-/usr/bin/variety -n &
+run_wal() {
+    if [ $fixed -eq 0 ]; then
+        wallpaper_path=$(<~/.config/variety/wallpaper/wallpaper.jpg.txt)
+    else
+        wallpaper_path="/home/zhao/.wallpapers/"
+    fi
 
-sleep 2s
+    wal -i $wallpaper_path -q
+}
 
-wallpaper_path=$(<~/.config/variety/wallpaper/wallpaper.jpg.txt)
+while true; do
+    fixed=$(</home/zhao/.config/scripts/scriptFiles/theme_fixed)
+    run_variety
+    sleep 2s
+    run_wal
 
-/home/zhao/.local/bin/wal -i $wallpaper_path --backend wal
+    new_time=$old_time
+    count=0
+    while [ "$new_time" = "$old_time" ]; do
+        sleep 1
+        echo "$count"
+        new_time="$(date -r /home/zhao/.config/scripts/scriptFiles/theme_fixed)"
+        ((count=count+1))
+        if [ "$count" -ge 18 ]; then
+            new_time=0
+        fi
+    done
+    old_time=$(date -r /home/zhao/.config/scripts/scriptFiles/theme_fixed)
+done

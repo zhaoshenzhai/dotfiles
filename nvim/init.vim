@@ -17,7 +17,7 @@ set linebreak                                                           " wraps 
 set updatetime=100                                                      " sets update time for git-gutter
 set clipboard=unnamedplus                                               " uses system clipboard
 set ignorecase                                                          " case insensitive when typing commands
-set relativenumber                                                      " relative line numbers
+"set relativenumber                                                      " relative line numbers
 
 " Pluggins
 call plug#begin('~/.config/nvim/plugged')
@@ -45,7 +45,7 @@ call plug#begin('~/.config/nvim/plugged')
 call plug#end()
 
 " Color scheme
-colorscheme wal
+colorscheme everforest
 highlight Normal ctermbg=NONE guibg=NONE
 highlight NonText ctermbg=NONE guibg=NONE
 highlight LineNr ctermbg=NONE guibg=NONE

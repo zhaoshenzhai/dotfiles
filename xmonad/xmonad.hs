@@ -105,7 +105,7 @@ myManageHook = composeAll
         resource  =? "kdesktop"       --> doIgnore
     ]
 myStartupHook = do
-    spawnOnce "~/.config/scripts/init.sh"
+    spawnOnce "~/.config/scripts/init.sh &"
 ---------------------------------------------------------------------------------------------------------------------
 main = do
     xmproc <- spawnPipe "xmobar -x 0 /home/zhao/.config/xmobar/xmobarrc"
