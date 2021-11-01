@@ -29,7 +29,7 @@ while true; do
         echo "$count"
         new_time="$(date -r /home/zhao/.config/scripts/scriptFiles/theme_fixed)"
         ((count=count+1))
-        if [ "$count" -ge 18 ]; then
+        if [ "$count" -ge 58 ]; then
             new_time=0
         fi
     done
