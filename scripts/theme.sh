@@ -26,7 +26,6 @@ while true; do
     count=0
     while [ "$new_time" = "$old_time" ]; do
         sleep 1
-        echo "$count"
         new_time="$(date -r /home/zhao/.config/scripts/scriptFiles/theme_fixed)"
         ((count=count+1))
         if [ "$count" -ge 58 ]; then

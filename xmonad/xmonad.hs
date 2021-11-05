@@ -37,7 +37,7 @@ import Graphics.X11.ExtraTypes.XF86
 ---------------------------------------------------------------------------------------------------------------------
 myTerminal                                   = "alacritty"                       :: String
 myBorderWidth                                = 2                                 :: Dimension
-myWindowGap                                  = 20                                :: Integer
+myWindowGap                                  = 0                                 :: Integer
 myModMask                                    = mod1Mask                          :: KeyMask
 myFocusedBorderColor                         = "#ffffff"                         :: String
 myUnFocusedBorderColor                       = "#777777"                         :: String
