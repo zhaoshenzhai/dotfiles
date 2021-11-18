@@ -1,18 +1,18 @@
 Config
 {
-    font = "xft:Mono:weight=bold:pixelsize=17:antialias=true:hinting=true",
+    font = "xft:Courier_Prime:weight=bold:pixelsize=17:antialias=true:hinting=true",
     additionalFonts = 
         [
             "xft:Mononoki Nerd Font:pixelsize=11:antialias=true:hinting=true"
         ],
-    bgColor = "#0f1819",
-    fgColor = "#d1bda9",
-    alpha = 230,
+    bgColor = "#1E2127",
+    fgColor = "#F8F8FF",
+    alpha = 255,
     position = Top,
     lowerOnStart = True,
     commands = 
         [
-            Run Cpu ["-L","3","-H","50","-l","#d1bda9","-h","red"] 10,
+            Run Cpu ["-L","3","-H","50","-l","#F8F8FF","-h","red"] 10,
             Run Memory ["-t","Mem: <usedratio>%"] 10,
             Run Swap [] 10,
             Run BatteryP ["BAT0"] ["-t", "Battery: <left>%"] 50,

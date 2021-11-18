@@ -39,8 +39,8 @@ myTerminal                                   = "alacritty"                      
 myBorderWidth                                = 2                                 :: Dimension
 myWindowGap                                  = 0                                 :: Integer
 myModMask                                    = mod1Mask                          :: KeyMask
-myFocusedBorderColor                         = "#ffffff"                         :: String
-myUnFocusedBorderColor                       = "#777777"                         :: String
+myFocusedBorderColor                         = "#5C6370"                         :: String
+myUnFocusedBorderColor                       = "#1E2127"                         :: String
 myFocusFollowsMouse                          = True                              :: Bool
 myClickJustFocuses                           = False                             :: Bool
 ---------------------------------------------------------------------------------------------------------------------

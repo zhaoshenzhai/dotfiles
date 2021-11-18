@@ -17,6 +17,7 @@ set linebreak                                                           " wraps 
 set updatetime=100                                                      " sets update time for git-gutter
 set clipboard=unnamedplus                                               " uses system clipboard
 set ignorecase                                                          " case insensitive when typing commands
+set noshowmode                                                          " remove default mode display
 
 " Pluggins
 call plug#begin('~/.config/nvim/plugged')
@@ -39,7 +40,8 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }            " python code highlighting
     Plug 'fisadev/vim-isort'                                            " python sort imports
     Plug 'joshdick/onedark.vim'                                         " onedark color scheme
-    Plug 'itchyny/lightline.vim'                                       " lightline
+    Plug 'itchyny/lightline.vim'                                        " lightline
+    Plug 'mhinz/vim-startify'                                           " start screen
 call plug#end()
 
 " Color scheme
@@ -90,7 +92,7 @@ let g:lightline = {
     \ }
 
 " Spell check
-setlocal spell
+setlocal nospell
 set spelllang=en
 nnoremap <silent> <leader>s :set spell!<cr>
 inoremap <silent> <leader>s <C-O>:set spell!<cr>
@@ -102,6 +104,25 @@ map <F3> :tabn<CR>
 
 " Search
 nnoremap <CR> :noh <CR>
+
+" Scroll
+function! ScreenMovement(movement)
+   if &wrap
+      return "g" . a:movement
+   else
+      return a:movement
+   endif
+endfunction
+onoremap <silent> <expr> j ScreenMovement("j")
+onoremap <silent> <expr> k ScreenMovement("k")
+onoremap <silent> <expr> 0 ScreenMovement("0")
+onoremap <silent> <expr> ^ ScreenMovement("^")
+onoremap <silent> <expr> $ ScreenMovement("$")
+nnoremap <silent> <expr> j ScreenMovement("j")
+nnoremap <silent> <expr> k ScreenMovement("k")
+nnoremap <silent> <expr> 0 ScreenMovement("0")
+nnoremap <silent> <expr> ^ ScreenMovement("^")
+nnoremap <silent> <expr> $ ScreenMovement("$")
 
 " Compile and run programs
 autocmd filetype c nnoremap <F5> :w <CR>:!gcc % -o %:r && ./%:r<CR>

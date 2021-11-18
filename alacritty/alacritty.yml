@@ -35,16 +35,16 @@ background_opacity: 1.0
 
 font:
   normal:
-    family: "Mono"
+    family: "Courier Prime"
     style: Regular
   bold:
-    family: "Mono"
+    family: "Courier Prime"
     style: Bold
   italic:
-    family: "Mono"
+    family: "Courier Prime"
     style: Italic
   bold_italic:
-    family: "Mono"
+    family: "Courier Prime"
     style: Bold Italic
 
   # Point size
