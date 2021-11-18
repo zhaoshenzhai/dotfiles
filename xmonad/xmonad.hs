@@ -31,6 +31,7 @@ import XMonad.Actions.Submap(submap)
 import XMonad.Util.Run (spawnPipe)
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.SpawnOnce
+import XMonad.Util.Dmenu
 
 -- Keys
 import Graphics.X11.ExtraTypes.XF86
@@ -65,6 +66,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [
         ((modm, xK_backslash), spawn myTerminal                            ),
         ((modm, xK_Return   ), spawn "dmenu_run"                           ),
+        ((modm, xK_n        ), spawn "alacritty -e nvim"                   ),
+        ((modm, xK_w        ), spawn "alacritty -e google-chrome-stable"   ),
+        ((modm, xK_h        ), spawn "alacritty -e vifm"                   ),
         ((modm, xK_Escape   ), kill                                        ),
         ((modm, xK_f        ), sendMessage NextLayout                      ),
         ((modm, xK_b        ), sendMessage ToggleStruts                    ),
