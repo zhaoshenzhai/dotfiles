@@ -38,7 +38,8 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'uiiaoo/java-syntax.vim'                                       " java code highlighting
     Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }            " python code highlighting
     Plug 'fisadev/vim-isort'                                            " python sort imports
-    Plug 'joshdick/onedark.vim'
+    Plug 'joshdick/onedark.vim'                                         " onedark color scheme
+    Plug 'itchyny/lightline.vim'                                       " lightline
 call plug#end()
 
 " Color scheme

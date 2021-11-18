@@ -16,6 +16,6 @@ set synctex-editor-command "gvim --servername GVIM --remote +%{line} %{input}"
 
 
 set recolor true
-set default-bg rgba(0,0,0,0.5)
-set recolor-lightcolor rgba(0,0,0,0.5)
+set default-bg "#1E2127"
+set recolor-lightcolor "#1E2127"
 set recolor-darkcolor rgba(248, 248, 255, 0.2)
