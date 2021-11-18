@@ -77,8 +77,17 @@ let g:vimtex_quickfix_ignore_filters=[
     \'Dimension too large.',
     \]
 let g:UltiSnipsExpandTrigger="<s-tab>"                                            
-let g:UltiSnipsJumpForwardTrigger="<tab>"                                       
+let g:UltiSnipsJumpForwardTrigger="<tab>"
 map <leader>f <leader>lv
+
+" Lightline
+let g:lightline = {
+    \ 'colorscheme': 'wombat',
+    \ 'active': {
+    \   'right': [ [ 'lineinfo' ],
+    \              [ 'percent' ]]
+    \ },
+    \ }
 
 " Spell check
 setlocal spell
