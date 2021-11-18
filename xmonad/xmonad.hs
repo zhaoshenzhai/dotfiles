@@ -67,6 +67,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_Return   ), spawn "dmenu_run"                           ),
         ((modm, xK_Escape   ), kill                                        ),
         ((modm, xK_f        ), sendMessage NextLayout                      ),
+        ((modm, xK_b        ), sendMessage ToggleStruts                    ),
         ((modm, xK_r        ), refresh                                     ),
         ((modm, xK_Tab      ), windows W.focusDown                         ),
         ((modm, xK_grave    ), windows W.focusUp                           ),
@@ -77,6 +78,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_j        ), sendMessage Shrink                          ),
         ((modm, xK_k        ), sendMessage Expand                          ),
         ((modm, xK_q        ), spawn "xmonad --recompile; xmonad --restart"),
+        ((modm, xK_F1       ), spawn "amixer -q set Master toggle"),
+        ((modm, xK_F2       ), spawn "amixer -q set Master unmute & amixer -q set Master 5%-"),
+        ((modm, xK_F3       ), spawn "amixer -q set Master unmute & amixer -q set Master 5%+"),
 
         ((modm .|. shiftMask, xK_q), io exitSuccess)
     ]

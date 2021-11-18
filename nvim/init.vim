@@ -17,7 +17,6 @@ set linebreak                                                           " wraps 
 set updatetime=100                                                      " sets update time for git-gutter
 set clipboard=unnamedplus                                               " uses system clipboard
 set ignorecase                                                          " case insensitive when typing commands
-"set relativenumber                                                      " relative line numbers
 
 " Pluggins
 call plug#begin('~/.config/nvim/plugged')
@@ -28,9 +27,6 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'kassio/neoterm'                                               " interactive shell
     Plug 'ctrlpvim/ctrlp.vim'                                           " fuzzy search
     Plug 'sbdchd/neoformat'                                             " formats code
-    Plug 'rakr/vim-one'                                                 " one color scheme
-    Plug 'sainnhe/everforest'                                           " everforest color scheme
-    Plug 'dylanaraps/wal.vim'                                           " dynamic colorscheme with wal
     Plug 'easymotion/vim-easymotion'                                    " go to any word quickly
     Plug 'ncm2/ncm2'                                                    " code completion
     Plug 'roxma/nvim-yarp'                                              " framework required for ncm2
@@ -42,10 +38,11 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'uiiaoo/java-syntax.vim'                                       " java code highlighting
     Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }            " python code highlighting
     Plug 'fisadev/vim-isort'                                            " python sort imports
+    Plug 'joshdick/onedark.vim'
 call plug#end()
 
 " Color scheme
-colorscheme everforest
+colorscheme onedark
 highlight Normal ctermbg=NONE guibg=NONE
 highlight NonText ctermbg=NONE guibg=NONE
 highlight LineNr ctermbg=NONE guibg=NONE
@@ -93,6 +90,8 @@ inoremap <leader>c <c-g>u<Esc>[s1z=`]a<c-g>u
 map <F2> :tabp<CR>
 map <F3> :tabn<CR>
 
+" Search
+nnoremap <CR> :noh <CR>
 
 " Compile and run programs
 autocmd filetype c nnoremap <F5> :w <CR>:!gcc % -o %:r && ./%:r<CR>
