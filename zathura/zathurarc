@@ -6,18 +6,20 @@ set statusbar-fg            "#13AFAF"
 set inputbar-bg             "#141A1F"
 set inputbar-fg             "#A6B5C5"
 
-set highlight-active-color "#1E2127"
-set highlight-transparency 0
+set highlight-active-color "#F8F8FF"
+set highlight-color "#A8A8AA"
+set highlight-transparency 0.5
+
+set recolor true
+set recolor-lightcolor "#1E2127"
+set recolor-darkcolor rgba(248, 248, 255, 0.2)
 
 set page-padding 0
-
 set guioptions none
 
 set dbus-service true
 set synctex true
 set synctex-editor-command "gvim --servername GVIM --remote +%{line} %{input}"
 
+map = feedkeys "+"
 
-set recolor true
-set recolor-lightcolor "#1E2127"
-set recolor-darkcolor rgba(248, 248, 255, 0.2)
