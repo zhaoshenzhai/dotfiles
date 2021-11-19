@@ -43,7 +43,7 @@
     "path_aliasFile": "",
     "path_shellCommand": "~/.cache/.dmenuEextended_shellCommand.sh",
     "prompt": "Open:",
-    "scan_hidden_folders": false,
+    "scan_hidden_folders": true,
     "terminal": "alacritty",
     "terminal_editor": "nvim",
     "valid_extensions": [
@@ -56,6 +56,7 @@
         "gif",
         "php",
         "tex",
+        "yml",
         "odf",
         "ods",
         "avi",
