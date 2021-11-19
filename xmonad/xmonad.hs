@@ -68,9 +68,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_n        ), spawn "alacritty -e nvim"),
         ((modm, xK_f        ), spawn "alacritty -e vifm"),
 
-        ((modm, xK_Return                 ), spawn "dmenu_extended_run"                                   ),
-        ((modm, xK_w                      ), spawn "dmenu_extended_run \"google-chrome-stable\""          ),
-        ((modm, xK_s                      ), spawn "dmenu_extended_run \"-> Internet search:\" \"Google\""),
+        ((modm, xK_Return                 ), spawn "dmenu_extended_run"                                      ),
+        ((modm, xK_w                      ), spawn "dmenu_extended_run \"google-chrome-stable\""             ),
+        ((modm, xK_s                      ), spawn "dmenu_extended_run \"-> Internet search:\" \"Google\""   ),
         ((modm .|. shiftMask, xK_s        ), spawn "dmenu_extended_run \"-> Internet search:\" \"Wikipedia\""),
  
         ((modm, xK_t        ), sendMessage NextLayout  ),
