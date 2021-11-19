@@ -15,6 +15,7 @@ import System.IO (hPutStrLn)
 import XMonad.Hooks.ManageDocks(avoidStruts, docks, manageDocks, ToggleStruts(..))
 import XMonad.Hooks.DynamicLog(dynamicLogWithPP, wrap, xmobarPP, xmobarColor, shorten, PP(..))
 import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.WorkspaceHistory
 
 -- Layout
 import XMonad.Layout.Renamed
@@ -108,12 +109,10 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 ---------------------------------------------------------------------------------------------------------------------
 myWorkspaces = ["1","2","3","4","5","6","7","8","9"]
 ---------------------------------------------------------------------------------------------------------------------
-myLogHook = return ()
 myEventHook = mempty
 myManageHook = composeAll
     [
         className =? "MPlayer"        --> doFloat,
-        className =? "Gimp"           --> doFloat,
         resource  =? "desktop_window" --> doIgnore,
         resource  =? "kdesktop"       --> doIgnore
     ]
@@ -122,22 +121,30 @@ myStartupHook = do
 ---------------------------------------------------------------------------------------------------------------------
 main = do
     xmproc <- spawnPipe "xmobar -x 0 /home/zhao/.config/xmobar/xmobarrc"
-    xmonad $ docks defaults
 
-defaults = def{
-    terminal           = myTerminal,
-    focusFollowsMouse  = myFocusFollowsMouse,
-    clickJustFocuses   = myClickJustFocuses,
-    borderWidth        = myBorderWidth,
-    modMask            = myModMask,
-    workspaces         = myWorkspaces,
-    normalBorderColor  = myUnFocusedBorderColor,
-    focusedBorderColor = myFocusedBorderColor,
-    keys               = myKeys,
-    mouseBindings      = myMouseBindings,
-    layoutHook         = myLayout,
-    manageHook         = myManageHook,
-    handleEventHook    = myEventHook,
-    logHook            = myLogHook,
-    startupHook        = myStartupHook
-}
+    xmonad $ docks def{
+        terminal           = myTerminal,
+        focusFollowsMouse  = myFocusFollowsMouse,
+        clickJustFocuses   = myClickJustFocuses,
+        borderWidth        = myBorderWidth,
+        modMask            = myModMask,
+        workspaces         = myWorkspaces,
+        normalBorderColor  = myUnFocusedBorderColor,
+        focusedBorderColor = myFocusedBorderColor,
+        keys               = myKeys,
+        mouseBindings      = myMouseBindings,
+        layoutHook         = myLayout,
+        manageHook         = myManageHook,
+        handleEventHook    = myEventHook,
+        startupHook        = myStartupHook,
+        
+        logHook = dynamicLogWithPP $ xmobarPP
+            {
+                ppOutput = \x -> hPutStrLn xmproc x,
+                ppCurrent = xmobarColor "#F8F8FF" "" . wrap "[" "]",
+                ppHidden = xmobarColor "#F8F8FF" "",
+                ppHiddenNoWindows = xmobarColor "#888888" "",
+                ppTitle = xmobarColor "#A8A8AA" "" . shorten 40,
+                ppSep = "<fc=#F8F8FF> | </fc>"
+            }
+    }

@@ -1,48 +1,34 @@
 Config
 {
-    font = "xft:Courier_Prime:weight=bold:pixelsize=18:antialias=true:hinting=true",
+    font = "xft:Anonymous Pro:weight=bold:pixelsize=18:antialias=true:hinting=true",
     bgColor = "#1E2127",
     fgColor = "#F8F8FF",
     alpha = 255,
     position = Top,
-    textOffset = 16,
+    textOffset = 17,
     lowerOnStart = True,
     iconRoot = ".config/xmobar/icons",
 
     commands = 
         [
             Run Cpu [
-                "--template"          , "<ipat><total>%",
-                "--Low"               , "5",
-                "--High"              , "50",
-                "--low"               , "#F8F8FF",
-                "--normal"            , "#F8F8FF",
-                "--high"              , "#a54242",
-                "--ppad"              , "2",
-                "--width"             , "2",
-                "--maxtwidth"         , "4",
+                "--template"          , "<ipat> <total>%",
                 "--"                  ,
                 "--load-icon-pattern" , "<icon=cpu/cpu_%%.xpm/>"
             ] 10,
             Run Battery [
-                "--template"          , "<leftipat> <acstatus>",
-                "--Low"               , "36",
-                "--High"              , "71",
-                "--low"               , "#a54242",
-                "--normal"            , "#de935f",
-                "--high"              , "#b5bd68",
-                "--maxtwidth"         , "10",
+                "--template"          , "<leftipat> <left>% ",
                 "--"                  ,
                 "--on-icon-pattern"   , "<icon=battery/on/battery_on_%%.xpm/>",
                 "--off-icon-pattern"  , "<icon=battery/off/battery_off_%%.xpm/>",
-                "--idle-icon-pattern" , "<icon=battery/idle/battery_idle_%%.xpm/>",
-                "-o"                  , "<left><fc=#c5c8c6>%</fc> <timeleft>",         -- discharging status
-                "-i"                  , ""                                             -- charged status
+                "--idle-icon-pattern" , "<icon=battery/idle/battery_idle.xpm/>"
             ] 50,
-    		Run Date "%a %b %d %Y %H:%M:%S" "date" 10
+    		Run Date "%H:%M" "time" 50,
+            Run Date "<icon=calendar.xpm/> %a %d/%m/%y" "date" 36000,
+            Run StdinReader
         ],
 
     sepChar = "%",
     alignSep = "}{",
-    template = " }%date%{ %cpu% | %battery%"
+    template = "%StdinReader% }%time%{%date%   %cpu%   %battery%"
 }

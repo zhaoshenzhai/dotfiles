@@ -31,7 +31,7 @@
         "-sb",
         "#000000",
         "-fn",
-        "Courier_Rrime:pixelsize=20",
+        "Courier:pixelsize=20",
         "-l",
         "10"
     ],
@@ -57,6 +57,7 @@
         "php",
         "tex",
         "hs",
+        "errors",
         "yml",
         "odf",
         "ods",
