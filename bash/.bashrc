@@ -17,6 +17,9 @@ export PATH="/home/zhao/.config/scripts:$PATH"
 # Host and User Color
 export PS1="[\[\e[0;35m\]\u\[\e[0m\]@\[\e[0;36m\]\h\[\e[0m\] \W]\$ "
 
+# Terminal
+export TERMINAL="/usr/bin/alacritty"
+
 # Copy bash files to .config/
 `cp ~/.bashrc ~/.config/bash/.bashrc`
 `cp ~/.bash_profile ~/.config/bash/.bash_profile`

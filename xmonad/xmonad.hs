@@ -41,7 +41,7 @@ myBorderWidth                                = 2                                
 myWindowGap                                  = 0                                 :: Integer
 myModMask                                    = mod1Mask                          :: KeyMask
 myFocusedBorderColor                         = "#5C6370"                         :: String
-myUnFocusedBorderColor                       = "#1E2127"                         :: String
+myUnFocusedBorderColor                       = "#0C1320"                         :: String
 myFocusFollowsMouse                          = True                              :: Bool
 myClickJustFocuses                           = False                             :: Bool
 ---------------------------------------------------------------------------------------------------------------------
@@ -64,28 +64,33 @@ myLayout =
 --Key bindings
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [
-        ((modm, xK_backslash), spawn myTerminal                            ),
-        ((modm, xK_Return   ), spawn "dmenu_run"                           ),
-        ((modm, xK_n        ), spawn "alacritty -e nvim"                   ),
-        ((modm, xK_w        ), spawn "alacritty -e google-chrome-stable"   ),
-        ((modm, xK_h        ), spawn "alacritty -e vifm"                   ),
-        ((modm, xK_Escape   ), kill                                        ),
-        ((modm, xK_f        ), sendMessage NextLayout                      ),
-        ((modm, xK_b        ), sendMessage ToggleStruts                    ),
-        ((modm, xK_r        ), refresh                                     ),
-        ((modm, xK_Tab      ), windows W.focusDown                         ),
-        ((modm, xK_grave    ), windows W.focusUp                           ),
-        ((modm, xK_1        ), windows W.focusMaster                       ),
-        ((modm, xK_m        ), windows W.swapMaster                        ),
-        ((modm, xK_h        ), windows W.swapUp                            ),
-        ((modm, xK_l        ), windows W.swapDown                          ),
-        ((modm, xK_j        ), sendMessage Shrink                          ),
-        ((modm, xK_k        ), sendMessage Expand                          ),
-        ((modm, xK_q        ), spawn "xmonad --recompile; xmonad --restart"),
-        ((modm, xK_F1       ), spawn "amixer -q set Master toggle"),
+        ((modm, xK_backslash), spawn myTerminal         ),
+        ((modm, xK_n        ), spawn "alacritty -e nvim"),
+        ((modm, xK_f        ), spawn "alacritty -e vifm"),
+
+        ((modm, xK_Return                 ), spawn "dmenu_extended_run"                                   ),
+        ((modm, xK_w                      ), spawn "dmenu_extended_run \"google-chrome-stable\""          ),
+        ((modm, xK_s                      ), spawn "dmenu_extended_run \"-> Internet search:\" \"Google\""),
+        ((modm .|. shiftMask, xK_s        ), spawn "dmenu_extended_run \"-> Internet search:\" \"Wikipedia\""),
+ 
+        ((modm, xK_t        ), sendMessage NextLayout  ),
+        ((modm, xK_b        ), sendMessage ToggleStruts),
+        ((modm, xK_Tab      ), windows W.focusDown     ),
+        ((modm, xK_grave    ), windows W.focusUp       ),
+        ((modm, xK_1        ), windows W.focusMaster   ),
+        ((modm, xK_m        ), windows W.swapMaster    ),
+        ((modm, xK_h        ), windows W.swapUp        ),
+        ((modm, xK_l        ), windows W.swapDown      ),
+        ((modm, xK_j        ), sendMessage Shrink      ),
+        ((modm, xK_k        ), sendMessage Expand      ),
+        ((modm, xK_r        ), refresh                 ),
+        ((modm, xK_Escape   ), kill                    ),
+
+        ((modm, xK_F1       ), spawn "amixer -q set Master toggle"                           ),
         ((modm, xK_F2       ), spawn "amixer -q set Master unmute & amixer -q set Master 5%-"),
         ((modm, xK_F3       ), spawn "amixer -q set Master unmute & amixer -q set Master 5%+"),
 
+        ((modm, xK_q        ), spawn "xmonad --recompile; xmonad --restart"),
         ((modm .|. shiftMask, xK_q), io exitSuccess)
     ]
     

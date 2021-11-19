@@ -1,0 +1,21 @@
+{
+    "default": "Google",
+    "providers": [
+        {
+            "title": "Google",
+            "url": "https://www.google.com/search?q={searchterm}"
+        },
+        {
+            "title": "Wikipedia",
+            "url": "https://en.wikipedia.org/wiki/Special:Search?search={searchterm}"
+        },
+        {
+            "title": "Google images",
+            "url": "https://www.google.com/images?q={searchterm}"
+        },
+        {
+            "title": "Github",
+            "url": "https://github.com/search?q={searchterm}"
+        }
+    ]
+}
