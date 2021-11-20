@@ -1,0 +1,37 @@
+Config
+{
+    font = "xft:Anonymous Pro:weight=bold:pixelsize=18:antialias=true:hinting=true",
+    additionalFonts = [ 
+	    "xft:Font Awesome 5 Free Solid-12"
+    ],
+    bgColor = "#1E2127",
+    fgColor = "#F8F8FF",
+    alpha = 255,
+    position = Static {xpos=0, ypos=0, width=1920,height=30},
+    textOffset = 20,
+    lowerOnStart = True,
+    hideOnStart = False,
+    allDesktops = True,
+    persistent = True,
+
+    commands = 
+        [
+            Run Cpu [
+                "--template"      , "<fn=1>\62171</fn> <total>%"
+            ] 10,
+            Run Battery [
+                "--template"      , "<acstatus>",
+                "--"              ,
+                "-o"              , "<fn=1>\62019</fn> <left>% (<timeleft> Left)",
+                "-O"              , "<fn=1>\62951</fn> <left>% (<timeleft> Left)",
+                "-i"              , "<fn=1>\62016</fn> Battery Full"
+            ] 50,
+    		Run Date "<fn=1>\61463</fn> %H:%M" "time" 10,
+            Run Date "<fn=1>\61747</fn> %a %d/%m/%y" "date" 36000,
+            Run UnsafeStdinReader
+        ],
+
+    sepChar = "%",
+    alignSep = "}{",
+    template = "  %UnsafeStdinReader% }{%time%    %date%    %cpu%    %battery%  "
+}

@@ -14,6 +14,8 @@ import System.IO (hPutStrLn)
 -- Hooks
 import XMonad.Hooks.ManageDocks(avoidStruts, docks, manageDocks, ToggleStruts(..))
 import XMonad.Hooks.DynamicLog(dynamicLogWithPP, wrap, xmobarPP, xmobarColor, shorten, PP(..))
+import XMonad.Hooks.StatusBar
+import XMonad.Hooks.StatusBar.PP
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.WorkspaceHistory
 
@@ -30,7 +32,7 @@ import XMonad.Actions.CopyWindow(copy, kill1, copyToAll, killAllOtherCopies)
 import XMonad.Actions.Submap(submap)
 
 -- Utils
-import XMonad.Util.Run (spawnPipe)
+import XMonad.Util.Run (spawnPipe, spawnPipeWithNoEncoding)
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.EZConfig
 import XMonad.Util.SpawnOnce
@@ -101,14 +103,14 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
         , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
 ---------------------------------------------------------------------------------------------------------------------
-myWorkspaces = ["<icon=workspaces/chrome.xpm/>","2","3","4","5","6","7","8","9"]
+myWorkspaces = ["1","2","3","4","5","6","7","8","9"]
 ---------------------------------------------------------------------------------------------------------------------
 myStartupHook = do
     spawnOnce "~/.config/scripts/init.sh &"
 ---------------------------------------------------------------------------------------------------------------------
 main :: IO ()
 main = do
-    xmproc <- spawnPipe "xmobar -x 0 /home/zhao/.config/xmobar/xmobarrc"
+    xmproc <- spawnPipeWithNoEncoding "xmobar -x 0 /home/zhao/.config/xmonad/xmobarrc"
 
     xmonad $ ewmh $ docks def{
         terminal           = myTerminal,
@@ -126,10 +128,11 @@ main = do
         logHook = dynamicLogWithPP $ xmobarPP
             {
                 ppOutput = \x -> hPutStrLn xmproc x,
-                ppCurrent = xmobarColor "#F8F8FF" "" . wrap "[" "]",
+                ppCurrent = xmobarColor "#F8F8FF" "" . xmobarBorder "Bottom" "#F8F8FF" 2,
                 ppHidden = xmobarColor "#F8F8FF" "",
                 ppHiddenNoWindows = xmobarColor "#888888" "",
-                ppTitle = xmobarColor "#A8A8AA" "" . shorten 40,
-                ppSep = "<fc=#F8F8FF> | </fc>"
+                ppLayout = const "",
+                ppTitle = xmobarColor "#A8A8AA" "" . shorten 80,
+                ppSep = " | "
             }
     }

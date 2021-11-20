@@ -58,6 +58,7 @@
         "tex",
         "hs",
         "errors",
+        "vim",
         "yml",
         "odf",
         "ods",

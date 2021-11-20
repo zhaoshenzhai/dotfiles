@@ -23,4 +23,3 @@ export TERMINAL="/usr/bin/alacritty"
 # Copy bash files to .config/
 `cp ~/.bashrc ~/.config/bash/.bashrc`
 `cp ~/.bash_profile ~/.config/bash/.bash_profile`
-`cp ~/.xmonad/xmonad.hs ~/.config/xmonad/xmonad.hs`

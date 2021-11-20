@@ -18,6 +18,8 @@ set updatetime=100                                                      " sets u
 set clipboard=unnamedplus                                               " uses system clipboard
 set ignorecase                                                          " case insensitive when typing commands
 set noshowmode                                                          " remove default mode display
+set fileencoding=utf-8                                                  " written encoding
+set encoding=utf-8                                                      " terminal encoding
 
 " Pluggins
 call plug#begin('~/.config/nvim/plugged')
