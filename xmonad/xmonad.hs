@@ -22,6 +22,7 @@ import XMonad.Layout.Renamed
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spacing
 import XMonad.Layout.ResizableTile
+import XMonad.Layout.ThreeColumns
 import XMonad.Layout.LayoutModifier(ModifiedLayout)
 
 -- Actions
@@ -31,6 +32,7 @@ import XMonad.Actions.Submap(submap)
 -- Utils
 import XMonad.Util.Run (spawnPipe)
 import XMonad.Util.NamedScratchpad
+import XMonad.Util.EZConfig
 import XMonad.Util.SpawnOnce
 import XMonad.Util.Dmenu
 
@@ -42,7 +44,7 @@ myBorderWidth                                = 2                                
 myWindowGap                                  = 0                                 :: Integer
 myModMask                                    = mod1Mask                          :: KeyMask
 myFocusedBorderColor                         = "#5C6370"                         :: String
-myUnFocusedBorderColor                       = "#0C1320"                         :: String
+myUnFocusedBorderColor                       = "#1E2127"                         :: String
 myFocusFollowsMouse                          = True                              :: Bool
 myClickJustFocuses                           = False                             :: Bool
 ---------------------------------------------------------------------------------------------------------------------
@@ -62,7 +64,6 @@ myLayout =
     where
         myLayout = full ||| tall
 ---------------------------------------------------------------------------------------------------------------------
---Key bindings
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [
         ((modm, xK_backslash), spawn myTerminal         ),
@@ -100,29 +101,16 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
         , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
 ---------------------------------------------------------------------------------------------------------------------
-myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
-    [
-        ((modm, button1), (\w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster)),
-        ((modm, button2), (\w -> focus w >> windows W.shiftMaster)),
-        ((modm, button3), (\w -> focus w >> mouseResizeWindow w >> windows W.shiftMaster))
-    ]
+myWorkspaces = ["<icon=workspaces/chrome.xpm/>","2","3","4","5","6","7","8","9"]
 ---------------------------------------------------------------------------------------------------------------------
-myWorkspaces = ["1","2","3","4","5","6","7","8","9"]
----------------------------------------------------------------------------------------------------------------------
-myEventHook = mempty
-myManageHook = composeAll
-    [
-        className =? "MPlayer"        --> doFloat,
-        resource  =? "desktop_window" --> doIgnore,
-        resource  =? "kdesktop"       --> doIgnore
-    ]
 myStartupHook = do
     spawnOnce "~/.config/scripts/init.sh &"
 ---------------------------------------------------------------------------------------------------------------------
+main :: IO ()
 main = do
     xmproc <- spawnPipe "xmobar -x 0 /home/zhao/.config/xmobar/xmobarrc"
 
-    xmonad $ docks def{
+    xmonad $ ewmh $ docks def{
         terminal           = myTerminal,
         focusFollowsMouse  = myFocusFollowsMouse,
         clickJustFocuses   = myClickJustFocuses,
@@ -132,10 +120,7 @@ main = do
         normalBorderColor  = myUnFocusedBorderColor,
         focusedBorderColor = myFocusedBorderColor,
         keys               = myKeys,
-        mouseBindings      = myMouseBindings,
         layoutHook         = myLayout,
-        manageHook         = myManageHook,
-        handleEventHook    = myEventHook,
         startupHook        = myStartupHook,
         
         logHook = dynamicLogWithPP $ xmobarPP

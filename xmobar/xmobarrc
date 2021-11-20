@@ -4,8 +4,8 @@ Config
     bgColor = "#1E2127",
     fgColor = "#F8F8FF",
     alpha = 255,
-    position = Top,
-    textOffset = 17,
+    position = Static {xpos=0, ypos=0, width=1920,height=30},
+    textOffset = 21,
     lowerOnStart = True,
     iconRoot = ".config/xmobar/icons",
 
@@ -17,7 +17,7 @@ Config
                 "--load-icon-pattern" , "<icon=cpu/cpu_%%.xpm/>"
             ] 10,
             Run Battery [
-                "--template"          , "<leftipat> <left>% ",
+                "--template"          , "<leftipat> <left>%",
                 "--"                  ,
                 "--on-icon-pattern"   , "<icon=battery/on/battery_on_%%.xpm/>",
                 "--off-icon-pattern"  , "<icon=battery/off/battery_off_%%.xpm/>",
@@ -25,10 +25,10 @@ Config
             ] 50,
     		Run Date "%H:%M" "time" 50,
             Run Date "<icon=calendar.xpm/> %a %d/%m/%y" "date" 36000,
-            Run StdinReader
+            Run UnsafeStdinReader
         ],
 
     sepChar = "%",
     alignSep = "}{",
-    template = "%StdinReader% }%time%{%date%   %cpu%   %battery%"
+    template = "  %UnsafeStdinReader% }%time%{%date%   %cpu%   %battery%  "
 }
