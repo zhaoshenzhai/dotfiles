@@ -20,6 +20,8 @@ set ignorecase                                                          " case i
 set noshowmode                                                          " remove default mode display
 set fileencoding=utf-8                                                  " written encoding
 set encoding=utf-8                                                      " terminal encoding
+set title
+set titlestring=\ %-25.55t\ %a%r%m
 
 " Pluggins
 call plug#begin('~/.config/nvim/plugged')

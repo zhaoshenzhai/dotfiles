@@ -16,10 +16,10 @@ set recolor-darkcolor rgba(248, 248, 255, 0.2)
 
 set page-padding 0
 set guioptions none
+set window-title-basename true
 
 set dbus-service true
 set synctex true
 set synctex-editor-command "gvim --servername GVIM --remote +%{line} %{input}"
 
 map = feedkeys "+"
-

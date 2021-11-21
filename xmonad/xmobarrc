@@ -2,13 +2,14 @@ Config
 {
     font = "xft:Anonymous Pro:weight=bold:pixelsize=18:antialias=true:hinting=true",
     additionalFonts = [ 
-	    "xft:Font Awesome 5 Free Solid-12"
+	    "xft:Font Awesome 5 Free Solid-12:pixelsize=15:antialias=true:hinting=true",
+        "xft:Mononoki Nerd Font:size=15:antialias=true:hinting=true"
     ],
     bgColor = "#1E2127",
-    fgColor = "#F8F8FF",
+    fgColor = "#888888",
     alpha = 255,
-    position = Static {xpos=0, ypos=0, width=1920,height=30},
-    textOffset = 20,
+    position = Static {xpos=0, ypos=0, width=1920,height=40},
+    textOffset = 25,
     lowerOnStart = True,
     hideOnStart = False,
     allDesktops = True,
@@ -19,19 +20,28 @@ Config
             Run Cpu [
                 "--template"      , "<fn=1>\62171</fn> <total>%"
             ] 10,
+            Run Memory [
+                "--template"      , "<fn=1>\xf538</fn> <usedratio>%"
+            ] 50,
+            Run Volume "default" "Master" [
+                "--template"      , "<status>",
+                "--"              ,
+                "-o"              , "<fc=#888888><fn=1>\xf6a9</fn> Muted</fc>",
+                "-O"              , "<fc=#888888><fn=1>\xf028</fn> <volume>%</fc>"
+            ] 2,
             Run Battery [
                 "--template"      , "<acstatus>",
                 "--"              ,
-                "-o"              , "<fn=1>\62019</fn> <left>% (<timeleft> Left)",
-                "-O"              , "<fn=1>\62951</fn> <left>% (<timeleft> Left)",
-                "-i"              , "<fn=1>\62016</fn> Battery Full"
+                "-o"              , "<fn=2>\xf582</fn> <left>% (<timeleft> Left)",
+                "-O"              , "<fn=2>\xf583</fn> <left>% (<timeleft> Left)",
+                "-i"              , "<fn=2>\xf578</fn> Full"
             ] 50,
     		Run Date "<fn=1>\61463</fn> %H:%M" "time" 10,
             Run Date "<fn=1>\61747</fn> %a %d/%m/%y" "date" 36000,
-            Run UnsafeStdinReader
+            Run StdinReader
         ],
 
     sepChar = "%",
     alignSep = "}{",
-    template = "  %UnsafeStdinReader% }{%time%    %date%    %cpu%    %battery%  "
+    template = "  %StdinReader% }{%time%    %date%    %default:Master%    %cpu%    %memory%    %battery%  "
 }

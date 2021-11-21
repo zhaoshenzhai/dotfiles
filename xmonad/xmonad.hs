@@ -12,12 +12,13 @@ import System.Exit (exitSuccess)
 import System.IO (hPutStrLn)
 
 -- Hooks
-import XMonad.Hooks.ManageDocks(avoidStruts, docks, manageDocks, ToggleStruts(..))
+import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.DynamicLog(dynamicLogWithPP, wrap, xmobarPP, xmobarColor, shorten, PP(..))
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.WorkspaceHistory
+import XMonad.Hooks.DynamicIcons
 
 -- Layout
 import XMonad.Layout.Renamed
@@ -30,13 +31,15 @@ import XMonad.Layout.LayoutModifier(ModifiedLayout)
 -- Actions
 import XMonad.Actions.CopyWindow(copy, kill1, copyToAll, killAllOtherCopies)
 import XMonad.Actions.Submap(submap)
+import XMonad.Actions.SpawnOn
 
 -- Utils
-import XMonad.Util.Run (spawnPipe, spawnPipeWithNoEncoding)
+import XMonad.Util.Run (spawnPipe, spawnPipeWithNoEncoding, spawnPipeWithUtf8Encoding)
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.EZConfig
 import XMonad.Util.SpawnOnce
 import XMonad.Util.Dmenu
+import XMonad.Util.WorkspaceCompare
 
 -- Keys
 import Graphics.X11.ExtraTypes.XF86
@@ -68,7 +71,7 @@ myLayout =
 ---------------------------------------------------------------------------------------------------------------------
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [
-        ((modm, xK_backslash), spawn myTerminal         ),
+        ((modm, xK_backslash), spawnOn "1" myTerminal         ),
         ((modm, xK_n        ), spawn "alacritty -e nvim"),
         ((modm, xK_f        ), spawn "alacritty -e vifm"),
 
@@ -97,20 +100,30 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_q        ), spawn "xmonad --recompile; xmonad --restart"),
         ((modm .|. shiftMask, xK_q), io exitSuccess)
     ]
-    
 
     ++[((m .|. modm, k), windows $ f i)
         | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
         , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
 ---------------------------------------------------------------------------------------------------------------------
-myWorkspaces = ["1","2","3","4","5","6","7","8","9"]
+myWorkspaces = [
+    "<fn=2>\xf489  </fn>", -- Terminal
+    "<fn=2>\xf448  </fn>", -- Writing
+    "<fn=2>\xf269  </fn>", -- Chrome
+    "<fn=2>\xf013 </fn>"   -- Config
+    ]
 ---------------------------------------------------------------------------------------------------------------------
 myStartupHook = do
     spawnOnce "~/.config/scripts/init.sh &"
 ---------------------------------------------------------------------------------------------------------------------
+myManageHook = composeAll
+    [
+        className =? myTerminal --> doShift "<fn=2>\xf489 </fn>",
+        manageDocks
+    ]
+---------------------------------------------------------------------------------------------------------------------
 main :: IO ()
 main = do
-    xmproc <- spawnPipeWithNoEncoding "xmobar -x 0 /home/zhao/.config/xmonad/xmobarrc"
+    xmproc <- spawnPipeWithUtf8Encoding "xmobar -x 0 /home/zhao/.config/xmonad/xmobarrc"
 
     xmonad $ ewmh $ docks def{
         terminal           = myTerminal,
@@ -124,15 +137,16 @@ main = do
         keys               = myKeys,
         layoutHook         = myLayout,
         startupHook        = myStartupHook,
-        
+        manageHook         = myManageHook <+> manageHook def,
+
         logHook = dynamicLogWithPP $ xmobarPP
             {
-                ppOutput = \x -> hPutStrLn xmproc x,
-                ppCurrent = xmobarColor "#F8F8FF" "" . xmobarBorder "Bottom" "#F8F8FF" 2,
+                ppOutput = hPutStrLn xmproc,
+                ppCurrent = xmobarColor "#56B6C2" "",
                 ppHidden = xmobarColor "#F8F8FF" "",
                 ppHiddenNoWindows = xmobarColor "#888888" "",
                 ppLayout = const "",
                 ppTitle = xmobarColor "#A8A8AA" "" . shorten 80,
-                ppSep = " | "
+                ppSep = "<fc=#888888> | </fc>"
             }
-    }
+}

@@ -80,7 +80,8 @@
         "md",
         "html",
         "sublime-project",
-        ""
+        "",
+        "*"
     ],
     "watch_folders": [
         "~/"
