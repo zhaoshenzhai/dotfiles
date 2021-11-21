@@ -6,10 +6,10 @@ Config
         "xft:Mononoki Nerd Font:size=15:antialias=true:hinting=true"
     ],
     bgColor = "#1E2127",
-    fgColor = "#888888",
+    fgColor = "#F8F8FF",
     alpha = 255,
-    position = Static {xpos=0, ypos=0, width=1920,height=40},
-    textOffset = 25,
+    position = Static {xpos=0, ypos=0, width=1920,height=37},
+    textOffset = 23,
     lowerOnStart = True,
     hideOnStart = False,
     allDesktops = True,
@@ -22,13 +22,7 @@ Config
             ] 10,
             Run Memory [
                 "--template"      , "<fn=1>\xf538</fn> <usedratio>%"
-            ] 50,
-            Run Volume "default" "Master" [
-                "--template"      , "<status>",
-                "--"              ,
-                "-o"              , "<fc=#888888><fn=1>\xf6a9</fn> Muted</fc>",
-                "-O"              , "<fc=#888888><fn=1>\xf028</fn> <volume>%</fc>"
-            ] 2,
+            ] 200,
             Run Battery [
                 "--template"      , "<acstatus>",
                 "--"              ,
@@ -36,12 +30,13 @@ Config
                 "-O"              , "<fn=2>\xf583</fn> <left>% (<timeleft> Left)",
                 "-i"              , "<fn=2>\xf578</fn> Full"
             ] 50,
-    		Run Date "<fn=1>\61463</fn> %H:%M" "time" 10,
+            Run Com "./.config/scripts/xmobarVolume.sh" [] "volume" 10,
+    		Run Date "<fn=1>\61463</fn> %H:%M" "time" 20,
             Run Date "<fn=1>\61747</fn> %a %d/%m/%y" "date" 36000,
             Run StdinReader
         ],
 
     sepChar = "%",
     alignSep = "}{",
-    template = "  %StdinReader% }{%time%    %date%    %default:Master%    %cpu%    %memory%    %battery%  "
+    template = "  %StdinReader% }{%time%    %date%    %volume%    %cpu%    %memory%    %battery%  "
 }
