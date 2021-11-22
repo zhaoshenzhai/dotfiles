@@ -22,9 +22,6 @@ import XMonad.Hooks.WorkspaceHistory
 import XMonad.Hooks.DynamicIcons
 
 -- Layout
-import XMonad.Layout.GridVariants (Grid(Grid))
-import XMonad.Layout.SimplestFloat
-import XMonad.Layout.Spiral
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
@@ -32,22 +29,13 @@ import XMonad.Layout.Renamed
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spacing
 import XMonad.Layout.LayoutModifier(ModifiedLayout)
-import XMonad.Layout.Simplest
 import XMonad.Layout.WindowNavigation
-import XMonad.Layout.SubLayouts
-import XMonad.Layout.LimitWindows
-import XMonad.Layout.WindowArranger
-import XMonad.Layout.MultiToggle (mkToggle, single, EOT(EOT), (??))
-import XMonad.Layout.MultiToggle.Instances (StdTransformers(NBFULL, MIRROR, NOBORDERS))
-import qualified XMonad.Layout.ToggleLayouts as T (toggleLayouts, ToggleLayout(Toggle))
-import qualified XMonad.Layout.MultiToggle as MT (Toggle(..))
 
 -- Actions
 import XMonad.Actions.CopyWindow(copy, kill1, copyToAll, killAllOtherCopies)
 import XMonad.Actions.Submap(submap)
 import XMonad.Actions.SpawnOn
 import XMonad.Actions.OnScreen
-import XMonad.Actions.UpdatePointer
 
 -- Utils
 import XMonad.Util.Run (spawnPipe, spawnPipeWithNoEncoding, spawnPipeWithUtf8Encoding)
