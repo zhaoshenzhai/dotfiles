@@ -71,15 +71,15 @@ myLayout =
 ---------------------------------------------------------------------------------------------------------------------
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [
-        ((modm, xK_backslash), spawnOn "1" myTerminal         ),
+        ((modm, xK_backslash), spawn myTerminal         ),
         ((modm, xK_n        ), spawn "alacritty -e nvim"),
         ((modm, xK_f        ), spawn "alacritty -e vifm"),
 
         ((modm, xK_Return                 ), spawn "dmenu_extended_run"                                      ),
         ((modm, xK_s                      ), spawn "dmenu_extended_run \"spotify\""                          ),
         ((modm, xK_w                      ), spawn "dmenu_extended_run \"google-chrome-stable\""             ),
-        --((modm, xK_s                      ), spawn "dmenu_extended_run \"-> Internet search:\" \"Google\""   ),
-        --((modm .|. shiftMask, xK_s        ), spawn "dmenu_extended_run \"-> Internet search:\" \"Wikipedia\""),
+      --((modm, xK_s                      ), spawn "dmenu_extended_run \"-> Internet search:\" \"Google\""   ),
+      --((modm .|. shiftMask, xK_s        ), spawn "dmenu_extended_run \"-> Internet search:\" \"Wikipedia\""),
  
         ((modm, xK_t        ), sendMessage NextLayout  ),
         ((modm, xK_b        ), sendMessage ToggleStruts),
@@ -94,11 +94,13 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_r        ), refresh                 ),
         ((modm, xK_Escape   ), kill                    ),
 
-        ((modm, xK_F1       ), spawn "./.config/scripts/volumeControl.sh -t"),
-        ((modm, xK_F2       ), spawn "./.config/scripts/volumeControl.sh -d 5"),
-        ((modm, xK_F3       ), spawn "./.config/scripts/volumeControl.sh -i 5"),
+        ((modm, xK_F1                     ), spawn "./.config/scripts/volumeControl.sh -t"  ),
+        ((modm, xK_F2                     ), spawn "./.config/scripts/volumeControl.sh -d 5"),
+        ((modm, xK_F3                     ), spawn "./.config/scripts/volumeControl.sh -i 5"),
+        ((modm .|. shiftMask, xK_F2       ), spawn "./.config/scripts/volumeControl.sh -d 1"),
+        ((modm .|. shiftMask, xK_F3       ), spawn "./.config/scripts/volumeControl.sh -i 1"),
 
-        ((modm, xK_q        ), spawn "xmonad --recompile; xmonad --restart"),
+        ((modm              , xK_q), spawn "xmonad --recompile; killall xmobar; xmonad --restart"),
         ((modm .|. shiftMask, xK_q), io exitSuccess)
     ]
 

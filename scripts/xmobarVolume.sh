@@ -1,17 +1,27 @@
 #!/bin/bash
-NUMLINES=$(pamixer --list-sink | sed -n 'p;$=' |& tail -1)
 
-SPEAKER_VOL=""
-HEADPHONE_VOL=""
+RAW=`pamixer --list-sink`
 
-if [ "$NUMLINES" -eq 2 ]; then
-    SINK=`pamixer --list-sinks | sed -n 2p`
+LINES=`echo "$RAW" | wc -l`
+
+if [ "$LINES" -eq 2 ]; then
+    SINK=`echo "$RAW" | sed -n 2p`
     SPEAKER=${SINK:0:1}
-    SPEAKER_VOL=`pamixer --sink "$SPEAKER" --get-volume-human`
-    printf "%s %s" "<fn=2> </fn>" $SPEAKER_VOL
-elif [ "$NUMLINES" -eq 3 ]; then
-    SINK=`pamixer --list-sinks | sed -n 3p`
+    MUTE=`pamixer --sink "$SPEAKER" --get-mute`
+    if [ "$MUTE" = true ]; then
+        printf "%s %s" "<fn=2> </fn>" "Muted"
+    else
+        SPEAKER_VOL=`pamixer --sink "$SPEAKER" --get-volume-human`
+        printf "%s %s" "<fn=2> </fn>" $SPEAKER_VOL
+    fi
+elif [ "$LINES" -eq 3 ]; then
+    SINK=`echo "$RAW" | sed -n 3p`
     HEADPHONE=${SINK:0:1}
-    HEADPHONE_VOL=`pamixer --sink "$HEADPHONE" --get-volume-human`
-    printf "%s %s" "<fn=2> </fn>" $HEADPHONE_VOL
+    MUTE=`pamixer --sink "$HEADPHONE" --get-mute`
+    if [ "$MUTE" = true ]; then
+        printf "%s %s" "<fn=2> </fn>" "Muted"
+    else
+        HEADPHONE_VOL=`pamixer --sink "$HEADPHONE" --get-volume-human`
+        printf "%s %s" "<fn=2> </fn>" $HEADPHONE_VOL
+    fi
 fi

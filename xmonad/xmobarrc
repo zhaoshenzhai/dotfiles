@@ -30,7 +30,7 @@ Config
                 "-O"              , "<fn=2>\xf583</fn> <left>% (<timeleft> Left)",
                 "-i"              , "<fn=2>\xf578</fn> Full"
             ] 50,
-            Run Com "./.config/scripts/xmobarVolume.sh" [] "volume" 10,
+            Run Com "./.config/scripts/xmobarVolume.sh" [] "volume" 5,
     		Run Date "<fn=1>\61463</fn> %H:%M" "time" 20,
             Run Date "<fn=1>\61747</fn> %a %d/%m/%y" "date" 36000,
             Run StdinReader

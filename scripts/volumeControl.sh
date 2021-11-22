@@ -9,16 +9,18 @@ Help()
     echo "d | Decreases Volume"
 }
 
-NUMLINES=$(pamixer --list-sink | sed -n 'p;$=' |& tail -1)
+RAW=`pamixer --list-sink`
+
+LINES=`echo "$RAW" | wc -l`
 
 VOLUME=""
 
-if [ "$NUMLINES" -eq 2 ]; then
-    SINK=`pamixer --list-sinks | sed -n 2p`
+if [ "$LINES" -eq 2 ]; then
+    SINK=`echo "$RAW" | sed -n 2p`
     SPEAKER=${SINK:0:1}
     VOLUME=`pamixer --sink "$SPEAKER" --get-volume`
-elif [ "$NUMLINES" -eq 3 ]; then
-    SINK=`pamixer --list-sinks | sed -n 3p`
+elif [ "$LINES" -eq 3 ]; then
+    SINK=`echo "$RAW" | sed -n 3p`
     HEADPHONE=${SINK:0:1}
     VOLUME=`pamixer --sink "$HEADPHONE" --get-volume`
 fi
