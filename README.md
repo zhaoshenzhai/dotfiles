@@ -4,14 +4,14 @@
 
 ### Spawn Applications:
 
-| Key                 | Application                  | Command                                              |
-| :---:     	      | :---:                        | :---:                                                |
-| `Alt`+`\`           | Alacritty Terminal           | spawn "alacritty"                                    |
-| `Alt`+`n`           | Neovim                       | spawn "alacritty -e nvim"                            |
-| `Alt`+`v`           | Vifm                         | spawn "alacritty -e vifm"                            |
-| `Alt`+`Enter`       | Dmenu-Extended               | spawn "dmenu_extended_run"                           |
-| `Alt`+`w`           | Spotify                      | spawn "dmenu_extended_run \"spotify\""               |
-| `Alt`+`w`           | Chrome                       | spawn "dmenu_extended_run \"google-chrome-stable\""  |
+| Key                 | Application                  | Command                                               |
+| :---:     	      | :---:                        | :---                                                  |
+| `Alt`+`\`           | Alacritty Terminal           | `spawn "alacritty"`                                    |
+| `Alt`+`n`           | Neovim                       | `spawn "alacritty -e nvim"`                            |
+| `Alt`+`v`           | Vifm                         | `spawn "alacritty -e vifm"`                            |
+| `Alt`+`Enter`       | Dmenu-Extended               | `spawn "dmenu_extended_run"`                           |
+| `Alt`+`w`           | Spotify                      | `spawn "dmenu_extended_run \"spotify\""`               |
+| `Alt`+`w`           | Chrome                       | `spawn "dmenu_extended_run \"google-chrome-stable\""`  |
 
 ### Windows and Workspaces
 
