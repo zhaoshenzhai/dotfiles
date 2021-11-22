@@ -4,6 +4,7 @@ import XMonad
 -- Window stack manipulation and map creation
 import Data.Tree
 import Data.Maybe (fromJust)
+import Control.Monad (liftM2)
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
@@ -21,17 +22,32 @@ import XMonad.Hooks.WorkspaceHistory
 import XMonad.Hooks.DynamicIcons
 
 -- Layout
+import XMonad.Layout.GridVariants (Grid(Grid))
+import XMonad.Layout.SimplestFloat
+import XMonad.Layout.Spiral
+import XMonad.Layout.ResizableTile
+import XMonad.Layout.Tabbed
+import XMonad.Layout.ThreeColumns
 import XMonad.Layout.Renamed
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spacing
-import XMonad.Layout.ResizableTile
-import XMonad.Layout.ThreeColumns
 import XMonad.Layout.LayoutModifier(ModifiedLayout)
+import XMonad.Layout.Simplest
+import XMonad.Layout.WindowNavigation
+import XMonad.Layout.SubLayouts
+import XMonad.Layout.LimitWindows
+import XMonad.Layout.WindowArranger
+import XMonad.Layout.MultiToggle (mkToggle, single, EOT(EOT), (??))
+import XMonad.Layout.MultiToggle.Instances (StdTransformers(NBFULL, MIRROR, NOBORDERS))
+import qualified XMonad.Layout.ToggleLayouts as T (toggleLayouts, ToggleLayout(Toggle))
+import qualified XMonad.Layout.MultiToggle as MT (Toggle(..))
 
 -- Actions
 import XMonad.Actions.CopyWindow(copy, kill1, copyToAll, killAllOtherCopies)
 import XMonad.Actions.Submap(submap)
 import XMonad.Actions.SpawnOn
+import XMonad.Actions.OnScreen
+import XMonad.Actions.UpdatePointer
 
 -- Utils
 import XMonad.Util.Run (spawnPipe, spawnPipeWithNoEncoding, spawnPipeWithUtf8Encoding)
@@ -64,41 +80,43 @@ full = renamed [Replace "Full"]
     $ mySpacing myWindowGap
     $ Full
 
-myLayout =
+myLayoutHook =
     avoidStruts $ smartBorders myLayout
     where
         myLayout = full ||| tall
 ---------------------------------------------------------------------------------------------------------------------
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [
-        ((modm, xK_backslash), spawn myTerminal         ),
-        ((modm, xK_n        ), spawn "alacritty -e nvim"),
-        ((modm, xK_f        ), spawn "alacritty -e vifm"),
+        ((modm, xK_backslash), spawn myTerminal                 ),
+        ((modm, xK_n        ), spawn "alacritty -e nvim"        ),
+        ((modm, xK_v        ), spawn "alacritty -e vifm"        ),
 
-        ((modm, xK_Return                 ), spawn "dmenu_extended_run"                                      ),
-        ((modm, xK_s                      ), spawn "dmenu_extended_run \"spotify\""                          ),
-        ((modm, xK_w                      ), spawn "dmenu_extended_run \"google-chrome-stable\""             ),
-      --((modm, xK_s                      ), spawn "dmenu_extended_run \"-> Internet search:\" \"Google\""   ),
-      --((modm .|. shiftMask, xK_s        ), spawn "dmenu_extended_run \"-> Internet search:\" \"Wikipedia\""),
+        ((modm .|. shiftMask, xK_a), spawn "pavucontrol"),
+        ((modm .|. shiftMask, xK_b), spawn "alacritty -e bluetoothctl"),
+
+        ((modm, xK_Return         ), spawn "dmenu_extended_run"                                      ),
+        ((modm, xK_s              ), spawn "dmenu_extended_run \"spotify\""                          ),
+        ((modm, xK_w              ), spawn "dmenu_extended_run \"google-chrome-stable\""             ),
+      --((modm, xK_s              ), spawn "dmenu_extended_run \"-> Internet search:\" \"Google\""   ),
+      --((modm .|. shiftMask, xK_s), spawn "dmenu_extended_run \"-> Internet search:\" \"Wikipedia\""),
  
-        ((modm, xK_t        ), sendMessage NextLayout  ),
-        ((modm, xK_b        ), sendMessage ToggleStruts),
-        ((modm, xK_Tab      ), windows W.focusDown     ),
-        ((modm, xK_grave    ), windows W.focusUp       ),
-        ((modm, xK_1        ), windows W.focusMaster   ),
-        ((modm, xK_m        ), windows W.swapMaster    ),
-        ((modm, xK_h        ), windows W.swapUp        ),
-        ((modm, xK_l        ), windows W.swapDown      ),
-        ((modm, xK_j        ), sendMessage Shrink      ),
-        ((modm, xK_k        ), sendMessage Expand      ),
-        ((modm, xK_r        ), refresh                 ),
-        ((modm, xK_Escape   ), kill                    ),
+        ((modm, xK_f     ), sendMessage NextLayout  ),
+        ((modm, xK_grave ), sendMessage ToggleStruts),
+        ((modm, xK_Tab   ), windows W.focusDown     ),
+        ((modm, xK_m     ), windows W.swapMaster    ),
+        ((modm, xK_h     ), windows W.swapUp        ),
+        ((modm, xK_l     ), windows W.swapDown      ),
+        ((modm, xK_j     ), sendMessage Shrink      ),
+        ((modm, xK_k     ), sendMessage Expand      ),
+        ((modm, xK_r     ), refresh                 ),
+        ((modm, xK_Escape), kill                    ),
 
-        ((modm, xK_F1                     ), spawn "./.config/scripts/volumeControl.sh -t"  ),
-        ((modm, xK_F2                     ), spawn "./.config/scripts/volumeControl.sh -d 5"),
-        ((modm, xK_F3                     ), spawn "./.config/scripts/volumeControl.sh -i 5"),
-        ((modm .|. shiftMask, xK_F2       ), spawn "./.config/scripts/volumeControl.sh -d 1"),
-        ((modm .|. shiftMask, xK_F3       ), spawn "./.config/scripts/volumeControl.sh -i 1"),
+        ((modm, xK_F1              ), spawn "./.config/scripts/volumeControl.sh -t"  ),
+        ((modm, xK_F2              ), spawn "./.config/scripts/volumeControl.sh -d 5"),
+        ((modm, xK_F3              ), spawn "./.config/scripts/volumeControl.sh -i 5"),
+        ((modm .|. shiftMask, xK_F2), spawn "./.config/scripts/volumeControl.sh -d 1"),
+        ((modm .|. shiftMask, xK_F3), spawn "./.config/scripts/volumeControl.sh -i 1"),
+        ((modm, xK_F5              ), spawn "./.config/scripts/volumeControl.sh -p"  ),
 
         ((modm              , xK_q), spawn "xmonad --recompile; killall xmobar; xmonad --restart"),
         ((modm .|. shiftMask, xK_q), io exitSuccess)
@@ -110,24 +128,28 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 ---------------------------------------------------------------------------------------------------------------------
 myWorkspaces = [
     "<fn=2>\xf303  </fn>", -- Arch
-    "<fn=2>\xf448  </fn>", -- Writing
+    "<fn=2>\xf448  </fn>", -- LaTeX
     "<fn=2>\xf269  </fn>", -- Chrome
     "<fn=2>\xf013  </fn>", -- Config
     "<fn=2>\xf9c6 </fn>"   -- Spotify
     ]
+
+myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..]
 ---------------------------------------------------------------------------------------------------------------------
 myStartupHook = do
     spawnOnce "~/.config/scripts/init.sh &"
 ---------------------------------------------------------------------------------------------------------------------
 myManageHook = composeAll
     [
-        className =? myTerminal --> doShift "<fn=2>\xf489 </fn>",
-        manageDocks
+        className =? ""       --> viewShift (myWorkspaces !! 4),
+        className =? "Google-chrome" --> viewShift (myWorkspaces !! 2)
     ]
+
+    where viewShift = doF . liftM2 (.) W.greedyView W.shift
 ---------------------------------------------------------------------------------------------------------------------
 main :: IO ()
 main = do
-    xmproc <- spawnPipeWithUtf8Encoding "xmobar -x 0 /home/zhao/.config/xmonad/xmobarrc"
+    xmproc <- spawnPipe "xmobar -x 0 /home/zhao/.config/xmonad/xmobarrc"
 
     xmonad $ ewmh $ docks def{
         terminal           = myTerminal,
@@ -139,18 +161,18 @@ main = do
         normalBorderColor  = myUnFocusedBorderColor,
         focusedBorderColor = myFocusedBorderColor,
         keys               = myKeys,
-        layoutHook         = myLayout,
+        layoutHook         = myLayoutHook,
         startupHook        = myStartupHook,
-        manageHook         = myManageHook <+> manageHook def,
+        manageHook         = myManageHook <+> manageDocks,
 
         logHook = dynamicLogWithPP $ xmobarPP
             {
                 ppOutput = hPutStrLn xmproc,
                 ppCurrent = xmobarColor "#56B6C2" "",
                 ppHidden = xmobarColor "#F8F8FF" "",
-                ppHiddenNoWindows = xmobarColor "#888888" "",
+                ppHiddenNoWindows = xmobarColor "#A8A8AA" "",
                 ppLayout = const "",
-                ppTitle = xmobarColor "#A8A8AA" "" . shorten 80,
-                ppSep = "<fc=#888888> | </fc>"
+                ppTitle = xmobarColor "#A8A8AA" "" . shorten 70,
+                ppSep = "<fc=#A8A8AA> | </fc>"
             }
 }

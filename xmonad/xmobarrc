@@ -6,7 +6,7 @@ Config
         "xft:Mononoki Nerd Font:size=15:antialias=true:hinting=true"
     ],
     bgColor = "#1E2127",
-    fgColor = "#F8F8FF",
+    fgColor = "#A8A8AA",
     alpha = 255,
     position = Static {xpos=0, ypos=0, width=1920,height=37},
     textOffset = 23,

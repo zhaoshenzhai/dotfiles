@@ -14,15 +14,18 @@ RAW=`pamixer --list-sink`
 LINES=`echo "$RAW" | wc -l`
 
 VOLUME=""
+MUTE=true
 
 if [ "$LINES" -eq 2 ]; then
     SINK=`echo "$RAW" | sed -n 2p`
     SPEAKER=${SINK:0:1}
     VOLUME=`pamixer --sink "$SPEAKER" --get-volume`
+    MUTE=`pamixer --sink "$SPEAKER" --get-mute`
 elif [ "$LINES" -eq 3 ]; then
     SINK=`echo "$RAW" | sed -n 3p`
     HEADPHONE=${SINK:0:1}
     VOLUME=`pamixer --sink "$HEADPHONE" --get-volume`
+    MUTE=`pamixer --sink "$HEADPHONE" --get-mute`
 fi
 
 while [ ! -z "$1" ]; do
@@ -31,11 +34,18 @@ while [ ! -z "$1" ]; do
             shift
             `pamixer -t`
             ;;
+        --play/pause|-p)
+            shift
+            `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause`
+            ;;
         --increase|-i)
             shift
             if [[ -z "$1" ]]; then
                 echo "Please choose an increment"
             else
+                if [ "$MUTE" = true ]; then
+                    `pamixer -u`
+                fi
                 VOLUME=$((VOLUME + $1))
                 `pamixer --set-volume $VOLUME`
             fi
@@ -45,6 +55,9 @@ while [ ! -z "$1" ]; do
             if [[ -z "$1" ]]; then
                 echo "Please choose an increment"
             else
+                if [ "$MUTE" = true ]; then
+                    `pamixer -u`
+                fi
                 VOLUME=$((VOLUME - $1))
                 `pamixer --set-volume $VOLUME`
             fi
