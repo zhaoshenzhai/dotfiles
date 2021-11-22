@@ -87,9 +87,9 @@ myLayoutHook =
 ---------------------------------------------------------------------------------------------------------------------
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [
-        ((modm, xK_backslash), spawn myTerminal                 ),
-        ((modm, xK_n        ), spawn "alacritty -e nvim"        ),
-        ((modm, xK_v        ), spawn "alacritty -e vifm"        ),
+        ((modm, xK_backslash), spawn myTerminal         ),
+        ((modm, xK_n        ), spawn "alacritty -e nvim"),
+        ((modm, xK_v        ), spawn "alacritty -e vifm"),
 
         ((modm .|. shiftMask, xK_a), spawn "pavucontrol"),
         ((modm .|. shiftMask, xK_b), spawn "alacritty -e bluetoothctl"),
