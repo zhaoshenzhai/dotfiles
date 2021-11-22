@@ -6,9 +6,7 @@ Help()
     echo "h | help   Prints this help"
     echo "n | name   Creates root directory NAME, containing:"
     echo "   NAME.tex"
-    echo "   figures"
-    echo "      white.png"
-    echo "d | docu   Creates root directory with only NAME.tex"
+    echo "   figures (directory)"
 }
 
 while [ ! -z "$1" ]; do
@@ -18,21 +16,10 @@ while [ ! -z "$1" ]; do
             if [[ -z "$1" ]]; then
                 echo "Please enter a nonempty name"
             else
-                mkdir "$1"
-                cd "$1"
-                cp $HOME/Templates/LaTeX/header.txt "${1// /\ }.tex"
+                mkdir "${1// /_}"
+                cd "${1// /_}"
+                cp $HOME/.config/scripts/scriptFiles/LaTeX_standard "${1// /_}.tex"
                 mkdir "figures"
-                cp $HOME/Templates/LaTeX/figures/white.png figures
-            fi
-            ;;
-        --docu|-d)
-            shift
-            if [[ -z "$1" ]]; then
-                echo "Please enter a nonempty name"
-            else
-                mkdir "$1"
-                cd "$1"
-                cp $HOME/Templates/LaTeX/header.txt "${1// /\ }.tex"
             fi
             ;;
         --help|-h)

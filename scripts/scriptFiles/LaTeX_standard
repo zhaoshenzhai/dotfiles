@@ -1,0 +1,146 @@
+\documentclass{report}
+
+%Packages	
+    \usepackage[utf8]{inputenc}
+    \usepackage[T1]{fontenc}
+    \usepackage[margin = 1in, marginparwidth = 3cm, marginparsep = -1.5cm]{geometry}
+    \usepackage{amsfonts, amsmath, amssymb, amsthm}
+    \usepackage{blindtext}
+    \usepackage[super]{nth}
+    \usepackage[english]{babel} 
+    \usepackage{graphicx}
+    \usepackage{lipsum} 
+    \usepackage{xcolor}
+    \usepackage{mathtools}
+    \usepackage{mdframed}
+    \usepackage{thmtools}
+    \usepackage{pgffor}
+    \usepackage{pifont}
+    \usepackage{caption}
+    \usepackage{tabu}
+    \usepackage{bm}
+    \usepackage{titling}
+    \usepackage{enumitem}
+    \usepackage{forest}
+    \usepackage{esint}
+    \usepackage[nooldvoltagedirection]{circuitikz}
+    \usepackage{listings}
+    \usepackage{color}
+    \usepackage[hidelinks]{hyperref}
+    \usepackage{array}
+    \usepackage{multirow}
+    \usepackage{mathrsfs}
+    \usepackage{tikz}\usetikzlibrary{matrix}
+    \usepackage{tikz-3dplot}
+    \usepackage{tikzpagenodes}
+    \usepackage{titlesec}
+    \usepackage{contour}
+    \usepackage{ulem}
+    \usepackage[bottom]{footmisc}
+    \usepackage{systeme}\sysdelim..
+    \usepackage{framed}
+    \usepackage{xargs}
+    \usepackage{fancyhdr}
+    \usepackage{venndiagram}
+    \usepackage{bookmark}
+
+%Miscellaneous
+    \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+    \graphicspath{{figures/}}
+    \titleformat{\chapter}[display]   
+    {\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{20pt}{\Huge}   
+    \titlespacing*{\chapter}{0pt}{-20pt}{40pt}
+    \renewenvironmentx{leftbar}{\def\FrameCommand{\hspace{0.1\textwidth} \vrule width 1pt \hspace{0.05\textwidth}}\MakeFramed {\advance\hsize-\width \FrameRestore}}{\endMakeFramed}
+    \definecolor{gray}{rgb}{0.8, 0.8, 0.8}
+    \definecolor{lightGray}{rgb}{0.9, 0.9, 0.9}
+    \setcounter{MaxMatrixCols}{20}
+    \makeatletter\renewcommand*\env@matrix[1][*\c@MaxMatrixCols c]{\hskip -\arraycolsep\let\@ifnextchar\new@ifnextchar\array{#1}}\makeatother
+    \makeatletter\newcommand{\ineq}{\mathrel{\text{\in@eq}}}\newcommand{\in@eq}{\oalign{\hidewidth$\m@th\in$\hidewidth\cr\noalign{\nointerlineskip\kern1ex}$\m@th\smash{-}$\cr\noalign{\nointerlineskip\kern-.5ex}}}\makeatother
+    \allowdisplaybreaks
+    \makeatletter\newcommand{\raisemath}[1]{\mathpalette{\raisem@th{#1}}}\newcommand{\raisem@th}[3]{\raisebox{#1}{$#2#3$}}\makeatother
+    \synctex=1
+
+%Commands
+    %Math
+        %Operators
+            \newcommand{\arcsinh}{\operatorname{arcsinh}}
+            \newcommand{\arccosh}{\operatorname{arccosh}}
+            \newcommand{\arctanh}{\operatorname{arctanh}}
+            \newcommand{\arccoth}{\operatorname{arccoth}}
+            \newcommand{\arcsech}{\operatorname{arcsech}}
+            \newcommand{\arccsch}{\operatorname{arccsch}}
+            \renewcommand{\min}{\operatorname{min}}
+            \renewcommand{\max}{\operatorname{max}}
+            \newcommand{\vspan}{\operatorname{Span}}
+            \renewcommand{\Re}{\operatorname{Re}}
+            \renewcommand{\Im}{\operatorname{Im}}
+            \newcommand{\im}{\operatorname{im}}
+            \newcommand{\preim}{\operatorname{preim}}
+            \newcommand{\diam}{\operatorname{diam}}
+            \newcommand{\uniflim}{\operatorname{unif\,lim}}
+            \newcommand{\id}{\operatorname{id}}
+            \newcommand{\iv}{\operatorname{iv}}
+            \newcommand{\proj}{\operatorname{proj}}
+            \newcommand{\dom}{\operatorname{dom}}
+            \newcommand{\ran}{\operatorname{ran}}
+            \newcommand{\cdm}{\operatorname{cdm}}
+            \newcommand{\fld}{\operatorname{fld}}
+            \newcommand{\img}{\operatorname{img}}
+        %Others
+            \renewcommand{\d}{\mathrm{d}}
+            \renewcommand{\v}[1]{\bm{\mathrm{#1}}}
+            \renewcommand{\vec}{\overrightarrow}
+            \newcommand{\ilimsup}[1]{\m{\limsup\limits_{#1\to\infty}\,}}
+            \newcommand{\iliminf}[1]{\m{\liminf\limits_{#1\to\infty}\,}}
+            \newcommand{\nab}{\v{\nabla}}
+            \newcommand{\ilim}[1]{\m{\lim\limits_{#1\to\infty}}}
+            \newcommand{\isum}[2]{\m{\sum_{#1=#2}^\infty}}
+            \newcommand{\unitv}[1]{\bm{\mathrm{\hat{#1}}}}
+            \newcommand{\dotpro}{\bm{\cdot}}
+            \newcommand{\cropro}{\bm{\times}}
+            \newcommand{\mc}[1]{\mathcal{#1}}
+            \newcommand{\mb}[1]{\mathbb{#1}}
+            \newcommand{\divides}{\,|\,}
+            \renewcommand{\em}{\varnothing}
+            \newcommand{\fa}{\forall}
+            \newcommand{\ex}{\exists}
+    
+    %LaTeX
+        \renewcommand{\l}{\left}
+        \renewcommand{\r}{\right}
+        \renewcommand{\it}[1]{\textit{#1}}
+        \renewcommand{\bf}[1]{\textbf{#1}}
+        \renewcommand{\qed}{\phantom\qedhere\hfill$\blacksquare$}
+        \newcommand{\qedin}{\tag*{$\blacksquare$}}
+        \newcommand{\exqed}{\phantom\qedhere\hfill$\blacklozenge$}
+        \newcommand{\exqedin}{\tag*{$\blacklozenge$}}
+        \newcommand{\measurepage}{\dimexpr\pagegoal-\pagetotal-\baselineskip\relax}
+        \newcommand{\ulthm}[1]{\uline{\phantom{#1}}\llap{\contour{gray}{#1}}}
+        \newcommand{\uldef}[1]{\uline{\phantom{#1}}\llap{\contour{lightGray}{#1}}}
+        \newcommand{\ul}[1]{\uline{\phantom{#1}}\llap{\contour{white}{#1}}}
+        \newcommand{\m}[1]{\displaystyle{#1}}
+        \renewcommand{\mid}{\,\middle\vert\,}
+        \renewcommand{\bar}[1]{\mskip.5\thinmuskip\overline{\mskip-.5\thinmuskip {#1} \mskip-.5\thinmuskip}\mskip.5\thinmuskip}
+        \renewcommand{\ULdepth}{1.8pt}\contourlength{0.8pt}
+        \newcommand{\numberthis}{\addtocounter{equation}{1}\tag{\theequation}}
+        \renewcommand{\tt}[1]{\lstinline{#1}}
+        \newcommand{\blank}{\rule{0.5cm}{0.15mm}}
+
+%Environments
+    \mdfdefinestyle{thmstyle}{backgroundcolor = gray, innertopmargin = -2pt, linewidth = 1pt}
+    \mdfdefinestyle{defstyle}{backgroundcolor = lightGray, innertopmargin = -2pt, linewidth = 1pt}
+    \newmdtheoremenv[style = thmstyle]{theorem}{Theorem}[chapter]
+    \newmdtheoremenv[style = thmstyle]{axiom}[theorem]{Axiom}
+    \newmdtheoremenv[style = defstyle]{definition}[theorem]{Definition}
+    \newmdtheoremenv[style = defstyle]{defprop}[theorem]{Definition/Proposition}
+    \newmdtheoremenv[style = defstyle]{corollary}{Corollary}[theorem]
+    \newmdtheoremenv[style = defstyle]{proposition}[theorem]{Proposition}
+    \theoremstyle{definition}\newmdtheoremenv[style = defstyle]{exercise}{Exercise}
+    \newmdtheoremenv[style = defstyle]{lemmaex}{Lemma}[exercise]
+    \newmdtheoremenv[style = defstyle]{lemmath}[theorem]{Lemma}
+    \theoremstyle{definition}\newtheorem{example}[theorem]{Example}
+    \theoremstyle{definition}\newtheorem*{remark}{Remark}
+    \theoremstyle{remark}\newtheorem*{solution}{Solution}
+    \makeatletter\renewenvironment{proof}[1][\proofname]{\par\normalfont\topsep6\p@\@plus6\p@\relax\trivlist\item[\hskip\labelsep\itshape#1\@addpunct{.}]\ignorespaces}{\endtrivlist\@endpefalse}\renewcommand\qedhere{}\makeatother
+
+

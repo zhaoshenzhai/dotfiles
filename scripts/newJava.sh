@@ -4,9 +4,10 @@ Help()
 {
     echo "Options:"
     echo "h | help   Prints this help"
-    echo "n | name   Creates root directory Java~NAME, containing:"
-    echo "   'src' directory"
-    echo "      NAME.java"
+    echo "n | name   Takes 2 arguments: [NAME, MAINCLASS (Optional, default=NAME)]."
+    echo "           Creates root directory Java~NAME, containing:"
+    echo "              'src' directory"
+    echo "                 MAINCLASS.java"
 }
 
 while [ ! -z "$1" ]; do
@@ -21,11 +22,11 @@ while [ ! -z "$1" ]; do
                 mkdir "src"
                 cd "src"
                 if [[ -z "$2" ]]; then
-                    cp $HOME/Templates/Java/standard.txt "Main.java"
+                    cp $HOME/.config/scripts/scriptFiles/Java_standard "Main.java"
                     sed -i 's/NAME/Main/g' Main.java
                 else
                     MAINNAME=${2// /}
-                    cp $HOME/Templates/Java/standard.txt "$MAINNAME.java"
+                    cp $HOME/.config/scripts/scriptFiles/Java_standard "$MAINNAME.java"
                     sed -i "s/NAME/$MAINNAME/g" $MAINNAME.java
                 fi
             fi
@@ -33,7 +34,10 @@ while [ ! -z "$1" ]; do
        --help|-h)
             Help
             ;;
-        *);;
+        *)
+            echo "Error: Invalid option"
+            Help
+            ;;
     esac
 shift
 done
