@@ -155,12 +155,14 @@ main = do
 
         logHook = dynamicLogWithPP $ xmobarPP
             {
-                ppOutput = hPutStrLn xmproc,
-                ppCurrent = xmobarColor "#56B6C2" "",
-                ppHidden = xmobarColor "#F8F8FF" "",
+                ppOutput          = hPutStrLn xmproc,
+                ppCurrent         = xmobarColor "#56B6C2" "",
+                ppHidden          = xmobarColor "#F8F8FF" "",
                 ppHiddenNoWindows = xmobarColor "#A8A8AA" "",
-                ppLayout = const "",
-                ppTitle = xmobarColor "#A8A8AA" "" . shorten 70,
-                ppSep = "<fc=#A8A8AA> | </fc>"
+                ppLayout          = const "",
+                ppTitle           = xmobarColor "#A8A8AA" "" . shorten 70,
+                ppSep             = "<fc=#A8A8AA> | </fc>",
+                ppExtras          = [gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset],
+                ppOrder           = \(ws:l:t:ex) -> [ws,l]++ex++[t]
             }
 }
