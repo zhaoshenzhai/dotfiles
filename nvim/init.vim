@@ -133,3 +133,6 @@ autocmd filetype c nnoremap <F5> :w <CR>:!gcc % -o %:r && ./%:r<CR>
 autocmd filetype cs nnoremap <F5> :w <CR>:T cSharpCompile.sh -p `dirname %`<CR>
 autocmd filetype java nnoremap <F5> :w <CR>:T javaCompile.sh -p `dirname %`<CR>
 autocmd filetype python nnoremap <F5> :w <CR>:!python3 %<CR>
+
+" Fix resizing
+autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"

@@ -82,9 +82,11 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm .|. shiftMask, xK_a), spawn "pavucontrol"),
         ((modm .|. shiftMask, xK_b), spawn "alacritty -e bluetoothctl"),
 
-        ((modm, xK_Return         ), spawn "dmenu_extended_run"                                      ),
-        ((modm, xK_s              ), spawn "dmenu_extended_run \"spotify\""                          ),
-        ((modm, xK_w              ), spawn "dmenu_extended_run \"google-chrome-stable\""             ),
+        ((modm, xK_Return), spawn "dmenu_extended_run"            ),
+        ((modm, xK_s     ), spawn "dmenu_extended_run \"spotify\""),
+
+        ((modm, xK_w              ), spawn "dmenu_extended_run \"google-chrome-stable --profile-directory=Default\""    ),
+        ((modm .|. shiftMask, xK_w), spawn "dmenu_extended_run \"google-chrome-stable --profile-directory='Profile 2'\""),
       --((modm, xK_s              ), spawn "dmenu_extended_run \"-> Internet search:\" \"Google\""   ),
       --((modm .|. shiftMask, xK_s), spawn "dmenu_extended_run \"-> Internet search:\" \"Wikipedia\""),
  
@@ -160,7 +162,7 @@ main = do
                 ppHidden          = xmobarColor "#F8F8FF" "",
                 ppHiddenNoWindows = xmobarColor "#A8A8AA" "",
                 ppLayout          = const "",
-                ppTitle           = xmobarColor "#A8A8AA" "" . shorten 70,
+                ppTitle           = xmobarColor "#A8A8AA" "" . shorten 50,
                 ppSep             = "<fc=#A8A8AA> | </fc>",
                 ppExtras          = [gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset],
                 ppOrder           = \(ws:l:t:ex) -> [ws,l]++ex++[t]
