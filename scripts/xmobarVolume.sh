@@ -1,7 +1,6 @@
 #!/bin/bash
 
 RAW=`pamixer --list-sink`
-
 LINES=`echo "$RAW" | wc -l`
 
 if [ "$LINES" -eq 2 ]; then

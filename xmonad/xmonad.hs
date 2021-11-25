@@ -81,6 +81,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
         ((modm .|. shiftMask, xK_a), spawn "pavucontrol"),
         ((modm .|. shiftMask, xK_b), spawn "alacritty -e bluetoothctl"),
+        ((modm .|. shiftMask, xK_i), spawn "alacritty -e iwctl"),
 
         ((modm, xK_Return), spawn "dmenu_extended_run"            ),
         ((modm, xK_s     ), spawn "dmenu_extended_run \"spotify\""),

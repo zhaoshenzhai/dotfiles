@@ -12,9 +12,9 @@ set highlight-transparency 0.5
 
 set recolor true
 set recolor-lightcolor "#1E2127"
-set recolor-darkcolor rgba(248, 248, 255, 0.2)
+set recolor-darkcolor "#F8F8FF"
 
-set page-padding 0
+set page-padding 10
 set guioptions none
 set window-title-basename true
 

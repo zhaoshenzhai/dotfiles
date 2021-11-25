@@ -88,13 +88,13 @@ snippet [ "[]" iA
 endsnippet
 
 context "math()"
-snippet { "{}" iA
-\l\{$1\r\}$0
+snippet | "||" iA
+\l|$1\r|$0
 endsnippet
 
 context "math()"
-snippet | "||" iA
-\l|$1\r|$0
+snippet br "{}" i
+\l\\{$1\r\\}$0
 endsnippet
 
 context "math()"
@@ -108,22 +108,22 @@ snippet an "<>" iA
 endsnippet
 
 context "math()"
-snippet fr "fraction" Ai
+snippet fr "fraction" iA
 \frac{$1}{$2}$0
 endsnippet
 
 context "math()"
-snippet der "derivative" Ai
+snippet der "derivative" iA
 \frac{\d ${1:f}}{\d ${2:x}}$0
 endsnippet
 
 context "math()"
-snippet par "partial derivative" Ai
+snippet par "partial derivative" iA
 \frac{\partial $1}{\partial $2}$0
 endsnippet
 
 context "math()"
-snippet int "integral" Ai
+snippet int "integral" iA
 \int_{$1}^{$2}$4\d ${3:x}$0
 endsnippet
 
@@ -149,7 +149,7 @@ endsnippet
 
 context "math()"
 snippet iacup "big arbirary indexed union" Ai
-\bigcup\limits_{${1:\alpha}\in\mathcal{A}}$0
+\bigcup\limits_{${1:\alpha}\in\mathcal{${2:A}}}$0
 endsnippet
 
 context "math()"
@@ -170,16 +170,6 @@ endsnippet
 context "math()"
 snippet bcap "big intersection" Ai
 \bigcap
-endsnippet
-
-context "math()"
-snippet mcal "mathcal" Ai
-\mathcal{$1}$0
-endsnippet
-
-context "math()"
-snippet mscr "mathscr" Ai
-\mathscr{$1}$0
 endsnippet
 
 priority 100

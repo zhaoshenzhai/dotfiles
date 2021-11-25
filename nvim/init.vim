@@ -56,17 +56,24 @@ highlight LineNr ctermbg=NONE guibg=NONE
 highlight SignColumn ctermbg=NONE guibg=NONE
 highlight EndOfBuffer ctermbg=NONE guibg=NONE
 
+" Leader
+let mapleader = ","
+
 " ncm2
 autocmd BufEnter * call ncm2#enable_for_buffer()
 set completeopt=noinsert,menuone,noselect
 let g:python3_host_prog='/usr/bin/python3'
 
 " NerdTree
-map <silent> <leader>n :NERDTreeFocus<CR>
+map <silent> <M-Space>n :NERDTreeFocus<CR>
 let NERDTreeIgnore=['\.pyc$']
 
-"Isort
-let g:vim_isort_map = '<leader>i'
+" Isort
+let g:vim_isort_map = '<M-Space>i'
+
+" Ultisnips
+let g:UltiSnipsExpandTrigger="<s-tab>"                                            
+let g:UltiSnipsJumpForwardTrigger="<tab>"
 
 " VimTex
 let g:tex_flavor='latex'
@@ -76,15 +83,14 @@ let g:vimtex_quickfix_ignore_filters=[
     \'Underfull \\hbox (badness [0-9]*) in paragraph at lines',
     \'Overfull \\hbox ([0-9]*.[0-9]*pt too wide) in paragraph at lines',
     \'Underfull \\hbox (badness [0-9]*) in ',
+    \'Underfull \\vbox (badness [0-9]*) detected at line ',
     \'Overfull \\hbox ([0-9]*.[0-9]*pt too wide) in ',
     \'Package hyperref Warning: Token not allowed in a PDF string',
     \'Package typearea Warning: Bad type area settings!',
     \'LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.',
     \'Dimension too large.',
     \]
-let g:UltiSnipsExpandTrigger="<s-tab>"                                            
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-map <leader>f <leader>lv
+map <M-Space>f <leader>lv
 
 " Lightline
 let g:lightline = {
@@ -98,9 +104,9 @@ let g:lightline = {
 " Spell check
 setlocal nospell
 set spelllang=en
-nnoremap <silent> <leader>s :set spell!<cr>
-inoremap <silent> <leader>s <C-O>:set spell!<cr>
-inoremap <leader>c <c-g>u<Esc>[s1z=`]a<c-g>u
+nnoremap <silent> <M-Space>s :set spell!<cr>
+inoremap <silent> <M-Space>s <C-O>:set spell!<cr>
+inoremap <leader>c <c-g>u<Esc>[s1z=`]a<c-g>ui
 
 " Switch tabs
 map <F2> :tabp<CR>
