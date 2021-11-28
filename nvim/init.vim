@@ -90,7 +90,7 @@ let g:vimtex_quickfix_ignore_filters=[
     \'LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.',
     \'Dimension too large.',
     \]
-map <M-Space>f <leader>lv
+map <F4> :VimtexView<CR>
 
 " Lightline
 let g:lightline = {
@@ -106,7 +106,7 @@ setlocal nospell
 set spelllang=en
 nnoremap <silent> <M-Space>s :set spell!<cr>
 inoremap <silent> <M-Space>s <C-O>:set spell!<cr>
-inoremap <leader>c <c-g>u<Esc>[s1z=`]a<c-g>ui
+inoremap <M-Space>c <c-g>u<Esc>[s1z=`]a<c-g>ui
 
 " Switch tabs
 map <F2> :tabp<CR>

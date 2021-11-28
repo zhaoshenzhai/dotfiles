@@ -4,4 +4,5 @@ xset r rate 250 &                                   # Set keyboard repeat rate
 # Start applications
 dropbox &
 nitrogen --restore &
-pulseaudio --start &
+pulseaudio -k
+pulseaudio --start

@@ -7,7 +7,7 @@
     "fileopener": "xdg-open",
     "filter_binaries": false,
     "follow_symlinks": false,
-    "frequently_used": 20,
+    "frequently_used": 1000,
     "global_ignore_folders": [],
     "ignore_folders": [],
     "include_applications": false,

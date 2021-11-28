@@ -27,6 +27,18 @@ snippet beg "begin + end environmenet" b
 \end{$1}
 endsnippet
 
+snippet item "itemize" b
+\begin{itemize}
+	\item $0
+\end{itemize}
+endsnippet
+
+snippet enum "enumerate" b
+\begin{enumerate}
+	\item $0
+\end{enumerate}
+endsnippet
+
 snippet eq "begin unnumbered equation" b
 \begin{equation*}
 	$0
@@ -37,6 +49,18 @@ snippet eqn "begin numbered equation" b
 \begin{equation}
 	$0
 \end{equation}
+endsnippet
+
+snippet ali "begin aligned" b
+\begin{aligned}
+	$0
+\end{aligned}
+endsnippet
+
+snippet def "begin definition" b
+\begin{definition}
+	$0
+\end{definition}
 endsnippet
 
 snippet thm "begin theorem" b
@@ -57,6 +81,12 @@ snippet lem "begin lemma" b
 \end{lemma}
 endsnippet
 
+snippet rem "begin remark" b
+\begin{remark}
+	$0
+\end{remark}
+endsnippet
+
 snippet prp "begin proposition" b
 \begin{proposition}
 	$0
@@ -67,6 +97,12 @@ snippet pro "begin proof" b
 \begin{proof}
 	$0
 \end{proof}
+endsnippet
+
+snippet tikz "begin tikzpicture" b
+\begin{tikzpicture}
+	$0
+\end{tikzpicture}
 endsnippet
 #### Environments ####
 
@@ -98,52 +134,57 @@ snippet br "{}" i
 endsnippet
 
 context "math()"
-snippet no "||||" iA
+snippet no "||||" i
 \l\|$1\r\|$0
 endsnippet
 
 context "math()"
-snippet an "<>" iA
+snippet an "<>" i
 \l\langle$1\r\rangle$0
 endsnippet
 
 context "math()"
-snippet fr "fraction" iA
+snippet fr "fraction" i
 \frac{$1}{$2}$0
 endsnippet
 
 context "math()"
-snippet der "derivative" iA
+snippet rt "sqrt" i
+\sqrt{$1}$0
+endsnippet
+
+context "math()"
+snippet der "derivative" i
 \frac{\d ${1:f}}{\d ${2:x}}$0
 endsnippet
 
 context "math()"
-snippet par "partial derivative" iA
+snippet par "partial derivative" i
 \frac{\partial $1}{\partial $2}$0
 endsnippet
 
 context "math()"
-snippet int "integral" iA
+snippet int "integral" i
 \int_{$1}^{$2}$4\d ${3:x}$0
 endsnippet
 
 context "math()"
-snippet lim "limit" Ai
+snippet lim "limit" i
 \lim\limits_{${1:n}\to${2:\infty}}$0
 endsnippet
 
 context "math()"
-snippet sum "sum" Ai
+snippet sum "sum" i
 \sum\limits_{$1=${2:0}}^{${3:\infty}}$0
 endsnippet
 
 context "math()"
-snippet prod "product" Ai
+snippet prod "product" i
 \prod\limits_{$1=${2:0}}^{${3:\infty}}$0
 endsnippet
 
 context "math()"
-snippet incup "big natural indexed union" Ai
+snippet incup "big natural indexed union" i
 \bigcup\limits_{${1:i}=${2:0}}^{${3:\infty}}$0
 endsnippet
 
@@ -153,22 +194,22 @@ snippet iacup "big arbirary indexed union" Ai
 endsnippet
 
 context "math()"
-snippet bcup "big union" Ai
+snippet bcup "big union" i
 \bigcup
 endsnippet
 
 context "math()"
-snippet incap "big natural indexed intersection" Ai
+snippet incap "big natural indexed intersection" i
 \bigcap\limits_{${1:i}=${2:0}}^{${3:\infty}}$0
 endsnippet
 
 context "math()"
-snippet iacap "big arbirary indexed intersection" Ai
+snippet iacap "big arbirary indexed intersection" i
 \bigcap\limits_{${1:\alpha}\in\mathcal{A}}$0
 endsnippet
 
 context "math()"
-snippet bcap "big intersection" Ai
+snippet bcap "big intersection" i
 \bigcap
 endsnippet
 
@@ -236,3 +277,55 @@ snippet N "eta" i
 \eta
 endsnippet
 #### Math ####
+
+###########################################################
+
+#### TikZ ####
+
+snippet OpenSet "Open Set" b
+\begin{tikzpicture}
+
+\end{tikzpicture}
+endsnippet
+
+#### TikZ ####
+
+###########################################################
+
+#### Title Format ####
+
+snippet LECTURE_NOTES "Lecture Notes"
+\newgeometry{margin = 0.7in, bmargin=1in, tmargin=1in}
+\pagestyle{empty}
+\begin{center}
+	\Large\textbf{\textsc{${1:TITLE}}}
+\end{center}
+\vspace*{0.03\textheight}
+\begin{minipage}[t]{0.5\textwidth}
+	\centering
+	{\large\textit{Course delivered on the ${2:ACADEMIC YEAR} academic year by}}
+	\\\\[\baselineskip]
+	{\textsc{Dr. ${3:PROF NAME}}}
+	\\\\[0.3\baselineskip]
+	{\textsc{Some University}}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+	\centering
+	{\large\textit{Notes taken (last updated on \today) by}}
+	\\\\[\baselineskip]
+	{\textsc{Zhaoshen Zhai}}
+	\\\\[0.3\baselineskip]
+	{\textsc{Email: }\url{zhaoshen.zhai@gmail.com}}
+\end{minipage}
+\\\\[2\baselineskip]
+\begin{center}
+	\textsc{\bfseries\contentsname}
+\end{center}
+
+\toccontents
+\clearpage
+\pagestyle{fancy}
+\setcounter{page}{1}
+\newgeometry{margin = 0.7in, bmargin=1in, tmargin=1in, outer=6.5cm, marginparwidth=5.5cm, marginparsep=0.5cm}
+endsnippet
+#### Title Format ####
