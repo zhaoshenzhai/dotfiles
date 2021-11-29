@@ -109,6 +109,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm .|. shiftMask, xK_F3), spawn "./.config/scripts/volumeControl.sh -i 1"),
         ((modm, xK_F5              ), spawn "./.config/scripts/volumeControl.sh -p"  ),
 
+        ((modm, xK_Print), spawn "scrot screen_%Y-%m-%d-%H-%M-%S.png"),
+
         ((modm              , xK_q), spawn "xmonad --recompile; killall xmobar; xmonad --restart"),
         ((modm .|. shiftMask, xK_q), io exitSuccess)
     ]
