@@ -105,6 +105,12 @@ snippet pro "begin proof" b
 \end{proof}
 endsnippet
 
+snippet exa "begin example" b
+\begin{example}
+	$0
+\end{example}
+endsnippet
+
 snippet tikz "begin tikzpicture" b
 \begin{tikzpicture}
 	$0
@@ -132,6 +138,11 @@ endsnippet
 context "math()"
 snippet | "||" iA
 \l|$1\r|$0
+endsnippet
+
+context "math()"
+snippet su ".|" i
+\l.$1\r|$0
 endsnippet
 
 context "math()"
@@ -195,7 +206,7 @@ snippet incup "big natural indexed union" i
 endsnippet
 
 context "math()"
-snippet iacup "big arbirary indexed union" Ai
+snippet iacup "big arbirary indexed union" i
 \bigcup\limits_{${1:\alpha}\in\mathcal{${2:A}}}$0
 endsnippet
 
@@ -221,25 +232,31 @@ endsnippet
 
 priority 100
 context "math()"
-snippet -> "right arrow" Ai
+snippet -> "right arrow" i
 \to
 endsnippet
 
 priority 100
 context "math()"
-snippet => "right double arrow" Ai
+snippet => "right double arrow" i
 \Rightarrow
+endsnippet
+
+priority 100
+context "math()"
+snippet <= "left double arrow" i
+\Leftarrow
 endsnippet
 
 priority 200
 context "math()"
-snippet <-> "left right arrow" Ai
+snippet <-> "left right arrow" i
 \leftrightarrow
 endsnippet
 
 priority 200
 context "math()"
-snippet <=> "Left right double arrow" Ai
+snippet <=> "Left right double arrow" i
 \Leftrightarrow
 endsnippet
 

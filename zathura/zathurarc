@@ -14,7 +14,7 @@ set recolor true
 set recolor-lightcolor "#1E2127"
 set recolor-darkcolor "#F8F8FF"
 
-set page-padding 0
+set page-padding 5
 set guioptions none
 set window-title-basename true
 
