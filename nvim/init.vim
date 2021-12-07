@@ -46,6 +46,8 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'joshdick/onedark.vim'                                         " onedark color scheme
     Plug 'itchyny/lightline.vim'                                        " lightline
     Plug 'mhinz/vim-startify'                                           " start screen
+    Plug 'xolox/vim-notes'                                              " notes
+    Plug 'xolox/vim-misc'                                               " needed by notes
 call plug#end()
 
 " Color scheme
@@ -104,6 +106,9 @@ let g:vimtex_quickfix_ignore_filters=[
     \'Dimension too large.',
     \]
 map <F4> :VimtexView<CR>
+
+" Vim-Notes
+let g:notes_directories = ['~/.config/notes']
 
 " Lightline
 let g:lightline = {
