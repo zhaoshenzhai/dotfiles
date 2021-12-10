@@ -22,6 +22,7 @@ set fileencoding=utf-8                                                  " writte
 set encoding=utf-8                                                      " terminal encoding
 set title                                                               " enable title
 set titlestring=\ %-25.55t\ %a%r%m                                      " remove full path; name only
+set relativenumber                                                      " relative line numbers
 
 " Pluggins
 call plug#begin('~/.config/nvim/plugged')

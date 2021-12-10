@@ -88,7 +88,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_w              ), spawn "dmenu_extended_run \"google-chrome-stable --profile-directory=Default\""    ),
         ((modm .|. shiftMask, xK_w), spawn "dmenu_extended_run \"google-chrome-stable --profile-directory='Profile 2'\""),
 
-        ((modm, xK_y), spawn "dmenu_extended_run \"chromium www.youtube.com\""),
+        ((modm, xK_y), spawn "dmenu_extended_run \"google-chrome-stable www.youtube.com\""),
 
         ((modm, xK_f     ), sendMessage NextLayout  ),
         ((modm, xK_grave ), sendMessage ToggleStruts),
@@ -133,10 +133,11 @@ myStartupHook = do
 ---------------------------------------------------------------------------------------------------------------------
 myManageHook = composeAll
     [
-        className =? ""              --> viewShift (myWorkspaces !! 4),
-        className =? "Google-chrome" --> viewShift (myWorkspaces !! 3),
+        className =? "reminders"     --> viewShift (myWorkspaces !! 0),
         className =? "nvim"          --> viewShift (myWorkspaces !! 1),
         className =? "sys"           --> viewShift (myWorkspaces !! 5),
+        className =? ""              --> viewShift (myWorkspaces !! 4),
+        className =? "Google-chrome" --> viewShift (myWorkspaces !! 3),
         className =? "Pavucontrol"   --> viewShift (myWorkspaces !! 5)
     ]
 
