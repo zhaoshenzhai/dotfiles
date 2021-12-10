@@ -1,9 +1,7 @@
 Topology
 
 # Exercises
-   • 9: Product and closure
    • 16,17,18: Determine closure in topologies of {{{tex \mb{R}}}}
-   • 19,20: Boundaries and interiors
    • 21: Kuratwoski
    • 10 → 13: Hausdorff
    • 14: Convergence
@@ -11,3 +9,4 @@ Topology
    
 # TODO
    • Condition with limit points; change to Definition {{{tex \ref{1:def:...}}}}
+   • Limit points and convergence

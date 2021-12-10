@@ -120,7 +120,7 @@ let g:lightline = {
     \ }
 
 " Spell check
-setlocal nospell
+setlocal spell
 set spelllang=en
 nnoremap <silent> <M-Space>s :set spell!<cr>
 inoremap <silent> <M-Space>s <C-O>:set spell!<cr>

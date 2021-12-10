@@ -22,4 +22,7 @@ set dbus-service true
 set synctex true
 set synctex-editor-command "gvim --servername GVIM --remote +%{line} %{input}"
 
+set selection-clipboard clipboard
+set sandbox none
+
 map = feedkeys "+"

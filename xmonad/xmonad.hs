@@ -77,16 +77,16 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [
         ((modm, xK_backslash), spawn myTerminal                 ),
         ((modm, xK_p        ), spawn "pavucontrol"              ),
-        ((modm, xK_n        ), spawn "alacritty -e nvim"        ),
         ((modm, xK_v        ), spawn "alacritty -e vifm"        ),
-        ((modm, xK_b        ), spawn "alacritty -e bluetoothctl"),
-        ((modm, xK_i        ), spawn "alacritty -e iwctl"       ),
+        ((modm, xK_n        ), spawn "alacritty --class nvim,nvim -e nvim"),
+        ((modm, xK_b        ), spawn "alacritty --class sys,sys -e bluetoothctl"),
+        ((modm, xK_i        ), spawn "alacritty --class sys,sys -e iwctl"       ),
 
         ((modm, xK_Return), spawn "dmenu_extended_run"            ),
         ((modm, xK_s     ), spawn "dmenu_extended_run \"spotify\""),
 
-        ((modm, xK_w              ), spawn "dmenu_extended_run \"chromium --profile-directory=Default\""    ),
-        ((modm .|. shiftMask, xK_w), spawn "dmenu_extended_run \"chromium --profile-directory='Profile 1'\""),
+        ((modm, xK_w              ), spawn "dmenu_extended_run \"google-chrome-stable --profile-directory=Default\""    ),
+        ((modm .|. shiftMask, xK_w), spawn "dmenu_extended_run \"google-chrome-stable --profile-directory='Profile 2'\""),
 
         ((modm, xK_y), spawn "dmenu_extended_run \"chromium www.youtube.com\""),
 
@@ -133,8 +133,11 @@ myStartupHook = do
 ---------------------------------------------------------------------------------------------------------------------
 myManageHook = composeAll
     [
-        className =? ""       --> viewShift (myWorkspaces !! 4),
-        className =? "Chromium" --> viewShift (myWorkspaces !! 3)
+        className =? ""              --> viewShift (myWorkspaces !! 4),
+        className =? "Google-chrome" --> viewShift (myWorkspaces !! 3),
+        className =? "nvim"          --> viewShift (myWorkspaces !! 1),
+        className =? "sys"           --> viewShift (myWorkspaces !! 5),
+        className =? "Pavucontrol"   --> viewShift (myWorkspaces !! 5)
     ]
 
     where viewShift = doF . liftM2 (.) W.greedyView W.shift
