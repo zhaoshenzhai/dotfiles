@@ -7,3 +7,6 @@ dropbox &
 nitrogen --restore &
 pulseaudio -k
 pulseaudio --start
+
+#Open reminders
+alacritty --class reminders,reminders -e nvim ~/.config/notes/Topology &

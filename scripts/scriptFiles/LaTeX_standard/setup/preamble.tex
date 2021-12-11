@@ -1,0 +1,111 @@
+\usepackage[T1]{fontenc}                             % make fonts work? not sure
+\usepackage[hidelinks]{hyperref}                     % links
+\usepackage[side]{footmisc}                          % footnotes
+\usepackage{geometry}                                % page layout
+\usepackage{fancyhdr}                                % headers and footers
+\usepackage{titlesec}                                % title page
+\usepackage{tocloft}                                 % custom table of contents
+\usepackage{amsfonts, amsmath, amssymb, amsthm}      % basic maths commands
+\usepackage{mathtools}                               % more maths commands
+\usepackage{mathrsfs}                                % more math commands
+\usepackage{mdframed}                                % framed environments
+\usepackage{graphicx}                                % images and other graphics
+\usepackage{tikz}                                    % maths figures
+\usepackage{tikz-3dplot}                             % needed by tikz
+\usepackage{tikzpagenodes}                           % needed by tikz
+\usepackage{contour}                                 % underlining
+\usepackage{ulem}                                    % needed by contour
+\usepackage{xcolor}                                  % more colors
+\usepackage{caption}                                 % captions outside float
+\usepackage{enumitem}                                % enumerate and itemize indents
+
+\titleformat{\chapter}[display]
+{\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{20pt}{\Huge}   
+\titlespacing*{\chapter}{0pt}{-20pt}{40pt}
+\synctex=1
+\setlength{\cftsecindent}{10pt}
+\makeatletter\newcommand*{\toccontents}{\@starttoc{toc}}\makeatother
+
+\usetikzlibrary{matrix}
+\usetikzlibrary{positioning}
+\usetikzlibrary{patterns}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{arrows}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{backgrounds}
+
+\definecolor{gray}{rgb}{0.8, 0.8, 0.8}
+\definecolor{lightGray}{rgb}{0.9, 0.9, 0.9}
+\mdfdefinestyle{thmstyle}{backgroundcolor = gray, innertopmargin = -2pt, linewidth = 1pt}
+\mdfdefinestyle{defstyle}{backgroundcolor = lightGray, innertopmargin = -2pt, linewidth = 1pt}
+\newmdtheoremenv[style = thmstyle]{theorem}{Theorem}[chapter]
+\newmdtheoremenv[style = thmstyle]{axiom}[theorem]{Axiom}
+\newmdtheoremenv[style = defstyle]{definition}[theorem]{Definition}
+\newmdtheoremenv[style = defstyle]{defprop}[theorem]{Definition/Proposition}
+\newmdtheoremenv[style = defstyle]{proposition}[theorem]{Proposition}
+\newmdtheoremenv[style = defstyle]{lemmath}[theorem]{Lemma}
+\newmdtheoremenv[style = defstyle]{corollary}{Corollary}[theorem]
+\theoremstyle{definition}\newmdtheoremenv[style = defstyle]{exercise}{Exercise}
+\newmdtheoremenv[style = defstyle]{lemmaex}{Lemma}[exercise]
+\theoremstyle{definition}\newtheorem{example}[theorem]{Example}
+\theoremstyle{definition}\newtheorem*{remark}{Remark}
+\theoremstyle{remark}\newtheorem*{solution}{Solution}
+\makeatletter\renewenvironment{proof}[1][\proofname]{\par\normalfont\topsep6\p@\@plus6\p@\relax\trivlist\item[\hskip\labelsep\itshape#1\@addpunct{.}]\ignorespaces}{\endtrivlist\@endpefalse}\renewcommand\qedhere{}\makeatother
+
+\newcommand{\arcsinh}{\operatorname{arcsinh}}
+\newcommand{\arccosh}{\operatorname{arccosh}}
+\newcommand{\arctanh}{\operatorname{arctanh}}
+\newcommand{\arccoth}{\operatorname{arccoth}}
+\newcommand{\arcsech}{\operatorname{arcsech}}
+\newcommand{\arccsch}{\operatorname{arccsch}}
+\newcommand{\vspan}{\operatorname{Span}}
+\newcommand{\im}{\operatorname{im}}
+\newcommand{\preim}{\operatorname{preim}}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\uniflim}{\operatorname{unif\,lim}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\iv}{\operatorname{iv}}
+\newcommand{\proj}{\operatorname{proj}}
+\newcommand{\dom}{\operatorname{dom}}
+\newcommand{\ran}{\operatorname{ran}}
+\newcommand{\cdm}{\operatorname{cdm}}
+\newcommand{\fld}{\operatorname{fld}}
+\newcommand{\img}{\operatorname{img}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\clo}{\operatorname{clo}}
+\newcommand{\bnd}{\operatorname{bnd}}
+\renewcommand{\min}{\operatorname{min}}
+\renewcommand{\max}{\operatorname{max}}
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newcommand{\unitv}[1]{\bm{\mathrm{\hat{#1}}}}
+\newcommand{\dotpro}{\bm{\cdot}}
+\newcommand{\cropro}{\bm{\times}}
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\ms}[1]{\mathscr{#1}}
+\newcommand{\mb}[1]{\mathbb{#1}}
+\newcommand{\divides}{\,|\,}
+\newcommand{\fa}{\forall}
+\newcommand{\ex}{\exists}
+\newcommand{\del}{\partial}
+\renewcommand{\v}[1]{\bm{\mathrm{#1}}}
+\renewcommand{\d}{\mathrm{d}}
+\renewcommand{\em}{\varnothing}
+\renewcommand{\mid}{\,\middle\vert\,}
+\renewcommand{\bar}[1]{\mskip.5\thinmuskip\overline{\mskip-.5\thinmuskip {#1} \mskip-.5\thinmuskip}\mskip.5\thinmuskip}
+
+\newcommand{\qedin}{\tag*{$\blacksquare$}}
+\newcommand{\exqed}{\phantom\qedhere\hfill$\blacklozenge$}
+\newcommand{\exqedin}{\tag*{$\blacklozenge$}}
+\newcommand{\ulthm}[1]{\uline{\phantom{#1}}\llap{\contour{gray}{#1}}}
+\newcommand{\uldef}[1]{\uline{\phantom{#1}}\llap{\contour{lightGray}{#1}}}
+\newcommand{\ul}[1]{\uline{\phantom{#1}}\llap{\contour{white}{#1}}}
+\newcommand{\m}[1]{\displaystyle{#1}}
+\newcommand{\numberthis}{\addtocounter{equation}{1}\tag{\theequation}}
+\newcommand{\side}[2]{\marginpar{\vspace{#2}\footnotesize{\normalfont{#1}}}}
+\renewcommand{\l}{\left}
+\renewcommand{\r}{\right}
+\renewcommand{\it}[1]{\textit{#1}}
+\renewcommand{\bf}[1]{\textbf{#1}}
+\renewcommand{\qed}{\phantom\qedhere\hfill$\blacksquare$}

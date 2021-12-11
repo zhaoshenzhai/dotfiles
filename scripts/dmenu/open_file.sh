@@ -7,36 +7,41 @@ declare -a options=(
     "Textbooks"
     "Reminders"
     "Config"
+    "Scripts"
 )
 
-main_choice=$(printf '%s\n' "${options[@]}" | dmenu -i -p 'Options:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+main_choice=$(printf '%s\n' "${options[@]}" | dmenu -i -p 'Options:' -g 2 -l 3 $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
 case $main_choice in
     "Course Notes")
         declare -a configs=(
-            "Topology"
-            "Set Theory"
-            "Real Analysis"
-            "Classical Mechanics"
-            "Linear Algebra"
+            "Introduction to Abstract Algebra"
+            "Introduction to Topology"
+            "Introduction to Set Theory"
+            "Introduction to Linear Algebra"
+            "Introduction to Classical Mechanics"
+            "Introduction to Real Analysis"
         )
 
         choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Edit:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
         case $choice in
-            "Topology")
+            "Introduction to Abstract Algebra")
+                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Abstract_Algebra/content/Chapter_1/Introduction_to_Groups.tex"
+            ;;
+            "Introduction to Topology")
                 alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Topology/content/Chapter_1/Topological_Spaces_and_Continuity.tex"
             ;;
-            "Set Theory")
+            "Introduction to Set Theory")
                 alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Set_Theory/Introduction_to_Set_Theory.tex"
             ;;
-            "Real Analysis")
+            "Introduction to Real Analysis")
                 alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Real_Analysis/Introduction_to_Real_Analysis.tex"
             ;;
-            "Classical Mechanics")
+            "Introduction to Classical Mechanics")
                 alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Classical_Mechanics/Introduction_to_Classical_Mechanics.tex"
             ;;
-            "Linear Algebra")
+            "Introduction to Linear Algebra")
                 alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Linear_Algebra/Introduction_To_Linear_Algebra.tex"
             ;;
         esac
@@ -64,13 +69,34 @@ case $main_choice in
         fi
     ;;
     "Config")
+        dir="$HOME/.config"
         declare -a configs=(
-            "nvim - $HOME/.config/nvim/init.vim"
-            "xmonad - $HOME/.config/xmonad/xmonad.hs"
-            "xmobar - $HOME/.config/xmonad/xmobarrc"
-            "zathura - $HOME/.config/zathura/zathurarc"
-            "dmenu - $HOME/.config/scripts/dmenu/open_file.sh"
-            "alacritty - $HOME/.config/alacritty/alacritty.yml"
+            "nvim - $dir/nvim/init.vim"
+            "xmonad - $dir/xmonad/xmonad.hs"
+            "xmobar - $dir/xmonad/xmobarrc"
+            "zathura - $dir/zathura/zathurarc"
+            "alacritty - $dir/alacritty/alacritty.yml"
+        )
+
+        choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Edit:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+
+        if [ "$choice" ]; then
+            alacritty --class sys,sys -e nvim $(printf '%s\n' "${choice}" | awk '{printf $NF}')
+        else
+            exit 0
+        fi
+    ;;
+    "Scripts")
+        dir="$HOME/.config/scripts"
+        declare -a configs=(
+            "dmenu - $dir/dmenu/open_file.sh"
+            "init - $dir/init.sh"
+            "newJava - $dir/newJava.sh"
+            "newLaTeX - $dir/newLaTeX.sh"
+            "javaCompile - $dir/javaCompile.sh"
+            "cSharpCompile - $dir/cSharpCompile.sh"
+            "volumeControl - $dir/volumeControl.sh"
+            "xmobarVolume - $dir/xmobarVolume.sh"
         )
 
         choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Edit:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')

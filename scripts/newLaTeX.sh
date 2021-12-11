@@ -16,10 +16,11 @@ while [ ! -z "$1" ]; do
             if [[ -z "$1" ]]; then
                 echo "Please enter a nonempty name"
             else
-                mkdir "${1// /_}"
-                cd "${1// /_}"
-                cp $HOME/.config/scripts/scriptFiles/LaTeX_standard "${1// /_}.tex"
-                mkdir "figures"
+                NAME="${1// /_}"
+                mkdir $NAME
+                cd $NAME
+                cp -r $HOME/.config/scripts/scriptFiles/LaTeX_standard/* $PWD
+                mv main.tex "$NAME.tex"
             fi
             ;;
         --help|-h)
