@@ -3,17 +3,17 @@
 . "$HOME/.config/scripts/dmenu/theme"
 
 declare -a options=(
-    "Course Notes"
-    "Textbooks"
-    "Reminders"
+    "Courses"
     "Config"
+    "Reminders"
+    "Textbooks"
     "Scripts"
 )
 
-main_choice=$(printf '%s\n' "${options[@]}" | dmenu -i -p 'Options:' -g 2 -l 3 $colors -fn 'courier prime:spacing=1:pixelsize=20')
+main_choice=$(printf '%s\n' "${options[@]}" | dmenu -i -p 'Options:' $colors -bw 0 -fn 'courier prime:spacing=1:pixelsize=20')
 
 case $main_choice in
-    "Course Notes")
+    "Courses")
         declare -a configs=(
             "Introduction to Abstract Algebra"
             "Introduction to Topology"
@@ -23,7 +23,7 @@ case $main_choice in
             "Introduction to Real Analysis"
         )
 
-        choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Edit:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+        choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Edit:' $lines $colors -c -bw 2 -fn 'courier prime:spacing=1:pixelsize=20')
 
         case $choice in
             "Introduction to Abstract Algebra")
