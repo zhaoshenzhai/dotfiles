@@ -3,6 +3,8 @@ dmenu-fuzzymatch-4.9.diff
 dmenu-grid-4.9.diff
 dmenu-gridnav-5.0.diff
 dmenu-border-20201112-1a13d04.diff
+dmenu-navhistory+search-20200709.diff
+dmenu-lineheight-5.0.diff
 
 https://tools.suckless.org/dmenu/patches/lines-below-prompt/dmenu-linesbelowprompt-20210703-1a13d04.diff
     This draws lines under prompt

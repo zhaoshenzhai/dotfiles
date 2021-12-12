@@ -8,6 +8,8 @@ dmenu \- dynamic menu
 .IR columns ]
 .RB [ \-l
 .IR lines ]
+.RB [ \-h
+.IR height ]
 .RB [ \-m
 .IR monitor ]
 .RB [ \-p
@@ -24,6 +26,8 @@ dmenu \- dynamic menu
 .IR color ]
 .RB [ \-w
 .IR windowid ]
+.RB [ \-H
+.IR histfile ]
 .P
 .BR dmenu_run " ..."
 .SH DESCRIPTION
@@ -58,6 +62,9 @@ dmenu lists items in a grid with the given number of columns.
 .BI \-l " lines"
 dmenu lists items in a grid with the given number of lines.
 .TP
+.BI \-h " height"
+dmenu uses a menu line of at least 'height' pixels tall, but no less than 8.
+.TP
 .BI \-m " monitor"
 dmenu is displayed on the monitor number supplied. Monitor numbers are starting
 from 0.
@@ -88,6 +95,9 @@ prints version information to stdout, then exits.
 .TP
 .BI \-w " windowid"
 embed into windowid.
+.TP
+.BI \-H " histfile"
+save input in histfile and use it for history navigation.
 .SH USAGE
 dmenu is completely controlled by the keyboard.  Items are selected using the
 arrow keys, page up, page down, home, and end.
