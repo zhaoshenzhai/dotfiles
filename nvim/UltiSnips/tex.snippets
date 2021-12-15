@@ -76,6 +76,12 @@ snippet ali "begin aligned" b
 \end{aligned}
 endsnippet
 
+snippet gat "begin gathered" b
+\begin{gathered}
+	$0
+\end{gathered}
+endsnippet
+
 snippet def "begin definition" b
 \begin{definition}
 	$0
@@ -345,6 +351,11 @@ snippet P "pi" i
 endsnippet
 
 context "math()"
+snippet L "lambda" i
+\lambda
+endsnippet
+
+context "math()"
 snippet T "tau" i
 \tau
 endsnippet
@@ -403,6 +414,10 @@ endsnippet
 priority 200
 snippet BIFUN "Bijecive Function"
 Let $${1:f}:${2:X}\simto ${3:Y}$. $0
+endsnippet
+
+snippet PROD "Product"
+Let $\l(${1:U},${2:\pi_X},${3:\pi_Y}\r)$ be a product. $0
 endsnippet
 
 ###$ Let ...
