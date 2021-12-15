@@ -2,11 +2,16 @@
 global !p
 def math():
 	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
+def notmath():
+	return vim.eval('vimtex#syntax#in_mathzone()') != '1'
 def comment(): 
 	return vim.eval('vimtex#syntax#in_comment()') == '1'
 def env(name):
 	[x,y] = vim.eval("vimtex#env#is_inside('" + name + "')") 
 	return x != '0' and y != '0'
+def notenv(name):
+	[x,y] = vim.eval("vimtex#env#is_inside('" + name + "')") 
+	return (x == '0' or y == '0') and vim.eval('vimtex#syntax#in_mathzone()') == '1'
 endglobal
 #### Preamble ####
 
@@ -15,6 +20,20 @@ endglobal
 #### General ####
 snippet { "braces" Ait
 \{$1}$0
+endsnippet
+
+context "notmath()"
+snippet [ "square brackets" Ait
+[$1]$0
+endsnippet
+
+context "notmath()"
+snippet ( "parenthesis" Ait
+($1)$0
+endsnippet
+
+snippet " "braces" Ait
+"$1"$0
 endsnippet
 #### General ####
 
@@ -111,10 +130,26 @@ snippet exa "begin example" b
 \end{example}
 endsnippet
 
-snippet tikz "begin tikzpicture" b
+snippet tik "begin tikzpicture" b
 \begin{tikzpicture}
 	$0
 \end{tikzpicture}
+endsnippet
+
+snippet cd "begin unnumbered tikzcd" b
+\begin{equation*}
+	\begin{tikzcd}
+		$0
+	\end{tikzcd}
+\end{equation*}
+endsnippet
+
+snippet cdn "begin numbered tikzcd" b
+\begin{equation}
+	\begin{tikzcd}
+		$0
+	\end{tikzcd}
+\end{equation}
 endsnippet
 #### Environments ####
 
@@ -125,12 +160,12 @@ snippet $ "enter math mode" Ai
 \$$1\$$0
 endsnippet
 
-context "math()"
+context "notenv(\"tikzcd\")"
 snippet ( "()" iA
 \l($1\r)$0
 endsnippet
 
-context "math()"
+context "notenv(\"tikzcd\")"
 snippet [ "[]" iA
 \l[$1\r]$0
 endsnippet
@@ -275,14 +310,28 @@ snippet B "beta" i
 \beta
 endsnippet
 
+priority 100
 context "math()"
 snippet G "gamma" i
 \gamma
 endsnippet
 
+priority 200
+context "math()"
+snippet GG "Gamma" i
+\Gamma
+endsnippet
+
+priority 100
 context "math()"
 snippet D "delta" i
 \delta
+endsnippet
+
+priority 200
+context "math()"
+snippet DD "Delta" i
+\Delta
 endsnippet
 
 context "math()"
@@ -296,10 +345,67 @@ snippet P "pi" i
 endsnippet
 
 context "math()"
+snippet T "tau" i
+\tau
+endsnippet
+context "math()"
+snippet I "iota" i
+\iota
+endsnippet
+
+context "math()"
 snippet N "eta" i
 \eta
 endsnippet
+
+priority 100
+context "math()"
+snippet S "sigma" i
+\sigma
+endsnippet
+
+priority 200
+context "math()"
+snippet SS "Sigma" i
+\Sigma
+endsnippet
+
+priority 100
+context "math()"
+snippet R "rho" i
+\rho
+endsnippet
 #### Math ####
+
+###########################################################
+
+#### Let ...
+
+snippet TOP "Topological Space"
+Let $\l\langle ${1:X},${2:\mc{T}}\r\rangle$ be a topological space. $0
+endsnippet
+
+priority 100
+snippet FUN "Function"
+Let $${1:f}:${2:X}\to ${3:Y}$. $0
+endsnippet
+
+priority 200
+snippet INFUN "Injective Function"
+Let $${1:f}:${2:X}\hookrightarrow ${3:Y}$. $0
+endsnippet
+
+priority 200
+snippet SUFUN "Surjective Function"
+Let $${1:f}:${2:X}\twoheadrightarrow ${3:Y}$. $0
+endsnippet
+
+priority 200
+snippet BIFUN "Bijecive Function"
+Let $${1:f}:${2:X}\simto ${3:Y}$. $0
+endsnippet
+
+###$ Let ...
 
 ###########################################################
 

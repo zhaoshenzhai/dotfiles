@@ -26,3 +26,4 @@ set selection-clipboard clipboard
 set sandbox none
 
 map = feedkeys "+"
+map x toggle_statusbar

@@ -58,6 +58,7 @@ highlight NonText ctermbg=NONE guibg=NONE
 highlight LineNr ctermbg=NONE guibg=NONE
 highlight SignColumn ctermbg=NONE guibg=NONE
 highlight EndOfBuffer ctermbg=NONE guibg=NONE
+let g:loaded_matchparen=1
 
 " Leader
 let mapleader = ","
@@ -125,14 +126,14 @@ setlocal spell
 set spelllang=en
 nnoremap <silent> <M-Space>s :set spell!<cr>
 inoremap <silent> <M-Space>s <C-O>:set spell!<cr>
-inoremap <M-Space>c <c-g>u<Esc>[s1z=`]a<c-g>ui
+inoremap <M-Space>c <c-g>u<Esc>[s1z=`]a<c-g>u
 
 " Switch tabs
 map <F2> :tabp<CR>
 map <F3> :tabn<CR>
 
 " Search
-nnoremap <CR> :noh <CR>
+nnoremap <Esc> :noh <CR>
 
 " Scroll
 function! ScreenMovement(movement)

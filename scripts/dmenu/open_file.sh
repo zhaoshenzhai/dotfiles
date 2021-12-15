@@ -10,12 +10,12 @@ declare -a options=(
     "Reminders"
 )
 
-main_choice=$(printf '%s\n' "${options[@]}" | dmenu -i -p 'Options:' $colors -bw 0 -h 37 -fn 'courier prime:spacing=1:pixelsize=20')
+main_choice=$(printf '%s\n' "${options[@]}" | dmenu -i -p 'Options:' $colors -bw 0 -h 30 -fn 'courier prime:spacing=1:pixelsize=20')
 
 case $main_choice in
     "Courses")
         declare -a configs=(
-            "Introduction to Abstract Algebra"
+            "Introduction to Algebra"
             "Introduction to Topology"
             "Introduction to Set Theory"
             "Introduction to Linear Algebra"
@@ -26,8 +26,8 @@ case $main_choice in
         choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Edit:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
         case $choice in
-            "Introduction to Abstract Algebra")
-                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Abstract_Algebra/content/Chapter_1/Introduction_to_Groups.tex"
+            "Introduction to Algebra")
+                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Algebra/content/Chapter_1/Basic_Category_Theory.tex"
             ;;
             "Introduction to Topology")
                 alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Topology/content/Chapter_1/Topological_Spaces_and_Continuity.tex"
