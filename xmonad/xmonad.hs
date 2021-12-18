@@ -120,9 +120,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 ---------------------------------------------------------------------------------------------------------------------
 myWorkspaces = [
     "<fn=2>\xf303  </fn>", -- Arch
+    "<fn=2>\xf269  </fn>", -- Browser
     "<fn=2>\xf448  </fn>", -- LaTeX
-    "<fn=2>\xf02d  </fn>", -- Book
-    "<fn=2>\xf269  </fn>", -- Chrome
+    "<fn=2>\xf02d  </fn>", -- Book1
+    "<fn=2>\xfad9  </fn>", -- Book2
     "<fn=2>\xf9c6  </fn>", -- Spotify
     "<fn=2>\xf013 </fn>"   -- Config
     ]
@@ -135,11 +136,11 @@ myStartupHook = do
 myManageHook = composeAll
     [
         className =? "reminders"     --> viewShift (myWorkspaces !! 0),
-        className =? "nvim"          --> viewShift (myWorkspaces !! 1),
-        className =? "sys"           --> viewShift (myWorkspaces !! 5),
-        className =? ""              --> viewShift (myWorkspaces !! 4),
-        className =? "Google-chrome" --> viewShift (myWorkspaces !! 3),
-        className =? "Pavucontrol"   --> viewShift (myWorkspaces !! 5)
+        className =? "Google-chrome" --> viewShift (myWorkspaces !! 1),
+        className =? "nvim"          --> viewShift (myWorkspaces !! 2),
+        className =? ""              --> viewShift (myWorkspaces !! 5),
+        className =? "sys"           --> viewShift (myWorkspaces !! 6),
+        className =? "Pavucontrol"   --> viewShift (myWorkspaces !! 6)
     ]
 
     where viewShift = doF . liftM2 (.) W.greedyView W.shift

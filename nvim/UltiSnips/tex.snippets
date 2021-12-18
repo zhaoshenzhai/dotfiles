@@ -271,6 +271,11 @@ snippet bcap "big intersection" i
 \bigcap
 endsnippet
 
+context "math()"
+snippet opp "opposite category" i
+\cat{${1:C}}^\mathrm{op}$0
+endsnippet
+
 priority 100
 context "math()"
 snippet -> "right arrow" i
@@ -414,6 +419,21 @@ endsnippet
 priority 200
 snippet BIFUN "Bijecive Function"
 Let $${1:f}:${2:X}\simto ${3:Y}$. $0
+endsnippet
+
+priority 100
+snippet CAT "Category"
+Let $\cat{${1:C}}$ be a category. $0
+endsnippet
+
+priority 200
+snippet SLICAT "Slice Category"
+Let $\cat{${1:C}}_{${2:X}}$ be the slice category of $\cat{$1}$ over $$2$. $0
+endsnippet
+
+priority 200
+snippet CSLCAT "Coslice Category"
+Let $\cat{${1:C}}^{${2:X}}$ be the coslice category of $\cat{$1}$ over $$2$. $0
 endsnippet
 
 snippet PROD "Product"

@@ -47,8 +47,6 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'joshdick/onedark.vim'                                         " onedark color scheme
     Plug 'itchyny/lightline.vim'                                        " lightline
     Plug 'mhinz/vim-startify'                                           " start screen
-    Plug 'xolox/vim-notes'                                              " notes
-    Plug 'xolox/vim-misc'                                               " needed by notes
 call plug#end()
 
 " Color scheme
@@ -106,6 +104,7 @@ let g:vimtex_quickfix_ignore_filters=[
     \'Package typearea Warning: Bad type area settings!',
     \'LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.',
     \'Dimension too large.',
+    \'LaTeX Warning\: Marginpar on page * moved. ',
     \]
 map <F4> :VimtexView<CR>
 

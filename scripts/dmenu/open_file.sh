@@ -7,6 +7,7 @@ declare -a options=(
     "Textbooks"
     "Config"
     "Scripts"
+    "Snippets"
     "Reminders"
 )
 
@@ -58,12 +59,23 @@ case $main_choice in
         fi
     ;;
     "Reminders")
-        root_path="$HOME/.config/notes/"
+        root_path="$HOME/Reminders/"
 
         choice=$(find $root_path -type f | cut -c$((${#root_path}+1))- | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
         if [ "$choice" ]; then
             alacritty --class reminders,reminders -e nvim "$root_path$choice"
+        else
+            exit 0
+        fi
+    ;;
+    "Snippets")
+        root_path="$HOME/.config/nvim/UltiSnips/"
+
+        choice=$(find $root_path -type f | cut -c$((${#root_path}+1))- | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+
+        if [ "$choice" ]; then
+            alacritty --class sys,sys -e nvim "$root_path$choice"
         else
             exit 0
         fi

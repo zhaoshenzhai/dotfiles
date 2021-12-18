@@ -9,4 +9,4 @@ pulseaudio -k
 pulseaudio --start
 
 #Open reminders
-alacritty --class reminders,reminders -e nvim ~/.config/notes/Topology &
+alacritty --class reminders,reminders -e nvim ~/Reminders/self_study.md &
