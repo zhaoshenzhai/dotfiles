@@ -311,11 +311,13 @@ snippet ~ "tilde" Ai
 \sim
 endsnippet
 
+priority 100
 context "math()"
 snippet A "alpha" i
 \alpha
 endsnippet
 
+priority 100
 context "math()"
 snippet B "beta" i
 \beta
@@ -345,30 +347,37 @@ snippet DD "Delta" i
 \Delta
 endsnippet
 
+priority 100
 context "math()"
 snippet E "epsilon" i
 \epsilon
 endsnippet
 
+priority 100
 context "math()"
 snippet P "pi" i
 \pi
 endsnippet
 
+priority 100
 context "math()"
 snippet L "lambda" i
 \lambda
 endsnippet
 
+priority 100
 context "math()"
 snippet T "tau" i
 \tau
 endsnippet
+
+priority 100
 context "math()"
 snippet I "iota" i
 \iota
 endsnippet
 
+priority 100
 context "math()"
 snippet N "eta" i
 \eta
@@ -401,22 +410,22 @@ snippet TOP "Topological Space"
 Let $\l\langle ${1:X},${2:\mc{T}}\r\rangle$ be a topological space. $0
 endsnippet
 
-priority 100
+priority 1000
 snippet FUN "Function"
 Let $${1:f}:${2:X}\to ${3:Y}$. $0
 endsnippet
 
-priority 200
+priority 2000
 snippet INFUN "Injective Function"
 Let $${1:f}:${2:X}\hookrightarrow ${3:Y}$. $0
 endsnippet
 
-priority 200
+priority 2000
 snippet SUFUN "Surjective Function"
 Let $${1:f}:${2:X}\twoheadrightarrow ${3:Y}$. $0
 endsnippet
 
-priority 200
+priority 2000
 snippet BIFUN "Bijecive Function"
 Let $${1:f}:${2:X}\simto ${3:Y}$. $0
 endsnippet
