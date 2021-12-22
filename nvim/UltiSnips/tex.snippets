@@ -167,8 +167,15 @@ snippet $ "enter math mode" Ai
 endsnippet
 
 context "notenv(\"tikzcd\")"
+priority 100
 snippet ( "()" iA
 \l($1\r)$0
+endsnippet
+
+context "math()"
+priority 200
+snippet b( "()" iA
+\big(\!$1\!\big)$0
 endsnippet
 
 context "notenv(\"tikzcd\")"
@@ -272,8 +279,8 @@ snippet bcap "big intersection" i
 endsnippet
 
 context "math()"
-snippet opp "opposite category" i
-\cat{${1:C}}^\mathrm{op}$0
+snippet div "divides" i
+$1\divides$2
 endsnippet
 
 priority 100
