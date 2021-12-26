@@ -28,7 +28,7 @@ case $main_choice in
 
         case $choice in
             "Introduction to Algebra")
-                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Algebra/content/Chapter_1/Basic_Category_Theory.tex"
+                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Algebra/content/Chapter_2/Groups_First_Encounter.tex"
             ;;
             "Introduction to Topology")
                 alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Topology/content/Chapter_1/Topological_Spaces_and_Continuity.tex"
