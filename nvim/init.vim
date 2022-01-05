@@ -1,7 +1,7 @@
 " Settings
 syntax on                                                               " code highlighting 
 set number                                                              " line numbers
-set hlsearch                                                            " highlight search
+set nohlsearch                                                          " no highlighting
 set incsearch                                                           " incremental search
 set tabstop=4                                                           " tab spaces
 set softtabstop=4                                                       " multiple spaces become tab stops
@@ -9,12 +9,11 @@ set expandtab                                                           " conver
 set shiftwidth=4                                                        " width for auto indents
 set autoindent                                                          " indents a new line    
 set wildmode=longest,list                                               " get bash-like tab completions
-set mouse=a                                                             " enable mouse clicks
+" set mouse=a                                                           " enable mouse clicks
 set noswapfile                                                          " disable creating a swap file 
 set wrap                                                                " wraps text
 set breakindent                                                         " wraps with correct indent
 set linebreak                                                           " wraps at word boundaries
-set updatetime=100                                                      " sets update time for git-gutter
 set clipboard=unnamedplus                                               " uses system clipboard
 set ignorecase                                                          " case insensitive when typing commands
 set noshowmode                                                          " remove default mode display
@@ -130,9 +129,6 @@ inoremap <M-Space>c <c-g>u<Esc>[s1z=`]a<c-g>u
 " Switch tabs
 map <F2> :tabp<CR>
 map <F3> :tabn<CR>
-
-" Search
-nnoremap <Esc> :noh <CR>
 
 " Scroll
 function! ScreenMovement(movement)

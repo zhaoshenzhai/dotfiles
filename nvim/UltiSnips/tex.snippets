@@ -298,6 +298,16 @@ snippet gl "general linear group" i
 \gl_${1:n}\!\l(${2:\mb\{R\}}\r)$0
 endsnippet
 
+context "math()"
+snippet 2in "take two elements in" i
+${1:x}_1,$1_2\in${3:X}
+endsnippet
+
+context "math()"
+snippet mod "congruence modulo n" i
+${1:a}\equiv${2:b}\mod ${3:n}
+endsnippet
+
 priority 100
 context "math()"
 snippet -> "right arrow" i
