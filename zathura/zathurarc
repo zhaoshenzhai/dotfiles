@@ -17,6 +17,7 @@ set recolor-darkcolor "#F8F8FF"
 set page-padding 5
 set guioptions none
 set window-title-basename true
+set adjust-open width
 
 set dbus-service true
 set synctex true

@@ -39,6 +39,7 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'ncm2/ncm2-path'                                               " complete paths
     Plug 'ncm2/ncm2-jedi'                                               " python completion
     Plug 'ObserverOfTime/ncm2-jc2', {'for': ['java', 'jsp']}            " java completion
+    Plug 'OmniSharp/omnisharp-vim'                                      " C# code completion
     Plug 'artur-shaik/vim-javacomplete2', {'for': ['java', 'jsp']}      " framework required for java completion
     Plug 'uiiaoo/java-syntax.vim'                                       " java code highlighting
     Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }            " python code highlighting
