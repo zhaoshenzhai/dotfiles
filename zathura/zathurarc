@@ -13,6 +13,7 @@ set highlight-transparency 0.5
 set recolor true
 set recolor-lightcolor "#1E2127"
 set recolor-darkcolor "#F8F8FF"
+set highlight-fg "#00FF00"
 
 set page-padding 5
 set guioptions none
