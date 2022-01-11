@@ -9,7 +9,6 @@ set expandtab                                                           " conver
 set shiftwidth=4                                                        " width for auto indents
 set autoindent                                                          " indents a new line    
 set wildmode=longest,list                                               " get bash-like tab completions
-" set mouse=a                                                           " enable mouse clicks
 set noswapfile                                                          " disable creating a swap file 
 set wrap                                                                " wraps text
 set breakindent                                                         " wraps with correct indent
@@ -47,6 +46,7 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'joshdick/onedark.vim'                                         " onedark color scheme
     Plug 'itchyny/lightline.vim'                                        " lightline
     Plug 'mhinz/vim-startify'                                           " start screen
+    Plug 'tpope/vim-surround'                                            " surround.vim
 call plug#end()
 
 " Color scheme
@@ -107,9 +107,6 @@ let g:vimtex_quickfix_ignore_filters=[
     \'LaTeX Warning\: Marginpar on page * moved. ',
     \]
 map <F4> :VimtexView<CR>
-
-" Vim-Notes
-let g:notes_directories = ['~/.config/notes']
 
 " Lightline
 let g:lightline = {

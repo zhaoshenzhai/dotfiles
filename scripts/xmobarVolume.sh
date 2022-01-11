@@ -5,7 +5,7 @@ LINES=`echo "$RAW" | wc -l`
 
 if [ "$LINES" -eq 2 ]; then
     SINK=`echo "$RAW" | sed -n 2p`
-    SPEAKER=${SINK:0:1}
+    SPEAKER=${SINK%%\ *}
     MUTE=`pamixer --sink "$SPEAKER" --get-mute`
     if [ "$MUTE" = true ]; then
         printf "%s %s" "<fn=2> </fn>" "Muted"
@@ -15,7 +15,7 @@ if [ "$LINES" -eq 2 ]; then
     fi
 elif [ "$LINES" -eq 3 ]; then
     SINK=`echo "$RAW" | sed -n 3p`
-    HEADPHONE=${SINK:0:1}
+    HEADPHONE=${SINK%%\ *}
     MUTE=`pamixer --sink "$HEADPHONE" --get-mute`
     if [ "$MUTE" = true ]; then
         printf "%s %s" "<fn=2> </fn>" "Muted"

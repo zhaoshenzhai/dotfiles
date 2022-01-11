@@ -299,6 +299,11 @@ snippet gl "general linear group" i
 endsnippet
 
 context "math()"
+snippet cycl "cyclic group" i
+\mb{Z}/${1:n}\mb{Z}$0
+endsnippet
+
+context "math()"
 snippet 2in "take two elements in" i
 ${1:x}_1,$1_2\in${3:X}
 endsnippet
@@ -306,6 +311,16 @@ endsnippet
 context "math()"
 snippet mod "congruence modulo n" i
 ${1:a}\equiv${2:b}\mod ${3:n}
+endsnippet
+
+context "math()"
+snippet ubrace "underbrace" i
+\underbrace{\l($1${2:\cdots}$3\r)}_{\mathclap{$4${5:\mathrm{\ times}}}}$0
+endsnippet
+
+context "math()"
+snippet obrace "overbrace" i
+\overbrace{\l($1${2:\cdots}$3\r)}^{\mathclap{$4${5:\mathrm{\ times}}}}$0
 endsnippet
 
 priority 100
@@ -341,6 +356,10 @@ endsnippet
 context "math()"
 snippet ~ "tilde" Ai
 \sim
+endsnippet
+
+snippet d= "coloneqq" i
+\coloneqq
 endsnippet
 
 priority 100
@@ -437,7 +456,6 @@ endsnippet
 ###########################################################
 
 #### Let ...
-
 snippet TOP "Topological Space"
 Let $\l\langle ${1:X},${2:\mc{T}}\r\rangle$ be a topological space. $0
 endsnippet
@@ -476,11 +494,6 @@ priority 200
 snippet CSLCAT "Coslice Category"
 Let $\cat{${1:C}}^{${2:X}}$ be the coslice category of $\cat{$1}$ over $$2$. $0
 endsnippet
-
-snippet PROD "Product"
-Let $\l(${1:U},${2:\pi_X},${3:\pi_Y}\r)$ be a product. $0
-endsnippet
-
 ###$ Let ...
 
 ###########################################################

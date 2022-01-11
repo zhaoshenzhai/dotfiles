@@ -18,12 +18,12 @@ MUTE=true
 
 if [ "$LINES" -eq 2 ]; then
     SINK=`echo "$RAW" | sed -n 2p`
-    SPEAKER=${SINK:0:1}
+    SPEAKER=${SINK%%\ *}
     VOLUME=`pamixer --sink "$SPEAKER" --get-volume`
     MUTE=`pamixer --sink "$SPEAKER" --get-mute`
 elif [ "$LINES" -eq 3 ]; then
     SINK=`echo "$RAW" | sed -n 3p`
-    HEADPHONE=${SINK:0:1}
+    HEADPHONE=${SINK%%\ *}
     VOLUME=`pamixer --sink "$HEADPHONE" --get-volume`
     MUTE=`pamixer --sink "$HEADPHONE" --get-mute`
 fi
@@ -59,6 +59,7 @@ while [ ! -z "$1" ]; do
                     `pamixer -u`
                 fi
                 VOLUME=$((VOLUME - $1))
+                echo $VOLUME
                 `pamixer --set-volume $VOLUME`
             fi
 
