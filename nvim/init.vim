@@ -46,7 +46,12 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'joshdick/onedark.vim'                                         " onedark color scheme
     Plug 'itchyny/lightline.vim'                                        " lightline
     Plug 'mhinz/vim-startify'                                           " start screen
-    Plug 'tpope/vim-surround'                                            " surround.vim
+    Plug 'godlygeek/tabular'                                            " needed by markdown
+    Plug 'plasticboy/vim-markdown'                                      " markdown syntax
+    Plug 'vimwiki/vimwiki'                                              " wiki
+    Plug 'inkarkat/vim-SyntaxRange'                                     " tex syntax in md
+    Plug 'tpope/vim-surround'                                           " vim surround
+    Plug 'tpope/vim-repeat'                                             " vim repeat
 call plug#end()
 
 " Color scheme
@@ -79,6 +84,10 @@ augroup NCM2
         \ })
 augroup END
 
+" VimWiki
+let g:vimwiki_list = [{'path': '~/Study/Introduction to Algebra',
+                      \ 'syntax': 'markdown', 'ext': '.md'}]
+
 " NerdTree
 map <silent> <M-Space>n :NERDTreeFocus<CR>
 let NERDTreeIgnore=['\.pyc$']
@@ -87,8 +96,16 @@ let NERDTreeIgnore=['\.pyc$']
 let g:vim_isort_map = '<M-Space>i'
 
 " Ultisnips
-let g:UltiSnipsExpandTrigger="<s-tab>"                                            
+let g:UltiSnipsExpandTrigger="<S-tab>"                                            
 let g:UltiSnipsJumpForwardTrigger="<tab>"
+
+" VimMarkdown
+let g:vim_markdown_math = 1
+let g:vimwiki_conceallevel = 0
+autocmd filetype vimwiki :call SyntaxRange#Include('\$', '\$', 'tex')
+autocmd filetype vimwiki :call SyntaxRange#Include('\$\$', '\$\$', 'tex')
+imap <Leader>o <Plug>VimwikiNextLink
+imap <Leader>p <Plug>VimwikiPrevLink
 
 " VimTex
 let g:tex_flavor='latex'

@@ -5,8 +5,6 @@ xset b off &                                        # Remove beep
 # Start applications
 dropbox &
 nitrogen --restore &
-pulseaudio -k &
-pulseaudio --start &
 
 #Open reminders
 alacritty --class reminders,reminders -e nvim ~/Reminders/self_study.md &

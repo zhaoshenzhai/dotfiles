@@ -1,0 +1,387 @@
+#### Preamble ####
+global !p
+def math():
+	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
+def notmath():
+	return vim.eval('vimtex#syntax#in_mathzone()') != '1'
+endglobal
+#### Preamble ####
+
+###########################################################
+
+#### General ####
+snippet { "braces" Ait
+\{$1}$0
+endsnippet
+
+context "notmath()"
+snippet [ "square brackets" Ait
+[$1]$0
+endsnippet
+
+context "notmath()"
+snippet ( "parenthesis" Ait
+($1)$0
+endsnippet
+
+snippet " "braces" Ait
+"$1"$0
+endsnippet
+#### General ####
+
+###########################################################
+
+#### Environments ####
+snippet eq "begin unnumbered equation" b
+\begin{equation*}
+	$0
+\end{equation*}
+endsnippet
+
+snippet eqn "begin numbered equation" b
+\begin{equation}
+	$0
+\end{equation}
+endsnippet
+
+snippet ali "begin aligned" b
+\begin{aligned}
+	$0
+\end{aligned}
+endsnippet
+
+snippet gat "begin gathered" b
+\begin{gathered}
+	$0
+\end{gathered}
+endsnippet
+#### Environments ####
+
+###########################################################
+
+#### Math ####
+snippet $ "enter math mode" Ai
+\$$1\$$0
+endsnippet
+
+priority 100
+context "math()"
+snippet ( "()" iA
+\l($1\r)$0
+endsnippet
+
+context "math()"
+priority 200
+snippet bigp "()" iA
+\big(\!$1\!\big)$0
+endsnippet
+
+context "math()"
+snippet [ "[]" iA
+\l[$1\r]$0
+endsnippet
+
+context "math()"
+snippet | "||" iA
+\l|$1\r|$0
+endsnippet
+
+context "math()"
+snippet su ".|" i
+\l.$1\r|$0
+endsnippet
+
+context "math()"
+snippet br "{}" i
+\l\\{$1\r\\}$0
+endsnippet
+
+context "math()"
+snippet no "||||" i
+\l\|$1\r\|$0
+endsnippet
+
+context "math()"
+snippet an "<>" i
+\l\langle$1\r\rangle$0
+endsnippet
+
+context "math()"
+snippet fr "fraction" i
+\frac{$1}{$2}$0
+endsnippet
+
+context "math()"
+snippet rt "sqrt" i
+\sqrt{$1}$0
+endsnippet
+
+context "math()"
+snippet der "derivative" i
+\frac{\d ${1:f}}{\d ${2:x}}$0
+endsnippet
+
+context "math()"
+snippet par "partial derivative" i
+\frac{\partial $1}{\partial $2}$0
+endsnippet
+
+context "math()"
+snippet int "integral" i
+\int_{$1}^{$2}$4\d ${3:x}$0
+endsnippet
+
+context "math()"
+snippet lim "limit" i
+\lim\limits_{${1:n}\to${2:\infty}}$0
+endsnippet
+
+context "math()"
+snippet sum "sum" i
+\sum\limits_{${1:i}=${2:0}}^{${3:\infty}}$0
+endsnippet
+
+context "math()"
+snippet prod "product" i
+\prod\limits_{${1:i}=${2:0}}^{${3:\infty}}$0
+endsnippet
+
+context "math()"
+snippet incup "big natural indexed union" i
+\bigcup\limits_{${1:i}=${2:0}}^{${3:\infty}}$0
+endsnippet
+
+context "math()"
+snippet iacup "big arbirary indexed union" i
+\bigcup\limits_{${1:\alpha}\in\mathcal{${2:A}}}$0
+endsnippet
+
+context "math()"
+snippet bcup "big union" i
+\bigcup
+endsnippet
+
+context "math()"
+snippet incap "big natural indexed intersection" i
+\bigcap\limits_{${1:i}=${2:0}}^{${3:\infty}}$0
+endsnippet
+
+context "math()"
+snippet iacap "big arbirary indexed intersection" i
+\bigcap\limits_{${1:\alpha}\in\mathcal{${2:A}}}$0
+endsnippet
+
+context "math()"
+snippet bcap "big intersection" i
+\bigcap
+endsnippet
+
+context "math()"
+snippet div "divides" i
+$1\divides$2
+endsnippet
+
+context "math()"
+snippet gl "general linear group" i
+\gl_${1:n}\!\l(${2:\mb\{R\}}\r)$0
+endsnippet
+
+context "math()"
+snippet cycl "cyclic group" i
+\mb{Z}/${1:n}\mb{Z}$0
+endsnippet
+
+context "math()"
+snippet 2in "take two elements in" i
+${1:x}_1,$1_2\in${3:X}
+endsnippet
+
+context "math()"
+snippet mod "congruence modulo n" i
+${1:a}\equiv${2:b}\mod ${3:n}
+endsnippet
+
+context "math()"
+snippet ubrace "underbrace" i
+\underbrace{\l($1${2:\cdots}$3\r)}_{\mathclap{$4${5:\mathrm{\ times}}}}$0
+endsnippet
+
+context "math()"
+snippet obrace "overbrace" i
+\overbrace{\l($1${2:\cdots}$3\r)}^{\mathclap{$4${5:\mathrm{\ times}}}}$0
+endsnippet
+
+priority 100
+context "math()"
+snippet -> "right arrow" i
+\to
+endsnippet
+
+priority 100
+context "math()"
+snippet => "right double arrow" i
+\Rightarrow
+endsnippet
+
+priority 100
+context "math()"
+snippet <= "left double arrow" i
+\Leftarrow
+endsnippet
+
+priority 200
+context "math()"
+snippet <-> "left right arrow" i
+\leftrightarrow
+endsnippet
+
+priority 200
+context "math()"
+snippet <=> "Left right double arrow" i
+\Leftrightarrow
+endsnippet
+
+context "math()"
+snippet ~ "tilde" Ai
+\sim
+endsnippet
+
+snippet d= "coloneqq" i
+\coloneqq
+endsnippet
+
+priority 100
+context "math()"
+snippet A "alpha" i
+\alpha
+endsnippet
+
+priority 100
+context "math()"
+snippet B "beta" i
+\beta
+endsnippet
+
+priority 100
+context "math()"
+snippet G "gamma" i
+\gamma
+endsnippet
+
+priority 200
+context "math()"
+snippet GG "Gamma" i
+\Gamma
+endsnippet
+
+priority 100
+context "math()"
+snippet D "delta" i
+\delta
+endsnippet
+
+priority 200
+context "math()"
+snippet DD "Delta" i
+\Delta
+endsnippet
+
+priority 100
+context "math()"
+snippet E "epsilon" i
+\epsilon
+endsnippet
+
+priority 100
+context "math()"
+snippet P "pi" i
+\pi
+endsnippet
+
+priority 100
+context "math()"
+snippet L "lambda" i
+\lambda
+endsnippet
+
+priority 100
+context "math()"
+snippet T "tau" i
+\tau
+endsnippet
+
+priority 100
+context "math()"
+snippet I "iota" i
+\iota
+endsnippet
+
+priority 100
+context "math()"
+snippet N "eta" i
+\eta
+endsnippet
+
+priority 100
+context "math()"
+snippet S "sigma" i
+\sigma
+endsnippet
+
+priority 200
+context "math()"
+snippet SS "Sigma" i
+\Sigma
+endsnippet
+
+priority 100
+context "math()"
+snippet R "rho" i
+\rho
+endsnippet
+#### Math ####
+
+###########################################################
+
+#### Let ...
+snippet TOP "Topological Space"
+Let $\l\langle ${1:X},${2:\mc{T}}\r\rangle$ be a topological space. $0
+endsnippet
+
+priority 1000
+snippet FUN "Function"
+Let $${1:f}:${2:X}\to ${3:Y}$. $0
+endsnippet
+
+priority 2000
+snippet INFUN "Injective Function"
+Let $${1:f}:${2:X}\hookrightarrow ${3:Y}$. $0
+endsnippet
+
+priority 2000
+snippet SUFUN "Surjective Function"
+Let $${1:f}:${2:X}\twoheadrightarrow ${3:Y}$. $0
+endsnippet
+
+priority 2000
+snippet BIFUN "Bijecive Function"
+Let $${1:f}:${2:X}\simto ${3:Y}$. $0
+endsnippet
+
+priority 100
+snippet CAT "Category"
+Let $\cat{${1:C}}$ be a category. $0
+endsnippet
+
+priority 200
+snippet SLICAT "Slice Category"
+Let $\cat{${1:C}}_{${2:X}}$ be the slice category of $\cat{$1}$ over $$2$. $0
+endsnippet
+
+priority 200
+snippet CSLCAT "Coslice Category"
+Let $\cat{${1:C}}^{${2:X}}$ be the coslice category of $\cat{$1}$ over $$2$. $0
+endsnippet
+###$ Let ...
+
+###########################################################

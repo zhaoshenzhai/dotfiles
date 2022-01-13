@@ -90,6 +90,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm .|. shiftMask, xK_w     ), spawn "dmenu_extended_run \"google-chrome-stable --profile-directory='Profile 2'\""),
 
         ((modm, xK_y), spawn "dmenu_extended_run \"google-chrome-stable www.youtube.com\""),
+        ((modm, xK_o), spawn "obsidian"),
 
         ((modm, xK_f     ), sendMessage NextLayout  ),
         ((modm, xK_grave ), sendMessage ToggleStruts),
@@ -138,6 +139,7 @@ myManageHook = composeAll
         className =? "reminders"     --> viewShift (myWorkspaces !! 0),
         className =? "Google-chrome" --> viewShift (myWorkspaces !! 1),
         className =? "nvim"          --> viewShift (myWorkspaces !! 2),
+        className =? "obsidian"      --> viewShift (myWorkspaces !! 2),
         className =? ""              --> viewShift (myWorkspaces !! 5),
         className =? "sys"           --> viewShift (myWorkspaces !! 6),
         className =? "Pavucontrol"   --> viewShift (myWorkspaces !! 6)
