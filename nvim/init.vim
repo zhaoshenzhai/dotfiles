@@ -21,6 +21,7 @@ set encoding=utf-8                                                      " termin
 set title                                                               " enable title
 set titlestring=\ %-25.55t\ %a%r%m                                      " remove full path; name only
 set relativenumber                                                      " relative line numbers
+set nofoldenable                                                        " no folding
 
 " Pluggins
 call plug#begin('~/.config/nvim/plugged')
@@ -50,8 +51,6 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'plasticboy/vim-markdown'                                      " markdown syntax
     Plug 'vimwiki/vimwiki'                                              " wiki
     Plug 'inkarkat/vim-SyntaxRange'                                     " tex syntax in md
-    Plug 'tpope/vim-surround'                                           " vim surround
-    Plug 'tpope/vim-repeat'                                             " vim repeat
 call plug#end()
 
 " Color scheme
@@ -64,7 +63,7 @@ highlight EndOfBuffer ctermbg=NONE guibg=NONE
 let g:loaded_matchparen=1
 
 " Leader
-let mapleader = ","
+let mapleader = "`"
 
 " ncm2
 autocmd BufEnter * call ncm2#enable_for_buffer()
@@ -85,11 +84,19 @@ augroup NCM2
 augroup END
 
 " VimWiki
-let g:vimwiki_list = [{'path': '~/Study/Introduction to Algebra',
-                      \ 'syntax': 'markdown', 'ext': '.md'}]
+nmap <leader><space> <Plug>VimwikiNextLink
+nmap <leader>. <Plug>VimwikiPrevLink
+nmap <leader><enter> <Plug>VimwikiFollowLink
+let g:vimwiki_conceallevel = 2
+let g:vimwiki_table_mappings = 0
+let g:vimwiki_list = [{'path': '~/MathWiki/',
+                        \ 'syntax': 'markdown', 'ext': '.md'}]
+autocmd filetype vimwiki :call SyntaxRange#Include('\$', '\$', 'tex')
+autocmd filetype vimwiki :call SyntaxRange#Include('\$\$', '\$\$', 'tex')
 
 " NerdTree
-map <silent> <M-Space>n :NERDTreeFocus<CR>
+map <silent> <Leader>n :NERDTreeToggle<CR>
+map <silent> <Leader>m :NERDTreeToggle ~/MathWiki/<CR>j<CR>
 let NERDTreeIgnore=['\.pyc$']
 
 " Isort
@@ -101,11 +108,6 @@ let g:UltiSnipsJumpForwardTrigger="<tab>"
 
 " VimMarkdown
 let g:vim_markdown_math = 1
-let g:vimwiki_conceallevel = 0
-autocmd filetype vimwiki :call SyntaxRange#Include('\$', '\$', 'tex')
-autocmd filetype vimwiki :call SyntaxRange#Include('\$\$', '\$\$', 'tex')
-imap <Leader>o <Plug>VimwikiNextLink
-imap <Leader>p <Plug>VimwikiPrevLink
 
 " VimTex
 let g:tex_flavor='latex'

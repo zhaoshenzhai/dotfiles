@@ -3,6 +3,7 @@
 . "$HOME/.config/scripts/dmenu/theme"
 
 declare -a options=(
+    "MathWiki"
     "Courses"
     "Textbooks"
     "Config"
@@ -14,6 +15,9 @@ declare -a options=(
 main_choice=$(printf '%s\n' "${options[@]}" | dmenu -i -p 'Options:' $colors -bw 0 -h 30 -fn 'courier prime:spacing=1:pixelsize=20')
 
 case $main_choice in
+    "MathWiki")
+        alacritty --class nvim,nvim -e nvim "$HOME/MathWiki/"
+    ;;
     "Courses")
         declare -a configs=(
             "Introduction to Algebra"

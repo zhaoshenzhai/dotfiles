@@ -52,3 +52,5 @@ monoid
 Abelianness
 coprime
 totient
+Extensionality
+preimage
