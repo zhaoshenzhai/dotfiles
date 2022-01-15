@@ -22,6 +22,7 @@ set title                                                               " enable
 set titlestring=\ %-25.55t\ %a%r%m                                      " remove full path; name only
 set relativenumber                                                      " relative line numbers
 set nofoldenable                                                        " no folding
+set conceallevel=2                                                      " conceal
 
 " Pluggins
 call plug#begin('~/.config/nvim/plugged')
@@ -93,6 +94,10 @@ let g:vimwiki_list = [{'path': '~/MathWiki/',
                         \ 'syntax': 'markdown', 'ext': '.md'}]
 autocmd filetype vimwiki :call SyntaxRange#Include('\$', '\$', 'tex')
 autocmd filetype vimwiki :call SyntaxRange#Include('\$\$', '\$\$', 'tex')
+" NOTE: To fix autocomplete <CR> skipping to next line, go to
+" ~/.config/nvim/plugged/vimwiki/ftplugin/vimwiki.vim line 486 and change the
+" key binding
+map <leader>p :grep -r "In Progress" ~/MathWiki<CR>:copen<CR><CR>
 
 " NerdTree
 map <silent> <Leader>n :NERDTreeToggle<CR>
@@ -146,6 +151,10 @@ inoremap <M-Space>c <c-g>u<Esc>[s1z=`]a<c-g>u
 " Switch tabs
 map <F2> :tabp<CR>
 map <F3> :tabn<CR>
+map <leader>j <C-w>j
+map <leader>k <C-w>k
+map <M-Space>d <C-w>-
+map <M-Space>u <C-w>+
 
 " Scroll
 function! ScreenMovement(movement)

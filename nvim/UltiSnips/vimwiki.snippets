@@ -24,8 +24,12 @@ snippet ( "parenthesis" Ait
 ($1)$0
 endsnippet
 
-snippet ' "single quotes" Ait
-$\textrm{`}$$\textrm{'}$
+snippet SQ "single quotes" it
+$\textrm{\`}$$1$\textrm{'}$$0
+endsnippet
+
+snippet DQ "double quotes" it
+$\textrm{\`\`}$$1$\textrm{''}$$0
 endsnippet
 
 snippet " "braces" Ait
@@ -36,6 +40,10 @@ snippet bf "bold" i
 **$1**$0
 endsnippet
 
+snippet it "italics" i
+_$1_$0
+endsnippet
+
 priority 100
 snippet qed "qed" i
 <span style="float:right;">$\blacksquare$</span>
@@ -44,6 +52,14 @@ endsnippet
 priority 200
 snippet exqed "exqed" i
 <span style="float:right;">$\blacklozenge$</span>
+endsnippet
+
+snippet 4s "4 spaces" i
+\ \ \ \ $0
+endsnippet
+
+snippet 8s "8 spaces" i
+\ \ \ \ \ \ \ \ $0
 endsnippet
 #### General ####
 
@@ -65,7 +81,7 @@ $1
 
 --- admonition
 
-_proof_. $0
+_Proof_. $0
 endsnippet
 
 snippet prp "begin proposition" b
@@ -75,11 +91,11 @@ $1
 
 --- admonition
 
-_proof_. $0
+_Proof_. $0
 endsnippet
 
 snippet pro "begin proof" b
-_proof_. $0
+_Proof_. $0
 endsnippet
 
 snippet eq "begin unnumbered equation" b
@@ -450,6 +466,7 @@ Date Created: `!p from datetime import datetime
 if not snip.c:
     snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
 Categories: $1
+Status: _In Progress_
 
 Types: _Not Applicable_
 Examples: _Not Applicable_ 
@@ -472,7 +489,9 @@ Date Created: `!p from datetime import datetime
 if not snip.c:
     snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
 Categories: $1
+Status: _In Progress_
 
+Lemmas: _Not Applicable_
 Generalizations: _Not Applicable_
 
 !!! ad-Theorem Theorem.
@@ -490,7 +509,9 @@ Date Created: `!p from datetime import datetime
 if not snip.c:
     snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
 Categories: $1
+Status: _In Progress_
 
+Lemmas: _Not Applicable_
 Generalizations: _Not Applicable_
 
 !!! ad-Proposition Proposition.
@@ -498,4 +519,17 @@ Generalizations: _Not Applicable_
 $0
 
 --- admonition
+endsnippet
+
+snippet EXA "Example" b
+<br />
+<br />
+
+Date Created: `!p from datetime import datetime
+if not snip.c:
+    snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
+Categories: $1
+Status: _In Progress_
+
+**Example.** $0
 endsnippet
