@@ -66,36 +66,12 @@ endsnippet
 ###########################################################
 
 #### Environments ####
-snippet def "begin definition" b
-!!! ad-Definition Definition.
-
-$0
-
---- admonition
-endsnippet
-
-snippet thm "begin theorem" b
-!!! ad-Theorem Theorem.
-
-$1
-
---- admonition
-
-_Proof_. $0
-endsnippet
-
-snippet prp "begin proposition" b
-!!! ad-Proposition Proposition.
-
-$1
-
---- admonition
-
-_Proof_. $0
-endsnippet
-
 snippet pro "begin proof" b
 _Proof_. $0
+endsnippet
+
+snippet rem "begin remark" b
+**Remark.** $0
 endsnippet
 
 snippet eq "begin unnumbered equation" b
@@ -122,9 +98,6 @@ snippet gat "begin gathered" b
 \end{gathered}
 endsnippet
 
-snippet rem "begin remark" b
-**Remark.** $0
-endsnippet
 #### Environments ####
 
 ###########################################################
@@ -458,7 +431,7 @@ endsnippet
 ###########################################################
 
 #### Templates
-snippet DEF "Definition" b
+snippet NEW "New note" b
 <br />
 <br />
 
@@ -466,8 +439,12 @@ Date Created: `!p from datetime import datetime
 if not snip.c:
     snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
 Categories: $1
-Status: _In Progress_
+Status: _${2:In Progress}_
 
+$0
+endsnippet
+
+snippet def "Definition" b
 Types: _Not Applicable_
 Examples: _Not Applicable_ 
 Properties: _Not Applicable_
@@ -481,16 +458,17 @@ $0
 --- admonition
 endsnippet
 
-snippet THM "Theorem" b
-<br />
-<br />
+snippet axi "Axiom" b
+Constructions: _Not Applicable_
 
-Date Created: `!p from datetime import datetime
-if not snip.c:
-    snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
-Categories: $1
-Status: _In Progress_
+!!! ad-Axiom Axiom.
 
+$0
+
+--- admonition
+endsnippet
+
+snippet thm "Theorem" b
 Lemmas: _Not Applicable_
 Generalizations: _Not Applicable_
 
@@ -501,16 +479,7 @@ $0
 --- admonition
 endsnippet
 
-snippet PRP "Proposition" b
-<br />
-<br />
-
-Date Created: `!p from datetime import datetime
-if not snip.c:
-    snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
-Categories: $1
-Status: _In Progress_
-
+snippet prp "Proposition" b
 Lemmas: _Not Applicable_
 Generalizations: _Not Applicable_
 
@@ -519,17 +488,4 @@ Generalizations: _Not Applicable_
 $0
 
 --- admonition
-endsnippet
-
-snippet EXA "Example" b
-<br />
-<br />
-
-Date Created: `!p from datetime import datetime
-if not snip.c:
-    snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
-Categories: $1
-Status: _In Progress_
-
-**Example.** $0
 endsnippet
