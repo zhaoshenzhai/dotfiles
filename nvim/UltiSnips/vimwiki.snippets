@@ -92,6 +92,12 @@ snippet ali "begin aligned" b
 \end{aligned}
 endsnippet
 
+snippet alia "begin alignedat" b
+\begin{alignedat}{${1:2}}
+	$0
+\end{alignedat}
+endsnippet
+
 snippet gat "begin gathered" b
 \begin{gathered}
 	$0
@@ -431,26 +437,22 @@ endsnippet
 ###########################################################
 
 #### Templates
-snippet NEW "New note" b
+snippet def "Definition" b
 <br />
 <br />
 
 Date Created: `!p from datetime import datetime
 if not snip.c:
     snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
-Status: #In_Progress
+Tags: #Definition #In_Progress
 
-$0
-endsnippet
-
-snippet def "Definition" b
 Requires: ${1:_Not Applicable_}
+Constructions: ${2:_Not Applicable_}
+Generalizations: _Not Applicable_
 
 Types: _Not Applicable_
 Examples: _Not Applicable_ 
 Properties: _Not Applicable_
-Constructions: ${2:_Not Applicable_}
-Generalizations: _Not Applicable_
 
 !!! ad-Definition Definition.
 
@@ -460,7 +462,16 @@ $0
 endsnippet
 
 snippet axi "Axiom" b
-Constructions: ${1:_Not Applicable_}
+<br />
+<br />
+
+Date Created: `!p from datetime import datetime
+if not snip.c:
+    snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
+Tags: #Axiom #In_Progress
+
+Requires: ${1:_Not Applicable_}
+Constructions: ${2:_Not Applicable_}
 
 !!! ad-Axiom Axiom.
 
@@ -470,7 +481,16 @@ $0
 endsnippet
 
 snippet thm "Theorem" b
-Lemmas: _Not Applicable_
+<br />
+<br />
+
+Date Created: `!p from datetime import datetime
+if not snip.c:
+    snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
+Tags: #Theorem #In_Progress
+
+Proved by: _Not Applicable_
+Proves: _Not Applicable_
 Generalizations: _Not Applicable_
 
 !!! ad-Theorem Theorem.
@@ -481,7 +501,16 @@ $0
 endsnippet
 
 snippet prp "Proposition" b
-Lemmas: _Not Applicable_
+<br />
+<br />
+
+Date Created: `!p from datetime import datetime
+if not snip.c:
+    snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
+Tags: #Proposition #In_Progress
+
+Proved by: _Not Applicable_
+Proves: _Not Applicable_
 Generalizations: _Not Applicable_
 
 !!! ad-Proposition Proposition.
