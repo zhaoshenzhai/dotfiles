@@ -61,6 +61,14 @@ endsnippet
 snippet 8s "8 spaces" i
 \ \ \ \ \ \ \ \ $0
 endsnippet
+
+snippet 4t "4 spaces with text" i
+\ \ \ \ \textrm{$1}\ \ \ \ $0
+endsnippet
+
+snippet 8t "8 spaces with text" i
+\ \ \ \ \ \ \ \ \textrm{$1}\ \ \ \ \ \ \ \ $0
+endsnippet
 #### General ####
 
 ###########################################################
@@ -119,15 +127,22 @@ snippet ( "()" iA
 \l($1\r)$0
 endsnippet
 
-context "math()"
 priority 200
+context "math()"
 snippet bigp "()" iA
 \big(\!$1\!\big)$0
 endsnippet
 
+priority 100
 context "math()"
 snippet [ "[]" iA
 \l[$1\r]$0
+endsnippet
+
+priority 200
+context "math()"
+snippet d[ "[[]]" iA
+\l[\!\l[$1\r]\!\r]$0
 endsnippet
 
 context "math()"
@@ -300,6 +315,11 @@ snippet d= "coloneqq" i
 \coloneqq
 endsnippet
 
+context "math()"
+snippet dequiv "colon<=>" i
+\,\colon\!\Leftrightarrow
+endsnippet
+
 priority 100
 context "math()"
 snippet A "alpha" i
@@ -452,7 +472,7 @@ Generalizations: _Not Applicable_
 
 Types: _Not Applicable_
 Examples: _Not Applicable_ 
-Properties: _Not Applicable_
+Properties: ${3:_Not Applicable_}
 
 !!! ad-Definition Definition.
 
