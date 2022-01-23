@@ -83,12 +83,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_i        ), spawn "alacritty --class sys,sys -e iwctl"       ),
 
         ((modm, xK_Return), spawn "./.config/scripts/dmenu/open_file.sh"),
-        ((modm, xK_s     ), spawn "dmenu_extended_run \"spotify\""),
 
         ((modm .|. shiftMask, xK_Return), spawn "dmenu_extended_run"),
         ((modm, xK_w                   ), spawn "dmenu_extended_run \"google-chrome-stable --profile-directory=Default\""    ),
         ((modm .|. shiftMask, xK_w     ), spawn "dmenu_extended_run \"google-chrome-stable --profile-directory='Profile 2'\""),
 
+        ((modm, xK_s     ), spawn "dmenu_extended_run \"spotify\""),
         ((modm, xK_y), spawn "dmenu_extended_run \"google-chrome-stable www.youtube.com\""),
         ((modm, xK_o), spawn "obsidian"),
 
