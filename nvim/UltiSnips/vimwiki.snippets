@@ -77,6 +77,22 @@ endsnippet
 snippet 8t "8 spaces with text" i
 \ \ \ \ \ \ \ \ \textrm{$1}\ \ \ \ \ \ \ \ $0
 endsnippet
+
+snippet 4e "4 spaces with equivalence" i
+\ \ \ \ \Leftrightarrow\ \ \ \ $0
+endsnippet
+
+snippet 8e "8 spaces with equivalence" i
+\ \ \ \ \ \ \ \ \Leftrightarrow\ \ \ \ \ \ \ \ $0
+endsnippet
+
+snippet 4i "4 spaces with implication" i
+\ \ \ \ \Rightarrow\ \ \ \ $0
+endsnippet
+
+snippet 8i "8 spaces with implication" i
+\ \ \ \ \ \ \ \ \Rightarrow\ \ \ \ \ \ \ \ $0
+endsnippet
 #### General ####
 
 ###########################################################
@@ -275,12 +291,12 @@ endsnippet
 
 context "math()"
 snippet ubrace "underbrace" i
-\underbrace{$1${2:\cdots}$3}_{\mathclap{$4${5:\mathrm{\ times}}}}$0
+\underbrace{$1${2:\cdots}$3}_{\mathclap{$4${5:\textrm{\ times}}}}$0
 endsnippet
 
 context "math()"
 snippet obrace "overbrace" i
-\overbrace{$1${2:\cdots}$3}^{\mathclap{$4${5:\mathrm{\ times}}}}$0
+\overbrace{$1${2:\cdots}$3}^{\mathclap{$4${5:\textrm{\ times}}}}$0
 endsnippet
 
 priority 100
@@ -446,6 +462,10 @@ snippet BIFUN "Bijecive Function"
 Let $${1:f}:${2:X}\simto ${3:Y}$. $0
 endsnippet
 
+snippet POS "Poser"
+Let $\l\langle ${1:X},${2:<}\r\rangle$ be a poset. $0
+endsnippet
+
 priority 100
 snippet CAT "Category"
 Let $\cat{${1:C}}$ be a category. $0
@@ -474,13 +494,12 @@ if not snip.c:
     snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
 Tags: #Definition #In_Progress
 
-Requires: ${1:_Not Applicable_}
-Constructions: ${2:_Not Applicable_}
+Constructions: ${1:_Not Applicable_}
 Generalizations: _Not Applicable_
 
 Types: _Not Applicable_
 Examples: _Not Applicable_ 
-Properties: ${3:_Not Applicable_}
+Properties: ${2:_Not Applicable_}
 
 !!! ad-Definition Definition.
 
@@ -498,8 +517,7 @@ if not snip.c:
     snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
 Tags: #Axiom #In_Progress
 
-Requires: ${1:_Not Applicable_}
-Constructions: ${2:_Not Applicable_}
+Constructions: ${1:_Not Applicable_}
 Generalizations: _Not Applicable_
 
 Types: _Not Applicable_
@@ -523,7 +541,6 @@ if not snip.c:
 Tags: #Theorem #In_Progress
 
 Proved by: _Not Applicable_
-Proves: _Not Applicable_
 Generalizations: _Not Applicable_
 
 !!! ad-Theorem Theorem.
@@ -543,7 +560,6 @@ if not snip.c:
 Tags: #Proposition #In_Progress
 
 Proved by: _Not Applicable_
-Proves: _Not Applicable_
 Generalizations: _Not Applicable_
 
 !!! ad-Proposition Proposition.

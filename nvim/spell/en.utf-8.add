@@ -1,5 +1,4 @@
 NerdTree
-lexographical
 subbasis
 Subbases
 Config
@@ -64,3 +63,5 @@ ZFC
 Kuratowski
 cofinite
 cocountable
+poset
+semilattice
