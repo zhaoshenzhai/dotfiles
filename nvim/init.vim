@@ -13,7 +13,7 @@ set noswapfile                                                          " disabl
 set wrap                                                                " wraps text
 set breakindent                                                         " wraps with correct indent
 set linebreak                                                           " wraps at word boundaries
-set clipboard=unnamedplus                                               " uses system clipboard
+set clipboard+=unnamedplus                                               " uses system clipboard
 set ignorecase                                                          " case insensitive when typing commands
 set noshowmode                                                          " remove default mode display
 set fileencoding=utf-8                                                  " written encoding
@@ -107,6 +107,9 @@ let NERDTreeIgnore=['\.pyc$']
 
 " Isort
 let g:vim_isort_map = '<M-Space>i'
+
+" Search
+nnoremap S :%s//gc<Left><Left>
 
 " Ultisnips
 let g:UltiSnipsExpandTrigger="<S-tab>"                                            
