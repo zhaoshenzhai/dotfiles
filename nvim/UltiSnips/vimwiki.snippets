@@ -136,6 +136,13 @@ snippet gat "begin gathered" b
 \end{gathered}
 endsnippet
 
+snippet dcs "begin dcases" b
+\begin{dcases}
+	$1 & \textrm{${2:if }}$3\\
+	$0
+\end{dcases}
+endsnippet
+
 #### Environments ####
 
 ###########################################################
@@ -438,7 +445,7 @@ endsnippet
 ###########################################################
 
 #### Let ...
-snippet Set "Set"
+snippet SET "Set"
 Let $${1:X}$ be a set. $0
 endsnippet
 
@@ -499,11 +506,11 @@ if not snip.c:
 Tags: #Definition #In_Progress
 
 Constructions: ${1:_Not Applicable_}
-Generalizations: _Not Applicable_
+Generalizations: ${2:_Not Applicable_}
 
-Types: _Not Applicable_
-Examples: _Not Applicable_ 
-Properties: ${2:_Not Applicable_}
+Types: ${3:_Not Applicable_}
+Examples: ${4:_Not Applicable_}
+Properties: ${5:_Not Applicable_}
 
 !!! ad-Definition Definition.
 
