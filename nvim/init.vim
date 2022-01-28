@@ -109,7 +109,7 @@ let NERDTreeIgnore=['\.pyc$']
 let g:vim_isort_map = '<M-Space>i'
 
 " Search
-nnoremap S :%s//gc<Left><Left>
+nnoremap S :%s//gc<Left><Left><Left>
 
 " Ultisnips
 let g:UltiSnipsExpandTrigger="<S-tab>"                                            
