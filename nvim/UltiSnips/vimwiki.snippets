@@ -242,36 +242,6 @@ snippet prod "product" i
 endsnippet
 
 context "math()"
-snippet incup "big natural indexed union" i
-\bigcup\limits_{${1:i}=${2:0}}^{${3:\infty}}$0
-endsnippet
-
-context "math()"
-snippet iacup "big arbirary indexed union" i
-\bigcup\limits_{${1:\alpha}\in\mathcal{${2:A}}}$0
-endsnippet
-
-context "math()"
-snippet bcup "big union" i
-\bigcup
-endsnippet
-
-context "math()"
-snippet incap "big natural indexed intersection" i
-\bigcap\limits_{${1:i}=${2:0}}^{${3:\infty}}$0
-endsnippet
-
-context "math()"
-snippet iacap "big arbirary indexed intersection" i
-\bigcap\limits_{${1:\alpha}\in\mathcal{${2:A}}}$0
-endsnippet
-
-context "math()"
-snippet bcap "big intersection" i
-\bigcap
-endsnippet
-
-context "math()"
 snippet div "divides" i
 $1\divides$2
 endsnippet
@@ -399,6 +369,12 @@ snippet P "pi" i
 \pi
 endsnippet
 
+priority 200
+context "math()"
+snippet PP "Pi" i
+\Pi
+endsnippet
+
 priority 100
 context "math()"
 snippet L "lambda" i
@@ -440,6 +416,18 @@ context "math()"
 snippet R "rho" i
 \rho
 endsnippet
+
+priority 100
+context "math()"
+snippet W "omega" i
+\omega
+endsnippet
+
+priority 200
+context "math()"
+snippet WW "Omega" i
+\Omega
+endsnippet
 #### Math ####
 
 ###########################################################
@@ -473,25 +461,37 @@ snippet BIFUN "Bijecive Function"
 Let $${1:f}:${2:X}\simto ${3:Y}$. $0
 endsnippet
 
+priority 1000
 snippet POS "Poset"
 Let $\l\langle ${1:X},${2:\leq}\r\rangle$ be a poset. $0
 endsnippet
 
+priority 1000
 snippet REL "Relation"
-Let $${1:R}$ be a binary relaiton. $0
+Let $${1:R}$ be a binary relation. $0
 endsnippet
 
-priority 100
+priority 2000
+snippet EQVREL "Relation"
+Let $${1:\\sim}$ be an equivalence relation on $${2:X}$. $0
+endsnippet
+
+priority 1000
+snippet IND "Indexed Family"
+Let $\l\\{${1:X}_${2:i}\r\\}_{$2\in${3:I}}$ be an indexed family. $0
+endsnippet
+
+priority 1000
 snippet CAT "Category"
 Let $\cat{${1:C}}$ be a category. $0
 endsnippet
 
-priority 200
+priority 2000
 snippet SLICAT "Slice Category"
 Let $\cat{${1:C}}_{${2:X}}$ be the slice category of $\cat{$1}$ over $$2$. $0
 endsnippet
 
-priority 200
+priority 2000
 snippet CSLCAT "Coslice Category"
 Let $\cat{${1:C}}^{${2:X}}$ be the coslice category of $\cat{$1}$ over $$2$. $0
 endsnippet
