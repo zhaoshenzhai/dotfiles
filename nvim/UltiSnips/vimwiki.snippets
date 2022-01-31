@@ -78,6 +78,14 @@ snippet 8t "8 spaces with text" i
 \ \ \ \ \ \ \ \ \textrm{$1}\ \ \ \ \ \ \ \ $0
 endsnippet
 
+snippet 4m "4 spaces with mapping" i
+\ \ \ \ \textrm{mapping}\ \ \ \ $0
+endsnippet
+
+snippet 8m "8 spaces with mapping" i
+\ \ \ \ \ \ \ \ \textrm{mapping}\ \ \ \ \ \ \ \ $0
+endsnippet
+
 snippet 4e "4 spaces with equivalence" i
 \ \ \ \ \Leftrightarrow\ \ \ \ $0
 endsnippet
@@ -401,6 +409,12 @@ endsnippet
 
 priority 100
 context "math()"
+snippet M "mu" i
+\mu
+endsnippet
+
+priority 100
+context "math()"
 snippet S "sigma" i
 \sigma
 endsnippet
@@ -428,6 +442,18 @@ context "math()"
 snippet WW "Omega" i
 \Omega
 endsnippet
+
+priority 100
+context "math()"
+snippet X "xi" i
+\xi
+endsnippet
+
+priority 200
+context "math()"
+snippet XX "Xi" i
+\Xi
+endsnippet
 #### Math ####
 
 ###########################################################
@@ -439,6 +465,10 @@ endsnippet
 
 snippet TOP "Topological Space"
 Let $\l\langle ${1:X},${2:\mc{T}}\r\rangle$ be a topological space. $0
+endsnippet
+
+snippet ORD "Ordinal"
+Let $${1:\alpha}$ be an ordinal. $0
 endsnippet
 
 priority 1000
@@ -478,7 +508,7 @@ endsnippet
 
 priority 1000
 snippet IND "Indexed Family"
-Let $\l\\{${1:X}_${2:i}\r\\}_{$2\in${3:I}}$ be an indexed family. $0
+Let $\l\\{${1:X}_${2:i}\r\\}_{$2\in${3: I}}$ be an indexed family. $0
 endsnippet
 
 priority 1000
