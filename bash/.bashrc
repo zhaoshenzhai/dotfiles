@@ -3,8 +3,6 @@ alias ls='ls --color=auto'
 
 # Alias
 alias la='ls -la'
-alias vi='nvim'
-alias vim='nvim'
 
 # Editor
 EDITOR=nvim
@@ -13,6 +11,7 @@ EDITOR=nvim
 export PATH="$PATH:$HOME/bin"
 export PATH="/home/zhao/.local/bin:$PATH"
 export PATH="/home/zhao/.config/scripts:$PATH"
+export PATH="/home/zhao/.local/share/gem/ruby/3.0.0/bin:$PATH"
 
 # Host and User Color
 export PS1="[\[\e[0;35m\]\u\[\e[0m\]@\[\e[0;36m\]\h\[\e[0m\] \W]\$ "

@@ -13,7 +13,7 @@ set noswapfile                                                          " disabl
 set wrap                                                                " wraps text
 set breakindent                                                         " wraps with correct indent
 set linebreak                                                           " wraps at word boundaries
-set clipboard+=unnamedplus                                               " uses system clipboard
+set clipboard+=unnamedplus                                              " uses system clipboard
 set ignorecase                                                          " case insensitive when typing commands
 set noshowmode                                                          " remove default mode display
 set fileencoding=utf-8                                                  " written encoding
@@ -23,6 +23,7 @@ set titlestring=\ %-25.55t\ %a%r%m                                      " remove
 set relativenumber                                                      " relative line numbers
 set nofoldenable                                                        " no folding
 set conceallevel=2                                                      " conceal
+set autochdir                                                           " change to current directory
 
 " Pluggins
 call plug#begin('~/.config/nvim/plugged')
