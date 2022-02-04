@@ -15,7 +15,7 @@ set recolor-lightcolor "#1E2127"
 set recolor-darkcolor "#F8F8FF"
 set highlight-fg "#00FF00"
 
-set page-padding 5
+set page-padding 1
 set guioptions none
 set window-title-basename true
 set adjust-open width

@@ -52,7 +52,7 @@ case $main_choice in
         esac
     ;;
     "Textbooks")
-        root_path="$HOME/Dropbox/Textbooks/Math/"
+        root_path="$HOME/Dropbox/Textbooks/"
 
         choice=$(find $root_path -type f \( ! -regex '.*/\..*' \) | cut -c$((${#root_path}+1))- | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
 

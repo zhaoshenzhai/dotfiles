@@ -71,27 +71,35 @@ snippet 8s "8 spaces" i
 endsnippet
 
 snippet 4t "4 spaces with text" i
-\ \ \ \ \textrm{$1}\ \ \ \ $0
+\ \ \ \ \text${1:rm}{$2}\ \ \ \ $0
 endsnippet
 
 snippet 8t "8 spaces with text" i
-\ \ \ \ \ \ \ \ \textrm{$1}\ \ \ \ \ \ \ \ $0
+\ \ \ \ \ \ \ \ \text${1:rm}{$2}\ \ \ \ \ \ \ \ $0
 endsnippet
 
 snippet 4a "4 spaces with and" i
-\ \ \ \ \textrm{and}\ \ \ \ $0
+\ \ \ \ \text${1:rm}{and}\ \ \ \ $0
 endsnippet
 
 snippet 8a "8 spaces with and" i
-\ \ \ \ \ \ \ \ \textrm{and}\ \ \ \ \ \ \ \ $0
+\ \ \ \ \ \ \ \ \text${1:rm}{and}\ \ \ \ \ \ \ \ $0
+endsnippet
+
+snippet 4a "4 spaces with or" i
+\ \ \ \ \text${1:rm}{or}\ \ \ \ $0
+endsnippet
+
+snippet 8a "8 spaces with or" i
+\ \ \ \ \ \ \ \ \text${1:rm}{or}\ \ \ \ \ \ \ \ $0
 endsnippet
 
 snippet 4m "4 spaces with mapping" i
-\ \ \ \ \textrm{mapping}\ \ \ \ $0
+\ \ \ \ \text${1:rm}{mapping}\ \ \ \ $0
 endsnippet
 
 snippet 8m "8 spaces with mapping" i
-\ \ \ \ \ \ \ \ \textrm{mapping}\ \ \ \ \ \ \ \ $0
+\ \ \ \ \ \ \ \ \text${1:rm}{mapping}\ \ \ \ \ \ \ \ $0
 endsnippet
 
 snippet 4e "4 spaces with equivalence" i
@@ -467,70 +475,80 @@ endsnippet
 ###########################################################
 
 #### Let ...
-snippet SET "Set"
+snippet SET "Set" i
 Let $${1:X}$ be a set. $0
 endsnippet
 
-snippet TOP "Topological Space"
+snippet TOP "Topological Space" i
 Let $\l\langle ${1:X},${2:\mc{T}}\r\rangle$ be a topological space. $0
 endsnippet
 
-snippet ORD "Ordinal"
+snippet ORD "Ordinal" i
 Let $${1:\alpha}$ be an ordinal. $0
 endsnippet
 
 priority 1000
-snippet FUN "Function"
+snippet FUN "Function" i
 Let $${1:f}:${2:X}\to ${3:Y}$. $0
 endsnippet
 
 priority 2000
-snippet INFUN "Injective Function"
+snippet INFUN "Injective Function" i
 Let $${1:f}:${2:X}\hookrightarrow ${3:Y}$. $0
 endsnippet
 
 priority 2000
-snippet SUFUN "Surjective Function"
+snippet SUFUN "Surjective Function" i
 Let $${1:f}:${2:X}\twoheadrightarrow ${3:Y}$. $0
 endsnippet
 
 priority 2000
-snippet BIFUN "Bijecive Function"
+snippet BIFUN "Bijecive Function" i
 Let $${1:f}:${2:X}\simto ${3:Y}$. $0
 endsnippet
 
 priority 1000
-snippet POS "Poset"
+snippet POS "Poset" i
 Let $\l\langle ${1:X},${2:\leq}\r\rangle$ be a poset. $0
 endsnippet
 
 priority 1000
-snippet REL "Relation"
+snippet TOT "Totally ordered set" i
+Let $\l\langle ${1:X},${2:<}\r\rangle$ be a totally ordered set. $0
+endsnippet
+
+priority 1000
+snippet PRE "Preordered set" i
+Let $\l\langle ${1:X},${2:\leq}\r\rangle$ be a preordered set. $0
+endsnippet
+
+priority 1000
+snippet REL "Relation" i
 Let $${1:R}$ be a binary relation. $0
 endsnippet
 
 priority 2000
-snippet EQVREL "Relation"
+snippet EQVREL "Relation" i
 Let $${1:\\sim}$ be an equivalence relation on $${2:X}$. $0
 endsnippet
 
 priority 1000
-snippet IND "Indexed Family"
+snippet IND "Indexed Family" i
 Let $\l\\{${1:X}_${2:i}\r\\}_{$2\in${3: I}}$ be an indexed family. $0
 endsnippet
 
 priority 1000
-snippet CAT "Category"
+snippet CAT "Category" i
 Let $\cat{${1:C}}$ be a category. $0
 endsnippet
 
 priority 2000
-snippet SLICAT "Slice Category"
+snippet SLICAT "Slice Category" i
 Let $\cat{${1:C}}_{${2:X}}$ be the slice category of $\cat{$1}$ over $$2$. $0
 endsnippet
 
 priority 2000
-snippet CSLCAT "Coslice Category"
+snippet CSLCAT "Coslice Category" i
 Let $\cat{${1:C}}^{${2:X}}$ be the coslice category of $\cat{$1}$ over $$2$. $0
 endsnippet
 #### Let ...
@@ -556,7 +574,7 @@ Properties: ${5:_Not Applicable_}
 
 !!! ad-Definition Definition.
 
-$0
+_$0_
 
 --- admonition
 endsnippet
@@ -579,7 +597,7 @@ Properties: _Not Applicable_
 
 !!! ad-Axiom Axiom.
 
-$0
+_$0_
 
 --- admonition
 endsnippet
@@ -598,7 +616,7 @@ Generalizations: _Not Applicable_
 
 !!! ad-Theorem Theorem.
 
-$0
+_$0_
 
 --- admonition
 endsnippet
@@ -617,7 +635,7 @@ Generalizations: _Not Applicable_
 
 !!! ad-Proposition Proposition.
 
-$0
+_$0_
 
 --- admonition
 endsnippet
