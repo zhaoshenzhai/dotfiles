@@ -161,6 +161,18 @@ snippet dcs "begin dcases" b
 \end{dcases}
 endsnippet
 
+snippet tikz "begin tikzpicture" b
+\begin{tikzpicture}
+	$0
+\end{tikzpicture}
+endsnippet
+
+snippet cdn "begin tikzcd" b
+\begin{tikzcd}
+	$0
+\end{tikzcd}
+endsnippet
+
 #### Environments ####
 
 ###########################################################
@@ -549,55 +561,7 @@ endsnippet
 
 ###########################################################
 
-snippet tikz "Tikz" b
-\documentclass[margin=20mm]{standalone}
-
-\usepackage[T1]{fontenc}                             % make fonts work?
-\usepackage[hidelinks]{hyperref}                     % links
-\usepackage[side]{footmisc}                          % footnotes
-\usepackage{geometry}                                % page layout
-\usepackage{fancyhdr}                                % headers and footers
-\usepackage{titlesec}                                % title page
-\usepackage{tocloft}                                 % custom table of contents
-\usepackage{amsfonts, amsmath, amssymb, amsthm}      % basic maths commands
-\usepackage{mathtools}                               % more maths commands
-\usepackage{mathrsfs}                                % more math commands
-\usepackage{mdframed}                                % framed environments
-\usepackage{graphicx}                                % images and other graphics
-\usepackage{tikz}                                    % maths figures
-\usepackage{tikz-3dplot}                             % needed by tikz
-\usepackage{tikzpagenodes}                           % needed by tikz
-\usepackage{pgfplots}\pgfplotsset{compat=1.7}        % plots
-\usepackage{contour}                                 % underlining
-\usepackage{ulem}                                    % needed by contour
-\usepackage{xcolor}                                  % more colors
-\usepackage{caption}                                 % captions outside float
-\usepackage{enumitem}                                % enumerate and itemize indents
-\usepackage{nicematrix}                              % matrices and tables
-\usepackage{marginnote}                              % margin notes
-
-\input{../../preamble.sty}
-
-\usetikzlibrary{matrix}
-\usetikzlibrary{positioning}
-\usetikzlibrary{patterns}
-\usetikzlibrary{decorations.markings}
-\usetikzlibrary{arrows}
-\usetikzlibrary{arrows.meta}
-\usetikzlibrary{backgrounds}
-\usetikzlibrary{math}
-\usetikzlibrary{cd}
-
-\definecolor{textColor}{RGB}{248, 248, 255}
-\definecolor{bgColor}{RGB}{29, 32, 38}
-\definecolor{bgColorAD}{RGB}{18, 19, 23}
-\definecolor{shadeColor}{RGB}{77, 77, 77}
-
-\begin{document}
-	
-\end{document}
-endsnippet
-
+#### TikZ
 snippet OPENSET "Open set" b
 \newcommand{\pathA}{(-0.50,+1.25) .. controls (+1.00,+0.75) and (+1.75,+1.75) .. (+2.50,+1.75)}
 \newcommand{\pathB}{(+2.50,+1.75) .. controls (+3.25,+1.75) and (+1.75,+0.50) .. (+2.50,-0.75)}
@@ -608,3 +572,4 @@ snippet OPENSET "Open set" b
 \draw[dashed, thick, dash phase=11pt] \pathA -- \pathB -- \pathC -- \pathD -- \pathE -- \pathF -- cycle;
 \fill \pathA -- \pathB -- \pathC -- \pathD -- \pathE -- \pathF;
 endsnippet
+#### TikZ

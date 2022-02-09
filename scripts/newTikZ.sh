@@ -15,5 +15,4 @@ dirName=`date +"%d-%m-%Y_%H%M"`
 cd ~/MathWiki/Images
 mkdir $dirName
 cd $dirName
-touch image.tex
-
+cp $HOME/MathWiki/imageTemplate.tex $PWD/image.tex
