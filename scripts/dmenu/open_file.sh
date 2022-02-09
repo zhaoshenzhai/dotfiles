@@ -16,7 +16,36 @@ main_choice=$(printf '%s\n' "${options[@]}" | dmenu -i -p 'Options:' $colors -bw
 
 case $main_choice in
     "MathWiki")
-        alacritty --class nvim,nvim -e nvim "$HOME/MathWiki/"
+        declare -a choices=(
+            "Files"
+            "Images"
+        )
+        choice=$(printf '%s\n' "${choices[@]}" | dmenu -i -p 'Edit:' $colors -bw 0 -h 30 -fn 'courier prime:spacing=1:pixelsize=20')
+        
+        case $choice in
+            "Files")
+                path="$HOME/MathWiki/Files/"
+
+                file=$(find $path -type f | cut -c$((${#path}+1))- | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+
+                if [ "$file" ]; then
+                    alacritty --class nvim,nvim -e nvim "$path$file"
+                else
+                    exit 0
+                fi
+            ;;
+            "Images")
+                path="$HOME/MathWiki/Images/"
+
+                folder=$(find $path -mindepth 1 -type d | sort -r | cut -c$((${#path}+1))- | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+
+                if [ "$folder" ]; then
+                    alacritty -e nvim "$path$folder/image.tex"
+                else
+                    exit 0
+                fi
+            ;;
+        esac
     ;;
     "Courses")
         declare -a configs=(
