@@ -4,14 +4,6 @@ def math():
 	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
 def notmath():
 	return vim.eval('vimtex#syntax#in_mathzone()') != '1'
-def comment(): 
-	return vim.eval('vimtex#syntax#in_comment()') == '1'
-def env(name):
-	[x,y] = vim.eval("vimtex#env#is_inside('" + name + "')") 
-	return x != '0' and y != '0'
-def notenv(name):
-	[x,y] = vim.eval("vimtex#env#is_inside('" + name + "')") 
-	return (x == '0' or y == '0') and vim.eval('vimtex#syntax#in_mathzone()') == '1'
 endglobal
 #### Preamble ####
 
@@ -32,30 +24,104 @@ snippet ( "parenthesis" Ait
 ($1)$0
 endsnippet
 
+snippet SQ "single quotes" it
+$\textrm{\`}$$1$\textrm{'}$$0
+endsnippet
+
+snippet DQ "double quotes" it
+$\textrm{\`\`}$$1$\textrm{''}$$0
+endsnippet
+
+snippet RESIMP "result follows ... chain of implications" it
+The result follows from the following chain of implications:$0
+endsnippet
+
+snippet RESEQV "result follows ... chain of equivalences" it
+The result follows from the following chain of equivalences:$0
+endsnippet
+
 snippet " "braces" Ait
 "$1"$0
+endsnippet
+
+snippet bf "bold" i
+**$1**$0
+endsnippet
+
+snippet it "italics" i
+_$1_$0
+endsnippet
+
+snippet 4s "4 spaces" i
+\ \ \ \ $0
+endsnippet
+
+snippet 8s "8 spaces" i
+\ \ \ \ \ \ \ \ $0
+endsnippet
+
+snippet 4t "4 spaces with text" i
+\ \ \ \ \text${1:rm}{$2}\ \ \ \ $0
+endsnippet
+
+snippet 8t "8 spaces with text" i
+\ \ \ \ \ \ \ \ \text${1:rm}{$2}\ \ \ \ \ \ \ \ $0
+endsnippet
+
+snippet 4a "4 spaces with and" i
+\ \ \ \ \text${1:rm}{and}\ \ \ \ $0
+endsnippet
+
+snippet 8a "8 spaces with and" i
+\ \ \ \ \ \ \ \ \text${1:rm}{and}\ \ \ \ \ \ \ \ $0
+endsnippet
+
+snippet 4o "4 spaces with or" i
+\ \ \ \ \text${1:rm}{or}\ \ \ \ $0
+endsnippet
+
+snippet 8o "8 spaces with or" i
+\ \ \ \ \ \ \ \ \text${1:rm}{or}\ \ \ \ \ \ \ \ $0
+endsnippet
+
+snippet 4m "4 spaces with mapping" i
+\ \ \ \ \text${1:rm}{mapping}\ \ \ \ $0
+endsnippet
+
+snippet 8m "8 spaces with mapping" i
+\ \ \ \ \ \ \ \ \text${1:rm}{mapping}\ \ \ \ \ \ \ \ $0
+endsnippet
+
+snippet 4e "4 spaces with equivalence" i
+\ \ \ \ \Leftrightarrow\ \ \ \ $0
+endsnippet
+
+snippet 8e "8 spaces with equivalence" i
+\ \ \ \ \ \ \ \ \Leftrightarrow\ \ \ \ \ \ \ \ $0
+endsnippet
+
+snippet 4i "4 spaces with implication" i
+\ \ \ \ \Rightarrow\ \ \ \ $0
+endsnippet
+
+snippet 8i "8 spaces with implication" i
+\ \ \ \ \ \ \ \ \Rightarrow\ \ \ \ \ \ \ \ $0
 endsnippet
 #### General ####
 
 ###########################################################
 
 #### Environments ####
-snippet beg "begin + end environmenet" b
-\begin{$1}
+snippet pro "begin proof" b
+\begin{proof}
 	$0
-\end{$1}
+\end{proof}
 endsnippet
 
-snippet item "itemize" b
-\begin{itemize}
-	\item $0
-\end{itemize}
-endsnippet
-
-snippet enum "enumerate" b
-\begin{enumerate}
-	\item $0
-\end{enumerate}
+snippet rem "begin remark" b
+\begin{remark}
+	$0
+\end{remark}
 endsnippet
 
 snippet eq "begin unnumbered equation" b
@@ -76,95 +142,23 @@ snippet ali "begin aligned" b
 \end{aligned}
 endsnippet
 
+snippet alia "begin alignedat" b
+\begin{alignedat}{2}
+	$0
+\end{alignedat}
+endsnippet
+
 snippet gat "begin gathered" b
 \begin{gathered}
 	$0
 \end{gathered}
 endsnippet
 
-snippet def "begin definition" b
-\begin{definition}
+snippet dcs "begin dcases" b
+\begin{dcases}
+	$1 & \textrm{${2:if }}$3\\\\
 	$0
-\end{definition}
-endsnippet
-
-snippet thm "begin theorem" b
-\begin{theorem}
-	$0
-\end{theorem}
-endsnippet
-
-snippet cor "begin corollary" b
-\begin{corollary}
-	$0
-\end{corollary}
-endsnippet
-
-snippet lem "begin lemma" b
-\begin{lemma}
-	$0
-\end{lemma}
-endsnippet
-
-snippet rem "begin remark" b
-\begin{remark}
-	$0
-\end{remark}
-endsnippet
-
-snippet prp "begin proposition" b
-\begin{proposition}
-	$0
-\end{proposition}
-endsnippet
-
-snippet dpp "begin defprop" b
-\begin{defprop}
-	$0
-\end{defprop}
-endsnippet
-
-snippet pro "begin proof" b
-\begin{proof}
-	$0
-\end{proof}
-endsnippet
-
-snippet exa "begin example" b
-\begin{example}
-	$0
-\end{example}
-endsnippet
-
-snippet tik "begin tikzpicture" b
-\begin{tikzpicture}
-	$0
-\end{tikzpicture}
-endsnippet
-
-snippet cd "begin unnumbered tikzcd" b
-\begin{equation*}
-	\begin{tikzcd}
-		$0
-	\end{tikzcd}
-\end{equation*}
-endsnippet
-
-snippet cdn "begin numbered tikzcd" b
-\begin{equation}
-	\begin{tikzcd}
-		$0
-	\end{tikzcd}
-\end{equation}
-endsnippet
-
-snippet tab "begin tabular" b
-\renewcommand{\arraystretch}{${1:1.3}}
-\begin{NiceTabular}{c|$2}
-	$3
-	\hline
-	$0
-\end{NiceTabular}
+\end{dcases}
 endsnippet
 
 #### Environments ####
@@ -176,21 +170,28 @@ snippet $ "enter math mode" Ai
 \$$1\$$0
 endsnippet
 
-context "notenv(\"tikzcd\")"
 priority 100
+context "math()"
 snippet ( "()" iA
 \l($1\r)$0
 endsnippet
 
-context "math()"
 priority 200
+context "math()"
 snippet bigp "()" iA
 \big(\!$1\!\big)$0
 endsnippet
 
-context "notenv(\"tikzcd\")"
+priority 100
+context "math()"
 snippet [ "[]" iA
 \l[$1\r]$0
+endsnippet
+
+priority 200
+context "math()"
+snippet 2[ "[[]]" iA
+\l[\!\l[$1\r]\!\r]$0
 endsnippet
 
 context "math()"
@@ -259,36 +260,6 @@ snippet prod "product" i
 endsnippet
 
 context "math()"
-snippet incup "big natural indexed union" i
-\bigcup\limits_{${1:i}=${2:0}}^{${3:\infty}}$0
-endsnippet
-
-context "math()"
-snippet iacup "big arbirary indexed union" i
-\bigcup\limits_{${1:\alpha}\in\mathcal{${2:A}}}$0
-endsnippet
-
-context "math()"
-snippet bcup "big union" i
-\bigcup
-endsnippet
-
-context "math()"
-snippet incap "big natural indexed intersection" i
-\bigcap\limits_{${1:i}=${2:0}}^{${3:\infty}}$0
-endsnippet
-
-context "math()"
-snippet iacap "big arbirary indexed intersection" i
-\bigcap\limits_{${1:\alpha}\in\mathcal{${2:A}}}$0
-endsnippet
-
-context "math()"
-snippet bcap "big intersection" i
-\bigcap
-endsnippet
-
-context "math()"
 snippet div "divides" i
 $1\divides$2
 endsnippet
@@ -315,12 +286,12 @@ endsnippet
 
 context "math()"
 snippet ubrace "underbrace" i
-\underbrace{\l($1${2:\cdots}$3\r)}_{\mathclap{$4${5:\mathrm{\ times}}}}$0
+\underbrace{$1}_{\mathclap{$2}}$0
 endsnippet
 
 context "math()"
 snippet obrace "overbrace" i
-\overbrace{\l($1${2:\cdots}$3\r)}^{\mathclap{$4${5:\mathrm{\ times}}}}$0
+\overbrace{$1}_{\mathclap{$2}}$0
 endsnippet
 
 priority 100
@@ -358,8 +329,14 @@ snippet ~ "tilde" Ai
 \sim
 endsnippet
 
+context "math()"
 snippet d= "coloneqq" i
 \coloneqq
+endsnippet
+
+context "math()"
+snippet dequiv "colon<=>" i
+\,\colon\!\Leftrightarrow
 endsnippet
 
 priority 100
@@ -410,6 +387,12 @@ snippet P "pi" i
 \pi
 endsnippet
 
+priority 200
+context "math()"
+snippet PP "Pi" i
+\Pi
+endsnippet
+
 priority 100
 context "math()"
 snippet L "lambda" i
@@ -436,6 +419,12 @@ endsnippet
 
 priority 100
 context "math()"
+snippet M "mu" i
+\mu
+endsnippet
+
+priority 100
+context "math()"
 snippet S "sigma" i
 \sigma
 endsnippet
@@ -451,100 +440,171 @@ context "math()"
 snippet R "rho" i
 \rho
 endsnippet
+
+priority 100
+context "math()"
+snippet W "omega" i
+\omega
+endsnippet
+
+priority 200
+context "math()"
+snippet WW "Omega" i
+\Omega
+endsnippet
+
+priority 100
+context "math()"
+snippet X "xi" i
+\xi
+endsnippet
+
+priority 200
+context "math()"
+snippet XX "Xi" i
+\Xi
+endsnippet
 #### Math ####
 
 ###########################################################
 
 #### Let ...
-snippet TOP "Topological Space"
+snippet SET "Set" i
+Let $${1:X}$ be a set. $0
+endsnippet
+
+snippet TOP "Topological Space" i
 Let $\l\langle ${1:X},${2:\mc{T}}\r\rangle$ be a topological space. $0
 endsnippet
 
+snippet ORD "Ordinal" i
+Let $${1:\alpha}$ be an ordinal. $0
+endsnippet
+
 priority 1000
-snippet FUN "Function"
+snippet FUN "Function" i
 Let $${1:f}:${2:X}\to ${3:Y}$. $0
 endsnippet
 
 priority 2000
-snippet INFUN "Injective Function"
+snippet INFUN "Injective Function" i
 Let $${1:f}:${2:X}\hookrightarrow ${3:Y}$. $0
 endsnippet
 
 priority 2000
-snippet SUFUN "Surjective Function"
+snippet SUFUN "Surjective Function" i
 Let $${1:f}:${2:X}\twoheadrightarrow ${3:Y}$. $0
 endsnippet
 
 priority 2000
-snippet BIFUN "Bijecive Function"
+snippet BIFUN "Bijecive Function" i
 Let $${1:f}:${2:X}\simto ${3:Y}$. $0
 endsnippet
 
-priority 100
-snippet CAT "Category"
+priority 1000
+snippet POS "Poset" i
+Let $\l\langle ${1:X},${2:\leq}\r\rangle$ be a poset. $0
+endsnippet
+
+priority 1000
+snippet TOT "Totally ordered set" i
+Let $\l\langle ${1:X},${2:<}\r\rangle$ be a totally ordered set. $0
+endsnippet
+
+priority 1000
+snippet PRE "Preordered set" i
+Let $\l\langle ${1:X},${2:\leq}\r\rangle$ be a preordered set. $0
+endsnippet
+
+priority 1000
+snippet REL "Relation" i
+Let $${1:R}$ be a binary relation. $0
+endsnippet
+
+priority 2000
+snippet EQVREL "Relation" i
+Let $${1:\\sim}$ be an equivalence relation on $${2:X}$. $0
+endsnippet
+
+priority 1000
+snippet IND "Indexed Family" i
+Let $\l\\{${1:X}_${2:i}\r\\}_{$2\in${3: I}}$ be an indexed family. $0
+endsnippet
+
+priority 1000
+snippet CAT "Category" i
 Let $\cat{${1:C}}$ be a category. $0
 endsnippet
 
-priority 200
-snippet SLICAT "Slice Category"
+priority 2000
+snippet SLICAT "Slice Category" i
 Let $\cat{${1:C}}_{${2:X}}$ be the slice category of $\cat{$1}$ over $$2$. $0
 endsnippet
 
-priority 200
-snippet CSLCAT "Coslice Category"
+priority 2000
+snippet CSLCAT "Coslice Category" i
 Let $\cat{${1:C}}^{${2:X}}$ be the coslice category of $\cat{$1}$ over $$2$. $0
 endsnippet
-###$ Let ...
+#### Let ...
 
 ###########################################################
 
-#### Tikz ####
+snippet tikz "Tikz" b
+\documentclass[margin=20mm]{standalone}
 
-snippet for "For loop"
-\foreach \\${1:i} in {${2:0},...,$3}
-{
-	$0
-}
+\usepackage[T1]{fontenc}                             % make fonts work?
+\usepackage[hidelinks]{hyperref}                     % links
+\usepackage[side]{footmisc}                          % footnotes
+\usepackage{geometry}                                % page layout
+\usepackage{fancyhdr}                                % headers and footers
+\usepackage{titlesec}                                % title page
+\usepackage{tocloft}                                 % custom table of contents
+\usepackage{amsfonts, amsmath, amssymb, amsthm}      % basic maths commands
+\usepackage{mathtools}                               % more maths commands
+\usepackage{mathrsfs}                                % more math commands
+\usepackage{mdframed}                                % framed environments
+\usepackage{graphicx}                                % images and other graphics
+\usepackage{tikz}                                    % maths figures
+\usepackage{tikz-3dplot}                             % needed by tikz
+\usepackage{tikzpagenodes}                           % needed by tikz
+\usepackage{pgfplots}\pgfplotsset{compat=1.7}        % plots
+\usepackage{contour}                                 % underlining
+\usepackage{ulem}                                    % needed by contour
+\usepackage{xcolor}                                  % more colors
+\usepackage{caption}                                 % captions outside float
+\usepackage{enumitem}                                % enumerate and itemize indents
+\usepackage{nicematrix}                              % matrices and tables
+\usepackage{marginnote}                              % margin notes
+
+\input{../../preamble.sty}
+
+\usetikzlibrary{matrix}
+\usetikzlibrary{positioning}
+\usetikzlibrary{patterns}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{arrows}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{math}
+\usetikzlibrary{cd}
+
+\definecolor{textColor}{RGB}{248, 248, 255}
+\definecolor{bgColor}{RGB}{29, 32, 38}
+\definecolor{bgColorAD}{RGB}{18, 19, 23}
+\definecolor{shadeColor}{RGB}{77, 77, 77}
+
+\begin{document}
+	
+\end{document}
 endsnippet
 
-#### Tikz ####
-
-###########################################################
-
-#### Title Format ####
-
-snippet LECTURE_NOTES "Lecture Notes"
-\newgeometry{margin = 0.7in, bmargin=1in, tmargin=1in}
-\pagestyle{empty}
-\begin{center}
-	\Large\textbf{\textsc{${1:TITLE}}}
-\end{center}
-\vspace*{0.03\textheight}
-\begin{minipage}[t]{0.5\textwidth}
-	\centering
-	{\large\textit{Course delivered on the ${2:ACADEMIC YEAR} academic year by}}
-	\\\\[\baselineskip]
-	{\textsc{Dr. ${3:PROF NAME}}}
-	\\\\[0.3\baselineskip]
-	{\textsc{Some University}}
-\end{minipage}
-\begin{minipage}[t]{0.5\textwidth}
-	\centering
-	{\large\textit{Notes taken (last updated on \today) by}}
-	\\\\[\baselineskip]
-	{\textsc{Zhaoshen Zhai}}
-	\\\\[0.3\baselineskip]
-	{\textsc{Email: }\url{zhaoshen.zhai@gmail.com}}
-\end{minipage}
-\\\\[2\baselineskip]
-\begin{center}
-	\textsc{\bfseries\contentsname}
-\end{center}
-
-\toccontents
-\clearpage
-\pagestyle{fancy}
-\setcounter{page}{1}
-\newgeometry{margin = 0.7in, bmargin=1in, tmargin=1in, outer=6.5cm, marginparwidth=5.5cm, marginparsep=0.5cm}
+snippet OPENSET "Open set" b
+\newcommand{\pathA}{(-0.50,+1.25) .. controls (+1.00,+0.75) and (+1.75,+1.75) .. (+2.50,+1.75)}
+\newcommand{\pathB}{(+2.50,+1.75) .. controls (+3.25,+1.75) and (+1.75,+0.50) .. (+2.50,-0.75)}
+\newcommand{\pathC}{(+2.50,-0.75) .. controls (+3.25,-2.00) and (+1.00,-0.25) .. (-0.25,-1.25)}
+\newcommand{\pathD}{(-0.25,-1.25) .. controls (-1.50,-2.25) and (-1.50,-0.75) .. (-1.50,-0.25)}
+\newcommand{\pathE}{(-1.50,-0.25) .. controls (-1.50,+0.25) and (-1.75,+0.75) .. (-1.75,+0.75)}
+\newcommand{\pathF}{(-1.75,+0.75) .. controls (-2.00,+1.25) and (-1.25,+1.50) .. (-0.50,+1.25)}
+\draw[dashed, thick, dash phase=11pt] \pathA -- \pathB -- \pathC -- \pathD -- \pathE -- \pathF -- cycle;
+\fill \pathA -- \pathB -- \pathC -- \pathD -- \pathE -- \pathF;
 endsnippet
-#### Title Format ####

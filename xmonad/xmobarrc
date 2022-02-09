@@ -2,7 +2,7 @@ Config
 {
     font = "xft:Anonymous Pro:weight=bold:pixelsize=18:antialias=true:hinting=true",
     additionalFonts = [ 
-	    "xft:Font Awesome 5 Free Solid-12:pixelsize=15:antialias=true:hinting=true",
+	    "xft:Font Awesome 6 Free Solid-12:pixelsize=15:antialias=true:hinting=true",
         "xft:Mononoki Nerd Font:size=15:antialias=true:hinting=true"
     ],
     bgColor = "#1E2127",
@@ -31,7 +31,7 @@ Config
                 "-i"              , "<fn=2>\xf578</fn> Full"
             ] 50,
             Run Com "./.config/scripts/xmobarVolume.sh" [] "volume" 5,
-    		Run Date "<fn=1>\61463</fn> %H:%M" "time" 20,
+    		Run Date "<fn=1>\61463</fn> %H:%M:%S" "time" 10,
             Run Date "<fn=1>\61747</fn> %a %d/%m/%y" "date" 36000,
             Run StdinReader
         ],

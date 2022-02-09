@@ -187,5 +187,8 @@ autocmd filetype tex nnoremap <F5> :w <CR>:VimtexCompile<CR>
 autocmd filetype java nnoremap <F5> :w <CR>:T javaCompile.sh -p `dirname %`<CR>
 autocmd filetype python nnoremap <F5> :w <CR>:!python3 %<CR>
 
+autocmd filetype vimwiki nnoremap <F6> :w <CR>:!~/.config/scripts/newTikZ.sh<CR>i<center><img src="https://raw.githubusercontent.com/zhaoshenzhai/MathWiki/master/Images/<C-r>=system('date +%d-%m-%Y_%H%M')<CR>/image.svg"></center><esc>I<backspace><esc>
+autocmd filetype tex nnoremap <F6> :w <CR>:!pdflatex -shell-escape image.tex && pdfcrop image.pdf image.pdf && pdf2svg image.pdf image.svg<CR>
+
 " Fix resizing
 autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"
