@@ -125,6 +125,7 @@ myWorkspaces = [
     "<fn=2>\xf448  </fn>", -- LaTeX
     "<fn=2>\xf02d  </fn>", -- Book1
     "<fn=2>\xfad9  </fn>", -- Book2
+    "<fn=2>\xf753  </fn>", -- Images (TeX)
     "<fn=2>\xf9c6  </fn>", -- Spotify
     "<fn=2>\xf013 </fn>"   -- Config
     ]
@@ -140,9 +141,10 @@ myManageHook = composeAll
         className =? "Google-chrome" --> viewShift (myWorkspaces !! 1),
         className =? "obsidian"      --> viewShift (myWorkspaces !! 2),
         className =? "nvim"          --> viewShift (myWorkspaces !! 2),
-        className =? ""              --> viewShift (myWorkspaces !! 5),
-        className =? "sys"           --> viewShift (myWorkspaces !! 6),
-        className =? "Pavucontrol"   --> viewShift (myWorkspaces !! 6)
+        className =? "image"         --> viewShift (myWorkspaces !! 5),
+        className =? ""              --> viewShift (myWorkspaces !! 6),
+        className =? "sys"           --> viewShift (myWorkspaces !! 7),
+        className =? "Pavucontrol"   --> viewShift (myWorkspaces !! 7)
     ]
 
     where viewShift = doF . liftM2 (.) W.greedyView W.shift
@@ -172,7 +174,7 @@ main = do
                 ppHidden          = xmobarColor "#F8F8FF" "",
                 ppHiddenNoWindows = xmobarColor "#A8A8AA" "",
                 ppLayout          = const "",
-                ppTitle           = xmobarColor "#A8A8AA" "" . shorten 50,
+                ppTitle           = xmobarColor "#A8A8AA" "" . shorten 40,
                 ppSep             = "<fc=#A8A8AA> | </fc>",
                 ppExtras          = [gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset],
                 ppOrder           = \(ws:l:t:ex) -> [ws,l]++ex++[t]

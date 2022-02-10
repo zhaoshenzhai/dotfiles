@@ -40,43 +40,10 @@ case $main_choice in
                 folder=$(find $path -mindepth 1 -type d | sort -r | cut -c$((${#path}+1))- | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
                 if [ "$folder" ]; then
-                    alacritty -e nvim "$path$folder/image.tex"
+                    alacritty --class image,image -e nvim "$path$folder/image.tex"
                 else
                     exit 0
                 fi
-            ;;
-        esac
-    ;;
-    "Courses")
-        declare -a configs=(
-            "Introduction to Algebra"
-            "Introduction to Topology"
-            "Introduction to Set Theory"
-            "Introduction to Linear Algebra"
-            "Introduction to Classical Mechanics"
-            "Introduction to Real Analysis"
-        )
-
-        choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Edit:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
-
-        case $choice in
-            "Introduction to Algebra")
-                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Algebra/content/Chapter_2/Groups_First_Encounter.tex"
-            ;;
-            "Introduction to Topology")
-                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Topology/content/Chapter_1/Topological_Spaces_and_Continuity.tex"
-            ;;
-            "Introduction to Set Theory")
-                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Set_Theory/Introduction_to_Set_Theory.tex"
-            ;;
-            "Introduction to Real Analysis")
-                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Real_Analysis/Introduction_to_Real_Analysis.tex"
-            ;;
-            "Introduction to Classical Mechanics")
-                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Classical_Mechanics/Introduction_to_Classical_Mechanics.tex"
-            ;;
-            "Introduction to Linear Algebra")
-                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Linear_Algebra/Introduction_To_Linear_Algebra.tex"
             ;;
         esac
     ;;
@@ -151,5 +118,38 @@ case $main_choice in
         else
             exit 0
         fi
+    ;;
+    "Courses")
+        declare -a configs=(
+            "Introduction to Algebra"
+            "Introduction to Topology"
+            "Introduction to Set Theory"
+            "Introduction to Linear Algebra"
+            "Introduction to Classical Mechanics"
+            "Introduction to Real Analysis"
+        )
+
+        choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Edit:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+
+        case $choice in
+            "Introduction to Algebra")
+                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Algebra/content/Chapter_2/Groups_First_Encounter.tex"
+            ;;
+            "Introduction to Topology")
+                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Topology/content/Chapter_1/Topological_Spaces_and_Continuity.tex"
+            ;;
+            "Introduction to Set Theory")
+                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Set_Theory/Introduction_to_Set_Theory.tex"
+            ;;
+            "Introduction to Real Analysis")
+                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Real_Analysis/Introduction_to_Real_Analysis.tex"
+            ;;
+            "Introduction to Classical Mechanics")
+                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Classical_Mechanics/Introduction_to_Classical_Mechanics.tex"
+            ;;
+            "Introduction to Linear Algebra")
+                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Linear_Algebra/Introduction_To_Linear_Algebra.tex"
+            ;;
+        esac
     ;;
 esac
