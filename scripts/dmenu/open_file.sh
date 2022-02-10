@@ -4,7 +4,7 @@
 
 declare -a options=(
     "MathWiki"
-    "Courses"
+    #"Courses"
     "Textbooks"
     "Config"
     "Scripts"
@@ -26,7 +26,7 @@ case $main_choice in
             "Files")
                 path="$HOME/MathWiki/Files/"
 
-                file=$(find $path -type f | cut -c$((${#path}+1))- | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+                file=$(find $path -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
                 if [ "$file" ]; then
                     alacritty --class nvim,nvim -e nvim "$path$file"
@@ -83,7 +83,7 @@ case $main_choice in
     "Textbooks")
         root_path="$HOME/Dropbox/Textbooks/"
 
-        choice=$(find $root_path -type f \( ! -regex '.*/\..*' \) | cut -c$((${#root_path}+1))- | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+        choice=$(find $root_path -printf "\n%AD %AT %p" | grep ".pdf" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
         if [ "$choice" ]; then
             zathura "$root_path$choice"

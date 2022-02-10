@@ -2,7 +2,7 @@
 alias ls='ls --color=auto'
 
 # Alias
-alias la='ls -lA --group-directories-first'
+alias la='ls -lhA --group-directories-first'
 
 # Editor
 EDITOR=nvim
