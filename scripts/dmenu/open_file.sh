@@ -4,8 +4,8 @@
 
 declare -a options=(
     "MathWiki"
-    #"Courses"
     "Textbooks"
+    "Courses"
     "Config"
     "Scripts"
     "Snippets"
@@ -131,25 +131,11 @@ case $main_choice in
 
         choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Edit:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
-        case $choice in
-            "Introduction to Algebra")
-                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Algebra/content/Chapter_2/Groups_First_Encounter.tex"
-            ;;
-            "Introduction to Topology")
-                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Topology/content/Chapter_1/Topological_Spaces_and_Continuity.tex"
-            ;;
-            "Introduction to Set Theory")
-                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Set_Theory/Introduction_to_Set_Theory.tex"
-            ;;
-            "Introduction to Real Analysis")
-                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Real_Analysis/Introduction_to_Real_Analysis.tex"
-            ;;
-            "Introduction to Classical Mechanics")
-                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Classical_Mechanics/Introduction_to_Classical_Mechanics.tex"
-            ;;
-            "Introduction to Linear Algebra")
-                alacritty --class nvim,nvim -e nvim "$HOME/Study/Highschool_Course_Notes/Introduction_to_Linear_Algebra/Introduction_To_Linear_Algebra.tex"
-            ;;
-        esac
+        if [ "$choice" ]; then
+            course=$(printf '%s\n' "${choice}" | sed 's/\ /_/g')
+            zathura "~/Study/Highschool_Course_Notes/$course/$course.pdf"
+        else
+            exit 0
+        fi
     ;;
 esac
