@@ -107,6 +107,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm .|. shiftMask, xK_F3), spawn "./.config/scripts/volume/volumeControl.sh -i 1"),
         ((modm, xK_F5              ), spawn "./.config/scripts/volume/volumeControl.sh -p"  ),
 
+        ((modm, xK_g), spawn "alacritty -e ~/MathWiki/.github/gitCommit.sh"),
+
         ((modm              , xK_q), spawn "xmonad --recompile; killall xmobar; xmonad --restart"),
         ((modm .|. shiftMask, xK_q), io exitSuccess)
     ]
