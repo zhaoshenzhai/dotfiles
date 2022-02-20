@@ -17,14 +17,14 @@ main_choice=$(printf '%s\n' "${options[@]}" | dmenu -i -p 'Options:' $colors -bw
 case $main_choice in
     "MathWiki")
         declare -a choices=(
-            "Files"
+            "Notes"
             "Images"
         )
         choice=$(printf '%s\n' "${choices[@]}" | dmenu -i -p 'Edit:' $colors -bw 0 -h 30 -fn 'courier prime:spacing=1:pixelsize=20')
         
         case $choice in
-            "Files")
-                path="$HOME/MathWiki/Files/"
+            "Notes")
+                path="$HOME/MathWiki/Notes/"
 
                 file=$(find $path -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
@@ -103,12 +103,12 @@ case $main_choice in
         declare -a configs=(
             "dmenu - $dir/dmenu/open_file.sh"
             "init - $dir/init.sh"
-            "newJava - $dir/newJava.sh"
-            "newLaTeX - $dir/newLaTeX.sh"
-            "javaCompile - $dir/javaCompile.sh"
-            "cSharpCompile - $dir/cSharpCompile.sh"
-            "volumeControl - $dir/volumeControl.sh"
-            "xmobarVolume - $dir/xmobarVolume.sh"
+            "newJava - $dir/new/newJava.sh"
+            "newLaTeX - $dir/new/newLaTeX.sh"
+            "javaCompile - $dir/compile/javaCompile.sh"
+            "cSharpCompile - $dir/compile/cSharpCompile.sh"
+            "volumeControl - $dir/volume/volumeControl.sh"
+            "xmobarVolume - $dir/volume/xmobarVolume.sh"
         )
 
         choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Edit:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
