@@ -8,7 +8,7 @@ dropbox &
 nitrogen --restore &
 
 # Open reminders
-alacritty --class reminders,reminders -e nvim ~/Reminders/self_study.md &
+alacritty --class reminders,reminders -e nvim ~/Dropbox/Reminders/MathWiki.md &
 
 # Start main applications
 google-chrome-stable --profile-directory=Default &
