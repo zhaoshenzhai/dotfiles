@@ -80,7 +80,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_v        ), spawn "alacritty -e vifm"        ),
         ((modm, xK_n        ), spawn "alacritty --class nvim,nvim -e nvim"),
         ((modm, xK_b        ), spawn "alacritty --class sys,sys -e bluetoothctl"),
-        ((modm, xK_i        ), spawn "alacritty --class sys,sys -e iwctl"       ),
+        ((modm, xK_i        ), spawn "alacritty --class sys,sys -e nmtui"       ),
 
         ((modm, xK_Return), spawn "./.config/scripts/dmenu/open_file.sh"),
 
