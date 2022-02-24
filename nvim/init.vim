@@ -99,7 +99,6 @@ autocmd filetype vimwiki :set spell
 " NOTE: To fix autocomplete <CR> skipping to next line, go to
 " ~/.config/nvim/plugged/vimwiki/ftplugin/vimwiki.vim line 486 and change the
 " key binding
-map <leader>p :grep -r "Status: \#In_Progress" ~/MathWiki<CR>:copen<CR><CR>
 
 " NerdTree
 map <silent> <Leader>n :NERDTreeToggle<CR>
@@ -156,10 +155,6 @@ inoremap <M-Space>c <c-g>u<Esc>[s1z=`]a<c-g>u
 " Switch tabs
 map <F2> :tabp<CR>
 map <F3> :tabn<CR>
-map <leader>j <C-w>j
-map <leader>k <C-w>k
-map <M-Space>d <C-w>+
-map <M-Space>u <C-w>-
 
 " Scroll
 function! ScreenMovement(movement)
