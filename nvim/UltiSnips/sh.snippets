@@ -1,0 +1,48 @@
+#### General ####
+snippet { "braces" Ait
+\{$1}$0
+endsnippet
+
+snippet [ "square brackets" Ait
+[$1]$0
+endsnippet
+
+snippet ( "parenthesis" Ait
+($1)$0
+endsnippet
+
+snippet " "braces" Ait
+"$1"$0
+endsnippet
+#### General ####
+
+###########################################################
+
+#### Loops & Conditions ####
+snippet while "while loop" b
+while [ ${1:bool condition} ];do
+	$0
+done
+endsnippet
+
+snippet if "if statement" b
+if [ ${1:bool condition} ]; then
+	$0
+fi
+endsnippet
+
+snippet whileline "loop through multiline variable" 
+while IFS= read -r ${1:line}; do
+	echo "$$1"
+	$0
+done <<< "$${2:var}"
+endsnippet
+#### Loops & Conditions ####
+
+###########################################################
+
+#### Others ####
+snippet ECHO "echo yellow" i
+echo -e "${YELLOW}$1${NC}"$0
+endsnippet
+#### Others ####

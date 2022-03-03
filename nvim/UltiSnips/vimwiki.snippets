@@ -10,18 +10,17 @@ endglobal
 ###########################################################
 
 #### General ####
+context "notmath()"
+snippet ( "parenthesis" Ait
+($1)$0
+endsnippet
+
 snippet { "braces" Ait
 \{$1}$0
 endsnippet
 
-context "notmath()"
 snippet [ "square brackets" Ait
 [$1]$0
-endsnippet
-
-context "notmath()"
-snippet ( "parenthesis" Ait
-($1)$0
 endsnippet
 
 snippet SQ "single quotes" it
@@ -33,11 +32,30 @@ $\textrm{\`\`}$$1$\textrm{''}$$0
 endsnippet
 
 snippet RESIMP "result follows ... chain of implications" it
-The result follows from the following chain of implications:$0
+The result follows from the following chain of implications:
+$$\begin{equation}
+	\begin{alignedat}{2}
+		$0
+	\end{alignedat}
+\end{equation}$$
 endsnippet
 
 snippet RESEQV "result follows ... chain of equivalences" it
-The result follows from the following chain of equivalences:$0
+The result follows from the following chain of equivalences:
+$$\begin{equation}
+	\begin{alignedat}{2}
+		$0
+	\end{alignedat}
+\end{equation}$$
+endsnippet
+
+snippet RESCOM "result follows the following computationg" it
+The result follows from the following computation:
+$$\begin{equation}
+	\begin{alignedat}{2}
+		$0
+	\end{alignedat}
+\end{equation}$$
 endsnippet
 
 snippet " "braces" Ait
@@ -194,7 +212,7 @@ endsnippet
 
 priority 100
 context "math()"
-snippet [ "[]" iA
+snippet sq "[]" iA
 \l[$1\r]$0
 endsnippet
 
