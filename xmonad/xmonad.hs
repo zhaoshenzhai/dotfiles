@@ -84,8 +84,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
         ((modm, xK_Return), spawn "./.config/scripts/dmenu/open_file.sh"),
 
-        ((modm, xK_w                   ), spawn "google-chrome-stable --profile-directory=Default"    ),
-        ((modm .|. shiftMask, xK_w     ), spawn "google-chrome-stable --profile-directory='Profile 2'"),
+        ((modm, xK_w                   ), spawn "google-chrome-stable --profile-directory=Default --force-dark-mode"    ),
+        ((modm .|. shiftMask, xK_w     ), spawn "google-chrome-stable --profile-directory='Profile 2' --force-dark-mode"),
 
         ((modm, xK_s), spawn "spotify"),
         ((modm, xK_o), spawn "obsidian"),

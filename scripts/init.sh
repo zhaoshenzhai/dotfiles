@@ -11,6 +11,6 @@ nitrogen --restore &
 alacritty --class reminders,reminders -e nvim ~/Dropbox/Reminders/MathWiki.md &
 
 # Start main applications
-google-chrome-stable --profile-directory=Default &
+google-chrome-stable --profile-directory=Default --force-dark-mode &
 obsidian &
 spotify &
