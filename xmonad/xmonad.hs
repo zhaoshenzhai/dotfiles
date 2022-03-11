@@ -78,7 +78,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_backslash), spawn myTerminal                 ),
         ((modm, xK_p        ), spawn "pavucontrol"              ),
         ((modm, xK_v        ), spawn "alacritty -e vifm"        ),
-        ((modm, xK_n        ), spawn "alacritty --class nvim,nvim -e nvim"),
+        ((modm, xK_n        ), spawn "alacritty -e nvim"),
         ((modm, xK_b        ), spawn "alacritty --class sys,sys -e bluetoothctl"),
         ((modm, xK_i        ), spawn "alacritty --class sys,sys -e nmtui"       ),
 
