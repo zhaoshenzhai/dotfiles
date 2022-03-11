@@ -13,4 +13,5 @@ let g:vimtex_quickfix_ignore_filters=[
     \'Dimension too large.',
     \'LaTeX Warning\: Marginpar on page * moved. ',
     \]
-map <F4> :VimtexView<CR>
+
+autocmd filetype tex nnoremap <F4> :w <CR>:VimtexView<CR>

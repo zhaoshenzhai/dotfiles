@@ -21,7 +21,7 @@ set title                                                               " enable
 set titlestring=\ %-25.55t\ %a%r%m                                      " remove full path; name only
 set relativenumber                                                      " relative line numbers
 set nofoldenable                                                        " no folding
-set conceallevel=2                                                      " conceal
+set conceallevel=1                                                      " conceal
 set autochdir                                                           " change to current directory
 set spell                                                               " spelling
 set spelllang=en                                                        " spell language
