@@ -33,7 +33,7 @@ endsnippet
 
 snippet whileline "loop through multiline variable" 
 while IFS= read -r ${1:line}; do
-	echo "$$1"
+	echo -e "${YELLOW}$$1${NC}"
 	$0
 done <<< "$${2:var}"
 endsnippet
