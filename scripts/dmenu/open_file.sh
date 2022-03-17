@@ -5,7 +5,8 @@
 declare -a options=(
     "MathWiki"
     "Textbooks"
-    "Courses"
+    "Old Notes"
+    "STEP Prep"
     "Config"
     "Scripts"
     "Snippets"
@@ -58,27 +59,68 @@ case $main_choice in
             exit 0
         fi
     ;;
-    "Reminders")
-        root_path="$HOME/Dropbox/Reminders/"
+    "Old Notes")
+        declare -a configs=(
+            "Introduction to Algebra"
+            "Introduction to Topology"
+            "Introduction to Set Theory"
+            "Introduction to Linear Algebra"
+            "Introduction to Classical Mechanics"
+            "Introduction to Real Analysis"
+        )
 
-        choice=$(find $root_path -type f | cut -c$((${#root_path}+1))- | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+        choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Edit:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
         if [ "$choice" ]; then
-            alacritty --class reminders,reminders -e nvim "$root_path$choice"
+            course=$(printf '%s\n' "${choice}" | sed 's/\ /_/g')
+            zathura "~/Highschool_Course_Notes/$course/$course.pdf"
         else
             exit 0
         fi
     ;;
-    "Snippets")
-        root_path="$HOME/.config/nvim/UltiSnips/"
+    "STEP Prep")
+        declare -a choices=(
+            "Foundations"
+            "Papers"
+            "Book"
+            "Specification"
+            "Boundaries"
+        )
+        choice=$(printf '%s\n' "${choices[@]}" | dmenu -i -p 'Edit:' $colors -bw 0 -h 30 -fn 'courier prime:spacing=1:pixelsize=20')
 
-        choice=$(find $root_path -type f | cut -c$((${#root_path}+1))- | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+        case $choice in
+            "Foundations")
+                path="$HOME/STEP/Foundation/"
 
-        if [ "$choice" ]; then
-            alacritty --class sys,sys -e nvim "$root_path$choice"
-        else
-            exit 0
-        fi
+                file=$(find $path -printf "%T@ %Tc %p\n" | grep ".pdf" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+
+                if [ "$file" ]; then
+                    zathura "$path$file"
+                else
+                    exit 0
+                fi
+            ;;
+            "Papers")
+                path="$HOME/STEP/Papers/"
+
+                file=$(find $path | grep ".pdf" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+
+                if [ "$file" ]; then
+                    zathura "$path$file"
+                else
+                    exit 0
+                fi
+            ;;
+            "Book")
+                zathura "$HOME/STEP/Advanced Problems in Mathematics.pdf"
+            ;;
+            "Specification")
+                zathura "$HOME/STEP/Specification.pdf"
+            ;;
+            "Boundaries")
+                zathura "$HOME/STEP/Boundaries.pdf"
+            ;;
+        esac
     ;;
     "Config")
         dir="$HOME/.config"
@@ -119,21 +161,24 @@ case $main_choice in
             exit 0
         fi
     ;;
-    "Courses")
-        declare -a configs=(
-            "Introduction to Algebra"
-            "Introduction to Topology"
-            "Introduction to Set Theory"
-            "Introduction to Linear Algebra"
-            "Introduction to Classical Mechanics"
-            "Introduction to Real Analysis"
-        )
+    "Snippets")
+        root_path="$HOME/.config/nvim/UltiSnips/"
 
-        choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Edit:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+        choice=$(find $root_path -type f | cut -c$((${#root_path}+1))- | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
         if [ "$choice" ]; then
-            course=$(printf '%s\n' "${choice}" | sed 's/\ /_/g')
-            zathura "~/Highschool_Course_Notes/$course/$course.pdf"
+            alacritty --class sys,sys -e nvim "$root_path$choice"
+        else
+            exit 0
+        fi
+    ;;
+    "Reminders")
+        root_path="$HOME/Dropbox/Reminders/"
+
+        choice=$(find $root_path -type f | cut -c$((${#root_path}+1))- | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+
+        if [ "$choice" ]; then
+            alacritty --class reminders,reminders -e nvim "$root_path$choice"
         else
             exit 0
         fi
