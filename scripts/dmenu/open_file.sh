@@ -133,7 +133,7 @@ case $main_choice in
 
         if [ "$choice" ]; then
             course=$(printf '%s\n' "${choice}" | sed 's/\ /_/g')
-            zathura "~/Study/Highschool_Course_Notes/$course/$course.pdf"
+            zathura "~/Highschool_Course_Notes/$course/$course.pdf"
         else
             exit 0
         fi
