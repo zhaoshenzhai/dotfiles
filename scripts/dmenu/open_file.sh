@@ -5,7 +5,7 @@
 declare -a options=(
     "MathWiki"
     "Textbooks"
-    "Old Notes"
+    "HS Notes"
     "STEP Prep"
     "Config"
     "Scripts"
@@ -59,21 +59,15 @@ case $main_choice in
             exit 0
         fi
     ;;
-    "Old Notes")
-        declare -a configs=(
-            "Introduction to Algebra"
-            "Introduction to Topology"
-            "Introduction to Set Theory"
-            "Introduction to Linear Algebra"
-            "Introduction to Classical Mechanics"
-            "Introduction to Real Analysis"
-        )
+    "HS Notes")
+        root_path="$HOME/Dropbox/Highschool/Course_Notes/"
 
-        choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Edit:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+        #choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Edit:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+        choice=$(find $root_path -maxdepth 2 -printf "\n%A+ %p" | grep ".pdf" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
         if [ "$choice" ]; then
-            course=$(printf '%s\n' "${choice}" | sed 's/\ /_/g')
-            zathura "~/Highschool_Course_Notes/$course/$course.pdf"
+            course=$(printf '%s\n' "${choice}" | sed 's/.pdf//g')
+            zathura "$root_path$course/$course.pdf"
         else
             exit 0
         fi
@@ -86,9 +80,10 @@ case $main_choice in
             "Specification"
             "Boundaries"
         )
-        choice=$(printf '%s\n' "${choices[@]}" | dmenu -i -p 'Edit:' $colors -bw 0 -h 30 -fn 'courier prime:spacing=1:pixelsize=20')
 
         root_path="$HOME/Dropbox/Highschool/University_2/Applications/United_Kingdom/STEP"
+
+        choice=$(printf '%s\n' "${choices[@]}" | dmenu -i -p 'Edit:' $colors -bw 0 -h 30 -fn 'courier prime:spacing=1:pixelsize=20')
 
         case $choice in
             "Foundations")
