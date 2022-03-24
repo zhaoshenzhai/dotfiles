@@ -88,9 +88,11 @@ case $main_choice in
         )
         choice=$(printf '%s\n' "${choices[@]}" | dmenu -i -p 'Edit:' $colors -bw 0 -h 30 -fn 'courier prime:spacing=1:pixelsize=20')
 
+        root_path="$HOME/Dropbox/Highschool/University_2/Applications/United_Kingdom/STEP"
+
         case $choice in
             "Foundations")
-                path="$HOME/STEP/Foundation/"
+                path="$root_path/Foundation/"
 
                 file=$(find $path -printf "%T@ %Tc %p\n" | grep ".pdf" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
@@ -101,7 +103,7 @@ case $main_choice in
                 fi
             ;;
             "Papers")
-                path="$HOME/STEP/Papers/"
+                path="$root_path/Papers/"
 
                 file=$(find $path | grep ".pdf" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
@@ -112,13 +114,13 @@ case $main_choice in
                 fi
             ;;
             "Book")
-                zathura "$HOME/STEP/Advanced Problems in Mathematics.pdf"
+                zathura "$root_path/Advanced Problems in Mathematics.pdf"
             ;;
             "Specification")
-                zathura "$HOME/STEP/Specification.pdf"
+                zathura "$root_path/Specification.pdf"
             ;;
             "Boundaries")
-                zathura "$HOME/STEP/Boundaries.pdf"
+                zathura "$root_path/Boundaries.pdf"
             ;;
         esac
     ;;
