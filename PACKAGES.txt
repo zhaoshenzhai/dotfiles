@@ -1,0 +1,11 @@
+Core:
+    linux-firmware linux-lts linux-lts-headers htop vim sudo xorg xterm yay networkmanager
+
+Desktop enviromnent:
+    xmonad xmonad-contrib xmobar alacritty bluez blueman neofetch nitrogen pamixer pacman-contrib pavucontrol pipewire pipewire-pulse dmenu gpicview
+
+Apps:
+    git neovim obsidian scrot texlive vifm zathura zathura-pdf-mupdf unzip colorpicker pdf2svg
+
+AUR:
+    dropbox google-chrome spotify scipetify-cli
