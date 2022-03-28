@@ -1,7 +1,7 @@
 nmap <leader><space> <Plug>VimwikiNextLink
 nmap <leader>. <Plug>VimwikiPrevLink
 nmap <leader><enter> <Plug>VimwikiFollowLink
-let g:vimwiki_conceallevel = 2
+let g:vimwiki_conceallevel = 0
 let g:vimwiki_table_mappings = 0
 let g:vimwiki_list = [{'path': '~/MathWiki/',
                         \ 'syntax': 'markdown', 'ext': '.md'}]
