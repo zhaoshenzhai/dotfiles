@@ -89,6 +89,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
         ((modm, xK_s), spawn "spotify"),
         ((modm, xK_o), spawn "obsidian"),
+        ((modm, xK_d), spawn "discord"),
 
         ((modm, xK_f     ), sendMessage NextLayout  ),
         ((modm, xK_grave ), sendMessage ToggleStruts),
@@ -138,6 +139,7 @@ myStartupHook = do
 myManageHook = composeAll
     [
         className =? "reminders"     --> viewShift (myWorkspaces !! 0),
+        className =? "discord"       --> viewShift (myWorkspaces !! 0),
         className =? "Google-chrome" --> viewShift (myWorkspaces !! 1),
         className =? "obsidian"      --> viewShift (myWorkspaces !! 2),
         className =? "nvim"          --> viewShift (myWorkspaces !! 2),
