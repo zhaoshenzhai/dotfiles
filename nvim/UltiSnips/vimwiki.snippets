@@ -89,47 +89,83 @@ snippet 8s "8 spaces" i
 endsnippet
 
 snippet 4t "4 spaces with text" i
-\ \ \ \ \text${1:rm}{$2}\ \ \ \ $0
+\ \ \ \ \textrm{$1}\ \ \ \ $0
 endsnippet
 
 snippet 8t "8 spaces with text" i
-\ \ \ \ \ \ \ \ \text${1:rm}{$2}\ \ \ \ \ \ \ \ $0
+\ \ \ \ \ \ \ \ \textrm{$1}\ \ \ \ \ \ \ \ $0
+endsnippet
+
+snippet 4it "4 spaces with text (italic)" i
+\ \ \ \ \textrm{\it{$1}}\ \ \ \ $0
+endsnippet
+
+snippet 8it "8 spaces with text (italic)" i
+\ \ \ \ \ \ \ \ \textrm{\it{$1}}\ \ \ \ \ \ \ \ $0
 endsnippet
 
 snippet 4a "4 spaces with and" i
-\ \ \ \ \text${1:rm}{and}\ \ \ \ $0
+\ \ \ \ \textrm{and}\ \ \ \ $0
 endsnippet
 
 snippet 8a "8 spaces with and" i
-\ \ \ \ \ \ \ \ \text${1:rm}{and}\ \ \ \ \ \ \ \ $0
+\ \ \ \ \ \ \ \ \textrm{and}\ \ \ \ \ \ \ \ $0
+endsnippet
+
+snippet 4ia "4 spaces with and (italic)" i
+\ \ \ \ \textrm{\it{and}}\ \ \ \ $0
+endsnippet
+
+snippet 8ia "8 spaces with and (italic)" i
+\ \ \ \ \ \ \ \ \textrm{\it{and}}\ \ \ \ \ \ \ \ $0
 endsnippet
 
 snippet 4o "4 spaces with or" i
-\ \ \ \ \text${1:rm}{or}\ \ \ \ $0
+\ \ \ \ \textrm{or}\ \ \ \ $0
 endsnippet
 
 snippet 8o "8 spaces with or" i
-\ \ \ \ \ \ \ \ \text${1:rm}{or}\ \ \ \ \ \ \ \ $0
+\ \ \ \ \ \ \ \ \textrm{or}\ \ \ \ \ \ \ \ $0
 endsnippet
 
-snippet 4m "4 spaces with mapping" i
-\ \ \ \ \text${1:rm}{mapping}\ \ \ \ $0
+snippet 4io "4 spaces with or (italic)" i
+\ \ \ \ \textrm{\it{or}}\ \ \ \ $0
 endsnippet
 
-snippet 8m "8 spaces with mapping" i
-\ \ \ \ \ \ \ \ \text${1:rm}{mapping}\ \ \ \ \ \ \ \ $0
+snippet 8io "8 spaces with or (italic)" i
+\ \ \ \ \ \ \ \ \textrm{\it{or}}\ \ \ \ \ \ \ \ $0
+endsnippet
+
+snippet 4o "4 spaces with mapping" i
+\ \ \ \ \textrm{mapping}\ \ \ \ $0
+endsnippet
+
+snippet 8o "8 spaces with mapping" i
+\ \ \ \ \ \ \ \ \textrm{mapping}\ \ \ \ \ \ \ \ $0
+endsnippet
+
+snippet 4io "4 spaces with mapping (italic)" i
+\ \ \ \ \textrm{\it{mapping}}\ \ \ \ $0
+endsnippet
+
+snippet 8io "8 spaces with mapping (italic)" i
+\ \ \ \ \ \ \ \ \textrm{\it{mapping}}\ \ \ \ \ \ \ \ $0
 endsnippet
 
 snippet 4e "4 spaces with equivalence" i
 \ \ \ \ \Leftrightarrow\ \ \ \ $0
 endsnippet
 
+snippet 8e "8 spaces with equivalence" i
+\ \ \ \ \ \ \ \ \Leftrightarrow\ \ \ \ \ \ \ \ $0
+endsnippet
+
 snippet 4de "4 spaces with definitional equivalence" i
 \ \ \ \ \,\colon\!\Leftrightarrow\ \ \ \ $0
 endsnippet
 
-snippet 8e "8 spaces with equivalence" i
-\ \ \ \ \ \ \ \ \Leftrightarrow\ \ \ \ \ \ \ \ $0
+snippet 8de "8 spaces with definitional equivalence" i
+\ \ \ \ \ \ \ \ \,\colon\!\Leftrightarrow\ \ \ \ \ \ \ \ $0
 endsnippet
 
 snippet 4i "4 spaces with implication" i
@@ -139,6 +175,23 @@ endsnippet
 snippet 8i "8 spaces with implication" i
 \ \ \ \ \ \ \ \ \Rightarrow\ \ \ \ \ \ \ \ $0
 endsnippet
+
+snippet 4at "4 spaces with arrows and text" i
+\ \ \ \ \xrightarrow{\textrm{$1}}\ \ \ \ $0
+endsnippet
+
+snippet 8at "8 spaces with arrows and text" i
+\ \ \ \ \ \ \ \ \xrightarrow{\textrm{$1}}\ \ \ \ \ \ \ \ $0
+endsnippet
+
+snippet 4iat "4 spaces with arrows and text (italic)" i
+\ \ \ \ \xrightarrow{\textrm{\it{$1}}}\ \ \ \ $0
+endsnippet
+
+snippet 8iat "8 spaces with arrows and text (italic)" i
+\ \ \ \ \ \ \ \ \xrightarrow{\textrm{\it{$1}}}\ \ \ \ \ \ \ \ $0
+endsnippet
+
 
 context "notmath()"
 snippet AA "Custom alias" b
