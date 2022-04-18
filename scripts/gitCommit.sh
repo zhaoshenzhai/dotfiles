@@ -6,26 +6,37 @@ RED='\033[0;31m'
 YELLOW='\033[0;33m'
 NC='\033[0m'
 
-echo -e "${CYAN}Repositories:${NC}"
-echo -e "${CYAN}    (1): MathWiki${NC}"
-echo -e "${CYAN}    (2): dotfiles${NC}"
-printf "\n"
+while [ ! -z "$1" ]; do
+    case "$1" in
+        --prompt|-p)
+            echo -e "${CYAN}Repositories:${NC}"
+            echo -e "${CYAN}    (1): MathWiki${NC}"
+            echo -e "${CYAN}    (2): dotfiles${NC}"
+            printf "\n"
 
-read -n 1 -ep "$(echo -e ${CYAN}"Select repository [1,2]: "${NC})" repo
-while [ ! "$repo" == "1" ] && [ ! "$repo" == "2" ]; do
-    read -n 1 -ep "$(echo -e ${CYAN}"Select repository [1,2]: "${NC})" repo
+            read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1,2] "${NC})" repo
+            while [ ! "$repo" == "1" ] && [ ! "$repo" == "2" ]; do
+                read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1,2] "${NC})" repo
+            done
+
+            case $repo in
+                "1")
+                    path="$HOME/MathWiki/"
+                ;;
+                "2")
+                    path="$HOME/.config/"
+                ;;
+            esac
+
+            cd "$path"
+    esac
+    case "$1" in
+        --MathWiki|-m)
+            repo="1"
+            cd "$HOME/MathWiki/"
+    esac
+shift
 done
-
-case $repo in
-    "1")
-        path="$HOME/MathWiki"
-    ;;
-    "2")
-        path="$HOME/.config"
-    ;;
-esac
-
-cd "$path"
 
 printf "\n"
 git status
