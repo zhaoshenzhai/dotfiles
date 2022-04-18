@@ -154,6 +154,7 @@ case $main_choice in
         declare -a configs=(
             "dmenu - $dir/dmenu/open_file.sh"
             "init - $dir/init.sh"
+            "gitCommit - $dir/gitCommit.sh"
             "newJava - $dir/new/newJava.sh"
             "newLaTeX - $dir/new/newLaTeX.sh"
             "javaCompile - $dir/compile/javaCompile.sh"
