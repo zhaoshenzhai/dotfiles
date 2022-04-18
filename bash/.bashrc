@@ -3,6 +3,7 @@ alias ls='ls --color=auto'
 
 # Alias
 alias la='LC_ALL=C ls -lhAr --group-directories-first'
+alias please='sudo'
 
 # Editor
 EDITOR=nvim
