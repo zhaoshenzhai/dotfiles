@@ -52,7 +52,7 @@ call plug#end()
 
 let mapleader = "`"
 
-source ~/.config/nvim/config/eyeCandy.vim
+source ~/.config/nvim/config/theme.vim
 source ~/.config/nvim/config/keyboardMovement.vim
 source ~/.config/nvim/config/mappings.vim
 source ~/.config/nvim/config/textObjects.vim
