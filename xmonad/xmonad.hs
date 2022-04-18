@@ -109,8 +109,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_F5              ), spawn "./.config/scripts/volume/volumeControl.sh -p"  ),
 
         ((modm .|. shiftMask, xK_g), spawn "alacritty -e ~/.config/scripts/gitCommit.sh -p"),
-        ((modm .|. shiftMask, xK_u), spawn "alacritty -e ~/MathWiki/.scripts/mathLinks.sh -u"),
-        ((modm .|. shiftMask, xK_n), spawn "alacritty -e ~/MathWiki/.scripts/mathLinks.sh -n"),
+        ((modm .|. shiftMask, xK_m), spawn "alacritty -e ~/MathWiki/.scripts/main.sh"),
 
         ((modm              , xK_q), spawn "xmonad --recompile; killall xmobar; xmonad --restart"),
         ((modm .|. shiftMask, xK_q), io exitSuccess)
