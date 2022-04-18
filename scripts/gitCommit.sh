@@ -53,6 +53,7 @@ printf "\n"
 read -n 1 -ep "$(echo -e ${CYAN}"Commit? [Y/n] "${NC})" choice
 if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
     if [[ "$repo" == "1" ]]; then
+        cd ~/MathWiki/
         source ~/MathWiki/.scripts/stats.sh -u
 
         templatesInsertLine=$(grep -n "#### Templates" ~/.config/nvim/UltiSnips/vimwiki.snippets | sed 's/:.*$//g')
