@@ -15,6 +15,9 @@ while [ ! -z "$1" ]; do
             printf "\n"
 
             read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1,2] "${NC})" repo
+            if [[ "$repo" == "q" ]]; then
+                exit
+            fi
             while [ ! "$repo" == "1" ] && [ ! "$repo" == "2" ]; do
                 read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1,2] "${NC})" repo
             done
