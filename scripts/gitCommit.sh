@@ -88,6 +88,9 @@ if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
 
     printf "\n"
     read -ep "$(echo -e ${CYAN}"Message: "${NC})" msg
+    while [ -z "$msg" ]; do
+        read -ep "$(echo -e ${CYAN}"Message: "${NC})" msg
+    done
     printf "\n"
 
     git commit -m "$msg"
