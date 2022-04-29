@@ -357,14 +357,28 @@ snippet lim "limit" i
 \lim\limits_{${1:n}\to${2:\infty}}$0
 endsnippet
 
+priority 100
 context "math()"
 snippet sum "sum" i
 \sum\limits_{${1:i}=${2:0}}^{${3:\infty}}$0
 endsnippet
 
+priority 100
 context "math()"
 snippet prod "product" i
 \prod\limits_{${1:i}=${2:0}}^{${3:\infty}}$0
+endsnippet
+
+priority 200
+context "math()"
+snippet asum "arbitrary sum" i
+\sum\limits_{${1:i}\in${2:I}}$0
+endsnippet
+
+priority 200
+context "math()"
+snippet aprod "arbitrary product" i
+\prod\limits_{${1:i}\in${2:I}}$0
 endsnippet
 
 context "math()"
