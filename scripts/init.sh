@@ -10,7 +10,7 @@ nitrogen --restore &
 # Open reminders
 alacritty --class reminders,reminders -e nvim ~/Dropbox/Reminders/MathWiki.md &
 alacritty --class reminders,reminders -e nvim ~/Dropbox/Reminders/Dates.md &
-zathura '~/Downloads/MATH133 (Fall 2020).pdf' &
+zathura '~/Dropbox/University/Courses/22F/MATH133/Fall 2020.pdf' &
 
 # Start main applications
 google-chrome-stable --profile-directory=Default --force-dark-mode &
