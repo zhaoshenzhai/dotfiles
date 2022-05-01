@@ -48,10 +48,21 @@ printf "\n"
 git status
 printf "\n"
 
-read -n 1 -ep "$(echo -e ${CYAN}"Show diff? [Y/n] "${NC})" choice
-if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
-    printf "\n"
-    git diff
+if [[ "$repo" == "1" ]]; then
+    read -n 1 -ep "$(echo -e ${CYAN}"Show diff? [Y/a/n] "${NC})" choice
+    if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
+        printf "\n"
+        git diff "Notes/*"
+    elif [ "$choice" == "a" ] || [ "$choice" == "A" ]; then
+        printf "\n"
+        git diff
+    fi
+else
+    read -n 1 -ep "$(echo -e ${CYAN}"Show diff? [Y/n] "${NC})" choice
+    if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
+        printf "\n"
+        git diff
+    fi
 fi
 
 printf "\n"
