@@ -101,12 +101,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_k     ), sendMessage Expand      ),
         ((modm, xK_Escape), kill                    ),
 
-        ((modm, 0x1008FF12              ), spawn "./.config/scripts/volume/volumeControl.sh -t  "),
-        ((modm, 0x1008FF11              ), spawn "./.config/scripts/volume/volumeControl.sh -d 5"),
-        ((modm, 0x1008FF13              ), spawn "./.config/scripts/volume/volumeControl.sh -i 5"),
-        ((modm .|. shiftMask, 0x1008FF11), spawn "./.config/scripts/volume/volumeControl.sh -d 1"),
-        ((modm .|. shiftMask, 0x1008FF13), spawn "./.config/scripts/volume/volumeControl.sh -i 1"),
-        ((modm, 0x1008FF14              ), spawn "./.config/scripts/volume/volumeControl.sh -p"  ),
+        ((modm, xK_F1              ), spawn "./.config/scripts/volume/volumeControl.sh -t  "),
+        ((modm, xK_F2              ), spawn "./.config/scripts/volume/volumeControl.sh -d 5"),
+        ((modm, xK_F3              ), spawn "./.config/scripts/volume/volumeControl.sh -i 5"),
+        ((modm .|. shiftMask, xK_F2), spawn "./.config/scripts/volume/volumeControl.sh -d 1"),
+        ((modm .|. shiftMask, xK_F3), spawn "./.config/scripts/volume/volumeControl.sh -i 1"),
+        ((modm, xK_F5              ), spawn "./.config/scripts/volume/volumeControl.sh -p"  ),
 
         ((modm .|. shiftMask, xK_g), spawn "alacritty -e ~/.config/scripts/gitCommit.sh -p"),
         ((modm .|. shiftMask, xK_m), spawn "alacritty -e ~/MathWiki/.scripts/main.sh"),
