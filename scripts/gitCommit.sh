@@ -75,9 +75,15 @@ if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
 
         templatesInsertLine=$(grep -n "#### Templates" ~/.config/nvim/UltiSnips/vimwiki.snippets | sed 's/:.*$//g')
         sed -i 's|\[templatesInsert\]:.*$|\[templatesInsert\]: https://github.com/zhaoshenzhai/dotfiles/blob/master/nvim/UltiSnips/vimwiki.snippets#L'"$templatesInsertLine"'|g' README.md
-        tikzInsertLine=$(grep -n "pdflatex -shell-escape image.tex" ~/.config/nvim/config/MathWiki.vim | sed 's/:.*$//g')
-        pdfLaTeXExecuteLine=$(grep -n "newTikZ.sh" ~/.config/nvim/config/MathWiki.vim | sed 's/:.*$//g')
+
+        tikzInsertLine=$(grep -n "newTikZ.sh" ~/.config/nvim/config/MathWiki.vim | sed 's/:.*$//g')
+        sed -i 's|\[tikzInsert\]:.*$|\[tikzInsert\]: https://github.com/zhaoshenzhai/dotfiles/blob/master/nvim/config/MathWiki.vim#L'"$tikzInsertLine"'|g' README.md
+
+        pdfLaTeXExecuteLine=$(grep -n "pdflatex -shell-escape image.tex" ~/.config/nvim/config/MathWiki.vim | sed 's/:.*$//g')
         sed -i 's|\[pdfLaTeXExecute\]:.*$|\[pdfLaTeXExecute\]: https://github.com/zhaoshenzhai/dotfiles/blob/master/nvim/config/MathWiki.vim#L'"$pdfLaTeXExecuteLine"'|g' README.md
+
+        autoAliasLine=$(grep -n "Math()" ~/MathWiki/.scripts/mathLinks.sh | sed 's/:.*$//g')
+        sed -i 's|\[standardAlias\]:.*$|\[standardAlias\]: https://github.com/zhaoshenzhai/MathWiki/blob/master/.scripts/mathLinks.sh#L9'"$autoAliasLine"'|g' README.md
     fi
 
     git add .
