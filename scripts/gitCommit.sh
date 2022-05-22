@@ -83,7 +83,7 @@ if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
         sed -i 's|\[pdfLaTeXExecute\]:.*$|\[pdfLaTeXExecute\]: https://github.com/zhaoshenzhai/dotfiles/blob/master/nvim/config/MathWiki.vim#L'"$pdfLaTeXExecuteLine"'|g' README.md
 
         autoAliasLine=$(grep -n "Math()" ~/MathWiki/.scripts/mathLinks.sh | sed 's/:.*$//g')
-        sed -i 's|\[standardAlias\]:.*$|\[standardAlias\]: https://github.com/zhaoshenzhai/MathWiki/blob/master/.scripts/mathLinks.sh#L9'"$autoAliasLine"'|g' README.md
+        sed -i 's|\[standardAlias\]:.*$|\[standardAlias\]: https://github.com/zhaoshenzhai/MathWiki/blob/master/.scripts/mathLinks.sh#L'"$autoAliasLine"'|g' README.md
     fi
 
     git add .
