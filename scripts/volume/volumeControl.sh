@@ -7,6 +7,7 @@ Help()
     echo "t | Toggles Mute/Unmute"
     echo "i | Increases Volume"
     echo "d | Decreases Volume"
+    echo "p | Play/pause"
 }
 
 RAW=`pamixer --list-sink`
