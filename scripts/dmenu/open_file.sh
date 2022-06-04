@@ -6,7 +6,6 @@ declare -a options=(
     "MathWiki"
     "Textbooks"
     "HS Notes"
-    "STEP Prep"
     "Config"
     "Scripts"
     "Snippets"
@@ -71,65 +70,6 @@ case $main_choice in
         else
             exit 0
         fi
-    ;;
-    "STEP Prep")
-        declare -a choices=(
-            "STEP2"
-            "Foundations"
-            "Papers"
-            "Book"
-            "Specification"
-            "Boundaries"
-        )
-
-        root_path="$HOME/Dropbox/Highschool/University_2/Applications/United_Kingdom/STEP"
-
-        choice=$(printf '%s\n' "${choices[@]}" | dmenu -i -p 'Edit:' $colors -bw 0 -h 30 -fn 'courier prime:spacing=1:pixelsize=20')
-
-        case $choice in
-            "STEP2")
-                path="$root_path/STEP2/"
-
-                file=$(find $path -printf "%T@ %Tc %p\n" | grep ".pdf" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
-
-                if [ "$file" ]; then
-                    zathura "$path$file"
-                else
-                    exit 0
-                fi
-            ;;
-            "Foundations")
-                path="$root_path/Foundation/"
-
-                file=$(find $path -printf "%T@ %Tc %p\n" | grep ".pdf" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
-
-                if [ "$file" ]; then
-                    zathura "$path$file"
-                else
-                    exit 0
-                fi
-            ;;
-            "Papers")
-                path="$root_path/Papers/"
-
-                file=$(find $path | grep ".pdf" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
-
-                if [ "$file" ]; then
-                    zathura "$path$file"
-                else
-                    exit 0
-                fi
-            ;;
-            "Book")
-                zathura "$root_path/Advanced Problems in Mathematics.pdf"
-            ;;
-            "Specification")
-                zathura "$root_path/Specification.pdf"
-            ;;
-            "Boundaries")
-                zathura "$root_path/Boundaries.pdf"
-            ;;
-        esac
     ;;
     "Config")
         dir="$HOME/.config"
