@@ -52,7 +52,7 @@ case $main_choice in
                 file=$(find $path -printf "%T@ %Tc %p\n" | grep ".sh" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
                 if [ "$file" ]; then
-                    alacritty --class nvim,nvim -e nvim "$path$file"
+                    alacritty --class sys,sys -e nvim "$path$file"
                 else
                     exit 0
                 fi
