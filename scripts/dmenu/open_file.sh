@@ -19,6 +19,7 @@ case $main_choice in
         declare -a choices=(
             "Notes"
             "Images"
+            "Scripts"
         )
         choice=$(printf '%s\n' "${choices[@]}" | dmenu -i -p 'Edit:' $colors -bw 0 -h 30 -fn 'courier prime:spacing=1:pixelsize=20')
         
@@ -41,6 +42,17 @@ case $main_choice in
 
                 if [ "$folder" ]; then
                     alacritty --class image,image -e nvim "$path$folder/image.tex"
+                else
+                    exit 0
+                fi
+            ;;
+            "Scripts")
+                path="$HOME/MathWiki/.scripts/"
+
+                file=$(find $path -printf "%T@ %Tc %p\n" | grep ".sh" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+
+                if [ "$file" ]; then
+                    alacritty --class nvim,nvim -e nvim "$path$file"
                 else
                     exit 0
                 fi
