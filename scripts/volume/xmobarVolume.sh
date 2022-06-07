@@ -17,7 +17,7 @@ elif [ "$LINES" -eq 3 ]; then
     SINK=`echo "$RAW" | sed -n 3p`
     HEADPHONE=${SINK%%\ *}
     MUTE=`pamixer --sink "$HEADPHONE" --get-mute`
-    HEADPHONE_BAT=`bluetoothctl info | sed -n 19p | sed -E 's/(.*\()//g' | sed 's/.$//'`
+    HEADPHONE_BAT=`bluetoothctl info | tail -n1 | sed -E 's/(.*\()//g' | sed 's/.$//'`
     if [ "$MUTE" = true ]; then
         printf "%s %s | %s" "<fn=2> </fn>" "Muted" $HEADPHONE_BAT"%"
     else
