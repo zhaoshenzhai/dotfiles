@@ -35,8 +35,7 @@ while [ ! -z "$1" ]; do
             esac
 
             cd "$path"
-    esac
-    case "$1" in
+        ;;
         --MathWiki|-m)
             repo="1"
             cd "$HOME/MathWiki/"
