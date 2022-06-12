@@ -107,12 +107,13 @@ case $main_choice in
             "dmenu - $dir/dmenu/open_file.sh"
             "init - $dir/init.sh"
             "gitCommit - $dir/gitCommit.sh"
+            "volumeControl - $dir/volume/volumeControl.sh"
+            "xmobarVolume - $dir/volume/xmobarVolume.sh"
+            "diskFree - $dir/diskFree.sh"
             "newJava - $dir/new/newJava.sh"
             "newLaTeX - $dir/new/newLaTeX.sh"
             "javaCompile - $dir/compile/javaCompile.sh"
             "cSharpCompile - $dir/compile/cSharpCompile.sh"
-            "volumeControl - $dir/volume/volumeControl.sh"
-            "xmobarVolume - $dir/volume/xmobarVolume.sh"
         )
 
         choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Edit:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')

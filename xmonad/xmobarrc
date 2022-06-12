@@ -20,9 +20,6 @@ Config
             Run Cpu [
                 "--template"      , "<fn=1>\62171</fn> <total>%"
             ] 10,
-            Run Memory [
-                "--template"      , "<fn=1>\xf538</fn> <usedratio>%"
-            ] 200,
             Run Battery [
                 "--template"      , "<acstatus>",
                 "--"              ,
@@ -31,6 +28,7 @@ Config
                 "-i"              , "<fn=2>\xf578</fn> Full"
             ] 50,
             Run Com "./.config/scripts/volume/xmobarVolume.sh" [] "volume" 5,
+            Run Com "./.config/scripts/diskFree.sh" [] "disk" 6000,
     		Run Date "<fn=1>\61463</fn> %H:%M:%S" "time" 10,
             Run Date "<fn=1>\61747</fn> %a %d/%m/%y" "date" 36000,
             Run StdinReader
@@ -38,5 +36,5 @@ Config
 
     sepChar = "%",
     alignSep = "}{",
-    template = "  %StdinReader% }%time%{%date%    %volume%    %cpu%    %memory%    %battery%  "
+    template = "  %StdinReader% }%time%{%date%    %volume%    %cpu%    %disk%    %battery%  "
 }
