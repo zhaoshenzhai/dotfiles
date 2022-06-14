@@ -27,20 +27,22 @@ set spell                                                               " spelli
 set spelllang=en                                                        " spell language
 
 call plug#begin('~/.config/nvim/plugged')
+    " Core
     Plug 'lervag/vimtex'                                                " latex support
     Plug 'SirVer/ultisnips'                                             " snippets to code much faster
     Plug 'kassio/neoterm'                                               " interactive shell
+
+    " Theme
+    Plug 'joshdick/onedark.vim'                                         " onedark color scheme
+    Plug 'sheerun/vim-polyglot'                                         " syntax highlighting
+    Plug 'inkarkat/vim-SyntaxRange'                                     " tex syntax in md
+    Plug 'itchyny/lightline.vim'                                        " lightline
+
+    " Completion
     Plug 'ncm2/ncm2'                                                    " code completion
     Plug 'roxma/nvim-yarp'                                              " framework required for ncm2
     Plug 'ncm2/ncm2-bufword'                                            " complete words in buffer
     Plug 'ncm2/ncm2-path'                                               " complete paths
-    Plug 'joshdick/onedark.vim'                                         " onedark color scheme
-    Plug 'itchyny/lightline.vim'                                        " lightline
-    Plug 'mhinz/vim-startify'                                           " start screen
-    Plug 'godlygeek/tabular'                                            " needed by markdown
-    Plug 'plasticboy/vim-markdown'                                      " markdown syntax
-    Plug 'vimwiki/vimwiki'                                              " wiki
-    Plug 'inkarkat/vim-SyntaxRange'                                     " tex syntax in md
 call plug#end()
 
 let mapleader = "`"
@@ -52,9 +54,9 @@ source ~/.config/nvim/config/textObjects.vim
 source ~/.config/nvim/config/compileAndRun.vim
 source ~/.config/nvim/config/MathWiki.vim
 
-source ~/.config/nvim/config/pluggins/ncm2.vim
-source ~/.config/nvim/config/pluggins/vimwiki.vim
+source ~/.config/nvim/config/pluggins/syntaxRange.vim
 source ~/.config/nvim/config/pluggins/ultisnips.vim
 source ~/.config/nvim/config/pluggins/vimtex.vim
+source ~/.config/nvim/config/pluggins/ncm2.vim
 
 autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"
