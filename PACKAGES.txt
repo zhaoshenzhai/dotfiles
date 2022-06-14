@@ -8,4 +8,4 @@ Apps:
     git neovim obsidian scrot texlive-core vifm zathura zathura-pdf-mupdf unzip colorpicker pdf2svg
 
 AUR:
-    dropbox google-chrome spotify scipetify-cli
+    dropbox google-chrome spotify scipetify-cli vscodium-bin
