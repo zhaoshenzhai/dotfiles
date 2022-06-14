@@ -10,7 +10,7 @@ Help()
     echo "p | Play/pause"
 }
 
-RAW=`pamixer --list-sink`
+RAW=`pamixer --list-sinks`
 
 LINES=`echo "$RAW" | wc -l`
 
