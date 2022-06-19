@@ -27,6 +27,7 @@ import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.Renamed
 import XMonad.Layout.NoBorders
+import XMonad.Layout.Grid
 import XMonad.Layout.Spacing
 import XMonad.Layout.LayoutModifier(ModifiedLayout)
 import XMonad.Layout.WindowNavigation
@@ -68,10 +69,14 @@ full = renamed [Replace "Full"]
     $ mySpacing myWindowGap
     $ Full
 
+grid = renamed [Replace "Grid"]
+    $ mySpacing myWindowGap
+    $ Grid
+
 myLayoutHook =
     avoidStruts $ smartBorders myLayout
     where
-        myLayout = full ||| tall
+        myLayout = full ||| tall ||| grid
 ---------------------------------------------------------------------------------------------------------------------
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [
