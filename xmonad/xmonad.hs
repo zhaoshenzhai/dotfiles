@@ -76,7 +76,8 @@ grid = renamed [Replace "Grid"]
 myLayoutHook =
     avoidStruts $ smartBorders myLayout
     where
-        myLayout = full ||| tall ||| grid
+        --myLayout = full ||| tall ||| grid
+        myLayout = full ||| tall
 ---------------------------------------------------------------------------------------------------------------------
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [
