@@ -627,82 +627,25 @@ endsnippet
 ###########################################################
 
 #### Let ...
-snippet SET "Set" i
-Let $${1:X}$ be a set. $0
-endsnippet
 
-snippet TOP "Topological Space" i
+snippet TOP "Topological space" i
 Let $\l\langle ${1:X},${2:\mc{T}}\r\rangle$ be a topological space. $0
-endsnippet
-
-snippet ORD "Ordinal" i
-Let $${1:\alpha}$ be an ordinal. $0
-endsnippet
-
-priority 1000
-snippet FUN "Function" i
-Let $${1:f}:${2:X}\to ${3:Y}$. $0
-endsnippet
-
-priority 2000
-snippet INFUN "Injective Function" i
-Let $${1:f}:${2:X}\hookrightarrow ${3:Y}$. $0
-endsnippet
-
-priority 2000
-snippet SUFUN "Surjective Function" i
-Let $${1:f}:${2:X}\twoheadrightarrow ${3:Y}$. $0
-endsnippet
-
-priority 2000
-snippet BIFUN "Bijecive Function" i
-Let $${1:f}:${2:X}\simto ${3:Y}$. $0
-endsnippet
-
-priority 1000
-snippet POS "Poset" i
-Let $\l\langle ${1:X},${2:\leq}\r\rangle$ be a poset. $0
-endsnippet
-
-priority 1000
-snippet TOT "Totally ordered set" i
-Let $\l\langle ${1:X},${2:<}\r\rangle$ be a totally ordered set. $0
-endsnippet
-
-priority 1000
-snippet PRE "Preordered set" i
-Let $\l\langle ${1:X},${2:\leq}\r\rangle$ be a preordered set. $0
-endsnippet
-
-priority 1000
-snippet REL "Relation" i
-Let $${1:R}$ be a binary relation. $0
 endsnippet
 
 priority 2000
 snippet EQVREL "Relation" i
-Let $${1:\\sim}$ be an equivalence relation on $${2:X}$. $0
+Let $${1:\\sim}$ be an equivalence relation on a set $${2:X}$. $0
 endsnippet
 
 priority 1000
-snippet IND "Indexed Family" i
-Let $\l\\{${1:X}_${2:i}\r\\}_{$2\in${3: I}}$ be an indexed family. $0
+snippet IND "Indexed family" i
+Let $\l\\{${1:X}_${2:i}\r\\}_{$2\in${3: I}}$ be an indexed family of sets. $0
 endsnippet
 
-priority 1000
-snippet CAT "Category" i
-Let $\cat{${1:C}}$ be a category. $0
+snippet RCINP "Real of complex inner product space" i
+Let $K$ denote either $\\R$ or $\\C$ and let $V$ be an inner product space over $K$. $0
 endsnippet
 
-priority 1000
-snippet GROUNI "Grothendieck universe" i
-Let $\mb{${1:U}}$ be a Grothendieck universe. $0
-endsnippet
-
-priority 1000
-snippet FIELD "Field" i
-Let $${1:K}$ be a field. $0
-endsnippet
 #### Let ...
 
 ###########################################################
