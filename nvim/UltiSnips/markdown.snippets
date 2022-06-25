@@ -258,10 +258,17 @@ snippet gat "begin gathered" b
 \end{gathered}
 endsnippet
 
-snippet dcs "begin dcases" b
+snippet 2c "begin dcases" b
 \begin{dcases}
-	$1 & \textrm{${2:if }}$3\\\\
-	$0
+	$1 & \textrm{if }$2 \\\\
+	$0 & \textrm{else}
+\end{dcases}
+endsnippet
+
+snippet 2ci "begin dcases" b
+\begin{dcases}
+	$1 & \\textrm{\it{if\hspace{0.1in}}}$2 \\\\
+	$0 & \textrm{\it{else}}
 \end{dcases}
 endsnippet
 
