@@ -117,6 +117,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         -- Volume control
         ((modm, xK_F1              ), spawn "./.config/scripts/volume/volumeControl.sh -t  "),
         ((modm, xK_F2              ), spawn "./.config/scripts/volume/volumeControl.sh -d 5"),
+        ((modm, xK_F3              ), spawn "./.config/scripts/volume/volumeControl.sh -i 5"),
         ((modm .|. shiftMask, xK_F2), spawn "./.config/scripts/volume/volumeControl.sh -d 1"),
         ((modm .|. shiftMask, xK_F3), spawn "./.config/scripts/volume/volumeControl.sh -i 1"),
         ((modm, xK_F4              ), spawn "./.config/scripts/volume/volumeControl.sh -p"  ),
