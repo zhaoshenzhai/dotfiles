@@ -76,27 +76,34 @@ grid = renamed [Replace "Grid"]
 myLayoutHook =
     avoidStruts $ smartBorders myLayout
     where
-        --myLayout = full ||| tall ||| grid
+        -- myLayout = full ||| tall ||| grid
         myLayout = full ||| tall
 ---------------------------------------------------------------------------------------------------------------------
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [
-        ((modm, xK_backslash), spawn myTerminal                 ),
-        ((modm, xK_p        ), spawn "pavucontrol"              ),
-        ((modm, xK_v        ), spawn "alacritty -e vifm"        ),
-        ((modm, xK_n        ), spawn "alacritty -e nvim"),
-        ((modm, xK_b        ), spawn "alacritty --class sys,sys -e bluetoothctl"),
-        ((modm, xK_i        ), spawn "alacritty --class sys,sys -e nmtui"       ),
+        -- Navigation
+        ((modm, xK_backslash), spawn myTerminal                            ),
+        ((modm, xK_Return   ), spawn "./.config/scripts/dmenu/open_file.sh"),
+        ((modm, xK_e        ), spawn "alacritty -e vifm"                   ),
 
-        ((modm, xK_Return), spawn "./.config/scripts/dmenu/open_file.sh"),
+        -- Browser
+        ((modm, xK_w              ), spawn "google-chrome-stable --profile-directory=Default --force-dark-mode"    ),
+        ((modm .|. shiftMask, xK_w), spawn "google-chrome-stable --profile-directory='Profile 2' --force-dark-mode"),
 
-        ((modm, xK_w                   ), spawn "google-chrome-stable --profile-directory=Default --force-dark-mode"    ),
-        ((modm .|. shiftMask, xK_w     ), spawn "google-chrome-stable --profile-directory='Profile 2' --force-dark-mode"),
+        -- GitHub
+        ((modm .|. shiftMask, xK_g), spawn "alacritty -e ~/.config/scripts/gitCommit.sh -p"),
+        ((modm .|. shiftMask, xK_m), spawn "alacritty -e ~/MathWiki/.scripts/main.sh"),
 
-        ((modm, xK_s), spawn "spotify"),
+        -- Applications
+        ((modm, xK_s), spawn "spotify" ),
         ((modm, xK_o), spawn "obsidian"),
-        ((modm, xK_d), spawn "discord"),
+        ((modm, xK_d), spawn "discord" ),
 
+        -- Internet/Bluetooth
+        ((modm, xK_i), spawn "alacritty --class sys,sys -e nmtui"       ),
+        ((modm, xK_b), spawn "alacritty --class sys,sys -e bluetoothctl"),
+
+        -- Window management
         ((modm, xK_f     ), sendMessage NextLayout  ),
         ((modm, xK_grave ), sendMessage ToggleStruts),
         ((modm, xK_Tab   ), windows W.focusDown     ),
@@ -107,18 +114,17 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_k     ), sendMessage Expand      ),
         ((modm, xK_Escape), kill                    ),
 
+        -- Volume control
         ((modm, xK_F1              ), spawn "./.config/scripts/volume/volumeControl.sh -t  "),
         ((modm, xK_F2              ), spawn "./.config/scripts/volume/volumeControl.sh -d 5"),
-        ((modm, xK_F3              ), spawn "./.config/scripts/volume/volumeControl.sh -i 5"),
         ((modm .|. shiftMask, xK_F2), spawn "./.config/scripts/volume/volumeControl.sh -d 1"),
         ((modm .|. shiftMask, xK_F3), spawn "./.config/scripts/volume/volumeControl.sh -i 1"),
-        ((modm, xK_F5              ), spawn "./.config/scripts/volume/volumeControl.sh -p"  ),
+        ((modm, xK_F4              ), spawn "./.config/scripts/volume/volumeControl.sh -p"  ),
+        ((modm, xK_F5              ), spawn "pavucontrol"                                   ),
 
-        ((modm .|. shiftMask, xK_g), spawn "alacritty -e ~/.config/scripts/gitCommit.sh -p"),
-        ((modm .|. shiftMask, xK_m), spawn "alacritty -e ~/MathWiki/.scripts/main.sh"),
-
-        ((modm              , xK_q), spawn "xmonad --recompile; killall xmobar; xmonad --restart"),
-        ((modm .|. shiftMask, xK_q), io exitSuccess)
+        -- Xmonad
+        ((modm .|. shiftMask, xK_q     ), spawn "xmonad --recompile; killall xmobar; xmonad --restart"),
+        ((modm .|. shiftMask, xK_Delete), io exitSuccess)
     ]
 
     ++[((m .|. modm, k), windows $ f i)
