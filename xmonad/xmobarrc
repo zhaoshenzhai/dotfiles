@@ -20,6 +20,9 @@ Config
             Run Cpu [
                 "--template"      , "<fn=1>\62171</fn> <total>%"
             ] 10,
+            Run Memory [
+                "--template"      , "<fn=1>\xf538</fn> <usedratio>%"
+            ] 200,
             Run Battery [
                 "--template"      , "<acstatus>",
                 "--"              ,
@@ -36,5 +39,5 @@ Config
 
     sepChar = "%",
     alignSep = "}{",
-    template = " %StdinReader% }%date% | %time%{%volume%    %cpu%    %disk%    %battery%  "
+    template = " %StdinReader% }%date% | %time%{%volume%    %cpu%    %memory%    %disk%    %battery%  "
 }
