@@ -15,12 +15,12 @@ while [ ! -z "$1" ]; do
             printf "\n"
 
             read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1,2] "${NC})" repo
-            if [[ "$repo" == "q" ]]; then
+            if [ "$repo" == "q" ]; then
                 exit
             fi
             while [ ! "$repo" == "1" ] && [ ! "$repo" == "2" ]; do
                 read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1,2] "${NC})" repo
-                if [[ "$repo" == "q" ]]; then
+                if [ "$repo" == "q" ]; then
                     exit
                 fi
             done
@@ -55,12 +55,16 @@ if [[ "$repo" == "1" ]]; then
     elif [ "$choice" == "a" ] || [ "$choice" == "A" ]; then
         printf "\n"
         git diff
+    elif [ "$choice" == "q" ]; then
+        exit
     fi
 else
     read -n 1 -ep "$(echo -e ${CYAN}"Show diff? [Y/n] "${NC})" choice
     if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
         printf "\n"
         git diff
+    elif [ "$choice" == "q" ]; then
+        exit
     fi
 fi
 
