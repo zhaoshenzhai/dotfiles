@@ -188,7 +188,7 @@ main = do
                 ppHidden          = xmobarColor "#F8F8FF" "",
                 ppHiddenNoWindows = xmobarColor "#A8A8AA" "",
                 ppLayout          = const "",
-                ppTitle           = xmobarColor "#A8A8AA" "" . shorten 40,
+                ppTitle           = xmobarColor "#A8A8AA" "" . shorten 30,
                 ppSep             = "<fc=#A8A8AA> | </fc>",
                 ppExtras          = [gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset],
                 ppOrder           = \(ws:l:t:ex) -> [ws,l]++ex++[t]
