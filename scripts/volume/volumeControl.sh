@@ -37,7 +37,15 @@ while [ ! -z "$1" ]; do
             ;;
         --play/pause|-p)
             shift
-            `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause`
+            `playerctl -p spotify play-pause`
+            ;;
+        --next)
+            shift
+            `playerctl -p spotify next`
+            ;;
+        --previous)
+            shift
+            `playerctl -p spotify previous`
             ;;
         --increase|-i)
             shift
