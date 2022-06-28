@@ -107,6 +107,7 @@ case $main_choice in
             "dmenu - $dir/dmenu/open_file.sh"
             "init - $dir/init.sh"
             "gitCommit - $dir/gitCommit.sh"
+            "bluetooth - $dir/bluetooth.sh"
             "volumeControl - $dir/volume/volumeControl.sh"
             "xmobarVolume - $dir/volume/xmobarVolume.sh"
             "diskFree - $dir/diskFree.sh"
