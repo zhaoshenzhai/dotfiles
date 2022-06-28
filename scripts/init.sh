@@ -2,6 +2,7 @@
 xset r rate 250 &                                   # Set keyboard repeat rate
 xset b off &                                        # Remove beep
 nmcli dev wifi con Z-5GHz &                         # Wifi
+bluetoothctl power on &                             # Bluetooth
 
 # Start background applications
 dropbox &
