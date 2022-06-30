@@ -1,9 +1,11 @@
 #!/bin/bash
 
-CYAN='\033[0;36m'
-GREEN='\033[0;32m'
-RED='\033[0;31m'
 YELLOW='\033[0;33m'
+PURPLE='\033[0;35m'
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+BLUE='\033[0;34m'
+RED='\033[0;31m'
 NC='\033[0m'
 
 while [ ! -z "$1" ]; do
@@ -14,12 +16,12 @@ while [ ! -z "$1" ]; do
             echo -e "${CYAN}    (2): dotfiles${NC}"
             printf "\n"
 
-            read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1,2] "${NC})" repo
+            read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1,2]${NC} ")" repo
             if [ "$repo" == "q" ]; then
                 exit
             fi
             while [ ! "$repo" == "1" ] && [ ! "$repo" == "2" ]; do
-                read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1,2] "${NC})" repo
+                read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1,2]${NC} ")" repo
                 if [ "$repo" == "q" ]; then
                     exit
                 fi
@@ -48,7 +50,7 @@ git status
 printf "\n"
 
 if [[ "$repo" == "1" ]]; then
-    read -n 1 -ep "$(echo -e ${CYAN}"Show diff? [Y/a/n] "${NC})" choice
+    read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/a/n]${NC} ")" choice
     if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
         printf "\n"
         git diff "Notes/*"
@@ -59,7 +61,7 @@ if [[ "$repo" == "1" ]]; then
         exit
     fi
 else
-    read -n 1 -ep "$(echo -e ${CYAN}"Show diff? [Y/n] "${NC})" choice
+    read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/n]${NC} ")" choice
     if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
         printf "\n"
         git diff
@@ -70,7 +72,7 @@ fi
 
 printf "\n"
 
-read -n 1 -ep "$(echo -e ${CYAN}"Commit? [Y/n] "${NC})" choice
+read -n 1 -ep "$(echo -e ${PURPLE}"Commit? [Y/n]${NC} ")" choice
 if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
     if [[ "$repo" == "1" ]]; then
         source ~/MathWiki/.scripts/stats.sh -u
@@ -95,7 +97,7 @@ if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
     git status
     printf "\n"
 
-    read -ep "$(echo -e ${CYAN}"Remove files? [N/(string)] "${NC})" choice
+    read -ep "$(echo -e ${PURPLE}"Remove files? [N/(string)]${NC} ")" choice
     while [[ ! -z $choice ]]; do
         git restore --staged "$choice"
 
@@ -103,13 +105,13 @@ if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
         git status
         printf "\n"
 
-        read -ep "$(echo -e ${CYAN}"Remove files? [N/(string)] "${NC})" choice
+        read -ep "$(echo -e ${PURPLE}"Remove files? [N/(string)]${NC} ")" choice
     done
 
     printf "\n"
-    read -ep "$(echo -e ${CYAN}"Message: "${NC})" msg
+    read -ep "$(echo -e ${PURPLE}"Message:${NC} ")" msg
     while [ -z "$msg" ]; do
-        read -ep "$(echo -e ${CYAN}"Message: "${NC})" msg
+        read -ep "$(echo -e ${PURPLE}"Message:${NC} ")" msg
     done
     printf "\n"
 
