@@ -142,7 +142,7 @@ case $main_choice in
         choice=$(find $root_path -type f | cut -c$((${#root_path}+1))- | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
         if [ "$choice" ]; then
-            alacritty --class reminders,reminders -e nvim "$root_path$choice"
+            alacritty -e nvim "$root_path$choice"
         else
             exit 0
         fi
