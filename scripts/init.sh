@@ -3,6 +3,7 @@ xset r rate 300 &                                   # Set keyboard repeat rate
 xset b off &                                        # Remove beep
 nmcli dev wifi con Z-5GHz &                         # Wifi
 bluetoothctl power on &                             # Bluetooth
+play-with-mpv &                                     # Mpv
 
 # Start background applications
 dropbox &
