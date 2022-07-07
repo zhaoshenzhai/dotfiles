@@ -137,7 +137,7 @@ case $main_choice in
         fi
     ;;
     "Reminders")
-        root_path="$HOME/Dropbox/Reminders/"
+        root_path="$HOME/Dropbox/Misc/Reminders/"
 
         choice=$(find $root_path -type f | cut -c$((${#root_path}+1))- | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
