@@ -1,5 +1,5 @@
 Core:
-    linux-firmware linux-lts linux-lts-headers htop vim sudo xorg xterm yay networkmanager
+    linux-firmware linux-lts linux-lts-headers htop vim sudo xorg xorg-xinit xterm yay networkmanager
 
 Window manager:
     xmonad xmonad-contrib xmobar alacritty bluez blueman neofetch nitrogen pamixer pacman-contrib pavucontrol pipewire pipewire-pulse dmenu gpicview

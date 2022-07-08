@@ -92,7 +92,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
         -- GitHub
         ((modm .|. shiftMask, xK_g), spawn "alacritty -e ~/.config/scripts/gitCommit.sh -p"),
-        ((modm .|. shiftMask, xK_m), spawn "alacritty -e ~/MathWiki/.scripts/main.sh"),
+        ((modm .|. shiftMask, xK_m), spawn "alacritty -e ~/Dropbox/MathWiki/.scripts/main.sh"),
 
         -- Applications
         ((modm, xK_s), spawn "spotify" ),

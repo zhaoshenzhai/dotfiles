@@ -1,2 +1,2 @@
-autocmd filetype vimwiki nnoremap <F6> :w <CR>:!~/MathWiki/.image/newTikZ.sh<CR>i<center><img src="https://raw.githubusercontent.com/zhaoshenzhai/MathWiki/master/Images/<C-r>=system('~/MathWiki/.image/getCurrentImage.sh')<CR>/image.svg"></center><esc>I<backspace><esc>
+autocmd filetype vimwiki nnoremap <F6> :w <CR>:!~/Dropbox/MathWiki/.image/newTikZ.sh<CR>i<center><img src="https://raw.githubusercontent.com/zhaoshenzhai/MathWiki/master/Images/<C-r>=system('~/Dropbox/MathWiki/.image/getCurrentImage.sh')<CR>/image.svg"></center><esc>I<backspace><esc>
 autocmd filetype tex nnoremap <F6> :w <CR>:!pdflatex -shell-escape image.tex && pdfcrop image.pdf image.pdf && pdf2svg image.pdf image.svg<CR>

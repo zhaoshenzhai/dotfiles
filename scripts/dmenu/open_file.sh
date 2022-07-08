@@ -25,7 +25,7 @@ case $main_choice in
         
         case $choice in
             "Notes")
-                path="$HOME/MathWiki/Notes/"
+                path="$HOME/Dropbox/MathWiki/Notes/"
 
                 file=$(find $path -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
@@ -36,7 +36,7 @@ case $main_choice in
                 fi
             ;;
             "Images")
-                path="$HOME/MathWiki/Images/"
+                path="$HOME/Dropbox/MathWiki/Images/"
 
                 folder=$(find $path -mindepth 1 -type d | sort -r | cut -c$((${#path}+1))- | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
@@ -47,7 +47,7 @@ case $main_choice in
                 fi
             ;;
             "Scripts")
-                path="$HOME/MathWiki/.scripts/"
+                path="$HOME/Dropbox/MathWiki/.scripts/"
 
                 file=$(find $path -printf "%T@ %Tc %p\n" | grep ".sh" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
