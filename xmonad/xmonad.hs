@@ -97,7 +97,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         -- Applications
         ((modm, xK_s), spawn "spotify" ),
         ((modm, xK_o), spawn "obsidian"),
-        ((modm, xK_d), spawn "discord" ),
 
         -- Internet/Bluetooth
         ((modm, xK_i              ), spawn "alacritty --class sys,sys -e nmtui"),
