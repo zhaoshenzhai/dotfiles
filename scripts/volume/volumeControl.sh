@@ -1,15 +1,5 @@
 #!/bin/bash
 
-Help()
-{
-    echo "Options:"
-    echo "h | Prints this help"
-    echo "t | Toggles Mute/Unmute"
-    echo "i | Increases Volume"
-    echo "d | Decreases Volume"
-    echo "p | Play/pause"
-}
-
 RAW=`pamixer --list-sinks`
 
 LINES=`echo "$RAW" | wc -l`
@@ -39,11 +29,11 @@ while [ ! -z "$1" ]; do
             shift
             `playerctl -p spotify play-pause`
             ;;
-        --next)
+        --next|-n)
             shift
             `playerctl -p spotify next`
             ;;
-        --previous)
+        --previous|-b)
             shift
             `playerctl -p spotify previous`
             ;;
@@ -72,9 +62,6 @@ while [ ! -z "$1" ]; do
                 `pamixer --set-volume $VOLUME`
             fi
 
-            ;;
-        --help|-h)
-            Help
             ;;
         *)
             echo "Error: Invalid option"

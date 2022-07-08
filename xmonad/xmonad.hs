@@ -115,15 +115,15 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_Escape), kill                    ),
 
         -- Audio control
-        ((modm, xK_F1              ), spawn "./.config/scripts/volume/volumeControl.sh -t  "      ),
-        ((modm, xK_F2              ), spawn "./.config/scripts/volume/volumeControl.sh -d 5"      ),
-        ((modm, xK_F3              ), spawn "./.config/scripts/volume/volumeControl.sh -i 5"      ),
-        ((modm .|. shiftMask, xK_F2), spawn "./.config/scripts/volume/volumeControl.sh -d 1"      ),
-        ((modm .|. shiftMask, xK_F3), spawn "./.config/scripts/volume/volumeControl.sh -i 1"      ),
-        ((modm, xK_F4              ), spawn "./.config/scripts/volume/volumeControl.sh --previous"),
-        ((modm, xK_F5              ), spawn "./.config/scripts/volume/volumeControl.sh -p"        ),
-        ((modm, xK_F6              ), spawn "./.config/scripts/volume/volumeControl.sh --next"    ),
-        ((modm, xK_F7              ), spawn "pavucontrol"                                         ),
+        ((modm, xK_F1              ), spawn "./.config/scripts/volume/volumeControl.sh -t  "),
+        ((modm, xK_F2              ), spawn "./.config/scripts/volume/volumeControl.sh -d 5"),
+        ((modm, xK_F3              ), spawn "./.config/scripts/volume/volumeControl.sh -i 5"),
+        ((modm .|. shiftMask, xK_F2), spawn "./.config/scripts/volume/volumeControl.sh -d 1"),
+        ((modm .|. shiftMask, xK_F3), spawn "./.config/scripts/volume/volumeControl.sh -i 1"),
+        ((modm, xK_F4              ), spawn "./.config/scripts/volume/volumeControl.sh -b"  ),
+        ((modm, xK_F5              ), spawn "./.config/scripts/volume/volumeControl.sh -p"  ),
+        ((modm, xK_F6              ), spawn "./.config/scripts/volume/volumeControl.sh -n"  ),
+        ((modm, xK_F7              ), spawn "pavucontrol"                                   ),
 
         -- Xmonad
         ((modm .|. shiftMask, xK_q     ), spawn "xmonad --recompile; killall xmobar; xmonad --restart"),
