@@ -8,7 +8,7 @@
 
 # More Packages:
     - Xmonad:
-        xorg xorg-xinit xmonad xmobar-contrib xmobar dmenu alacritty vifm pipewire pipewire-pulse pipewire-jack pamixer nitrogen ttf-courier-prime ttf-font-awesome ttf-anonymous-pro nerd-fonts-mononoki neofetch
+        xorg xorg-xinit xmonad xmobar-contrib xmobar dmenu alacritty vifm pipewire pipewire-pulse pipewire-jack pamixer nitrogen ttf-courier-prime ttf-font-awesome ttf-anonymous-pro ttf-cmu-serif nerd-fonts-mononoki neofetch
     - Tools:
         neovim python htop tree unzip pdf2svg bc scrot colorpicker texlive-core texlive-latexextra
     - Programs:
