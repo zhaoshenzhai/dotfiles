@@ -3,18 +3,18 @@ xset r rate 300 &                                   # Set keyboard repeat rate
 xset b off &                                        # Remove beep
 xsetroot -cursor_name left_ptr                      # Cursor
 nmcli dev wifi con Z-5GHz &                         # Wifi
-bluetoothctl power on &                             # Bluetooth
+#bluetoothctl power on &                             # Bluetooth
 #play-with-mpv &                                     # Mpv
 
 # Start background applications
-#dropbox &
+dropbox &
 nitrogen --restore &
 
 # Open reminders
-#alacritty --class reminders,reminders -e nvim ~/Dropbox/Misc/Reminders/MathWiki.md &
-#alacritty --class reminders,reminders -e nvim ~/Dropbox/Misc/Reminders/Dates.md &
-#alacritty --class reminders,reminders -e nvim ~/Dropbox/Misc/Reminders/Items.md &
-#zathura '~/Dropbox/University/Courses/22F/MATH133/Syllabus/Fall 2020.pdf' &
+alacritty --class reminders,reminders -e nvim ~/Dropbox/Misc/Reminders/MathWiki.md &
+alacritty --class reminders,reminders -e nvim ~/Dropbox/Misc/Reminders/Dates.md &
+alacritty --class reminders,reminders -e nvim ~/Dropbox/Misc/Reminders/Items.md &
+zathura '~/Dropbox/University/Courses/22F/MATH133/Syllabus/Fall 2020.pdf' &
 
 # Start main applications
 obsidian &
