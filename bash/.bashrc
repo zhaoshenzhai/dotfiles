@@ -8,6 +8,11 @@ alias la='LC_ALL=C ls -lhAr --group-directories-first'
 export EDITOR=nvim
 export TERMINAL="/usr/bin/alacritty"
 
+# Xmonad
+export XMONAD_CONFIG_DIR="/home/zhao/.config/xmonad"
+export XMONAD_CACHE_DIR="/home/zhao/.config/xmonad"
+export XMONAD_DATA_DIR="/home/zhao/.config/xmonad"
+
 # Paths
 export PATH="$PATH:$HOME/bin"
 export PATH="/home/zhao/.local/bin:$PATH"

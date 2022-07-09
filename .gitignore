@@ -18,6 +18,11 @@ font-manager
 fontconfig
 mpv/watch_later
 
+xmonad/xmonad.hi
+xmonad/xmonad.o
+xmonad/xmonad.errors
+xmonad/xmonad-x86_64-linux
+
 nvim/plugged
 nvim/autoload/*
 nvim/spell/en.utf-8.add.spl

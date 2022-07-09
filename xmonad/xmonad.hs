@@ -15,11 +15,11 @@ import System.IO (hPutStrLn)
 -- Hooks
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.DynamicLog(dynamicLogWithPP, wrap, xmobarPP, xmobarColor, shorten, PP(..))
-import XMonad.Hooks.StatusBar
-import XMonad.Hooks.StatusBar.PP
+--import XMonad.Hooks.StatusBar
+--import XMonad.Hooks.StatusBar.PP
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.WorkspaceHistory
-import XMonad.Hooks.DynamicIcons
+--import XMonad.Hooks.DynamicIcons
 
 -- Layout
 import XMonad.Layout.ResizableTile
@@ -39,7 +39,8 @@ import XMonad.Actions.SpawnOn
 import XMonad.Actions.OnScreen
 
 -- Utils
-import XMonad.Util.Run (spawnPipe, spawnPipeWithNoEncoding, spawnPipeWithUtf8Encoding)
+--import XMonad.Util.Run (spawnPipe, spawnPipeWithNoEncoding, spawnPipeWithUtf8Encoding)
+import XMonad.Util.Run (spawnPipe)
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.EZConfig
 import XMonad.Util.SpawnOnce
