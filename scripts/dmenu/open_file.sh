@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. "$HOME/.config/scripts/dmenu/theme"
+source "$HOME/.config/scripts/dmenu/theme.sh"
 
 declare -a options=(
     "MathWiki"
@@ -12,7 +12,7 @@ declare -a options=(
     "Reminders"
 )
 
-main_choice=$(printf '%s\n' "${options[@]}" | dmenu -i -p 'Options:' $colors -bw 0 -h 30 -fn 'courier prime:spacing=1:pixelsize=20')
+main_choice=$(printf '%s\n' "${options[@]}" | dmenu -i -p 'Options:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
 case $main_choice in
     "MathWiki")
@@ -21,13 +21,13 @@ case $main_choice in
             "Images"
             "Scripts"
         )
-        choice=$(printf '%s\n' "${choices[@]}" | dmenu -i -p 'Edit:' $colors -bw 0 -h 30 -fn 'courier prime:spacing=1:pixelsize=20')
+        choice=$(printf '%s\n' "${choices[@]}" | dmenu -i -p 'Edit:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
         
         case $choice in
             "Notes")
                 path="$HOME/Dropbox/MathWiki/Notes/"
 
-                file=$(find $path -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+                file=$(find $path -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
                 if [ "$file" ]; then
                     alacritty --class nvim,nvim -e nvim "$path$file"
@@ -38,7 +38,7 @@ case $main_choice in
             "Images")
                 path="$HOME/Dropbox/MathWiki/Images/"
 
-                folder=$(find $path -mindepth 1 -type d | sort -r | cut -c$((${#path}+1))- | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+                folder=$(find $path -mindepth 1 -type d | sort -r | cut -c$((${#path}+1))- | dmenu -i -p 'Open:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
                 if [ "$folder" ]; then
                     alacritty --class image,image -e nvim "$path$folder/image.tex"
@@ -49,7 +49,7 @@ case $main_choice in
             "Scripts")
                 path="$HOME/Dropbox/MathWiki/.scripts/"
 
-                file=$(find $path -printf "%T@ %Tc %p\n" | grep ".sh" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+                file=$(find $path -printf "%T@ %Tc %p\n" | grep ".sh" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
                 if [ "$file" ]; then
                     alacritty --class sys,sys -e nvim "$path$file"
@@ -62,7 +62,7 @@ case $main_choice in
     "Textbooks")
         root_path="$HOME/Dropbox/Textbooks/"
 
-        choice=$(find $root_path -printf "\n%AD %AT %p" | grep ".pdf" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+        choice=$(find $root_path -printf "\n%AD %AT %p" | grep ".pdf" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
         if [ "$choice" ]; then
             zathura "$root_path$choice"
@@ -73,8 +73,7 @@ case $main_choice in
     "HS Notes")
         root_path="$HOME/Dropbox/Highschool/Course_Notes/"
 
-        #choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Edit:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
-        choice=$(find $root_path -maxdepth 2 -printf "\n%A+ %p" | grep ".pdf" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+        choice=$(find $root_path -maxdepth 2 -printf "\n%A+ %p" | grep ".pdf" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
         if [ "$choice" ]; then
             course=$(printf '%s\n' "${choice}" | sed 's/.pdf//g')
@@ -93,7 +92,7 @@ case $main_choice in
             "alacritty - $dir/alacritty/alacritty.yml"
         )
 
-        choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Edit:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+        choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Edit:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
         if [ "$choice" ]; then
             alacritty --class sys,sys -e nvim $(printf '%s\n' "${choice}" | awk '{printf $NF}')
@@ -117,7 +116,7 @@ case $main_choice in
             "cSharpCompile - $dir/compile/cSharpCompile.sh"
         )
 
-        choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Edit:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+        choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Edit:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
         if [ "$choice" ]; then
             alacritty --class sys,sys -e nvim $(printf '%s\n' "${choice}" | awk '{printf $NF}')
@@ -128,7 +127,7 @@ case $main_choice in
     "Snippets")
         root_path="$HOME/.config/nvim/UltiSnips/"
 
-        choice=$(find $root_path -type f | cut -c$((${#root_path}+1))- | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+        choice=$(find $root_path -type f | cut -c$((${#root_path}+1))- | dmenu -i -p 'Open:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
         if [ "$choice" ]; then
             alacritty --class sys,sys -e nvim "$root_path$choice"
@@ -139,7 +138,7 @@ case $main_choice in
     "Reminders")
         root_path="$HOME/Dropbox/Misc/Reminders/"
 
-        choice=$(find $root_path -type f | cut -c$((${#root_path}+1))- | dmenu -i -p 'Open:' $lines $colors -fn 'courier prime:spacing=1:pixelsize=20')
+        choice=$(find $root_path -type f | cut -c$((${#root_path}+1))- | dmenu -i -p 'Open:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
         if [ "$choice" ]; then
             alacritty -e nvim "$root_path$choice"
