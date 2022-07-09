@@ -88,7 +88,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_e        ), spawn "alacritty -e vifm"                   ),
 
         -- Browser
-        ((modm, xK_w              ), spawn "google-chrome-stable --profile-directory=Default --force-dark-mode"    ),
+        --((modm, xK_w              ), spawn "google-chrome-stable --profile-directory=Default --force-dark-mode"    ),
+        ((modm, xK_w              ), spawn "qutebrowser"),
         ((modm .|. shiftMask, xK_w), spawn "google-chrome-stable --profile-directory='Profile 2' --force-dark-mode"),
 
         -- GitHub

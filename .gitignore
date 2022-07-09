@@ -17,6 +17,7 @@ obsidian
 font-manager
 fontconfig
 mpv/watch_later
+qutebrowser
 
 xmonad/xmonad.hi
 xmonad/xmonad.o
