@@ -63,10 +63,6 @@ while [ ! -z "$1" ]; do
             fi
 
             ;;
-        *)
-            echo "Error: Invalid option"
-            Help
-            ;;
     esac
 shift
 done

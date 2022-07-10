@@ -98,8 +98,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
         -- Internet/Bluetooth
         ((modm, xK_i              ), spawn "alacritty --class sys,sys -e nmtui"),
-        ((modm, xK_b              ), spawn "./.config/scripts/bluetooth.sh -c" ),
-        ((modm .|. shiftMask, xK_b), spawn "./.config/scripts/bluetooth.sh -d" ),
+        ((modm, xK_c              ), spawn "./.config/scripts/bluetooth.sh -c1"),
+        ((modm .|. shiftMask, xK_c), spawn "./.config/scripts/bluetooth.sh -c2"),
+        ((modm, xK_d              ), spawn "./.config/scripts/bluetooth.sh -d1"),
+        ((modm .|. shiftMask, xK_d), spawn "./.config/scripts/bluetooth.sh -d2"),
 
         -- Window management
         ((modm, xK_f     ), sendMessage NextLayout  ),
