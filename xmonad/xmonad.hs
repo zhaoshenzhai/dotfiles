@@ -86,8 +86,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         -- Browser
         --((modm, xK_w              ), spawn "google-chrome-stable --profile-directory=Default --force-dark-mode"    ),
         --((modm .|. shiftMask, xK_w), spawn "google-chrome-stable --profile-directory='Profile 2' --force-dark-mode"),
-        ((modm, xK_w), spawn "qutebrowser-profile --new 'Zhaoshen'"),
-        ((modm .|. shiftMask, xK_w), spawn "qutebrowser-profile --new 'Playswise'"),
+        ((modm, xK_w), spawn "qutebrowser-profile --new 'Z'"),
+        ((modm .|. shiftMask, xK_w), spawn "qutebrowser-profile --new 'P'"),
 
         -- GitHub
         ((controlMask .|. shiftMask, xK_g), spawn "xclip -sel clip ~/.gitpat"                       ),
