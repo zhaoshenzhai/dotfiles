@@ -161,7 +161,7 @@ case $main_choice in
         choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Options:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
         if [ "$choice" ]; then
-            if [[ "$choice" == "nvim       ./nvim/" ]]; then
+            if [[ "$choice" == "nvim          ./nvim/" ]]; then
                 nvimDir="$dir/nvim"
                 declare -a nvimConfigs=(
                     "snippets              ./nvim/UltiSnips/"
