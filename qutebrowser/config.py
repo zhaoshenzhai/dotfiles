@@ -16,11 +16,35 @@ config.load_autoconfig(False)
 # Dark mode
 config.set("colors.webpage.darkmode.enabled", True)
 
-# Bookmakrs in normal mode
-config.bind('M', 'hint links spawn -d mpv {hint-url} &')
-config.bind('x', 'config-cycle statusbar.show always never;; config-cycle tabs.show always never')
+# No tabs on start
+config.set("statusbar.show", "always")
+config.set("tabs.show", "never")
 
+# Open mpv
+config.bind('<Meta+m>', 'hint links spawn -d mpv {hint-url} &')
 
+# Zoom
+config.bind('<Meta+=>', 'zoom-in')
+config.bind('<Meta+->', 'zoom-out')
+config.bind('<Meta+0>', 'zoom=100')
+
+# Toggle bars
+config.bind('<Meta+`>', 'config-cycle tabs.show always never')
+config.bind('<Meta+x>', 'config-cycle statusbar.show always never;; config-cycle tabs.show always never')
+
+# Tab control
+config.bind('<Meta+u>', 'undo')
+config.bind('<Meta+h>', 'back')
+config.bind('<Meta+l>', 'forward')
+config.bind('<Meta+j>', 'tab-prev')
+config.bind('<Meta+k>', 'tab-next')
+config.bind('<Meta+w>', 'tab-close')
+for i in range (1, 9):
+    config.bind('<Meta+' + str(i) + '>', 'tab-select ' + str(i))
+    config.bind('<Meta+F' + str(i) + '>', 'tab-move ' + str(i))
+
+# Restart
+config.bind('<Meta+q>', 'restart')
 
 # Which cookies to accept. With QtWebEngine, this setting also controls
 # other features with tracking capabilities similar to those of cookies;
