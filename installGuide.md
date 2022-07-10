@@ -27,3 +27,8 @@
 
 # Pacman colors:
     - Uncomment `Color` in `/etc/pacman.conf`
+
+# Qutebrowser profiles:
+    - Z for primary and P for secondary
+    - Use `--new` flag instead of `--load`; should be fixed
+    - To change from `qute [Z] - Title` to `Z - Title`, modify line containing `window.title_format` in `/usr/bin/qutebrowser-profile`
