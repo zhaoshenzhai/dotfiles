@@ -2,8 +2,6 @@
 config.load_autoconfig(False)
 
 # Colors
-#config.set("colors.webpage.darkmode.enabled", True)
-#config.set("colors.webpage.darkmode.algorithm", "lightness-hsl")
 config.set("colors.webpage.bg", "#1e2127")
 config.set("colors.statusbar.url.fg", "#a8a8aa")
 config.set("colors.statusbar.normal.fg", "#a8a8aa")
@@ -37,22 +35,23 @@ config.set("tabs.padding", {"bottom": 5, "left": 5, "right": 5, "top": 0})
 
 # Search engines
 c.url.searchengines = {
-        'DEFAULT': 'https://duckduckgo.com/?q={}',
-        'wk': 'https://en.wikipedia.org/wiki/{}',
-        'yt': 'https://www.youtube.com/results?search_query={}',
-        'aw': 'https://wiki.archlinux.org/?search={}'}
+    'DEFAULT': 'https://duckduckgo.com/?q={}',
+    'wk': 'https://en.wikipedia.org/wiki/{}',
+    'yt': 'https://www.youtube.com/results?search_query={}',
+    'mse': 'https://math.stackexchange.com//search?q={}',
+    'aw': 'https://wiki.archlinux.org/?search={}'}
 
 # Open mpv
 config.bind('<Meta+m>', 'hint links spawn -d mpv {hint-url} &')
 
 # Zoom
+config.set("zoom.default", "125%")
 config.bind('<Meta+=>', 'zoom-in')
 config.bind('<Meta+->', 'zoom-out')
-config.bind('<Meta+0>', 'zoom 100')
+config.bind('<Meta+0>', 'zoom 125')
 
 # Toggle bars
-config.bind('<Meta+`>', 'config-cycle tabs.show multiple never')
-config.bind('<Meta+x>', 'config-cycle statusbar.show always never;; config-cycle tabs.show multiple never')
+config.bind('<Meta+`>', 'config-cycle statusbar.show always never;; config-cycle tabs.show multiple never')
 
 # Tab control
 config.bind('<Meta+u>', 'undo')
