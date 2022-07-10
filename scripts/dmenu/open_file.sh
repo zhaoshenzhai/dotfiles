@@ -167,7 +167,7 @@ case $mainChoiceName in
             "xmobar        ./xmonad/xmobarrc"
             "alacritty     ./alacritty/alacritty.yml"
             "zathura       ./zathura/zathurarc"
-            "qutebrowser   ./xmonad/xmobarrc"
+            "qutebrowser   ./qutebrowser/config.py"
         )
 
         choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Options:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
