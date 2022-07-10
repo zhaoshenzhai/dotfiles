@@ -24,3 +24,6 @@
 
 # Natural scrolling: 
     - Add `Option "NaturalScrolling" "true"` to `/usr/share/X11/xorg.conf.d/40-libinput.conf`
+
+# Pacman colors:
+    - Uncomment `Color` in `/etc/pacman.conf`
