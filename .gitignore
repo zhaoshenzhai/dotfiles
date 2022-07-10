@@ -24,6 +24,7 @@ xmonad/xmonad.hi
 xmonad/xmonad.o
 xmonad/xmonad.errors
 xmonad/xmonad-x86_64-linux
+xmonad/build-x86_64-linux
 
 nvim/plugged
 nvim/autoload/*

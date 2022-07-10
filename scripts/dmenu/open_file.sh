@@ -150,11 +150,12 @@ case $main_choice in
     "Configs    ~/.config/")
         dir="$HOME/.config"
         declare -a configs=(
-            "nvim       ./nvim/"
-            "xmonad     ./xmonad/xmonad.hs"
-            "xmobar     ./xmonad/xmobarrc"
-            "zathura    ./zathura/zathurarc"
-            "alacritty  ./alacritty/alacritty.yml"
+            "nvim          ./nvim/"
+            "xmonad        ./xmonad/xmonad.hs"
+            "xmobar        ./xmonad/xmobarrc"
+            "zathura       ./zathura/zathurarc"
+            "alacritty     ./alacritty/alacritty.yml"
+            "installGuide  ./installGuide.md"
         )
 
         choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Options:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
