@@ -20,6 +20,7 @@ mpv/watch_later
 
 qutebrowser/greasemonkey
 qutebrowser/qsettings
+qutebrowser/autoconfig.yml
 
 xmonad/xmonad.hi
 xmonad/xmonad.o
