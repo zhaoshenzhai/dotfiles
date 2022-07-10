@@ -2,8 +2,8 @@
 config.load_autoconfig(False)
 
 # Colors
-config.set("colors.webpage.darkmode.enabled", True)
-config.set("colors.webpage.darkmode.algorithm", "lightness-hsl")
+#config.set("colors.webpage.darkmode.enabled", True)
+#config.set("colors.webpage.darkmode.algorithm", "lightness-hsl")
 config.set("colors.webpage.bg", "#1e2127")
 config.set("colors.statusbar.url.fg", "#a8a8aa")
 config.set("colors.statusbar.normal.fg", "#a8a8aa")
