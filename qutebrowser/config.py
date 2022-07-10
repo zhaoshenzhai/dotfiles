@@ -4,10 +4,36 @@ config.load_autoconfig(False)
 # Colors
 config.set("colors.webpage.darkmode.enabled", True)
 config.set("colors.webpage.darkmode.algorithm", "lightness-hsl")
+config.set("colors.webpage.bg", "#1e2127")
+config.set("colors.statusbar.url.fg", "#a8a8aa")
+config.set("colors.statusbar.normal.fg", "#a8a8aa")
+config.set("colors.statusbar.url.hover.fg", "#f8f8ff")
+config.set("colors.statusbar.url.success.http.fg", "#a8a8aa")
+config.set("colors.statusbar.url.success.https.fg", "#a8a8aa")
+config.set("colors.tabs.bar.bg", "#1e2127")
+config.set("colors.tabs.even.bg", "#1e2127")
+config.set("colors.tabs.odd.bg", "#1e2127")
+config.set("colors.tabs.even.fg", "#a8a8a8")
+config.set("colors.tabs.odd.fg", "#a8a8a8")
+config.set("colors.tabs.selected.even.bg", "#1e2127")
+config.set("colors.tabs.selected.odd.bg", "#1e2127")
+config.set("colors.tabs.selected.even.fg", "#f8f8ff")
+config.set("colors.tabs.selected.odd.fg", "#f8f8ff")
 
-# No tabs on start
+# Fonts
+config.set("fonts.default_family", "Anonymous Pro")
+config.set("fonts.default_size", "15pt")
+config.set("fonts.tabs.selected", "bold default_size default_family")
+config.set("fonts.tabs.unselected", "bold default_size default_family")
+config.set("fonts.statusbar", "bold default_size default_family")
+
+# Tabs and statusbar
 config.set("statusbar.show", "always")
-config.set("tabs.show", "never")
+config.set("tabs.show", "multiple")
+config.set("tabs.favicons.scale", 0.9)
+config.set("tabs.indicator.width", 0)
+config.set("tabs.max_width", 350)
+config.set("tabs.padding", {"bottom": 5, "left": 5, "right": 5, "top": 0})
 
 # Open mpv
 config.bind('<Meta+m>', 'hint links spawn -d mpv {hint-url} &')
@@ -18,8 +44,8 @@ config.bind('<Meta+->', 'zoom-out')
 config.bind('<Meta+0>', 'zoom=100')
 
 # Toggle bars
-config.bind('<Meta+`>', 'config-cycle tabs.show always never')
-config.bind('<Meta+x>', 'config-cycle statusbar.show always never;; config-cycle tabs.show always never')
+config.bind('<Meta+`>', 'config-cycle tabs.show multiple never')
+config.bind('<Meta+x>', 'config-cycle statusbar.show always never;; config-cycle tabs.show multiple never')
 
 # Tab control
 config.bind('<Meta+u>', 'undo')
