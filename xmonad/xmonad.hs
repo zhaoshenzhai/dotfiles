@@ -89,7 +89,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_w), spawn "qutebrowser"),
 
         -- GitHub
-        ((modm .|. shiftMask, xK_g), spawn "alacritty -e ~/.config/scripts/gitCommit.sh -p"),
+        ((modm, xK_g              ), spawn "alacritty -e ~/.config/scripts/gitCommit.sh -p"  ),
+        ((modm .|. shiftMask, xK_g), spawn "xclip -sel clip ~/.gitpat"                       ),
         ((modm .|. shiftMask, xK_m), spawn "alacritty -e ~/Dropbox/MathWiki/.scripts/main.sh"),
 
         -- Applications
