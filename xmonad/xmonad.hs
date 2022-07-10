@@ -86,12 +86,13 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         -- Browser
         --((modm, xK_w              ), spawn "google-chrome-stable --profile-directory=Default --force-dark-mode"    ),
         --((modm .|. shiftMask, xK_w), spawn "google-chrome-stable --profile-directory='Profile 2' --force-dark-mode"),
-        ((modm, xK_w), spawn "qutebrowser"),
+        ((modm, xK_w), spawn "qutebrowser-profile --new 'Zhaoshen'"),
+        ((modm .|. shiftMask, xK_w), spawn "qutebrowser-profile --new 'Playswise'"),
 
         -- GitHub
-        ((controlMask .|. shiftMask, xK_g ), spawn "xclip -sel clip ~/.gitpat"                       ),
-        ((modm .|. shiftMask, xK_g        ), spawn "alacritty -e ~/.config/scripts/gitCommit.sh -p"  ),
-        ((modm .|. shiftMask, xK_m        ), spawn "alacritty -e ~/Dropbox/MathWiki/.scripts/main.sh"),
+        ((controlMask .|. shiftMask, xK_g), spawn "xclip -sel clip ~/.gitpat"                       ),
+        ((modm .|. shiftMask, xK_g       ), spawn "alacritty -e ~/.config/scripts/gitCommit.sh -p"  ),
+        ((modm .|. shiftMask, xK_m       ), spawn "alacritty -e ~/Dropbox/MathWiki/.scripts/main.sh"),
 
         -- Applications
         ((modm, xK_s), spawn "spotify" ),
