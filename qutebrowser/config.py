@@ -13,8 +13,11 @@
 # Change the argument to True to still load settings configured via autoconfig.yml
 config.load_autoconfig(False)
 
+# Dark mode
+config.set("colors.webpage.darkmode.enabled", True)
+
 # Bookmakrs in normal mode
-config.bind('M', 'hint links spawn mpv {hint-url}')
+config.bind('M', 'hint links spawn -d mpv {hint-url} &')
 config.bind('x', 'config-cycle statusbar.show always never;; config-cycle tabs.show always never')
 
 
