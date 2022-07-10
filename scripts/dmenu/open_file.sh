@@ -73,6 +73,7 @@ case $main_choice in
                     declare -a MathWikiSnippets=(
                         "links           ./.obsidian/snippets/links.css"
                         "lists           ./.obsidian/snippets/lists.css"
+                        "bgColor         ./.obsidian/snippets/bgColor.css"
                         "centerImages    ./.obsidian/snippets/centerImages.css"
                         "slidingPanes    ./.obsidian/snippets/slidingPanes.css"
                         "listsLineBreak  ./.obsidian/snippets/listsLineBreak.css"
