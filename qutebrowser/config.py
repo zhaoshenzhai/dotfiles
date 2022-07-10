@@ -41,7 +41,7 @@ config.bind('<Meta+m>', 'hint links spawn -d mpv {hint-url} &')
 # Zoom
 config.bind('<Meta+=>', 'zoom-in')
 config.bind('<Meta+->', 'zoom-out')
-config.bind('<Meta+0>', 'zoom=100')
+config.bind('<Meta+0>', 'zoom 100')
 
 # Toggle bars
 config.bind('<Meta+`>', 'config-cycle tabs.show multiple never')
