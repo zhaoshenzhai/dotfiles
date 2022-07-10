@@ -35,6 +35,13 @@ config.set("tabs.indicator.width", 0)
 config.set("tabs.max_width", 350)
 config.set("tabs.padding", {"bottom": 5, "left": 5, "right": 5, "top": 0})
 
+# Search engines
+c.url.searchengines = {
+        'DEFAULT': 'https://duckduckgo.com/?q={}',
+        'wk': 'https://en.wikipedia.org/wiki/{}',
+        'yt': 'https://www.youtube.com/results?search_query={}',
+        'aw': 'https://wiki.archlinux.org/?search={}'}
+
 # Open mpv
 config.bind('<Meta+m>', 'hint links spawn -d mpv {hint-url} &')
 
