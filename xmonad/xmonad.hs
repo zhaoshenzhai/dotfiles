@@ -81,7 +81,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         -- Navigation
         ((modm, xK_backslash), spawn myTerminal                            ),
         ((modm, xK_Return   ), spawn "./.config/scripts/dmenu/open_file.sh"),
-        ((modm, xK_e        ), spawn "alacritty -e vifm -c normal\\ ggga"   ),
+        ((modm, xK_e        ), spawn "alacritty -e vifm ~/ ~/ -c normal\\ ggga"   ),
 
         -- Browser
         --((modm, xK_w              ), spawn "google-chrome-stable --profile-directory=Default --force-dark-mode"    ),
