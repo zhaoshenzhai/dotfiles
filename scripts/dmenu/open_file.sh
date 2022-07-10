@@ -6,7 +6,7 @@ declare -a options=(
     "MathWiki   ~/Dropbox/MathWiki/"
     "Textbooks  ~/Dropbox/Textbooks/"
     "HS Notes   ~/Dropbox/Highschool/Course_Notes/"
-    "Reminders  ~/Dropbox/Misc/Reminders/"
+    "Reminders  ~/Dropbox/Others/Reminders/"
     "Configs    ~/.config/"
     "Scripts    ~/.config/scripts/"
 )
@@ -138,8 +138,8 @@ case $main_choice in
             fi
         fi
     ;;
-    "Reminders  ~/Dropbox/Misc/Reminders/")
-        dir="$HOME/Dropbox/Misc/Reminders/"
+    "Reminders  ~/Dropbox/Others/Reminders/")
+        dir="$HOME/Dropbox/Others/Reminders/"
 
         choice=$(find $dir -type f | cut -c$((${#dir}+1))- | dmenu -i -p 'Open:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
