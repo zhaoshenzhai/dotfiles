@@ -17,7 +17,9 @@ obsidian
 font-manager
 fontconfig
 mpv/watch_later
-qutebrowser
+
+qutebrowser/greasemonkey
+qutebrowser/qsettings
 
 xmonad/xmonad.hi
 xmonad/xmonad.o

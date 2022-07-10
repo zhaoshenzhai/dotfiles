@@ -12,7 +12,7 @@
     - Tools:
         neovim python python-pip htop tree unzip ghostscript pdf2svg bc scrot colorpicker texlive-core texlive-latexextra texlive-science texlive-pictures xclip
     - Programs:
-        zathura zathura-pdf-mupdf obsidian dropbox spotify qutebrowser
+        zathura zathura-pdf-mupdf obsidian dropbox spotify qutebrowser yt-dlp mpv
     - Pip stuff:
         pynvim
 
