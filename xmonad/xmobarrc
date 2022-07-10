@@ -39,5 +39,5 @@ Config
 
     sepChar = "%",
     alignSep = "}{",
-    template = " %StdinReader% }%date% | %time%{%volume%    %cpu%    %memory%    %disk%    %battery%  "
+    template = " %StdinReader% }%date% | %time%{ %volume%  |  %cpu%  |  %memory%  |  %disk%  |  %battery%  "
 }
