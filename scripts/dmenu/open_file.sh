@@ -17,6 +17,7 @@ declare -a options=(
     "Reminders  ~/Dropbox/Others/Reminders/"
     "Configs    ~/.config/"
     "Scripts    ~/.config/scripts/"
+    "Shows      ~/Downloads/"
 )
 
 mainChoice=$(printf '%s\n' "${options[@]}" | dmenu -i -p 'Options:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
@@ -270,6 +271,27 @@ case $mainChoiceName in
 
         if [ "$choice" ]; then
             alacritty --class sys,sys -e nvim $(printf '%s\n' "${choice}" | sed 's,\ \.,'"$dir"',g' | awk '{printf $NF}')
+        fi
+    ;;
+    "Shows")
+        dir="$HOME/Downloads"
+        declare -a configs=(
+            "Dark       ./Dark/"
+            "Mr. Robot  ./Mr._Robot/"
+        )
+
+        choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Options:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
+        choiceName=$(echo "$choice" | sed 's/\.\/.*//g' | sed 's/\ \ \ *//g')
+
+        if [ "$choice" ]; then
+            choiceDir="$dir/$(echo "$choice" | sed 's/^.*\.\///g')"
+
+            file=$(find $choiceDir/vids/ -printf "%T@ %Tc %p\n" | grep ".mp4" | sort -d | sed 's:.*/::' | dmenu -i -p 'Open:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
+
+            if [ "$file" ]; then
+                sub=$(echo "$file" | sed 's/\.mp4/\.srt/g')
+                `mpv $choiceDir/vids/$file --sub-file=$choiceDir/subs/$sub`
+            fi
         fi
     ;;
 esac
