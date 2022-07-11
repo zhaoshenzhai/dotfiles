@@ -41,6 +41,9 @@ c.url.searchengines = {
     'mse': 'https://math.stackexchange.com//search?q={}',
     'aw': 'https://wiki.archlinux.org/?search={}'}
 
+# Download
+config.set("downloads.remove_finished", 1000)
+
 # Open mpv
 config.bind('<Meta+m>', 'hint links spawn -d mpv {hint-url} &')
 
