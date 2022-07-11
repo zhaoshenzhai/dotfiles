@@ -1,21 +1,14 @@
 autostart
 dconf
-gpicview
 htop
 neofetch
 nitrogen
 pulse
-mimeapps.list
-google-chrome
 gtk-2.0
+gtk-3.0
 yay
 spotify
-pavucontrol.ini
-menus
-systemd
 obsidian
-font-manager
-fontconfig
 mpv/watch_later
 
 qutebrowser/greasemonkey
