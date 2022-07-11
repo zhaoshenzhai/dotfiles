@@ -156,8 +156,8 @@ myManageHook = composeAll
     [
         className =? "reminders"     --> viewShift (myWorkspaces !! 0),
         className =? "discord"       --> viewShift (myWorkspaces !! 0),
-        --className =? "Google-chrome" --> viewShift (myWorkspaces !! 1),
         className =? "qutebrowser"   --> viewShift (myWorkspaces !! 1),
+        className =? "mpv"           --> viewShift (myWorkspaces !! 1),
         className =? "obsidian"      --> viewShift (myWorkspaces !! 2),
         className =? "nvim"          --> viewShift (myWorkspaces !! 2),
         className =? "image"         --> viewShift (myWorkspaces !! 5),
