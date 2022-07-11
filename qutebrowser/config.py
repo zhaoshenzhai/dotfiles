@@ -39,7 +39,8 @@ c.url.searchengines = {
     'wk': 'https://en.wikipedia.org/wiki/{}',
     'yt': 'https://www.youtube.com/results?search_query={}',
     'mse': 'https://math.stackexchange.com//search?q={}',
-    'aw': 'https://wiki.archlinux.org/?search={}'}
+    'aw': 'https://wiki.archlinux.org/?search={}',
+    'mf': 'https://myflixer.to/search/{}'}
 
 # Download
 config.set("downloads.remove_finished", 1000)
