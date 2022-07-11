@@ -43,6 +43,7 @@ c.url.searchengines = {
 
 # Download
 config.set("downloads.remove_finished", 1000)
+config.set("downloads.location.directory", "~/Downloads")
 
 # Open mpv
 config.bind('<Meta+m>', 'hint links spawn -d mpv {hint-url} &')
