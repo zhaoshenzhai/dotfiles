@@ -56,7 +56,7 @@ case $mainChoiceName in
                     folder=$(find $MathWikiImagesDir -mindepth 1 -type d | sort -r | cut -c$((${#MathWikiImagesDir}+1))- | dmenu -i -p 'Open:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
                     if [ "$folder" ]; then
-                        alacritty --class image,image -e nvim "$MathWikiImagesDir$folder/image.tex"
+                        alacritty --class media,media -e nvim "$MathWikiImagesDir$folder/image.tex"
                     fi
                 ;;
                 "Scripts")
