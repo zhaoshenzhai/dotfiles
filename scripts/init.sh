@@ -2,7 +2,6 @@
 xset r rate 300 &                # Set keyboard repeat rate
 xset b off &                     # Remove beep
 xsetroot -cursor_name left_ptr   # Cursor
-nmcli dev wifi con Z &           # Wifi
 
 # Start background applications
 dropbox &
@@ -19,4 +18,3 @@ sleep 10
 obsidian &
 sleep 10
 spotify &
-sleep 10
