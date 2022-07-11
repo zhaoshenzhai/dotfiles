@@ -286,7 +286,7 @@ case $mainChoiceName in
         if [ "$choice" ]; then
             choiceDir="$dir/$(echo "$choice" | sed 's/^.*\.\///g')"
 
-            file=$(find $choiceDir/vids/ -printf "%T@ %Tc %p\n" | grep ".mp4" | sort -d | sed 's:.*/::' | dmenu -i -p 'Open:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
+            file=$(find $choiceDir/vids/ -printf "%T@ %Tc %p\n" | grep ".mp4" | sed 's:.*/::' | sort -d | dmenu -i -p 'Open:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
             if [ "$file" ]; then
                 sub=$(echo "$file" | sed 's/\.mp4/\.srt/g')
