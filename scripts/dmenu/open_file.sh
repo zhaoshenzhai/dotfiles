@@ -289,7 +289,7 @@ case $mainChoiceName in
             file=$(find $choiceDir/vids/ -printf "%T@ %Tc %p\n" | grep ".mp4" | sed 's:.*/::' | sort -d | dmenu -i -p 'Open:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
             if [ "$file" ]; then
-                sub=$(echo "$file" | sed 's/\.mp4$/\.srt/g')
+                sub=$(echo "$file" | sed 's/\.mp4.*$/\.srt/g')
                 `mpv $choiceDir/vids/$file --sub-file=$choiceDir/subs/$sub`
             fi
         fi
