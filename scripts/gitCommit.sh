@@ -119,10 +119,12 @@ if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
     printf "\n"
     
     res=$(git push 2>&1 | grep -o fatal)
-    if [[ $res == "fatal" ]]; then
-        echo -e "${YELLOW}hi${NC}"
-    fi
-    sleep 60000
+    while [[ $res == "fatal" ]]; do
+        echo -ne "${YELLOW}Connecting...${NC}\r"
+        sleep 1
+        res=$(git push 2>&1 | grep -o fatal)
+    done
+    git push
 else
     exit
 fi
