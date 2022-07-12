@@ -122,6 +122,7 @@ if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
     if [[ $(grep "fatal" "$PUSH_RES") ]]; then
         echo -e "${YELLOW}hi${NC}"
     fi
+    sleep 10
 else
     exit
 fi
