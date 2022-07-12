@@ -4,9 +4,10 @@
 # Wifi
     - Touch `/etc/wpa_supplicant/wpa_supplicant-wlp1s0.conf` with contents
         `ctrl_interface=/run/wpa_supplicant
+        bg_scan=""
 
         network={
-            ssid="Z"
+            ssid="Z-5GHz"
             psk=_______________
         }`
     - Psk is generated via `wpa_passphrase Z 'password'`. Need to `su` first. Cat it.

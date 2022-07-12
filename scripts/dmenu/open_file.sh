@@ -163,7 +163,7 @@ case $mainChoiceName in
         declare -a configs=(
             "mpv           ./mpv/"
             "nvim          ./nvim/"
-            "installGuide  ./installGuide.md"
+            "setup         ./setup.md"
             "xmonad        ./xmonad/xmonad.hs"
             "xmobar        ./xmonad/xmobarrc"
             "alacritty     ./alacritty/alacritty.yml"
