@@ -119,7 +119,7 @@ if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
     printf "\n"
     
     PUSH_RES=$(echo $(git push))
-    echo -e "${YELLOW}$PUSH_RES${NC}"
+    echo -e "${YELLOW}HI${NC}"
     sleep 60
 else
     exit
