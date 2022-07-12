@@ -118,7 +118,7 @@ if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
     git commit -m "$msg"
     printf "\n"
     
-    PUSH_RES=$(echo $(git push))
+    PUSH_RES=$(git push)
     echo -e "${YELLOW}$PUSH_RES${NC}"
     if [[ $(echo "$PUSH_RES" | sed 's/fatal.*/fatal/g') == "fatal" ]]; then
         echo -e "${YELLOW}hi${NC}"
