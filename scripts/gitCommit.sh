@@ -118,9 +118,8 @@ if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
     git commit -m "$msg"
     printf "\n"
     
-    res=$(git push 2>&1 | grep fatal)
-    echo -e "${YELLOW}$res${NC}"
-    if [[ $(echo "$res" | sed 's/fatal.*/fatal/g') == "fatal" ]]; then
+    res=$(git push 2>&1 | grep -o fatal)
+    if [[ $res == "fatal" ]]; then
         echo -e "${YELLOW}hi${NC}"
     fi
     sleep 60000
