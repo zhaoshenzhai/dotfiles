@@ -1,6 +1,23 @@
 # Base packages:
     - linux linux-firmware base base-devel grub efibootmgr vim networkmanager xterm git
 
+# Wifi
+    - Touch `/etc/wpa_supplicant/wpa_supplicant-wlp1s0.conf` with contents
+        `ctrl_interface=/run/wpa_supplicant
+
+        network={
+            ssid="Z"
+            psk=_______________
+        }`
+    - Psk is generated via `wpa_passphrase Z 'password'`. Need to `su` first. Cat it.
+    - Touch `/etc/systemd/network/10-wireless.network` with contents
+        `[Match]
+        Name=wl*
+
+        [Network]
+        DHCP=ipv4`
+    - Need to `sudo systemctl enable ______`. Reboot.
+
 # Boot is something with grub.efi
 
 # Yay:
