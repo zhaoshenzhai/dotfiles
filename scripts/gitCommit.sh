@@ -119,7 +119,7 @@ if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
     printf "\n"
     
     PUSH_RES=$(echo $(git push))
-    if [[ $(grep "fatal" "$PUSH_RES") ]]; then
+    if [[ $(echo "$PUSH_RES" | sed 's/fatal.*/fatal/g') == "fatal" ]]; then
         echo -e "${YELLOW}hi${NC}"
     fi
     sleep 60000
