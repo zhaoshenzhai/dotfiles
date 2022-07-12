@@ -14,10 +14,10 @@ declare -a options=(
     "MathWiki   ~/Dropbox/MathWiki/"
     "Textbooks  ~/Dropbox/Textbooks/"
     "HS Notes   ~/Dropbox/Highschool/Course_Notes/"
-    "Reminders  ~/Dropbox/Others/Reminders/"
     "Configs    ~/.config/"
     "Scripts    ~/.config/scripts/"
-    "Shows      ~/Downloads/"
+    "Reminders  ~/Dropbox/Others/Reminders/"
+    "Shows      ~/Dropbox/Others/Shows/"
 )
 
 mainChoice=$(printf '%s\n' "${options[@]}" | dmenu -i -p 'Options:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
@@ -274,7 +274,7 @@ case $mainChoiceName in
         fi
     ;;
     "Shows")
-        dir="$HOME/Downloads"
+        dir="$HOME/Dropbox/Others/Shows"
         declare -a configs=(
             "Dark       ./Dark/"
             "Mr. Robot  ./Mr._Robot/"
@@ -285,12 +285,14 @@ case $mainChoiceName in
 
         if [ "$choice" ]; then
             choiceDir="$dir/$(echo "$choice" | sed 's/^.*\.\///g')"
+            declare -a files=$(cat $choiceDir/links.md | sed 's/\ https.*//g')
 
-            file=$(find $choiceDir/vids/ -printf "%T@ %Tc %p\n" | grep ".mp4" | sed 's:.*/::' | sort -d | dmenu -i -p 'Open:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
+            file=$(printf '%s\n' "${files[@]}" | dmenu -i -p 'Open:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
 
             if [ "$file" ]; then
-                sub=$(echo "$file" | sed 's/\.mp4.*$/\.srt/g')
-                `mpv $choiceDir/vids/$file --sub-file=$choiceDir/subs/$sub`
+                sub=$(echo "$file" | sed 's/$/\.srt/g' | sed 's/\ /_/g')
+                link=$(echo "$file" | cat $choiceDir/links.md | grep "$file" | sed 's/.*https/https/g')
+                `mpv $link --sub-file=$choiceDir/subs/$sub --title="$file"`
             fi
         fi
     ;;

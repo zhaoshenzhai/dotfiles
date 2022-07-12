@@ -14,7 +14,7 @@ alacritty --class reminders,reminders -e nvim ~/Dropbox/Others/Reminders/Items.m
 zathura '~/Dropbox/University/Courses/22F/MATH133/Syllabus/Fall 2020.pdf' &
 
 # Start main applications
-sleep 10
-obsidian &
-sleep 10
-spotify &
+#sleep 10
+#obsidian &
+#sleep 10
+#spotify &
