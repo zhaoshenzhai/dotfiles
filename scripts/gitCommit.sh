@@ -119,8 +119,9 @@ if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
     printf "\n"
     
     PUSH_RES=$(echo $(git push))
-    echo -e "${YELLOW}HI${NC}"
-    sleep 60
+    if [[ $(grep "fatal" "$PUSH_RES") ]]; then
+        echo -e "${YELLOW}hi${NC}"
+    fi
 else
     exit
 fi
