@@ -117,7 +117,10 @@ if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
 
     git commit -m "$msg"
     printf "\n"
-    git push
+    
+    PUSH_RES=$(echo $(git push))
+    echo -e "${YELLOW}$PUSH_RES${NC}"
+    sleep 60
 else
     exit
 fi
