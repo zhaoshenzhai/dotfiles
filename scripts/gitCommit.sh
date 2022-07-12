@@ -119,6 +119,7 @@ if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
     printf "\n"
     
     PUSH_RES=$(echo $(git push))
+    echo -e "${YELLOW}$PUSH_RES${NC}"
     if [[ $(echo "$PUSH_RES" | sed 's/fatal.*/fatal/g') == "fatal" ]]; then
         echo -e "${YELLOW}hi${NC}"
     fi
