@@ -124,7 +124,6 @@ if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
         sleep 1
         res=$(git push 2>&1 | grep -o fatal)
     done
-    git push
 else
     exit
 fi
