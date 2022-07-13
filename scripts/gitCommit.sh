@@ -46,7 +46,10 @@ shift
 done
 
 printf "\n"
-git status
+status=$(git status | tee /dev/tty)
+if [[ $(echo "$status" | grep "no changes added to commit") ]]; then
+    printf "\n"
+fi
 
 if [[ "$repo" == "1" ]]; then
     read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/a/n]${NC} ")" choice
@@ -94,7 +97,6 @@ if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
 
     printf "\n"
     git status
-    printf "\n"
 
     read -ep "$(echo -e ${PURPLE}"Remove files? [N/(string)]${NC} ")" choice
     while [[ ! -z $choice ]]; do
