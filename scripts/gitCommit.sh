@@ -47,7 +47,6 @@ done
 
 printf "\n"
 git status
-printf "\n"
 
 if [[ "$repo" == "1" ]]; then
     read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/a/n]${NC} ")" choice
@@ -118,12 +117,16 @@ if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
     git commit -m "$msg"
     printf "\n"
     
-    res=$(git push 2>&1 | grep -o fatal)
-    while [[ $res == "fatal" ]]; do
+    res=$(git push 2>&1)
+    fatal=$(echo $res | grep -o fatal)
+    while [[ $fatal ]]; do
         echo -ne "${YELLOW}Connecting...${NC}\r"
         sleep 1
-        res=$(git push 2>&1 | grep -o fatal)
+        res=$(git push 2>&1)
+        fatal=$(echo $res | grep -o fatal)
     done
+    echo "$res"
+    sleep 5
 else
     exit
 fi
