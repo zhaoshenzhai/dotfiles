@@ -46,7 +46,7 @@ done
 
 printf "\n"
 status=$(git -c color.status=always status | tee /dev/tty)
-if [[ $(echo -e "$status" | grep "no changes added to commit") ]] || [[ $(echo "$status" | grep "nothing to commit") ]]; then
+if [[ $(echo -e "$status" | grep "no changes added to commit") ]] || [[ $(echo -e "$status" | grep "nothing to commit") ]]; then
     printf "\n"
 fi
 
@@ -71,7 +71,7 @@ else
     fi
 fi
 
-if [[ $(echo "$diff" | tail -n1) ]]; then
+if [[ $(echo "$diff" | tail -n1 | sed 's/\ .*//g') ]]; then
     printf "\n"
 fi
 
