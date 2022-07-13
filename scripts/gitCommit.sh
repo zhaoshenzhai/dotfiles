@@ -46,8 +46,8 @@ shift
 done
 
 printf "\n"
-git status
-if [[ $(echo -e `git status` | grep "no changes added to commit") ]] || [[ $(echo "$status" | grep "nothing to commit") ]]; then
+status=$(git -c color.status=always status | tee /dev/tty)
+if [[ $(echo -e "$status" | grep "no changes added to commit") ]] || [[ $(echo "$status" | grep "nothing to commit") ]]; then
     printf "\n"
 fi
 
@@ -55,10 +55,10 @@ if [[ "$repo" == "1" ]]; then
     read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/a/n]${NC} ")" choice
     if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
         printf "\n"
-        git diff "Notes/*"
+        diff=$(git -c color.diff=always diff "Notes/*" | tee /dev/tty)
     elif [ "$choice" == "a" ] || [ "$choice" == "A" ]; then
         printf "\n"
-        git diff
+        diff=$(git -c color.diff=always diff | tee /dev/tty)
     elif [ "$choice" == "q" ]; then
         exit
     fi
@@ -66,13 +66,15 @@ else
     read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/n]${NC} ")" choice
     if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
         printf "\n"
-        git diff
+        diff=$(git -c color.diff=always diff | tee /dev/tty)
     elif [ "$choice" == "q" ]; then
         exit
     fi
 fi
 
-printf "\n"
+if [[ $(echo "$diff" | tail -n1) ]]; then
+    printf "\n"
+fi
 
 read -n 1 -ep "$(echo -e ${PURPLE}"Commit? [Y/n]${NC} ")" choice
 if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
