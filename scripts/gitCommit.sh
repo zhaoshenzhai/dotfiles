@@ -46,8 +46,8 @@ shift
 done
 
 printf "\n"
-status=$(git status | tee /dev/tty)
-if [[ $(echo "$status" | grep "no changes added to commit") ]]; then
+git status
+if [[ $(echo -e `git status` | grep "no changes added to commit") ]] || [[ $(echo "$status" | grep "nothing to commit") ]]; then
     printf "\n"
 fi
 
