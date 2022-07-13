@@ -29,14 +29,12 @@ while [ ! -z "$1" ]; do
 
             case $repo in
                 "1")
-                    path="$HOME/Dropbox/MathWiki/"
+                    cd $HOME/Dropbox/MathWiki/
                 ;;
                 "2")
-                    path="$HOME/.config/"
+                    cd $HOME/.config/
                 ;;
             esac
-
-            cd "$path"
         ;;
         --MathWiki|-m)
             repo="1"
@@ -130,7 +128,6 @@ if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
         fatal=$(echo $res | grep -o fatal)
     done
     echo "$res"
-    sleep 5
 else
     exit
 fi
