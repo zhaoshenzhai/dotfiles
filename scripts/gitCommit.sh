@@ -98,40 +98,38 @@ if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
 
     printf "\n"
     status=$(git -c color.status=always status | tee /dev/tty)
-    if [[ $(echo -e "$status" | grep "no changes added to commit") ]] || [[ $(echo -e "$status" | grep "nothing to commit") ]]; then
-        printf "\n"
-    fi
-
-    read -ep "$(echo -e ${PURPLE}"Remove files? [N/(string)]${NC} ")" choice
-    while [[ ! -z $choice ]]; do
-        git restore --staged "$choice"
-
-        printf "\n"
-        git status
-        printf "\n"
-
+    if [[ ! $(echo -e "$status" | grep "no changes added to commit") ]] && [[ ! $(echo -e "$status" | grep "nothing to commit") ]]; then
         read -ep "$(echo -e ${PURPLE}"Remove files? [N/(string)]${NC} ")" choice
-    done
+        while [[ ! -z $choice ]]; do
+            git restore --staged "$choice"
 
-    printf "\n"
-    read -ep "$(echo -e ${PURPLE}"Message:${NC} ")" msg
-    while [ -z "$msg" ]; do
+            printf "\n"
+            git status
+            printf "\n"
+
+            read -ep "$(echo -e ${PURPLE}"Remove files? [N/(string)]${NC} ")" choice
+        done
+
+        printf "\n"
         read -ep "$(echo -e ${PURPLE}"Message:${NC} ")" msg
-    done
-    printf "\n"
+        while [ -z "$msg" ]; do
+            read -ep "$(echo -e ${PURPLE}"Message:${NC} ")" msg
+        done
+        printf "\n"
 
-    git commit -m "$msg"
-    printf "\n"
-    
-    res=$(git push 2>&1)
-    fatal=$(echo $res | grep -o fatal)
-    while [[ $fatal ]]; do
-        echo -ne "${YELLOW}Connecting...${NC}\r"
-        sleep 1
+        git commit -m "$msg"
+        printf "\n"
+
         res=$(git push 2>&1)
         fatal=$(echo $res | grep -o fatal)
-    done
-    echo "$res"
+        while [[ $fatal ]]; do
+            echo -ne "${YELLOW}Connecting...${NC}\r"
+            sleep 1
+            res=$(git push 2>&1)
+            fatal=$(echo $res | grep -o fatal)
+        done
+        echo "$res"
+    fi
 
     if [[ "$prompt" == "-p" ]]; then
         printf "\n"
