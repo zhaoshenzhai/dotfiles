@@ -9,6 +9,7 @@ RED='\033[0;31m'
 NC='\033[0m'
 
 while [ ! -z "$1" ]; do
+    prompt=$1
     case "$1" in
         --prompt|-p)
             echo -e "${CYAN}Repositories:${NC}"
@@ -128,6 +129,26 @@ if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
         fatal=$(echo $res | grep -o fatal)
     done
     echo "$res"
+
+    if [[ "$prompt" == "-p" ]]; then
+        printf "\n"
+        read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
+        if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
+            clear
+            ~/.config/scripts/gitCommit.sh -p
+        else
+            exit
+        fi
+    fi
 else
-    exit
+    if [[ "$prompt" == "-p" ]]; then
+        printf "\n"
+        read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
+        if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
+            clear
+            ~/.config/scripts/gitCommit.sh -p
+        else
+            exit
+        fi
+    fi
 fi
