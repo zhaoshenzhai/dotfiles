@@ -44,61 +44,59 @@ while [ ! -z "$1" ]; do
 shift
 done
 
+if [[ "$repo" == "1" ]]; then
+    source ~/Dropbox/MathWiki/.scripts/stats.sh -u
+    source ~/Dropbox/MathWiki/.scripts/stats.sh -r
+
+    templatesInsertLine=$(grep -n "#### Templates" ~/.config/nvim/UltiSnips/markdown.snippets | sed 's/:.*$//g')
+    sed -i 's|\[templatesInsert\]:.*$|\[templatesInsert\]: https://github.com/zhaoshenzhai/dotfiles/blob/master/nvim/UltiSnips/markdown.snippets#L'"$templatesInsertLine"'|g' README.md
+
+    tikzInsertLine=$(grep -n "newTikZ.sh" ~/.config/nvim/config/MathWiki.vim | sed 's/:.*$//g')
+    sed -i 's|\[tikzInsert\]:.*$|\[tikzInsert\]: https://github.com/zhaoshenzhai/dotfiles/blob/master/nvim/config/MathWiki.vim#L'"$tikzInsertLine"'|g' README.md
+
+    pdfLaTeXExecuteLine=$(grep -n "pdflatex -shell-escape image.tex" ~/.config/nvim/config/MathWiki.vim | sed 's/:.*$//g')
+    sed -i 's|\[pdfLaTeXExecute\]:.*$|\[pdfLaTeXExecute\]: https://github.com/zhaoshenzhai/dotfiles/blob/master/nvim/config/MathWiki.vim#L'"$pdfLaTeXExecuteLine"'|g' README.md
+
+    autoAliasLine=$(grep -n "Math()" ~/Dropbox/MathWiki/.scripts/mathLinks.sh | sed 's/:.*$//g')
+    sed -i 's|\[standardAlias\]:.*$|\[standardAlias\]: https://github.com/zhaoshenzhai/MathWiki/blob/master/.scripts/mathLinks.sh#L'"$autoAliasLine"'|g' README.md
+fi
+
 printf "\n"
 status=$(git -c color.status=always status | tee /dev/tty)
-if [[ $(echo -e "$status" | grep "no changes added to commit") ]] || [[ $(echo -e "$status" | grep "nothing to commit") ]]; then
+if [[ $(echo -e "$status" | grep "no changes added to commit") ]]; then
     printf "\n"
 fi
 
-if [[ "$repo" == "1" ]]; then
-    read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/a/n]${NC} ")" choice
-    if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
-        printf "\n"
-        diff=$(git -c color.diff=always diff "Notes/*" | tee /dev/tty)
-    elif [ "$choice" == "a" ] || [ "$choice" == "A" ]; then
-        printf "\n"
-        diff=$(git -c color.diff=always diff | tee /dev/tty)
-    elif [ "$choice" == "q" ]; then
-        exit
-    fi
-else
-    read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/n]${NC} ")" choice
-    if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
-        printf "\n"
-        diff=$(git -c color.diff=always diff | tee /dev/tty)
-    elif [ "$choice" == "q" ]; then
-        exit
-    fi
-fi
-
-if [[ $(echo "$diff" | tail -n1 | sed 's/\ .\ //g') ]]; then
-    printf "\n"
-fi
-
-read -n 1 -ep "$(echo -e ${PURPLE}"Commit? [Y/n]${NC} ")" choice
-if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
+if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
     if [[ "$repo" == "1" ]]; then
-        source ~/Dropbox/MathWiki/.scripts/stats.sh -u
-        source ~/Dropbox/MathWiki/.scripts/stats.sh -r
-
-        templatesInsertLine=$(grep -n "#### Templates" ~/.config/nvim/UltiSnips/markdown.snippets | sed 's/:.*$//g')
-        sed -i 's|\[templatesInsert\]:.*$|\[templatesInsert\]: https://github.com/zhaoshenzhai/dotfiles/blob/master/nvim/UltiSnips/markdown.snippets#L'"$templatesInsertLine"'|g' README.md
-
-        tikzInsertLine=$(grep -n "newTikZ.sh" ~/.config/nvim/config/MathWiki.vim | sed 's/:.*$//g')
-        sed -i 's|\[tikzInsert\]:.*$|\[tikzInsert\]: https://github.com/zhaoshenzhai/dotfiles/blob/master/nvim/config/MathWiki.vim#L'"$tikzInsertLine"'|g' README.md
-
-        pdfLaTeXExecuteLine=$(grep -n "pdflatex -shell-escape image.tex" ~/.config/nvim/config/MathWiki.vim | sed 's/:.*$//g')
-        sed -i 's|\[pdfLaTeXExecute\]:.*$|\[pdfLaTeXExecute\]: https://github.com/zhaoshenzhai/dotfiles/blob/master/nvim/config/MathWiki.vim#L'"$pdfLaTeXExecuteLine"'|g' README.md
-
-        autoAliasLine=$(grep -n "Math()" ~/Dropbox/MathWiki/.scripts/mathLinks.sh | sed 's/:.*$//g')
-        sed -i 's|\[standardAlias\]:.*$|\[standardAlias\]: https://github.com/zhaoshenzhai/MathWiki/blob/master/.scripts/mathLinks.sh#L'"$autoAliasLine"'|g' README.md
+        read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/a/n]${NC} ")" choice
+        if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
+            printf "\n"
+            diff=$(git -c color.diff=always diff "Notes/*" | tee /dev/tty)
+        elif [ "$choice" == "a" ] || [ "$choice" == "A" ]; then
+            printf "\n"
+            diff=$(git -c color.diff=always diff | tee /dev/tty)
+        elif [ "$choice" == "q" ]; then
+            exit
+        fi
+    else
+        read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/n]${NC} ")" choice
+        if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
+            printf "\n"
+            diff=$(git -c color.diff=always diff | tee /dev/tty)
+        elif [ "$choice" == "q" ]; then
+            exit
+        fi
     fi
 
-    git add .
-
-    printf "\n"
-    status=$(git -c color.status=always status | tee /dev/tty)
-    if [[ ! $(echo -e "$status" | grep "no changes added to commit") ]] && [[ ! $(echo -e "$status" | grep "nothing to commit") ]]; then
+    if [[ $(echo "$diff" | tail -n1 | sed 's/\ .\ //g') ]]; then
+        printf "\n"
+    fi
+    read -n 1 -ep "$(echo -e ${PURPLE}"Commit? [Y/n]${NC} ")" choice
+    if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
+        git add .
+        printf "\n"
+        git status
         read -ep "$(echo -e ${PURPLE}"Remove files? [N/(string)]${NC} ")" choice
         while [[ ! -z $choice ]]; do
             git restore --staged "$choice"
