@@ -8,294 +8,216 @@ BLUE='\033[0;34m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-source "$HOME/.config/scripts/scriptFiles/dmenu_theme"
+DMENU()
+{
+    dmenu -i -p $1 -nb "#1E2127" -nf "#F8F8F8" -sb "#457eb0" -fn 'courier prime:spacing=1:pixelsize=20' -bw 3 -c -l 15
+}
 
 declare -a options=(
-    "MathWiki   ~/Dropbox/MathWiki/"
-    "Textbooks  ~/Dropbox/Textbooks/"
-    "HS Notes   ~/Dropbox/Highschool/Course_Notes/"
-    "Configs    ~/.config/"
-    "Scripts    ~/.config/scripts/"
-    "Reminders  ~/Dropbox/Others/Reminders/"
-    "Shows      ~/Dropbox/Others/Shows/"
+    "~/Dropbox/MathWiki"
+    "~/Dropbox/Textbooks"
+    "~/Dropbox/Highschool/Course_Notes"
+    "~/Dropbox/Others/Reminders"
+    "~/Dropbox/Others/Shows"
+    "~/.config"
+    "~/.config/scripts"
 )
 
-mainChoice=$(printf '%s\n' "${options[@]}" | dmenu -i -p 'Options:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
-mainChoiceName=$(echo "$mainChoice" | sed 's/\~.*//g' | sed 's/\ \ \ *//g')
+mainChoice=$(printf '%s\n' "${options[@]}" | DMENU "~/Dropbox/")
 
-case $mainChoiceName in
-    "MathWiki")
-        dir="$HOME/Dropbox/MathWiki"
+case $mainChoice in
+    "~/Dropbox/MathWiki")
+        dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
         declare -a choices=(
-            "Notes          ./Notes/"
-            "Images         ./Images/"
-            "Scripts        ./.scripts/"
-            "Snippets       ./.obsidian/snippets/"
-            "README         ./README.md"
-            "preamble       ./preamble.sty"
-            "imageConfig    ./imageConfig.tex"
-            "imageTemplate  ./imageTemplate.tex"
+            "$mainChoice/Notes"
+            "$mainChoice/Images"
+            "$mainChoice/.scripts"
+            "$mainChoice/.obsidian/snippets"
+            "$mainChoice/README.md"
+            "$mainChoice/preamble.sty"
+            "$mainChoice/imageConfig.tex"
+            "$mainChoice/imageTemplate.tex"
         )
-        choice=$(printf '%s\n' "${choices[@]}" | dmenu -i -p 'Options:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
-        choiceName=$(echo "$choice" | sed 's/\ .*//g')
+
+        choice=$(printf '%s\n' "${choices[@]}" | DMENU $mainChoice/)
         
         if [[ "$choice" ]]; then
-            case $choiceName in
-                "Notes")
-                    MathWikiNotesDir="$HOME/Dropbox/MathWiki/Notes/"
-
-                    file=$(find $MathWikiNotesDir -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
+            case $choice in
+                "$mainChoice/Notes")
+                    MathWikiNotesDir="$dir/Notes"
+                    file=$(find $MathWikiNotesDir -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/::' | DMENU $(echo "$MathWikiNotesDir/" | sed 's:/home/zhao:~:g'))
 
                     if [ "$file" ]; then
-                        alacritty --class nvim,nvim -e nvim "$MathWikiNotesDir$file"
+                        alacritty --class nvim,nvim -e nvim "$MathWikiNotesDir/$file"
                     fi
                 ;;
-                "Images")
-                    MathWikiImagesDir="$HOME/Dropbox/MathWiki/Images/"
-
-                    folder=$(find $MathWikiImagesDir -mindepth 1 -type d | sort -r | cut -c$((${#MathWikiImagesDir}+1))- | dmenu -i -p 'Open:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
+                "$mainChoice/Images")
+                    MathWikiImagesDir="$dir/Images"
+                    folder=$(find $MathWikiImagesDir -mindepth 1 -type d | sort -r | sed 's:/home/zhao:~:g' | DMENU $(echo "$MathWikiImagesDir/" | sed 's:/home/zhao:~:g'))
 
                     if [ "$folder" ]; then
-                        alacritty --class media,media -e nvim "$MathWikiImagesDir$folder/image.tex"
+                        alacritty --class media,media -e nvim $(echo "$folder/image.tex" | sed 's:~:/home/zhao:g')
                     fi
                 ;;
-                "Scripts")
+                "$mainChoice/.scripts")
                     MathWikiScriptsDir="$dir/.scripts"
-                    declare -a MathWikiScripts=(
-                        "main             ./.scripts/main.sh"
-                        "stats            ./.scripts/stats.sh"
-                        "ghost            ./.scripts/ghost.sh"
-                        "search           ./.scripts/search.sh"
-                        "newTikZ          ./.scripts/newTikZ.sh"
-                        "mathLinks        ./.scripts/mathLinks.sh"
-                        "massEditing      ./.scripts/massEditing.sh"
-                        "updateImages     ./.scripts/updateImages.sh"
-                        "getCurrentImage  ./.scripts/getCurrentImage.sh"
-                    )
+                    file=$(find $MathWikiScriptsDir -printf "%T@ %Tc %p\n" | grep ".sh" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$MathWikiScriptsDir/" | sed 's:/home/zhao:~:g'))
 
-                    MathWikiScriptsChoice=$(printf '%s\n' "${MathWikiScripts[@]}" | dmenu -i -p 'Options:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
-
-                    if [ "$MathWikiScriptsChoice" ]; then
-                        alacritty --class sys,sys -e nvim $(printf '%s\n' "${MathWikiScriptsChoice}" | sed 's,\ \.,'"$dir"',g' | awk '{printf $NF}')
+                    if [ "$file" ]; then
+                        alacritty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
                     fi
                 ;;
-                "Snippets")
+                "$mainChoice/.obsidian/snippets")
                     MathWikiSnippetsDir="$dir/.obsidian/snippets"
-                    declare -a MathWikiSnippets=(
-                        "links           ./.obsidian/snippets/links.css"
-                        "lists           ./.obsidian/snippets/lists.css"
-                        "bgColor         ./.obsidian/snippets/bgColor.css"
-                        "centerImages    ./.obsidian/snippets/centerImages.css"
-                        "slidingPanes    ./.obsidian/snippets/slidingPanes.css"
-                        "listsLineBreak  ./.obsidian/snippets/listsLineBreak.css"
-                    )
+                    file=$(find $MathWikiSnippetsDir -printf "%T@ %Tc %p\n" | grep ".css" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$MathWikiSnippetsDir/" | sed 's:/home/zhao:~:g'))
 
-                    MathWikiSnippetsChoice=$(printf '%s\n' "${MathWikiSnippets[@]}" | dmenu -i -p 'Options:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
-
-                    if [ "$MathWikiSnippetsChoice" ]; then
-                        alacritty --class sys,sys -e nvim $(printf '%s\n' "${MathWikiSnippetsChoice}" | sed 's,\ \.,'"$dir"',g' | awk '{printf $NF}')
+                    if [ "$file" ]; then
+                        alacritty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
                     fi
                 ;;
                 *)
-                    alacritty --class sys,sys -e nvim $(printf '%s\n' "${choice}" | sed 's,\ \.,'"$dir"',g' | awk '{printf $NF}')
+                    alacritty --class sys,sys -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
                 ;;
             esac
         fi
     ;;
-    "Textbooks")
-        dir="$HOME/Dropbox/Textbooks/"
-
-        choice=$(find $dir -printf "\n%AD %AT %p" | grep ".pdf" | sort -nr | sed 's:.*/::' | dmenu -i -p 'Open:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
+    "~/Dropbox/Textbooks")
+        dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
+        choice=$(find $dir -printf "\n%AD %AT %p" | grep ".pdf" | sort -nr | sed 's:.*/::' | DMENU "$mainChoice/")
 
         if [ "$choice" ]; then
-            zathura "$dir$choice"
+            zathura "$mainChoice/$choice"
         fi
     ;;
-    "HS Notes")
+    "~/Dropbox/Highschool/Course_Notes")
         dir="$HOME/Dropbox/Highschool/Course_Notes"
         declare -a notes=(
-            "Introduction to Linear Algebra       ./Introduction_to_Linear_Algebra/Introduction_to_Linear_Algebra.pdf"
-            "Introduction to Algebra              ./Introduction_to_Algebra/Introduction_to_Algebra.pdf"
-            "Introduction to Topology             ./Introduction_to_Topology/Introduction_to_Topology.pdf"
-            "Introduction to Set Theory           ./Introduction_to_Set_Theory/Introduction_to_Set_Theory/"
-            "Introduction to Classical Mechanics  ./Introduction_to_Classical_Mechanics/Introduction_to_Classical_Mechanics.pdf"
-            "Introduction to Real Analysis        ./Introduction_to_Real_Analysis/Introduction_to_Real_Analysis.pdf"
-            "AP Physics C                         ./AP_Physics_C/AP_Physics_C.pdf"
-            "AP Calculus BC                       ./AP_Calculus_BC/AP_Calculus_BC.pdf"
-            "AP Calculus AB                       ./AP_Calculus_AB/AP_Calculus_AB.pdf"
-            "Physics Core                         ./Physics_Core/Physics_Core.pdf"
+            "$mainChoice/Introduction_to_Linear_Algebra/Introduction_to_Linear_Algebra.pdf"
+            "$mainChoice/Introduction_to_Algebra/Introduction_to_Algebra.pdf"
+            "$mainChoice/Introduction_to_Topology/Introduction_to_Topology.pdf"
+            "$mainChoice/Introduction_to_Set_Theory/Introduction_to_Set_Theory"
+            "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_1/Chapter_1.pdf"
+            "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_2/Chapter_2.pdf"
+            "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_3/Chapter_3.pdf"
+            "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_4/Chapter_4.pdf"
+            "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_5/Chapter_5.pdf"
+            "$mainChoice/Introduction_to_Classical_Mechanics/Introduction_to_Classical_Mechanics.pdf"
+            "$mainChoice/Introduction_to_Real_Analysis/Introduction_to_Real_Analysis.pdf"
+            "$mainChoice/AP_Physics_C/AP_Physics_C.pdf"
+            "$mainChoice/AP_Calculus_BC/AP_Calculus_BC.pdf"
+            "$mainChoice/AP_Calculus_AB/AP_Calculus_AB.pdf"
+            "$mainChoice/Physics_Core/Physics_Core.pdf"
         )
-
-        choice=$(printf '%s\n' "${notes[@]}" | dmenu -i -p 'Options:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
-        choiceName=$(echo "$choice" | sed 's/\.\/.*//g' | sed 's/\ \ \ *//g')
+        choice=$(printf '%s\n' "${notes[@]}" | DMENU "$mainChoice/")
 
         if [ "$choice" ]; then
-            if [[ "$choiceName" == "Introduction to Set Theory" ]]; then
-                declare -a chapters=(
-                    "Introduction to Set Theory  ./Introduction_to_Set_Theory/Introduction_to_Set_Theory.pdf"
-                    "Chapter 1 Exercises         ./Introduction_to_Set_Theory/exercises/Chapter_1/Chapter_1.pdf"
-                    "Chapter 2 Exercises         ./Introduction_to_Set_Theory/exercises/Chapter_2/Chapter_2.pdf"
-                    "Chapter 3 Exercises         ./Introduction_to_Set_Theory/exercises/Chapter_3/Chapter_3.pdf"
-                    "Chapter 4 Exercises         ./Introduction_to_Set_Theory/exercises/Chapter_4/Chapter_4.pdf"
-                    "Chapter 5 Exercises         ./Introduction_to_Set_Theory/exercises/Chapter_5/Chapter_5.pdf"
-                )
-
-                setTheoryExercises=$(printf '%s\n' "${chapters[@]}" | dmenu -i -p 'Options:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
-
-                if [[ "$setTheoryExercises" ]]; then
-                    zathura $(printf '%s\n' "${setTheoryExercises}" | sed 's,\ \.,'"$dir"',g' | awk '{printf $NF}')
-                fi
-            else
-                zathura $(printf '%s\n' "${choice}" | sed 's,\ \.,'"$dir"',g' | awk '{printf $NF}')
-            fi
+            zathura $choice
         fi
     ;;
-    "Reminders")
-        dir="$HOME/Dropbox/Others/Reminders/"
-
-        choice=$(find $dir -type f | cut -c$((${#dir}+1))- | dmenu -i -p 'Open:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
+    "~/Dropbox/Others/Reminders")
+        dir="$HOME/Dropbox/Others/Reminders"
+        choice=$(find $dir -type f | sed 's:/home/zhao:~:g' | DMENU "$mainChoice/")
 
         if [ "$choice" ]; then
-            alacritty -e nvim "$dir$choice"
+            alacritty -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
         fi
     ;;
-    "Configs")
-        dir="$HOME/.config"
-        declare -a configs=(
-            "mpv           ./mpv/"
-            "nvim          ./nvim/"
-            "setup         ./setup.md"
-            "xmonad        ./xmonad/xmonad.hs"
-            "xmobar        ./xmonad/xmobarrc"
-            "alacritty     ./alacritty/alacritty.yml"
-            "zathura       ./zathura/zathurarc"
-            "qutebrowser   ./qutebrowser/config.py"
-        )
-
-        choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Options:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
-        choiceName=$(echo "$choice" | sed 's/\.\/.*//g' | sed 's/\ \ \ *//g')
-
-        if [ "$choice" ]; then
-            case $choiceName in
-                "nvim")
-                    nvimDir="$dir/nvim"
-                    declare -a nvimConfigs=(
-                        "snippets              ./nvim/UltiSnips/"
-                        "pluggins              ./nvim/config/pluggins/"
-                        "init.vim              ./nvim/init.vim"
-                        "theme.vim             ./nvim/config/theme.vim"
-                        "mappings.vim          ./nvim/config/mappings.vim"
-                        "MathWiki.vim          ./nvim/config/MathWiki.vim"
-                        "textObjects.vim       ./nvim/config/textObjects.vim"
-                        "compileAndRun.vim     ./nvim/config/compileAndRun.vim"
-                        "keyboardMovement.vim  ./nvim/config/keyboardMovement.vim"
-                    )
-
-                    nvimChoice=$(printf '%s\n' "${nvimConfigs[@]}" | dmenu -i -p 'Options:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
-                    nvimChoiceName=$(echo "$nvimChoice" | sed 's/\.\/.*//g' | sed 's/\ \ \ *//g')
-
-                    if [[ "$nvimChoice" ]]; then
-                        case `$nvimChoiceName` in
-                            "pluggins")
-                                nvimPlugginsDir="$nvimDir/config/pluggins"
-                                declare -a nvimPluggins=(
-                                    "ncm2.vim         ./nvim/config/pluggins/ncm2.vim"
-                                    "vimtex.vim       ./nvim/config/pluggins/vimtex.vim"
-                                    "ultisnips.vim    ./nvim/config/pluggins/ultisnips.vim"
-                                    "syntaxRange.vim  ./nvim/config/pluggins/syntaxRange.vim"
-                                )
-
-                                nvimPlugginsChoice=$(printf '%s\n' "${nvimPluggins[@]}" | dmenu -i -p 'Options:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
-
-                                if [[ "$nvimPlugginsChoice" ]]; then
-                                    alacritty --class sys,sys -e nvim $(printf '%s\n' "${nvimPlugginsChoice}" | sed 's,\ \.,'"$dir"',g' | awk '{printf $NF}')
-                                fi
-                            ;;
-                            "snippets")
-                                nvimSnippetsDir="$nvimDir/UltiSnips"
-                                declare -a nvimSnippets=(
-                                    "markdown.snippets  ./nvim/UltiSnips/markdown.snippets"
-                                    "tex.snippets       ./nvim/UltiSnips/tex.snippets"
-                                    "sh.snippets        ./nvim/UltiSnips/sh.snippets"
-                                    "cs.snippets        ./nvim/UltiSnips/cs.snippets"
-                                )
-
-                                nvimSnippetsChoice=$(printf '%s\n' "${nvimSnippets[@]}" | dmenu -i -p 'Options:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
-
-                                if [[ "$nvimSnippetsChoice" ]]; then
-                                    alacritty --class sys,sys -e nvim $(printf '%s\n' "${nvimSnippetsChoice}" | sed 's,\ \.,'"$dir"',g' | awk '{printf $NF}')
-                                fi
-                            ;;
-                            *)
-                                alacritty --class sys,sys -e nvim $(printf '%s\n' "${nvimChoice}" | sed 's,\ \.,'"$dir"',g' | awk '{printf $NF}')
-                            ;;
-                        esac
-                    fi
-                ;;
-                "mpv")
-                    mpvDir="$dir/mpv"
-                    declare -a mpvConfigs=(
-                        "mpv    ./mpv/mpv.conf"
-                        "input  ./mpv/input.conf"
-                    )
-
-                    mpvChoice=$(printf '%s\n' "${mpvConfigs[@]}" | dmenu -i -p 'Options:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
-                    mpvChoiceName=$(echo "$mpvChoice" | sed 's/\.\/.*//g' | sed 's/\ \ \ *//g')
-
-                    if [[ "$mpvChoice" ]]; then
-                        alacritty --class sys,sys -e nvim $(printf '%s\n' "${mpvChoice}" | sed 's,\ \.,'"$dir"',g' | awk '{printf $NF}')
-                    fi
-                ;;
-                *)
-                    alacritty --class sys,sys -e nvim $(printf '%s\n' "${choice}" | sed 's,\ \.,'"$dir"',g' | awk '{printf $NF}')
-                ;;
-            esac
-        fi
-    ;;
-    "Scripts")
-        dir="$HOME/.config/scripts"
-        declare -a configs=(
-            "dmenu          ./dmenuOpenFile.sh"
-            "init           ./init.sh"
-            "gitCommit      ./gitCommit.sh"
-            "diskFree       ./diskFree.sh"
-            "openQute       ./openQute.sh"
-            "audioConrol    ./audioControl.sh"
-            "audioXmobar    ./audioXmobar.sh"
-            "newJava        ./newJava.sh"
-            "newCSharp      ./newCSharp.sh"
-            "newLaTeX       ./newLaTeX.sh"
-            "compileJava    ./compileJava.sh"
-            "compileCSharp  ./compileCSharp.sh"
-        )
-
-        choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Options:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
-
-        if [ "$choice" ]; then
-            alacritty --class sys,sys -e nvim $(printf '%s\n' "${choice}" | sed 's,\ \.,'"$dir"',g' | awk '{printf $NF}')
-        fi
-    ;;
-    "Shows")
+    "~/Dropbox/Others/Shows")
         dir="$HOME/Dropbox/Others/Shows"
-        declare -a configs=(
-            "Dark       ./Dark/"
-            "Mr. Robot  ./Mr._Robot/"
-        )
-
-        choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Options:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
-        choiceName=$(echo "$choice" | sed 's/\.\/.*//g' | sed 's/\ \ \ *//g')
+        choice=$(find $dir -mindepth 1 -maxdepth 1 -type d | sed 's:/home/zhao:~:g' | DMENU "$mainChoice/")
 
         if [ "$choice" ]; then
-            choiceDir="$dir/$(echo "$choice" | sed 's/^.*\.\///g')"
+            choiceDir="$(echo "$choice" | sed 's/^.*\.\///g' | sed 's:~:/home/zhao:g')"
             declare -a files=$(cat $choiceDir/links.md | sed 's/\ https.*//g')
-
-            file=$(printf '%s\n' "${files[@]}" | dmenu -i -p 'Open:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
+            file=$(printf '%s\n' "${files[@]}" | DMENU "$choice/")
 
             if [ "$file" ]; then
                 sub=$(echo "$file" | sed 's/$/\.srt/g' | sed 's/\ /_/g')
                 link=$(echo "$file" | cat $choiceDir/links.md | grep "$file" | sed 's/.*https/https/g')
                 `mpv $link --sub-file=$choiceDir/subs/$sub --title="$file"`
             fi
+        fi
+    ;;
+    "~/.config")
+        dir="$HOME/.config"
+        declare -a configs=(
+            "$mainChoice/nvim"
+            "$mainChoice/setup.md"
+            "$mainChoice/mpv/mpv.conf"
+            "$mainChoice/mpv/input.conf"
+            "$mainChoice/xmonad/xmonad.hs"
+            "$mainChoice/xmonad/xmobarrc"
+            "$mainChoice/zathura/zathurarc"
+            "$mainChoice/qutebrowser/config.py"
+            "$mainChoice/alacritty/alacritty.yml"
+        )
+        choice=$(printf '%s\n' "${configs[@]}" | DMENU "$mainChoice/")
+
+        if [ "$choice" ]; then
+            case $choice in
+                "$mainChoice/nvim")
+                    nvimDir="$dir/nvim"
+                    declare -a nvimConfigs=(
+                        "$mainChoice/nvim/UltiSnips"
+                        "$mainChoice/nvim/config/pluggins"
+                        "$mainChoice/nvim/init.vim"
+                        "$mainChoice/nvim/config/theme.vim"
+                        "$mainChoice/nvim/config/mappings.vim"
+                        "$mainChoice/nvim/config/MathWiki.vim"
+                        "$mainChoice/nvim/config/textObjects.vim"
+                        "$mainChoice/nvim/config/compileAndRun.vim"
+                        "$mainChoice/nvim/config/keyboardMovement.vim"
+                    )
+                    nvimChoice=$(printf '%s\n' "${nvimConfigs[@]}" | DMENU "$mainChoice/nvim/")
+
+                    if [[ "$nvimChoice" ]]; then
+                        case $nvimChoice in
+                            "$mainChoice/nvim/config/pluggins")
+                                nvimPlugginsDir="$nvimDir/config/pluggins"
+                                declare -a nvimPluggins=(
+                                    "$mainChoice/nvim/config/pluggins/ncm2.vim"
+                                    "$mainChoice/nvim/config/pluggins/vimtex.vim"
+                                    "$mainChoice/nvim/config/pluggins/ultisnips.vim"
+                                    "$mainChoice/nvim/config/pluggins/syntaxRange.vim"
+                                )
+                                nvimPlugginsChoice=$(printf '%s\n' "${nvimPluggins[@]}" | DMENU "$mainChoice/nvim/config/pluggins/")
+
+                                if [[ "$nvimPlugginsChoice" ]]; then
+                                    alacritty --class sys,sys -e nvim $(echo "$nvimPlugginsChoice" | sed 's:~:/home/zhao:g')
+                                fi
+                            ;;
+                            "$mainChoice/nvim/UltiSnips")
+                                nvimSnippetsDir="$nvimDir/UltiSnips"
+                                declare -a nvimSnippets=(
+                                    "$mainChoice/nvim/UltiSnips/markdown.snippets"
+                                    "$mainChoice/nvim/UltiSnips/tex.snippets"
+                                    "$mainChoice/nvim/UltiSnips/sh.snippets"
+                                    "$mainChoice/nvim/UltiSnips/cs.snippets"
+                                )
+                                nvimSnippetsChoice=$(printf '%s\n' "${nvimSnippets[@]}" | DMENU "$mainChoice/nvim/UltiSnips/")
+
+                                if [[ "$nvimSnippetsChoice" ]]; then
+                                    alacritty --class sys,sys -e nvim $(echo "$nvimSnippetsChoice" | sed 's:~:/home/zhao:g')
+                                fi
+                            ;;
+                            *)
+                                alacritty --class sys,sys -e nvim $(echo "$nvimChoice" | sed 's:~:/home/zhao:g')
+                            ;;
+                        esac
+                    fi
+                ;;
+                *)
+                    alacritty --class sys,sys -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
+                ;;
+            esac
+        fi
+    ;;
+    "~/.config/scripts")
+        dir="$HOME/.config/scripts"
+        file=$(find $dir -printf "%T@ %Tc %p\n" | grep ".sh" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$dir/" | sed 's:/home/zhao:~:g'))
+
+        if [ "$file" ]; then
+            alacritty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
         fi
     ;;
 esac
