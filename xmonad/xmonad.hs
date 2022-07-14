@@ -88,7 +88,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm .|. shiftMask, xK_w), spawn "./.config/scripts/openQute.sh -P"),
 
         -- GitHub
-        ((controlMask .|. shiftMask, xK_g), spawn "xclip -sel clip ~/.gitpat"                       ),
+        ((controlMask .|. shiftMask, xK_g), spawn "xclip -sel clip ~/.config/.gitpat"               ),
         ((modm .|. shiftMask, xK_g       ), spawn "alacritty -e ~/.config/scripts/gitCommit.sh -p"  ),
         ((modm .|. shiftMask, xK_m       ), spawn "alacritty -e ~/Dropbox/MathWiki/.scripts/main.sh"),
 
