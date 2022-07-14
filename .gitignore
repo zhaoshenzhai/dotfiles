@@ -10,10 +10,14 @@ yay
 spotify
 obsidian
 mpv/watch_later
+chromium
 
 qutebrowser/greasemonkey
 qutebrowser/qsettings
 qutebrowser/autoconfig.yml
+
+cookies_Z.txt
+cookies_P.txt
 
 xmonad/xmonad.hi
 xmonad/xmonad.o

@@ -46,9 +46,6 @@ c.url.searchengines = {
 config.set("downloads.remove_finished", 1000)
 config.set("downloads.location.directory", "~/Downloads")
 
-# Open mpv
-config.bind('<Meta+m>', 'hint links spawn -d mpv {hint-url} &')
-
 # Zoom
 config.set("zoom.default", "125%")
 config.bind('<Meta+=>', 'zoom-in')

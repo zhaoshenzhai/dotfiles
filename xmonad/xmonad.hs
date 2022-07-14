@@ -84,10 +84,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_e        ), spawn "alacritty -e vifm ~/ ~/ -c normal\\ ggga"   ),
 
         -- Browser
-        --((modm, xK_w              ), spawn "google-chrome-stable --profile-directory=Default --force-dark-mode"    ),
-        --((modm .|. shiftMask, xK_w), spawn "google-chrome-stable --profile-directory='Profile 2' --force-dark-mode"),
-        ((modm, xK_w), spawn "qutebrowser-profile --new 'Z'"),
-        ((modm .|. shiftMask, xK_w), spawn "qutebrowser-profile --new 'P'"),
+        ((modm, xK_w), spawn "./.config/scripts/openQute.sh -Z"),
+        ((modm .|. shiftMask, xK_w), spawn "./.config/scripts/openQute.sh -P"),
 
         -- GitHub
         ((controlMask .|. shiftMask, xK_g), spawn "xclip -sel clip ~/.gitpat"                       ),
