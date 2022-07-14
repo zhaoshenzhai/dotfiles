@@ -50,3 +50,11 @@
     - Z for primary and P for secondary
     - Use `--new` flag instead of `--load`; should be fixed
     - To change from `qute [Z] - Title` to `Z - Title`, modify line containing `window.title_format` in `/usr/bin/qutebrowser-profile`
+
+# Qutebrowser mpv youtube --mark-watched
+    - Install chromium and setup profiles
+    - Install Open cookie.txt extension (or something like that)
+    - Enable it in youtube.com and download the files
+    - Name them `cookie_Z.txt` and `cookie_P.txt`
+    - Put them in `~/.config`
+    - Uninstall chromium
