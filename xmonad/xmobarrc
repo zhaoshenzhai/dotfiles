@@ -30,7 +30,7 @@ Config
                 "-O"              , "<fn=2>\xf583</fn> <left>% (<timeleft> Left)",
                 "-i"              , "<fn=2>\xf578</fn> Full"
             ] 50,
-            Run Com "./.config/scripts/volume/xmobarVolume.sh" [] "volume" 5,
+            Run Com "./.config/scripts/audioXmobar.sh" [] "volume" 5,
             Run Com "./.config/scripts/diskFree.sh" [] "disk" 6000,
     		Run Date "<fn=1>\61463</fn> %H:%M:%S" "time" 10,
             Run Date "<fn=1>\61747</fn> %a %d/%m/%y" "date" 36000,

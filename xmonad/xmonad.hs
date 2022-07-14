@@ -79,12 +79,12 @@ myLayoutHook =
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [
         -- Navigation
-        ((modm, xK_backslash), spawn myTerminal                            ),
-        ((modm, xK_Return   ), spawn "./.config/scripts/dmenu/open_file.sh"),
-        ((modm, xK_e        ), spawn "alacritty -e vifm ~/ ~/ -c normal\\ ggga"   ),
+        ((modm, xK_backslash), spawn myTerminal                                ),
+        ((modm, xK_Return   ), spawn "./.config/scripts/dmenuOpenFile.sh"      ),
+        ((modm, xK_e        ), spawn "alacritty -e vifm ~/ ~/ -c normal\\ ggga"),
 
         -- Browser
-        ((modm, xK_w), spawn "./.config/scripts/openQute.sh -Z"),
+        ((modm, xK_w              ), spawn "./.config/scripts/openQute.sh -Z"),
         ((modm .|. shiftMask, xK_w), spawn "./.config/scripts/openQute.sh -P"),
 
         -- GitHub
@@ -95,13 +95,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         -- Applications
         ((modm, xK_s), spawn "spotify" ),
         ((modm, xK_o), spawn "obsidian"),
-
-        -- Internet/Bluetooth
-        ((modm, xK_i              ), spawn "sudo alacritty --class sys,sys -e nmtui"),
-        ((modm, xK_c              ), spawn "./.config/scripts/bluetooth.sh -c1"     ),
-        ((modm .|. shiftMask, xK_c), spawn "./.config/scripts/bluetooth.sh -c2"     ),
-        ((modm, xK_d              ), spawn "./.config/scripts/bluetooth.sh -d1"     ),
-        ((modm .|. shiftMask, xK_d), spawn "./.config/scripts/bluetooth.sh -d2"     ),
 
         -- Window management
         ((modm, xK_f     ), sendMessage NextLayout  ),
@@ -115,15 +108,18 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_Escape), kill                    ),
 
         -- Audio control
-        ((modm, xK_F1              ), spawn "./.config/scripts/volume/volumeControl.sh -t  "),
-        ((modm, xK_F2              ), spawn "./.config/scripts/volume/volumeControl.sh -d 5"),
-        ((modm, xK_F3              ), spawn "./.config/scripts/volume/volumeControl.sh -i 5"),
-        ((modm .|. shiftMask, xK_F2), spawn "./.config/scripts/volume/volumeControl.sh -d 1"),
-        ((modm .|. shiftMask, xK_F3), spawn "./.config/scripts/volume/volumeControl.sh -i 1"),
-        ((modm, xK_F4              ), spawn "./.config/scripts/volume/volumeControl.sh -b"  ),
-        ((modm, xK_F5              ), spawn "./.config/scripts/volume/volumeControl.sh -p"  ),
-        ((modm, xK_F6              ), spawn "./.config/scripts/volume/volumeControl.sh -n"  ),
-        ((modm, xK_F7              ), spawn "pavucontrol"                                   ),
+        ((modm, xK_F1              ), spawn "./.config/scripts/audioControl.sh -t  "),
+        ((modm, xK_F2              ), spawn "./.config/scripts/audioControl.sh -d 5"),
+        ((modm, xK_F3              ), spawn "./.config/scripts/audioControl.sh -i 5"),
+        ((modm .|. shiftMask, xK_F2), spawn "./.config/scripts/audioControl.sh -d 1"),
+        ((modm .|. shiftMask, xK_F3), spawn "./.config/scripts/audioControl.sh -i 1"),
+        ((modm, xK_F4              ), spawn "./.config/scripts/audioControl.sh -b"  ),
+        ((modm, xK_F5              ), spawn "./.config/scripts/audioControl.sh -p"  ),
+        ((modm, xK_F6              ), spawn "./.config/scripts/audioControl.sh -n"  ),
+        ((modm, xK_c               ), spawn "./.config/scripts/audioControl.sh -c1" ),
+        ((modm .|. shiftMask, xK_c ), spawn "./.config/scripts/audioControl.sh -c2" ),
+        ((modm, xK_d               ), spawn "./.config/scripts/audioControl.sh -d1" ),
+        ((modm .|. shiftMask, xK_d ), spawn "./.config/scripts/audioControl.sh -d2" ),
 
         -- Xmonad
         ((modm .|. shiftMask, xK_q     ), spawn "xmonad --recompile; killall xmobar; xmonad --restart"),

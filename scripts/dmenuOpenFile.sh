@@ -8,7 +8,7 @@ BLUE='\033[0;34m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-source "$HOME/.config/scripts/dmenu/theme.sh"
+source "$HOME/.config/scripts/scriptFiles/dmenu_theme"
 
 declare -a options=(
     "MathWiki   ~/Dropbox/MathWiki/"
@@ -132,11 +132,12 @@ case $mainChoiceName in
         if [ "$choice" ]; then
             if [[ "$choiceName" == "Introduction to Set Theory" ]]; then
                 declare -a chapters=(
-                    "Chapter 1  ./Introduction_to_Set_Theory/exercises/Chapter_1/Chapter_1.pdf"
-                    "Chapter 2  ./Introduction_to_Set_Theory/exercises/Chapter_2/Chapter_2.pdf"
-                    "Chapter 3  ./Introduction_to_Set_Theory/exercises/Chapter_3/Chapter_3.pdf"
-                    "Chapter 4  ./Introduction_to_Set_Theory/exercises/Chapter_4/Chapter_4.pdf"
-                    "Chapter 5  ./Introduction_to_Set_Theory/exercises/Chapter_5/Chapter_5.pdf"
+                    "Introduction to Set Theory  ./Introduction_to_Set_Theory/Introduction_to_Set_Theory.pdf"
+                    "Chapter 1 Exercises         ./Introduction_to_Set_Theory/exercises/Chapter_1/Chapter_1.pdf"
+                    "Chapter 2 Exercises         ./Introduction_to_Set_Theory/exercises/Chapter_2/Chapter_2.pdf"
+                    "Chapter 3 Exercises         ./Introduction_to_Set_Theory/exercises/Chapter_3/Chapter_3.pdf"
+                    "Chapter 4 Exercises         ./Introduction_to_Set_Theory/exercises/Chapter_4/Chapter_4.pdf"
+                    "Chapter 5 Exercises         ./Introduction_to_Set_Theory/exercises/Chapter_5/Chapter_5.pdf"
                 )
 
                 setTheoryExercises=$(printf '%s\n' "${chapters[@]}" | dmenu -i -p 'Options:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
@@ -194,8 +195,8 @@ case $mainChoiceName in
                     nvimChoiceName=$(echo "$nvimChoice" | sed 's/\.\/.*//g' | sed 's/\ \ \ *//g')
 
                     if [[ "$nvimChoice" ]]; then
-                        case `$nvimChoice` in
-                            "pluggins              ./nvim/config/pluggins/")
+                        case `$nvimChoiceName` in
+                            "pluggins")
                                 nvimPlugginsDir="$nvimDir/config/pluggins"
                                 declare -a nvimPluggins=(
                                     "ncm2.vim         ./nvim/config/pluggins/ncm2.vim"
@@ -210,7 +211,7 @@ case $mainChoiceName in
                                     alacritty --class sys,sys -e nvim $(printf '%s\n' "${nvimPlugginsChoice}" | sed 's,\ \.,'"$dir"',g' | awk '{printf $NF}')
                                 fi
                             ;;
-                            "snippets              ./nvim/UltiSnips/")
+                            "snippets")
                                 nvimSnippetsDir="$nvimDir/UltiSnips"
                                 declare -a nvimSnippets=(
                                     "markdown.snippets  ./nvim/UltiSnips/markdown.snippets"
@@ -254,18 +255,18 @@ case $mainChoiceName in
     "Scripts")
         dir="$HOME/.config/scripts"
         declare -a configs=(
-            "dmenu          ./dmenu/open_file.sh"
+            "dmenu          ./dmenuOpenFile.sh"
             "init           ./init.sh"
             "gitCommit      ./gitCommit.sh"
-            "bluetooth      ./bluetooth.sh"
             "diskFree       ./diskFree.sh"
             "openQute       ./openQute.sh"
-            "volumeControl  ./volume/volumeControl.sh"
-            "xmobarVolume   ./volume/xmobarVolume.sh"
-            "newJava        ./new/newJava.sh"
-            "newLaTeX       ./new/newLaTeX.sh"
-            "javaCompile    ./compile/javaCompile.sh"
-            "cSharpCompile  ./compile/cSharpCompile.sh"
+            "audioConrol    ./audioControl.sh"
+            "audioXmobar    ./audioXmobar.sh"
+            "newJava        ./newJava.sh"
+            "newCSharp      ./newCSharp.sh"
+            "newLaTeX       ./newLaTeX.sh"
+            "compileJava    ./compileJava.sh"
+            "compileCSharp  ./compileCSharp.sh"
         )
 
         choice=$(printf '%s\n' "${configs[@]}" | dmenu -i -p 'Options:' $flags $colors -fn 'courier prime:spacing=1:pixelsize=20')
