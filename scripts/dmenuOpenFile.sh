@@ -20,10 +20,9 @@ declare -a options=(
     "~/Dropbox/Others/Reminders"
     "~/Dropbox/Others/Shows"
     "~/.config"
-    "~/.config/scripts"
 )
 
-mainChoice=$(printf '%s\n' "${options[@]}" | DMENU "~/Dropbox/")
+mainChoice=$(printf '%s\n' "${options[@]}" | DMENU "~/")
 
 case $mainChoice in
     "~/Dropbox/MathWiki")
@@ -142,6 +141,7 @@ case $mainChoice in
         dir="$HOME/.config"
         declare -a configs=(
             "$mainChoice/nvim"
+            "$mainChoice/scripts"
             "$mainChoice/setup.md"
             "$mainChoice/mpv/mpv.conf"
             "$mainChoice/mpv/input.conf"
@@ -155,6 +155,14 @@ case $mainChoice in
 
         if [ "$choice" ]; then
             case $choice in
+                "$mainChoice/scripts")
+                    scriptsDir="$HOME/.config/scripts"
+                    file=$(find $scriptsDir -printf "%T@ %Tc %p\n" | grep ".sh" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$scriptsDir/" | sed 's:/home/zhao:~:g'))
+
+                    if [ "$file" ]; then
+                        alacritty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
+                    fi
+                ;;
                 "$mainChoice/nvim")
                     nvimDir="$dir/nvim"
                     declare -a nvimConfigs=(
@@ -210,14 +218,6 @@ case $mainChoice in
                     alacritty --class sys,sys -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
                 ;;
             esac
-        fi
-    ;;
-    "~/.config/scripts")
-        dir="$HOME/.config/scripts"
-        file=$(find $dir -printf "%T@ %Tc %p\n" | grep ".sh" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$dir/" | sed 's:/home/zhao:~:g'))
-
-        if [ "$file" ]; then
-            alacritty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
         fi
     ;;
 esac
