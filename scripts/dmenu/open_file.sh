@@ -259,6 +259,7 @@ case $mainChoiceName in
             "gitCommit      ./gitCommit.sh"
             "bluetooth      ./bluetooth.sh"
             "diskFree       ./diskFree.sh"
+            "openQute       ./openQute.sh"
             "volumeControl  ./volume/volumeControl.sh"
             "xmobarVolume   ./volume/xmobarVolume.sh"
             "newJava        ./new/newJava.sh"
