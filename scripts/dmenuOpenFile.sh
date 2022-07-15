@@ -123,17 +123,15 @@ case $mainChoice in
     ;;
     "~/Dropbox/Others/Shows")
         dir="$HOME/Dropbox/Others/Shows"
-        choice=$(find $dir -mindepth 1 -maxdepth 1 -type d | sed 's:/home/zhao:~:g' | DMENU "$mainChoice/")
+        show=$(find $dir -mindepth 1 -maxdepth 1 -type d | sed 's:/home/zhao:~:g' | DMENU "$mainChoice/")
 
-        if [ "$choice" ]; then
-            choiceDir="$(echo "$choice" | sed 's/^.*\.\///g' | sed 's:~:/home/zhao:g')"
-            declare -a files=$(cat $choiceDir/links.md | sed 's/\ https.*//g')
-            file=$(printf '%s\n' "${files[@]}" | DMENU "$choice/")
+        if [ "$show" ]; then
+            showDir=$(echo "$show" | sed 's/^.*\.\///g' | sed 's:~:/home/zhao:g')
+            declare -a episodes=$(cat $showDir/links.md | sed 's/\ https.*//g')
+            episode=$(printf '%s\n' "${episodes[@]}" | DMENU "$show/")
 
-            if [ "$file" ]; then
-                sub=$(echo "$file" | sed 's/$/\.srt/g' | sed 's/\ /_/g')
-                link=$(echo "$file" | cat $choiceDir/links.md | grep "$file" | sed 's/.*https/https/g')
-                `mpv $link --sub-file=$choiceDir/subs/$sub --title="$file"`
+            if [ "$episode" ]; then
+                alacritty -e ~/.config/scripts/mpvStream.sh $showDir "$episode"
             fi
         fi
     ;;
