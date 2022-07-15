@@ -108,11 +108,13 @@ if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
 
         res=$(git push 2>&1)
         fatal=$(echo $res | grep -o fatal)
+        attempt=1
         while [[ $fatal ]]; do
-            echo -ne "${YELLOW}Connecting...${NC}\r"
+            echo -ne "${YELLOW}Connecting... (x$attempt)${NC}\r"
             sleep 1
             res=$(git push 2>&1)
             fatal=$(echo $res | grep -o fatal)
+            attempt=$(($attempt + 1))
         done
         echo "$res"
     fi
