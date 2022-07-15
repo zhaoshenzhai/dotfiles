@@ -46,7 +46,7 @@ done
 
 printf "\n"
 status=$(git -c color.status=always status | tee /dev/tty)
-if [[ $(echo -e "$status" | grep "no changes added to commit") ]]; then
+if [[ $(echo -e "$status" | grep "no changes added to commit") ]] || [[ $(echo -e "$status" | grep "nothing added to commit") ]]; then
     printf "\n"
 fi
 
@@ -80,7 +80,7 @@ if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
         git add .
         printf "\n"
         status=$(git -c color.status=always status | tee /dev/tty)
-        if [[ $(echo -e "$status" | grep "no changes added to commit") ]]; then
+        if [[ $(echo -e "$status" | grep "no changes added to commit") ]] || [[ $(echo -e "$status" | grep "nothing added to commit") ]]; then
             printf "\n"
         fi
         read -ep "$(echo -e ${PURPLE}"Remove files? [N/(string)]${NC} ")" choice
@@ -89,7 +89,7 @@ if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
 
             printf "\n"
             status=$(git -c color.status=always status | tee /dev/tty)
-            if [[ $(echo -e "$status" | grep "no changes added to commit") ]]; then
+            if [[ $(echo -e "$status" | grep "no changes added to commit") ]] || [[ $(echo -e "$status" | grep "nothing added to commit") ]]; then
                 printf "\n"
             fi
 
