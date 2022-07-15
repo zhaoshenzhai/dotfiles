@@ -10,10 +10,13 @@ NC='\033[0m'
 
 vid=$(echo "$2" | sed 's/\ /_/g' | sed 's/$/.mp4/g')
 if [[ -f "$1/vids/$vid" ]]; then
+    echo -e "${GREEN}Video found, playing${NC}"
     sub=$(echo "$2" | sed 's/$/\.srt/g' | sed 's/\ /_/g')
     $(mpv "$1/vids/$vid" --sub-file=$1/subs/$sub --title="$2")
     exit
 fi
+
+echo -e "${YELLOW}Video not found, attempting to find urls${NC}"
 
 mainUrl=$(cat "$1/links.md" | grep "$2" | sed "s/$2\ //g")
 
@@ -29,7 +32,7 @@ if [[ ! "$attempt" == 1 ]]; then
     echo ""
 fi
 
-echo -e "${GREEN}Curled main url${NC}"
+echo -e "${GREEN}Curled main page${NC}"
 
 urls=$(echo "$curled" | grep -o -E "href=[\"'](.*)[\"']" | sed 's/href="//g' | sed 's/".*//g')
 upStream=$(echo "$urls" | grep "https://upstream.to")
@@ -60,7 +63,7 @@ while [[ ! -f "/home/zhao/Downloads/$vid.download" ]]; do
 done
 echo ""
 
-echo -e "${GREEN}File found${NC}"
+echo -e "${GREEN}File found, playing${NC}"
 
 sub=$(echo "$2" | sed 's/$/\.srt/g' | sed 's/\ /_/g')
 

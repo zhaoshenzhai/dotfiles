@@ -131,7 +131,7 @@ case $mainChoice in
             episode=$(printf '%s\n' "${episodes[@]}" | DMENU "$show/")
 
             if [ "$episode" ]; then
-                alacritty -e ~/.config/scripts/mpvStream.sh $showDir "$episode"
+                alacritty --class sys,sys -e ~/.config/scripts/mpvStream.sh $showDir "$episode"
             fi
         fi
     ;;
