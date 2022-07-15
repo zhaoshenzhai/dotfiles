@@ -8,11 +8,12 @@ BLUE='\033[0;34m'
 RED='\033[0;31m'
 NC='\033[0m'
 
+path=$(echo "$1" | sed 's:Dropbox/Others:Downloads:g')
 vid=$(echo "$2" | sed 's/\ /_/g' | sed 's/$/.mp4/g')
-if [[ -f "$1/vids/$vid" ]]; then
+if [[ -f "$path/$vid" ]]; then
     echo -e "${GREEN}Video found, playing${NC}"
     sub=$(echo "$2" | sed 's/$/\.srt/g' | sed 's/\ /_/g')
-    $(mpv "$1/vids/$vid" --sub-file=$1/subs/$sub --title="$2")
+    $(mpv "$path/$vid" --sub-file=$1/subs/$sub --title="$2")
     exit
 fi
 
@@ -85,6 +86,6 @@ done
 
 rm "/home/zhao/Downloads/$vid.download"
 if [[ -f "/home/zhao/Downloads/$vid" ]]; then
-    mv "/home/zhao/Downloads/$vid" "$1/vids/"
+    mv "/home/zhao/Downloads/$vid" "$path"
 fi
 exit
