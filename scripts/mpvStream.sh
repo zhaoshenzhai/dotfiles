@@ -41,6 +41,7 @@ mixDrop=$(echo "$urls" | grep "https://mixdrop.co")
 streamLare=$(echo "$urls" | grep "https://streamlare.com")
 streamLareUrls=$(curl -s $streamLare | grep -o -E "href=[\"'](.*)[\"']" | sed 's/href="//g' | sed 's/".*//g')
 slTube=$(echo "$streamLareUrls" | grep "https://sltube.org")
+slMaxed=$(echo "$streamLareUrls" | grep "https://slmaxed.com")
 
 echo -e "${GREEN}Extracted links${NC}"
 
@@ -52,6 +53,9 @@ if [[ ! -z "$mixDrop" ]] && [[ ! $(curl -s $mixDrop | grep "We can't") ]]; then
 fi
 if [[ ! -z "$slTube" ]] && [[ ! $(curl -s $slTube | grep "File Not Found") ]]; then
     $(qutebrowser-profile --new 'N' $slTube &> /dev/null)
+fi
+if [[ ! -z "$slMaxed" ]] && [[ ! $(curl -s $slMaxed | grep "File Not Found") ]]; then
+    $(qutebrowser-profile --new 'N' $slMaxed &> /dev/null)
 fi
 
 echo -e "${GREEN}Opened browser${NC}"
