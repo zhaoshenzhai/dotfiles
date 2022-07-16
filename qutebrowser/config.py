@@ -17,6 +17,7 @@ config.set("colors.tabs.selected.even.bg", "#1e2127")
 config.set("colors.tabs.selected.odd.bg", "#1e2127")
 config.set("colors.tabs.selected.even.fg", "#f8f8ff")
 config.set("colors.tabs.selected.odd.fg", "#f8f8ff")
+config.set("colors.downloads.bar.bg", "#1e2127")
 
 # Fonts
 config.set("fonts.default_family", "Anonymous Pro")
