@@ -51,10 +51,10 @@ config.set("downloads.remove_finished", 1000)
 config.set("downloads.location.directory", "~/Downloads")
 
 # Zoom
-config.set("zoom.default", "125%")
+config.set("zoom.default", "100%")
 config.bind('<Meta+=>', 'zoom-in')
 config.bind('<Meta+->', 'zoom-out')
-config.bind('<Meta+0>', 'zoom 125')
+config.bind('<Meta+0>', 'zoom 100')
 
 # Toggle bars
 config.bind('<Meta+`>', 'config-cycle statusbar.show always never;; config-cycle tabs.show multiple never')
