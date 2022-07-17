@@ -18,7 +18,6 @@ declare -a options=(
     "~/Dropbox/Textbooks"
     "~/Dropbox/Highschool/Course_Notes"
     "~/Dropbox/Others/Reminders"
-    "~/Dropbox/Others/Shows"
     "~/.config"
 )
 
@@ -119,20 +118,6 @@ case $mainChoice in
 
         if [ "$choice" ]; then
             alacritty -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
-        fi
-    ;;
-    "~/Dropbox/Others/Shows")
-        dir="$HOME/Dropbox/Others/Shows"
-        show=$(find $dir -mindepth 1 -maxdepth 1 -type d | sed 's:/home/zhao:~:g' | DMENU "$mainChoice/")
-
-        if [ "$show" ]; then
-            showDir=$(echo "$show" | sed 's/^.*\.\///g' | sed 's:~:/home/zhao:g')
-            declare -a episodes=$(cat $showDir/links.md | sed 's/\ https.*//g')
-            episode=$(printf '%s\n' "${episodes[@]}" | DMENU "$show/")
-
-            if [ "$episode" ]; then
-                alacritty --class sys,sys -e ~/.config/scripts/mpvStream.sh $showDir "$episode"
-            fi
         fi
     ;;
     "~/.config")
