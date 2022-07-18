@@ -55,7 +55,7 @@ if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
         read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/a/n]${NC} ")" choice
         if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
             printf "\n"
-            diff=$(git -c color.diff=always diff "Notes/*" | tee /dev/tty)
+            diff=$(git -c color.diff=always diff -- . ':(exclude).obsidian/*' | tee /dev/tty)
         elif [ "$choice" == "a" ] || [ "$choice" == "A" ]; then
             printf "\n"
             diff=$(git -c color.diff=always diff | tee /dev/tty)
