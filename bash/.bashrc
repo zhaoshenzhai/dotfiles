@@ -9,8 +9,8 @@ export EDITOR=nvim
 export TERMINAL="/usr/bin/alacritty"
 
 # Xmonad
+export XMONAD_CACHE_DIR="/home/zhao/.cache"
 export XMONAD_CONFIG_DIR="/home/zhao/.config/xmonad"
-export XMONAD_CACHE_DIR="/home/zhao/.config/xmonad"
 export XMONAD_DATA_DIR="/home/zhao/.config/xmonad"
 
 # Paths
