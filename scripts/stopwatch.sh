@@ -20,7 +20,7 @@ stopwatch() {
             splitTime=$totalTime
         fi
 
-        echo -ne "${GREEN}Split time: $splitTime | Total time: $totalTime${NC}\r"
+        echo -ne "${GREEN}Split #$splitCount: $splitTime | Total: $totalTime${NC}\r"
 
         keyPress=$(cat -v)
         sleep 0.01
@@ -36,7 +36,7 @@ stopwatch() {
 pause() {
     pauseStart=$(date +%s)
     keyPress=""
-    echo -ne "${YELLOW}Split time: $splitTime | Total time: $totalTime${NC}\r"
+    echo -ne "${YELLOW}Split #$splitCount: $splitTime | Total: $totalTime${NC}\r"
     while [[ $keyPress != p ]] && [[ $keyPress != q ]]; do
         keyPress=$(cat -v)
         sleep 0.01
@@ -54,16 +54,16 @@ pause() {
 
 repeat="Y"
 while [[ $repeat == Y ]]; do
-    echo -e "${CYAN}Press 'p' to pause/resume\n      's' to split\n      'q' to quit\n${NC}"
-    read -n 1 -ep "$(echo -e "${CYAN}Press 'Enter' or 'Space' to start:${NC}") " input
+    echo -e "${CYAN}Press [p] to pause/resume\n      [s] to split\n      [q] to quit\n${NC}"
+    read -n 1 -ep "$(echo -e "${CYAN}Press [Enter] or [Space] to start:${NC}") " input
     if [[ $input == q ]]; then
         exit
     fi
 
     while [[ ! -z $input ]]; do
         clear 
-        echo -e "${CYAN}Press 'p' to pause/resume\n      's' to split\n      'q' to quit\n${NC}"
-        read -n 1 -ep "$(echo -e "${CYAN}Press 'Enter' or 'Space' to start:${NC}") " input
+        echo -e "${CYAN}Press [p] to pause/resume\n      [s] to split\n      [q] to quit\n${NC}"
+        read -n 1 -ep "$(echo -e "${CYAN}Press [Enter] or [Space] to start:${NC}") " input
         if [[ $input == q ]]; then
             exit
         fi
@@ -77,6 +77,7 @@ while [[ $repeat == Y ]]; do
 
     START=$(date +%s)
     pauseElapsed=0
+    splitCount=1
 
     stopwatch $START
     splitTimes=$totalTime   
@@ -84,21 +85,26 @@ while [[ $repeat == Y ]]; do
     while [[ $keyPress != q ]]; do
         SPLIT=$(date +%s)
         pauseElapsedSplit=0
+        splitCount=$((++splitCount))
 
         stopwatch $START $SPLIT
         splitTimes="$splitTimes $splitTime"
     done
 
-    count=1
-    while [[ "$splitTimes" != "" ]]; do
-        echo -e "${PURPLE}Split #$count: $(echo "$splitTimes" | sed 's/\ .*//g')${NC}"
-        if [[ $(grep " " <<< "$splitTimes") ]]; then
-            splitTimes=$(echo "$splitTimes" | sed 's/^..:..:..\ //g')
-        else
-            splitTimes=""
-        fi
-        count=$((++count))
-    done
+    if [[ $splitCount -gt 1 ]]; then
+        count=1
+        printf "\n"
+        while [[ "$splitTimes" != "" ]]; do
+            echo -e "${PURPLE}Split #$count: $(echo "$splitTimes" | sed 's/\ .*//g')${NC}"
+            if [[ $(grep " " <<< "$splitTimes") ]]; then
+                splitTimes=$(echo "$splitTimes" | sed 's/^..:..:..\ //g')
+            else
+                splitTimes=""
+            fi
+            count=$((++count))
+        done
+    fi
+
     printf "\n"
 
     if [ -t 0 ]; then stty "$SAVED_STTY"; fi   
