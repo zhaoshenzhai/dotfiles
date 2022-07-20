@@ -87,14 +87,17 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_w              ), spawn "./.config/scripts/openQute.sh -Z"),
         ((modm .|. shiftMask, xK_w), spawn "./.config/scripts/openQute.sh -P"),
 
-        -- GitHub
-        ((controlMask .|. shiftMask, xK_g), spawn "xclip -sel clip ~/.config/.gitpat"               ),
-        ((modm .|. shiftMask, xK_g       ), spawn "alacritty -e ~/.config/scripts/gitCommit.sh -p"  ),
-        ((modm .|. shiftMask, xK_m       ), spawn "alacritty -e ~/Dropbox/MathWiki/.scripts/main.sh"),
+        -- My scripts
+        ((modm .|. shiftMask, xK_s), spawn "alacritty -e ~/.config/scripts/stopwatch.sh"     ),
+        ((modm .|. shiftMask, xK_g), spawn "alacritty -e ~/.config/scripts/gitCommit.sh -p"  ),
+        ((modm .|. shiftMask, xK_m), spawn "alacritty -e ~/Dropbox/MathWiki/.scripts/main.sh"),
 
         -- Applications
         ((modm, xK_s), spawn "spotify" ),
         ((modm, xK_o), spawn "obsidian"),
+
+        -- GitHub
+        ((controlMask .|. shiftMask, xK_g), spawn "xclip -sel clip ~/.config/.gitpat"),
 
         -- Window management
         ((modm, xK_f     ), sendMessage NextLayout  ),
