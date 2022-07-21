@@ -26,12 +26,14 @@
 
 # More Packages:
     - Xmonad:
-        xorg xorg-xinit xmonad xmobar-contrib xmobar dmenu alacritty vifm pipewire pipewire-pulse pipewire-jack pamixer playerctl bluez bluez-utils nitrogen ttf-courier-prime ttf-font-awesome ttf-anonymous-pro ttf-cmu-serif nerd-fonts-mononoki neofetch
+        xorg xorg-xinit xmonad xmobar-contrib xmobar neovim dmenu alacritty vifm pipewire pipewire-pulse pipewire-jack pamixer playerctl bluez bluez-utils nitrogen ttf-courier-prime ttf-font-awesome ttf-anonymous-pro ttf-cmu-serif nerd-fonts-mononoki neofetch
     - Tools:
-        neovim python python-pip htop tree unzip ghostscript pdf2svg bc scrot colorpicker texlive-core texlive-latexextra texlive-science texlive-pictures xclip gpicview
+        htop tree unzip bc xclip scrot python python-pip npm ghostscript pdf2svg colorpicker texlive-core texlive-latexextra texlive-science texlive-pictures gpicview
     - Programs:
         zathura zathura-pdf-mupdf obsidian dropbox spotify qutebrowser qutebrowser-profile-git yt-dlp mpv
-    - Pip stuff:
+
+# Other package managers:
+    - Pip:
         pynvim
 
 # Clone dotfiles:

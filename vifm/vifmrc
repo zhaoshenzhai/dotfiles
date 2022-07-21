@@ -184,6 +184,9 @@ command! reload :write | restart full
 filextype {*.pdf},<application/pdf> zathura %c %i &, apvlv %c, xpdf %c
 fileviewer {*.pdf},<application/pdf> pdftotext -nopgbrk %c -
 
+" Typescript
+filextype {*.ts},<application/ts> nvim %f
+
 " PostScript
 filextype {*.ps,*.eps,*.ps.gz},<application/postscript>
         \ {View in zathura}

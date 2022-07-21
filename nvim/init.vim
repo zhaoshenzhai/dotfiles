@@ -36,8 +36,8 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'joshdick/onedark.vim'                                         " onedark color scheme
     Plug 'itchyny/lightline.vim'                                        " lightline
     Plug 'inkarkat/vim-SyntaxRange'                                     " tex syntax in md
-    Plug 'godlygeek/tabular'
-    Plug 'preservim/vim-markdown'
+    Plug 'preservim/vim-markdown'                                       " syntax highlighting markdown
+    Plug 'pangloss/vim-javascript'                                      " syntax highlighting javascript
 
     " Completion
     Plug 'ncm2/ncm2'                                                    " code completion

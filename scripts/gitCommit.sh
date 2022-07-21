@@ -15,15 +15,18 @@ while [ ! -z "$1" ]; do
             echo -e "${CYAN}Repositories:${NC}"
             echo -e "${CYAN}    (1): MathWiki${NC}"
             echo -e "${CYAN}    (2): dotfiles${NC}"
+            echo -e "${CYAN}    (3): obsidian-mathlinks${NC}"
             printf "\n"
 
-            read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1,2]${NC} ")" repo
+            read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1-3]${NC} ")" repo
             if [ "$repo" == "q" ]; then
                 exit
             fi
-            while [ ! "$repo" == "1" ] && [ ! "$repo" == "2" ]; do
-                read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1,2]${NC} ")" repo
-                if [ "$repo" == "q" ]; then
+
+            re='^[0-9]+$'
+            while ( ! [[ $repo =~ $re ]] ) || ( [ "$repo" -lt "1" ] || [ "$repo" -gt "3" ] ); do
+                read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1-3]${NC} ")" repo
+                if [[ "$repo" == "q" ]]; then
                     exit
                 fi
             done
@@ -34,6 +37,9 @@ while [ ! -z "$1" ]; do
                 ;;
                 "2")
                     cd $HOME/.config/
+                ;;
+                "3")
+                    cd $HOME/Downloads/obsidian-mathlinks
                 ;;
             esac
         ;;
