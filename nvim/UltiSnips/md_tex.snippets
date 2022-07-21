@@ -1,3 +1,14 @@
+#### Math ####
+global !p
+def math():
+	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
+def notMath():
+	return vim.eval('vimtex#syntax#in_mathzone()') != '1'
+endglobal
+#### Math ####
+
+###########################################################
+
 #### Main ####
 snippet $ "enter math mode" Ai
 \$$1\$$0

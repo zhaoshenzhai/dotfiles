@@ -2,7 +2,7 @@
 global !p
 def math():
 	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
-def notmath():
+def notMath():
 	return vim.eval('vimtex#syntax#in_mathzone()') != '1'
 endglobal
 #### Math ####
@@ -14,7 +14,7 @@ snippet bf "bold" i
 **$1**$0
 endsnippet
 
-context "notmath()"
+context "notMath()"
 snippet it "italics" i
 _$1_$0
 endsnippet
@@ -33,7 +33,7 @@ endsnippet
 ###########################################################
 
 #### Alias ####
-context "notmath()"
+context "notMath()"
 snippet AA "Custom alias" b
 ---
 alias: auto_aliasing
@@ -42,7 +42,7 @@ alias: auto_aliasing
 $0
 endsnippet
 
-context "notmath()"
+context "notMath()"
 snippet CA "Custom alias" b
 ---
 custom_alias: $1
