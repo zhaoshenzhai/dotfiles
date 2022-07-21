@@ -179,15 +179,9 @@ case $mainChoice in
                             ;;
                             "$mainChoice/nvim/UltiSnips")
                                 nvimSnippetsDir="$nvimDir/UltiSnips"
-                                declare -a nvimSnippets=(
-                                    "$mainChoice/nvim/UltiSnips/markdown.snippets"
-                                    "$mainChoice/nvim/UltiSnips/tex.snippets"
-                                    "$mainChoice/nvim/UltiSnips/sh.snippets"
-                                    "$mainChoice/nvim/UltiSnips/cs.snippets"
-                                )
-                                nvimSnippetsChoice=$(printf '%s\n' "${nvimSnippets[@]}" | DMENU "$mainChoice/nvim/UltiSnips/")
+                                nvimSnippetsChoice=$(find $nvimSnippetsDir -printf "%T@ %Tc %p\n" | grep ".snippets" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$nvimSnippetsDir/" | sed 's:/home/zhao:~:g'))
 
-                                if [[ "$nvimSnippetsChoice" ]]; then
+                                if [ "$nvimSnippetsChoice" ]; then
                                     alacritty --class sys,sys -e nvim $(echo "$nvimSnippetsChoice" | sed 's:~:/home/zhao:g')
                                 fi
                             ;;
