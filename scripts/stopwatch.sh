@@ -23,7 +23,7 @@ stopwatch() {
         echo -ne "${GREEN}Split #$splitCount: $splitTime | Total: $totalTime${NC}\r"
 
         keyPress=$(cat -v)
-        sleep 0.01
+        sleep 0.1
     done
 
     if [[ $keyPress == p ]]; then
@@ -39,7 +39,7 @@ pause() {
     echo -ne "${YELLOW}Split #$splitCount: $splitTime | Total: $totalTime${NC}\r"
     while [[ $keyPress != p ]] && [[ $keyPress != q ]]; do
         keyPress=$(cat -v)
-        sleep 0.01
+        sleep 0.1
     done
     pauseEnd=$(date +%s)
 
@@ -91,10 +91,16 @@ while [[ $repeat == Y ]]; do
         splitTimes="$splitTimes $splitTime"
     done
 
+    cd ~/Downloads
+    fileName="Stopwatch_$(date +"%Y-%m-%d_%H%M%S")"
+    touch $fileName
+    echo "Total time: $totalTime" >> $fileName
     if [[ $splitCount -gt 1 ]]; then
         count=1
-        printf "\n"
+        echo "" >> $fileName
+        echo ""
         while [[ "$splitTimes" != "" ]]; do
+            echo "    Split #$count: $(echo "$splitTimes" | sed 's/\ .*//g')" >> $fileName
             echo -e "${PURPLE}Split #$count: $(echo "$splitTimes" | sed 's/\ .*//g')${NC}"
             if [[ $(grep " " <<< "$splitTimes") ]]; then
                 splitTimes=$(echo "$splitTimes" | sed 's/^..:..:..\ //g')
