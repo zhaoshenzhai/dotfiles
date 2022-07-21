@@ -13,7 +13,7 @@ if [[ -z $1 ]]; then
     echo -e "${CYAN}    (1): MathWiki${NC}"
     echo -e "${CYAN}    (2): dotfiles${NC}"
     echo -e "${CYAN}    (3): obsidian-mathlinks${NC}"
-    printf "\n"
+    echo ""
 
     read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1-3]${NC} ")" repo
     if [ "$repo" == "q" ]; then
@@ -48,67 +48,89 @@ else
     esac
 fi
 
-printf "\n"
+echo ""
 status=$(git -c color.status=always status | tee /dev/tty)
 if [[ $(echo -e "$status" | grep "no changes added to commit") ]] || [[ $(echo -e "$status" | grep "nothing added to commit") ]]; then
-    printf "\n"
+    echo ""
 fi
 
 if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
     if [[ "$repo" == "1" ]]; then
         read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/a/n]${NC} ")" choice
         if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
-            printf "\n"
+            echo ""
             diff=$(git -c color.diff=always diff -- . ':(exclude).obsidian/*' | tee /dev/tty)
         elif [ "$choice" == "a" ] || [ "$choice" == "A" ]; then
-            printf "\n"
+            echo ""
             diff=$(git -c color.diff=always diff | tee /dev/tty)
         elif [ "$choice" == "q" ]; then
-            exit
+            if [[ -z $prompt ]]; then
+                echo ""
+                read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
+                if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
+                    clear
+                    ~/.config/scripts/gitCommit.sh
+                    exit
+                else
+                    exit
+                fi
+            else
+                exit
+            fi
         fi
     else
         read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/n]${NC} ")" choice
         if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
-            printf "\n"
+            echo ""
             diff=$(git -c color.diff=always diff | tee /dev/tty)
         elif [ "$choice" == "q" ]; then
-            exit
+            if [[ -z $prompt ]]; then
+                echo ""
+                read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
+                if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
+                    clear
+                    ~/.config/scripts/gitCommit.sh
+                    exit
+                else
+                    exit
+                fi
+            fi
         fi
     fi
 
     if [[ $(echo "$diff" | tail -n1 | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g" | grep -E '\S') ]]; then
-        printf "\n"
+        echo ""
     fi
     read -n 1 -ep "$(echo -e ${PURPLE}"Commit? [Y/n]${NC} ")" choice
     if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
         git add .
-        printf "\n"
+        echo ""
         status=$(git -c color.status=always status | tee /dev/tty)
         if [[ $(echo -e "$status" | grep "no changes added to commit") ]] || [[ $(echo -e "$status" | grep "nothing added to commit") ]]; then
-            printf "\n"
+            echo ""
         fi
         read -ep "$(echo -e ${PURPLE}"Remove files? [N/(string)]${NC} ")" choice
         while [[ ! -z $choice ]]; do
             git restore --staged "$choice"
 
-            printf "\n"
+            echo ""
             status=$(git -c color.status=always status | tee /dev/tty)
             if [[ $(echo -e "$status" | grep "no changes added to commit") ]] || [[ $(echo -e "$status" | grep "nothing added to commit") ]]; then
-                printf "\n"
+                echo ""
             fi
 
             read -ep "$(echo -e ${PURPLE}"Remove files? [N/(string)]${NC} ")" choice
         done
 
-        printf "\n"
+        echo ""
         read -ep "$(echo -e ${PURPLE}"Message:${NC} ")" msg
         while [ -z "$msg" ]; do
             read -ep "$(echo -e ${PURPLE}"Message:${NC} ")" msg
         done
-        printf "\n"
+        echo ""
 
         git commit -m "$msg"
-        printf "\n"
+        echo ""
 
         res=$(git push 2>&1)
         fatal=$(echo $res | grep -o fatal)
@@ -124,22 +146,24 @@ if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
     fi
 
     if [[ -z $prompt ]]; then
-        printf "\n"
+        echo ""
         read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
         if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
             clear
             ~/.config/scripts/gitCommit.sh
+            exit
         else
             exit
         fi
     fi
 else
     if [[ -z $prompt ]]; then
-        printf "\n"
+        echo ""
         read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
         if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
             clear
             ~/.config/scripts/gitCommit.sh
+            exit
         else
             exit
         fi
