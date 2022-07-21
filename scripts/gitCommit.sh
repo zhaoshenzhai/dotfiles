@@ -8,47 +8,45 @@ BLUE='\033[0;34m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-while [ ! -z "$1" ]; do
+if [[ -z $1 ]]; then
+    echo -e "${CYAN}Repositories:${NC}"
+    echo -e "${CYAN}    (1): MathWiki${NC}"
+    echo -e "${CYAN}    (2): dotfiles${NC}"
+    echo -e "${CYAN}    (3): obsidian-mathlinks${NC}"
+    printf "\n"
+
+    read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1-3]${NC} ")" repo
+    if [ "$repo" == "q" ]; then
+        exit
+    fi
+
+    re='^[0-9]+$'
+    while ( ! [[ $repo =~ $re ]] ) || ( [ "$repo" -lt "1" ] || [ "$repo" -gt "3" ] ); do
+        read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1-3]${NC} ")" repo
+        if [[ "$repo" == "q" ]]; then
+            exit
+        fi
+    done
+
+    case $repo in
+        "1")
+            cd $HOME/Dropbox/MathWiki/
+        ;;
+        "2")
+            cd $HOME/.config/
+        ;;
+        "3")
+            cd $HOME/Downloads/obsidian-mathlinks
+        ;;
+    esac   
+else
     prompt=$1
     case "$1" in
-        --prompt|-p)
-            echo -e "${CYAN}Repositories:${NC}"
-            echo -e "${CYAN}    (1): MathWiki${NC}"
-            echo -e "${CYAN}    (2): dotfiles${NC}"
-            echo -e "${CYAN}    (3): obsidian-mathlinks${NC}"
-            printf "\n"
-
-            read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1-3]${NC} ")" repo
-            if [ "$repo" == "q" ]; then
-                exit
-            fi
-
-            re='^[0-9]+$'
-            while ( ! [[ $repo =~ $re ]] ) || ( [ "$repo" -lt "1" ] || [ "$repo" -gt "3" ] ); do
-                read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1-3]${NC} ")" repo
-                if [[ "$repo" == "q" ]]; then
-                    exit
-                fi
-            done
-
-            case $repo in
-                "1")
-                    cd $HOME/Dropbox/MathWiki/
-                ;;
-                "2")
-                    cd $HOME/.config/
-                ;;
-                "3")
-                    cd $HOME/Downloads/obsidian-mathlinks
-                ;;
-            esac
-        ;;
         --MathWiki|-m)
             repo="1"
             cd "$HOME/Dropbox/MathWiki/"
     esac
-shift
-done
+fi
 
 printf "\n"
 status=$(git -c color.status=always status | tee /dev/tty)
@@ -125,23 +123,23 @@ if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
         echo "$res"
     fi
 
-    if [[ "$prompt" == "-p" ]]; then
+    if [[ -z $prompt ]]; then
         printf "\n"
         read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
         if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
             clear
-            ~/.config/scripts/gitCommit.sh -p
+            ~/.config/scripts/gitCommit.sh
         else
             exit
         fi
     fi
 else
-    if [[ "$prompt" == "-p" ]]; then
+    if [[ -z $prompt ]]; then
         printf "\n"
         read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
         if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
             clear
-            ~/.config/scripts/gitCommit.sh -p
+            ~/.config/scripts/gitCommit.sh
         else
             exit
         fi
