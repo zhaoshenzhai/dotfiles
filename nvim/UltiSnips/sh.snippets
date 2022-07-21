@@ -41,8 +41,12 @@ endsnippet
 
 ###########################################################
 
-#### Others ####
+#### Echo ####
 snippet ECHO "echo with color" i
 echo -e "${${1:YELLOW}}$2${NC}"$0
 endsnippet
-#### Others ####
+
+snippet ECHOCLEAR "clear current line" i
+echo -ne "\033[0K\r"$0
+endsnippet
+#### Echo ####
