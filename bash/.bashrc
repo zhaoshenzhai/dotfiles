@@ -14,6 +14,7 @@ export XMONAD_CONFIG_DIR="/home/zhao/.config/xmonad"
 export XMONAD_DATA_DIR="/home/zhao/.config/xmonad"
 
 # Paths
+export PATH="/home/zhao/.local/bin:$PATH"
 export PATH="/home/zhao/.config/scripts:$PATH"
 export PATH="/home/zhao/Dropbox/MathWiki/.scripts:$PATH"
 

@@ -34,7 +34,7 @@
 
 # Other package managers:
     - Pip:
-        pynvim
+        pynvim numpy matplotlib
     - npm:
         typescript
 
