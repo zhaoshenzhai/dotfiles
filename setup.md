@@ -35,6 +35,8 @@
 # Other package managers:
     - Pip:
         pynvim
+    - npm:
+        typescript
 
 # Clone dotfiles:
     - git clone https://github.com/zhaoshenzhai/dotfiles.git
