@@ -10,14 +10,22 @@ NC='\033[0m'
 
 repeat="Y"
 while [[ "$repeat" == "Y" ]]; do
-    cd $(echo $PWD | sed 's/src//g')
+    if [[ $PWD == "/home/zhao/Downloads/obsidian-mathlinks" ]]; then
+        npm run dev
+        cp main.js /home/zhao/Dropbox/MathWiki/.obsidian/plugins/obsidian-mathlinks/main.js
+        cp manifest.json /home/zhao/Dropbox/MathWiki/.obsidian/plugins/obsidian-mathlinks/manifest.json
+    else
+        tsc -noEmit -skipLibCheck && node esbuild.config.mjs production
 
-    tsc -noEmit -skipLibCheck && node esbuild.config.mjs production
-    echo ""
-    echo -e "${CYAN}----  Starts here  ----${NC}"
-    node $(echo $PWD/$1 | sed 's/\.ts/\.js/g')
+        out=$(echo $PWD/$1 | sed 's/\.ts/\.js/g')
+        if [[ -f $out ]]; then
+            echo ""
+            echo -e "${CYAN}----  Starts here  ----${NC}"
+            node $out
+            echo ""
+        fi
+    fi
 
-    echo ""
     echo -e "${GREEN}DONE${NC}"
     echo ""
 

@@ -36,7 +36,7 @@
     - Pip:
         pynvim numpy matplotlib
     - npm:
-        typescript
+        typescript shelljs @types/shelljs
 
 # Clone dotfiles:
     - git clone https://github.com/zhaoshenzhai/dotfiles.git

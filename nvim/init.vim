@@ -36,6 +36,7 @@ call plug#begin('~/.config/nvim/plugged')
 
     " Development
     Plug 'lervag/vimtex'                                                " latex support
+    Plug 'Quramy/tsuquyomi'                                             " typescript
 
     " Theme
     Plug 'joshdick/onedark.vim'                                         " onedark color scheme
