@@ -36,7 +36,7 @@ if [[ -z $1 ]]; then
             cd $HOME/.config/
         ;;
         "3")
-            cd $HOME/Downloads/obsidian-mathlinks
+            cd $HOME/Dropbox/obsidian-mathlinks
         ;;
     esac   
 else
