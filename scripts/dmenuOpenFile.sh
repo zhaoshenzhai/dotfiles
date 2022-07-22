@@ -16,6 +16,7 @@ DMENU()
 declare -a options=(
     "~/Dropbox/MathWiki"
     "~/Dropbox/Textbooks"
+    "~/Dropbox/obsidian-mathlinks"
     "~/Dropbox/Highschool/Course_Notes"
     "~/Dropbox/Others/Reminders"
     "~/.config"
@@ -35,6 +36,8 @@ case $mainChoice in
             "$mainChoice/preamble.sty"
             "$mainChoice/imageConfig.tex"
             "$mainChoice/imageTemplate.tex"
+            "$mainChoice/.gitignore"
+            "$mainChoice/.gitattributes"
         )
 
         choice=$(printf '%s\n' "${choices[@]}" | DMENU $mainChoice/)
@@ -85,6 +88,25 @@ case $mainChoice in
 
         if [ "$choice" ]; then
             zathura "$mainChoice/$choice"
+        fi
+    ;;
+    "~/Dropbox/obsidian-mathlinks")
+        dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
+        declare -a choices=(
+            "$mainChoice/main.ts"
+            "$mainChoice/README.md"
+            "$mainChoice/package.json"
+            "$mainChoice/manifest.json"
+            "$mainChoice/tsconfig.json"
+            "$mainChoice/versions.json"
+            "$mainChoice/esbuild.config.mjs"
+            "$mainChoice/.gitignore"
+        )
+
+        choice=$(printf '%s\n' "${choices[@]}" | DMENU $mainChoice/)
+
+        if [[ "$choice" ]]; then
+            alacritty --class sys,sys -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
         fi
     ;;
     "~/Dropbox/Highschool/Course_Notes")
