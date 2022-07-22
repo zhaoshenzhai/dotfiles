@@ -28,22 +28,21 @@ set spelllang=en                                                        " spell 
 
 call plug#begin('~/.config/nvim/plugged')
     " Core
+    Plug 'SirVer/ultisnips'                                             " snippets
+    Plug 'ncm2/ncm2'                                                    " code completion
+    Plug 'roxma/nvim-yarp'                                              " framework required for ncm2
+    Plug 'ncm2/ncm2-bufword'                                            " complete words in buffer
+    Plug 'ncm2/ncm2-path'                                               " complete paths
+
+    " Development
     Plug 'lervag/vimtex'                                                " latex support
-    Plug 'SirVer/ultisnips'                                             " snippets to code much faster
-    Plug 'kassio/neoterm'                                               " interactive shell
 
     " Theme
     Plug 'joshdick/onedark.vim'                                         " onedark color scheme
     Plug 'itchyny/lightline.vim'                                        " lightline
     Plug 'inkarkat/vim-SyntaxRange'                                     " tex syntax in md
     Plug 'preservim/vim-markdown'                                       " syntax highlighting markdown
-    Plug 'pangloss/vim-javascript'                                      " syntax highlighting javascript
-
-    " Completion
-    Plug 'ncm2/ncm2'                                                    " code completion
-    Plug 'roxma/nvim-yarp'                                              " framework required for ncm2
-    Plug 'ncm2/ncm2-bufword'                                            " complete words in buffer
-    Plug 'ncm2/ncm2-path'                                               " complete paths
+    Plug 'leafgarland/typescript-vim'                                   " syntax highlighting typescript
 call plug#end()
 
 let mapleader = "`"

@@ -10,8 +10,12 @@ NC='\033[0m'
 
 repeat="Y"
 while [[ "$repeat" == "Y" ]]; do
-    tsc
-    node $(echo $PWD/$1 | sed 's/src/dist/g' | sed 's/\.ts/\.js/g')
+    cd $(echo $PWD | sed 's/src//g')
+
+    tsc -noEmit -skipLibCheck && node esbuild.config.mjs production
+    echo ""
+    echo -e "${CYAN}----  Starts here  ----${NC}"
+    node $(echo $PWD/$1 | sed 's/\.ts/\.js/g')
 
     echo ""
     echo -e "${GREEN}DONE${NC}"
