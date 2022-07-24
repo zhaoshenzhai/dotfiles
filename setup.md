@@ -28,9 +28,9 @@
     - Xmonad:
         xorg xorg-xinit xmonad xmobar-contrib xmobar neovim dmenu alacritty vifm pipewire pipewire-pulse pipewire-jack pamixer playerctl bluez bluez-utils nitrogen ttf-courier-prime ttf-font-awesome ttf-anonymous-pro ttf-cmu-serif nerd-fonts-mononoki neofetch
     - Tools:
-        htop tree unzip bc xclip scrot python python-pip npm ghostscript pdf2svg colorpicker texlive-core texlive-latexextra texlive-science texlive-pictures gpicview
+        htop tree unzip bc xclip scrot python python-pip npm ghostscript pdf2svg colorpicker texlive-core texlive-latexextra texlive-science texlive-pictures gpicview fuse
     - Programs:
-        zathura zathura-pdf-mupdf obsidian dropbox spotify qutebrowser qutebrowser-profile-git yt-dlp mpv
+        zathura zathura-pdf-mupdf obsidian (or obsidian-appimage) dropbox spotify qutebrowser qutebrowser-profile-git yt-dlp mpv
 
 # Other package managers:
     - Pip:
