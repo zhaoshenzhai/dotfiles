@@ -10,10 +10,10 @@ NC='\033[0m'
 
 repeat="Y"
 while [[ "$repeat" == "Y" ]]; do
-    if [[ $PWD == "/home/zhao/Dropbox/obsidian-mathlinks" ]]; then
+    if [[ $PWD == "/home/zhao/Dropbox/obsidian-mathlinks/src" ]]; then
         npm run dev
-        cp main.js /home/zhao/Downloads/TestVault/.obsidian/plugins/obsidian-mathlinks/main.js
-        cp manifest.json /home/zhao/Downloads/TestVault/.obsidian/plugins/obsidian-mathlinks/manifest.json
+        cp ../main.js /home/zhao/Downloads/TestVault/.obsidian/plugins/obsidian-mathlinks/main.js
+        cp ../manifest.json /home/zhao/Downloads/TestVault/.obsidian/plugins/obsidian-mathlinks/manifest.json
     else
         tsc -noEmit -skipLibCheck && node esbuild.config.mjs production
 

@@ -93,7 +93,8 @@ case $mainChoice in
     "~/Dropbox/obsidian-mathlinks")
         dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
         declare -a choices=(
-            "$mainChoice/main.ts"
+            "$mainChoice/src/main.ts"
+            "$mainChoice/src/settings.ts"
             "$mainChoice/README.md"
             "$mainChoice/package.json"
             "$mainChoice/manifest.json"
@@ -106,7 +107,7 @@ case $mainChoice in
         choice=$(printf '%s\n' "${choices[@]}" | DMENU $mainChoice/)
 
         if [[ "$choice" ]]; then
-            alacritty --class sys,sys -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
+            alacritty -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
         fi
     ;;
     "~/Dropbox/Highschool/Course_Notes")
