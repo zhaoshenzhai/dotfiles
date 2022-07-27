@@ -117,7 +117,7 @@ case $mainChoice in
             "$mainChoice/Introduction_to_Linear_Algebra/Introduction_to_Linear_Algebra.pdf"
             "$mainChoice/Introduction_to_Algebra/Introduction_to_Algebra.pdf"
             "$mainChoice/Introduction_to_Topology/Introduction_to_Topology.pdf"
-            "$mainChoice/Introduction_to_Set_Theory/Introduction_to_Set_Theory"
+            "$mainChoice/Introduction_to_Set_Theory/Introduction_to_Set_Theory.pdf"
             "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_1/Chapter_1.pdf"
             "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_2/Chapter_2.pdf"
             "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_3/Chapter_3.pdf"
