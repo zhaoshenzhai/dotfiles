@@ -1,5 +1,140 @@
-# Base packages:
-    - linux linux-firmware base base-devel grub efibootmgr vim networkmanager xterm git
+# Archlinux Setup
+    - https://wiki.archlinux.org/title/Installation_guide
+    - https://www.youtube.com/watch?v=68z11VAYMS8
+    - https://www.youtube.com/watch?v=pouX5VvX0_Q
+
+    ## Get bootable usb
+        - Download .iso file
+        - Download rufus
+        - Write with gpt(?) format
+        - Disable secure boot
+        - Unplug usb, shutdown, plug usb, power up, and pray
+
+    ## Internet
+        - `iwctl`
+            - `device list`
+            - ` station wlan0 scan`
+            - ` station wlan0 get-networks`
+            - ` station wlan0 connect "Z-5GHz"`
+            - `exit`
+            - `ip addr`
+            - `ping archlinux.org`
+
+    ## Partition disk
+        - `lsblk`
+        - Here, `DISK` stands for the main disk
+        - `cfdisk /dev/DISK`
+            - Delete everything and make three partitions:
+                - 100M for boot
+                - 4G for virtual memory
+                - Rest for /
+            - Write, then type yes
+        - `mkfs.ext4 /dev/DISKp3`
+        - `mkfs.fat -F 32 /dev/DISKp1`
+        - `mkswap /dev/DISKp2`
+        - `mount /dev/DISKp3 /mnt`
+        - `mkdir -p /mnt/boot/efi`
+        - `mount /dev/DISKp1 /mnt/boot/efi`
+        - `swapon /dev/DISKp2`
+
+    ## Base packages
+        - `pacstrap /mnt linux linux-firmware base base-devel grub efibootmgr vim networkmanager xterm git`
+            - If pgp error, run `pacman -Sy archlinux-keyring` and retry
+
+    ## Configure
+        - `genfstab /mnt > /mnt/etc/fstab`
+        - `ln -sf /usr/share/zoneinfo/TIMEZONE /etc/localtime`
+        - `date`
+        - `hwclock --systohc`
+        - `vim /etc/locale.gen`
+            - Uncomment en_US.UTF-8
+        - `locale-gen`
+        - `vim /etc/locale.conf`
+            - LANG=en_US.UTF-8
+        - `passwd`
+        - `useradd -m -G wheel -s /bin/bash zhao`
+        - `passwd zhao`
+        - `EDITOR=vim visudo`
+            - G and uncomment
+        - `systemctl enable NetworkManager`
+        - `grub-install /dev/DISK`
+        - `grub-mkconfig -o /boot/grub/grub.cfg`
+        - `exit`
+        - `umount -a`
+        - Reboot, unplug usb, and pray
+
+    ## Packages
+        - `git clone https://aur.archlinux.org/yay-git`
+        - `makepkg -si`
+        - `sudo vim /etc/pacman.conf`
+            - Uncomment Color
+        - Pacman:
+            - xorg xorg-xinit xmonad xmonad-contrib xmobar neovim dmenu alacritty vifm pipewire pipewire-pulse pipewire-jack pamixer playerctl bluez bluez-utils nitrogen ttf-courier-prime ttf-font-awesome ttf-anonymous-pro ttf-cmu-serif nerd-fonts-mononoki neofetch htop tree unzip bc xclip scrot python python-pip npm ghostscript pdf2svg texlive-core texlive-latexextra texlive-science texlive-pictures gpicview zathura zathura-pdf-mupdf obsidian qutebrowser yt-dlp mpv
+        - pip
+            - pynvim numpy matplotlib
+        - npm
+            - typescript
+
+    ## Natural scrolling
+        - `sudo vim /usr/share/X11/xorg.conf.d/40-libinput.conf`
+        - Under "touchpad": Option "NaturalScrolling" "true"
+
+    ## Dotfiles
+        - `git clone https://github.com/zhaoshenzhai/dotfiles.git`
+        - `mv ~/.config/bash/.bashrc ~/.bashrc`
+        - `mv ~/.config/bash/.bash_profile ~/.bash_profile`
+        - `bash`
+        - `cd ~/.config/dmenu_patched`
+        - `sudo make install`
+
+    ## Xorg
+        - `cp /etc/X11/xinit/xinitrc ~/.xinitrc`
+        - `nvim ~/.xinitrc`
+            - Cleanup
+            - Change last block to `exec xmonad`
+        - Reboot
+
+    ## Nvim
+        - `sh -c 'curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'`
+
+    ## Nitrogen
+        - Add ~/.config/wallpapers
+
+    ## Dropbox and git repos
+        - `yay dropbox spotify qutebrowser-profile-git`
+        - `mkdir ~/Dropbox`
+        - `cd ~/Dropbox`
+        - `git clone https://github.com/zhaoshenzhai/MathWiki.git`
+        - `git clone https://github.com/zhaoshenzhai/obsidian-mathlinks.git`
+        - `dropbox`; don't close this until finished
+
+    ## Git
+        - `git config --global user.name "zhaoshenzhai"`
+        - `git config --global user.email "email"`
+        - Generate new PAT, copy it
+        - `nvim ~/.config/.gitpat`
+            - Paste
+
+    ## Vifm
+        - zo
+        - :sort N
+        - Add marks:
+            - h ~/
+            - m ~/Dropbox/MathWiki
+            - o ~/Dropbox/obsidian-mathlinks
+            - 1 ~/Dropbox/University/Courses/22F/MATH133/
+
+    ## Qutebrowser
+        - `qutebrowser-profile --new 'Z'`
+        - `qutebrowser-profile --new 'P'`
+            - Set theme: #1e2127 #f8f8ff
+        - To change from `qute [Z] - Title` to `Z - Title`, modify line containing `window.title_format` in `/usr/bin/qutebrowser-profile`
+        - Install chromium and setup profiles
+        - Install Open cookie.txt extension (or something like that)
+        - Enable it in youtube.com and download the files
+        - Name them `cookie_Z.txt` and `cookie_P.txt`
+        - Put them in `~/.config`
+        - Uninstall chromium
 
 # Wifi
     - Touch `/etc/wpa_supplicant/wpa_supplicant-wlp1s0.conf` with contents
@@ -18,47 +153,3 @@
         [Network]
         DHCP=ipv4`
     - Need to `sudo systemctl enable ______`. Reboot.
-
-# Boot is something with grub.efi
-
-# Yay:
-    - git clone https://aur.archlinux.org/yay-git and makepkg -si
-
-# More Packages:
-    - Xmonad:
-        xorg xorg-xinit xmonad xmobar-contrib xmobar neovim dmenu alacritty vifm pipewire pipewire-pulse pipewire-jack pamixer playerctl bluez bluez-utils nitrogen ttf-courier-prime ttf-font-awesome ttf-anonymous-pro ttf-cmu-serif nerd-fonts-mononoki neofetch
-    - Tools:
-        htop tree unzip bc xclip scrot python python-pip npm ghostscript pdf2svg colorpicker texlive-core texlive-latexextra texlive-science texlive-pictures gpicview fuse p7zip
-    - Programs:
-        zathura zathura-pdf-mupdf obsidian (or obsidian-appimage) dropbox spotify qutebrowser qutebrowser-profile-git yt-dlp mpv
-
-# Other package managers:
-    - Pip:
-        pynvim numpy matplotlib
-    - npm:
-        typescript
-
-# Clone dotfiles:
-    - git clone https://github.com/zhaoshenzhai/dotfiles.git
-
-# Nvim pluggins:
-    - sh -c 'curl -fL0 "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-
-# Natural scrolling: 
-    - Add `Option "NaturalScrolling" "true"` to `/usr/share/X11/xorg.conf.d/40-libinput.conf`
-
-# Pacman colors:
-    - Uncomment `Color` in `/etc/pacman.conf`
-
-# Qutebrowser profiles:
-    - Z for primary and P for secondary
-    - Use `--new` flag instead of `--load`; should be fixed
-    - To change from `qute [Z] - Title` to `Z - Title`, modify line containing `window.title_format` in `/usr/bin/qutebrowser-profile`
-
-# Qutebrowser mpv youtube --mark-watched
-    - Install chromium and setup profiles
-    - Install Open cookie.txt extension (or something like that)
-    - Enable it in youtube.com and download the files
-    - Name them `cookie_Z.txt` and `cookie_P.txt`
-    - Put them in `~/.config`
-    - Uninstall chromium
