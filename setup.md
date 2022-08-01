@@ -68,8 +68,19 @@
         - `makepkg -si`
         - `sudo vim /etc/pacman.conf`
             - Uncomment Color
-        - Pacman:
-            - xorg xorg-xinit xmonad xmonad-contrib xmobar neovim dmenu alacritty vifm pipewire pipewire-pulse pipewire-jack pamixer playerctl bluez bluez-utils nitrogen ttf-courier-prime ttf-font-awesome ttf-anonymous-pro ttf-cmu-serif nerd-fonts-mononoki neofetch htop tree unzip bc xclip scrot python python-pip npm ghostscript pdf2svg texlive-core texlive-latexextra texlive-science texlive-pictures gpicview zathura zathura-pdf-mupdf obsidian qutebrowser yt-dlp mpv
+        - Pacman
+            - Base
+                - xorg xorg-xinit xmonad xmonad-contrib xmobar xclip
+            - Programs
+                - neovim dmenu alacritty vifm nitrogen neofetch zathura zathura-pdf-mupdf obsidian qutebrowser yt-dlp mpv
+            - Audio
+                - pipewire pipewire-pulse pipewire-jack pamixer playerctl bluez bluez-utils alsa-utils sof-firmware alsa-ucm-conf pavucontrol
+            - Fonts
+                - ttf-courier-prime ttf-font-awesome ttf-anonymous-pro ttf-cmu-serif nerd-fonts-mononoki
+            - Tools
+                - htop tree unzip bc scrot python python-pip npm ghostscript pdf2svg
+            - TeX
+                - texlive-core texlive-latexextra texlive-science texlive-pictures
         - pip
             - pynvim numpy matplotlib
         - npm

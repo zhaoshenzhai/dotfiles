@@ -127,6 +127,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm .|. shiftMask, xK_c ), spawn "./.config/scripts/audioControl.sh -c2" ),
         ((modm, xK_d               ), spawn "./.config/scripts/audioControl.sh -d1" ),
         ((modm .|. shiftMask, xK_d ), spawn "./.config/scripts/audioControl.sh -d2" ),
+        ((modm, xK_p               ), spawn "pavucontrol                          " ),
 
         -- Xmonad
         ((modm .|. shiftMask, xK_q     ), spawn "xmonad --recompile; killall xmobar; xmonad --restart"),
