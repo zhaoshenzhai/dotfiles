@@ -128,13 +128,10 @@
         - `qutebrowser-profile --new 'Z'`
         - `qutebrowser-profile --new 'P'`
             - Set theme: #1e2127 #f8f8ff
-        - To change from `qute [Z] - Title` to `Z - Title`, modify line containing `window.title_format` in `/usr/bin/qutebrowser-profile`
-        - Install chromium and setup profiles
-        - Install Open cookie.txt extension (or something like that)
-        - Enable it in youtube.com and download the files
-        - Name them `cookie_Z.txt` and `cookie_P.txt`
-        - Put them in `~/.config`
-        - Uninstall chromium
+        - `sudo nvim /usr/bin/qutebrowser-profile`
+            - Search for window.title_format
+            - Change to {perc}qute [${session}$]{title_sep}...
+        - Move `cookies_Z.txt` and `cookies_P.txt` to `~/.config`
 
 # Wifi
     - Touch `/etc/wpa_supplicant/wpa_supplicant-wlp1s0.conf` with contents
