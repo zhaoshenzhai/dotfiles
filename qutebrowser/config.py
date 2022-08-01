@@ -35,7 +35,7 @@ config.set("tabs.max_width", 350)
 config.set("tabs.padding", {"bottom": 5, "left": 5, "right": 5, "top": 0})
 
 # Open mpv
-config.bind('<Meta+m>', 'hint links spawn -d mpv --ytdl-raw-options=\'sub-lang="en",write-auto-sub=,cookies=~/.config/cookies_Z.txt,mark-watched=\' {hint-url} &')
+config.bind('<Meta+m>', 'hint links spawn -d mpv --ytdl-raw-options=\'sub-lang="en,eng,enUS,en-US",write-auto-sub=,write-sub=,cookies=~/.config/cookies_Z.txt,mark-watched=\' {hint-url} &')
 
 # Search engines
 c.url.searchengines = {
