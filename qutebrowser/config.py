@@ -71,7 +71,7 @@ for i in range (1, 9):
     config.bind('<Meta+F' + str(i) + '>', 'tab-move ' + str(i))
 
 # Restart
-config.bind('<Meta+q>', 'restart')
+config.bind('<Meta+r>', 'restart')
 
 # Auto load images
 config.set('content.images', True, 'chrome-devtools://*')
