@@ -119,10 +119,12 @@
         - zo
         - :sort N
         - Add marks:
-            - h ~/
-            - m ~/Dropbox/MathWiki
-            - o ~/Dropbox/obsidian-mathlinks
-            - 1 ~/Dropbox/University/Courses/22F/MATH133/
+            - c ~/.config [xmonad]
+            - d ~/Dropbox [MathWiki]
+            - h ~/ [none]
+            - m ~/Dropbox/MathWiki [Notes]
+            - o ~/Dropbox/obsidian-mathlinks [src]
+            - u ~/Dropbox/University/Courses/22F [MATH133]
 
     ## Qutebrowser
         - `qutebrowser-profile --new 'Z'`
