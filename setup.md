@@ -139,6 +139,10 @@
         - `yay spotify`
         - `sudo systemctl enable bluetooth`
         - `sudo systemctl start --now bluetooth`
+        - If no speaker:
+            - `sudo nvim /etc/modprobe.d/audio-fix.conf`
+                - blacklist snd-sof-pci
+                - options snd-intel-dspcfg dsp_driver=1
 
     ## Qutebrowser
         - `yay qutebrowser-profile-git`
