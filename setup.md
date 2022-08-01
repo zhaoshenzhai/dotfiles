@@ -75,10 +75,6 @@
         - npm
             - typescript
 
-    ## Natural scrolling
-        - `sudo vim /usr/share/X11/xorg.conf.d/40-libinput.conf`
-        - Under "touchpad": Option "NaturalScrolling" "true"
-
     ## Dotfiles
         - `git clone https://github.com/zhaoshenzhai/dotfiles.git`
         - `mv ~/.config/bash/.bashrc ~/.bashrc`
@@ -87,6 +83,11 @@
         - `cd ~/.config/dmenu_patched`
         - `sudo make install`
 
+    ## Nvim
+        - `sh -c 'curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'`
+        - `nvim`
+            - :PlugInstall
+
     ## Xorg
         - `cp /etc/X11/xinit/xinitrc ~/.xinitrc`
         - `nvim ~/.xinitrc`
@@ -94,14 +95,22 @@
             - Change last block to `exec xmonad`
         - Reboot
 
-    ## Nvim
-        - `sh -c 'curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'`
+    ## Natural scrolling
+        - `sudo vim /usr/share/X11/xorg.conf.d/40-libinput.conf`
+        - Under "touchpad": Option "NaturalScrolling" "true"
+
+    ## Brightness
+        - `git clone https://github.com/Ventto/lux.git`
+        - `cd lux`
+        - `sudo make install`
+        - `sudo lux`
+        - Relogin
 
     ## Nitrogen
         - Add ~/.config/wallpapers
 
     ## Dropbox and git repos
-        - `yay dropbox spotify qutebrowser-profile-git`
+        - `yay dropbox spotify`
         - `mkdir ~/Dropbox`
         - `cd ~/Dropbox`
         - `git clone https://github.com/zhaoshenzhai/MathWiki.git`
@@ -126,7 +135,11 @@
             - o ~/Dropbox/obsidian-mathlinks [src]
             - u ~/Dropbox/University/Courses/22F [MATH133]
 
+    ## Spotify
+        - `yay spotify`
+
     ## Qutebrowser
+        - `yay qutebrowser-profile-git`
         - `qutebrowser-profile --new 'Z'`
         - `qutebrowser-profile --new 'P'`
             - Set theme: #1e2127 #f8f8ff
