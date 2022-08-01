@@ -110,6 +110,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_k     ), sendMessage Expand      ),
         ((modm, xK_Escape), kill                    ),
 
+        -- Brightness
+        ((modm, xK_F7), spawn "lux -s 10%"),
+        ((modm, xK_F8), spawn "lux -a 10%"),
+
         -- Audio control
         ((modm, xK_F1              ), spawn "./.config/scripts/audioControl.sh -t  "),
         ((modm, xK_F2              ), spawn "./.config/scripts/audioControl.sh -d 5"),
