@@ -135,8 +135,10 @@
             - o ~/Dropbox/obsidian-mathlinks [src]
             - u ~/Dropbox/University/Courses/22F [MATH133]
 
-    ## Spotify
+    ## Audio
         - `yay spotify`
+        - `sudo systemctl enable bluetooth`
+        - `sudo systemctl start --now bluetooth`
 
     ## Qutebrowser
         - `yay qutebrowser-profile-git`
