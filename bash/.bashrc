@@ -6,7 +6,7 @@ alias la='LC_ALL=C ls -lhAr --group-directories-first'
 
 # Declutter
 export LESSHISTFILE=-
-export HISTFILE="$XDG_STATE_HOME/bash/history"
+export HISTFILE="$HOME/.local/state/bash/history"
 
 # Host and User Color
 export PS1="[\[\e[0;35m\]\u\[\e[0m\]@\[\e[0;36m\]\h\[\e[0m\] \W]\$ "
