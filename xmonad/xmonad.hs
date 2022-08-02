@@ -115,7 +115,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_F8), spawn "lux -a 10%"),
 
         -- Audio control
-        ((modm, xK_F1              ), spawn "./.config/scripts/audioControl.sh -t  "),
+        ((modm, xK_F1              ), spawn "./.config/scripts/audioControl.sh -t"  ),
         ((modm, xK_F2              ), spawn "./.config/scripts/audioControl.sh -d 5"),
         ((modm, xK_F3              ), spawn "./.config/scripts/audioControl.sh -i 5"),
         ((modm .|. shiftMask, xK_F2), spawn "./.config/scripts/audioControl.sh -d 1"),
@@ -127,7 +127,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm .|. shiftMask, xK_c ), spawn "./.config/scripts/audioControl.sh -c2" ),
         ((modm, xK_d               ), spawn "./.config/scripts/audioControl.sh -d1" ),
         ((modm .|. shiftMask, xK_d ), spawn "./.config/scripts/audioControl.sh -d2" ),
-        ((modm, xK_p               ), spawn "pavucontrol                          " ),
+
+        -- System info
+        ((modm, xK_h), spawn "alacritty -e htop"),
+        ((modm, xK_p), spawn "pavucontrol"      ),
 
         -- Xmonad
         ((modm .|. shiftMask, xK_q     ), spawn "xmonad --recompile; killall xmobar; xmonad --restart"),
