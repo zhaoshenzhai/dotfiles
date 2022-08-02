@@ -93,18 +93,12 @@
         - `bash`
         - `cd ~/.config/dmenu_patched`
         - `sudo make install`
+        - Reboot, should `startx` immediately
 
     ## Nvim
         - `sh -c 'curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'`
         - `nvim`
             - :PlugInstall
-
-    ## Xorg
-        - `cp /etc/X11/xinit/xinitrc ~/.xinitrc`
-        - `nvim ~/.xinitrc`
-            - Cleanup
-            - Change last block to `exec xmonad`
-        - Reboot
 
     ## Natural scrolling
         - `sudo vim /usr/share/X11/xorg.conf.d/40-libinput.conf`
@@ -165,20 +159,20 @@
             - Change to {perc}qute [${session}$]{title_sep}...
         - Move `cookies_Z.txt` and `cookies_P.txt` to `~/.config`
 
-# Wifi
-    - Touch `/etc/wpa_supplicant/wpa_supplicant-wlp1s0.conf` with contents
-        `ctrl_interface=/run/wpa_supplicant
-        bg_scan=""
+    ## Wifi with systemd-networkd (optional)
+        - Touch `/etc/wpa_supplicant/wpa_supplicant-wlp1s0.conf` with contents
+            `ctrl_interface=/run/wpa_supplicant
+            bg_scan=""
 
-        network={
-            ssid="Z-5GHz"
-            psk=_______________
-        }`
-    - Psk is generated via `wpa_passphrase Z 'password'`. Need to `su` first. Cat it.
-    - Touch `/etc/systemd/network/10-wireless.network` with contents
-        `[Match]
-        Name=wl*
+            network={
+                ssid="Z-5GHz"
+                psk=_______________
+            }`
+        - Psk is generated via `wpa_passphrase Z 'password'`. Need to `su` first. Cat it.
+        - Touch `/etc/systemd/network/10-wireless.network` with contents
+            `[Match]
+            Name=wl*
 
-        [Network]
-        DHCP=ipv4`
-    - Need to `sudo systemctl enable ______`. Reboot.
+            [Network]
+            DHCP=ipv4`
+        - Need to `sudo systemctl enable ______`. Reboot.
