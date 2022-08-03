@@ -38,7 +38,7 @@
         - `swapon /dev/DISKp2`
 
     ## Base packages
-        - `pacstrap /mnt linux linux-firmware base base-devel grub efibootmgr vim networkmanager xterm git`
+        - `pacstrap /mnt linux linux-firmware base base-devel grub efibootmgr networkmanager xterm neovim git`
             - If pgp error, run `pacman -Sy archlinux-keyring` and retry
 
     ## Configure
@@ -46,15 +46,15 @@
         - `ln -sf /usr/share/zoneinfo/TIMEZONE /etc/localtime`
         - `date`
         - `hwclock --systohc`
-        - `vim /etc/locale.gen`
+        - `nvim /etc/locale.gen`
             - Uncomment en_US.UTF-8
         - `locale-gen`
-        - `vim /etc/locale.conf`
+        - `nvim /etc/locale.conf`
             - LANG=en_US.UTF-8
         - `passwd`
         - `useradd -m -G wheel -s /bin/bash zhao`
         - `passwd zhao`
-        - `EDITOR=vim visudo`
+        - `EDITOR=nvim visudo`
             - G and uncomment
         - `systemctl enable NetworkManager`
         - `grub-install /dev/DISK`
@@ -66,13 +66,13 @@
     ## Packages
         - `git clone https://aur.archlinux.org/yay-git`
         - `makepkg -si`
-        - `sudo vim /etc/pacman.conf`
+        - `sudo nvim /etc/pacman.conf`
             - Uncomment Color
         - Pacman
-            - Base
+            - X
                 - xorg xorg-xinit xmonad xmonad-contrib xmobar xclip
             - Programs
-                - neovim dmenu alacritty vifm nitrogen neofetch zathura zathura-pdf-mupdf obsidian qutebrowser yt-dlp mpv
+                - dmenu alacritty vifm nitrogen neofetch zathura zathura-pdf-mupdf obsidian qutebrowser yt-dlp mpv
             - Audio
                 - pipewire pipewire-pulse pipewire-jack pamixer playerctl bluez bluez-utils alsa-utils sof-firmware alsa-ucm-conf pavucontrol
             - Fonts
@@ -93,15 +93,13 @@
         - `bash`
         - `cd ~/.config/dmenu_patched`
         - `sudo make install`
-        - Reboot, should `startx` immediately
-
-    ## Nvim
         - `sh -c 'curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'`
         - `nvim`
             - :PlugInstall
+        - Reboot, should `startx` immediately
 
     ## Natural scrolling
-        - `sudo vim /usr/share/X11/xorg.conf.d/40-libinput.conf`
+        - `sudo nvim /usr/share/X11/xorg.conf.d/40-libinput.conf`
         - Under "touchpad": Option "NaturalScrolling" "true"
 
     ## Brightness
