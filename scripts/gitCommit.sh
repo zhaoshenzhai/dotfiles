@@ -45,6 +45,8 @@ else
         --MathWiki|-m)
             repo="1"
             cd "$HOME/Dropbox/MathWiki/"
+            source .scripts/stats.sh -u
+            source .scripts/stats.sh -r
     esac
 fi
 
