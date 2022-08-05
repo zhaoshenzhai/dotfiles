@@ -72,13 +72,9 @@ if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
                 if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
                     clear
                     ~/.config/scripts/gitCommit.sh
-                    exit
-                else
-                    exit
                 fi
-            else
-                exit
             fi
+            exit
         fi
     else
         read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/n]${NC} ")" choice
@@ -92,11 +88,9 @@ if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
                 if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
                     clear
                     ~/.config/scripts/gitCommit.sh
-                    exit
-                else
-                    exit
                 fi
             fi
+            exit
         fi
     fi
 
@@ -153,10 +147,8 @@ if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
         if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
             clear
             ~/.config/scripts/gitCommit.sh
-            exit
-        else
-            exit
         fi
+        exit
     fi
 else
     if [[ -z $prompt ]]; then
@@ -165,9 +157,7 @@ else
         if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
             clear
             ~/.config/scripts/gitCommit.sh
-            exit
-        else
-            exit
         fi
+        exit
     fi
 fi
