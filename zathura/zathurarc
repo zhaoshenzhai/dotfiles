@@ -6,27 +6,26 @@ set statusbar-fg            "#13AFAF"
 set inputbar-bg             "#141A1F"
 set inputbar-fg             "#A6B5C5"
 
-set highlight-active-color "#F8F8FF"
-set highlight-color "#A8A8AA"
-set highlight-transparency 0.5
-set highlight-fg "#00FF00"
+set highlight-transparency  0.5
+set highlight-active-color  "#F8F8FF"
+set highlight-color         "#A8A8AA"
+set highlight-fg            "#00FF00"
 
 set recolor
 set recolor-keephue
-set recolor-lightcolor "#1E2127"
-set recolor-darkcolor "#F8F8FF"
+set recolor-lightcolor      "#1E2127"
+set recolor-darkcolor       "#F8F8FF"
 
-set page-padding 1
-set guioptions none
-set window-title-basename true
-set adjust-open width
+set page-padding            1
+set guioptions              none
+set window-title-basename   true
+set adjust-open             width
 
-set dbus-service true
-set synctex true
-set synctex-editor-command "gvim --servername GVIM --remote +%{line} %{input}"
+set dbus-service            true
+set synctex                 true
 
-set selection-clipboard clipboard
-set sandbox none
+set selection-clipboard     clipboard
+set sandbox                 none
 
-map = feedkeys "+"
+map = feedkeys              "+"
 map x toggle_statusbar
