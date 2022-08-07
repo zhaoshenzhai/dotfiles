@@ -81,6 +81,8 @@
                 - htop tree unzip bc scrot python python-pip npm ghostscript pdf2svg
             - TeX
                 - texlive-core texlive-latexextra texlive-science texlive-pictures
+        - Yay
+            - qutebrowser-profile-git spotify colorpicker
         - pip
             - pynvim numpy matplotlib
         - npm
@@ -113,7 +115,7 @@
         - Add ~/.config/wallpapers
 
     ## Dropbox and git repos
-        - `yay dropbox spotify`
+        - `yay dropbox`
         - `mkdir ~/Dropbox`
         - `cd ~/Dropbox`
         - `git clone https://github.com/zhaoshenzhai/MathWiki.git`
@@ -139,7 +141,6 @@
             - u ~/Dropbox/University/Courses/22F [MATH133]
 
     ## Audio
-        - `yay spotify`
         - `sudo systemctl enable bluetooth`
         - `sudo systemctl start --now bluetooth`
         - If no speaker:
@@ -148,7 +149,6 @@
                 - options snd-intel-dspcfg dsp_driver=1
 
     ## Qutebrowser
-        - `yay qutebrowser-profile-git`
         - `qutebrowser-profile --new 'Z'`
         - `qutebrowser-profile --new 'P'`
             - Set theme: #1e2127 #f8f8ff

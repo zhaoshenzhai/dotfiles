@@ -193,6 +193,7 @@ case $mainChoice in
                                 declare -a nvimPluggins=(
                                     "$mainChoice/nvim/config/pluggins/ncm2.vim"
                                     "$mainChoice/nvim/config/pluggins/vimtex.vim"
+                                    "$mainChoice/nvim/config/pluggins/markdown.vim"
                                     "$mainChoice/nvim/config/pluggins/ultisnips.vim"
                                     "$mainChoice/nvim/config/pluggins/syntaxRange.vim"
                                 )
