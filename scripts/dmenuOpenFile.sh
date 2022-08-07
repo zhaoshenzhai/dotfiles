@@ -134,7 +134,7 @@ case $mainChoice in
         choice=$(printf '%s\n' "${notes[@]}" | DMENU "$mainChoice/")
 
         if [ "$choice" ]; then
-            zathura $choice
+            alacritty -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g' | sed 's/\.pdf/\.tex/g')
         fi
     ;;
     "~/Dropbox/Others/Reminders")
