@@ -6,7 +6,7 @@ set tabstop=4                                                           " tab sp
 set softtabstop=4                                                       " multiple spaces become tab stops
 set expandtab                                                           " converts tabs to spaces
 set shiftwidth=4                                                        " width for auto indents
-set autoindent                                                          " indents a new line    
+set autoindent                                                          " indents a new line
 set wildmode=longest,list                                               " get bash-like tab completions
 set noswapfile                                                          " disable creating a swap file 
 set wrap                                                                " wraps text
