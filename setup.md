@@ -157,6 +157,10 @@
             - Change to {perc}qute [${session}$]{title_sep}...
         - Move `cookies_Z.txt` and `cookies_P.txt` to `~/.config`
 
+    ## Nvim markdown
+        - `nvim ~/.config/nvim/plugged/vim-markdown/syntax/markdown.vim`
+            - Comment out line with execute 'syn region htmlItalic...
+
     ## Wifi with systemd-networkd (optional)
         - Touch `/etc/wpa_supplicant/wpa_supplicant-wlp1s0.conf` with contents
             `ctrl_interface=/run/wpa_supplicant

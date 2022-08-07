@@ -21,7 +21,7 @@ set title                                                               " enable
 set titlestring=\ %-25.55t\ %a%r%m                                      " remove full path; name only
 set relativenumber                                                      " relative line numbers
 set nofoldenable                                                        " no folding
-set conceallevel=0                                                      " conceal
+set conceallevel=0                                                      " no conceal
 set autochdir                                                           " change to current directory
 set spell                                                               " spelling
 set spelllang=en                                                        " spell language
@@ -41,7 +41,6 @@ call plug#begin('~/.config/nvim/plugged')
     " Theme
     Plug 'joshdick/onedark.vim'                                         " onedark color scheme
     Plug 'itchyny/lightline.vim'                                        " lightline
-    Plug 'inkarkat/vim-SyntaxRange'                                     " tex syntax in md
     Plug 'preservim/vim-markdown'                                       " syntax highlighting markdown
     Plug 'leafgarland/typescript-vim'                                   " syntax highlighting typescript
 call plug#end()
@@ -55,7 +54,7 @@ source ~/.config/nvim/config/textObjects.vim
 source ~/.config/nvim/config/compileAndRun.vim
 source ~/.config/nvim/config/MathWiki.vim
 
-source ~/.config/nvim/config/pluggins/syntaxRange.vim
+source ~/.config/nvim/config/pluggins/markdown.vim
 source ~/.config/nvim/config/pluggins/ultisnips.vim
 source ~/.config/nvim/config/pluggins/vimtex.vim
 source ~/.config/nvim/config/pluggins/ncm2.vim
