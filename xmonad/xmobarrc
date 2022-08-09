@@ -17,7 +17,7 @@ Config
 
     commands = 
         [
-            Run Cpu [
+            Run MultiCpu [
                 "--template"      , "<fn=1>\62171</fn> <total>%"
             ] 10,
             Run Memory [
@@ -26,8 +26,8 @@ Config
             Run Battery [
                 "--template"      , "<acstatus>",
                 "--"              ,
-                "-o"              , "<fn=2>\xf582</fn> <left>% (<timeleft> Left)",
-                "-O"              , "<fn=2>\xf583</fn> <left>% (<timeleft> Left)",
+                "-o"              , "<fn=2>\xf582</fn> <left>%",
+                "-O"              , "<fn=2>\xf583</fn> <left>%",
                 "-i"              , "<fn=2>\xf578</fn> Full"
             ] 50,
             Run Com "./.config/scripts/audioXmobar.sh" [] "volume" 5,
@@ -39,5 +39,5 @@ Config
 
     sepChar = "%",
     alignSep = "}{",
-    template = " %StdinReader% }%date% | %time%{ %volume%  |  %cpu%  |  %memory%  |  %disk%  |  %battery%  "
+    template = " %StdinReader% }%date% | %time%{ %volume%  |  %multicpu%  |  %memory%  |  %disk%  |  %battery%  "
 }
