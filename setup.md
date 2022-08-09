@@ -45,6 +45,7 @@
         - `genfstab /mnt > /mnt/etc/fstab`
         - `ln -sf /usr/share/zoneinfo/TIMEZONE /etc/localtime`
         - `date`
+        - `systemctl enable systemd-timesyncd.service`
         - `hwclock --systohc`
         - `nvim /etc/locale.gen`
             - Uncomment en_US.UTF-8
