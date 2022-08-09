@@ -9,7 +9,7 @@ mp.register_script_message("cycle-cmd", function() {
     var key = JSON.stringify(arguments);
     if (!(registry[key] >= 0))
         registry[key] = -1;
-    
+
     registry[key] = (registry[key] + 1) % arguments.length;
     mp.command(arguments[registry[key]]);
 });

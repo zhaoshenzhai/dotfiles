@@ -161,6 +161,17 @@
         - `nvim ~/.config/nvim/plugged/vim-markdown/syntax/markdown.vim`
             - Comment out line with execute 'syn region htmlItalic...
 
+    ## Mpv
+        - `cd Downloads`
+        - `git clone https://github.com/4e6/mpv-reload`
+        - `git clone https://github.com/jgreco/mpv-youtube-quality`
+        - `mv mpv-reload/reload.lua ~/.config/mpv/scripts/reload.lua`
+        - `mv mpv-youtube-quality ~/.config/mpv/scripts/youtube-quality.lua`
+        - `sudo rm -r mpv-reload mpv-youtube-quality`
+        - `nvim ~/.config/mpv/scripts/cycle-cmd.js`
+            - Insert contents of https://github.com/mpv-player/mpv/issues/8658
+            - Remove space at line 12
+
     ## Wifi with systemd-networkd (optional)
         - Touch `/etc/wpa_supplicant/wpa_supplicant-wlp1s0.conf` with contents
             `ctrl_interface=/run/wpa_supplicant

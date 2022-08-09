@@ -10,7 +10,6 @@ yay
 spotify
 obsidian
 gpicview
-mpv/watch_later
 Code - OSS
 pavucontrol.ini
 mimeapps.list
@@ -18,6 +17,9 @@ chromium
 
 qutebrowser/qsettings
 qutebrowser/autoconfig.yml
+
+mpv/watch_later
+mpv/scripts
 
 .gitpat
 cookies_Z.txt
