@@ -14,6 +14,11 @@ while [[ "$repeat" == "Y" ]]; do
         npm run dev
         cp ../main.js ~/TestVault/.obsidian/plugins/obsidian-mathlinks/main.js
         cp ../manifest.json ~/TestVault/.obsidian/plugins/obsidian-mathlinks/manifest.json
+
+    elif [[ $PWD == "/home/zhao/Downloads/obsidian-vim-reading-view-navigation/src" ]]; then
+        npm run dev
+        cp ../build/main.js ~/TestVault/.obsidian/plugins/vim-reading-view-navigation/main.js
+        cp ../build/manifest.json ~/TestVault/.obsidian/plugins/vim-reading-view-navigation/manifest.json
     else
         tsc -noEmit -skipLibCheck && node esbuild.config.mjs production
 

@@ -8,7 +8,7 @@ highlight EndOfBuffer ctermbg=NONE guibg=NONE
 let g:lightline = {
     \ 'colorscheme': 'wombat',
     \ 'active': {
-    \   'right': [ [ 'lineinfo' ],
-    \              [ 'percent' ]]
+    \   'left': [ [ 'mode', 'paste' ], [ 'readonly', 'absolutepath', 'modified' ] ],
+    \   'right': [ [ 'lineinfo' ], [ 'percent' ] ]
     \ },
     \ }
