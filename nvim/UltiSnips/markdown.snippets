@@ -32,25 +32,25 @@ endsnippet
 
 ###########################################################
 
-#### Alias ####
+#### MathLink ####
 context "notMath()"
-snippet AA "Custom alias" b
+snippet MA "mathLink: auto" b
 ---
-alias: auto_aliasing
+mathLink: auto
 ---
 
 $0
 endsnippet
 
 context "notMath()"
-snippet CA "Custom alias" b
+snippet MC "mathLink: ..." b
 ---
-custom_alias: $1
+mathLink: $1
 ---
 
 $0
 endsnippet
-#### Alias ####
+#### MathLink ####
 
 ###########################################################
 
@@ -118,8 +118,7 @@ endsnippet
 
 #### Templates
 snippet def "Definition" b
-<br />
-<br />
+<div class="topSpace"></div>
 
 Date Created: `!p from datetime import datetime
 if not snip.c:
@@ -145,8 +144,7 @@ _$0_
 endsnippet
 
 snippet axi "Axiom" b
-<br />
-<br />
+<div class="topSpace"></div>
 
 Date Created: `!p from datetime import datetime
 if not snip.c:
@@ -165,8 +163,7 @@ _$0_
 endsnippet
 
 snippet thm "Theorem" b
-<br />
-<br />
+<div class="topSpace"></div>
 
 Date Created: `!p from datetime import datetime
 if not snip.c:
@@ -190,8 +187,7 @@ _Proof_. $0
 endsnippet
 
 snippet prp "Proposition" b
-<br />
-<br />
+<div class="topSpace"></div>
 
 Date Created: `!p from datetime import datetime
 if not snip.c:
