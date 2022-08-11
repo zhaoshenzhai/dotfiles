@@ -136,7 +136,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm .|. shiftMask, xK_d ), spawn "./.config/scripts/audioControl.sh -d2" ),
 
         -- Info
-        ((modm, xK_h), spawn "alacritty --class sys,sys -e htop"),
+        ((modm, xK_t), spawn "alacritty --class sys,sys -e htop"),
         ((modm, xK_p), spawn "pavucontrol"      ),
 
         -- Xmonad
