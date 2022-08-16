@@ -83,7 +83,7 @@
             - TeX
                 - texlive-core texlive-latexextra texlive-science texlive-pictures
         - Yay
-            - qutebrowser-profile-git spotify colorpicker chromium
+            - qutebrowser-profile-git spotify spotify-adblock colorpicker chromium
         - pip
             - pynvim numpy matplotlib
         - npm

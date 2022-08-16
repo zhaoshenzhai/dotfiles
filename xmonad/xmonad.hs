@@ -84,7 +84,7 @@ myLayoutHook =
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [
-        -- Navigation
+        -- Base
         ((modm, xK_backslash), spawn myTerminal                                ),
         ((modm, xK_Return   ), spawn "./.config/scripts/dmenuOpenFile.sh"      ),
         ((modm, xK_e        ), spawn "alacritty -e vifm ~/ ~/ -c normal\\ ggga"),
@@ -95,13 +95,13 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_g              ), spawn "chromium --force-dark-mode"      ),
 
         -- Scripts
-        ((modm .|. shiftMask, xK_s), spawn "alacritty -e ~/.config/scripts/stopwatch.sh"     ),
-        ((modm .|. shiftMask, xK_g), spawn "alacritty -e ~/.config/scripts/gitCommit.sh"     ),
         ((modm .|. shiftMask, xK_m), spawn "alacritty -e ~/Dropbox/MathWiki/.scripts/main.sh"),
+        ((modm .|. shiftMask, xK_g), spawn "alacritty -e ~/.config/scripts/gitCommit.sh"     ),
+        ((modm .|. shiftMask, xK_s), spawn "alacritty -e ~/.config/scripts/stopwatch.sh"     ),
 
         -- Applications
-        ((modm, xK_s), spawn "spotify" ),
-        ((modm, xK_o), spawn "obsidian"),
+        ((modm, xK_s), spawn "LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify"),
+        ((modm, xK_o), spawn "obsidian"                                            ),
 
         -- GitHub
         ((controlMask .|. shiftMask, xK_g), spawn "xclip -sel clip ~/.config/.gitpat"),
@@ -117,10 +117,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_k     ), sendMessage Expand      ),
         ((modm, xK_Escape), kill                    ),
 
-        -- Brightness
-        ((modm, xK_F7), spawn "lux -s 10%"),
-        ((modm, xK_F8), spawn "lux -a 10%"),
-
         -- Audio
         ((modm, xK_F1              ), spawn "./.config/scripts/audioControl.sh -t"  ),
         ((modm, xK_F2              ), spawn "./.config/scripts/audioControl.sh -d 5"),
@@ -134,6 +130,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm .|. shiftMask, xK_c ), spawn "./.config/scripts/audioControl.sh -c2" ),
         ((modm, xK_d               ), spawn "./.config/scripts/audioControl.sh -d1" ),
         ((modm .|. shiftMask, xK_d ), spawn "./.config/scripts/audioControl.sh -d2" ),
+
+        -- Brightness
+        ((modm, xK_F7), spawn "lux -s 10%"),
+        ((modm, xK_F8), spawn "lux -a 10%"),
 
         -- Info
         ((modm, xK_t), spawn "alacritty --class sys,sys -e htop"),
