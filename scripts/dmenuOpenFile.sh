@@ -15,11 +15,11 @@ DMENU()
 
 declare -a options=(
     "~/Dropbox/MathWiki"
+    "~/Dropbox/Dotfiles"
     "~/Dropbox/Textbooks"
-    "~/Dropbox/obsidian-mathlinks"
-    "~/Dropbox/Highschool/Course_Notes"
+    "~/Dropbox/MathLinks"
     "~/Dropbox/Others/Reminders"
-    "~/.config"
+    "~/Dropbox/Highschool/Course_Notes"
 )
 
 mainChoice=$(printf '%s\n' "${options[@]}" | DMENU "~/")
@@ -91,7 +91,7 @@ case $mainChoice in
             zathura "$mainChoice/$choice"
         fi
     ;;
-    "~/Dropbox/obsidian-mathlinks")
+    "~/Dropbox/MathLinks")
         dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
         declare -a choices=(
             "$mainChoice/src/main.ts"
@@ -145,76 +145,34 @@ case $mainChoice in
             alacritty -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
         fi
     ;;
-    "~/.config")
-        dir="$HOME/.config"
+    "~/Dropbox/Dotfiles")
         declare -a configs=(
-            "$mainChoice/nvim"
+            "$mainChoice/config"
             "$mainChoice/scripts"
             "$mainChoice/setup.md"
-            "$mainChoice/mpv/mpv.conf"
-            "$mainChoice/mpv/input.conf"
-            "$mainChoice/xmonad/xmonad.hs"
-            "$mainChoice/xmonad/xmobarrc"
-            "$mainChoice/zathura/zathurarc"
-            "$mainChoice/qutebrowser/config.py"
-            "$mainChoice/alacritty/alacritty.yml"
+            "$mainChoice/.bashrc"
+            "$mainChoice/.bash_profile"
         )
         choice=$(printf '%s\n' "${configs[@]}" | DMENU "$mainChoice/")
 
         if [ "$choice" ]; then
             case $choice in
                 "$mainChoice/scripts")
-                    scriptsDir="$HOME/.config/scripts"
+                    scriptsDir=$(echo "$mainChoice/scripts" | sed 's:~:/home/zhao:g')
+                    echo -e "${YELLOW}$scriptsDir${NC}"
                     file=$(find $scriptsDir -printf "%T@ %Tc %p\n" | grep ".sh" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$scriptsDir/" | sed 's:/home/zhao:~:g'))
 
                     if [ "$file" ]; then
                         alacritty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
                     fi
                 ;;
-                "$mainChoice/nvim")
-                    nvimDir="$dir/nvim"
-                    declare -a nvimConfigs=(
-                        "$mainChoice/nvim/UltiSnips"
-                        "$mainChoice/nvim/config/pluggins"
-                        "$mainChoice/nvim/init.vim"
-                        "$mainChoice/nvim/config/theme.vim"
-                        "$mainChoice/nvim/config/mappings.vim"
-                        "$mainChoice/nvim/config/MathWiki.vim"
-                        "$mainChoice/nvim/config/textObjects.vim"
-                        "$mainChoice/nvim/config/compileAndRun.vim"
-                        "$mainChoice/nvim/config/keyboardMovement.vim"
-                    )
-                    nvimChoice=$(printf '%s\n' "${nvimConfigs[@]}" | DMENU "$mainChoice/nvim/")
+                "$mainChoice/config")
+                    configDir=$(echo "$mainChoice/config" | sed 's:~:/home/zhao:g')
+                    echo -e "${YELLOW}$configDir${NC}"
+                    file=$(find $configDir -type f -printf "%T@ %Tc %p\n" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$configDir/" | sed 's:/home/zhao:~:g'))
 
-                    if [[ "$nvimChoice" ]]; then
-                        case $nvimChoice in
-                            "$mainChoice/nvim/config/pluggins")
-                                nvimPlugginsDir="$nvimDir/config/pluggins"
-                                declare -a nvimPluggins=(
-                                    "$mainChoice/nvim/config/pluggins/ncm2.vim"
-                                    "$mainChoice/nvim/config/pluggins/vimtex.vim"
-                                    "$mainChoice/nvim/config/pluggins/markdown.vim"
-                                    "$mainChoice/nvim/config/pluggins/ultisnips.vim"
-                                    "$mainChoice/nvim/config/pluggins/syntaxRange.vim"
-                                )
-                                nvimPlugginsChoice=$(printf '%s\n' "${nvimPluggins[@]}" | DMENU "$mainChoice/nvim/config/pluggins/")
-
-                                if [[ "$nvimPlugginsChoice" ]]; then
-                                    alacritty --class sys,sys -e nvim $(echo "$nvimPlugginsChoice" | sed 's:~:/home/zhao:g')
-                                fi
-                            ;;
-                            "$mainChoice/nvim/UltiSnips")
-                                nvimSnippetsDir="$nvimDir/UltiSnips"
-                                nvimSnippetsChoice=$(find $nvimSnippetsDir -printf "%T@ %Tc %p\n" | grep ".snippets" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$nvimSnippetsDir/" | sed 's:/home/zhao:~:g'))
-
-                                if [ "$nvimSnippetsChoice" ]; then
-                                    alacritty --class sys,sys -e nvim $(echo "$nvimSnippetsChoice" | sed 's:~:/home/zhao:g')
-                                fi
-                            ;;
-                            *)
-                                alacritty --class sys,sys -e nvim $(echo "$nvimChoice" | sed 's:~:/home/zhao:g')
-                            ;;
-                        esac
+                    if [ "$file" ]; then
+                        alacritty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
                     fi
                 ;;
                 *)

@@ -11,8 +11,8 @@ NC='\033[0m'
 if [[ -z $1 ]]; then
     echo -e "${CYAN}Repositories:${NC}"
     echo -e "${CYAN}    (1): MathWiki${NC}"
-    echo -e "${CYAN}    (2): dotfiles${NC}"
-    echo -e "${CYAN}    (3): obsidian-mathlinks${NC}"
+    echo -e "${CYAN}    (2): Dotfiles${NC}"
+    echo -e "${CYAN}    (3): MathLinks${NC}"
     echo ""
 
     read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1-3]${NC} ")" repo
@@ -30,13 +30,13 @@ if [[ -z $1 ]]; then
 
     case $repo in
         "1")
-            cd $HOME/Dropbox/MathWiki/
+            cd $HOME/Dropbox/MathWiki
         ;;
         "2")
-            cd $HOME/.config/
+            cd $HOME/Dropbox/Dotfiles
         ;;
         "3")
-            cd $HOME/Dropbox/obsidian-mathlinks
+            cd $HOME/Dropbox/MathLinks
         ;;
     esac   
 else

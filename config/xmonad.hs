@@ -85,19 +85,19 @@ myLayoutHook =
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [
         -- Base
-        ((modm, xK_backslash), spawn myTerminal                                ),
-        ((modm, xK_Return   ), spawn "./.config/scripts/dmenuOpenFile.sh"      ),
-        ((modm, xK_e        ), spawn "alacritty -e vifm ~/ ~/ -c normal\\ ggga"),
+        ((modm, xK_backslash), spawn myTerminal                                   ),
+        ((modm, xK_Return   ), spawn "~/Dropbox/Dotfiles/scripts/dmenuOpenFile.sh"),
+        ((modm, xK_e        ), spawn "alacritty -e vifm ~/ ~/ -c normal\\ ggga"   ),
 
         -- Browser
-        ((modm, xK_w              ), spawn "./.config/scripts/openQute.sh -Z"),
-        ((modm .|. shiftMask, xK_w), spawn "./.config/scripts/openQute.sh -P"),
-        ((modm, xK_g              ), spawn "chromium --force-dark-mode"      ),
+        ((modm, xK_w              ), spawn "./Dropbox/Dotfiles/scripts/openQute.sh -Z"),
+        ((modm .|. shiftMask, xK_w), spawn "./Dropbox/Dotfiles/scripts/openQute.sh -P"),
+        ((modm, xK_g              ), spawn "chromium --force-dark-mode"               ),
 
         -- Scripts
-        ((modm .|. shiftMask, xK_m), spawn "alacritty -e ~/Dropbox/MathWiki/.scripts/main.sh"),
-        ((modm .|. shiftMask, xK_g), spawn "alacritty -e ~/.config/scripts/gitCommit.sh"     ),
-        ((modm .|. shiftMask, xK_s), spawn "alacritty -e ~/.config/scripts/stopwatch.sh"     ),
+        ((modm .|. shiftMask, xK_m), spawn "alacritty -e ~/Dropbox/MathWiki/.scripts/main.sh"         ),
+        ((modm .|. shiftMask, xK_g), spawn "alacritty -e ~/Dropbox/Dotfiles/scripts/gitCommit.sh"     ),
+        ((modm .|. shiftMask, xK_s), spawn "alacritty -e ~/Dropbox/Dotfiles/scripts/stopwatch.sh"     ),
 
         -- Applications
         ((modm, xK_s), spawn "LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify"),
@@ -118,18 +118,18 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_Escape), kill                    ),
 
         -- Audio
-        ((modm, xK_F1              ), spawn "./.config/scripts/audioControl.sh -t"  ),
-        ((modm, xK_F2              ), spawn "./.config/scripts/audioControl.sh -d 5"),
-        ((modm, xK_F3              ), spawn "./.config/scripts/audioControl.sh -i 5"),
-        ((modm .|. shiftMask, xK_F2), spawn "./.config/scripts/audioControl.sh -d 1"),
-        ((modm .|. shiftMask, xK_F3), spawn "./.config/scripts/audioControl.sh -i 1"),
-        ((modm, xK_F4              ), spawn "./.config/scripts/audioControl.sh -b"  ),
-        ((modm, xK_F5              ), spawn "./.config/scripts/audioControl.sh -p"  ),
-        ((modm, xK_F6              ), spawn "./.config/scripts/audioControl.sh -n"  ),
-        ((modm, xK_c               ), spawn "./.config/scripts/audioControl.sh -c1" ),
-        ((modm .|. shiftMask, xK_c ), spawn "./.config/scripts/audioControl.sh -c2" ),
-        ((modm, xK_d               ), spawn "./.config/scripts/audioControl.sh -d1" ),
-        ((modm .|. shiftMask, xK_d ), spawn "./.config/scripts/audioControl.sh -d2" ),
+        ((modm, xK_F1              ), spawn "./Dropbox/Dotfiles/scripts/audioControl.sh -t"  ),
+        ((modm, xK_F2              ), spawn "./Dropbox/Dotfiles/scripts/audioControl.sh -d 5"),
+        ((modm, xK_F3              ), spawn "./Dropbox/Dotfiles/scripts/audioControl.sh -i 5"),
+        ((modm .|. shiftMask, xK_F2), spawn "./Dropbox/Dotfiles/scripts/audioControl.sh -d 1"),
+        ((modm .|. shiftMask, xK_F3), spawn "./Dropbox/Dotfiles/scripts/audioControl.sh -i 1"),
+        ((modm, xK_F4              ), spawn "./Dropbox/Dotfiles/scripts/audioControl.sh -b"  ),
+        ((modm, xK_F5              ), spawn "./Dropbox/Dotfiles/scripts/audioControl.sh -p"  ),
+        ((modm, xK_F6              ), spawn "./Dropbox/Dotfiles/scripts/audioControl.sh -n"  ),
+        ((modm, xK_c               ), spawn "./Dropbox/Dotfiles/scripts/audioControl.sh -c1" ),
+        ((modm .|. shiftMask, xK_c ), spawn "./Dropbox/Dotfiles/scripts/audioControl.sh -c2" ),
+        ((modm, xK_d               ), spawn "./Dropbox/Dotfiles/scripts/audioControl.sh -d1" ),
+        ((modm .|. shiftMask, xK_d ), spawn "./Dropbox/Dotfiles/scripts/audioControl.sh -d2" ),
 
         -- Brightness
         ((modm, xK_F7), spawn "lux -s 10%"),
@@ -137,7 +137,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
         -- Info
         ((modm, xK_t), spawn "alacritty --class sys,sys -e htop"),
-        ((modm, xK_p), spawn "pavucontrol"      ),
+        ((modm, xK_p), spawn "pavucontrol"                      ),
 
         -- Xmonad
         ((modm .|. shiftMask, xK_r), spawn "xmonad --recompile; killall xmobar; xmonad --restart"),
@@ -166,7 +166,7 @@ myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..]
 ---------------------------------------------------------------------------------------------------------------------
 
 myStartupHook = do
-    spawnOnce "~/.config/scripts/init.sh &"
+    spawnOnce "~/Dropbox/Dotfiles/scripts/init.sh &"
 
 ---------------------------------------------------------------------------------------------------------------------
 
