@@ -15,6 +15,6 @@ alacritty --class reminders,reminders -e nvim ~/Dropbox/Others/Reminders/Items.m
 # Start applications if on chips
 if [[ `cat /etc/hostname` == 'chips' ]]; then
     obsidian &
-    spotify &
+    LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify &
     qutebrowser-profile --new 'Z' https://www.youtube.com https://www.github.com/zhaoshenzhai https://mail.google.com/mail/u/0 https://outlook.office.com/mail &
 fi
