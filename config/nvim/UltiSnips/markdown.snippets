@@ -1,0 +1,211 @@
+#### Math ####
+global !p
+def math():
+	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
+def notMath():
+	return vim.eval('vimtex#syntax#in_mathzone()') != '1'
+endglobal
+#### Math ####
+
+###########################################################
+
+#### General ####
+snippet bf "bold" i
+**$1**$0
+endsnippet
+
+context "notMath()"
+snippet it "italics" i
+_$1_$0
+endsnippet
+
+priority 100
+snippet qed "qed" i
+<span style="float:right;">$\blacksquare$</span>
+endsnippet
+
+priority 200
+snippet exqed "exqed" i
+<span style="float:right;">$\blacklozenge$</span>
+endsnippet
+#### General ####
+
+###########################################################
+
+#### MathLink ####
+context "notMath()"
+snippet MA "mathLink: auto" b
+---
+mathLink: auto
+---
+
+$0
+endsnippet
+
+context "notMath()"
+snippet MC "mathLink: ..." b
+---
+mathLink: $1
+---
+
+$0
+endsnippet
+#### MathLink ####
+
+###########################################################
+
+#### Result follows ####
+snippet RESIMP "Result follows ... chain of implications" it
+The result follows from the following chain of implications:
+$$\begin{equation}
+	\begin{aligned}
+		$0
+	\end{aligned}
+\end{equation}$$
+endsnippet
+
+snippet RESEQV "Result follows ... chain of equivalences" it
+The result follows from the following chain of equivalences:
+$$\begin{equation}
+	\begin{aligned}
+		$0
+	\end{aligned}
+\end{equation}$$
+endsnippet
+
+snippet RESCOM "Result follows ... computations" it
+The result follows from the following computation:
+$$\begin{equation}
+	\begin{aligned}
+		$0
+	\end{aligned}
+\end{equation}$$
+endsnippet
+#### Result follows ####
+
+###########################################################
+
+#### Environments ####
+snippet pro "begin proof" b
+_Proof_. $0
+endsnippet
+
+snippet rem "begin remark" b
+**Remark.** $0
+endsnippet
+
+snippet eq "begin equation" b
+$$\begin{equation}
+	$0
+\end{equation}$$
+endsnippet
+
+snippet ali "begin align" b
+$\begin{align}
+	$0
+\end{align}$
+endsnippet
+
+snippet 2ci "begin dcases" b
+\begin{dcases}
+	$1 & \\textrm{\it{if\hspace{0.1in}}}$2 \\\\
+	$0 & \textrm{\it{else}}
+\end{dcases}
+endsnippet
+#### Environments ####
+
+###########################################################
+
+#### Templates
+snippet def "Definition" b
+<div class="topSpace"></div>
+
+Date Created: `!p from datetime import datetime
+if not snip.c:
+    snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
+Tags: #Definition #In_Progress
+
+Types: _Not Applicable_
+Examples: _Not Applicable_
+Constructions: _Not Applicable_
+Generalizations: _Not Applicable_
+
+Properties: _Not Applicable_
+Sufficiencies: _Not Applicable_
+Equivalences: _Not Applicable_
+Justifications: _Not Applicable_
+
+\`\`\` ad-Definition
+title: Definition.
+
+_$0_
+
+\`\`\`
+endsnippet
+
+snippet axi "Axiom" b
+<div class="topSpace"></div>
+
+Date Created: `!p from datetime import datetime
+if not snip.c:
+    snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
+Tags: #Axiom #In_Progress
+
+Equivalences: _Not Applicable_
+Constructions: _Not Applicable_
+
+\`\`\` ad-Axiom
+title: Axiom.
+
+_$0_
+
+\`\`\`
+endsnippet
+
+snippet thm "Theorem" b
+<div class="topSpace"></div>
+
+Date Created: `!p from datetime import datetime
+if not snip.c:
+    snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
+Tags: #Theorem #In_Progress
+
+Proved by: _Not Applicable_
+Justifications: _Not Applicable_
+
+Generalizations: _Not Applicable_
+Counterexamples: _Not Applicable_
+
+\`\`\` ad-Theorem
+title: Theorem.
+
+_$1_
+
+\`\`\`
+
+_Proof_. $0
+endsnippet
+
+snippet prp "Proposition" b
+<div class="topSpace"></div>
+
+Date Created: `!p from datetime import datetime
+if not snip.c:
+    snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
+Tags: #Proposition #In_Progress
+
+Proved by: _Not Applicable_
+Justifications: _Not Applicable_
+
+Generalizations: _Not Applicable_
+Counterexamples: _Not Applicable_
+
+\`\`\` ad-Proposition
+title: Proposition.
+
+_$1_
+
+\`\`\`
+
+_Proof_. $0
+endsnippet
