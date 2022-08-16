@@ -83,68 +83,6 @@ case $mainChoice in
             esac
         fi
     ;;
-    "~/Dropbox/Textbooks")
-        dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
-        choice=$(find $dir -printf "\n%AD %AT %p" | grep ".pdf" | sort -nr | sed 's:.*/::' | DMENU "$mainChoice/")
-
-        if [ "$choice" ]; then
-            zathura "$mainChoice/$choice"
-        fi
-    ;;
-    "~/Dropbox/MathLinks")
-        dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
-        declare -a choices=(
-            "$mainChoice/src/main.ts"
-            "$mainChoice/src/settings.ts"
-            "$mainChoice/src/utils.ts"
-            "$mainChoice/README.md"
-            "$mainChoice/package.json"
-            "$mainChoice/manifest.json"
-            "$mainChoice/tsconfig.json"
-            "$mainChoice/versions.json"
-            "$mainChoice/esbuild.config.mjs"
-            "$mainChoice/.gitignore"
-        )
-
-        choice=$(printf '%s\n' "${choices[@]}" | DMENU $mainChoice/)
-
-        if [[ "$choice" ]]; then
-            alacritty -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
-        fi
-    ;;
-    "~/Dropbox/Highschool/Course_Notes")
-        dir="$HOME/Dropbox/Highschool/Course_Notes"
-        declare -a notes=(
-            "$mainChoice/Introduction_to_Linear_Algebra/Introduction_to_Linear_Algebra.pdf"
-            "$mainChoice/Introduction_to_Algebra/Introduction_to_Algebra.pdf"
-            "$mainChoice/Introduction_to_Topology/Introduction_to_Topology.pdf"
-            "$mainChoice/Introduction_to_Set_Theory/Introduction_to_Set_Theory.pdf"
-            "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_1/Chapter_1.pdf"
-            "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_2/Chapter_2.pdf"
-            "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_3/Chapter_3.pdf"
-            "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_4/Chapter_4.pdf"
-            "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_5/Chapter_5.pdf"
-            "$mainChoice/Introduction_to_Classical_Mechanics/Introduction_to_Classical_Mechanics.pdf"
-            "$mainChoice/Introduction_to_Real_Analysis/Introduction_to_Real_Analysis.pdf"
-            "$mainChoice/AP_Physics_C/AP_Physics_C.pdf"
-            "$mainChoice/AP_Calculus_BC/AP_Calculus_BC.pdf"
-            "$mainChoice/AP_Calculus_AB/AP_Calculus_AB.pdf"
-            "$mainChoice/Physics_Core/Physics_Core.pdf"
-        )
-        choice=$(printf '%s\n' "${notes[@]}" | DMENU "$mainChoice/")
-
-        if [ "$choice" ]; then
-            alacritty -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g' | sed 's/\.pdf/\.tex/g')
-        fi
-    ;;
-    "~/Dropbox/Others/Reminders")
-        dir="$HOME/Dropbox/Others/Reminders"
-        choice=$(find $dir -type f | sed 's:/home/zhao:~:g' | DMENU "$mainChoice/")
-
-        if [ "$choice" ]; then
-            alacritty -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
-        fi
-    ;;
     "~/Dropbox/Dotfiles")
         declare -a configs=(
             "$mainChoice/config"
@@ -179,6 +117,68 @@ case $mainChoice in
                     alacritty --class sys,sys -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
                 ;;
             esac
+        fi
+    ;;
+    "~/Dropbox/Textbooks")
+        dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
+        choice=$(find $dir -printf "\n%AD %AT %p" | grep ".pdf" | sort -nr | sed 's:.*/::' | DMENU "$mainChoice/")
+
+        if [ "$choice" ]; then
+            zathura "$mainChoice/$choice"
+        fi
+    ;;
+    "~/Dropbox/MathLinks")
+        dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
+        declare -a choices=(
+            "$mainChoice/src/main.ts"
+            "$mainChoice/src/settings.ts"
+            "$mainChoice/src/utils.ts"
+            "$mainChoice/README.md"
+            "$mainChoice/package.json"
+            "$mainChoice/manifest.json"
+            "$mainChoice/tsconfig.json"
+            "$mainChoice/versions.json"
+            "$mainChoice/esbuild.config.mjs"
+            "$mainChoice/.gitignore"
+        )
+
+        choice=$(printf '%s\n' "${choices[@]}" | DMENU $mainChoice/)
+
+        if [[ "$choice" ]]; then
+            alacritty -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
+        fi
+    ;;
+    "~/Dropbox/Others/Reminders")
+        dir="$HOME/Dropbox/Others/Reminders"
+        choice=$(find $dir -type f | sed 's:/home/zhao:~:g' | DMENU "$mainChoice/")
+
+        if [ "$choice" ]; then
+            alacritty -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
+        fi
+    ;;
+    "~/Dropbox/Highschool/Course_Notes")
+        dir="$HOME/Dropbox/Highschool/Course_Notes"
+        declare -a notes=(
+            "$mainChoice/Introduction_to_Linear_Algebra/Introduction_to_Linear_Algebra.pdf"
+            "$mainChoice/Introduction_to_Algebra/Introduction_to_Algebra.pdf"
+            "$mainChoice/Introduction_to_Topology/Introduction_to_Topology.pdf"
+            "$mainChoice/Introduction_to_Set_Theory/Introduction_to_Set_Theory.pdf"
+            "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_1/Chapter_1.pdf"
+            "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_2/Chapter_2.pdf"
+            "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_3/Chapter_3.pdf"
+            "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_4/Chapter_4.pdf"
+            "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_5/Chapter_5.pdf"
+            "$mainChoice/Introduction_to_Classical_Mechanics/Introduction_to_Classical_Mechanics.pdf"
+            "$mainChoice/Introduction_to_Real_Analysis/Introduction_to_Real_Analysis.pdf"
+            "$mainChoice/AP_Physics_C/AP_Physics_C.pdf"
+            "$mainChoice/AP_Calculus_BC/AP_Calculus_BC.pdf"
+            "$mainChoice/AP_Calculus_AB/AP_Calculus_AB.pdf"
+            "$mainChoice/Physics_Core/Physics_Core.pdf"
+        )
+        choice=$(printf '%s\n' "${notes[@]}" | DMENU "$mainChoice/")
+
+        if [ "$choice" ]; then
+            alacritty -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g' | sed 's/\.pdf/\.tex/g')
         fi
     ;;
 esac
