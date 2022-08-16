@@ -71,7 +71,7 @@ if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
                 read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
                 if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
                     clear
-                    ~/.config/scripts/gitCommit.sh
+                    ~/Dropbox/Dotfiles/scripts/gitCommit.sh
                 fi
             fi
             exit
@@ -87,7 +87,7 @@ if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
                 read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
                 if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
                     clear
-                    ~/.config/scripts/gitCommit.sh
+                    ~/Dropbox/Dotfiles/scripts/gitCommit.sh
                 fi
             fi
             exit
@@ -146,7 +146,7 @@ if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
         read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
         if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
             clear
-            ~/.config/scripts/gitCommit.sh
+            ~/Dropbox/Dotfiles/scripts/gitCommit.sh
         fi
         exit
     fi
@@ -156,7 +156,7 @@ else
         read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
         if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
             clear
-            ~/.config/scripts/gitCommit.sh
+            ~/Dropbox/Dotfiles/scripts/gitCommit.sh
         fi
         exit
     fi
