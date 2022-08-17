@@ -15,11 +15,15 @@ export XMONAD_CACHE_DIR="$HOME/.cache"
 export XMONAD_CONFIG_DIR="$HOME/.config/xmonad"
 export XMONAD_DATA_DIR="$HOME/.config/xmonad"
 
+# Directories
+export MATHWIKI_DIR="$HOME/Dropbox/MathWiki"
+export DOTFILES_DIR="$HOME/Dropbox/Dotfiles"
+
 # Paths
 export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/.config/scripts:$PATH"
-export PATH="$HOME/Dropbox/MathWiki/.scripts:$PATH"
+export PATH="$DOTFILES_DIR/scripts:$PATH"
+export PATH="$MATHWIKI_DIR/.scripts:$PATH"
 
 if [ -z "${DISPLAY}" ] && [ "${XDG_VTNR}" -eq 1 ]; then
-    exec startx "$HOME/Dropbox/Dotfiles/config/xinitrc"
+    exec startx "$DOTFILES_DIR/config/xinitrc"
 fi
