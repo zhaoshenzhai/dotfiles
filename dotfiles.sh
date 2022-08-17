@@ -9,6 +9,10 @@ sudo sed -i 's/#Color/Color/g' /etc/pacman.conf
 # Symlinks
 rm $HOME/.bashrc
 rm $HOME/.bash_profile
+mkdir $HOME/.config
+cd $HOME/.config
+mkdir alacritty git mpv mpv/script-opts vifm zathura xmonad qutebrowser nvim nvim/spell
+cd ..
 ln -s $HOME/Dropbox/Dotfiles/config/alacritty.yml $HOME/.config/alacritty/alacritty.yml
 ln -s $HOME/Dropbox/Dotfiles/config/git.conf $HOME/.config/git/config
 ln -s $HOME/Dropbox/Dotfiles/config/mpv/input.conf $HOME/.config/mpv/input.conf
@@ -25,6 +29,7 @@ ln -s $HOME/Dropbox/Dotfiles/config/qutebrowser/quickmarks $HOME/.config/qutebro
 ln -s $HOME/Dropbox/Dotfiles/config/qutebrowser/bookmarks/urls $HOME/.config/qutebrowser/bookmarks/urls
 ln -s $HOME/Dropbox/Dotfiles/config/nvim/UltiSnips/ $HOME/.config/nvim/UltiSnips
 ln -s $HOME/Dropbox/Dotfiles/config/nvim/spell/en.utf-8.add $HOME/.config/nvim/spell/en.utf-8.add
+ln -s $HOME/Dropbox/Dotfiles/config/nvim/spell/en.utf-8.add.spl $HOME/.config/nvim/spell/en.utf-8.add.spl
 ln -s $HOME/Dropbox/Dotfiles/config/nvim/init.vim $HOME/.config/nvim/init.vim
 ln -s $HOME/Dropbox/Dotfiles/config/.bashrc $HOME/.bashrc
 ln -s $HOME/Dropbox/Dotfiles/config/.bash_profile $HOME/.bash_profile
