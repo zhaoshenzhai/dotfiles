@@ -88,8 +88,6 @@ case $mainChoice in
             "$mainChoice/config"
             "$mainChoice/scripts"
             "$mainChoice/setup.md"
-            "$mainChoice/.bashrc"
-            "$mainChoice/.bash_profile"
         )
         choice=$(printf '%s\n' "${configs[@]}" | DMENU "$mainChoice/")
 
