@@ -30,10 +30,10 @@ if [[ -z $1 ]]; then
 
     case $repo in
         "1")
-            cd $HOME/Dropbox/MathWiki
+            cd $MATHWIKI_DIR
         ;;
         "2")
-            cd $HOME/Dropbox/Dotfiles
+            cd $DOTFILES_DIR
         ;;
         "3")
             cd $HOME/Dropbox/MathLinks
@@ -44,7 +44,7 @@ else
     case "$1" in
         --MathWiki|-m)
             repo="1"
-            cd "$HOME/Dropbox/MathWiki/"
+            cd $MATHWIKI_DIR
             source .scripts/stats.sh -u
             source .scripts/stats.sh -r
     esac
@@ -71,7 +71,7 @@ if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
                 read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
                 if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
                     clear
-                    ~/Dropbox/Dotfiles/scripts/gitCommit.sh
+                    $DOTFILES_DIR/scripts/gitCommit.sh
                 fi
             fi
             exit
@@ -87,7 +87,7 @@ if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
                 read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
                 if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
                     clear
-                    ~/Dropbox/Dotfiles/scripts/gitCommit.sh
+                    $DOTFILES_DIR/scripts/gitCommit.sh
                 fi
             fi
             exit
@@ -146,7 +146,7 @@ if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
         read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
         if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
             clear
-            ~/Dropbox/Dotfiles/scripts/gitCommit.sh
+            $DOTFILES_DIR/scripts/gitCommit.sh
         fi
         exit
     fi
@@ -156,7 +156,7 @@ else
         read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
         if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
             clear
-            ~/Dropbox/Dotfiles/scripts/gitCommit.sh
+            $DOTFILES_DIR/scripts/gitCommit.sh
         fi
         exit
     fi
