@@ -64,11 +64,14 @@
         - `umount -a`
         - Reboot, unplug usb, and pray
 
+    ## Dotfiles
+        - `mkdir ~/Dropbox`
+        - `cd ~/Dropbox`
+        - `git clone https://github.com/zhaoshenzhai/dotfiles.git`
+        - `./dotfiles.sh`
+        - `bash`
+
     ## Packages
-        - `git clone https://aur.archlinux.org/yay-git`
-        - `makepkg -si`
-        - `sudo nvim /etc/pacman.conf`
-            - Uncomment Color
         - Pacman
             - X
                 - xorg xorg-xinit xmonad xmonad-contrib xmobar xclip
@@ -77,55 +80,32 @@
             - Audio
                 - pipewire pipewire-pulse pipewire-jack pamixer playerctl bluez bluez-utils alsa-utils sof-firmware alsa-ucm-conf pavucontrol
             - Fonts
-                - ttf-courier-prime ttf-font-awesome ttf-anonymous-pro ttf-cmu-serif nerd-fonts-mononoki
+                - ttf-font-awesome ttf-anonymous-pro 
             - Tools
                 - htop tree unzip bc scrot python python-pip npm ghostscript pdf2svg
             - TeX
                 - texlive-core texlive-latexextra texlive-science texlive-pictures
         - Yay
-            - qutebrowser-profile-git spotify spotify-adblock colorpicker chromium
+            - ttf-courier-prime ttf-cmu-serif nerd-fonts-mononoki qutebrowser-profile-git spotify colorpicker chromium dropbox
         - pip
             - pynvim numpy matplotlib
         - npm
             - typescript
 
-    ## Dotfiles
-        - `git clone https://github.com/zhaoshenzhai/dotfiles.git`
-        - `mv ~/.config/bash/.bashrc ~/.bashrc`
-        - `mv ~/.config/bash/.bash_profile ~/.bash_profile`
-        - `bash`
-        - `cd ~/.config/dmenu_patched`
-        - `sudo make install`
-        - `sh -c 'curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'`
+    ## Reboot, should `startx` immediately
+
+    ## Nvim
         - `nvim`
             - :PlugInstall
-        - Reboot, should `startx` immediately
 
     ## Natural scrolling
         - `sudo nvim /usr/share/X11/xorg.conf.d/40-libinput.conf`
         - Under "touchpad": Option "NaturalScrolling" "true"
 
-    ## Brightness
-        - `git clone https://github.com/Ventto/lux.git`
-        - `cd lux`
-        - `sudo make install`
-        - `sudo lux`
-        - Relogin
-
     ## Nitrogen
         - Add ~/.config/wallpapers
 
-    ## Dropbox and git repos
-        - `yay dropbox`
-        - `mkdir ~/Dropbox`
-        - `cd ~/Dropbox`
-        - `git clone https://github.com/zhaoshenzhai/MathWiki.git`
-        - `git clone https://github.com/zhaoshenzhai/obsidian-mathlinks.git`
-        - `dropbox`; don't close this until finished
-
     ## Git
-        - `git config --global user.name "zhaoshenzhai"`
-        - `git config --global user.email "email"`
         - Generate new PAT, copy it
         - `nvim ~/.config/.gitpat`
             - Paste
@@ -142,8 +122,6 @@
             - u ~/Dropbox/University/Courses/22F [MATH133]
 
     ## Audio
-        - `sudo systemctl enable bluetooth`
-        - `sudo systemctl start --now bluetooth`
         - If no speaker:
             - `sudo nvim /etc/modprobe.d/audio-fix.conf`
                 - blacklist snd-sof-pci
@@ -162,13 +140,7 @@
         - `nvim ~/.config/nvim/plugged/vim-markdown/syntax/markdown.vim`
             - Comment out line with execute 'syn region htmlItalic...
 
-    ## Mpv
-        - `cd Downloads`
-        - `git clone https://github.com/4e6/mpv-reload`
-        - `git clone https://github.com/jgreco/mpv-youtube-quality`
-        - `mv mpv-reload/reload.lua ~/.config/mpv/scripts/reload.lua`
-        - `mv mpv-youtube-quality ~/.config/mpv/scripts/youtube-quality.lua`
-        - `sudo rm -r mpv-reload mpv-youtube-quality`
+    ## Mpv cycle-cmd.js
         - `nvim ~/.config/mpv/scripts/cycle-cmd.js`
             - Insert contents of https://github.com/mpv-player/mpv/issues/8658
             - Remove space at line 12
