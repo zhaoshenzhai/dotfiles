@@ -87,7 +87,7 @@ case $mainChoice in
         declare -a configs=(
             "$mainChoice/config"
             "$mainChoice/scripts"
-            "$mainChoice/init.md"
+            "$mainChoice/setup.md"
             "$mainChoice/dotfiles.sh"
         )
         choice=$(printf '%s\n' "${configs[@]}" | DMENU "$mainChoice/")

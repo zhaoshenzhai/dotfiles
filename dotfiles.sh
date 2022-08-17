@@ -83,4 +83,5 @@ mv mpv-youtube-quality/youtube-quality.lua $HOME/.config/mpv/scripts/youtube-qua
 rm -rf mpv-reload mpv-youtube-quality
 
 #Qutebrowser
+mkdir -p $HOME/.config/qutebrowser/greasemonkey
 curl https://greasyfork.org/scripts/436115-return-youtube-dislike/code/Return%20YouTube%20Dislike.user.js -o $HOME/.config/qutebrowser/greasemonkey/return-youtube-dislike.js
