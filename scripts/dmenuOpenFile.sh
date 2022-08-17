@@ -14,8 +14,8 @@ DMENU()
 }
 
 declare -a options=(
-    "~/Dropbox/MathWiki"
-    "~/Dropbox/Dotfiles"
+    `echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g'`
+    `echo $DOTFILES_DIR | sed 's:/home/zhao:~:g'`
     "~/Dropbox/Textbooks"
     "~/Dropbox/MathLinks"
     "~/Dropbox/Others/Reminders"
@@ -25,7 +25,7 @@ declare -a options=(
 mainChoice=$(printf '%s\n' "${options[@]}" | DMENU "~/")
 
 case $mainChoice in
-    "~/Dropbox/MathWiki")
+    `echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g'`)
         dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
         declare -a choices=(
             "$mainChoice/Notes"
@@ -83,7 +83,7 @@ case $mainChoice in
             esac
         fi
     ;;
-    "~/Dropbox/Dotfiles")
+    `echo $DOTFILES_DIR | sed 's:/home/zhao:~:g'`)
         declare -a configs=(
             "$mainChoice/config"
             "$mainChoice/scripts"
