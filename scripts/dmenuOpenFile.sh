@@ -50,7 +50,6 @@ case $mainChoice in
 
                     if [ "$file" ]; then
                         alacritty --class nvim,nvim -e nvim "$MathWikiNotesDir/$file" &
-                        obsidian obsidian://open?vault=MathWiki\&file="$file" &
                     fi
                 ;;
                 "$mainChoice/Images")
