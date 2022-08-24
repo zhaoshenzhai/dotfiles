@@ -10,7 +10,6 @@ nitrogen --restore &
 # Open reminders
 alacritty --class reminders,reminders -e nvim ~/Dropbox/Others/Reminders/MathWiki.md &
 alacritty --class reminders,reminders -e nvim ~/Dropbox/Others/Reminders/Dates.md &
-alacritty --class reminders,reminders -e nvim ~/Dropbox/Others/Reminders/Items.md &
 
 # Start applications if on chips
 if [[ `cat /etc/hostname` == 'chips' ]]; then
