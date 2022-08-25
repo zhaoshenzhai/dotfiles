@@ -46,8 +46,6 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'leafgarland/typescript-vim'                     " syntax highlighting typescript
 call plug#end()
 
-let mapleader = "`"
-
 source ~/Dropbox/Dotfiles/config/nvim/config/theme.vim
 source ~/Dropbox/Dotfiles/config/nvim/config/keyboardMovement.vim
 source ~/Dropbox/Dotfiles/config/nvim/config/mappings.vim
