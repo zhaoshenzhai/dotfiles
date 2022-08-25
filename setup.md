@@ -138,27 +138,9 @@
 
     ## Nvim markdown
         - `nvim ~/.config/nvim/plugged/vim-markdown/syntax/markdown.vim`
-            - Comment out line with execute 'syn region htmlItalic...
+            - Comment out second line with execute 'syn region htmlItalic...
 
     ## Mpv cycle-cmd.js
         - `nvim ~/.config/mpv/scripts/cycle-cmd.js`
             - Insert contents of https://github.com/mpv-player/mpv/issues/8658
             - Remove space at line 12
-
-    ## Wifi with systemd-networkd (optional)
-        - Touch `/etc/wpa_supplicant/wpa_supplicant-wlp1s0.conf` with contents
-            `ctrl_interface=/run/wpa_supplicant
-            bg_scan=""
-
-            network={
-                ssid="Z-5GHz"
-                psk=_______________
-            }`
-        - Psk is generated via `wpa_passphrase Z 'password'`. Need to `su` first. Cat it.
-        - Touch `/etc/systemd/network/10-wireless.network` with contents
-            `[Match]
-            Name=wl*
-
-            [Network]
-            DHCP=ipv4`
-        - Need to `sudo systemctl enable ______`. Reboot.
