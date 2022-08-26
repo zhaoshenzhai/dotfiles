@@ -1,22 +1,27 @@
 #!/bin/bash
 
-RAW=`pamixer --list-sinks`
+raw=$(pamixer --list-sinks)
+sinks="Sinks:"
+while IFS= read -r sink; do
+    if [[ -z $(echo "$sink" | grep "HDMI") ]] && [[ -z $(echo "$sink" | grep "Sinks:") ]]; then
+        sinks="$sinks\n$sink"
+    fi
+done <<< "$raw"
+lines=`echo -e "$sinks" | wc -l`
 
-LINES=`echo "$RAW" | wc -l`
+volume=""
+mute=true
 
-VOLUME=""
-MUTE=true
-
-if [ "$LINES" -eq 2 ]; then
-    SINK=`echo "$RAW" | sed -n 2p`
-    SPEAKER=${SINK%%\ *}
-    VOLUME=`pamixer --sink "$SPEAKER" --get-volume`
-    MUTE=`pamixer --sink "$SPEAKER" --get-mute`
-elif [ "$LINES" -eq 3 ]; then
-    SINK=`echo "$RAW" | sed -n 3p`
-    HEADPHONE=${SINK%%\ *}
-    VOLUME=`pamixer --sink "$HEADPHONE" --get-volume`
-    MUTE=`pamixer --sink "$HEADPHONE" --get-mute`
+if [ "$lines" -eq 2 ]; then
+    sink=`echo -e "$sinks" | sed -n 2p`
+    speaker=${sink%%\ *}
+    volume=`pamixer --sink "$speaker" --get-volume`
+    mute=`pamixer --sink "$speaker" --get-mute`
+elif [ "$lines" -eq 3 ]; then
+    sink=`echo -e "$sinks" | sed -n 3p`
+    headphone=${sink%%\ *}
+    volume=`pamixer --sink "$headphone" --get-volume`
+    mute=`pamixer --sink "$headphone" --get-mute`
 fi
 
 while [ ! -z "$1" ]; do
@@ -42,11 +47,11 @@ while [ ! -z "$1" ]; do
             if [[ -z "$1" ]]; then
                 echo "Please choose an increment"
             else
-                if [ "$MUTE" = true ]; then
+                if [ "$mute" = true ]; then
                     `pamixer -u`
                 fi
-                VOLUME=$((VOLUME + $1))
-                `pamixer --set-volume $VOLUME`
+                volume=$((volume + $1))
+                `pamixer --set-volume $volume`
             fi
             ;;
         --decrease|-d)
@@ -54,12 +59,12 @@ while [ ! -z "$1" ]; do
             if [[ -z "$1" ]]; then
                 echo "Please choose an increment"
             else
-                if [ "$MUTE" = true ]; then
+                if [ "$mute" = true ]; then
                     `pamixer -u`
                 fi
-                VOLUME=$((VOLUME - $1))
-                echo $VOLUME
-                `pamixer --set-volume $VOLUME`
+                volume=$((volume - $1))
+                echo $volume
+                `pamixer --set-volume $volume`
             fi
             ;;
         --connect1|-c1)
