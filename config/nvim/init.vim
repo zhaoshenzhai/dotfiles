@@ -33,6 +33,7 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'roxma/nvim-yarp'                                " framework required for ncm2
     Plug 'ncm2/ncm2-bufword'                              " complete words in buffer
     Plug 'ncm2/ncm2-path'                                 " complete paths
+    Plug 'kana/vim-textobj-user'                          " custom textObjects
 
     " Development
     Plug 'lervag/vimtex'                                  " latex support
