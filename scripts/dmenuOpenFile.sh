@@ -146,9 +146,9 @@ case $mainChoice in
             alacritty -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
         fi
     ;;
-    "~/Dropbox/Others/Reminders")
+    "~/Dropbox/Others/eeminders")
         dir="$HOME/Dropbox/Others/Reminders"
-        choice=$(find $dir -type f | sed 's:/home/zhao:~:g' | DMENU "$mainChoice/")
+        choice=$(find $dir -type f -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:^.*\ /home:/home:' | DMENU $(echo "$mainChoice/" | sed 's:/home/zhao:~:g'))
 
         if [ "$choice" ]; then
             alacritty -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')

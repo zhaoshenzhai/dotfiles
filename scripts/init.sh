@@ -8,8 +8,10 @@ dropbox &
 nitrogen --restore &
 
 # Open reminders
-alacritty --class reminders,reminders -e nvim ~/Dropbox/Others/Reminders/MathWiki.md &
-alacritty --class reminders,reminders -e nvim ~/Dropbox/Others/Reminders/Dates.md &
+notes=$(find "/home/zhao/Dropbox/Others/Reminders" -maxdepth 1 -type f | grep ".md")
+while IFS= read -r note; do
+    alacritty --class reminders,reminders -e nvim "$note" &
+done <<< "$notes"
 
 # Start applications if on chips
 if [[ `cat /etc/hostname` == 'chips' ]]; then
