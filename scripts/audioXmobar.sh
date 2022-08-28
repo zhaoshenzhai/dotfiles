@@ -3,7 +3,7 @@
 raw=$(pamixer --list-sinks)
 sinks="Sinks:"
 while IFS= read -r sink; do
-    if [[ -z $(echo "$sink" | grep "HDMI") ]] && [[ -z $(echo "$sink" | grep "Sinks:") ]]; then
+    if [[ -z $(echo "$sink" | grep "HDMI") ]] && [[ -z $(echo "$sink" | grep "Pro ") ]] && [[ -z $(echo "$sink" | grep "Controller") ]] && [[ -z $(echo "$sink" | grep "Sinks:") ]]; then
         sinks="$sinks\n$sink"
     fi
 done <<< "$raw"
