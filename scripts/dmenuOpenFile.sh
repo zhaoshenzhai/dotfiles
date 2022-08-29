@@ -146,7 +146,7 @@ case $mainChoice in
             alacritty -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
         fi
     ;;
-    "~/Dropbox/Others/eeminders")
+    "~/Dropbox/Others/Reminders")
         dir="$HOME/Dropbox/Others/Reminders"
         choice=$(find $dir -type f -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:^.*\ /home:/home:' | DMENU $(echo "$mainChoice/" | sed 's:/home/zhao:~:g'))
 
