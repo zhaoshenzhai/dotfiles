@@ -130,7 +130,6 @@ case $mainChoice in
         declare -a choices=(
             "$mainChoice/src/main.ts"
             "$mainChoice/src/settings.ts"
-            "$mainChoice/src/utils.ts"
             "$mainChoice/README.md"
             "$mainChoice/package.json"
             "$mainChoice/manifest.json"
