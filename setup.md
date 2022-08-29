@@ -80,7 +80,7 @@
             - Audio
                 - pipewire pipewire-pulse pipewire-jack pamixer playerctl bluez bluez-utils alsa-utils sof-firmware alsa-ucm-conf pavucontrol
             - Fonts
-                - ttf-font-awesome ttf-anonymous-pro 
+                - ttf-font-awesome ttf-anonymous-pro adobe-source-han-sans-cn-fonts
             - Tools
                 - htop tree unzip bc scrot python python-pip npm ghostscript pdf2svg
             - TeX
