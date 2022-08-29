@@ -176,7 +176,7 @@ case $mainChoice in
         choice=$(printf '%s\n' "${notes[@]}" | DMENU "$mainChoice/")
 
         if [ "$choice" ]; then
-            alacritty -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g' | sed 's/\.pdf/\.tex/g')
+            alacritty --class media,media -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g' | sed 's/\.pdf/\.tex/g')
         fi
     ;;
 esac
