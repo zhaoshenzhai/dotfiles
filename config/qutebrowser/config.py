@@ -42,7 +42,7 @@ c.url.searchengines = {
     'DEFAULT': 'https://duckduckgo.com/?q={}',
     'wk': 'https://en.wikipedia.org/wiki/{}',
     'yt': 'https://www.youtube.com/results?search_query={}',
-    'mse': 'https://math.stackexchange.com//search?q={}',
+    'se': 'https://math.stackexchange.com//search?q={}',
     'aw': 'https://wiki.archlinux.org/?search={}',
     'mf': 'https://myflixer.to/search/{}'}
 
