@@ -8,14 +8,14 @@
         - Download rufus
         - Write with gpt(?) format
         - Disable secure boot
-        - Unplug usb, shutdown, plug usb, power up, and pray
+        - Unplug usb, shutdown, plug usb, power up
 
     ## Internet
         - `iwctl`
             - `device list`
             - ` station wlan0 scan`
             - ` station wlan0 get-networks`
-            - ` station wlan0 connect "Z-5GHz"`
+            - ` station wlan0 connect WIFI_NAME`
             - `exit`
             - `ip addr`
             - `ping archlinux.org`
@@ -62,7 +62,7 @@
         - `grub-mkconfig -o /boot/grub/grub.cfg`
         - `exit`
         - `umount -a`
-        - Reboot, unplug usb, and pray
+        - Reboot and unplug usb
 
     ## Dotfiles
         - `mkdir ~/Dropbox`
