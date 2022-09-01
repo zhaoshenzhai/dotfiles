@@ -1,0 +1,43 @@
+\usepackage[T1]{fontenc}                             % make fonts work?
+\usepackage[hidelinks]{hyperref}                     % links
+\usepackage[side]{footmisc}                          % footnotes
+\usepackage{geometry}                                % page layout
+\usepackage{fancyhdr}                                % headers and footers
+\usepackage{titlesec}                                % title page
+\usepackage{tocloft}                                 % custom table of contents
+\usepackage{amsfonts, amsmath, amssymb, amsthm}      % basic maths commands
+\usepackage{mathtools}                               % more maths commands
+\usepackage{mathrsfs}                                % more math commands
+\usepackage{mdframed}                                % framed environments
+\usepackage{graphicx}                                % images and other graphics
+\usepackage{tikz}                                    % maths figures
+\usepackage{tikz-3dplot}                             % needed by tikz
+\usepackage{tikzpagenodes}                           % needed by tikz
+\usepackage{pgfplots}\pgfplotsset{compat=1.7}        % plots
+\usepackage{contour}                                 % underlining
+\usepackage{ulem}                                    % needed by contour
+\usepackage{xcolor}                                  % more colors
+\usepackage{caption}                                 % captions outside float
+\usepackage{enumitem}                                % enumerate and itemize indents
+\usepackage{nicematrix}                              % matrices and tables
+\usepackage{marginnote}                              % margin notes
+
+\usetikzlibrary{matrix}
+\usetikzlibrary{positioning}
+\usetikzlibrary{patterns}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{arrows}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{math}
+\usetikzlibrary{cd}
+
+\definecolor{lightGray}{rgb}{0.9, 0.9, 0.9}
+\mdfdefinestyle{light}{backgroundcolor = lightGray, innertopmargin = -2pt, linewidth = 1pt}
+
+\theoremstyle{definition}\newmdtheoremenv[style = light]{exercise}{Exercise}
+\theoremstyle{definition}\newtheorem*{remark}{Remark}
+\theoremstyle{remark}\newtheorem*{solution}{Solution}
+
+\newgeometry{margin = 0.7in, bmargin=1in, tmargin=1in}
+\pagestyle{fancy}

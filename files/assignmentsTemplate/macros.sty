@@ -1,0 +1,140 @@
+% Math notations
+    % Set Theory
+        \newcommand{\fa}{\forall}
+        \newcommand{\ex}{\exists}
+        \renewcommand{\em}{\varnothing}
+        \newcommand{\pow}{\mathcal{P}}
+        \newcommand{\id}{\operatorname{id}}
+        \newcommand{\iv}{\operatorname{iv}}
+        \newcommand{\dom}{\operatorname{dom}}
+        \newcommand{\ran}{\operatorname{ran}}
+        \newcommand{\cdm}{\operatorname{cdm}}
+        \newcommand{\fld}{\operatorname{fld}}
+        \newcommand{\im}{\operatorname{im}}
+        \newcommand{\preim}{\operatorname{preim}}
+        \newcommand{\rest}{\!\upharpoonright\!}
+        \newcommand{\comp}{\setminus}
+        \newcommand{\rfcl}{\operatorname{rfcl}}
+        \newcommand{\ord}{\textrm{ON}}
+        \newcommand{\iso}{\cong}
+        \newcommand{\into}{\hookrightarrow}
+        \newcommand{\onto}{\twoheadrightarrow}
+        \newcommand{\simto}{\rightleftarrows}
+        \renewcommand{\min}{\operatorname{min}}
+        \renewcommand{\max}{\operatorname{max}}
+
+    % Category Theory
+        \newcommand{\cat}[1]{\textbf{#1}}
+        \newcommand{\catset}{\cat{Set}}
+        \newcommand{\catrel}{\cat{Rel}}
+        \newcommand{\catvect}[1][K]{\cat{Vect}_#1}
+        \newcommand{\Id}{\operatorname{Id}}
+        \newcommand{\natid}{\mc{I}\textrm{d}}
+        \newcommand{\obj}{\operatorname{Obj}}
+        \newcommand{\aut}{\operatorname{Aut}}
+        \newcommand{\edm}{\operatorname{End}}
+        \renewcommand{\hom}{\operatorname{Hom}}
+
+    % Geometry
+        % Analysis
+            \newcommand{\diam}{\operatorname{diam}}
+            \newcommand{\uniflim}{\operatorname{unif\,lim}}
+            \newcommand{\del}{\partial}
+            \renewcommand{\d}{\mathrm{d}}
+            \renewcommand{\Re}{\operatorname{Re}}
+            \renewcommand{\Im}{\operatorname{Im}}
+
+        % Topology
+            \newcommand{\interior}{\operatorname{int}}
+            \newcommand{\clo}{\operatorname{clo}}
+            \newcommand{\bnd}{\operatorname{bnd}}
+            \newcommand{\sttopR}[1][]{\mc{T}^\textrm{st}_{\R^{#1}}}
+            \newcommand{\ULtopR}{\mc{T}^\textrm{UL}_\R}
+            \newcommand{\LLtopR}{\mc{T}^\textrm{LL}_\R}
+            \newcommand{\KtopR}{\mc{T}^K_\R}
+
+    % Algebra
+        % Linear Algebra
+            \newcommand{\rank}{\operatorname{rank}}
+            \newcommand{\nullity}{\operatorname{nullity}}
+            \newcommand{\bilform}[2]{\l\langle{#1},{#2}\r\rangle}
+            \newcommand{\proj}{\operatorname{proj}}
+            \newcommand{\gl}{\operatorname{GL}}
+            \newcommand{\mat}[2]{\mathcal{M}_{#1}\!\l(#2\r)}
+            \newcommand{\sym}[2]{\operatorname{Sym}_{#1}\!\l(#2\r)}
+            \newcommand{\Diag}[2]{\operatorname{Diag}_{#1}\!\l(#2\r)}
+            \newcommand{\diag}{\operatorname{diag}}
+            \newcommand{\trans}{\mathsf{T}}
+            \newcommand{\rref}{\operatorname{rref}}
+            \newcommand{\row}{\operatorname{row}}
+            \newcommand{\col}{\operatorname{col}}
+            \newcommand{\dotpro}{\boldsymbol\cdot}
+            \newcommand{\cropro}{\boldsymbol\times}
+            \newcommand{\reflection}{\operatorname{reflection}}
+            \newcommand{\rotation}{\operatorname{rotation}}
+            \newcommand{\nullsp}{\operatorname{null}}
+            \renewcommand{\skew}[2]{\operatorname{Skew}_{#1}\!\l(#2\r)}
+            \renewcommand{\span}{\operatorname{span}}
+            \renewcommand{\v}[1]{\mathbf{#1}}
+
+        % Group Theory
+            \newcommand{\inn}{\operatorname{Inn}}
+
+        % Number Theory
+            \newcommand{\lcm}{\operatorname{lcm}}
+
+        % Field Theory
+            \newcommand{\charfld}{\operatorname{char}}
+
+% Math others
+    % Number Systems
+        \newcommand{\N}{\mathbb{N}}
+        \newcommand{\Z}{\mathbb{Z}}
+        \newcommand{\Q}{\mathbb{Q}}
+        \newcommand{\R}{\mathbb{R}}
+        \newcommand{\C}{\mathbb{C}}
+
+    % Axioms
+        \newcommand{\axiext}[1][]{{\rm\bf{E}{\scriptsize\bf{XTENSIONALITY}}}_{\bf{#1}}}
+        \newcommand{\axipairing}[1][]{{\rm\bf{P}{\scriptsize\bf{AIRING}}}_{\bf{#1}}}
+        \newcommand{\axiunion}[1][]{{\rm\bf{U}{\scriptsize\bf{NION}}}_{\bf{#1}}}
+        \newcommand{\axiinfty}[1][]{{\rm\bf{I}{\scriptsize\bf{NFINITY}}}_{\bf{#1}}}
+        \newcommand{\axipow}[1][]{{\rm\bf{P}{\scriptsize\bf{OWER}}}_{\bf{#1}}}
+        \newcommand{\axirepl}[1][]{{\rm\bf{R}{\scriptsize\bf{EPLACEMENT}}}_{\bf{#1}}}
+        \newcommand{\axispec}[1][]{{\rm\bf{S}{\scriptsize\bf{PECIFICATION}}}_{\bf{#1}}}
+
+        \newcommand{\axicat}[1][]{{\rm\bf{C}{\scriptsize\bf{AT}}}_{\bf{#1}}}
+        \newcommand{\axivec}[1][]{{\rm\bf{V}{\scriptsize\bf{EC}}}_{\bf{#1}}}
+        \newcommand{\axiref}[1][]{{\rm\bf{R}{\scriptsize\bf{EF}}}_{\bf{#1}}}
+        \newcommand{\axigrp}[1][]{{\rm\bf{G}{\scriptsize\bf{RP}}}_{\bf{#1}}}
+        \newcommand{\axilin}[1][]{{\rm\bf{L}{\scriptsize\bf{IN}}}_{\bf{#1}}}
+        \newcommand{\axitop}[1][]{{\rm\bf{T}{\scriptsize\bf{OP}}}_{\bf{#1}}}
+        \newcommand{\axitopcl}[1][]{{\rm\bf{T}{\scriptsize\bf{OP}}}^\boldsymbol{\ast}_{\bf{#1}}}
+        \newcommand{\axibasis}[1][]{{\rm\bf{B}{\scriptsize\bf{AS}}}_{\bf{#1}}}
+        \newcommand{\axiinnprod}[1][]{{\rm\bf{I}{\scriptsize\bf{NNPROD}}}_{\bf{#1}}}
+        \newcommand{\axifunctor}[1][]{{\rm\bf{F}{\scriptsize\bf{TR}}}_{\bf{#1}}}
+        \newcommand{\axipartition}[1][]{{\rm\bf{P}{\scriptsize\bf{AR}}}_{\bf{#1}}}
+
+% LaTeX/MathJax
+    \newcommand{\mc}[1]{\mathcal{#1}}
+    \newcommand{\ms}[1]{\mathscr{#1}}
+    \newcommand{\mb}[1]{\mathbb{#1}}
+    \newcommand{\ul}[1]{\underline{\smash{#1}}}
+    \newcommand{\tpl}[1]{\l(#1\r)}
+    \newcommand{\blob}{\bullet}
+    \newcommand{\slot}{-}
+    \newcommand{\qedin}{\tag*{$\blacksquare$}}
+    \newcommand{\exqed}{\phantom\qedhere\hfill$\blacklozenge$}
+    \newcommand{\exqedin}{\tag*{$\blacklozenge$}}
+    \newcommand{\necceqq}{\overset{!}{=}}
+    \newcommand{\cref}[1]{\tag{$\,#1\,$}}
+    \renewcommand{\qed}{\phantom\qedhere\hfill$\blacksquare$}
+    \renewcommand{\ref}[1]{\l(\,#1\,\r)}
+    \renewcommand{\l}{\left}
+    \renewcommand{\r}{\right}
+    \renewcommand{\it}[1]{\textit{#1}}
+    \renewcommand{\bf}[1]{\textbf{#1}}
+    \renewcommand{\mid}{\,\middle\vert\,}
+    \renewcommand{\bar}{\overline}
+    \renewcommand{\phi}{\varphi}
+    \renewcommand{\epsilon}{\varepsilon}
