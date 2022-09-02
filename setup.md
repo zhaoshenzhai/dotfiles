@@ -82,7 +82,7 @@
             - Fonts
                 - ttf-font-awesome ttf-anonymous-pro adobe-source-han-sans-cn-fonts
             - Tools
-                - htop tree unzip bc scrot python python-pip npm ghostscript pdf2svg jdk-openjdk jre-openjre
+                - htop tree unzip bc scrot python python-pip npm ghostscript pdf2svg jdk-openjdk jre-openjdk
             - TeX
                 - texlive-core texlive-latexextra texlive-science texlive-pictures
         - Yay
