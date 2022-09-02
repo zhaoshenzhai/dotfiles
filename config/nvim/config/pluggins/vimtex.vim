@@ -14,3 +14,4 @@ let g:vimtex_quickfix_ignore_filters=[
     \]
 
 autocmd filetype tex nnoremap <F4> :w <CR>:VimtexView<CR>
+autocmd filetype tex nnoremap <F5> :w <CR>:VimtexCompile<CR>
