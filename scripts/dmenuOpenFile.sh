@@ -150,7 +150,7 @@ case $mainChoice in
         choice=$(find $dir -type f -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:^.*\ /home:/home:' | DMENU $(echo "$mainChoice/" | sed 's:/home/zhao:~:g'))
 
         if [ "$choice" ]; then
-            alacritty -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
+            alacritty --class reminders,reminders -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
         fi
     ;;
     "~/Dropbox/Highschool/Course_Notes")
