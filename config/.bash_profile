@@ -21,6 +21,8 @@ export DOTFILES_DIR="$HOME/Dropbox/Dotfiles"
 
 # Paths
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="$DOTFILES_DIR/scripts:$PATH"
+export PATH="$MATHWIKI_DIR/.scripts:$PATH"
 
 if [ -z "${DISPLAY}" ] && [ "${XDG_VTNR}" -eq 1 ]; then
     exec startx "$DOTFILES_DIR/config/xinitrc"

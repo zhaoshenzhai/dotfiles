@@ -10,22 +10,14 @@ NC='\033[0m'
 
 repeat="Y"
 while [[ "$repeat" == "Y" ]]; do
-    rootPath=$(echo $1 | sed 's/\/src\/.*$//g')
-    baseName=$(basename "$rootPath")
-    cd "$rootPath"
+    cd $(echo $1 | sed 's/\/src.*$//g')
 
     find -name "*.java" > src.txt
     javac -d build @src.txt
 
-    mainPath=`find . -type f -print | xargs grep "public static void main(String\[\] args)"`
-    mainPath=${mainPath:5}
-    while [[ $mainPath == *"."* ]]; do
-        mainPath=${mainPath%?}
-    done
-    mainPath="${mainPath////.}"
-    mainPath=${mainPath:1}
-
-    java -cp .:build:**/*.class $mainPath
+    mainPath=$(grep -lr "public static void main(String\[\] args)" * | sed 's/src\///g' | sed 's/\.java$//g')
+    cd build
+    java $mainPath
 
     echo ""
     echo -e "${GREEN}DONE${NC}"
