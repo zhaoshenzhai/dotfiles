@@ -11,8 +11,8 @@ while [ ! -z "$1" ]; do
                     baseName=$(basename "$rootPath")
                     cd "$rootPath"
 
-                    find -name "*.java" > source.txt
-                    javac -d build @source.txt
+                    find -name "*.java" > src.txt
+                    javac -d build @src.txt
 
                     mainPath=`find . -type f -print | xargs grep "public static void main(String\[\] args)"`
                     mainPath=${mainPath:5}
