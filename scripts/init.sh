@@ -17,5 +17,5 @@ done <<< "$notes"
 if [[ `cat /etc/hostname` == 'chips' ]]; then
     obsidian &
     LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify &
-    qutebrowser-profile --new 'Z' https://www.youtube.com https://www.github.com/zhaoshenzhai https://mail.google.com/mail/u/0 https://outlook.office.com/mail &
+    qutebrowser-profile --new 'Z' https://www.youtube.com https://www.github.com/zhaoshenzhai https://calendar.google.com/calendar https://mail.google.com/mail/u/0 https://outlook.office.com/mail &
 fi
