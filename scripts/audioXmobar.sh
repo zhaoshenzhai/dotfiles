@@ -26,7 +26,7 @@ elif [ "$lines" -eq 3 ]; then
     mute=`pamixer --sink "$headphone" --get-mute`
 
     if [ "$mute" = true ]; then
-        printf "%s %s | %s" "<fn=2> </fn>" "Muted"
+        printf "%s %s" "<fn=2> </fn>" "Muted"
     else
         headphoneVol=`pamixer --sink "$headphone" --get-volume-human`
         printf "%s %s" "<fn=2> </fn>" $headphoneVol
