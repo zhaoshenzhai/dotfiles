@@ -95,6 +95,15 @@ snippet exer "begin exercise" b
 \end{exercise}
 endsnippet
 
+snippet exer* "begin unnumbered exercise" b
+\let\normaltheorem=\theexerciseUnnumbered
+\let\theexerciseUnnumbered=\relax
+\begin{exerciseUnnumbered}
+	$0
+\end{exerciseUnnumbered}
+\let\theexerciseUnnumbered=\normaltheorem
+endsnippet
+
 snippet sol "begin solution" b
 \begin{solution}
 	$0
