@@ -13,9 +13,7 @@ while IFS= read -r note; do
     alacritty --class reminders,reminders -e nvim "$note" &
 done <<< "$notes"
 
-# Start applications if on chips
-if [[ `cat /etc/hostname` == 'chips' ]]; then
-    obsidian &
-    LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify &
-    qutebrowser-profile --new 'Z' https://www.youtube.com https://www.github.com/zhaoshenzhai https://calendar.google.com/calendar https://mail.google.com/mail/u/0 https://outlook.office.com/mail &
-fi
+# Start applications
+obsidian &
+LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify &
+qutebrowser-profile --new 'Z' https://www.youtube.com https://www.github.com/zhaoshenzhai https://calendar.google.com/calendar https://mail.google.com/mail/u/0 https://outlook.office.com/mail &
