@@ -42,7 +42,7 @@ call plug#begin('~/.config/nvim/plugged')
     " Theme
     Plug 'joshdick/onedark.vim'                                       " onedark color scheme
     Plug 'itchyny/lightline.vim'                                      " lightline
-    Plug 'inkarkat/vim-SyntaxRange'                                   " tex syntax in md
+    Plug 'inkarkat/vim-SyntaxRange'                                   " code block syntax
     Plug 'preservim/vim-markdown'                                     " syntax highlighting markdown
     Plug 'leafgarland/typescript-vim'                                 " syntax highlighting typescript
     Plug 'uiiaoo/java-syntax.vim'                                     " syntax highlighting java
