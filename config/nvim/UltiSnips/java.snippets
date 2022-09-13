@@ -46,13 +46,21 @@ while(${1:bool condition}) {
 endsnippet
 
 snippet for "for loop" b
-for(int ${1:i} = ${2:0}; $1 ${3:<} ${4:int num}; $1${5:++}) {
+for(int ${1:i} = ${2:0}; $1 ${3:<} ${4:num}; $1${5:++}) {
 	$0
 }
 endsnippet
 
-snippet if "if statement" i
+snippet if "if statement" b
 if(${1:bool condition}) {
+	$0
+}
+endsnippet
+
+snippet try "try" b
+try {
+	$1
+} catch {
 	$0
 }
 endsnippet
