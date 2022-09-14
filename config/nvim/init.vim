@@ -48,17 +48,18 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'uiiaoo/java-syntax.vim'                                     " syntax highlighting java
 call plug#end()
 
-source ~/Dropbox/Dotfiles/config/nvim/config/theme.vim
-source ~/Dropbox/Dotfiles/config/nvim/config/keyboardMovement.vim
-source ~/Dropbox/Dotfiles/config/nvim/config/mappings.vim
-source ~/Dropbox/Dotfiles/config/nvim/config/textObjects.vim
-source ~/Dropbox/Dotfiles/config/nvim/config/compileAndRun.vim
-source ~/Dropbox/Dotfiles/config/nvim/config/MathWiki.vim
+source $DOTFILES_DIR/config/nvim/config/theme.vim
+source $DOTFILES_DIR/config/nvim/config/keyboardMovement.vim
+source $DOTFILES_DIR/config/nvim/config/mappings.vim
+source $DOTFILES_DIR/config/nvim/config/textObjects.vim
+source $DOTFILES_DIR/config/nvim/config/compileAndRun.vim
+source $DOTFILES_DIR/config/nvim/config/MathWiki.vim
+source $DOTFILES_DIR/config/nvim/config/fileTypeDefaults.vim
 
-source ~/Dropbox/Dotfiles/config/nvim/config/pluggins/markdown.vim
-source ~/Dropbox/Dotfiles/config/nvim/config/pluggins/syntaxRange.vim
-source ~/Dropbox/Dotfiles/config/nvim/config/pluggins/ultisnips.vim
-source ~/Dropbox/Dotfiles/config/nvim/config/pluggins/vimtex.vim
-source ~/Dropbox/Dotfiles/config/nvim/config/pluggins/ncm2.vim
+source $DOTFILES_DIR/config/nvim/config/pluggins/markdown.vim
+source $DOTFILES_DIR/config/nvim/config/pluggins/syntaxRange.vim
+source $DOTFILES_DIR/config/nvim/config/pluggins/ultisnips.vim
+source $DOTFILES_DIR/config/nvim/config/pluggins/vimtex.vim
+source $DOTFILES_DIR/config/nvim/config/pluggins/ncm2.vim
 
 autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"
