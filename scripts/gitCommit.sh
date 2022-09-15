@@ -15,18 +15,19 @@ if [[ -z $1 ]]; then
     echo -e "${CYAN}    (3): MathLinks${NC}"
     echo ""
 
-    read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1-3]${NC} ")" repo
-    if [ "$repo" == "q" ]; then
+    read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1|(1-3)]${NC} ")" repo
+    re='^[0-9]+$'
+    if ( [[ $repo =~ $re ]] ) && ( [ "$repo" -gt "0" ] && [ "$repo" -lt "4" ] ) || [[ -z "$repo" ]]; then
+        if [[ -z "$repo" ]]; then
+            repo="1"
+        fi
+    elif [[ "$repo" == "q" ]]; then
+        exit
+    else
+        clear
+        $DOTFILES_DIR/scripts/gitCommit.sh
         exit
     fi
-
-    re='^[0-9]+$'
-    while ( ! [[ $repo =~ $re ]] ) || ( [ "$repo" -lt "1" ] || [ "$repo" -gt "3" ] ); do
-        read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1-3]${NC} ")" repo
-        if [[ "$repo" == "q" ]]; then
-            exit
-        fi
-    done
 
     case $repo in
         "1")
