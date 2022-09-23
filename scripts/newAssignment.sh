@@ -36,6 +36,6 @@ while getopts 'f:t:d:s' OPTION; do
         s)
             template="template_s.tex"
         ;;
-  esac
+    esac
 done
 shift "$(($OPTIND -1))"
