@@ -43,6 +43,12 @@ while getopts 'c:r:' OPTION; do
         ;;
         r)
             cd $(echo $OPTARG | sed 's/\/src.*$//g')
+
+            if [[ -z $(echo $(ls) | grep "build") ]]; then
+                find -name "*.java" > src.txt
+                javac -d build @src.txt
+            fi
+
             Run
         ;;
     esac
