@@ -147,6 +147,7 @@ case $mainChoice in
     ;;
     "~/Dropbox/Others/Reminders")
         dir="$HOME/Dropbox/Others/Reminders"
+        cd $dir
         choice=$(find $dir -type f -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:^.*\ /home:/home:' | DMENU $(echo "$mainChoice/" | sed 's:/home/zhao:~:g'))
 
         if [ "$choice" ]; then

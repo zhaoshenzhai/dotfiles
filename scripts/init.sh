@@ -8,7 +8,8 @@ dropbox &
 nitrogen --restore &
 
 # Open reminders
-notes=$(find "/home/zhao/Dropbox/Others/Reminders" -maxdepth 1 -type f | grep ".md")
+cd /home/zhao/Dropbox/Others/Reminders
+notes=$(find . -maxdepth 1 -type f | grep ".md")
 while IFS= read -r note; do
     alacritty --class reminders,reminders -e nvim "$note" &
 done <<< "$notes"
