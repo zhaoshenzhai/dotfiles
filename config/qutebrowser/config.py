@@ -34,6 +34,12 @@ config.set("tabs.indicator.width", 0)
 config.set("tabs.max_width", 350)
 config.set("tabs.padding", {"bottom": 5, "left": 5, "right": 5, "top": 0})
 
+# Default programs
+config.set("editor.command", ['alacritty', '-e', 'nvim', '{}'])
+config.set("fileselect.handler", "external")
+config.set("fileselect.single_file.command", ['alacritty', '-e', 'vifm', '--choose-files={}'])
+config.set("fileselect.multiple_files.command", ['alacritty', '-e', 'vifm', '--choose-files={}'])
+
 # Open mpv
 config.bind('<Meta+m>', 'hint links spawn -d mpv --ytdl-raw-options=\'sub-lang="en,eng,enUS,en-US",write-auto-sub=,write-sub=,cookies=~/.config/cookies_Z.txt,mark-watched=\' {hint-url} &')
 
