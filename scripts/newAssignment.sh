@@ -24,6 +24,7 @@ while getopts 'f:t:d:s' OPTION; do
 
             sed -i 's/COURSE_NAME/'"$courseName"'/g' $file.tex
             sed -i 's/TERM_YEAR/'"$termYear"'/g' $file.tex
+            sed -i 's/TITLE/'"$displayedTitle"'/g' $file.tex
         ;;
         t)
             displayedTitle=$OPTARG
