@@ -2,7 +2,6 @@
     % Set Theory
         \newcommand{\fa}{\forall}
         \newcommand{\ex}{\exists}
-        \renewcommand{\em}{\varnothing}
         \newcommand{\pow}{\mathcal{P}}
         \newcommand{\id}{\operatorname{id}}
         \newcommand{\iv}{\operatorname{iv}}
@@ -15,12 +14,13 @@
         \newcommand{\rest}{\!\upharpoonright\!}
         \newcommand{\comp}{\setminus}
         \newcommand{\rfcl}{\operatorname{rfcl}}
-        \newcommand{\ord}{\textrm{ON}}
+        \newcommand{\ordinal}{\textrm{ON}}
         \newcommand{\iso}{\cong}
         \newcommand{\into}{\hookrightarrow}
         \newcommand{\onto}{\twoheadrightarrow}
         \newcommand{\simto}{\rightleftarrows}
-        \newcommand{\eqnum}{\equiv}
+        \newcommand{\eqnum}{\approx}
+        \renewcommand{\em}{\varnothing}
         \renewcommand{\min}{\operatorname{min}}
         \renewcommand{\max}{\operatorname{max}}
 
@@ -83,10 +83,12 @@
 
         % Group Theory
             \newcommand{\inn}{\operatorname{Inn}}
+            \newcommand{\ord}[1]{\l|#1\r|}
 
         % Number Theory
             \newcommand{\lcm}{\operatorname{lcm}}
             \newcommand{\divides}{\,|\,}
+            \newcommand{\ndivides}{\nmid}
             \renewcommand{\mod}[1]{\equiv_{#1}}
 
         % Field Theory
