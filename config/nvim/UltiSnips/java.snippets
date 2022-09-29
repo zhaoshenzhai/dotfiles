@@ -27,6 +27,13 @@ public static ${1:void} ${2:name}($3) {
 }
 endsnippet
 
+priority 300
+snippet pffun "new public static function" b
+public final ${1:void} ${2:name}($3) {
+	$0
+}
+endsnippet
+
 snippet pl "Console.WriteLine()" b
 System.out.println(${1:string str});$0
 endsnippet
@@ -37,6 +44,45 @@ endsnippet
 #### Functions ####
 
 ###########################################################
+
+#### Classes ####
+priority 100
+snippet cls "new class" b
+class ${1:name} {
+	$0
+}
+endsnippet
+
+priority 200
+snippet pcls "new public class" b
+public class ${1:name} {
+	$0
+}
+endsnippet
+
+priority 200
+snippet acls "new abstract class" b
+abstract class ${1:name} {
+	$0
+}
+endsnippet
+
+priority 300
+snippet pacls "new public abstract class" b
+public abstract class ${1:name} {
+	$0
+}
+endsnippet
+
+snippet con "constructor" b
+public ${1:name}($2) {
+	$0
+}
+endsnippet
+
+###########################################################
+
+#### Classes ####
 
 #### Loops & Conditions ####
 snippet while "while loop" b
