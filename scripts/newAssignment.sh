@@ -27,8 +27,8 @@ while getopts 'f:t:d:s' OPTION; do
             sed -i 's/TITLE/'"$displayedTitle"'/g' $file.tex
         ;;
         t)
-            displayedTitle=$OPTARG
-            sed -i 's/TITLE/'"$displayedTitle"'/g' $file.tex
+            displayedTitleNew=$OPTARG
+            sed -i 's/'"$displayedTitle"'/'"$displayedTitleNew"'/g' $file.tex
         ;;
         d)
             dueDate=$(echo $OPTARG | sed 's/\\/\\\\/g' | sed 's/\$/\\\$/g' | sed 's/\\t/\\t/g')
