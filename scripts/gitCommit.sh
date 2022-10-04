@@ -32,6 +32,8 @@ if [[ -z $1 ]]; then
     case $repo in
         "1")
             cd $MATHWIKI_DIR
+            source $MATHWIKI_DIR/.scripts/stats.sh -u
+            source $MATHWIKI_DIR/.scripts/stats.sh -r
         ;;
         "2")
             cd $DOTFILES_DIR
@@ -45,6 +47,8 @@ else
     case "$1" in
         --MathWiki|-m)
             repo="1"
+            source $MATHWIKI_DIR/.scripts/stats.sh -u
+            source $MATHWIKI_DIR/.scripts/stats.sh -r
             cd $MATHWIKI_DIR
     esac
 fi
