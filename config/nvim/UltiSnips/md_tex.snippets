@@ -5,15 +5,15 @@ def math():
 def notMath():
 	return vim.eval('vimtex#syntax#in_mathzone()') != '1'
 endglobal
+
+snippet $ "enter math mode" Ai
+\$$1\$$0
+endsnippet
 #### Math ####
 
 ###########################################################
 
-#### Main ####
-snippet $ "enter math mode" Ai
-\$$1\$$0
-endsnippet
-
+#### Brackets ####
 priority 100
 context "math()"
 snippet ( "()" iA
@@ -66,7 +66,11 @@ context "math()"
 snippet cl "ceiling" i
 \l\lceil$1\r\rceil$0
 endsnippet
+#### Brackets ####
 
+###########################################################
+
+#### Common operators/notations ####
 context "math()"
 snippet fr "fraction" i
 \frac{$1}{$2}$0
@@ -132,20 +136,19 @@ snippet gl "general linear group" i
 endsnippet
 
 context "math()"
-snippet ubrace "underbrace" i
-\underbrace{$1}_{\mathclap{$2}}$0
-endsnippet
-
-context "math()"
-snippet obrace "overbrace" i
-\overbrace{$1}_{\mathclap{$2}}$0
-endsnippet
-
-context "math()"
 snippet gra "graph of a function" i
 \Gamma_{\mathclap{${1:f}}}\ 
 endsnippet
 
+context "math()"
+snippet cycle "cycle" i
+\l(${1:a}_1\ \cdots\ $1_$2\r)$0
+endsnippet
+#### Common operators/notations ####
+
+###########################################################
+
+#### Arrows ####
 priority 100
 context "math()"
 snippet -> "right arrow" i
@@ -175,22 +178,7 @@ context "math()"
 snippet <=> "Left right double arrow" i
 \Leftrightarrow
 endsnippet
-
-context "math()"
-snippet ~ "tilde" Ai
-\sim
-endsnippet
-
-context "math()"
-snippet d= "coloneqq" i
-\coloneqq
-endsnippet
-
-context "math()"
-snippet dequiv "colon<=>" i
-\,\colon\!\Leftrightarrow
-endsnippet
-#### Main ####
+#### Arrows ####
 
 ###########################################################
 
@@ -240,6 +228,31 @@ endsnippet
 
 snippet wlog "without loss of generality" i
 w.l.o.g.
+endsnippet
+
+context "math()"
+snippet ~ "tilde" Ai
+\sim
+endsnippet
+
+context "math()"
+snippet d= "coloneqq" i
+\coloneqq
+endsnippet
+
+context "math()"
+snippet dequiv "colon<=>" i
+\,\colon\!\Leftrightarrow
+endsnippet
+
+context "math()"
+snippet ubrace "underbrace" i
+\underbrace{$1}_{\mathclap{$2}}$0
+endsnippet
+
+context "math()"
+snippet obrace "overbrace" i
+\overbrace{$1}_{\mathclap{$2}}$0
 endsnippet
 #### Convenience ####
 
