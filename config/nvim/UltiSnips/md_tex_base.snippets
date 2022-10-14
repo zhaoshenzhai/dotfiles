@@ -70,84 +70,6 @@ endsnippet
 
 ###########################################################
 
-#### Common operators/notations ####
-context "math()"
-snippet fr "fraction" i
-\frac{$1}{$2}$0
-endsnippet
-
-context "math()"
-snippet rt "sqrt" i
-\sqrt$2{$1}$0
-endsnippet
-
-context "math()"
-snippet der "derivative" i
-\frac{\d ${1:f}}{\d ${2:x}}$0
-endsnippet
-
-context "math()"
-snippet par "partial derivative" i
-\frac{\partial $1}{\partial $2}$0
-endsnippet
-
-context "math()"
-snippet int "integral" i
-\int_{$1}^{$2}$4\d ${3:x}$0
-endsnippet
-
-context "math()"
-snippet lim "limit" i
-\lim_{${1:n}\to${2:\infty}}$0
-endsnippet
-
-priority 100
-context "math()"
-snippet sum "sum" i
-\sum_{${1:i}=${2:0}}^{${3:\infty}}$0
-endsnippet
-
-priority 100
-context "math()"
-snippet prod "product" i
-\prod_{${1:i}=${2:0}}^{${3:\infty}}$0
-endsnippet
-
-priority 200
-context "math()"
-snippet asum "arbitrary sum" i
-\sum_{${1:i}\in${2: I}}$0
-endsnippet
-
-priority 200
-context "math()"
-snippet aprod "arbitrary product" i
-\prod_{${1:i}\in${2: I}}$0
-endsnippet
-
-context "math()"
-snippet div "divides" i
-$1\divides$2
-endsnippet
-
-context "math()"
-snippet gl "general linear group" i
-\gl_${1:n}\!\l(${2:\R}\r)$0
-endsnippet
-
-context "math()"
-snippet gra "graph of a function" i
-\Gamma_{\mathclap{${1:f}}}\ 
-endsnippet
-
-context "math()"
-snippet cycle "cycle" i
-\l(${1:a}_1\ \cdots\ $1_$2\r)$0
-endsnippet
-#### Common operators/notations ####
-
-###########################################################
-
 #### Arrows ####
 priority 100
 context "math()"
@@ -255,32 +177,6 @@ snippet obrace "overbrace" i
 \overbrace{$1}_{\mathclap{$2}}$0
 endsnippet
 #### Convenience ####
-
-###########################################################
-
-#### Let ...
-snippet TOP "Topological space" i
-Let $\l\langle ${1:X},${2:\mc{T}}\r\rangle$ be a topological space. $0
-endsnippet
-
-priority 2000
-snippet EQVREL "Relation" i
-Let $${1:\\sim}$ be an equivalence relation on a set $${2:X}$. $0
-endsnippet
-
-priority 1000
-snippet IND "Indexed family" i
-Let $\l\\{${1:X}_${2:i}\r\\}_{$2\in${3: I}}$ be an indexed family of sets. $0
-endsnippet
-
-snippet RCINP "Real of complex inner product space" i
-Let $K$ denote either $\\R$ or $\\C$ and let $V$ be an inner product space over $K$. $0
-endsnippet
-
-snippet E>0 "Epsilon greater than 0" i
-Let $\epsilon>0$. $0
-endsnippet
-#### Let ...
 
 ###########################################################
 
