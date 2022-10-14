@@ -7,8 +7,19 @@ termYear=""
 displayedTitle=""
 dueDate="DUE_DATE"
 
-while getopts 'f:t:d:s' OPTION; do
+section="0"
+subsection="0"
+
+while getopts 'f:t:d:s:S:' OPTION; do
     case "$OPTION" in
+        s)
+            template="template_s.tex"
+            subsection=$OPTARG
+        ;;
+        S)
+            template="template_s.tex"
+            section=$OPTARG
+        ;;
         f)
             file=$OPTARG
             mkdir $file
@@ -25,6 +36,9 @@ while getopts 'f:t:d:s' OPTION; do
             sed -i 's/COURSE_NAME/'"$courseName"'/g' $file.tex
             sed -i 's/TERM_YEAR/'"$termYear"'/g' $file.tex
             sed -i 's/TITLE/'"$displayedTitle"'/g' $file.tex
+
+            sed -i 's/{section}{0}/{section}{'"$section"'}/g' $file.tex
+            sed -i 's/{subsection}{0}/{subsection}{'"$subsection"'}/g' $file.tex
         ;;
         t)
             displayedTitleNew=$OPTARG
@@ -33,9 +47,6 @@ while getopts 'f:t:d:s' OPTION; do
         d)
             dueDate=$(echo $OPTARG | sed 's/\\/\\\\/g' | sed 's/\$/\\\$/g' | sed 's/\\t/\\t/g')
             sed -i 's/DUE_DATE/'"$dueDate"'/g' $file.tex
-        ;;
-        s)
-            template="template_s.tex"
         ;;
     esac
 done
