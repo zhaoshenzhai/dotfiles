@@ -34,10 +34,7 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'ncm2/ncm2-bufword'                                          " complete words in buffer
     Plug 'ncm2/ncm2-path'                                             " complete paths
     Plug 'kana/vim-textobj-user'                                      " custom textObjects
-
-    " Development
     Plug 'lervag/vimtex'                                              " latex support
-    Plug 'Quramy/tsuquyomi'                                           " typescript
 
     " Theme
     Plug 'joshdick/onedark.vim'                                       " onedark color scheme
