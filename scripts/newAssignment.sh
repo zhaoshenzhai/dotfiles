@@ -32,6 +32,7 @@ while getopts 'f:t:d:s:S:' OPTION; do
             courseName=$(echo $PWD | grep -Po "[A-Z]{4}[1-9]{3}.*/" | sed 's/\/.*//g' | sed 's/_/\ /g' | sed '0,/\ /{s/\ /\ -\ /}')
             termYear=$(echo $PWD | grep -Po "Y\d_.*/" | sed 's/\/.*//g' | sed 's/^.*_//g')\ $(echo $PWD | grep -Po "20\d\d")
             displayedTitle=$(echo $file | sed 's/_/\ /g')
+            number=$(($(echo $file | sed 's/Question_//g') - 1))
 
             sed -i 's/COURSE_NAME/'"$courseName"'/g' $file.tex
             sed -i 's/TERM_YEAR/'"$termYear"'/g' $file.tex
@@ -39,6 +40,7 @@ while getopts 'f:t:d:s:S:' OPTION; do
 
             sed -i 's/{section}{0}/{section}{'"$section"'}/g' $file.tex
             sed -i 's/{subsection}{0}/{subsection}{'"$subsection"'}/g' $file.tex
+            sed -i 's/{exercise}{0}/{exercise}{'"$number"'}/g' $file.tex
         ;;
         t)
             displayedTitleNew=$OPTARG
