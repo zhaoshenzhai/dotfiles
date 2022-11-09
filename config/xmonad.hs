@@ -131,6 +131,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_d               ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -d1" ),
         ((modm .|. shiftMask, xK_d ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -d2" ),
 
+        -- Background
+        ((modm, xK_F11), spawn "nitrogen /home/zhao/Dropbox/Dotfiles/wallpapers/image.jpg --set-zoom-fill"),
+        ((modm, xK_F12), spawn "nitrogen /home/zhao/Dropbox/Dotfiles/wallpapers/image2.png --set-zoom-fill"),
+
         -- Brightness
         ((modm, xK_F7), spawn "lux -s 5%"),
         ((modm, xK_F8), spawn "lux -a 5%"),
