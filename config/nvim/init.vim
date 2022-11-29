@@ -52,6 +52,7 @@ source $DOTFILES_DIR/config/nvim/config/textObjects.vim
 source $DOTFILES_DIR/config/nvim/config/compileAndRun.vim
 source $DOTFILES_DIR/config/nvim/config/MathWiki.vim
 source $DOTFILES_DIR/config/nvim/config/fileTypeDefaults.vim
+source $DOTFILES_DIR/config/nvim/config/autoFold.vim
 
 source $DOTFILES_DIR/config/nvim/config/pluggins/markdown.vim
 source $DOTFILES_DIR/config/nvim/config/pluggins/syntaxRange.vim
