@@ -126,10 +126,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_F4              ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -b"  ),
         ((modm, xK_F5              ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -p"  ),
         ((modm, xK_F6              ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -n"  ),
-        ((modm, xK_c               ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -c1" ),
-        ((modm .|. shiftMask, xK_c ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -c2" ),
-        ((modm, xK_d               ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -d1" ),
-        ((modm .|. shiftMask, xK_d ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -d2" ),
+        ((modm, xK_c               ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -c"  ),
+        ((modm, xK_d               ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -d"  ),
 
         -- Background
         ((modm, xK_F11), spawn "nitrogen /home/zhao/Dropbox/Dotfiles/wallpapers/image.jpg --set-zoom-fill"),

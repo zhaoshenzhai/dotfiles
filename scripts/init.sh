@@ -1,5 +1,5 @@
 #!/bin/bash
-xset r rate 300 &                # Set keyboard repeat rate
+xset r rate 200 &                # Set keyboard repeat rate
 xset b off &                     # Remove beep
 xsetroot -cursor_name left_ptr   # Cursor
 
@@ -17,4 +17,4 @@ done <<< "$notes"
 # Start applications
 obsidian &
 LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify &
-qutebrowser-profile --new 'Z' https://www.youtube.com https://www.github.com/zhaoshenzhai https://calendar.google.com/calendar https://mail.google.com/mail/u/0 https://outlook.office.com/mail &
+qutebrowser-profile --new 'Z' https://calendar.google.com/calendar https://mail.google.com/mail/u/0 https://outlook.office.com/mail &

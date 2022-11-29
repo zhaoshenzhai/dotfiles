@@ -67,23 +67,12 @@ while [ ! -z "$1" ]; do
                 `pamixer --set-volume $volume`
             fi
             ;;
-        --connect1|-c1)
-            shift
-            `bluetoothctl power on`
-            `bluetoothctl connect 88:D0:39:9F:C9:4B`
-            ;;
-        --connect2|-c2)
+        --connect|-c)
             shift
             `bluetoothctl power on`
             `bluetoothctl connect E8:07:BF:CB:CD:1A`
             ;;
-        --disconnect1|-d1)
-            shift
-            `bluetoothctl disconnect 88:D0:39:9F:C9:4B`
-            `bluetoothctl power off`
-            `playerctl -p spotify pause`
-            ;;
-        --disconnect2|-d2)
+        --disconnect|-d)
             shift
             `bluetoothctl disconnect E8:07:BF:CB:CD:1A`
             `bluetoothctl power off`
