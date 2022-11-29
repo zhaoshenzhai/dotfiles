@@ -72,7 +72,7 @@ while [ ! -z "$1" ]; do
             `bluetoothctl power on`
             `bluetoothctl connect E8:07:BF:CB:CD:1A`
             ;;
-        --disconnect|-d)
+        --disconnect|-x)
             shift
             `bluetoothctl disconnect E8:07:BF:CB:CD:1A`
             `bluetoothctl power off`
