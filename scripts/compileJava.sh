@@ -12,7 +12,7 @@ repeat="Y"
 
 Run() {
     while [[ "$repeat" == "Y" ]]; do
-        mainPath=$(grep -lr "public static void main(String\[\] args)" * | sed 's/src\///g' | sed 's/\.java$//g')
+        mainPath=$(grep -lr "public static void main(String\[\] args)" * | sed 's/src\///g' | sed 's/\.java$//g' | sed 's/\//./g')
         cd build
         java $mainPath
         cd ..
