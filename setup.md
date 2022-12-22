@@ -114,9 +114,8 @@
         - zo
         - :sort N
         - Add marks:
-            - c ~/.config [xmonad]
-            - d ~/Dropbox [MathWiki]
-            - h ~/ [none]
+            - h ~/ [Dropbox]
+            - d ~/Dropbox/Dotfiles [config]
             - m ~/Dropbox/MathWiki [Notes]
             - o ~/Dropbox/obsidian-mathlinks [src]
             - u ~/Dropbox/University/Courses/22F [MATH133]
