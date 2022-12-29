@@ -44,6 +44,30 @@ snippet aprod "arbitrary product" i
 \prod_{${1:i}\in${2: I}}$0
 endsnippet
 
+priority 100
+context "math()"
+snippet bcup "bigcup" i
+\bigcup_{${1:i}=${2:0}}^{${3:\infty}}$0
+endsnippet
+
+priority 200
+context "math()"
+snippet abcup "arbitrary bigcup" i
+\bigcup_{${1:\alpha}\in${2:\mc{A}}}$0
+endsnippet
+
+priority 100
+context "math()"
+snippet bcap "bigcap" i
+\bigcap_{${1:i}=${2:0}}^{${3:\infty}}$0
+endsnippet
+
+priority 200
+context "math()"
+snippet abcap "arbitrary bigcap" i
+\bigcap_{${1:\alpha}\in${2:\mc{A}}}$0
+endsnippet
+
 context "math()"
 snippet gra "graph of a function" i
 \Gamma_{\mathclap{${1:f}}}\ 
