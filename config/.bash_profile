@@ -15,6 +15,9 @@ export XMONAD_CACHE_DIR="$HOME/.cache"
 export XMONAD_CONFIG_DIR="$HOME/.config/xmonad"
 export XMONAD_DATA_DIR="$HOME/.config/xmonad"
 
+# Java
+export _JAVA_AWT_WM_NONREPARENTING=1
+
 # Directories
 export MATHWIKI_DIR="$HOME/Dropbox/MathWiki"
 export DOTFILES_DIR="$HOME/Dropbox/Dotfiles"

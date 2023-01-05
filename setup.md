@@ -82,11 +82,11 @@
             - Fonts
                 - ttf-font-awesome ttf-anonymous-pro adobe-source-han-sans-cn-fonts
             - Tools
-                - htop tree unzip bc scrot python python-pip npm ghostscript pdf2svg jdk-openjdk jre-openjdk mono
+                - htop tree unzip bc scrot python python-pip npm ghostscript pdf2svg jdk-openjdk jre-openjdk mono openssh
             - TeX
                 - texlive-core texlive-latexextra texlive-science texlive-pictures
         - Yay
-            - ttf-courier-prime ttf-cmu-serif nerd-fonts-mononoki qutebrowser-profile-git spotify colorpicker chromium dropbox
+            - ttf-courier-prime ttf-cmu-serif nerd-fonts-mononoki qutebrowser-profile-git spotify colorpicker chromium dropbox logisim-evolution mars-mips
         - pip
             - pynvim numpy matplotlib
         - npm
