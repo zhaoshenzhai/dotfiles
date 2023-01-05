@@ -118,7 +118,7 @@
             - d ~/Dropbox/Dotfiles [config]
             - m ~/Dropbox/MathWiki [Notes]
             - o ~/Dropbox/obsidian-mathlinks [src]
-            - u ~/Dropbox/University/Courses/22F [MATH133]
+            - u ~/Dropbox/University/Courses/2023_01_Y1_Winter [COMP206_Introduction_to_Software_Systems]
 
     ## Audio
         - If no speaker:
