@@ -119,7 +119,7 @@ case $mainChoice in
     ;;
     "~/Dropbox/Textbooks")
         dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
-        choice=$(find $dir -printf "\n%AD %AT %p" | grep ".pdf" | sort -nr | sed 's:.*/::' | DMENU "$mainChoice/")
+        choice=$(find $dir -printf "\n%A@ %p" | grep ".pdf" | sort -nr | sed 's:.*/::' | DMENU "$mainChoice/")
 
         if [ "$choice" ]; then
             zathura "$mainChoice/$choice"
