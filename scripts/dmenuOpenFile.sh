@@ -122,6 +122,7 @@ case $mainChoice in
         choice=$(find $dir -printf "\n%A@ %p" | grep ".pdf" | sort -nr | sed 's:.*/::' | DMENU "$mainChoice/")
 
         if [ "$choice" ]; then
+            touch "$dir/$choice"
             zathura "$mainChoice/$choice"
         fi
     ;;
