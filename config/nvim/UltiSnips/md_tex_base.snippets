@@ -135,6 +135,16 @@ snippet mat "begin pmatrix" b
 	$0
 \end{bmatrix}
 endsnippet
+
+snippet alg "begin algorithm" b
+\begin{center}
+	\parbox{${1:0.7}\textwidth}{
+	\begin{algorithm}[H]
+		\caption{$\textsc{$2}$}
+		$0
+	\end{algorithm}}
+\end{center}
+endsnippet
 #### Environments ####
 
 ###########################################################
@@ -275,6 +285,12 @@ priority 200
 context "math()"
 snippet TH "theta" i
 \theta
+endsnippet
+
+priority 300
+context "math()"
+snippet TTH "Theta" i
+\Theta
 endsnippet
 
 priority 100
