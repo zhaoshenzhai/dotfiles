@@ -56,6 +56,7 @@ c.url.searchengines = {
 # Download
 config.set("downloads.remove_finished", 1000)
 config.set("downloads.location.directory", "~/Downloads")
+config.set("downloads.prevent_mixed_content", False)
 
 # Zoom
 config.set("zoom.default", "100%")
