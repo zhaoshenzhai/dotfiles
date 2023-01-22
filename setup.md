@@ -86,7 +86,7 @@
             - TeX
                 - texlive-core texlive-latexextra texlive-science texlive-pictures
         - Yay
-            - ttf-courier-prime ttf-cmu-serif nerd-fonts-mononoki qutebrowser-profile-git spotify spotify-adblock colorpicker chromium dropbox logisim-evolution mars-mips
+            - ttf-courier-prime ttf-cmu-serif ttf-mononoki-nerd qutebrowser-profile-git spotify spotify-adblock colorpicker chromium dropbox logisim-evolution mars-mips
         - pip
             - pynvim numpy matplotlib
         - npm
