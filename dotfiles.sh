@@ -7,12 +7,32 @@ NC='\033[0m'
 sudo sed -i 's/#Color/Color/g' /etc/pacman.conf
 
 # Symlinks
+rm $HOME/.config/alacritty/alacritty.yml
+rm $HOME/.config/git/config
+rm $HOME/.config/mpv/input.conf
+rm $HOME/.config/mpv/mpv.conf
+rm $HOME/.config/mpv/script-opts/reload.conf
+rm $HOME/.config/mpv/script-opts/youtube-quality.conf
+rm $HOME/.config/vifm/vifmrc
+rm $HOME/.config/zathura/zathurarc
+rm $HOME/.config/xmonad/xmonad.hs
+rm $HOME/.config/xmonad/xmobarrc
+rm $HOME/.config/mimeapps.list
+rm $HOME/.config/qutebrowser/config.py
+rm $HOME/.config/qutebrowser/quickmarks
+rm $HOME/.config/qutebrowser/bookmarks/urls
+rm $HOME/.config/nvim/UltiSnips
+rm $HOME/.config/nvim/spell/en.utf-8.add
+rm $HOME/.config/nvim/spell/en.utf-8.add.spl
+rm $HOME/.config/nvim/init.vim
 rm $HOME/.bashrc
 rm $HOME/.bash_profile
+
 mkdir $HOME/.config
 cd $HOME/.config
 mkdir alacritty git mpv mpv/script-opts vifm zathura xmonad qutebrowser nvim nvim/spell
 cd ..
+
 ln -s $HOME/Dropbox/Dotfiles/config/alacritty.yml $HOME/.config/alacritty/alacritty.yml
 ln -s $HOME/Dropbox/Dotfiles/config/git.conf $HOME/.config/git/config
 ln -s $HOME/Dropbox/Dotfiles/config/mpv/input.conf $HOME/.config/mpv/input.conf
