@@ -163,3 +163,4 @@ recurses
 recurse
 significand
 submodule
+nonintersecting
