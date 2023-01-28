@@ -100,8 +100,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm .|. shiftMask, xK_s), spawn "alacritty -e $DOTFILES_DIR/scripts/stopwatch.sh"),
 
         -- Applications
-        ((modm, xK_s), spawn "LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify"),
-        ((modm, xK_o), spawn "obsidian"                                            ),
+        ((modm, xK_s),               spawn "LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify"),
+        ((modm, xK_o),               spawn "obsidian"                                            ),
+        ((modm .|. shiftMask, xK_d), spawn "discord"                                             ),
 
         -- GitHub
         ((controlMask .|. shiftMask, xK_g), spawn "xclip -sel clip ~/.config/.gitpat"),
@@ -177,7 +178,6 @@ myStartupHook = do
 myManageHook = composeAll
     [
         className =? "reminders"     --> viewShift (myWorkspaces !! 0),
-        className =? "discord"       --> viewShift (myWorkspaces !! 0),
         className =? "qutebrowser"   --> viewShift (myWorkspaces !! 1),
         className =? "Chromium"      --> viewShift (myWorkspaces !! 1),
         className =? "obsidian"      --> viewShift (myWorkspaces !! 2),

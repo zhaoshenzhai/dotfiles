@@ -13,11 +13,12 @@ if [[ -z $1 ]]; then
     echo -e "${CYAN}    (1): MathWiki${NC}"
     echo -e "${CYAN}    (2): Dotfiles${NC}"
     echo -e "${CYAN}    (3): MathLinks${NC}"
+    echo -e "${CYAN}    (4): McHacks10${NC}"
     echo ""
 
-    read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1|(1-3)]${NC} ")" repo
+    read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1|(1-4)]${NC} ")" repo
     re='^[0-9]+$'
-    if ( [[ $repo =~ $re ]] ) && ( [ "$repo" -gt "0" ] && [ "$repo" -lt "4" ] ) || [[ -z "$repo" ]]; then
+    if ( [[ $repo =~ $re ]] ) && ( [ "$repo" -gt "0" ] && [ "$repo" -le "4" ] ) || [[ -z "$repo" ]]; then
         if [[ -z "$repo" ]]; then
             repo="1"
         fi
@@ -40,6 +41,9 @@ if [[ -z $1 ]]; then
         ;;
         "3")
             cd $HOME/Dropbox/MathLinks
+        ;;
+        "4")
+            cd $HOME/Downloads/McHacks10
         ;;
     esac   
 else
