@@ -43,7 +43,7 @@ if [[ -z $1 ]]; then
             cd $HOME/Dropbox/MathLinks
         ;;
         "4")
-            cd $HOME/Downloads/McHacks10
+            cd $HOME/Dropbox/University/Events/McHacks10-Subreddit-Vibes
         ;;
     esac   
 else
