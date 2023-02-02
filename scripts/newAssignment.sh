@@ -1,23 +1,28 @@
 #!/bin/bash
 
-file=""
+filesPath=$DOTFILES_DIR/files/assignmentsTemplate/
 template="template.tex"
+
+file=""
 courseName=""
 termYear=""
 displayedTitle=""
 dueDate="DUE_DATE"
+setCounterLine=0
+collabInfo=""
 
-section="0"
-subsection="0"
-
-while getopts 'f:t:d:s:S:' OPTION; do
+while getopts 'c:f:t:d:s:S:' OPTION; do
     case "$OPTION" in
+        c)
+            template="template_c.tex"
+            collabInfo=$OPTARG
+        ;;
         s)
-            template="template_s.tex"
+            setCounterLine=$(grep -n "setcounter" $filesPath/$template | sed 's/:.*//')
             subsection=$OPTARG
         ;;
         S)
-            template="template_s.tex"
+            setCounterLine=$(grep -n "setcounter" $filesPath/$template | sed 's/:.*//')
             section=$OPTARG
         ;;
         f)
@@ -25,8 +30,8 @@ while getopts 'f:t:d:s:S:' OPTION; do
             mkdir $file
             cd $file
 
-            cp -r $DOTFILES_DIR/files/assignmentsTemplate/*.sty $PWD
-            cp -r $DOTFILES_DIR/files/assignmentsTemplate/$template $PWD
+            cp -r $filesPath*.sty $PWD
+            cp -r $filesPath/$template $PWD
             mv $template $file.tex
 
             courseName=$(echo $PWD | grep -Po "[A-Z]{4}[1-9]{3}.*/" | sed 's/\/.*//g' | sed 's/_/\ /g' | sed '0,/\ /{s/\ /\ -\ /}')
@@ -38,9 +43,17 @@ while getopts 'f:t:d:s:S:' OPTION; do
             sed -i 's/TERM_YEAR/'"$termYear"'/g' $file.tex
             sed -i 's/TITLE/'"$displayedTitle"'/g' $file.tex
 
-            sed -i 's/{section}{0}/{section}{'"$section"'}/g' $file.tex
-            sed -i 's/{subsection}{0}/{subsection}{'"$subsection"'}/g' $file.tex
             sed -i 's/{exercise}{0}/{exercise}{'"$number"'}/g' $file.tex
+
+            if [[ ! -z $section ]]; then
+                sed -i ''"$setCounterLine"'s/$/\n    \\setcounter{section}{'"$section"'}/g' $file.tex
+            fi
+
+            if [[ ! -z $subsection ]]; then
+                sed -i ''"$((setCounterLine + 1))"'s/$/\n    \\setcounter{subsection}{'"$subsection"'}/g' $file.tex
+            fi
+
+            sed -i 's/COLLAB_INFO/'"$collabInfo"'/g' $file.tex
         ;;
         t)
             displayedTitleNew=$OPTARG
