@@ -47,10 +47,12 @@ while getopts 'c:f:t:d:s:S:' OPTION; do
 
             if [[ ! -z $section ]]; then
                 sed -i ''"$setCounterLine"'s/$/\n    \\setcounter{section}{'"$section"'}/g' $file.tex
+                sed -i 's/{exercise}{Exercise}.*/{exercise}{Exercise}[section]/g' $file.tex
             fi
 
             if [[ ! -z $subsection ]]; then
                 sed -i ''"$((setCounterLine + 1))"'s/$/\n    \\setcounter{subsection}{'"$subsection"'}/g' $file.tex
+                sed -i 's/{exercise}{Exercise}.*/{exercise}{Exercise}[subsection]/g' $file.tex
             fi
 
             sed -i 's/COLLAB_INFO/'"$collabInfo"'/g' $file.tex
