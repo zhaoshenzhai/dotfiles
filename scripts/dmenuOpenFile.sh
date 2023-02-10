@@ -17,6 +17,7 @@ declare -a options=(
     `echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g'`
     `echo $DOTFILES_DIR | sed 's:/home/zhao:~:g'`
     "~/Dropbox/Textbooks"
+    "~/Dropbox/Papers"
     "~/Dropbox/MathLinks"
     "~/Dropbox/Others/Reminders"
     "~/Dropbox/Highschool/Course_Notes"
@@ -118,6 +119,15 @@ case $mainChoice in
         fi
     ;;
     "~/Dropbox/Textbooks")
+        dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
+        choice=$(find $dir -printf "\n%A@ %p" | grep ".pdf" | sort -nr | sed 's:.*/::' | DMENU "$mainChoice/")
+
+        if [ "$choice" ]; then
+            touch "$dir/$choice"
+            zathura "$mainChoice/$choice"
+        fi
+    ;;
+    "~/Dropbox/Papers")
         dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
         choice=$(find $dir -printf "\n%A@ %p" | grep ".pdf" | sort -nr | sed 's:.*/::' | DMENU "$mainChoice/")
 

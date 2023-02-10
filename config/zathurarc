@@ -30,3 +30,4 @@ set sandbox                 none
 
 map = feedkeys              "+"
 map x toggle_statusbar
+map D set "first-page-column 1:1"
