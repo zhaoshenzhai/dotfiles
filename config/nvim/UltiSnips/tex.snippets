@@ -53,6 +53,24 @@ snippet enum "begin enumerate" b
 \end{enumerate}
 endsnippet
 
+snippet def "begin definition" b
+\begin{definition}
+	$0
+\end{definition}
+endsnippet
+
+snippet prp "begin proposition" b
+\begin{proposition}
+	$0
+\end{proposition}
+endsnippet
+
+snippet thm "begin theorem" b
+\begin{theorem}
+	$0
+\end{theorem}
+endsnippet
+
 snippet pro "begin proof" b
 \begin{proof}
 	$0
@@ -83,6 +101,12 @@ snippet tikz "begin tikzpicture" b
 \end{tikzpicture}
 endsnippet
 
+snippet cdn "begin tikzcd" b
+\begin{tikzcd}
+	$0
+\end{tikzcd}
+endsnippet
+
 snippet center "begin center" b
 \begin{center}
 	$0
@@ -95,25 +119,10 @@ snippet scope "begin scope" b
 \end{scope}
 endsnippet
 
-snippet cdn "begin tikzcd" b
-\begin{tikzcd}
-	$0
-\end{tikzcd}
-endsnippet
-
 snippet exer "begin exercise" b
 \begin{exercise}
 	$0
 \end{exercise}
-endsnippet
-
-snippet exer* "begin unnumbered exercise" b
-\let\normaltheorem=\theexerciseUnnumbered
-\let\theexerciseUnnumbered=\relax
-\begin{exerciseUnnumbered}
-	$0
-\end{exerciseUnnumbered}
-\let\theexerciseUnnumbered=\normaltheorem
 endsnippet
 
 snippet sol "begin solution" b
@@ -133,19 +142,4 @@ endsnippet
 snippet bf "bold" i
 \textbf{$1}$0
 endsnippet
-#### Typesetting
-
-###########################################################
-
-#### TikZ
-snippet OPENSET "Open set" b
-\newcommand{\pathA}{(-0.50,+1.25) .. controls (+1.00,+0.75) and (+1.75,+1.75) .. (+2.50,+1.75)}
-\newcommand{\pathB}{(+2.50,+1.75) .. controls (+3.25,+1.75) and (+1.75,+0.50) .. (+2.50,-0.75)}
-\newcommand{\pathC}{(+2.50,-0.75) .. controls (+3.25,-2.00) and (+1.00,-0.25) .. (-0.25,-1.25)}
-\newcommand{\pathD}{(-0.25,-1.25) .. controls (-1.50,-2.25) and (-1.50,-0.75) .. (-1.50,-0.25)}
-\newcommand{\pathE}{(-1.50,-0.25) .. controls (-1.50,+0.25) and (-1.75,+0.75) .. (-1.75,+0.75)}
-\newcommand{\pathF}{(-1.75,+0.75) .. controls (-2.00,+1.25) and (-1.25,+1.50) .. (-0.50,+1.25)}
-\draw[dashed, thick, dash phase=11pt] \pathA -- \pathB -- \pathC -- \pathD -- \pathE -- \pathF -- cycle;
-\fill \pathA -- \pathB -- \pathC -- \pathD -- \pathE -- \pathF;
-endsnippet
-#### TikZ
+#### Typesetting ####

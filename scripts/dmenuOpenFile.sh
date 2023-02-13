@@ -20,7 +20,7 @@ declare -a options=(
     "~/Dropbox/Papers"
     "~/Dropbox/MathLinks"
     "~/Dropbox/Others/Reminders"
-    "~/Dropbox/Highschool/Course_Notes"
+    "~/Dropbox/Others/Highschool/Course_Notes"
 )
 
 mainChoice=$(printf '%s\n' "${options[@]}" | DMENU "~/")
@@ -165,8 +165,8 @@ case $mainChoice in
             alacritty --class reminders,reminders -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
         fi
     ;;
-    "~/Dropbox/Highschool/Course_Notes")
-        dir="$HOME/Dropbox/Highschool/Course_Notes"
+    "~/Dropbox/Others/Highschool/Course_Notes")
+        dir="$HOME/Dropbox/Others/Highschool/Course_Notes"
         declare -a notes=(
             "$mainChoice/Introduction_to_Linear_Algebra/Introduction_to_Linear_Algebra.pdf"
             "$mainChoice/Introduction_to_Algebra/Introduction_to_Algebra.pdf"
