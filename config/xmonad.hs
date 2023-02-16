@@ -86,18 +86,19 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [
         -- Base
         ((modm, xK_backslash), spawn myTerminal                                   ),
-        ((modm, xK_Return   ), spawn "$DOTFILES_DIR/scripts/dmenuOpenFile.sh"),
+        ((modm, xK_Return   ), spawn "$DOTFILES_DIR/scripts/dmenuOpenFile.sh"     ),
         ((modm, xK_e        ), spawn "alacritty -e vifm ~/ ~/ -c normal\\ ggga"   ),
 
         -- Browser
         ((modm, xK_w              ), spawn "$DOTFILES_DIR/scripts/openQute.sh -Z"),
         ((modm .|. shiftMask, xK_w), spawn "$DOTFILES_DIR/scripts/openQute.sh -P"),
-        ((modm, xK_g              ), spawn "chromium --force-dark-mode"               ),
+        ((modm, xK_g              ), spawn "chromium --force-dark-mode"          ),
 
         -- Scripts
-        ((modm .|. shiftMask, xK_m), spawn "alacritty -e $MATHWIKI_DIR/.scripts/main.sh"    ),
-        ((modm .|. shiftMask, xK_g), spawn "alacritty -e $DOTFILES_DIR/scripts/gitCommit.sh"),
-        ((modm .|. shiftMask, xK_s), spawn "alacritty -e $DOTFILES_DIR/scripts/stopwatch.sh"),
+        ((modm .|. shiftMask, xK_m), spawn "alacritty -e $MATHWIKI_DIR/.scripts/main.sh"      ),
+        ((modm .|. shiftMask, xK_g), spawn "alacritty -e $DOTFILES_DIR/scripts/gitCommit.sh"  ),
+        ((modm .|. shiftMask, xK_s), spawn "alacritty -e $DOTFILES_DIR/scripts/stopwatch.sh"  ),
+        ((modm .|. shiftMask, xK_p), spawn "cd ~/Downloads; scrot 'Scrot_%Y_%m_%d_%H%M%S.png'"),
 
         -- Applications
         ((modm, xK_s),               spawn "LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify"),
@@ -131,7 +132,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_d               ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -x"  ),
 
         -- Background
-        ((modm, xK_F11), spawn "nitrogen /home/zhao/Dropbox/Dotfiles/wallpapers/image.jpg --set-zoom-fill"),
+        ((modm, xK_F11), spawn "nitrogen /home/zhao/Dropbox/Dotfiles/wallpapers/image.jpg --set-zoom-fill" ),
         ((modm, xK_F12), spawn "nitrogen /home/zhao/Dropbox/Dotfiles/wallpapers/image2.png --set-zoom-fill"),
 
         -- Brightness
