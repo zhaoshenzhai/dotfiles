@@ -84,7 +84,7 @@
             - Tools
                 - htop tree unzip bc scrot python python-pip npm ghostscript pdf2svg jdk-openjdk jre-openjdk mono openssh
             - TeX
-                - texlive-core texlive-latexextra texlive-science texlive-pictures
+                - texlive-core texlive-latexextra texlive-science texlive-pictures texlive-bibtexextra biber
         - Yay
             - ttf-courier-prime ttf-cmu-serif ttf-mononoki-nerd qutebrowser-profile-git spotify spotify-adblock colorpicker chromium dropbox logisim-evolution mars-mips
         - pip
