@@ -12,8 +12,8 @@ if [[ -z $1 ]]; then
     echo -e "${CYAN}Repositories:${NC}"
     echo -e "${CYAN}    (1): MathWiki${NC}"
     echo -e "${CYAN}    (2): Dotfiles${NC}"
-    echo -e "${CYAN}    (3): MathLinks${NC}"
-    echo -e "${CYAN}    (4): McHacks10${NC}"
+    echo -e "${CYAN}    (3): DRP2023${NC}"
+    echo -e "${CYAN}    (4): MathLinks${NC}"
     echo ""
 
     read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1|(1-4)]${NC} ")" repo
@@ -40,10 +40,10 @@ if [[ -z $1 ]]; then
             cd $DOTFILES_DIR
         ;;
         "3")
-            cd $HOME/Dropbox/MathLinks
+            cd $HOME/Dropbox/University/Courses/2023_01_Y1_Winter/DRP2023_Moduli_Spaces_of_Riemann_Surfaces/Paper
         ;;
         "4")
-            cd $HOME/Dropbox/University/Events/McHacks10-Subreddit-Vibes
+            cd $HOME/Dropbox/MathLinks
         ;;
     esac   
 else
