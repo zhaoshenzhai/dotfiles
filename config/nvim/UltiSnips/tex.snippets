@@ -1,4 +1,4 @@
-#### Math ####
+
 global !p
 def math():
 	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
@@ -23,27 +23,30 @@ snippet RESIMP "Result follows ... chain of implications" it
 The result follows from the following chain of implications:$0
 \begin{equation*}
 	\begin{aligned}
-		$0
+		$1
 	\end{aligned}
 \end{equation*}
+$0
 endsnippet
 
 snippet RESEQV "Result follows ... chain of equivalences" it
 The result follows from the following chain of equivalences:$0
 \begin{equation*}
 	\begin{aligned}
-		$0
+		$1
 	\end{aligned}
 \end{equation*}
+$0
 endsnippet
 
 snippet RESCOM "Result follows ... computations" it
 The result follows from the following computation:
 \begin{equation*}
 	\begin{aligned}
-		$0
+		$1
 	\end{aligned}
 \end{equation*}
+$0
 endsnippet
 #### Result follows ####
 
@@ -52,98 +55,114 @@ endsnippet
 #### Environments ####
 snippet item "begin itemize" b
 \begin{itemize}
-	\item $0
+	\item $1
 \end{itemize}
+$0
 endsnippet
 
 snippet enum "begin enumerate" b
 \begin{enumerate}
-	\item $0
+	\item $1
 \end{enumerate}
+$0
 endsnippet
 
 snippet def "begin definition" b
 \begin{definition}
-	$0
+	$1
 \end{definition}
+$0
 endsnippet
 
 snippet prp "begin proposition" b
 \begin{proposition}
-	$0
+	$1
 \end{proposition}
+$0
 endsnippet
 
 snippet thm "begin theorem" b
 \begin{theorem}
-	$0
+	$1
 \end{theorem}
+$0
 endsnippet
 
 snippet pro "begin proof" b
 \begin{proof}
-	$0
+	$1
 \end{proof}
+$0
 endsnippet
 
 snippet rem "begin remark" b
 \begin{remark}
-	$0
+	$1
 \end{remark}
+$0
 endsnippet
 
 snippet exa "begin example" b
 \begin{example}
-	$0
+	$1
 \end{example}
+$0
 endsnippet
 
 snippet eq "begin unnumbered equation" b
 \begin{equation*}
-	$0
+	$1
 \end{equation*}
+$0
 endsnippet
 
 snippet eqn "begin numbered equation" b
 \begin{equation}
-	$0
+	$1
 \end{equation}
+$0
 endsnippet
 
 snippet tikz "begin tikzpicture" b
 \begin{tikzpicture}
-	$0
+	$1
 \end{tikzpicture}
+$0
 endsnippet
 
 snippet cdn "begin tikzcd" b
 \begin{tikzcd}
-	$0
+	$1
 \end{tikzcd}
+$0
 endsnippet
 
 snippet center "begin center" b
 \begin{center}
-	$0
+	$1
 \end{center}
+$0
 endsnippet
 
 snippet scope "begin scope" b
 \begin{scope}
-	$0
+	$1
 \end{scope}
+$0
 endsnippet
 
 snippet exer "begin exercise" b
 \begin{exercise}
-	$0
+	$1
 \end{exercise}
+$0
 endsnippet
 
 snippet sol "begin solution" b
 \begin{solution}
-	$0
+	$1
 \end{solution}
+$0
 endsnippet
 #### Environments ####
 

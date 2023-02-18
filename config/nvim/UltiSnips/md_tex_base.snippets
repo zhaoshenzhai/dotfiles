@@ -102,33 +102,69 @@ endsnippet
 #### Environments ####
 snippet ali "begin aligned" b
 \begin{aligned}
-	$0
+	$1
 \end{aligned}
+$0
 endsnippet
 
 snippet alia "begin alignedat" b
 \begin{alignedat}{$1}
-	$0
+	$2
 \end{alignedat}
+$)
 endsnippet
 
 snippet gat "begin gathered" b
 \begin{gathered}
-	$0
+	$1
 \end{gathered}
+$0
 endsnippet
 
 snippet 2c "begin dcases" b
 \begin{dcases}
 	$1 & \textrm{if }$2 \\\\
-	$0 & \textrm{else}
+	$3 & \textrm{else}
 \end{dcases}
+$0
 endsnippet
 
-snippet mat "begin pmatrix" b
+priority 100
+snippet mat "begin matrix" b
 \begin{bmatrix}
-	$0
+	$1
 \end{bmatrix}
+$0
+endsnippet
+
+priority 200
+snippet 2x2mat "begin 2x2 matrix" b
+\begin{bmatrix}
+	$1 & $2 \\\\
+	$3 & $4
+\end{bmatrix}
+$0
+endsnippet
+
+priority 200
+snippet 3x3mat "begin 3x3 matrix" b
+\begin{bmatrix}
+	$1 & $2 & $3 \\\\
+	$4 & $5 & $6 \\\\
+	$7 & $8 & $9
+\end{bmatrix}
+$0
+endsnippet
+
+priority 200
+snippet 4x4mat "begin 4x4 matrix" b
+\begin{bmatrix}
+	$1 & $2 & $3 & $4 \\\\
+	$5 & $6 & $7 & $8 \\\\
+	$9 & $10 & $11 & $12 \\\\
+	$13 & $14 & $15 & $16
+\end{bmatrix}
+$0
 endsnippet
 
 snippet alg "begin algorithm" b
@@ -140,9 +176,10 @@ snippet alg "begin algorithm" b
 		\Input{$3}
 		\Output{$4}
 		\BlankLine
-		$0
+		$5
 	\end{algorithm}}
 \end{center}
+$0
 endsnippet
 #### Environments ####
 
