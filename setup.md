@@ -131,7 +131,7 @@
 
     ## Nvim markdown
         - `nvim ~/.config/nvim/plugged/vim-markdown/syntax/markdown.vim`
-            - Comment out second line with execute 'syn region htmlItalic...
+            - Comment out lines with 'execute syn region htmlItalic...' etc
 
     ## Mpv cycle-cmd.js
         - `nvim ~/.config/mpv/scripts/cycle-cmd.js`
