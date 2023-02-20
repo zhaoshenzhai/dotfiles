@@ -11,14 +11,13 @@ NC='\033[0m'
 filesPath=$DOTFILES_DIR/files/assignmentsTemplate/
 template="template.tex"
 
-assingnmentNumber=
+assignmentNumber=
 numberOfQuestions=
 dueMonth=
 dueDate=
 dueDateMod=
 section=
 subsection=
-setCounterLine=
 collabInfo=
 
 FIX_DATE() {
@@ -117,6 +116,8 @@ if [[ ! $assignmentNumber =~ $re ]] || [[ $assignmentNumber -lt 1 ]] || [[ ! $nu
     exit 2
 fi
 
+mkdir Assignment_$assignmentNumber
+cd Assignment_$assignmentNumber
 for i in $(eval echo {1..$numberOfQuestions}); do
     file=Question_$i
     mkdir $file
@@ -134,23 +135,21 @@ for i in $(eval echo {1..$numberOfQuestions}); do
     sed -i 's/COURSE_NAME/'"$courseName"'/g' $file.tex
     sed -i 's/TERM_YEAR/'"$termYear"'/g' $file.tex
     sed -i 's/TITLE/'"$displayedTitle"'/g' $file.tex
-    sed -i 's/{exercise}{0}/{exercise}{'"$exerciseNumber"'}/g' $file.tex
+    sed -i 's/EXERCISE_NUMBER/'"$exerciseNumber"'/g' $file.tex
+    sed -i 's/COLLAB_INFO/'"$collabInfo"'/g' $file.tex
+    sed -i 's/DUE_MONTH/'"$dueMonth"'/g' $file.tex
+    sed -i 's/DUE_DATE_MOD/'"$dueDateMod"'/g' $file.tex
+    sed -i 's/DUE_DATE/'"$dueDate"'/g' $file.tex
 
     setCounterLine=$(grep -n "setcounter" $filesPath/$template | sed 's/:.*//')
     if [[ ! -z $section ]]; then
         sed -i ''"$setCounterLine"'s/$/\n    \\setcounter{section}{'"$section"'}/g' $file.tex
         sed -i 's/{exercise}{Exercise}.*/{exercise}{Exercise}[section]/g' $file.tex
     fi
-
     if [[ ! -z $subsection ]]; then
         sed -i ''"$((setCounterLine + 1))"'s/$/\n    \\setcounter{subsection}{'"$subsection"'}/g' $file.tex
         sed -i 's/{exercise}{Exercise}.*/{exercise}{Exercise}[subsection]/g' $file.tex
     fi
-
-    sed -i 's/COLLAB_INFO/'"$collabInfo"'/g' $file.tex
-    sed -i 's/DUE_MONTH/'"$dueMonth"'/g' $file.tex
-    sed -i 's/DUE_DATE_MOD/'"$dueDateMod"'/g' $file.tex
-    sed -i 's/DUE_DATE/'"$dueDate"'/g' $file.tex
 
     cd ..
 done
