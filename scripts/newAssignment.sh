@@ -1,70 +1,156 @@
 #!/bin/bash
 
+YELLOW='\033[0;33m'
+PURPLE='\033[0;35m'
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+BLUE='\033[0;34m'
+RED='\033[0;31m'
+NC='\033[0m'
+
 filesPath=$DOTFILES_DIR/files/assignmentsTemplate/
 template="template.tex"
 
-file=""
-courseName=""
-termYear=""
-displayedTitle=""
-dueDate="DUE_DATE"
-setCounterLine=0
-collabInfo=""
+assingnmentNumber=
+numberOfQuestions=
+dueMonth=
+dueDate=
+dueDateMod=
+section=
+subsection=
+setCounterLine=
+collabInfo=
 
-while getopts 'c:f:t:d:s:S:' OPTION; do
-    case "$OPTION" in
-        c)
-            template="template_c.tex"
-            collabInfo=$OPTARG
-        ;;
-        s)
-            setCounterLine=$(grep -n "setcounter" $filesPath/$template | sed 's/:.*//')
-            subsection=$OPTARG
-        ;;
-        S)
-            setCounterLine=$(grep -n "setcounter" $filesPath/$template | sed 's/:.*//')
-            section=$OPTARG
-        ;;
-        f)
-            file=$OPTARG
-            mkdir $file
-            cd $file
-
-            cp -r $filesPath*.sty $PWD
-            cp -r $filesPath/$template $PWD
-            mv $template $file.tex
-
-            courseName=$(echo $PWD | grep -Po "[A-Z]{4}[1-9]{3}.*/" | sed 's/\/.*//g' | sed 's/_/\ /g' | sed '0,/\ /{s/\ /\ -\ /}')
-            termYear=$(echo $PWD | grep -Po "Y\d_.*/" | sed 's/\/.*//g' | sed 's/^.*_//g')\ $(echo $PWD | grep -Po "20\d\d")
-            displayedTitle=$(echo $file | sed 's/_/\ /g')
-            number=$(($(echo $file | sed 's/Question_//g') - 1))
-
-            sed -i 's/COURSE_NAME/'"$courseName"'/g' $file.tex
-            sed -i 's/TERM_YEAR/'"$termYear"'/g' $file.tex
-            sed -i 's/TITLE/'"$displayedTitle"'/g' $file.tex
-
-            sed -i 's/{exercise}{0}/{exercise}{'"$number"'}/g' $file.tex
-
-            if [[ ! -z $section ]]; then
-                sed -i ''"$setCounterLine"'s/$/\n    \\setcounter{section}{'"$section"'}/g' $file.tex
-                sed -i 's/{exercise}{Exercise}.*/{exercise}{Exercise}[section]/g' $file.tex
-            fi
-
-            if [[ ! -z $subsection ]]; then
-                sed -i ''"$((setCounterLine + 1))"'s/$/\n    \\setcounter{subsection}{'"$subsection"'}/g' $file.tex
-                sed -i 's/{exercise}{Exercise}.*/{exercise}{Exercise}[subsection]/g' $file.tex
-            fi
-
-            sed -i 's/COLLAB_INFO/'"$collabInfo"'/g' $file.tex
-        ;;
-        t)
-            displayedTitleNew=$OPTARG
-            sed -i 's/'"$displayedTitle"'/'"$displayedTitleNew"'/g' $file.tex
-        ;;
-        d)
-            dueDate=$(echo $OPTARG | sed 's/\\/\\\\/g' | sed 's/\$/\\\$/g' | sed 's/\\t/\\t/g')
-            sed -i 's/DUE_DATE/'"$dueDate"'/g' $file.tex
-        ;;
+FIX_DATE() {
+    case $dueMonth in
+        Jan|1|01)
+            dueMonth=January
+            ;;
+        Feb|2|02)
+            dueMonth=February
+            ;;
+        Mar|3|03)
+            dueMonth=March
+            ;;
+        Apr|4|04)
+            dueMonth=April
+            ;;
+        May|5|05)
+            dueMonth=May
+            ;;
+        Jun|6|06)
+            dueMonth=June
+            ;;
+        Jul|7|07)
+            dueMonth=July
+            ;;
+        Aug|8|08)
+            dueMonth=August
+            ;;
+        Sep|9|09)
+            dueMonth=September
+            ;;
+        Oct|10)
+            dueMonth=October
+            ;;
+        Nov|11)
+            dueMonth=November
+            ;;
+        Dec|12)
+            dueMonth=December
+            ;;
     esac
+
+    case $dueDate in
+        1|21|31)
+            dueDateMod=st
+            ;;
+        2|22)
+            dueDateMod=nd
+            ;;
+        3|23)
+            dueDateMod=rd
+            ;;
+        *)
+            dueDateMod=th
+            ;;
+    esac
+}
+
+while [[ ! -z $1 ]]; do
+    case $1 in
+        -a)
+            assignmentNumber=$2
+            ;;
+        -q)
+            numberOfQuestions=$2
+            ;;
+        -d)
+            dueMonth=$2
+            dueDate=$3
+            FIX_DATE
+            shift
+            ;;
+        -s)
+            section=$2
+            ;;
+        -S)
+            subsection=$2
+            ;;
+        -c)
+            template="template_c.tex"
+            collabInfo=$2
+    esac
+    shift
+    shift
 done
-shift "$(($OPTIND -1))"
+
+if [[ -z $assignmentNumber ]] || [[ -z $numberOfQuestions ]] || [[ -z $dueMonth ]] || [[ -z $dueDate ]]; then
+    echo "Error: Expected at least [-a] [-q] [-d] flags."
+    echo "Usage: ./newAssignment.sh -a [assignmentNumber] -q [numberOfQuestions] -d [dueMonth] [dueDate]"
+    exit 1
+fi
+
+re='^[0-9]+$'
+if [[ ! $assignmentNumber =~ $re ]] || [[ $assignmentNumber -lt 1 ]] || [[ ! $numberOfQuestions =~ $re ]] || [[ $numberOfQuestions -lt 1 ]] || [[ ! $dueDate =~ $re ]] || [[ $dueDate -lt 1 ]] || [[ $dueDate -gt 31 ]]; then
+    echo "Error: Invalid inputs."
+    exit 2
+fi
+
+for i in $(eval echo {1..$numberOfQuestions}); do
+    file=Question_$i
+    mkdir $file
+    cd $file
+
+    cp -r $filesPath*.sty $PWD
+    cp -r $filesPath/$template $PWD
+    mv $template $file.tex
+
+    courseName=$(echo $PWD | grep -Po "[A-Z]{4}[1-9]{3}.*/" | sed 's/\/.*//g' | sed 's/_/\ /g' | sed '0,/\ /{s/\ /\ -\ /}')
+    termYear=$(echo $PWD | grep -Po "Y\d_.*/" | sed 's/\/.*//g' | sed 's/^.*_//g')\ $(echo $PWD | grep -Po "20\d\d")
+    displayedTitle=$(echo $file | sed 's/_/\ /g' | sed 's/^/Assignment\ '$assignmentNumber'\ |\ /g')
+    exerciseNumber=$(($(echo $file | sed 's/Question_//g') - 1))
+
+    sed -i 's/COURSE_NAME/'"$courseName"'/g' $file.tex
+    sed -i 's/TERM_YEAR/'"$termYear"'/g' $file.tex
+    sed -i 's/TITLE/'"$displayedTitle"'/g' $file.tex
+    sed -i 's/{exercise}{0}/{exercise}{'"$exerciseNumber"'}/g' $file.tex
+
+    setCounterLine=$(grep -n "setcounter" $filesPath/$template | sed 's/:.*//')
+    if [[ ! -z $section ]]; then
+        sed -i ''"$setCounterLine"'s/$/\n    \\setcounter{section}{'"$section"'}/g' $file.tex
+        sed -i 's/{exercise}{Exercise}.*/{exercise}{Exercise}[section]/g' $file.tex
+    fi
+
+    if [[ ! -z $subsection ]]; then
+        sed -i ''"$((setCounterLine + 1))"'s/$/\n    \\setcounter{subsection}{'"$subsection"'}/g' $file.tex
+        sed -i 's/{exercise}{Exercise}.*/{exercise}{Exercise}[subsection]/g' $file.tex
+    fi
+
+    sed -i 's/COLLAB_INFO/'"$collabInfo"'/g' $file.tex
+    sed -i 's/DUE_MONTH/'"$dueMonth"'/g' $file.tex
+    sed -i 's/DUE_DATE_MOD/'"$dueDateMod"'/g' $file.tex
+    sed -i 's/DUE_DATE/'"$dueDate"'/g' $file.tex
+
+    cd ..
+done
