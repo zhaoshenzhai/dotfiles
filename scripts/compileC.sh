@@ -8,12 +8,10 @@ BLUE='\033[0;34m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-output=$(echo $2 | sed 's/\.c//g' | sed 's/$/\.out/g')
-
 repeat="Y"
 Run() {
     while [[ "$repeat" == "Y" ]]; do
-        ./$output
+        ./a.out
 
         echo ""
         echo -e "${GREEN}DONE${NC}"
@@ -34,11 +32,11 @@ Run() {
 while getopts 'c:r:' OPTION; do
     case "$OPTION" in
         c)
-            gcc $OPTARG -o $output
+            gcc $OPTARG
         ;;
         r)
             if [[ -z $(echo $(ls) | grep ".out") ]]; then
-                gcc $OPTARG -o $output
+                gcc $OPTARG
             fi
         ;;
     esac
