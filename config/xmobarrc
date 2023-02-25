@@ -1,15 +1,15 @@
 Config
 {
-    font = "xft:Anonymous Pro:weight=bold:pixelsize=18:antialias=true:hinting=true",
+    font = "Anonymous Pro Bold 14",
     additionalFonts = [ 
-	    "xft:Font Awesome 6 Free Solid-12:pixelsize=15:antialias=true:hinting=true",
-        "xft:Mononoki Nerd Font:size=15:antialias=true:hinting=true"
+	    "Font Awesome 6 Free Solid 11",
+        "Mononoki Nerd Font 15"
     ],
     bgColor = "#1E2127",
     fgColor = "#A8A8AA",
     alpha = 255,
     position = Static {xpos=0, ypos=0, width=1920,height=37},
-    textOffset = 23,
+    textOffset = 0,
     lowerOnStart = True,
     hideOnStart = False,
     allDesktops = True,
