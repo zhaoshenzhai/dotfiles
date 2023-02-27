@@ -9,9 +9,11 @@ RED='\033[0;31m'
 NC='\033[0m'
 
 repeat="Y"
+output=$(echo "$2" | sed 's/.c$//g')
+
 Run() {
     while [[ "$repeat" == "Y" ]]; do
-        ./a.out
+        ./$output
 
         echo ""
         echo -e "${GREEN}DONE${NC}"
@@ -32,11 +34,11 @@ Run() {
 while getopts 'c:r:' OPTION; do
     case "$OPTION" in
         c)
-            gcc $OPTARG
+            gcc -o $output $OPTARG
         ;;
         r)
             if [[ -z $(echo $(ls) | grep ".out") ]]; then
-                gcc $OPTARG
+                gcc-o $output $OPTARG
             fi
         ;;
     esac

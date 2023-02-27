@@ -1,0 +1,31 @@
+#### Convenience ####
+snippet pf "printf" b
+printf("$1", $2);$0
+endsnippet
+
+snippet sf "scanf" b
+scanf("$1", $2); $0
+endsnippet
+#### Convenience ####
+
+###########################################################
+
+#### Loops & Conditions ####
+snippet if "if statement" b
+if(${1:bool condition}) {
+	$0
+}
+endsnippet
+
+snippet for "for loop" b
+for(int ${1:i} = ${2:0}; $1 ${3:<} ${4:num}; $1${5:++}) {
+	$0
+}
+endsnippet
+
+snippet while "while loop" b
+while(${1:bool condition}) {
+	$0
+}
+endsnippet
+#### Loops & Conditions ####
