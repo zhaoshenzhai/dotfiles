@@ -12,10 +12,10 @@ repeat="Y"
 while [[ "$repeat" == "Y" ]]; do
     if [[ $PWD == "/home/zhao/Dropbox/MathLinks/src" ]]; then
         npm run dev
-        # cp ../main.js ~/Downloads/Test/.obsidian/plugins/mathlinks/main.js
-        # cp ../manifest.json ~/Downloads/Test/.obsidian/plugins/mathlinks/manifest.json
-        # cp ../main.js $MATHWIKI_DIR/.obsidian/plugins/mathlinks/main.js
-        # cp ../manifest.json $MATHWIKI_DIR/.obsidian/plugins/mathlinks/manifest.json
+        cp ../main.js ~/Downloads/Test_Vault/.obsidian/plugins/mathlinks/main.js
+        cp ../manifest.json ~/Downloads/Test_Vault/.obsidian/plugins/mathlinks/manifest.json
+        cp ../main.js $MATHWIKI_DIR/.obsidian/plugins/mathlinks/main.js
+        cp ../manifest.json $MATHWIKI_DIR/.obsidian/plugins/mathlinks/manifest.json
     else
         tsc -noEmit -skipLibCheck && node esbuild.config.mjs production
 
