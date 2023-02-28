@@ -20,7 +20,6 @@ declare -a options=(
     "~/Dropbox/Papers"
     "~/Dropbox/MathLinks"
     "~/Dropbox/Others/Reminders"
-    "~/Dropbox/Others/Highschool/Course_Notes"
 )
 
 mainChoice=$(printf '%s\n' "${options[@]}" | DMENU "~/")
@@ -163,31 +162,6 @@ case $mainChoice in
 
         if [ "$choice" ]; then
             alacritty --class reminders,reminders -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
-        fi
-    ;;
-    "~/Dropbox/Others/Highschool/Course_Notes")
-        dir="$HOME/Dropbox/Others/Highschool/Course_Notes"
-        declare -a notes=(
-            "$mainChoice/Introduction_to_Linear_Algebra/Introduction_to_Linear_Algebra.pdf"
-            "$mainChoice/Introduction_to_Algebra/Introduction_to_Algebra.pdf"
-            "$mainChoice/Introduction_to_Topology/Introduction_to_Topology.pdf"
-            "$mainChoice/Introduction_to_Set_Theory/Introduction_to_Set_Theory.pdf"
-            "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_1/Chapter_1.pdf"
-            "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_2/Chapter_2.pdf"
-            "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_3/Chapter_3.pdf"
-            "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_4/Chapter_4.pdf"
-            "$mainChoice/Introduction_to_Set_Theory/exercises/Chapter_5/Chapter_5.pdf"
-            "$mainChoice/Introduction_to_Classical_Mechanics/Introduction_to_Classical_Mechanics.pdf"
-            "$mainChoice/Introduction_to_Real_Analysis/Introduction_to_Real_Analysis.pdf"
-            "$mainChoice/AP_Physics_C/AP_Physics_C.pdf"
-            "$mainChoice/AP_Calculus_BC/AP_Calculus_BC.pdf"
-            "$mainChoice/AP_Calculus_AB/AP_Calculus_AB.pdf"
-            "$mainChoice/Physics_Core/Physics_Core.pdf"
-        )
-        choice=$(printf '%s\n' "${notes[@]}" | DMENU "$mainChoice/")
-
-        if [ "$choice" ]; then
-            alacritty --class media,media -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g' | sed 's/\.pdf/\.tex/g')
         fi
     ;;
 esac
