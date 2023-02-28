@@ -161,8 +161,16 @@ snippet TOP "Topological space" i
 Let $\tpl{${1:X},${2:\mc{T}}}$ be a topological space. $0
 endsnippet
 
+snippet TOPS "Topological spaces" i
+Let $\tpl{${1:X},${2:\mc{T}}_$1}$ and $\tpl{${3:Y},$2_$3}$ be topological spaces. $0
+endsnippet
+
 snippet MET "Metric space" i
 Let $\tpl{${1:X},${2:d}}$ be a metric space. $0
+endsnippet
+
+snippet METS "Metric spaces" i
+Let $\tpl{${1:X},${2:d}_$1}$ and $\tpl{${3:Y},$2_$3}$ be metric spaces. $0
 endsnippet
 
 priority 100
@@ -170,17 +178,68 @@ snippet VEC "Vector space" i
 Let $${1:V}$ be a $${2:K}$-vector space. $0
 endsnippet
 
+priority 100
+snippet VECS "Vector spaces" i
+Let $${1:V}$ and ${2:W}$ be $${3:K}$-vector spaces. $0
+endsnippet
+
 priority 200
 snippet FDVEC "Finite-dimensional vector space" i
 Let $${1:V}$ be a finite-dimensional $${2:K}$-vector space. $0
 endsnippet
 
-snippet RCINP "Real of complex inner product space" i
+priority 200
+snippet FDVECS "Finite-dimensional vector spaces" i
+Let $${1:V}$ and $${2:W}$ be finite-dimensional $${3:K}$-vector spaces. $0
+endsnippet
+
+priority 200
+snippet NVC "Normed vector space" i
+Let $${1:V}$ be a normed vector space. $0
+endsnippet
+
+priority 200
+snippet NVCS "Normed vector spaces" i
+Let $${1:V}$ and $${2:W}$ be normed vector spaces. $0
+endsnippet
+
+priority 300
+snippet RCNVC "Real/complex normed vector space" i
+Let $${1:K}$ denote either $\\R$ or $\\C$ and let $${2:V}$ be a $$1$-normed vector space over $$1$. $0
+endsnippet
+
+priority 300
+snippet RCNVCS "Real/complex normed vector spaces" i
+Let $${1:K}$ denote either $\\R$ or $\\C$ and let $${2:V}$ and $${3:W}$ be $$1$-normed vector spaces over $$1$. $0
+endsnippet
+
+priority 100
+snippet INP "Inner product space" i
+Let $${1:V}$ be an inner product space. $0
+endsnippet
+
+priority 100
+snippet INPS "Inner product spaces" i
+Let $${1:V}$ and $${2:W}$ be inner product spaces. $0
+endsnippet
+
+priority 200
+snippet RCINP "Real/complex inner product space" i
 Let $${1:K}$ denote either $\\R$ or $\\C$ and let $${2:V}$ be a $$1$-inner product space. $0
+endsnippet
+
+priority 200
+snippet RCINPS "Real/complex inner product spaces" i
+Let $${1:K}$ denote either $\\R$ or $\\C$ and let $${2:V}$ and $${3:W}$ be $$1$-inner product spaces. $0
 endsnippet
 
 priority 200
 snippet RS "Riemann surface" i
 Let $${1:X}$ be a Riemann surface. $0
+endsnippet
+
+priority 200
+snippet RSS "Riemann surfaces" i
+Let $${1:X}$ and $${2:Y}$ be Riemann surfaces. $0
 endsnippet
 #### Let ...
