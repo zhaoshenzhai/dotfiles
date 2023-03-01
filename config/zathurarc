@@ -1,10 +1,12 @@
 set default-fg              "#A6B5C5"
 
 set statusbar-bg            "#1A2128"
-set statusbar-fg            "#13AFAF"
+set statusbar-fg            "#F8F8FF"
 
 set inputbar-bg             "#141A1F"
 set inputbar-fg             "#A6B5C5"
+
+set font                    "Courier Prime normal 15"
 
 set highlight-transparency  0.5
 set highlight-active-color  "#F8F8FF"
@@ -29,5 +31,5 @@ set selection-clipboard     clipboard
 set sandbox                 none
 
 map = feedkeys              "+"
-map x toggle_statusbar
+map ` toggle_statusbar
 map D set "first-page-column 1:1"
