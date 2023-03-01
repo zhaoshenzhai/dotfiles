@@ -105,11 +105,6 @@
     ## Nitrogen
         - Add ~/.config/wallpapers
 
-    ## Git
-        - Generate new PAT, copy it
-        - `nvim ~/.config/.gitpat`
-            - Paste
-
     ## Vifm
         - zo
         - :sort N
