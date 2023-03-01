@@ -105,9 +105,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_o),               spawn "obsidian"                                            ),
         ((modm .|. shiftMask, xK_d), spawn "discord"                                             ),
 
-        -- GitHub
-        ((controlMask .|. shiftMask, xK_g), spawn "xclip -sel clip ~/.config/.gitpat"),
-
         -- Windows
         ((modm, xK_f     ), sendMessage NextLayout  ),
         ((modm, xK_grave ), sendMessage ToggleStruts),
