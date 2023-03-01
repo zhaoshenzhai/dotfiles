@@ -14,8 +14,8 @@ while [[ "$repeat" == "Y" ]]; do
         npm run dev
         cp ../main.js ~/Downloads/Test_Vault/.obsidian/plugins/mathlinks/main.js
         cp ../manifest.json ~/Downloads/Test_Vault/.obsidian/plugins/mathlinks/manifest.json
-        cp ../main.js $MATHWIKI_DIR/.obsidian/plugins/mathlinks/main.js
-        cp ../manifest.json $MATHWIKI_DIR/.obsidian/plugins/mathlinks/manifest.json
+        # cp ../main.js $MATHWIKI_DIR/.obsidian/plugins/mathlinks/main.js
+        # cp ../manifest.json $MATHWIKI_DIR/.obsidian/plugins/mathlinks/manifest.json
     else
         tsc -noEmit -skipLibCheck && node esbuild.config.mjs production
 
