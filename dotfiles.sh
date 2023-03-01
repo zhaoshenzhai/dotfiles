@@ -28,9 +28,9 @@ rm $HOME/.config/nvim/init.vim
 rm $HOME/.bashrc
 rm $HOME/.bash_profile
 
-mkdir $HOME/.config
+mkdir -p $HOME/.config
 cd $HOME/.config
-mkdir alacritty git mpv mpv/script-opts vifm zathura xmonad qutebrowser nvim nvim/spell
+mkdir -p alacritty git mpv/script-opts vifm zathura xmonad qutebrowser nvim/spell
 cd ..
 
 ln -s $HOME/Dropbox/Dotfiles/config/alacritty.yml $HOME/.config/alacritty/alacritty.yml
@@ -107,6 +107,9 @@ mv mpv-reload/reload.lua $HOME/.config/mpv/scripts/reload.lua
 mv mpv-youtube-quality/youtube-quality.lua $HOME/.config/mpv/scripts/youtube-quality.lua
 rm -rf mpv-reload mpv-youtube-quality
 
-#Qutebrowser
+# Qutebrowser
 mkdir -p $HOME/.config/qutebrowser/greasemonkey
 curl https://greasyfork.org/scripts/436115-return-youtube-dislike/code/Return%20YouTube%20Dislike.user.js -o $HOME/.config/qutebrowser/greasemonkey/return-youtube-dislike.js
+
+# Git
+git config --global credential.helper store
