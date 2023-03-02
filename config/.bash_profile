@@ -11,7 +11,7 @@ export TERMINAL="/usr/bin/alacritty"
 export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
 
 # Xmonad
-export XMONAD_CACHE_DIR="$HOME/.cache"
+export XMONAD_CACHE_DIR="$HOME/.cache/xmonad"
 export XMONAD_CONFIG_DIR="$HOME/.config/xmonad"
 export XMONAD_DATA_DIR="$HOME/.config/xmonad"
 
@@ -26,6 +26,7 @@ export DOTFILES_DIR="$HOME/Dropbox/Dotfiles"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$DOTFILES_DIR/scripts:$PATH"
 export PATH="$MATHWIKI_DIR/.scripts:$PATH"
+export PATH="/home/zhao/.local/share/gem/ruby/3.0.0/bin:$PATH"
 
 if [ -z "${DISPLAY}" ] && [ "${XDG_VTNR}" -eq 1 ]; then
     exec startx "$DOTFILES_DIR/config/xinitrc"
