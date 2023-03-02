@@ -2,7 +2,6 @@
 config.load_autoconfig(False)
 
 # Colors
-config.set("colors.webpage.bg", "#1e2127")
 config.set("colors.webpage.preferred_color_scheme", "dark")
 config.set("colors.messages.info.bg", "#1e2127")
 config.set("colors.messages.warning.bg", "#1e2127")
