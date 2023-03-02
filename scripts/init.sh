@@ -17,5 +17,4 @@ done <<< "$notes"
 # Start applications
 obsidian &
 LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify &
-qutebrowser-profile --new 'Z' https://calendar.google.com/calendar https://mail.google.com/mail/u/0 https://outlook.office.com/mail &
-qutebrowser-profile --new 'P' https://web.whatsapp.com https://www.instagram.com/direct/inbox &
+$DOTFILES_DIR/scripts/openQute.sh &

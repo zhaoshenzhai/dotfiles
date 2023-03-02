@@ -5,12 +5,12 @@ while [ ! -z "$1" ]; do
         -Z)
             shift
             sed -i 's/cookies_P/cookies_Z/g' $DOTFILES_DIR/config/qutebrowser/config.py
-            `qutebrowser-profile --new 'Z'`
+            $(qutebrowser-profile --new 'Z' https://calendar.google.com/calendar https://mail.google.com/mail/u/0 https://outlook.office.com/mail)
             ;;
         -P)
             shift
             sed -i 's/cookies_Z/cookies_P/g' $DOTFILES_DIR/config/qutebrowser/config.py
-            `qutebrowser-profile --new 'P'`
+            $(qutebrowser-profile --new 'P' https://web.whatsapp.com https://www.instagram.com/direct/inbox)
             sleep 2
             sed -i 's/cookies_P/cookies_Z/g' $DOTFILES_DIR/config/qutebrowser/config.py
             ;;
