@@ -116,14 +116,20 @@ case $mainChoice in
     ;;
     "~/Dropbox/Documents")
         dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
-        folder=$(find $dir -type d -printf "%T@ %Tc %p\n" | tail -n +2 | sort -nr | sed 's:.*/home/zhao:/home/zhao:' | DMENU $(echo "$mainChoice/" | sed 's:/home/zhao:~:g'))
+        folder=$(find $dir -type d -printf "%T@ %Tc %p\n" | tail -n +2 | sort -nr | sed 's:.*/home/zhao:~:' | DMENU "$mainChoice/")
+        folderAbs=$(echo "$folder" | sed 's:~:/home/zhao:g')
         if [[ "$folder" ]]; then
-            touch "$folder"
-            choice=$(find $folder -printf "\n%A@ %p" | grep ".pdf" | sort -nr | sed 's:.*/::' | DMENU "$mainChoice/$folder")
+            touch "$folderAbs"
+            choice=
+            if [[ $(basename "$folder") != "LaTeX" ]]; then
+                choice=$(find $folderAbs -printf "\n%A@ %p" | grep ".pdf" | sort -nr | sed 's:.*/::' | DMENU "$folder")
+            else
+                choice=$(find $folderAbs -printf "\n%A@ %p" | grep ".pdf" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU "$folder")
+            fi
 
             if [ "$choice" ]; then
-                touch "$folder/$choice"
-                zathura "$folder/$choice"
+                touch "$(echo "$choice" | sed 's:~:/home/zhao:g')"
+                zathura "$choice"
             fi
         fi
     ;;
@@ -149,8 +155,7 @@ case $mainChoice in
     ;;
     "~/Dropbox/Others/Reminders")
         dir="$HOME/Dropbox/Others/Reminders"
-        cd $dir
-        choice=$(find $dir -type f -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:^.*\ /home:/home:' | DMENU $(echo "$mainChoice/" | sed 's:/home/zhao:~:g'))
+        choice=$(find $dir -type f -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU "$mainChoice/")
 
         if [ "$choice" ]; then
             alacritty --class reminders,reminders -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
