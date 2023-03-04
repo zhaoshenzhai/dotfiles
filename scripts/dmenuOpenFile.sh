@@ -126,10 +126,12 @@ case $mainChoice in
             else
                 choice=$(find $folderAbs -printf "\n%A@ %p" | grep ".pdf" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU "$folder")
             fi
+            choice=$(basename "$choice")
 
             if [ "$choice" ]; then
-                touch "$(echo "$choice" | sed 's:~:/home/zhao:g')"
-                zathura "$choice"
+                file="$folderAbs/$choice"
+                touch "$file"
+                zathura "$file"
             fi
         fi
     ;;
