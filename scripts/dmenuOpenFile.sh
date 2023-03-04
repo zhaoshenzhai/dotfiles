@@ -14,10 +14,9 @@ DMENU()
 }
 
 declare -a options=(
-    `echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g'`
-    `echo $DOTFILES_DIR | sed 's:/home/zhao:~:g'`
-    "~/Dropbox/Textbooks"
-    "~/Dropbox/Papers"
+    $(echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g')
+    $(echo $DOTFILES_DIR | sed 's:/home/zhao:~:g')
+    "~/Dropbox/Documents"
     "~/Dropbox/MathLinks"
     "~/Dropbox/Others/Reminders"
 )
@@ -25,7 +24,7 @@ declare -a options=(
 mainChoice=$(printf '%s\n' "${options[@]}" | DMENU "~/")
 
 case $mainChoice in
-    `echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g'`)
+    $(echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g'))
         dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
         declare -a choices=(
             "$mainChoice/Notes"
@@ -82,7 +81,7 @@ case $mainChoice in
             esac
         fi
     ;;
-    `echo $DOTFILES_DIR | sed 's:/home/zhao:~:g'`)
+    $(echo $DOTFILES_DIR | sed 's:/home/zhao:~:g'))
         declare -a configs=(
             "$mainChoice/config"
             "$mainChoice/scripts"
@@ -95,7 +94,6 @@ case $mainChoice in
             case $choice in
                 "$mainChoice/scripts")
                     scriptsDir=$(echo "$mainChoice/scripts" | sed 's:~:/home/zhao:g')
-                    echo -e "${YELLOW}$scriptsDir${NC}"
                     file=$(find $scriptsDir -printf "%T@ %Tc %p\n" | grep ".sh" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$scriptsDir/" | sed 's:/home/zhao:~:g'))
 
                     if [ "$file" ]; then
@@ -104,7 +102,6 @@ case $mainChoice in
                 ;;
                 "$mainChoice/config")
                     configDir=$(echo "$mainChoice/config" | sed 's:~:/home/zhao:g')
-                    echo -e "${YELLOW}$configDir${NC}"
                     file=$(find $configDir -type f -printf "%T@ %Tc %p\n" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$configDir/" | sed 's:/home/zhao:~:g'))
 
                     if [ "$file" ]; then
@@ -117,22 +114,17 @@ case $mainChoice in
             esac
         fi
     ;;
-    "~/Dropbox/Textbooks")
+    "~/Dropbox/Documents")
         dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
-        choice=$(find $dir -printf "\n%A@ %p" | grep ".pdf" | sort -nr | sed 's:.*/::' | DMENU "$mainChoice/")
+        folder=$(find $dir -type d -printf "%T@ %Tc %p\n" | tail -n +2 | sort -nr | sed 's:.*/home/zhao:/home/zhao:' | DMENU $(echo "$mainChoice/" | sed 's:/home/zhao:~:g'))
+        if [[ "$folder" ]]; then
+            touch "$folder"
+            choice=$(find $folder -printf "\n%A@ %p" | grep ".pdf" | sort -nr | sed 's:.*/::' | DMENU "$mainChoice/$folder")
 
-        if [ "$choice" ]; then
-            touch "$dir/$choice"
-            zathura "$mainChoice/$choice"
-        fi
-    ;;
-    "~/Dropbox/Papers")
-        dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
-        choice=$(find $dir -printf "\n%A@ %p" | grep ".pdf" | sort -nr | sed 's:.*/::' | DMENU "$mainChoice/")
-
-        if [ "$choice" ]; then
-            touch "$dir/$choice"
-            zathura "$mainChoice/$choice"
+            if [ "$choice" ]; then
+                touch "$folder/$choice"
+                zathura "$folder/$choice"
+            fi
         fi
     ;;
     "~/Dropbox/MathLinks")
