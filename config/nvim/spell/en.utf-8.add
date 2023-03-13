@@ -190,3 +190,8 @@ iterable
 Minkowski
 nilpotency
 eigenspace
+treap
+inorder
+stitchheap
+stitchheaps
+deque
