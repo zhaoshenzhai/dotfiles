@@ -108,6 +108,7 @@
         \newcommand{\R}{\mathbb{R}}
         \newcommand{\C}{\mathbb{C}}
         \newcommand{\F}{\mathbb{F}}
+        \newcommand{\E}{\mathbb{E}}
 
     % Axioms
         \newcommand{\axiext}[1][]{{\rm\bf{E}{\scriptsize\bf{XTENSIONALITY}}}_{\bf{#1}}}
@@ -140,6 +141,8 @@
         \renewcommand{\bf}[1]{\textbf{#1}}
         \renewcommand{\phi}{\varphi}
         \renewcommand{\epsilon}{\varepsilon}
+        \DeclareRobustCommand{\upchi}{{\mathpalette\irchi\relax}}
+        \newcommand{\irchi}[2]{\raisebox{\depth}{$#1\chi$}}
     % Meta
         \renewcommand{\qed}{\phantom\qedhere\hfill$\blacksquare$}
         \newcommand{\qedin}{\tag*{$\blacksquare$}}
