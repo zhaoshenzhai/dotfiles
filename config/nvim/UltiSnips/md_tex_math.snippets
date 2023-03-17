@@ -20,51 +20,75 @@ snippet rt "sqrt" i
 \sqrt$2{$1}$0
 endsnippet
 
-priority 100
+priority 200
 context "math()"
-snippet sum "sum" i
+snippet isum "indexed sum" i
 \sum_{${1:i}=${2:0}}^{${3:\infty}}$0
 endsnippet
 
-priority 100
+priority 200
 context "math()"
-snippet prod "product" i
+snippet iprod "indexed product" i
 \prod_{${1:i}=${2:0}}^{${3:\infty}}$0
 endsnippet
 
 priority 200
 context "math()"
-snippet asum "arbitrary sum" i
-\sum_{${1:i}\in${2: I}}$0
+snippet icprod "indexed coproduct" i
+\coprod_{${1:i}=${2:0}}^{${3:\infty}}$0
 endsnippet
 
 priority 200
 context "math()"
-snippet aprod "arbitrary product" i
-\prod_{${1:i}\in${2: I}}$0
+snippet idsum "indexed direct sum" i
+\bigoplus_{${1:i}=${2:0}}^{${3:\infty}}$0
 endsnippet
 
-priority 100
+priority 200
 context "math()"
-snippet bcup "bigcup" i
+snippet icup "indexed bigcup" i
 \bigcup_{${1:i}=${2:0}}^{${3:\infty}}$0
 endsnippet
 
 priority 200
 context "math()"
-snippet abcup "arbitrary bigcup" i
+snippet icap "indexed bigcap" i
+\bigcap_{${1:i}=${2:0}}^{${3:\infty}}$0
+endsnippet
+
+priority 100
+context "math()"
+snippet sum "arbitrary sum" i
+\sum_{${1:i}\in${2: I}}$0
+endsnippet
+
+priority 100
+context "math()"
+snippet prod "arbitrary product" i
+\prod_{${1:i}\in${2: I}}$0
+endsnippet
+
+priority 150
+context "math()"
+snippet cprod "arbitrary coproduct" i
+\coprod_{${1:i}\in${2: I}}$0
+endsnippet
+
+priority 150
+context "math()"
+snippet dsum "arbitrary direct sum" i
+\bigoplus_{${1:i}\in${2: I}}$0
+endsnippet
+
+priority 100
+context "math()"
+snippet cup "arbitrary bigcup" i
 \bigcup_{${1:\alpha}\in${2:\mc{A}}}$0
 endsnippet
 
 priority 100
 context "math()"
-snippet bcap "bigcap" i
-\bigcap_{${1:i}=${2:0}}^{${3:\infty}}$0
-endsnippet
-
-priority 200
-context "math()"
-snippet abcap "arbitrary bigcap" i
+snippet cap "arbitrary bigcap" i
 \bigcap_{${1:\alpha}\in${2:\mc{A}}}$0
 endsnippet
 
