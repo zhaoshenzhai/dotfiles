@@ -76,8 +76,17 @@ FIX_DATE() {
     esac
 }
 
+HELP() {
+    echo -e "Usage: ./newAssignment.sh [-a assignmentNumber] [-q numberOfQuestions] [-d dueMonth dueDate]"
+    echo -e "    Optional: [-s section] [-S subsection] [-c collabInfo]"
+}
+
 while [[ ! -z $1 ]]; do
     case $1 in
+        -h|--help)
+            HELP
+            exit 0
+            ;;
         -a)
             assignmentNumber=$2
             ;;
@@ -105,8 +114,8 @@ while [[ ! -z $1 ]]; do
 done
 
 if [[ -z $assignmentNumber ]] || [[ -z $numberOfQuestions ]] || [[ -z $dueMonth ]] || [[ -z $dueDate ]]; then
-    echo "Error: Expected at least [-a] [-q] [-d] flags."
-    echo "Usage: ./newAssignment.sh -a [assignmentNumber] -q [numberOfQuestions] -d [dueMonth] [dueDate]"
+    echo -e "${RED}Error: Expected at least [-a] [-q] [-d] flags.${NC}"
+    HELP
     exit 1
 fi
 
