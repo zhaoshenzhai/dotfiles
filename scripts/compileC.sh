@@ -38,7 +38,7 @@ while getopts 'c:r:' OPTION; do
         ;;
         r)
             if [[ -z $(echo $(ls) | grep ".out") ]]; then
-                gcc-o $output $OPTARG
+                gcc -o $output $OPTARG
             fi
         ;;
     esac
