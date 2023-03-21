@@ -8,10 +8,11 @@ BLUE='\033[0;34m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-name=
+projectName=
+mainName=
 
 HELP() {
-    echo -e "Usage: ./newC.sh [-n name]"
+    echo -e "Usage: ./newC.sh [-p projectName] [-n mainName|projectName]"
 }
 
 while [[ ! -z $1 ]]; do
@@ -20,18 +21,25 @@ while [[ ! -z $1 ]]; do
             HELP
             exit 0
             ;;
+        -p)
+            projectName=$2
+            mainName=$2
+            ;;
         -n)
-            name=$2
+            mainName=$2
             ;;
     esac
     shift
     shift
 done
 
-if [[ -z $name ]]; then
-    echo -e "${RED}Error: Expected [-n] flag.${NC}"
+if [[ -z $projectName ]]; then
+    echo -e "${RED}Error: Expected [-p] flag.${NC}"
     HELP
     exit 1
 fi
 
-cp $DOTFILES_DIR/files/C_template.c $name.c
+mkdir $projectName
+cd $projectName
+
+cp $DOTFILES_DIR/files/C_template.c $mainName.c
