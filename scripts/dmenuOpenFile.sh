@@ -26,7 +26,7 @@ mainChoice=$(printf '%s\n' "${options[@]}" | DMENU "~/")
 case $mainChoice in
     $(echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g'))
         dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
-        declare -a choices=(
+        choices=(
             "$mainChoice/Notes"
             "$mainChoice/Images"
             "$mainChoice/.scripts"
@@ -39,10 +39,22 @@ case $mainChoice in
             "$mainChoice/.gitattributes"
         )
 
+        if [[ $(ls "$dir/Lectures" | wc -l) != 0 ]]; then
+            choices=$(echo $choices | sed 's:^:'"$mainChoice"'/Lectures\n:g')
+        fi
+
         choice=$(printf '%s\n' "${choices[@]}" | DMENU $mainChoice/)
         
         if [[ "$choice" ]]; then
             case $choice in
+                "$mainChoice/Lectures")
+                    MathWikiLecturesDir="$dir/Lectures"
+                    file=$(find $MathWikiLecturesDir -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/::' | DMENU $(echo "$MathWikiLecturesDir/" | sed 's:/home/zhao:~:g'))
+
+                    if [ "$file" ]; then
+                        alacritty --class nvim,nvim -e nvim "$MathWikiLecturesDir/$file" &
+                    fi
+                ;;
                 "$mainChoice/Notes")
                     MathWikiNotesDir="$dir/Notes"
                     file=$(find $MathWikiNotesDir -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/::' | DMENU $(echo "$MathWikiNotesDir/" | sed 's:/home/zhao:~:g'))
