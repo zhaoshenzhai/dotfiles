@@ -26,7 +26,7 @@ mainChoice=$(printf '%s\n' "${options[@]}" | DMENU "~/")
 case $mainChoice in
     $(echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g'))
         dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
-        choices=(
+        declare -a choices=(
             "$mainChoice/Notes"
             "$mainChoice/Images"
             "$mainChoice/.scripts"
@@ -40,11 +40,12 @@ case $mainChoice in
         )
 
         if [[ $(ls "$dir/Lectures" | wc -l) != 0 ]]; then
-            choices=$(echo $choices | sed 's:^:'"$mainChoice"'/Lectures\n:g')
+            choices=$(echo -e "${choices[@]}" | sed 's:Images:Images\n'"$mainChoice"'/Lectures:g' | sed 's/\ /\n/g')
+            choice=$(printf '%s\n' "${choices}" | DMENU $mainChoice/)
+        else
+            choice=$(printf '%s\n' "${choices[@]}" | DMENU $mainChoice/)
         fi
 
-        choice=$(printf '%s\n' "${choices[@]}" | DMENU $mainChoice/)
-        
         if [[ "$choice" ]]; then
             case $choice in
                 "$mainChoice/Lectures")
