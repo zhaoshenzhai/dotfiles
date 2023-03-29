@@ -1,4 +1,4 @@
-#### Loops & Conditions ####
+# Loops & Conditions
 snippet while "while loop" b
 while [[ ${1:bool condition} ]]; do
 	$0
@@ -17,11 +17,8 @@ while IFS= read -r ${1:line}; do
 	$0
 done <<< "$${2:var}"
 endsnippet
-#### Loops & Conditions ####
 
-###########################################################
-
-#### Echo ####
+# Echo
 snippet ECHO "echo with color" i
 echo -e "${${1:YELLOW}}$2${NC}"$0
 endsnippet
@@ -29,4 +26,3 @@ endsnippet
 snippet ECHOCLEAR "clear current line" i
 echo -ne "\033[0K\r"$0
 endsnippet
-#### Echo ####

@@ -1,4 +1,4 @@
-#### Math ####
+# Math
 global !p
 def math():
 	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
@@ -9,11 +9,8 @@ endglobal
 snippet $ "enter math mode" Ai
 \$$1\$$0
 endsnippet
-#### Math ####
 
-###########################################################
-
-#### Brackets ####
+# Brackets
 priority 100
 context "math()"
 snippet ( "()" iA
@@ -61,11 +58,8 @@ context "math()"
 snippet cl "ceiling" i
 \l\lceil$1\r\rceil$0
 endsnippet
-#### Brackets ####
 
-###########################################################
-
-#### Arrows ####
+# Arrows
 priority 100
 context "math()"
 snippet -> "right arrow" i
@@ -95,11 +89,8 @@ context "math()"
 snippet <=> "Left right double arrow" i
 \Leftrightarrow
 endsnippet
-#### Arrows ####
 
-###########################################################
-
-#### Environments ####
+# Environments
 snippet ali "begin aligned" b
 \begin{aligned}
 	$0
@@ -172,11 +163,8 @@ snippet alg "begin algorithm" b
 	\end{algorithm}}
 \end{center}
 endsnippet
-#### Environments ####
 
-###########################################################
-
-#### Convenience ####
+# Convenience
 snippet th "^th" it
 ^\textrm{${1:th}}$0
 endsnippet
@@ -238,11 +226,8 @@ context "math()"
 snippet max "maximum" i
 \underset{$1}{\max}$0
 endsnippet
-#### Convenience ####
 
-###########################################################
-
-#### Greek letters ####
+# Greek letters
 priority 100
 context "math()"
 snippet A "alpha" i
@@ -415,11 +400,8 @@ context "math()"
 snippet XX "Xi" i
 \Xi
 endsnippet
-#### Greek letters ####
 
-###########################################################
-
-#### Spaces with text ####
+# Spaces with text
 snippet 4s "4 spaces" i
 \ \ \ \ $0
 endsnippet
@@ -563,4 +545,3 @@ endsnippet
 snippet 8ir "8 spaces with resp. (italic)" i
 \ \ \ \ \ \ \ \ \textrm{\it{(resp.} } $1\textrm{\it{)}}$0
 endsnippet
-#### Spaces with text ####

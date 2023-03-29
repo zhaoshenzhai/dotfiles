@@ -1,15 +1,12 @@
-#### Math ####
+# Math
 global !p
 def math():
 	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
 def notMath():
 	return vim.eval('vimtex#syntax#in_mathzone()') != '1'
 endglobal
-#### Math ####
 
-###########################################################
-
-#### Common operators/notations ####
+# Common operators/notations
 context "math()"
 snippet fr "fraction" i
 \frac{$1}{$2}$0
@@ -96,11 +93,8 @@ context "math()"
 snippet gra "graph of a function" i
 \Gamma_{\mathclap{${1:f}}}\,$0
 endsnippet
-#### Common operators/notations ####
 
-###########################################################
-
-#### Analysis ####
+# Analysis
 context "math()"
 snippet der "derivative" i
 \frac{\d ${1:f}}{\d ${2:x}}$0
@@ -144,11 +138,8 @@ context "math()"
 snippet linf "limit superior" i
 \liminf\limits_{${1:n}\to${2:\infty}}$0
 endsnippet
-#### Analysis ####
 
-###########################################################
-
-#### Group Theory ####
+# Group Theory
 context "math()"
 snippet cycle "cycle" i
 \l(${1:a}_1\ \cdots\ $1_$2\r)$0
@@ -158,29 +149,26 @@ context "math()"
 snippet index "index" i
 \l[${1:G}:${2:H}\r]$0
 endsnippet
-#### Group Theory ####
 
-###########################################################
-
-#### Number Theory ####
-context "math()"
-snippet div "divides" i
-$1\divides$0
-endsnippet
-#### Number Theory ####
-
-###########################################################
-
-#### Linear Algebra ####
+# Linear Algebra
 context "math()"
 snippet gl "general linear group" i
 \GL_${1:n}\!\l(${2:\R}\r)$0
 endsnippet
-#### Linear Algebra ####
 
-###########################################################
+# Functional Analysis
+context "math()"
+snippet ip "inner product" i
+\inprod{$1}{$2}$0
+endsnippet
 
-#### Let ...
+# Number Theory
+context "math()"
+snippet div "divides" i
+$1\divides$0
+endsnippet
+
+# Let ...
 snippet TOP "Topological space" i
 Let $\tpl{${1:X},${2:\mc{T}}}$ be a topological space. $0
 endsnippet
@@ -266,4 +254,3 @@ priority 200
 snippet RSS "Riemann surfaces" i
 Let $${1:X}$ and $${2:Y}$ be Riemann surfaces. $0
 endsnippet
-#### Let ...

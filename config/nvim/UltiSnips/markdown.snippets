@@ -1,15 +1,12 @@
-#### Math ####
+# Math
 global !p
 def math():
 	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
 def notMath():
 	return vim.eval('vimtex#syntax#in_mathzone()') != '1'
 endglobal
-#### Math ####
 
-###########################################################
-
-#### General ####
+# General
 snippet bf "bold" i
 **$1**$0
 endsnippet
@@ -28,11 +25,8 @@ priority 200
 snippet exqed "exqed" i
 <span style="float:right;">$\blacklozenge$</span>
 endsnippet
-#### General ####
 
-###########################################################
-
-#### Convenience ####
+# Convenience
 snippet SQ "single quotes" it
 $\textrm{\`}$$1$\textrm{'}$$0
 endsnippet
@@ -46,11 +40,8 @@ endsnippet
 snippet DQ "double quotes" it
 $\textrm{\`\`}$$1$\textrm{''}$$0
 endsnippet
-#### Convenience ####
 
-###########################################################
-
-#### Brackets ####
+# Brackets
 context "math()"
 snippet no "||||" i
 \|$1\|$0
@@ -72,11 +63,8 @@ context "math()"
 snippet opnol "operator norm" i
 \l\|$1\r\|_\textrm{op}$0
 endsnippet
-#### Brackets ####
 
-###########################################################
-
-#### MathLink ####
+# MathLink
 context "notMath()"
 snippet MA "mathLink: auto" b
 ---
@@ -94,42 +82,8 @@ mathLink: $1
 
 $0
 endsnippet
-#### MathLink ####
 
-###########################################################
-
-#### Result follows ####
-snippet RESIMP "Result follows ... chain of implications" it
-The result follows from the following chain of implications:
-$$\begin{equation}
-	\begin{aligned}
-		$0
-	\end{aligned}
-\end{equation}$$
-endsnippet
-
-snippet RESEQV "Result follows ... chain of equivalences" it
-The result follows from the following chain of equivalences:
-$$\begin{equation}
-	\begin{aligned}
-		$0
-	\end{aligned}
-\end{equation}$$
-endsnippet
-
-snippet RESCOM "Result follows ... computations" it
-The result follows from the following computation:
-$$\begin{equation}
-	\begin{aligned}
-		$0
-	\end{aligned}
-\end{equation}$$
-endsnippet
-#### Result follows ####
-
-###########################################################
-
-#### Environments ####
+# Environments
 snippet pro "begin proof" b
 _Proof_. $0
 endsnippet
@@ -150,11 +104,8 @@ snippet 2ci "begin dcases" b
 	$0 & \textrm{\it{else}}
 \end{dcases}
 endsnippet
-#### Environments ####
 
-###########################################################
-
-#### Templates
+# Templates
 snippet def "Definition" b
 <div class="topSpace"></div>
 

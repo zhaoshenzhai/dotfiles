@@ -20,7 +20,7 @@ set autochdir                                                         " change t
 set spell                                                             " spelling
 set spelllang=en                                                      " spell language
 set ignorecase                                                        " case insensitive when typing commands
-set nofoldenable                                                      " no folding
+set foldmethod=manual                                                 " manual folding
 set nohlsearch                                                        " no highlighting
 set noswapfile                                                        " disable creating a swap file
 set noshowmode                                                        " remove default mode display

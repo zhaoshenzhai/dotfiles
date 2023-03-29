@@ -1,15 +1,12 @@
-#### Math ####
+# Math
 global !p
 def math():
 	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
 def notMath():
 	return vim.eval('vimtex#syntax#in_mathzone()') != '1'
 endglobal
-#### Math ####
 
-###########################################################
-
-#### General ####
+# General
 snippet { "braces" Ait
 \{$1}$0
 endsnippet
@@ -31,4 +28,3 @@ context "notMath()"
 snippet ' "single quotes" Ait
 '$1'$0
 endsnippet
-#### General ####

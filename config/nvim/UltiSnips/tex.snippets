@@ -1,15 +1,12 @@
-
+# Math
 global !p
 def math():
 	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
 def notMath():
 	return vim.eval('vimtex#syntax#in_mathzone()') != '1'
 endglobal
-#### Math ####
 
-###########################################################
-
-#### Convenience ####
+# Convenience
 snippet SQ "single quotes" it
 \`$1'$0
 endsnippet
@@ -23,11 +20,8 @@ endsnippet
 snippet DQ "double quotes" it
 \`\`$1''$0
 endsnippet
-#### Convenience ####
 
-###########################################################
-
-#### Brackets ####
+# Brackets
 context "math()"
 snippet no "||||" i
 \l\|$1\r\|$0
@@ -38,42 +32,8 @@ context "math()"
 snippet opno "operator norm" i
 \l\|$1\r\|_\textrm{op}$0
 endsnippet
-#### Brackets ####
 
-###########################################################
-
-#### Result Follows ####
-snippet RESIMP "Result follows ... chain of implications" it
-The result follows from the following chain of implications:$0
-\begin{equation*}
-	\begin{aligned}
-		$0
-	\end{aligned}
-\end{equation*}
-endsnippet
-
-snippet RESEQV "Result follows ... chain of equivalences" it
-The result follows from the following chain of equivalences:$0
-\begin{equation*}
-	\begin{aligned}
-		$0
-	\end{aligned}
-\end{equation*}
-endsnippet
-
-snippet RESCOM "Result follows ... computations" it
-The result follows from the following computation:
-\begin{equation*}
-	\begin{aligned}
-		$0
-	\end{aligned}
-\end{equation*}
-endsnippet
-#### Result follows ####
-
-###########################################################
-
-#### Environments ####
+# Environments
 snippet item "begin itemize" b
 \begin{itemize}
 	\item $0
@@ -175,11 +135,8 @@ snippet sol "begin solution" b
 	$0
 \end{solution}
 endsnippet
-#### Environments ####
 
-###########################################################
-
-#### Typesetting
+# Typesetting
 snippet bf "bold" i
 \textbf{$1}$0
 endsnippet
@@ -191,4 +148,3 @@ endsnippet
 snippet ud "underline definition" i
 \uldef{$1}$0
 endsnippet
-#### Typesetting ####
