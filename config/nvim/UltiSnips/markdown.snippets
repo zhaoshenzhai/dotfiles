@@ -231,3 +231,14 @@ $\huge\rm\bf{$1}\normalsize\rm\bf{$2}$ is the study of $0
 
 **Computations.** 
 endsnippet
+
+snippet lec "Lecture" b
+<div class="topSpace"></div>
+
+Date Created: `!p from datetime import datetime
+if not snip.c:
+    snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
+Tags: #Lecture #In_Progress #Courses/$1
+
+$0
+endsnippet
