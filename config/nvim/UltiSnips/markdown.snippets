@@ -47,8 +47,9 @@ snippet no "||||" i
 \|$1\|$0
 endsnippet
 
+priority 100
 context "math()"
-snippet nol "||||" i
+snippet lno "||||" i
 \l\|$1\r\|$0
 endsnippet
 
@@ -58,9 +59,9 @@ snippet opno "operator norm" i
 \|$1\|_\textrm{op}$0
 endsnippet
 
-priority 200
+priority 300
 context "math()"
-snippet opnol "operator norm" i
+snippet lopno "operator norm" i
 \l\|$1\r\|_\textrm{op}$0
 endsnippet
 
