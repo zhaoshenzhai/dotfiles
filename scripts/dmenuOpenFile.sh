@@ -50,10 +50,20 @@ case $mainChoice in
             case $choice in
                 "$mainChoice/Lectures")
                     MathWikiLecturesDir="$dir/Lectures"
-                    file=$(find $MathWikiLecturesDir -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/::' | DMENU $(echo "$MathWikiLecturesDir/" | sed 's:/home/zhao:~:g'))
 
-                    if [ "$file" ]; then
-                        alacritty --class nvim,nvim -e nvim "$MathWikiLecturesDir/$file" &
+                    folder=$(find $MathWikiLecturesDir -type d -printf "%T@ %Tc %p\n" | tail -n +2 | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$MathWikiLecturesDir/" | sed 's:/home/zhao:~:g'))
+                    folderAbs=$(echo "$folder" | sed 's:~:/home/zhao:g')
+
+                    if [[ "$folder" ]]; then
+                        touch "$folderAbs"
+                        choice=$(find $folderAbs -printf "\n%A@ %p" | grep ".md" | sort -nr | sed 's:.*/::' | DMENU "$folder")
+                        choice=$(basename "$choice")
+
+                        if [ "$choice" ]; then
+                            file="$folderAbs/$choice"
+                            touch "$file"
+                            alacritty --class nvim,nvim -e nvim "$file" &
+                        fi
                     fi
                 ;;
                 "$mainChoice/Notes")
