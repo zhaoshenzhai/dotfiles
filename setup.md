@@ -100,7 +100,7 @@
 
     ## Natural scrolling
         - `sudo nvim /usr/share/X11/xorg.conf.d/40-libinput.conf`
-        - Under "touchpad": Option "NaturalScrolling" "true"
+        - Under "touchpad": `Option "NaturalScrolling" "true"`
 
     ## Nitrogen
         - Add ~/.config/wallpapers
