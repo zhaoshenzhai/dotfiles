@@ -182,7 +182,7 @@ myManageHook = composeAll
         className =? "nvim"          --> viewShift (myWorkspaces !! 2),
         className =? "mpv"           --> viewShift (myWorkspaces !! 5),
         className =? "media"         --> viewShift (myWorkspaces !! 5),
-        className =? ""              --> viewShift (myWorkspaces !! 6),
+        className =? "Spotify"       --> viewShift (myWorkspaces !! 6),
         className =? "sys"           --> viewShift (myWorkspaces !! 7),
         className =? "Pavucontrol"   --> viewShift (myWorkspaces !! 7)
     ]
