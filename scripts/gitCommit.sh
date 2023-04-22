@@ -40,7 +40,7 @@ if [[ -z $1 ]]; then
             cd $DOTFILES_DIR
         ;;
         "3")
-            cd $HOME/Dropbox/University/Courses/2023_01_Y1_Winter/DRP2023_Moduli_Spaces_of_Riemann_Surfaces/Paper
+            cd $HOME/Dropbox/University/Courses/2023_01_Y1_Winter/DRP2023_Moduli_Spaces_of_Riemann_Surfaces
         ;;
         "4")
             cd $HOME/Dropbox/MathLinks
