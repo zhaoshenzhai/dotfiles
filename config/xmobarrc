@@ -26,9 +26,9 @@ Config
             Run Battery [
                 "--template"      , "<acstatus>",
                 "--"              ,
-                "-o"              , "<fn=2>\xf582</fn> <left>%",
-                "-O"              , "<fn=2>\xf583</fn> <left>%",
-                "-i"              , "<fn=2>\xf578</fn> Full"
+                "-o"              , "<fn=2>\xf0083</fn> <left>%",
+                "-O"              , "<fn=2>\xf0083</fn> <left>%",
+                "-i"              , "<fn=2>\xf0079</fn> Full"
             ] 50,
             Run Com "./Dropbox/Dotfiles/scripts/audioXmobar.sh" [] "volume" 5,
             Run Com "./Dropbox/Dotfiles/scripts/disk.sh" [] "disk" 600,
