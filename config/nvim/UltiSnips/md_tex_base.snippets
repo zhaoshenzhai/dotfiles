@@ -63,13 +63,31 @@ endsnippet
 priority 100
 context "math()"
 snippet -> "right arrow" i
-\to
+\rightarrow
 endsnippet
 
 priority 100
 context "math()"
 snippet => "right double arrow" i
 \Rightarrow
+endsnippet
+
+priority 200
+context "math()"
+snippet --> "long right arrow" i
+\longrightarrow
+endsnippet
+
+priority 200
+context "math()"
+snippet ==> "long right double arrow" i
+\Longrightarrow
+endsnippet
+
+priority 100
+context "math()"
+snippet <- "left arrow" i
+\leftarrow
 endsnippet
 
 priority 100
@@ -80,14 +98,38 @@ endsnippet
 
 priority 200
 context "math()"
-snippet <-> "left right arrow" i
-\leftrightarrow
+snippet <-- "long left arrow" i
+\longleftarrow
 endsnippet
 
 priority 200
 context "math()"
+snippet <== "long left double arrow" i
+\Longleftarrow
+endsnippet
+
+priority 300
+context "math()"
+snippet <-> "left right arrow" i
+\leftrightarrow
+endsnippet
+
+priority 300
+context "math()"
 snippet <=> "Left right double arrow" i
 \Leftrightarrow
+endsnippet
+
+priority 400
+context "math()"
+snippet <--> "left right double arrow" i
+\longleftrightarrow
+endsnippet
+
+priority 400
+context "math()"
+snippet <==> "Long left right double arrow" i
+\Longleftrightarrow
 endsnippet
 
 # Environments
