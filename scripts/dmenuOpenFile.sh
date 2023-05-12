@@ -128,24 +128,11 @@ case $mainChoice in
         fi
     ;;
     "~/Dropbox/Documents")
-        dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
-        folder=$(find $dir -type d -printf "%T@ %Tc %p\n" | tail -n +2 | sort -nr | sed 's:.*/home/zhao:~:' | DMENU "$mainChoice/")
-        folderAbs=$(echo "$folder" | sed 's:~:/home/zhao:g')
-        if [[ "$folder" ]]; then
-            touch "$folderAbs"
-            choice=
-            if [[ $(basename "$folder") != "LaTeX" ]]; then
-                choice=$(find $folderAbs -printf "\n%A@ %p" | grep ".pdf" | sort -nr | sed 's:.*/::' | DMENU "$folder")
-            else
-                choice=$(find $folderAbs -printf "\n%A@ %p" | grep ".pdf" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU "$folder")
-            fi
-            choice=$(basename "$choice")
+        dir="$HOME/Dropbox/Documents"
+        file=$(find $dir -printf "%T@ %Tc %p\n" | grep ".pdf" | sort -nr | sed 's:.*/::' | DMENU $(echo "$mainChoice/" | sed 's:/home/zhao:~:g'))
 
-            if [ "$choice" ]; then
-                file="$folderAbs/$choice"
-                touch "$file"
-                zathura "$file"
-            fi
+        if [ "$file" ]; then
+            touch "$dir/$file"
         fi
     ;;
     "~/Dropbox/MathLinks")
