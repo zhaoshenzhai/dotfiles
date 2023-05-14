@@ -132,8 +132,8 @@ case $mainChoice in
         file=$(find $dir -printf "%T@ %Tc %p\n" | grep ".pdf" | sort -nr | sed 's:.*/::' | DMENU $(echo "$mainChoice/" | sed 's:/home/zhao:~:g'))
 
         if [ "$file" ]; then
-            zathura "$dir/$file"
             touch "$dir/$file"
+            zathura "$dir/$file"
         fi
     ;;
     "~/Dropbox/MathLinks")
