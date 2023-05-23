@@ -164,12 +164,24 @@ $1\divides$0
 endsnippet
 
 # Let ...
+priority 100
 snippet TOP "Topological space" i
 Let $${1:X}$ be a topological space. $0
 endsnippet
 
+priority 200
 snippet TOPS "Topological spaces" i
 Let $${1:X}$ and $${2:Y}$ be topological spaces. $0
+endsnippet
+
+priority 300
+snippet PTOP "Topological space" i
+Let $\\l(${1:X},${2:x}_0\\r)$ be a pointed topological space. $0
+endsnippet
+
+priority 400
+snippet PTOPS "Topological spaces" i
+Let $\\l(${1:X},${2:x}_0\\r)$ and $\\l(${3:Y},${4:y}_0\\r)$ be pointed topological spaces. $0
 endsnippet
 
 snippet MET "Metric space" i
