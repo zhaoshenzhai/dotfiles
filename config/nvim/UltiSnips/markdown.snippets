@@ -9,12 +9,12 @@ endglobal
 # General
 context "notMath()"
 snippet bf "bold" i
-**$1**$0
+<b>$1</b>$0
 endsnippet
 
 context "notMath()"
 snippet it "italics" i
-_$1_$0
+<i>$1</i>$0
 endsnippet
 
 priority 100
@@ -88,11 +88,11 @@ endsnippet
 
 # Environments
 snippet pro "begin proof" b
-_Proof_. $0
+<i>Proof.</i> $0
 endsnippet
 
 snippet rem "begin remark" b
-**Remark.** $0
+<b>Remark.</b> $0
 endsnippet
 
 snippet eq "begin equation" b
@@ -117,15 +117,15 @@ if not snip.c:
     snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
 Tags: #Type/Definition #In_Progress
 
-Types: _Not Applicable_
-Examples: _Not Applicable_
-Constructions: _Not Applicable_
-Generalizations: _Not Applicable_
+Types: <i>Not Applicable</i>
+Examples: <i>Not Applicable</i>
+Constructions: <i>Not Applicable</i>
+Generalizations: <i>Not Applicable</i>
 
-Properties: _Not Applicable_
-Sufficiencies: _Not Applicable_
-Equivalences: _Not Applicable_
-Justifications: _Not Applicable_
+Properties: <i>Not Applicable</i>
+Sufficiencies: <i>Not Applicable</i>
+Equivalences: <i>Not Applicable</i>
+Justifications: <i>Not Applicable</i>
 
 \`\`\` ad-Definition
 title: Definition.
@@ -143,12 +143,12 @@ if not snip.c:
     snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
 Tags: #Type/Axiom #In_Progress
 
-Constructions: _Not Applicable_
-Generalizations: _Not Applicable_
+Constructions: <i>Not Applicable</i>
+Generalizations: <i>Not Applicable</i>
 
-Properties: _Not Applicable_
-Sufficiencies: _Not Applicable_
-Equivalences: _Not Applicable_
+Properties: <i>Not Applicable</i>
+Sufficiencies: <i>Not Applicable</i>
+Equivalences: <i>Not Applicable</i>
 
 \`\`\` ad-Axiom
 title: Axiom $1.
@@ -166,12 +166,12 @@ if not snip.c:
     snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
 Tags: #Type/Proposition #In_Progress
 
-Proved by: _Not Applicable_
-References: _Not Applicable_
-Justifications: _Not Applicable_
+Proved by: <i>Not Applicable</i>
+References: <i>Not Applicable</i>
+Justifications: <i>Not Applicable</i>
 
-Specializations: _Not Applicable_
-Generalizations: _Not Applicable_
+Specializations: <i>Not Applicable</i>
+Generalizations: <i>Not Applicable</i>
 
 \`\`\` ad-Proposition
 title: Proposition$1.
@@ -180,7 +180,7 @@ $2
 
 \`\`\`
 
-_Proof_. $0
+<i>Proof.</i> $0
 endsnippet
 
 snippet thm "Theorem" b
@@ -191,12 +191,12 @@ if not snip.c:
     snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
 Tags: #Type/Theorem #In_Progress
 
-Proved by: _Not Applicable_
-References: _Not Applicable_
-Justifications: _Not Applicable_
+Proved by: <i>Not Applicable</i>
+References: <i>Not Applicable</i>
+Justifications: <i>Not Applicable</i>
 
-Specializations: _Not Applicable_
-Generalizations: _Not Applicable_
+Specializations: <i>Not Applicable</i>
+Generalizations: <i>Not Applicable</i>
 
 \`\`\` ad-Theorem
 title: Theorem$1.
@@ -205,7 +205,7 @@ $2
 
 \`\`\`
 
-_Proof_. $0
+<i>Proof.</i> $0
 endsnippet
 
 snippet moc "Map of Content" b
@@ -216,23 +216,23 @@ if not snip.c:
     snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
 Tags: #Type/MOC #In_Progress
 
-Context: _Not Applicable_
-Excursions: _Not Applicable_
-Abstractions: _Not Applicable_
+Context: <i>Not Applicable</i>
+Excursions: <i>Not Applicable</i>
+Abstractions: <i>Not Applicable</i>
 
 $\huge\rm\bf{$1}\normalsize\rm\bf{$2}$ is the study of $0
 
 ---
 
-**Constructions.** 
+<b>Constructions.</b> 
 
 ---
 
-**Characterizations.** 
+<b>Characterizations.</b> 
 
 ---
 
-**Computations.** 
+<b>Computations.</b> 
 endsnippet
 
 snippet lec "Lecture" b
