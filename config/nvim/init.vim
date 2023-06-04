@@ -39,7 +39,6 @@ call plug#begin('~/.config/nvim/plugged')
     " Theme
     Plug 'joshdick/onedark.vim'                                       " onedark color scheme
     Plug 'itchyny/lightline.vim'                                      " lightline
-    Plug 'inkarkat/vim-SyntaxRange'                                   " code block syntax
     Plug 'preservim/vim-markdown'                                     " syntax highlighting markdown
     Plug 'leafgarland/typescript-vim'                                 " syntax highlighting typescript
     Plug 'uiiaoo/java-syntax.vim'                                     " syntax highlighting java
@@ -55,7 +54,6 @@ source $DOTFILES_DIR/config/nvim/config/fileTypeDefaults.vim
 source $DOTFILES_DIR/config/nvim/config/autoFold.vim
 
 source $DOTFILES_DIR/config/nvim/config/pluggins/markdown.vim
-source $DOTFILES_DIR/config/nvim/config/pluggins/syntaxRange.vim
 source $DOTFILES_DIR/config/nvim/config/pluggins/ultisnips.vim
 source $DOTFILES_DIR/config/nvim/config/pluggins/vimtex.vim
 source $DOTFILES_DIR/config/nvim/config/pluggins/ncm2.vim

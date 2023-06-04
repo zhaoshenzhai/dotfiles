@@ -126,7 +126,7 @@
 
     ## Nvim markdown
         - `nvim ~/.config/nvim/plugged/vim-markdown/syntax/markdown.vim`
-            - Comment out lines with 'syn region htmlItalic...' etc
+        - Remove `htmlBold` in `syn cluster mkdNonListItem`
 
     ## Mpv cycle-cmd.js
         - `nvim ~/.config/mpv/scripts/cycle-cmd.js`
