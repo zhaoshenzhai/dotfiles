@@ -1,13 +1,5 @@
 #!/bin/bash
 
-YELLOW='\033[0;33m'
-PURPLE='\033[0;35m'
-GREEN='\033[0;32m'
-CYAN='\033[0;36m'
-BLUE='\033[0;34m'
-RED='\033[0;31m'
-NC='\033[0m'
-
 DMENU()
 {
     dmenu -i -p $1 -nb "#1E2127" -nf "#F8F8F8" -sb "#457eb0" -fn 'courier prime:spacing=1:pixelsize=20' -bw 3 -c -l 15
