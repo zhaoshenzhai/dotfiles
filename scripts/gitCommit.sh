@@ -64,10 +64,10 @@ if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
         read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/a/n]${NC} ")" choice
         if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
             echo ""
-            diff=$(git -c color.diff=always diff -- . ':(exclude).obsidian/*' | tee /dev/tty)
+            diff=$(git -c color.diff=always diff --color-words -- . ':(exclude).obsidian/*' | tee /dev/tty)
         elif [ "$choice" == "a" ] || [ "$choice" == "A" ]; then
             echo ""
-            diff=$(git -c color.diff=always diff | tee /dev/tty)
+            diff=$(git -c color.diff=always diff --color-words | tee /dev/tty)
         elif [ "$choice" == "q" ]; then
             if [[ -z $prompt ]]; then
                 echo ""
@@ -83,7 +83,7 @@ if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
         read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/n]${NC} ")" choice
         if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
             echo ""
-            diff=$(git -c color.diff=always diff | tee /dev/tty)
+            diff=$(git -c color.diff=always diff --color-words | tee /dev/tty)
         elif [ "$choice" == "q" ]; then
             if [[ -z $prompt ]]; then
                 echo ""
