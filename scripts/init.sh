@@ -16,6 +16,6 @@ done <<< "$notes"
 
 # Start applications
 obsidian &
-LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify &
+spotify &
 $DOTFILES_DIR/scripts/openQute.sh -Z &
 $DOTFILES_DIR/scripts/openQute.sh -P &
