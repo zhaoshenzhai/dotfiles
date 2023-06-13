@@ -132,6 +132,3 @@
         - `nvim ~/.config/mpv/scripts/cycle-cmd.js`
             - Insert contents of https://github.com/mpv-player/mpv/issues/8658
             - Remove space at line 12
-
-    ## Spotify
-        - `bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Linux/main/install.sh) -c`
