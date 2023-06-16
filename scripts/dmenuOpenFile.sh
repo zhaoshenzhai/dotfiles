@@ -118,8 +118,8 @@ case $mainChoice in
     "~/Dropbox/MathLinks")
         dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
         declare -a choices=(
-            "$mainChoice/main.ts"
-            "$mainChoice/settings.ts"
+            "$mainChoice/src/main.ts"
+            "$mainChoice/src/settings.ts"
             "$mainChoice/README.md"
             "$mainChoice/makefile"
             "$mainChoice/package.json"
