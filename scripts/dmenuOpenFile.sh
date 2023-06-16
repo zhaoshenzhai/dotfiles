@@ -31,23 +31,10 @@ case $mainChoice in
             "$mainChoice/.gitattributes"
         )
 
-        if [[ $(ls "$dir/Lectures" | wc -l) != 0 ]]; then
-            choices=$(echo -e "${choices[@]}" | sed 's:Images:Images\n'"$mainChoice"'/Lectures:g' | sed 's/\ /\n/g')
-            choice=$(printf '%s\n' "${choices}" | DMENU $mainChoice/)
-        else
-            choice=$(printf '%s\n' "${choices[@]}" | DMENU $mainChoice/)
-        fi
+        choice=$(printf '%s\n' "${choices[@]}" | DMENU $mainChoice/)
 
         if [[ "$choice" ]]; then
             case $choice in
-                "$mainChoice/Lectures")
-                    MathWikiLecturesDir="$dir/Lectures"
-                    file=$(find $MathWikiLecturesDir -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/::' | DMENU $(echo "$MathWikiLecturesDir/" | sed 's:/home/zhao:~:g'))
-
-                    if [ "$file" ]; then
-                        alacritty --class nvim,nvim -e nvim "$MathWikiLecturesDir/$file" &
-                    fi
-                ;;
                 "$mainChoice/Notes")
                     MathWikiNotesDir="$dir/Notes"
                     file=$(find $MathWikiNotesDir -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/::' | DMENU $(echo "$MathWikiNotesDir/" | sed 's:/home/zhao:~:g'))
