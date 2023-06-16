@@ -1,5 +1,7 @@
 if !empty(globpath(expand("%:p:h"), 'makefile'))
     nnoremap <F5> :w <CR>:!make<CR>
+elseif !empty(globpath(expand("%:p:h"), '../makefile'))
+    nnoremap <F5> :w <CR>:!cd .. && make<CR>
 else
     autocmd filetype cs nnoremap <F5> :w <CR>:!alacritty -e $DOTFILES_DIR/scripts/compileCSharp.sh $PWD<CR><CR>
     autocmd filetype python nnoremap <F5> :w <CR>:!alacritty -e $DOTFILES_DIR/scripts/compilePython.sh %<CR><CR>
