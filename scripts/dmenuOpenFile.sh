@@ -119,6 +119,8 @@ case $mainChoice in
         dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
         declare -a choices=(
             "$mainChoice/src/main.ts"
+            "$mainChoice/src/tools.ts"
+            "$mainChoice/src/preview.ts"
             "$mainChoice/src/settings.ts"
             "$mainChoice/README.md"
             "$mainChoice/makefile"
