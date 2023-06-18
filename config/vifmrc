@@ -128,7 +128,7 @@ mark h ~/ Dropbox
 mark d ~/Dropbox/Dotfiles config
 mark m ~/Dropbox/MathWiki Notes
 mark o ~/Dropbox/MathLinks src
-mark u ~/Dropbox/University/Courses/2023_05_Y1_Summer/SURA23S/ Resources
+mark u ~/Dropbox/University/Courses MATH570_Higher_Algebra_1
 
 map f '
 
