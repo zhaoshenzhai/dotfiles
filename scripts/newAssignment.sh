@@ -117,6 +117,8 @@ if [[ ! $assignmentNumber =~ $re ]] || [[ $assignmentNumber -lt 1 ]] || [[ ! $nu
     exit 2
 fi
 
+courseFolder=$PWD
+
 mkdir Assignment_$assignmentNumber
 cd Assignment_$assignmentNumber
 for i in $(eval echo {1..$numberOfQuestions}); do
@@ -128,8 +130,8 @@ for i in $(eval echo {1..$numberOfQuestions}); do
     cp -r $filesPath/$template $PWD
     mv $template $file.tex
 
-    courseName=$(echo $PWD | grep -Po "[A-Z]{4}[1-9]{3}.*/" | sed 's/\/.*//g' | sed 's/_/\ /g' | sed '0,/\ /{s/\ /\ -\ /}')
-    termYear=$(echo $PWD | grep -Po "Y\d_.*/" | sed 's/\/.*//g' | sed 's/^.*_//g')\ $(echo $PWD | grep -Po "20\d\d")
+    courseName=$(echo $courseFolder | sed 's/^.*Courses\///g' | sed 's/_/\ /g' | sed '0,/\ /{s/\ /\ -\ /}')
+    termYear=$(cat "$courseFolder/.info")
     displayedTitle=$(echo $file | sed 's/_/\ /g' | sed 's/^/Assignment\ '$assignmentNumber'\ |\ /g')
     exerciseNumber=$(($(echo $file | sed 's/Question_//g') - 1))
 
