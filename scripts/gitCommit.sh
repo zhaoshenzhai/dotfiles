@@ -33,10 +33,10 @@ if [[ -z $1 ]]; then
             cd $DOTFILES_DIR
         ;;
         "3")
-            cd $HOME/Dropbox/University/Courses/2023_05_Y1_Summer/SURA23S/Paper
+            cd $HOME/Dropbox/University/Courses/SURA23S/Paper
         ;;
         "4")
-            cd $HOME/Dropbox/University/Courses/2023_01_Y1_Winter/DRP2023_Moduli_Spaces_of_Riemann_Surfaces
+            cd $HOME/Dropbox/University/Courses/DRP2023_Moduli_Spaces_of_Riemann_Surfaces
         ;;
         "5")
             cd $HOME/Dropbox/MathLinks
