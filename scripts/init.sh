@@ -15,7 +15,7 @@ while IFS= read -r note; do
 done <<< "$notes"
 
 # Start applications
-obsidian &
-spotify &
 $DOTFILES_DIR/scripts/openQute.sh -Z &
 $DOTFILES_DIR/scripts/openQute.sh -P &
+obsidian &
+spotify &

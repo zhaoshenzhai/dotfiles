@@ -19,8 +19,10 @@ export XMONAD_DATA_DIR="$HOME/.config/xmonad"
 export _JAVA_AWT_WM_NONREPARENTING=1
 
 # Directories
-export MATHWIKI_DIR="$HOME/Dropbox/MathWiki"
 export DOTFILES_DIR="$HOME/Dropbox/Dotfiles"
+export MATHWIKI_DIR="$HOME/Dropbox/MathWiki"
+export MATHLINKS_DIR="$HOME/Dropbox/Projects/MathLinks"
+export UNIVERSITY_DIR="$HOME/Dropbox/University"
 
 # Paths
 export PATH="$HOME/.local/bin:$PATH"

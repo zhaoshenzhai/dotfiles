@@ -33,13 +33,13 @@ if [[ -z $1 ]]; then
             cd $DOTFILES_DIR
         ;;
         "3")
-            cd $HOME/Dropbox/University/Courses/SURA23S
+            cd $UNIVERSITY_DIR/Courses/SURA23S
         ;;
         "4")
-            cd $HOME/Dropbox/University/Courses/DRP2023_Moduli_Spaces_of_Riemann_Surfaces
+            cd $UNIVERSITY_DIR/Courses/DRP2023_Moduli_Spaces_of_Riemann_Surfaces
         ;;
         "5")
-            cd $HOME/Dropbox/MathLinks
+            cd $MATHLINKS_DIR
         ;;
     esac   
 else

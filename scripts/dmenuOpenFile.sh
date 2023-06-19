@@ -9,7 +9,7 @@ declare -a options=(
     $(echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g')
     $(echo $DOTFILES_DIR | sed 's:/home/zhao:~:g')
     "~/Dropbox/Documents"
-    "~/Dropbox/MathLinks"
+    $(echo $MATHLINKS_DIR | sed 's:/home/zhao:~:g')
     "~/Dropbox/Others/Reminders"
 )
 
@@ -115,7 +115,7 @@ case $mainChoice in
             zathura "$dir/$file"
         fi
     ;;
-    "~/Dropbox/MathLinks")
+    $(echo $MATHLINKS_DIR | sed 's:/home/zhao:~:g'))
         dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
         declare -a choices=(
             "$mainChoice/src/main.ts"
