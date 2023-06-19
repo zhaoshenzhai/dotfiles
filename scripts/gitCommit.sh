@@ -33,7 +33,7 @@ if [[ -z $1 ]]; then
             cd $DOTFILES_DIR
         ;;
         "3")
-            cd $UNIVERSITY_DIR/Courses/SURA23S
+            cd $UNIVERSITY_DIR/Courses/SURA23S_Curve_Systems_on_Surfaces
         ;;
         "4")
             cd $UNIVERSITY_DIR/Courses/DRP2023_Moduli_Spaces_of_Riemann_Surfaces
