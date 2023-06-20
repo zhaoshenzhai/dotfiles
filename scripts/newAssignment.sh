@@ -135,23 +135,23 @@ for i in $(eval echo {1..$numberOfQuestions}); do
     displayedTitle=$(echo $file | sed 's/_/\ /g' | sed 's/^/Assignment\ '$assignmentNumber'\ |\ /g')
     exerciseNumber=$(($(echo $file | sed 's/Question_//g') - 1))
 
-    sed -i 's/COURSE_NAME/'"$courseName"'/g' $file.tex
-    sed -i 's/TERM_YEAR/'"$termYear"'/g' $file.tex
+    sed -i 's/COURSE_NAME/'"$courseName"'/g' preamble.sty
+    sed -i 's/TERM_YEAR/'"$termYear"'/g' preamble.sty
+    sed -i 's/EXERCISE_NUMBER/'"$exerciseNumber"'/g' preamble.sty
     sed -i 's/TITLE/'"$displayedTitle"'/g' $file.tex
-    sed -i 's/EXERCISE_NUMBER/'"$exerciseNumber"'/g' $file.tex
     sed -i 's/COLLAB_INFO/'"$collabInfo"'/g' $file.tex
     sed -i 's/DUE_MONTH/'"$dueMonth"'/g' $file.tex
     sed -i 's/DUE_DATE_MOD/'"$dueDateMod"'/g' $file.tex
     sed -i 's/DUE_DATE/'"$dueDate"'/g' $file.tex
 
-    setCounterLine=$(grep -n "setcounter" $filesPath/$template | sed 's/:.*//')
+    setCounterLine=$(grep -n "setcounter" "$filesPath/preamble.sty" | sed 's/:.*//')
     if [[ ! -z $section ]]; then
-        sed -i ''"$setCounterLine"'s/$/\n    \\setcounter{section}{'"$section"'}/g' $file.tex
-        sed -i 's/{exercise}{Exercise}.*/{exercise}{Exercise}[section]/g' $file.tex
+        sed -i ''"$setCounterLine"'s/$/\n\\setcounter{section}{'"$section"'}/g' preamble.sty
+        sed -i 's/{exercise}{Exercise}.*/{exercise}{Exercise}[section]/g' preamble.sty
     fi
     if [[ ! -z $subsection ]]; then
-        sed -i ''"$((setCounterLine + 1))"'s/$/\n    \\setcounter{subsection}{'"$subsection"'}/g' $file.tex
-        sed -i 's/{exercise}{Exercise}.*/{exercise}{Exercise}[subsection]/g' $file.tex
+        sed -i ''"$((setCounterLine + 1))"'s/$/\n\\setcounter{subsection}{'"$subsection"'}/g' preamble.sty
+        sed -i 's/{exercise}{Exercise}.*/{exercise}{Exercise}[subsection]/g' preamble.sty
     fi
 
     cd ..

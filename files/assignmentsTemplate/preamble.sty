@@ -39,11 +39,17 @@
 \mdfdefinestyle{light}{backgroundcolor = lightGray, innertopmargin = -2pt, linewidth = 1pt}
 
 % Environments
-\theoremstyle{definition}\newtheorem*{remark}{Remark}
 \theoremstyle{remark}\newtheorem*{solution}{Solution}
+\theoremstyle{definition}\newmdtheoremenv[style = light]{exercise}{Exercise}
+\theoremstyle{definition}\newmdtheoremenv[style = light]{exerciseUnnumbered}{Exercise\!\!}
+\setcounter{exercise}{EXERCISE_NUMBER}
 
 % Styles
 \newgeometry{margin = 0.7in, bmargin=1in, tmargin=1in}
 \pagestyle{fancy}
 \LinesNumbered
 \RestyleAlgo{ruled}
+
+% Header
+\lhead{COURSE_NAME}
+\rhead{McGill University - TERM_YEAR}
