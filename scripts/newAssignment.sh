@@ -130,7 +130,7 @@ for i in $(eval echo {1..$numberOfQuestions}); do
     cp -r $filesPath/$template $PWD
     mv $template $file.tex
 
-    courseName=$(echo $courseFolder | sed 's/^.*Courses\///g' | sed 's/_/\ /g' | sed '0,/\ /{s/\ /\ -\ /}')
+    courseName=$(echo $courseFolder | sed -E 's/^.*([A-Z]{4}[0-9]{3})/\1/g' | sed 's/_/\ /g' | sed '0,/\ /{s/\ /\ -\ /}')
     termYear=$(cat "$courseFolder/.info")
     displayedTitle=$(echo $file | sed 's/_/\ /g' | sed 's/^/Assignment\ '$assignmentNumber'\ |\ /g')
     exerciseNumber=$(($(echo $file | sed 's/Question_//g') - 1))
