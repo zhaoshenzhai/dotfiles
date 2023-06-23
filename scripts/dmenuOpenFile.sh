@@ -40,6 +40,7 @@ case $mainChoice in
                     file=$(find $MathWikiNotesDir -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/::' | DMENU $(echo "$MathWikiNotesDir/" | sed 's:/home/zhao:~:g'))
 
                     if [ "$file" ]; then
+                        cd $MathWikiNotesDir
                         alacritty --class nvim,nvim -e nvim "$MathWikiNotesDir/$file" &
                     fi
                 ;;
