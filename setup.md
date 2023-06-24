@@ -82,9 +82,7 @@
             - Fonts
                 - ttf-font-awesome ttf-anonymous-pro adobe-source-han-sans-cn-fonts
             - Tools
-                - htop tree bc scrot python python-pip npm ghostscript pdf2svg jdk-openjdk jre-openjdk mono openssh zip unzip
-            - TeX
-                - texlive-core texlive-latexextra texlive-science texlive-pictures texlive-bibtexextra biber
+                - htop tree bc scrot texlive biber python python-pip npm ghostscript pdf2svg jdk-openjdk jre-openjdk mono openssh zip unzip
         - Yay
             - ttf-courier-prime ttf-cmu-serif ttf-mononoki-nerd qutebrowser-profile-git spotify colorpicker chromium dropbox logisim-evolution mars-mips
         - pip
