@@ -5,13 +5,12 @@ if [[ -z $1 ]]; then
     echo -e "${CYAN}    (1): MathWiki${NC}"
     echo -e "${CYAN}    (2): Dotfiles${NC}"
     echo -e "${CYAN}    (3): SURA2023${NC}"
-    echo -e "${CYAN}    (4): DRP2023${NC}"
-    echo -e "${CYAN}    (5): MathLinks${NC}"
+    echo -e "${CYAN}    (4): MathLinks${NC}"
     echo ""
 
-    read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1|(1-5)]${NC} ")" repo
+    read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1|(1-4)]${NC} ")" repo
     re='^[0-9]+$'
-    if ( [[ $repo =~ $re ]] ) && ( [ "$repo" -gt "0" ] && [ "$repo" -le "5" ] ) || [[ -z "$repo" ]]; then
+    if ( [[ $repo =~ $re ]] ) && ( [ "$repo" -gt "0" ] && [ "$repo" -le "4" ] ) || [[ -z "$repo" ]]; then
         if [[ -z "$repo" ]]; then
             repo="1"
         fi
@@ -36,9 +35,6 @@ if [[ -z $1 ]]; then
             cd $UNIVERSITY_DIR/Courses/SURA23S_Curve_Systems_on_Surfaces
         ;;
         "4")
-            cd $UNIVERSITY_DIR/Courses/DRP2023_Moduli_Spaces_of_Riemann_Surfaces
-        ;;
-        "5")
             cd $MATHLINKS_DIR
         ;;
     esac   
