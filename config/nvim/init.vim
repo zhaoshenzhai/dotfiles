@@ -49,7 +49,6 @@ source $DOTFILES_DIR/config/nvim/config/keyboardMovement.vim
 source $DOTFILES_DIR/config/nvim/config/mappings.vim
 source $DOTFILES_DIR/config/nvim/config/textObjects.vim
 source $DOTFILES_DIR/config/nvim/config/compileAndRun.vim
-source $DOTFILES_DIR/config/nvim/config/MathWiki.vim
 source $DOTFILES_DIR/config/nvim/config/fileTypeDefaults.vim
 source $DOTFILES_DIR/config/nvim/config/autoFold.vim
 

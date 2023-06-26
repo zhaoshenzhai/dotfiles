@@ -49,6 +49,7 @@ case $mainChoice in
                     folder=$(find $MathWikiImagesDir -mindepth 1 -type d | sort -r | sed 's:/home/zhao:~:g' | DMENU $(echo "$MathWikiImagesDir/" | sed 's:/home/zhao:~:g'))
 
                     if [ "$folder" ]; then
+                        cd $MathWikiImagesDir
                         alacritty --class media,media -e nvim $(echo "$folder/image.tex" | sed 's:~:/home/zhao:g')
                     fi
                 ;;
@@ -144,6 +145,7 @@ case $mainChoice in
         choice=$(find $dir -type f -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU "$mainChoice/")
 
         if [ "$choice" ]; then
+            cd "$dir"
             alacritty --class reminders,reminders -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
         fi
     ;;
