@@ -20,7 +20,11 @@ body, #repository-container-header, .gh-header, .Header, .color-bg-default, .Box
     background-color: #1E2127 !important;
 }
 
-.TimelineItem-badge {
+.Box-row--focus-gray.navigation-focus {
+    background-color: #30343A !important;
+}
+
+.TimelineItem-badge, .Box-row {
     border: none !important;
 }
 
