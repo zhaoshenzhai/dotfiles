@@ -1,8 +1,5 @@
 #!/bin/bash
 
-YELLOW='\033[0;33m'
-NC='\033[0m'
-
 # Pacman colors
 sudo sed -i 's/#Color/Color/g' /etc/pacman.conf
 
@@ -81,6 +78,8 @@ sudo systemctl start --now bluetooth
 # Clone repos
 cd $HOME/Dropbox
 git clone https://github.com/zhaoshenzhai/MathWiki.git
+mkdir $HOME/Dropbox/Projects
+cd $HOME/Dropbox/Projects
 git clone https://github.com/zhaoshenzhai/MathLinks.git
 mkdir $HOME/Downloads
 cd $HOME/Downloads
