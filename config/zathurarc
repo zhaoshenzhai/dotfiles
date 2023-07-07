@@ -19,7 +19,7 @@ set highlight-fg            "#00FF00"
 set recolor
 set recolor-keephue
 set recolor-lightcolor      "#1E2127"
-set recolor-darkcolor       "#F8F8FF"
+set recolor-darkcolor       "#E8E8EE"
 
 set first-page-column       "1:1"
 set page-padding            2
