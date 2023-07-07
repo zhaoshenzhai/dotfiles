@@ -71,7 +71,6 @@ if [[ -z $1 ]]; then
 
             if [[ $changedReposNum = 0 ]]; then
                 repo=1
-                break
             elif [[ $changedReposNum = 1 ]]; then
                 repo=$(echo "$repoIndices" | head -c 1 | tail -c 1)
                 cd $(echo "$REPOPATHS" | sed "${repo}q;d")
