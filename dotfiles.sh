@@ -75,12 +75,22 @@ sh -c 'curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim --create-dirs ht
 sudo systemctl enable bluetooth
 sudo systemctl start --now bluetooth
 
+# Git
+git config --global credential.helper store
+
 # Clone repos
 cd $HOME/Dropbox
 git clone https://github.com/zhaoshenzhai/MathWiki.git
+
 mkdir $HOME/Dropbox/Projects
 cd $HOME/Dropbox/Projects
 git clone https://github.com/zhaoshenzhai/MathLinks.git
+
+mkdir $HOME/Dropbox/University
+cd $HOME/Dropbox/University
+git clone https://github.com/zhaoshenzhai/courses.git
+mv courses Courses
+
 mkdir $HOME/Downloads
 cd $HOME/Downloads
 git clone https://aur.archlinux.org/yay-git
@@ -110,9 +120,6 @@ rm -rf mpv-reload mpv-youtube-quality
 # Qutebrowser
 mkdir -p $HOME/.config/qutebrowser/greasemonkey
 curl https://greasyfork.org/scripts/436115-return-youtube-dislike/code/Return%20YouTube%20Dislike.user.js -o $HOME/.config/qutebrowser/greasemonkey/return-youtube-dislike.js
-
-# Git
-git config --global credential.helper store
 
 # Dropbox
 gitRepos=$(find /home/zhao -type d -name .git)
