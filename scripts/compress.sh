@@ -18,4 +18,7 @@ for file in "$@"; do
        
         echo -e "${GREEN}[$oldSizeHuman  ->  $newSizeHuman] $file${NC}"
     fi
+
+    mv "$file" "$file.bak"
+    mv "$file.compressed" "$file"
 done
