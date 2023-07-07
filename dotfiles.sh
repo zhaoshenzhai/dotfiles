@@ -113,3 +113,9 @@ curl https://greasyfork.org/scripts/436115-return-youtube-dislike/code/Return%20
 
 # Git
 git config --global credential.helper store
+
+# Dropbox
+gitRepos=$(find /home/zhao -type d -name .git)
+while IFS= read -r repo; do
+    attr -s com.dropbox.ignored -V 1 $repo
+done <<< "$gitRepos"
