@@ -1,27 +1,37 @@
 #!/bin/bash
 
-if [[ -z $1 ]]; then
-    echo -e "${CYAN}Repositories:${NC}"
-    echo -e "${CYAN}    (1): MathWiki${NC}"
-    echo -e "${CYAN}    (2): Dotfiles${NC}"
-    echo -e "${CYAN}    (3): Courses${NC}"
-    echo -e "${CYAN}    (4): SURA2023${NC}"
-    echo -e "${CYAN}    (5): MathLinks${NC}"
-    echo ""
+REPOS="
+MathWiki     $MATHWIKI_DIR
+Dotfiles     $DOTFILES_DIR
+Courses      $UNIVERSITY_DIR/Courses
+SURA2023     $UNIVERSITY_DIR/Courses/SURA23S_Curve_Systems_on_Surfaces
+MathLinks    $MATHLINKS_DIR"
 
-    read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1|(1-5)]${NC} ")" repo
-    re='^[0-9]+$'
-    if ( [[ $repo =~ $re ]] ) && ( [ "$repo" -gt "0" ] && [ "$repo" -le "5" ] ) || [[ -z "$repo" ]]; then
-        if [[ -z "$repo" ]]; then
-            repo="1"
+REPOS=$(echo "$REPOS" | sed 1d)
+REPOSNUM=$(echo "$REPOS" | wc -l)
+REPONAMES=$(echo "$REPOS" | cut -f 1 -d ' ')
+REPOPATHS=$(echo "$REPOS" | cut -f 1 -d ' ' --complement | sed 's/\ *//g')
+
+if [[ -z $1 ]]; then
+    while [[ -z $valid ]]; do
+        echo -e "${CYAN}Repositories:${NC}"
+        repoIndex=1
+        while IFS= read -r repoName; do
+            echo -e "    ${CYAN}($repoIndex): $repoName${NC}"
+            repoIndex=$((repoIndex + 1))
+        done <<< "$REPONAMES"
+        echo ""
+
+        read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1-$REPOSNUM]${NC} ")" repo
+        re='^[0-9]+$'
+        if [[ "$repo" == "q" ]]; then
+            exit
+        elif [[ -z $repo ]] || ([[ $repo =~ $re ]] && [[ $repo -gt 0 ]] && [[ $repo -le $REPOSNUM ]]); then
+            valid=1
+        else
+            clear
         fi
-    elif [[ "$repo" == "q" ]]; then
-        exit
-    else
-        clear
-        $DOTFILES_DIR/scripts/gitCommit.sh
-        exit
-    fi
+    done
 
     case $repo in
         "1")
@@ -40,6 +50,57 @@ if [[ -z $1 ]]; then
         ;;
         "5")
             cd $MATHLINKS_DIR
+        ;;
+        *)
+            changedRepos=""
+            changedReposNum=0
+            repoIndex=1
+            repoIndices=""
+            while IFS= read -r repo; do
+                cd $(echo $repo | cut -f 1 -d ' ' --complement | sed 's/\ *//g')
+                status=$(git -c color.status=always status 2>&1)
+                if [[ ! $(echo -e "$status" | grep "nothing to commit, working tree clean") ]]; then
+                    changedRepos="$changedRepos\n$repo"
+                    changedReposNum=$((changedReposNum + 1))
+                    repoIndices="$repoIndices$repoIndex"
+                fi
+                repoIndex=$((repoIndex + 1))
+            done <<< "$REPOS"
+
+            changedRepos=$(echo "$changedRepos" | sed -e 's/^\\n//g')
+
+            if [[ $changedReposNum = 0 ]]; then
+                repo=1
+                break
+            elif [[ $changedReposNum = 1 ]]; then
+                repo=$(echo "$repoIndices" | head -c 1 | tail -c 1)
+                cd $(echo "$REPOPATHS" | sed "${repo}q;d")
+            else
+                clear
+                while [[ -z $changedValid ]]; do
+                    changedRepoNames=$(echo -e "$changedRepos" | cut -f 1 -d ' ')
+                    echo -e "${CYAN}Changed Repositories:${NC}"
+                    repoIndex=1
+                    while IFS= read -r repo; do
+                        echo -e "    ${CYAN}($repoIndex): $repo${NC}"
+                        repoIndex=$((repoIndex + 1))
+                    done <<< "$changedRepoNames"
+                    echo ""
+
+                    read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1-$changedReposNum]${NC} ")" changedRepo
+                    re='^[0-9]+$'
+                    if [[ "$changedRepo" == "q" ]]; then
+                        exit
+                    elif [[ $changedRepo =~ $re ]] && [[ "$changedRepo" -gt "0" ]] && [[ "$changedRepo" -le "$changedReposNum" ]]; then
+                        changedValid=1
+                    else
+                        clear
+                    fi
+                done
+
+                repo=$(echo "$repoIndices" | head -c $changedRepo | tail -c 1)
+                cd $(echo "$REPOPATHS" | sed "${repo}q;d")
+            fi
         ;;
     esac   
 else
