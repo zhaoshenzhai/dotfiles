@@ -114,6 +114,10 @@ else
 fi
 
 echo ""
+ignoredFiles=$(git ls-files -i -c --exclude-from=.gitignore)
+if [[ ! -z $ignoredFiles ]]; then
+    git rm --cached $ignoredFiles
+fi
 status=$(git -c color.status=always status | tee /dev/tty)
 if [[ $(echo -e "$status" | grep "no changes added to commit") ]] || [[ $(echo -e "$status" | grep "nothing added to commit") ]]; then
     echo ""
@@ -162,7 +166,6 @@ if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
     fi
     read -n 1 -ep "$(echo -e ${PURPLE}"Commit? [Y/n]${NC} ")" choice
     if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
-        git rm --cached `git ls-files -i -c --exclude-from=.gitignore`
         git add .
         echo ""
         status=$(git -c color.status=always status | tee /dev/tty)
