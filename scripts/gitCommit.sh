@@ -99,6 +99,10 @@ if [[ -z $1 ]]; then
 
                 repo=$(echo "$repoIndices" | head -c $changedRepo | tail -c 1)
                 cd $(echo "$REPOPATHS" | sed "${repo}q;d")
+                if [[ $repo == 1 ]]; then
+                    source $MATHWIKI_DIR/.scripts/stats.sh -u
+                    source $MATHWIKI_DIR/.scripts/stats.sh -r
+                fi
             fi
         ;;
     esac   
