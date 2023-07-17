@@ -1,6 +1,7 @@
 #!/bin/bash
 
 for file in "$@"; do
+    cp "$file" "$file.bak"
     echo -ne "${YELLOW}Compressing: $file${NC}\r"
     gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dPDFSETTINGS=/printer -dNOPAUSE -dQUIET -dBATCH -sOutputFile="$file.tmp" "$file"
     
@@ -10,15 +11,13 @@ for file in "$@"; do
     echo -ne "\033[0K\r"
 
     if [[ $newSize -ge $oldSize ]]; then
-        cp "$file" "$file.tmp"
+        rm "$file.tmp"
         echo -e "${CYAN}[No changes] $file${NC}"
     else
         oldSizeHuman=$(du -h "$file" | awk '{print $1}')
         newSizeHuman=$(du -h "$file.tmp" | awk '{print $1}')
        
         echo -e "${GREEN}[$oldSizeHuman  ->  $newSizeHuman] $file${NC}"
+        mv "$file.tmp" "$file"
     fi
-
-    mv "$file" "$file.bak"
-    mv "$file.tmp" "$file"
 done
