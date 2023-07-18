@@ -3,7 +3,6 @@ autocmd filetype java set spell!
 if $PWD == "/home/zhao/Dropbox/Others/Reminders"
     set spell!
     let g:vim_markdown_math = 1
-    echo "hi"
 endif
 
 if $PWD == "/home/zhao/Dropbox/MathWiki/Notes"
