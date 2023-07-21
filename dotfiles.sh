@@ -126,3 +126,13 @@ gitRepos=$(find /home/zhao -type d -name .git)
 while IFS= read -r repo; do
     attr -s com.dropbox.ignored -V 1 $repo
 done <<< "$gitRepos"
+
+# Cpdf
+curl https://raw.githubusercontent.com/coherentgraphics/cpdf-binaries/master/Linux-Intel-64bit/cpdf -o $HOME/.local/bin/cpdf
+chmod +x $HOME/.local/bin/cpdf
+
+# Spicetify
+sudo cp $HOME/Dropbox/Dotfiles/config/spicetify.ini /usr/share/spicetify-cli/Themes/Dribbblish/color.ini
+spicetify config current_theme Dribbblish
+spicetify config color_scheme rosepine
+spicetify backup apply
