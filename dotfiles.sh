@@ -135,4 +135,5 @@ chmod +x $HOME/.local/bin/cpdf
 sudo cp $HOME/Dropbox/Dotfiles/config/spicetify.ini /usr/share/spicetify-cli/Themes/Dribbblish/color.ini
 spicetify config current_theme Dribbblish
 spicetify config color_scheme rosepine
+spicetify config experimental_features 0
 spicetify backup apply
