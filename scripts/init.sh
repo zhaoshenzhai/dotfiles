@@ -1,5 +1,5 @@
 #!/bin/bash
-xset r rate 200 &                # Set keyboard repeat rate
+xset r rate 150 &                # Set keyboard repeat rate
 xset b off &                     # Remove beep
 xsetroot -cursor_name left_ptr   # Cursor
 
