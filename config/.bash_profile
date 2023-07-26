@@ -1,9 +1,9 @@
 [[ -f ~/.bashrc ]] && . ~/.bashrc
 
 # XDG paths
-export XDG_DATA_HOME=${XDG_DATA_HOME:="$HOME/.local/share"}
 export XDG_CACHE_HOME=${XDG_CACHE_HOME:="$HOME/.cache"}
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:="$HOME/.config"}
+export XDG_DATA_HOME=${XDG_DATA_HOME:="$HOME/.local/share"}
 
 # Environments
 export EDITOR=nvim
@@ -12,8 +12,8 @@ export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
 
 # Xmonad
 export XMONAD_CACHE_DIR="$HOME/.cache/xmonad"
-export XMONAD_CONFIG_DIR="$HOME/.config/xmonad"
 export XMONAD_DATA_DIR="$HOME/.config/xmonad"
+export XMONAD_CONFIG_DIR="$HOME/.config/xmonad"
 
 # Java
 export _JAVA_AWT_WM_NONREPARENTING=1
@@ -21,8 +21,8 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 # Directories
 export DOTFILES_DIR="$HOME/Dropbox/Dotfiles"
 export MATHWIKI_DIR="$HOME/Dropbox/MathWiki"
-export MATHLINKS_DIR="$HOME/Dropbox/Projects/MathLinks"
 export UNIVERSITY_DIR="$HOME/Dropbox/University"
+export MATHLINKS_DIR="$HOME/Dropbox/Projects/MathLinks"
 
 # Paths
 export PATH="$HOME/.local/bin:$PATH"
