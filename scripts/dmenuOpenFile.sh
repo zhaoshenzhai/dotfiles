@@ -39,7 +39,8 @@ case $mainChoice in
                     MathWikiNotesDir="$dir/Notes"
                     file=$(find $MathWikiNotesDir -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/::' | DMENU $(echo "$MathWikiNotesDir/" | sed 's:/home/zhao:~:g'))
 
-                    if [ "$file" ]; then
+                    if [[ -f "$file" ]]; then
+                        echo -e "${YELLOW}$file${NC}"
                         cd $MathWikiNotesDir
                         alacritty --class nvim,nvim -e nvim "$MathWikiNotesDir/$file" &
                     fi
@@ -48,7 +49,7 @@ case $mainChoice in
                     MathWikiImagesDir="$dir/Images"
                     folder=$(find $MathWikiImagesDir -mindepth 1 -type d | sort -r | sed 's:/home/zhao:~:g' | DMENU $(echo "$MathWikiImagesDir/" | sed 's:/home/zhao:~:g'))
 
-                    if [ "$folder" ]; then
+                    if [[ -d "$folder" ]]; then
                         cd $MathWikiImagesDir
                         alacritty --class media,media -e nvim $(echo "$folder/image.tex" | sed 's:~:/home/zhao:g')
                     fi
@@ -57,7 +58,7 @@ case $mainChoice in
                     MathWikiScriptsDir="$dir/.scripts"
                     file=$(find $MathWikiScriptsDir -printf "%T@ %Tc %p\n" | grep ".sh" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$MathWikiScriptsDir/" | sed 's:/home/zhao:~:g'))
 
-                    if [ "$file" ]; then
+                    if [[ -f "$file" ]]; then
                         alacritty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
                     fi
                 ;;
@@ -65,12 +66,14 @@ case $mainChoice in
                     MathWikiSnippetsDir="$dir/.obsidian/snippets"
                     file=$(find $MathWikiSnippetsDir -printf "%T@ %Tc %p\n" | grep ".css" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$MathWikiSnippetsDir/" | sed 's:/home/zhao:~:g'))
 
-                    if [ "$file" ]; then
+                    if [[ -f "$file" ]]; then
                         alacritty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
                     fi
                 ;;
                 *)
-                    alacritty --class sys,sys -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
+                    if [[ -f "$choice" ]]; then
+                        alacritty --class sys,sys -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
+                    fi
                 ;;
             esac
         fi
@@ -90,7 +93,7 @@ case $mainChoice in
                     scriptsDir=$(echo "$mainChoice/scripts" | sed 's:~:/home/zhao:g')
                     file=$(find $scriptsDir -printf "%T@ %Tc %p\n" | grep ".sh" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$scriptsDir/" | sed 's:/home/zhao:~:g'))
 
-                    if [ "$file" ]; then
+                    if [[ -f "$file" ]]; then
                         alacritty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
                     fi
                 ;;
@@ -98,12 +101,14 @@ case $mainChoice in
                     configDir=$(echo "$mainChoice/config" | sed 's:~:/home/zhao:g')
                     file=$(find $configDir -type f -printf "%T@ %Tc %p\n" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$configDir/" | sed 's:/home/zhao:~:g'))
 
-                    if [ "$file" ]; then
+                    if [[ -f "$file" ]]; then
                         alacritty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
                     fi
                 ;;
                 *)
-                    alacritty --class sys,sys -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
+                    if [[ -f "$choice" ]]; then
+                        alacritty --class sys,sys -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
+                    fi
                 ;;
             esac
         fi
@@ -112,7 +117,7 @@ case $mainChoice in
         dir="$HOME/Dropbox/Documents"
         file=$(find $dir -printf "%T@ %Tc %p\n" | grep ".pdf" | sort -nr | sed 's:.*/::' | DMENU $(echo "$mainChoice/" | sed 's:/home/zhao:~:g'))
 
-        if [ "$file" ]; then
+        if [[ -f "$file" ]]; then
             touch "$dir/$file"
             zathura "$dir/$file"
         fi
@@ -136,7 +141,7 @@ case $mainChoice in
 
         choice=$(printf '%s\n' "${choices[@]}" | DMENU $mainChoice/)
 
-        if [[ "$choice" ]]; then
+        if [[ -f "$choice" ]]; then
             alacritty -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
         fi
     ;;
@@ -144,7 +149,7 @@ case $mainChoice in
         dir="$HOME/Dropbox/Others/Reminders"
         choice=$(find $dir -type f -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU "$mainChoice/")
 
-        if [ "$choice" ]; then
+        if [[ -f "$choice" ]]; then
             cd "$dir"
             alacritty --class reminders,reminders -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
         fi
