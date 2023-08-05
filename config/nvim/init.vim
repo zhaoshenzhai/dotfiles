@@ -53,6 +53,7 @@ source $DOTFILES_DIR/config/nvim/config/compileAndRun.vim
 source $DOTFILES_DIR/config/nvim/config/fileTypeDefaults.vim
 source $DOTFILES_DIR/config/nvim/config/autoFold.vim
 
+source $DOTFILES_DIR/config/nvim/config/pluggins/vim-markdown.vim
 source $DOTFILES_DIR/config/nvim/config/pluggins/ultisnips.vim
 source $DOTFILES_DIR/config/nvim/config/pluggins/vimtex.vim
 source $DOTFILES_DIR/config/nvim/config/pluggins/ncm2.vim
