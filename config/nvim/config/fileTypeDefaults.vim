@@ -1,4 +1,4 @@
-autocmd filetype java set spell!
+autocmd filetype java setlocal spell!
 
 if $PWD == "/home/zhao/Dropbox/Others/Reminders"
     set spell!
@@ -12,7 +12,7 @@ if $PWD == "/home/zhao/Dropbox/MathWiki/Notes"
     let @g="?equation\<CR>dd/equation\<CR>dd?gathered\<CR>/e\<CR>xxI$$\<Esc>/gathered\<CR>/e\<CR>xxA$$\<Esc>v?gather\<CR>n</gather\<CR>kA\\qedin\<Esc>"
     let @b="/\\\\r)\<CR>xx?\\\\l(\<CR>lr,/)\<CR>"
 
-    autocmd filetype markdown set syntax=tex
+    autocmd filetype markdown setlocal syntax=tex
 endif
 
 if $PWD == "/home/zhao/Dropbox/MathWiki/Images"

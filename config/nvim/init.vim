@@ -39,10 +39,10 @@ call plug#begin('~/.config/nvim/plugged')
     " Theme
     Plug 'joshdick/onedark.vim'                                       " onedark color scheme
     Plug 'itchyny/lightline.vim'                                      " lightline
+    Plug 'godlygeek/tabular'                                          " needed for vim-markdown
     Plug 'leafgarland/typescript-vim'                                 " syntax highlighting typescript
     Plug 'uiiaoo/java-syntax.vim'                                     " syntax highlighting java
-    Plug 'godlygeek/tabular'
-    Plug 'preservim/vim-markdown'
+    Plug 'preservim/vim-markdown'                                     " syntax highlighting markdown
 call plug#end()
 
 source $DOTFILES_DIR/config/nvim/config/theme.vim
@@ -50,8 +50,8 @@ source $DOTFILES_DIR/config/nvim/config/keyboardMovement.vim
 source $DOTFILES_DIR/config/nvim/config/mappings.vim
 source $DOTFILES_DIR/config/nvim/config/textObjects.vim
 source $DOTFILES_DIR/config/nvim/config/compileAndRun.vim
-source $DOTFILES_DIR/config/nvim/config/fileTypeDefaults.vim
 source $DOTFILES_DIR/config/nvim/config/autoFold.vim
+source $DOTFILES_DIR/config/nvim/config/fileTypeDefaults.vim
 
 source $DOTFILES_DIR/config/nvim/config/pluggins/vim-markdown.vim
 source $DOTFILES_DIR/config/nvim/config/pluggins/ultisnips.vim
