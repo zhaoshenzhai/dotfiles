@@ -121,9 +121,9 @@
         - Change to {perc}qute [${session}$]{title_sep}...
     - Move `cookies_Z.txt` and `cookies_P.txt` to `~/.config`
 
-# Nvim markdown
-    - `nvim ~/.config/nvim/plugged/vim-markdown/syntax/markdown.vim`
-    - Remove `htmlBold` in `syn cluster mkdNonListItem`
+# Vim-markdown
+    - `nvim ~/.config/nvim/plugged/vim-markdown/ftplugin/markdown.vim`
+        - Comment out lines on code blocks
 
 # Mpv cycle-cmd.js
     - `nvim ~/.config/mpv/scripts/cycle-cmd.js`

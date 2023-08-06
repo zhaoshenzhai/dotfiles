@@ -13,7 +13,6 @@ if $PWD == "/home/zhao/Dropbox/MathWiki/Notes"
     let @b="/\\\\r)\<CR>xx?\\\\l(\<CR>lr,/)\<CR>"
 
     autocmd filetype markdown set syntax=tex
-    let g:vim_markdown_fenced_languages = ["ad-Definition=tex", "ad-Theorem=tex", "ad-Proposition=tex", "ad-Example=tex", "ad-Axiom=tex"]
 endif
 
 if $PWD == "/home/zhao/Dropbox/MathWiki/Images"
