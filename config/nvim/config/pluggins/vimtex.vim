@@ -12,4 +12,5 @@ let g:vimtex_quickfix_ignore_filters=[
     \'LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.',
     \'Dimension too large.',
     \'LaTeX Warning\: Marginpar on page * moved. ',
+    \'I found no \\bibdata command'
     \]
