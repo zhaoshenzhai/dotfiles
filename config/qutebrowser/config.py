@@ -107,7 +107,7 @@ config.set('content.images', True, 'chrome-devtools://*')
 config.set('content.images', True, 'devtools://*')
 
 # Scrolling
-config.set('scrolling.smooth', True)
+config.set('scrolling.smooth', False)
 
 # Enable javascript
 config.set('content.javascript.enabled', True, 'chrome-devtools://*')
