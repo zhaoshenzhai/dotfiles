@@ -10,7 +10,7 @@ while [ ! -z "$1" ]; do
         -P)
             shift
             sed -i 's/cookies_Z/cookies_P/g' $DOTFILES_DIR/config/qutebrowser/config.py
-            $(qutebrowser-profile --new 'P' https://web.whatsapp.com https://www.instagram.com/direct/inbox)
+            $(qutebrowser-profile --new 'P' https://web.whatsapp.com https://www.instagram.com/direct/inbox https://web.snapchat.com/)
             sleep 2
             sed -i 's/cookies_P/cookies_Z/g' $DOTFILES_DIR/config/qutebrowser/config.py
             ;;
