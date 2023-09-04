@@ -98,7 +98,7 @@ endsnippet
 
 # Environments
 snippet pro "begin proof" b
-<i>Proof.</i> $0
+<i>Proof$1.</i> $0
 endsnippet
 
 snippet rem "begin remark" b
@@ -171,29 +171,6 @@ $0
 \`\`\`
 endsnippet
 
-snippet axi "Axiom" b
-<div class="topSpace"></div>
-
-Date Created: `!p from datetime import datetime
-if not snip.c:
-    snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
-Tags: #Type/Axiom #In_Progress
-
-Constructions: <i>Not Applicable</i>
-Generalizations: <i>Not Applicable</i>
-
-Properties: <i>Not Applicable</i>
-Sufficiencies: <i>Not Applicable</i>
-Equivalences: <i>Not Applicable</i>
-
-\`\`\` ad-Axiom
-title: Axiom $1.
-
-$0
-
-\`\`\`
-endsnippet
-
 snippet prp "Proposition" b
 <div class="topSpace"></div>
 
@@ -242,31 +219,4 @@ $2
 \`\`\`
 
 <i>Proof.</i> $0
-endsnippet
-
-snippet moc "Map of Content" b
-<div class="topSpace"></div>
-
-Date Created: `!p from datetime import datetime
-if not snip.c:
-    snip.rv=datetime.now().strftime("%d/%m/%Y %H:%M:%S")`
-Tags: #Type/MOC #In_Progress
-
-Context: <i>Not Applicable</i>
-Excursions: <i>Not Applicable</i>
-Abstractions: <i>Not Applicable</i>
-
-$\huge\rm\bf{$1}\normalsize\rm\bf{$2}$ is the study of $0
-
----
-
-<b>Constructions.</b> 
-
----
-
-<b>Characterizations.</b> 
-
----
-
-<b>Computations.</b> 
 endsnippet
