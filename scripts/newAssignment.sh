@@ -119,8 +119,8 @@ fi
 
 courseFolder=$PWD
 
-mkdir Assignment_$assignmentNumber
-cd Assignment_$assignmentNumber
+mkdir -p Assignments/Assignment_$assignmentNumber
+cd Assignments/Assignment_$assignmentNumber
 for i in $(eval echo {1..$numberOfQuestions}); do
     file=Question_$i
     mkdir $file
