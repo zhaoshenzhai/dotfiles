@@ -1,54 +1,151 @@
-\usepackage[T1]{fontenc}                                                    % make fonts work?
-\usepackage[hidelinks]{hyperref}                                            % links
-\usepackage{pgfplots}\pgfplotsset{compat=1.18}                              % plots
-\usepackage{geometry}                                                       % page layout
-\usepackage{fancyhdr}                                                       % headers and footers
-\usepackage{titlesec}                                                       % title page
-\usepackage{tocloft}                                                        % custom table of contents
-\usepackage{amsfonts, amsmath, amssymb, amsthm}                             % basic maths commands
-\usepackage{mathtools}                                                      % more maths commands
-\usepackage{mathrsfs}                                                       % more math commands
-\usepackage{mdframed}                                                       % framed environments
-\usepackage{graphicx}                                                       % images and other graphics
-\usepackage{tikz}                                                           % maths figures
-\usepackage{tikz-3dplot}                                                    % needed by tikz
-\usepackage{tikzpagenodes}                                                  % needed by tikz
-\usepackage{ulem}                                                           % underlining
-\usepackage{xcolor}                                                         % more colors
-\usepackage{caption}                                                        % captions outside float
-\usepackage{enumitem}                                                       % enumerate and itemize indents
-\usepackage{nicematrix}                                                     % matrices and tables
-\usepackage{bm}                                                             % bold math
-\usepackage{esint}                                                          % integrals
-\usepackage{algorithm2e}                                                    % pseudocode
+% Operators
+    \newcommand{\id}{\operatorname{id}}
+    \newcommand{\im}{\operatorname{im}}
+    \newcommand{\rk}{\operatorname{rk}}
+    \newcommand{\ch}{\operatorname{ch}}
+    \newcommand{\tr}{\operatorname{tr}}
+    \newcommand{\ON}{\operatorname{ON}}
+    \newcommand{\GL}{\operatorname{GL}}
+    \newcommand{\SL}{\operatorname{SL}}
+    \newcommand{\Id}{\operatorname{Id}}
+    \newcommand{\dom}{\operatorname{dom}}
+    \newcommand{\ran}{\operatorname{ran}}
+    \newcommand{\cdm}{\operatorname{cdm}}
+    \newcommand{\sgn}{\operatorname{sgn}}
+    \newcommand{\lcm}{\operatorname{lcm}}
+    \newcommand{\ord}{\operatorname{ord}}
+    \newcommand{\Aut}{\operatorname{Aut}}
+    \newcommand{\Inn}{\operatorname{Inn}}
+    \newcommand{\End}{\operatorname{End}}
+    \newcommand{\Mat}{\operatorname{Mat}}
+    \newcommand{\Obj}{\operatorname{Obj}}
+    \newcommand{\Hom}{\operatorname{Hom}}
+    \newcommand{\Tor}{\operatorname{Tor}}
+    \newcommand{\Ann}{\operatorname{Ann}}
+    \newcommand{\Sym}{\operatorname{Sym}}
+    \newcommand{\Cov}{\operatorname{Cov}}
+    \newcommand{\Orb}{\operatorname{Orb}}
+    \newcommand{\rfcl}{\operatorname{rfcl}}
+    \newcommand{\proj}{\operatorname{proj}}
+    \newcommand{\diag}{\operatorname{diag}}
+    \newcommand{\eval}{\operatorname{eval}}
+    \newcommand{\cont}{\operatorname{cont}}
+    \newcommand{\diam}{\operatorname{diam}}
+    \newcommand{\Skew}{\operatorname{Skew}}
+    \newcommand{\Frac}{\operatorname{Frac}}
+    \newcommand{\Stab}{\operatorname{Stab}}
+    \newcommand{\Isom}{\operatorname{Isom}}
+    \newcommand{\coker}{\operatorname{coker}}
+    \newcommand{\preim}{\operatorname{preim}}
+    \newcommand{\arccosh}{\operatorname{arccosh}}
+    \renewcommand{\span}{\operatorname{span}}
+    \renewcommand{\Re}{\operatorname{Re}}
+    \renewcommand{\Im}{\operatorname{Im}}
 
-% TikZ Libraries
-\usetikzlibrary{matrix}
-\usetikzlibrary{positioning}
-\usetikzlibrary{patterns}
-\usetikzlibrary{decorations.markings}
-\usetikzlibrary{arrows}
-\usetikzlibrary{arrows.meta}
-\usetikzlibrary{backgrounds}
-\usetikzlibrary{math}
-\usetikzlibrary{cd}
+% Math notations
+    % Set Theory
+        \newcommand{\fa}{\forall}
+        \newcommand{\ex}{\exists}
+        \newcommand{\pow}{\mathcal{P}}
+        \newcommand{\rest}{\!\upharpoonright\!}
+        \newcommand{\comp}{\setminus}
+        \newcommand{\iso}{\cong}
+        \newcommand{\into}{\hookrightarrow}
+        \newcommand{\onto}{\twoheadrightarrow}
+        \newcommand{\simto}{\rightleftarrows}
+        \newcommand{\eqnum}{\approx}
+        \renewcommand{\em}{\varnothing}
 
-% Colors
-\definecolor{lightGray}{rgb}{0.9, 0.9, 0.9}
-\mdfdefinestyle{light}{backgroundcolor = lightGray, innertopmargin = -2pt, linewidth = 1pt}
+    % Category Theory
+        \newcommand{\cat}[1]{\textbf{#1}}
+        \newcommand{\catset}{\cat{Set}}
+        \newcommand{\catrel}{\cat{Rel}}
+        \newcommand{\catmon}{\cat{Mon}}
+        \newcommand{\catgrp}{\cat{Grp}}
+        \newcommand{\catabgrp}{\cat{Ab}}
+        \newcommand{\catring}{\cat{Ring}}
+        \newcommand{\catmod}[1][R]{\prescript{}{#1}{\cat{Mod}}}
+        \newcommand{\catfgmod}[1][R]{\cat{fg}_{#1}\cat{Mod}}
+        \newcommand{\catrmod}[1][R]{\cat{Mod}_{#1}}
+        \newcommand{\catalg}[1][R]{\prescript{}{#1}{\cat{Alg}}}
+        \newcommand{\catvect}[1][k]{\prescript{}{#1}{\cat{Vect}}}
+        \newcommand{\catfgvect}[1][k]{\cat{fg}_{#1}\cat{Vect}}
+        \newcommand{\cattop}{\cat{Top}}
+        \newcommand{\catptop}{\cat{Top}_\blob}
+        \newcommand{\catgset}[1]{\prescript{}{#1}{\cat{Set}}}
+        \newcommand{\catrep}[2][\,]{\cat{Rep}_{#1\!}\l(#2\r)}
+        \newcommand{\catfgrep}[2][\,]{\cat{fgRep}_{#1\!}\l(#2\r)}
+        \newcommand{\catcov}[1][X]{\cat{Cov}\l(#1\r)}
+        \newcommand{\catmet}{\cat{Met}}
 
-% Environments
-\theoremstyle{remark}\newtheorem*{solution}{Solution}
-\theoremstyle{definition}\newmdtheoremenv[style = light]{exercise}{Exercise}
-\theoremstyle{definition}\newmdtheoremenv[style = light]{exerciseUnnumbered}{Exercise\!\!}
-\setcounter{exercise}{EXERCISE_NUMBER}
+    % Analysis
+        \newcommand{\del}{\partial}
+        \newcommand{\RI}[1][]{\ms{R}#1}
+        \newcommand{\CONT}[1][]{\ms{C}#1}
+        \newcommand{\BDD}[1][]{\ms{B}#1}
+        \renewcommand{\d}{\,\mathrm{d}}
 
-% Styles
-\newgeometry{margin = 0.7in, bmargin=1in, tmargin=1in}
-\pagestyle{fancy}
-\LinesNumbered
-\RestyleAlgo{ruled}
+    % Topology
+        \newcommand{\htopeq}{\simeq}
+        \newcommand{\rel}{\ \operatorname{rel}\ }
 
-% Header
-\lhead{COURSE_NAME}
-\rhead{McGill University - TERM_YEAR}
+    % Linear Algebra
+        \newcommand{\inprod}[2]{\l\langle{#1},{#2}\r\rangle}
+        \newcommand{\dual}{\wedge}
+        \newcommand{\adj}{\ast}
+        \newcommand{\trans}{\mathsf{T}}
+        \renewcommand{\vec}[1]{\mathbf{#1}}
+
+    % Group Theory
+        \newcommand{\subgrp}{<}
+        \newcommand{\nsubgrp}{\triangleleft}
+        \newcommand{\nsupgrp}{\triangleright}
+        \newcommand{\subgrpeq}{\leq}
+        \newcommand{\nsubgrpeq}{\trianglelefteq}
+        \newcommand{\nspbgrpeq}{\trianglerighteq}
+        \newcommand{\semi}{\rtimes}
+
+    % Number Theory
+        \newcommand{\divides}{\,|\,}
+        \newcommand{\ndivides}{\nmid}
+        \renewcommand{\mod}[1]{\l(\operatorname{mod}\,#1\r)}
+
+    % Misc
+        \newcommand{\tpl}[1]{\l(#1\r)}
+        \newcommand{\st}{\,\middle\vert\,}
+        \newcommand{\gen}[1]{\l\langle#1\r\rangle}
+        \renewcommand{\bar}{\overline}
+
+% Math others
+    % Number Systems
+        \newcommand{\N}{\mathbb{N}}
+        \newcommand{\Z}{\mathbb{Z}}
+        \newcommand{\Q}{\mathbb{Q}}
+        \newcommand{\R}{\mathbb{R}}
+        \newcommand{\C}{\mathbb{C}}
+        \newcommand{\F}{\mathbb{F}}
+        \newcommand{\E}{\mathbb{E}}
+        \renewcommand{\P}{\mathbb{P}}
+        \renewcommand{\H}{\mathbb{H}}
+
+% LaTeX/MathJax
+    % Fonts
+        \newcommand{\mc}[1]{\mathcal{#1}}
+        \newcommand{\ms}[1]{\mathscr{#1}}
+        \newcommand{\mb}[1]{\mathbb{#1}}
+        \newcommand{\mf}[1]{\mathfrak{#1}}
+        \renewcommand{\it}[1]{\textit{#1}}
+        \renewcommand{\bf}[1]{\textbf{#1}}
+        \renewcommand{\phi}{\varphi}
+        \renewcommand{\epsilon}{\varepsilon}
+        \newcommand{\cchi}{\raise 1pt {\chi}}
+
+    % Meta
+        \newcommand{\qedin}{\tag*{$\blacksquare$}}
+        \newcommand{\exqedin}{\tag*{$\blacklozenge$}}
+        \newcommand{\blob}{\bullet}
+        \newcommand{\slot}{-}
+        \newcommand{\cref}[1]{\tag{$\,#1\,$}}
+        \renewcommand{\ref}[1]{\l(\,#1\,\r)}
+        \renewcommand{\l}{\left}
+        \renewcommand{\r}{\right}
