@@ -1,17 +1,20 @@
 #!/bin/bash
 
+courseFolder=$PWD
 filesPath=$DOTFILES_DIR/files/assignmentsTemplate/
 template="template.tex"
 
 assignmentNumber=
-numberOfQuestions=
 dueMonth=
 dueDate=
 dueDateMod=
+questionStart=
+questionEnd=
 section=
 subsection=
 collabInfo=
 
+# Fix dates
 FIX_DATE() {
     case $dueMonth in
         Jan|1|01)
@@ -68,63 +71,15 @@ FIX_DATE() {
     esac
 }
 
+# Help
 HELP() {
-    echo -e "Usage: ./newAssignment.sh [-a assignmentNumber] [-q numberOfQuestions] [-d dueMonth dueDate]"
-    echo -e "    Optional: [-s section] [-S subsection] [-c collabInfo]"
+    echo -e "Usage: ./newAssignment.sh [-a assignmentNumber] [-d dueMonth dueDate]"
+    echo -e "    Optional: [-qs questionStart] [-qe questionEnd] [-s section] [-S subsection] [-c collabInfo]"
 }
 
-while [[ ! -z $1 ]]; do
-    case $1 in
-        -h|--help)
-            HELP
-            exit 0
-            ;;
-        -a)
-            assignmentNumber=$2
-            ;;
-        -q)
-            numberOfQuestions=$2
-            ;;
-        -d)
-            dueMonth=$2
-            dueDate=$3
-            FIX_DATE
-            shift
-            ;;
-        -s)
-            section=$2
-            ;;
-        -S)
-            subsection=$2
-            ;;
-        -c)
-            template="template_c.tex"
-            collabInfo=$2
-    esac
-    shift
-    shift
-done
-
-if [[ -z $assignmentNumber ]] || [[ -z $numberOfQuestions ]] || [[ -z $dueMonth ]] || [[ -z $dueDate ]]; then
-    echo -e "${RED}Error: Expected at least [-a] [-q] [-d] flags.${NC}"
-    HELP
-    exit 1
-fi
-
-re='^[0-9]+$'
-if [[ ! $assignmentNumber =~ $re ]] || [[ $assignmentNumber -lt 1 ]] || [[ ! $numberOfQuestions =~ $re ]] || [[ $numberOfQuestions -lt 1 ]] || [[ ! $dueDate =~ $re ]] || [[ $dueDate -lt 1 ]] || [[ $dueDate -gt 31 ]]; then
-    echo "Error: Invalid inputs."
-    exit 2
-fi
-
-courseFolder=$PWD
-
-mkdir -p Assignments/Assignment_$assignmentNumber
-cd Assignments/Assignment_$assignmentNumber
-for i in $(eval echo {1..$numberOfQuestions}); do
-    file=Question_$i
-    mkdir $file
-    cd $file
+# Create files
+CREATE() {
+    file=$1
 
     cp -r $filesPath*.sty $PWD
     cp -r $filesPath/$template $PWD
@@ -132,8 +87,13 @@ for i in $(eval echo {1..$numberOfQuestions}); do
 
     courseName=$(echo $courseFolder | sed -E 's/^.*([A-Z]{4}[0-9]{3})/\1/g' | sed 's/_/\ /g' | sed '0,/\ /{s/\ /\ -\ /}')
     termYear=$(cat "$courseFolder/.info")
-    displayedTitle=$(echo $file | sed 's/_/\ /g' | sed 's/^/Assignment\ '$assignmentNumber'\ |\ /g')
-    exerciseNumber=$(($(echo $file | sed 's/Question_//g') - 1))
+    displayedTitle=$(echo $file | sed 's/_/\ /g')
+    exerciseNumber=0
+
+    if [[ ! -z $2 ]]; then
+        displayedTitle=$(echo $displayedTitle | sed 's/^/Assignment\ '$assignmentNumber'\ |\ /g')
+        exerciseNumber=$(($(echo $file | sed 's/Question_//g') - 1))
+    fi
 
     sed -i 's/COURSE_NAME/'"$courseName"'/g' preamble.sty
     sed -i 's/TERM_YEAR/'"$termYear"'/g' preamble.sty
@@ -153,6 +113,74 @@ for i in $(eval echo {1..$numberOfQuestions}); do
         sed -i ''"$((setCounterLine + 1))"'s/$/\n\\setcounter{subsection}{'"$subsection"'}/g' preamble.sty
         sed -i 's/{exercise}{Exercise}.*/{exercise}{Exercise}[subsection]/g' preamble.sty
     fi
+}
 
-    cd ..
+# Input
+while [[ ! -z $1 ]]; do
+    case $1 in
+        -h|--help)
+            HELP
+            exit 0
+            ;;
+        -a)
+            assignmentNumber=$2
+            ;;
+        -d)
+            dueMonth=$2
+            dueDate=$3
+            FIX_DATE
+            shift
+            ;;
+        -qs)
+            questionStart=$2
+            ;;
+        -qe)
+            questionEnd=$2
+            ;;
+        -s)
+            section=$2
+            ;;
+        -S)
+            subsection=$2
+            ;;
+        -c)
+            template="template_c.tex"
+            collabInfo=$2
+    esac
+    shift
+    shift
 done
+
+# Validate
+if [[ -z $assignmentNumber ]] || [[ -z $dueMonth ]] || [[ -z $dueDate ]]; then
+    echo -e "${RED}Error: Expected at least [-a] [-d] flags.${NC}"
+    HELP
+    exit 1
+fi
+
+re='^[0-9]+$'
+if [[ ! $assignmentNumber =~ $re ]] || [[ $assignmentNumber -lt 1 ]] || [[ ! $dueDate =~ $re ]] || [[ $dueDate -lt 1 ]] || [[ $dueDate -gt 31 ]]; then
+    echo "Error: Invalid inputs."
+    exit 2
+fi
+
+if [[ ! -z $questionStart ]] && ([[ $questionStart -lt 1 ]] || ([[ ! -z $questionEnd ]] && [[ $questionStart -gt $questionEnd ]])); then
+    echo "Error: Invalid inputs."
+    exit 2
+fi
+
+mkdir -p Assignments/Assignment_$assignmentNumber
+cd Assignments/Assignment_$assignmentNumber
+
+if [[ ! -z $questionEnd ]]; then
+    if [[ -z $questionStart ]]; then questionStart=1; fi
+    for i in $(eval echo {$questionStart..$questionEnd}); do
+        file=Question_$i
+        mkdir $file
+        cd $file
+        CREATE $file MODIFY_TITLE
+        cd ..
+    done
+else
+    CREATE Assignment_$assignmentNumber
+fi
