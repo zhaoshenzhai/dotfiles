@@ -4,7 +4,7 @@ REPOS="
 MathWiki     $MATHWIKI_DIR
 Dotfiles     $DOTFILES_DIR
 Courses      $UNIVERSITY_DIR/Courses
-CATS20F      $UNIVERSITY_DIR/Courses/CATS23F_Category_Theory_in_Context
+CATS23F      $UNIVERSITY_DIR/Courses/CATS23F_Category_Theory_in_Context
 SURA2023     $UNIVERSITY_DIR/Courses/.old/SURA23S_Curve_Systems_on_Surfaces
 MathLinks    $MATHLINKS_DIR"
 
@@ -47,9 +47,12 @@ if [[ -z $1 ]]; then
             cd $UNIVERSITY_DIR/Courses
         ;;
         "4")
-            cd $UNIVERSITY_DIR/Courses/SURA23S_Curve_Systems_on_Surfaces
+            cd $UNIVERSITY_DIR/Courses/CATS23F_Category_Theory_in_Context
         ;;
         "5")
+            cd $UNIVERSITY_DIR/Courses/.old/SURA23S_Curve_Systems_on_Surfaces
+        ;;
+        "6")
             cd $MATHLINKS_DIR
         ;;
         *)
