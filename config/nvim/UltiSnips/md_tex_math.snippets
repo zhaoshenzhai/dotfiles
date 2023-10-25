@@ -110,35 +110,6 @@ snippet int "integral" i
 \int_$1$3\d${2:\\mu}$0
 endsnippet
 
-priority 100
-context "math()"
-snippet sup "supremum" i
-\sup\limits_{$1}$0
-endsnippet
-
-priority 100
-context "math()"
-snippet inf "infimum" i
-\inf\limits_{$1}$0
-endsnippet
-
-context "math()"
-snippet lim "limit" i
-\lim\limits_{${1:n}\to${2:\infty}}$0
-endsnippet
-
-priority 200
-context "math()"
-snippet lsup "limit superior" i
-\limsup\limits_{${1:n}\to${2:\infty}}$0
-endsnippet
-
-priority 200
-context "math()"
-snippet linf "limit superior" i
-\liminf\limits_{${1:n}\to${2:\infty}}$0
-endsnippet
-
 # Category Theory
 context "math()"
 snippet SES "short exact sequence" i
@@ -193,6 +164,14 @@ endsnippet
 
 snippet METS "Metric spaces" i
 Let $${1:X}$ and $${2:Y}$ be metric spaces. $0
+endsnippet
+
+snippet MEAS "Measure space" i
+Let $\\tpl{${1:X},${2:\\mu}}$ be a measure space. $0
+endsnippet
+
+snippet MEASS "Measure spaces" i
+Let $\\tpl{${1:X},${2:\\mu}}$ and $\\tpl{${1:Y},${2:\\nu}}$ be measure spaces. $0
 endsnippet
 
 priority 100
