@@ -50,10 +50,10 @@
     % Set Theory
         \newcommand{\fa}{\forall}
         \newcommand{\ex}{\exists}
+        \newcommand{\iso}{\cong}
         \newcommand{\pow}{\mathcal{P}}
         \newcommand{\rest}{\!\upharpoonright\!}
         \newcommand{\comp}{\setminus}
-        \newcommand{\iso}{\cong}
         \newcommand{\into}{\hookrightarrow}
         \newcommand{\onto}{\twoheadrightarrow}
         \newcommand{\simto}{\rightleftarrows}
@@ -82,7 +82,7 @@
         \newcommand{\catgset}[1]{\prescript{}{#1}{\cat{Set}}}
         \newcommand{\catrep}[2][\,]{\cat{Rep}_{#1\!}\l(#2\r)}
         \newcommand{\catfgrep}[2][\,]{\cat{fgRep}_{#1\!}\l(#2\r)}
-        \newcommand{\catcov}[1][X]{\cat{Cov}\l(#1\r)}
+        \newcommand{\catcov}[1][X]{\cat{Cov}_{#1}}
         \newcommand{\catmet}{\cat{Met}}
 
     % Analysis
@@ -105,6 +105,7 @@
         \newcommand{\inprod}[2]{\l\langle{#1},{#2}\r\rangle}
 
     % Group Theory
+        \newcommand{\act}{\curvearrowright}
         \newcommand{\semi}{\rtimes}
         \newcommand{\subgrp}{<}
         \newcommand{\nsubgrp}{\triangleleft}
@@ -156,7 +157,7 @@
         \newcommand{\cref}[1]{\tag{$\,#1\,$}}
         \newcommand{\qedin}{\tag*{$\blacksquare$}}
         \newcommand{\exqedin}{\tag*{$\blacklozenge$}}
-        \renewcommand{\qed}{\phantom\qedhere\hfill$\blacksquare$}
-        \renewcommand{\ref}[1]{\l(\,#1\,\r)}
         \renewcommand{\l}{\left}
         \renewcommand{\r}{\right}
+        \renewcommand{\qed}{\phantom\qedhere\hfill$\blacksquare$}
+        \renewcommand{\ref}[1]{\l(\,#1\,\r)}
