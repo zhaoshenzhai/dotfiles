@@ -46,12 +46,9 @@ if [[ -z $1 ]]; then
             cd $UNIVERSITY_DIR/Courses
         ;;
         "4")
-            cd $UNIVERSITY_DIR/Courses/CATS23F_Category_Theory_in_Context
-        ;;
-        "5")
             cd $UNIVERSITY_DIR/Courses/.old/SURA23S_Curve_Systems_on_Surfaces
         ;;
-        "6")
+        "5")
             cd $MATHLINKS_DIR
         ;;
         *)
