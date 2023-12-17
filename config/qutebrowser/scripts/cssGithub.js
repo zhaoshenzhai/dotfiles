@@ -16,7 +16,7 @@
             document.head.appendChild(style);
             style.innerHTML = `
 
-body, #repository-container-header, .gh-header, .Header, .color-bg-default, .Box, .Box-header, .form-control, .form-select, .ajax-pagination-form .ajax-pagination-btn, .tabnav-tab.selected, .tabnav-tab[aria-current]:not([aria-current=false]), .tabnav-tab[aria-selected=true], .timeline-comment, .timeline-comment-header, .TimelineItem-break, .discussion-timeline-actions, .page-responsive .previewable-comment-form .comment-form-head.tabnav .toolbar-commenting, .TimelineItem--condensed .TimelineItem-badge, .diffbar, .pr-toolbar.is-stuck, .markdown-body table tr, .color-bg-inset, .user-status-circle-badge, .menu, .gh-header-sticky.is-stuck+.gh-header-shadow, .pagination-loader-container, .markdown-body img, .AppHeader, .full-commit, .commit-meta, .Layout-main {
+body, #repository-container-header, .gh-header, .Header, .color-bg-default, .Box, .Box-header, .form-control, .form-select, .ajax-pagination-form .ajax-pagination-btn, .tabnav-tab.selected, .tabnav-tab[aria-current]:not([aria-current=false]), .tabnav-tab[aria-selected=true], .timeline-comment, .timeline-comment-header, .TimelineItem-break, .discussion-timeline-actions, .page-responsive .previewable-comment-form .comment-form-head.tabnav .toolbar-commenting, .TimelineItem--condensed .TimelineItem-badge, .diffbar, .pr-toolbar.is-stuck, .markdown-body table tr, .color-bg-inset, .user-status-circle-badge, .menu, .gh-header-sticky.is-stuck+.gh-header-shadow, .pagination-loader-container, .markdown-body img, .AppHeader, .full-commit, .commit-meta, .Layout-main, .gvKfTi, .eYedVD, .cPEOjV, .jMdYTc {
     background-color: #1E2127 !important;
 }
 
