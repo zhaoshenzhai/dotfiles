@@ -1,11 +1,8 @@
 - https://wiki.archlinux.org/title/Installation_guide
-- https://www.youtube.com/watch?v=68z11VAYMS8
-- https://www.youtube.com/watch?v=pouX5VvX0_Q
 
 # Get bootable usb
     - Download .iso file
     - Download rufus
-    - Write with gpt(?) format
     - Disable secure boot
     - Unplug usb, shutdown, plug usb, power up
 
@@ -75,15 +72,15 @@
         - X
             - xorg xorg-xinit xmonad xmonad-contrib xmobar xclip
         - Programs
-            - dmenu alacritty vifm nitrogen neofetch zathura zathura-pdf-mupdf obsidian qutebrowser yt-dlp mpv
+            - dmenu alacritty vifm nitrogen neofetch zathura zathura-pdf-mupdf obsidian qutebrowser
         - Audio
-            - pipewire pipewire-pulse pipewire-jack pamixer playerctl bluez bluez-utils alsa-utils sof-firmware alsa-ucm-conf pavucontrol
+            - pipewire pipewire-pulse pipewire-jack pamixer playerctl bluez bluez-utils alsa-utils sof-firmware alsa-ucm-conf pavucontrol ffmpeg-compat-57
         - Fonts
             - ttf-font-awesome ttf-anonymous-pro adobe-source-han-sans-cn-fonts
         - Tools
-            - htop tree bc scrot texlive biber python python-pip npm ghostscript pdf2svg jdk-openjdk jre-openjdk mono openssh zip unzip downgrade pandoc arandr
+            - htop tree bc scrot texlive biber python python-pip npm ghostscript pdf2svg zip unzip meh arandr
     - Yay
-        - ttf-courier-prime ttf-cmu-serif ttf-mononoki-nerd qutebrowser-profile-git spotify colorpicker chromium dropbox logisim-evolution mars-mips spicetify-cli
+        - ttf-courier-prime ttf-cmu-serif ttf-mononoki-nerd noto-fonts qutebrowser-profile-git colorpicker chromium dropbox spotify spicetify-cli
     - pip
         - pynvim numpy matplotlib
     - npm
@@ -97,7 +94,9 @@
 
 # Natural scrolling
     - `sudo nvim /usr/share/X11/xorg.conf.d/40-libinput.conf`
-    - Under "touchpad": `Option "NaturalScrolling" "true"`
+    - Under "touchpad":
+        - `Option "NaturalScrolling" "true"`
+        - `Option "Tapping" "on"`
 
 # Nitrogen
     - Add ~/.config/wallpapers
@@ -106,26 +105,20 @@
     - zo
     - :sort N
 
-# Audio
-    - If no speaker:
-        - `sudo nvim /etc/modprobe.d/audio-fix.conf`
-            - blacklist snd-sof-pci
-            - options snd-intel-dspcfg dsp_driver=1
-
 # Qutebrowser
-    - `qutebrowser-profile --new 'Z'`
-    - `qutebrowser-profile --new 'P'`
+    - `qutebrowser-profile --load 'Z' --new`
+    - `qutebrowser-profile --load 'P' --new`
         - Set theme: #1e2127 #f8f8ff
     - `sudo nvim /usr/bin/qutebrowser-profile`
         - Search for window.title_format
         - Change to {perc}qute [${session}$]{title_sep}...
-    - Move `cookies_Z.txt` and `cookies_P.txt` to `~/.config`
 
 # Vim-markdown
     - `nvim ~/.config/nvim/plugged/vim-markdown/ftplugin/markdown.vim`
         - Comment out lines on code blocks
 
-# Mpv cycle-cmd.js
-    - `nvim ~/.config/mpv/scripts/cycle-cmd.js`
-        - Insert contents of https://github.com/mpv-player/mpv/issues/8658
-        - Remove space at line 12
+# Audio
+    - If no speaker:
+        - `sudo nvim /etc/modprobe.d/audio-fix.conf`
+            - blacklist snd-sof-pci
+            - options snd-intel-dspcfg dsp_driver=1

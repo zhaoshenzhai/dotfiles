@@ -6,10 +6,6 @@ sudo sed -i 's/#Color/Color/g' /etc/pacman.conf
 # Symlinks
 rm $HOME/.config/alacritty/alacritty.yml
 rm $HOME/.config/git/config
-rm $HOME/.config/mpv/input.conf
-rm $HOME/.config/mpv/mpv.conf
-rm $HOME/.config/mpv/script-opts/reload.conf
-rm $HOME/.config/mpv/script-opts/youtube-quality.conf
 rm $HOME/.config/vifm/vifmrc
 rm $HOME/.config/zathura/zathurarc
 rm $HOME/.config/xmonad/xmonad.hs
@@ -27,15 +23,11 @@ rm $HOME/.bash_profile
 
 mkdir -p $HOME/.config
 cd $HOME/.config
-mkdir -p alacritty git mpv/script-opts vifm zathura xmonad qutebrowser nvim/spell
+mkdir -p alacritty git vifm zathura xmonad qutebrowser/greasemonkey nvim/spell
 cd ..
 
 ln -s $HOME/Dropbox/Dotfiles/config/alacritty.yml $HOME/.config/alacritty/alacritty.yml
 ln -s $HOME/Dropbox/Dotfiles/config/git.conf $HOME/.config/git/config
-ln -s $HOME/Dropbox/Dotfiles/config/mpv/input.conf $HOME/.config/mpv/input.conf
-ln -s $HOME/Dropbox/Dotfiles/config/mpv/mpv.conf $HOME/.config/mpv/mpv.conf
-ln -s $HOME/Dropbox/Dotfiles/config/mpv/script-opts/reload.conf $HOME/.config/mpv/script-opts/reload.conf
-ln -s $HOME/Dropbox/Dotfiles/config/mpv/script-opts/youtube-quality.conf $HOME/.config/mpv/script-opts/youtube-quality.conf
 ln -s $HOME/Dropbox/Dotfiles/config/vifmrc $HOME/.config/vifm/vifmrc
 ln -s $HOME/Dropbox/Dotfiles/config/zathurarc $HOME/.config/zathura/zathurarc
 ln -s $HOME/Dropbox/Dotfiles/config/xmonad.hs $HOME/.config/xmonad/xmonad.hs
@@ -95,8 +87,6 @@ mkdir $HOME/Downloads
 cd $HOME/Downloads
 git clone https://aur.archlinux.org/yay-git
 git clone https://github.com/Ventto/lux.git
-git clone https://github.com/4e6/mpv-reload
-git clone https://github.com/jgreco/mpv-youtube-quality
 
 # Yay
 cd yay-git
@@ -110,12 +100,6 @@ sudo make install
 sudo lux
 cd ..
 rm -rf lux
-
-# Mpv
-mkdir -p $HOME/.config/mpv/scripts
-mv mpv-reload/reload.lua $HOME/.config/mpv/scripts/reload.lua
-mv mpv-youtube-quality/youtube-quality.lua $HOME/.config/mpv/scripts/youtube-quality.lua
-rm -rf mpv-reload mpv-youtube-quality
 
 # Qutebrowser
 mkdir -p $HOME/.config/qutebrowser/greasemonkey
@@ -132,6 +116,7 @@ curl https://raw.githubusercontent.com/coherentgraphics/cpdf-binaries/master/Lin
 chmod +x $HOME/.local/bin/cpdf
 
 # Spicetify
+mkdir -p /usr/share/spicetify-cli/Themes/Dribbblish/
 sudo cp $HOME/Dropbox/Dotfiles/config/spicetify.ini /usr/share/spicetify-cli/Themes/Dribbblish/color.ini
 spicetify config current_theme Dribbblish
 spicetify config color_scheme rosepine

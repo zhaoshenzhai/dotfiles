@@ -77,7 +77,6 @@ grid = renamed [Replace "Grid"]
 myLayoutHook =
     avoidStruts $ smartBorders myLayout
     where
-        -- myLayout = full ||| tall ||| grid
         myLayout = full ||| tall
 
 ---------------------------------------------------------------------------------------------------------------------
@@ -127,10 +126,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_F6              ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -n"  ),
         ((modm, xK_c               ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -c"  ),
         ((modm, xK_d               ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -x"  ),
-
-        -- Background
-        ((modm, xK_F11), spawn "nitrogen /home/zhao/Dropbox/Dotfiles/wallpapers/image.jpg --set-zoom-fill" ),
-        ((modm, xK_F12), spawn "nitrogen /home/zhao/Dropbox/Dotfiles/wallpapers/image2.png --set-zoom-fill"),
 
         -- Brightness
         ((modm, xK_F7), spawn "lux -s 5%"),
