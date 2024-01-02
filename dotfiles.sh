@@ -67,9 +67,6 @@ sh -c 'curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim --create-dirs ht
 sudo systemctl enable bluetooth
 sudo systemctl start --now bluetooth
 
-# Git
-git config --global credential.helper store
-
 # Downloads
 mkdir $HOME/Downloads
 cd $HOME/Downloads
