@@ -3,8 +3,7 @@
 # Get bootable usb
     - Download .iso file
     - Download rufus
-    - Disable secure boot
-    - Unplug usb, shutdown, plug usb, power up
+    - Plug usb, power up, disable secure boot
 
 # Internet
     - `iwctl`
@@ -21,8 +20,8 @@
     - Here, `DISK` stands for the main disk
     - `cfdisk /dev/DISK`
         - Delete everything and make three partitions:
-            - 100M for boot
-            - 4G for virtual memory
+            - 300M for boot
+            - 512M for swap
             - Rest for /
         - Write, then type yes
     - `mkfs.ext4 /dev/DISKp3`
@@ -52,7 +51,7 @@
     - `useradd -m -G wheel -s /bin/bash zhao`
     - `passwd zhao`
     - `EDITOR=nvim visudo`
-        - G and uncomment
+        - Press G, find correct line, and uncomment
     - `systemctl enable NetworkManager`
     - `grub-install /dev/DISK`
     - `grub-mkconfig -o /boot/grub/grub.cfg`
@@ -64,27 +63,10 @@
     - `mkdir ~/Dropbox`
     - `cd ~/Dropbox`
     - `git clone https://github.com/zhaoshenzhai/dotfiles.git`
+    - `mv dotfiles Dotfiles`
+    - `cd Dotfiles`
     - `./dotfiles.sh`
     - `bash`
-
-# Packages
-    - Pacman
-        - X
-            - xorg xorg-xinit xmonad xmonad-contrib xmobar xclip
-        - Programs
-            - dmenu alacritty vifm nitrogen neofetch zathura zathura-pdf-mupdf obsidian qutebrowser
-        - Audio
-            - pipewire pipewire-pulse pipewire-jack pamixer playerctl bluez bluez-utils alsa-utils sof-firmware alsa-ucm-conf pavucontrol ffmpeg-compat-57
-        - Fonts
-            - ttf-font-awesome ttf-anonymous-pro adobe-source-han-sans-cn-fonts
-        - Tools
-            - htop tree bc scrot texlive biber python python-pip npm ghostscript pdf2svg zip unzip meh arandr
-    - Yay
-        - ttf-courier-prime ttf-cmu-serif ttf-mononoki-nerd noto-fonts qutebrowser-profile-git colorpicker chromium dropbox spotify spicetify-cli
-    - pip
-        - pynvim numpy matplotlib
-    - npm
-        - typescript
 
 # Reboot, should `startx` immediately
 
@@ -92,7 +74,7 @@
     - `nvim`
         - :PlugInstall
 
-# Natural scrolling
+# Touchpad
     - `sudo nvim /usr/share/X11/xorg.conf.d/40-libinput.conf`
     - Under "touchpad":
         - `Option "NaturalScrolling" "true"`
@@ -104,14 +86,6 @@
 # Vifm
     - zo
     - :sort N
-
-# Qutebrowser
-    - `qutebrowser-profile --load 'Z' --new`
-    - `qutebrowser-profile --load 'P' --new`
-        - Set theme: #1e2127 #f8f8ff
-    - `sudo nvim /usr/bin/qutebrowser-profile`
-        - Search for window.title_format
-        - Change to {perc}qute [${session}$]{title_sep}...
 
 # Vim-markdown
     - `nvim ~/.config/nvim/plugged/vim-markdown/ftplugin/markdown.vim`

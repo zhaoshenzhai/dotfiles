@@ -41,7 +41,7 @@ case $mainChoice in
 
                     if [[ -f "$MathWikiNotesDir/$file" ]]; then
                         cd $MathWikiNotesDir
-                        alacritty --class nvim,nvim -e nvim "$MathWikiNotesDir/$file" &
+                        kitty --class nvim,nvim -e nvim "$MathWikiNotesDir/$file" &
                     fi
                 ;;
                 "$mainChoice/Images")
@@ -50,7 +50,7 @@ case $mainChoice in
 
                     if [[ -d $(echo "$folder" | sed 's:~:/home/zhao:g') ]]; then
                         cd $MathWikiImagesDir
-                        alacritty --class media,media -e nvim $(echo "$folder/image.tex" | sed 's:~:/home/zhao:g')
+                        kitty --class media,media -e nvim $(echo "$folder/image.tex" | sed 's:~:/home/zhao:g')
                     fi
                 ;;
                 "$mainChoice/.scripts")
@@ -58,7 +58,7 @@ case $mainChoice in
                     file=$(find $MathWikiScriptsDir -printf "%T@ %Tc %p\n" | grep ".sh" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$MathWikiScriptsDir/" | sed 's:/home/zhao:~:g'))
 
                     if [[ -f $(echo "$file" | sed 's:~:/home/zhao:g') ]]; then
-                        alacritty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
+                        kitty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
                     fi
                 ;;
                 "$mainChoice/.obsidian/snippets")
@@ -66,12 +66,12 @@ case $mainChoice in
                     file=$(find $MathWikiSnippetsDir -printf "%T@ %Tc %p\n" | grep ".css" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$MathWikiSnippetsDir/" | sed 's:/home/zhao:~:g'))
 
                     if [[ -f $(echo "$file" | sed 's:~:/home/zhao:g') ]]; then
-                        alacritty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
+                        kitty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
                     fi
                 ;;
                 *)
                     if [[ -f $(echo "$choice" | sed 's:~:/home/zhao:g') ]]; then
-                        alacritty --class sys,sys -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
+                        kitty --class sys,sys -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
                     fi
                 ;;
             esac
@@ -93,7 +93,7 @@ case $mainChoice in
                     file=$(find $scriptsDir -printf "%T@ %Tc %p\n" | grep ".sh" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$scriptsDir/" | sed 's:/home/zhao:~:g'))
 
                     if [[ -f $(echo "$file" | sed 's:~:/home/zhao:g') ]]; then
-                        alacritty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
+                        kitty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
                     fi
                 ;;
                 "$mainChoice/config")
@@ -101,12 +101,12 @@ case $mainChoice in
                     file=$(find $configDir -type f -printf "%T@ %Tc %p\n" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$configDir/" | sed 's:/home/zhao:~:g'))
 
                     if [[ -f $(echo "$file" | sed 's:~:/home/zhao:g') ]]; then
-                        alacritty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
+                        kitty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
                     fi
                 ;;
                 *)
                     if [[ -f $(echo "$choice" | sed 's:~:/home/zhao:g') ]]; then
-                        alacritty --class sys,sys -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
+                        kitty --class sys,sys -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
                     fi
                 ;;
             esac
@@ -141,7 +141,7 @@ case $mainChoice in
         choice=$(printf '%s\n' "${choices[@]}" | DMENU $mainChoice/)
 
         if [[ -f $(echo "$choice" | sed 's:~:/home/zhao:g') ]]; then
-            alacritty -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
+            kitty -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
         fi
     ;;
     "~/Dropbox/Others/Reminders")
@@ -150,7 +150,7 @@ case $mainChoice in
 
         if [[ -f $(echo "$choice" | sed 's:~:/home/zhao:g') ]]; then
             cd "$dir"
-            alacritty --class reminders,reminders -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
+            kitty --class reminders,reminders -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
         fi
     ;;
 esac

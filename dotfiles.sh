@@ -4,7 +4,7 @@
 sudo sed -i 's/#Color/Color/g' /etc/pacman.conf
 
 # Symlinks
-rm $HOME/.config/alacritty/alacritty.yml
+rm $HOME/.config/kitty/kitty.yml
 rm $HOME/.config/git/config
 rm $HOME/.config/vifm/vifmrc
 rm $HOME/.config/zathura/zathurarc
@@ -23,10 +23,10 @@ rm $HOME/.bash_profile
 
 mkdir -p $HOME/.config
 cd $HOME/.config
-mkdir -p alacritty git vifm zathura xmonad qutebrowser/greasemonkey nvim/spell
+mkdir -p kitty git vifm zathura xmonad qutebrowser/greasemonkey nvim/spell
 cd ..
 
-ln -s $HOME/Dropbox/Dotfiles/config/alacritty.yml $HOME/.config/alacritty/alacritty.yml
+ln -s $HOME/Dropbox/Dotfiles/config/kitty.yml $HOME/.config/kitty/kitty.yml
 ln -s $HOME/Dropbox/Dotfiles/config/git.conf $HOME/.config/git/config
 ln -s $HOME/Dropbox/Dotfiles/config/vifmrc $HOME/.config/vifm/vifmrc
 ln -s $HOME/Dropbox/Dotfiles/config/zathurarc $HOME/.config/zathura/zathurarc
@@ -70,19 +70,7 @@ sudo systemctl start --now bluetooth
 # Git
 git config --global credential.helper store
 
-# Clone repos
-cd $HOME/Dropbox
-git clone https://github.com/zhaoshenzhai/MathWiki.git
-
-mkdir $HOME/Dropbox/Projects
-cd $HOME/Dropbox/Projects
-git clone https://github.com/zhaoshenzhai/MathLinks.git
-
-mkdir $HOME/Dropbox/University
-cd $HOME/Dropbox/University
-git clone https://github.com/zhaoshenzhai/courses.git
-mv courses Courses
-
+# Downloads
 mkdir $HOME/Downloads
 cd $HOME/Downloads
 git clone https://aur.archlinux.org/yay-git
@@ -101,9 +89,12 @@ sudo lux
 cd ..
 rm -rf lux
 
-# Qutebrowser
-mkdir -p $HOME/.config/qutebrowser/greasemonkey
-curl https://greasyfork.org/scripts/436115-return-youtube-dislike/code/Return%20YouTube%20Dislike.user.js -o $HOME/.config/qutebrowser/greasemonkey/return-youtube-dislike.js
+# Packages
+yay -Syu xorg xorg-xinit xmonad xmonad-contrib xmobar xclip
+yay -Syu dmenu kitty vifm nitrogen neofetch zathura zathura-pdf-mupdf obsidian qutebrowser qutebrowser-profile-git dropbox spotify
+yay -Syu pipewire pipewire-pulse pipewire-jack pamixer playerctl bluez bluez-utils alsa-utils sof-firmware alsa-ucm-conf pavucontrol ffmpeg-compat-57
+yay -Syu ttf-font-awesome ttf-anonymous-pro adobe-source-han-sans-cn-fonts ttf-courier-prime ttf-cmu-serif ttf-mononoki-nerd noto-fonts
+yay -Syu htop tree bc scrot texlive biber python  npm ghostscript pdf2svg zip unzip meh arandr colorpicker python-pynvim python-colorama python-click
 
 # Dropbox
 gitRepos=$(find /home/zhao -type d -name .git)
@@ -116,9 +107,9 @@ curl https://raw.githubusercontent.com/coherentgraphics/cpdf-binaries/master/Lin
 chmod +x $HOME/.local/bin/cpdf
 
 # Spicetify
-mkdir -p /usr/share/spicetify-cli/Themes/Dribbblish/
-sudo cp $HOME/Dropbox/Dotfiles/config/spicetify.ini /usr/share/spicetify-cli/Themes/Dribbblish/color.ini
-spicetify config current_theme Dribbblish
-spicetify config color_scheme rosepine
-spicetify config experimental_features 0
-spicetify backup apply
+# mkdir -p /usr/share/spicetify-cli/Themes/Dribbblish/
+# sudo cp $HOME/Dropbox/Dotfiles/config/spicetify.ini /usr/share/spicetify-cli/Themes/Dribbblish/color.ini
+# spicetify config current_theme Dribbblish
+# spicetify config color_scheme rosepine
+# spicetify config experimental_features 0
+# spicetify backup apply

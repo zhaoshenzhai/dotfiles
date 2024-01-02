@@ -48,7 +48,7 @@ import Graphics.X11.ExtraTypes.XF86
 
 ---------------------------------------------------------------------------------------------------------------------
 
-myTerminal                                   = "alacritty"                       :: String
+myTerminal                                   = "kitty"                           :: String
 myBorderWidth                                = 2                                 :: Dimension
 myWindowGap                                  = 0                                 :: Integer
 myModMask                                    = mod1Mask                          :: KeyMask
@@ -84,9 +84,9 @@ myLayoutHook =
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [
         -- Base
-        ((modm, xK_backslash), spawn myTerminal                                   ),
-        ((modm, xK_Return   ), spawn "$DOTFILES_DIR/scripts/dmenuOpenFile.sh"     ),
-        ((modm, xK_e        ), spawn "alacritty -e vifm ~/ ~/ -c normal\\ ggga"   ),
+        ((modm, xK_backslash), spawn myTerminal                              ),
+        ((modm, xK_Return   ), spawn "$DOTFILES_DIR/scripts/dmenuOpenFile.sh"),
+        ((modm, xK_e        ), spawn "kitty -e vifm -c normal\\ ggvGgA"      ),
 
         -- Browser
         ((modm, xK_w              ), spawn "$DOTFILES_DIR/scripts/openQute.sh -Z"),
@@ -94,15 +94,16 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_g              ), spawn "chromium --force-dark-mode"          ),
 
         -- Scripts
-        ((modm .|. shiftMask, xK_m), spawn "alacritty -e $MATHWIKI_DIR/.scripts/main.sh"      ),
-        ((modm .|. shiftMask, xK_g), spawn "alacritty -e $DOTFILES_DIR/scripts/gitCommit.sh"  ),
-        ((modm .|. shiftMask, xK_s), spawn "alacritty -e $DOTFILES_DIR/scripts/stopwatch.sh"  ),
+        ((modm .|. shiftMask, xK_m), spawn "kitty $MATHWIKI_DIR/.scripts/main.sh"    ),
+        ((modm .|. shiftMask, xK_g), spawn "kitty $DOTFILES_DIR/scripts/gitCommit.sh"),
+        ((modm .|. shiftMask, xK_s), spawn "kitty $DOTFILES_DIR/scripts/stopwatch.sh"),
+
+        -- Screenshot
         ((modm .|. shiftMask, xK_p), spawn "cd ~/Downloads; scrot 'Scrot_%Y_%m_%d_%H%M%S.png'"),
 
         -- Applications
         ((modm, xK_s),               spawn "spotify" ),
         ((modm, xK_o),               spawn "obsidian"),
-        ((modm .|. shiftMask, xK_d), spawn "discord" ),
 
         -- Windows
         ((modm, xK_f     ), sendMessage NextLayout  ),
@@ -134,8 +135,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm .|. shiftMask, xK_F8), spawn "lux -a 1%"),
 
         -- Info
-        ((modm, xK_t), spawn "alacritty --class sys,sys -e htop"),
-        ((modm, xK_p), spawn "pavucontrol"                      ),
+        ((modm, xK_t), spawn "kitty --class sys,sys -e htop"),
+        ((modm, xK_p), spawn "pavucontrol"                  ),
 
         -- Xmonad
         ((modm .|. shiftMask, xK_r), spawn "sudo ghc --make $DOTFILES_DIR/config/xmonad.hs -i -ilib -fforce-recomp -main-is main -dynamic -v0 -outputdir /home/zhao/.cache/xmonad/build-x86_64-linux -o /home/zhao/.cache/xmonad/xmonad-x86_64-linux; killall xmobar; xmonad --restart"),
