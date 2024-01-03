@@ -23,7 +23,7 @@ rm $HOME/.bash_profile
 
 mkdir -p $HOME/.config
 cd $HOME/.config
-mkdir -p kitty git vifm zathura xmonad qutebrowser/greasemonkey nvim/spell
+mkdir -p kitty git vifm zathura xmonad qutebrowser/greasemonkey qutebrowser/bookmarks nvim/spell
 cd ..
 
 ln -s $HOME/Dropbox/Dotfiles/config/kitty.yml $HOME/.config/kitty/kitty.yml
