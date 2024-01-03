@@ -56,10 +56,10 @@ config.set("tabs.max_width", 350)
 config.set("tabs.padding", {"bottom": 5, "left": 5, "right": 5, "top": 0})
 
 # Default programs
-config.set("editor.command", ['alacritty', '-e', 'nvim', '{}'])
+config.set("editor.command", ['kitty', 'nvim', '{}'])
 config.set("fileselect.handler", "external")
-config.set("fileselect.single_file.command", ['alacritty', '-e', 'vifm', '--choose-files={}'])
-config.set("fileselect.multiple_files.command", ['alacritty', '-e', 'vifm', '--choose-files={}'])
+config.set("fileselect.single_file.command", ['kitty', 'vifm', '--choose-files={}'])
+config.set("fileselect.multiple_files.command", ['kitty', 'vifm', '--choose-files={}'])
 
 # Search engines
 c.url.searchengines = {
