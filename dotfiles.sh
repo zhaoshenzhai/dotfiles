@@ -88,7 +88,7 @@ rm -rf lux
 
 # Packages
 yay -Syu xorg xorg-xinit xmonad xmonad-contrib xmobar xclip
-yay -Syu dmenu kitty vifm nitrogen neofetch zathura zathura-pdf-mupdf obsidian qutebrowser qutebrowser-profile-git dropbox spotify
+yay -Syu dmenu kitty vifm nitrogen neofetch zathura zathura-pdf-mupdf obsidian qutebrowser qutebrowser-profile-git dropbox spotify spicetify-cli
 yay -Syu pipewire pipewire-pulse pipewire-jack pamixer playerctl bluez bluez-utils alsa-utils sof-firmware alsa-ucm-conf pavucontrol ffmpeg-compat-57
 yay -Syu ttf-font-awesome ttf-anonymous-pro adobe-source-han-sans-cn-fonts ttf-courier-prime ttf-cmu-serif ttf-mononoki-nerd noto-fonts
 yay -Syu htop tree bc scrot texlive biber python  npm ghostscript pdf2svg zip unzip meh arandr colorpicker python-pynvim python-colorama python-click
@@ -104,9 +104,11 @@ curl https://raw.githubusercontent.com/coherentgraphics/cpdf-binaries/master/Lin
 chmod +x $HOME/.local/bin/cpdf
 
 # Spicetify
-# mkdir -p /usr/share/spicetify-cli/Themes/Dribbblish/
-# sudo cp $HOME/Dropbox/Dotfiles/config/spicetify.ini /usr/share/spicetify-cli/Themes/Dribbblish/color.ini
-# spicetify config current_theme Dribbblish
-# spicetify config color_scheme rosepine
-# spicetify config experimental_features 0
-# spicetify backup apply
+mkdir -p /usr/share/spicetify-cli/Themes/Dribbblish/
+sudo cp $HOME/Dropbox/Dotfiles/config/spicetify.ini /usr/share/spicetify-cli/Themes/Dribbblish/color.ini
+sudo chmod a+wr /opt/spotify
+sudo chmod a+wr /opt/spotify/Apps -R
+spicetify config current_theme Dribbblish
+spicetify config color_scheme rosepine
+spicetify config experimental_features 0
+spicetify backup apply
