@@ -89,9 +89,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_e        ), spawn "kitty -e vifm -c normal\\ ggvGgA"      ),
 
         -- Browser
-        ((modm, xK_w              ), spawn "$DOTFILES_DIR/scripts/openQute.sh -Z"),
+        ((modm,               xK_w), spawn "$DOTFILES_DIR/scripts/openQute.sh -Z"),
         ((modm .|. shiftMask, xK_w), spawn "$DOTFILES_DIR/scripts/openQute.sh -P"),
-        ((modm, xK_g              ), spawn "chromium --force-dark-mode"          ),
+        ((modm,               xK_g), spawn "chromium --force-dark-mode"          ),
 
         -- Scripts
         ((modm .|. shiftMask, xK_m), spawn "kitty $MATHWIKI_DIR/.scripts/main.sh"    ),
@@ -102,8 +102,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm .|. shiftMask, xK_p), spawn "cd ~/Downloads; scrot 'Scrot_%Y_%m_%d_%H%M%S.png'"),
 
         -- Applications
-        ((modm, xK_s),               spawn "spotify" ),
-        ((modm, xK_o),               spawn "obsidian"),
+        ((modm,               xK_s), spawn "spotify" ),
+        ((modm,               xK_o), spawn "obsidian"),
+        ((modm .|. shiftMask, xK_d), spawn "discord" ),
 
         -- Windows
         ((modm, xK_f     ), sendMessage NextLayout  ),
@@ -117,20 +118,20 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_Escape), kill                    ),
 
         -- Audio
-        ((modm, xK_F1              ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -t"  ),
-        ((modm, xK_F2              ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -d 5"),
-        ((modm, xK_F3              ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -i 5"),
+        ((modm,               xK_F1), spawn "$DOTFILES_DIR/scripts/audioControl.sh -t"  ),
+        ((modm,               xK_F2), spawn "$DOTFILES_DIR/scripts/audioControl.sh -d 5"),
+        ((modm,               xK_F3), spawn "$DOTFILES_DIR/scripts/audioControl.sh -i 5"),
         ((modm .|. shiftMask, xK_F2), spawn "$DOTFILES_DIR/scripts/audioControl.sh -d 1"),
         ((modm .|. shiftMask, xK_F3), spawn "$DOTFILES_DIR/scripts/audioControl.sh -i 1"),
-        ((modm, xK_F4              ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -b"  ),
-        ((modm, xK_F5              ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -p"  ),
-        ((modm, xK_F6              ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -n"  ),
-        ((modm, xK_c               ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -c"  ),
-        ((modm, xK_d               ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -x"  ),
+        ((modm,               xK_F4), spawn "$DOTFILES_DIR/scripts/audioControl.sh -b"  ),
+        ((modm,               xK_F5), spawn "$DOTFILES_DIR/scripts/audioControl.sh -p"  ),
+        ((modm,               xK_F6), spawn "$DOTFILES_DIR/scripts/audioControl.sh -n"  ),
+        ((modm,               xK_c ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -c"  ),
+        ((modm,               xK_d ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -x"  ),
 
         -- Brightness
-        ((modm, xK_F7), spawn "lux -s 5%"),
-        ((modm, xK_F8), spawn "lux -a 5%"),
+        ((modm,               xK_F7), spawn "lux -s 5%"),
+        ((modm,               xK_F8), spawn "lux -a 5%"),
         ((modm .|. shiftMask, xK_F7), spawn "lux -s 1%"),
         ((modm .|. shiftMask, xK_F8), spawn "lux -a 1%"),
 
