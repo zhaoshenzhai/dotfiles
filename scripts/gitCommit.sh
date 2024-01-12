@@ -4,7 +4,6 @@ REPOS="
 MathWiki     $MATHWIKI_DIR
 Dotfiles     $DOTFILES_DIR
 Courses      $UNIVERSITY_DIR/Courses
-SURA2023     $UNIVERSITY_DIR/Courses/.old/SURA23S_Curve_Systems_on_Surfaces
 MathLinks    $MATHLINKS_DIR"
 
 REPOS=$(echo "$REPOS" | sed 1d)
@@ -46,9 +45,6 @@ if [[ -z $1 ]]; then
             cd $UNIVERSITY_DIR/Courses
         ;;
         "4")
-            cd $UNIVERSITY_DIR/Courses/.old/SURA23S_Curve_Systems_on_Surfaces
-        ;;
-        "5")
             cd $MATHLINKS_DIR
         ;;
         *)
