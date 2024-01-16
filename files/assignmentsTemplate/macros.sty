@@ -28,8 +28,11 @@
     \newcommand{\Cov}{\operatorname{Cov}}
     \newcommand{\Orb}{\operatorname{Orb}}
     \newcommand{\Sat}{\operatorname{Sat}}
-    \newcommand{\FOL}{\operatorname{FOL}}
+    \newcommand{\Thm}{\operatorname{Thm}}
+    \newcommand{\Var}{\operatorname{Var}}
+    \newcommand{\Core}{\operatorname{Core}}
     \newcommand{\Term}{\operatorname{Term}}
+    \newcommand{\Taut}{\operatorname{Taut}}
     \newcommand{\Sent}{\operatorname{Sent}}
     \newcommand{\rfcl}{\operatorname{rfcl}}
     \newcommand{\proj}{\operatorname{proj}}
@@ -42,36 +45,54 @@
     \newcommand{\Stab}{\operatorname{Stab}}
     \newcommand{\Isom}{\operatorname{Isom}}
     \newcommand{\Meas}{\operatorname{Meas}}
+    \newcommand{\Diag}{\operatorname{Diag}}
     \newcommand{\coker}{\operatorname{coker}}
     \newcommand{\preim}{\operatorname{preim}}
     \newcommand{\Graph}{\operatorname{Graph}}
+    \newcommand{\UnSat}{\operatorname{UnSat}}
+    \newcommand{\ElDiag}{\operatorname{ElDiag}}
     \newcommand{\Axioms}{\operatorname{Axioms}}
     \newcommand{\arccosh}{\operatorname{arccosh}}
-    \newcommand{\ExtTerm}{\operatorname{ExtTerm}}
-    \newcommand{\ExtForm}{\operatorname{ExtForm}}
     \renewcommand{\Re}{\operatorname{Re}}
     \renewcommand{\Im}{\operatorname{Im}}
     \renewcommand{\Form}{\operatorname{Form}}
 
 % Math notations
-    % Set Theory and Logic
+    % Set Theory, Category Theory, and Logic
         \newcommand{\fa}{\forall}
         \newcommand{\ex}{\exists}
-        \newcommand{\MP}{\rightsquigarrow_\textrm{MP}}
+        \newcommand{\PA}{\textrm{PA}}
+        \newcommand{\PL}{{\rm P{\small L}}}
+        \newcommand{\ZFC}{\textrm{ZFC}}
+        \newcommand{\FOL}{{\rm F{\small OL}}}
         \newcommand{\iso}{\cong}
         \newcommand{\pow}{\mathcal{P}}
         \newcommand{\rest}{\!\upharpoonright\!}
         \newcommand{\comp}{\setminus}
         \newcommand{\into}{\hookrightarrow}
         \newcommand{\onto}{\twoheadrightarrow}
+        \newcommand{\parto}{\rightharpoonup}
         \newcommand{\simto}{\rightleftarrows}
         \newcommand{\eqnum}{\approx}
+        \newcommand{\natiso}{\simeq}
         \newcommand{\proves}{\vdash}
         \newcommand{\nproves}{\nvdash}
         \newcommand{\symdiff}{\vartriangle}
+        \newcommand{\infrule}{\rightsquigarrow}
+        \newcommand{\elemequiv}{\equiv}
+        \newcommand{\substruct}{<}
+        \newcommand{\supstruct}{>}
+        \newcommand{\elemembed}{\preceq}
+        \newcommand{\elemextend}{\succeq}
+        \newcommand{\substructeq}{\leq}
+        \newcommand{\supstructeq}{\geq}
         \renewcommand{\em}{\varnothing}
 
-    % Category Theory
+    % Complexity Theory
+        \newcommand{\NP}{\mathsf{NP}}
+        \newcommand{\coNP}{\mathsf{coNP}}
+
+    % Categories
         \newcommand{\cat}[1]{\textbf{#1}}
         \newcommand{\catset}{\cat{Set}}
         \newcommand{\catgrp}{\cat{Grp}}
@@ -79,9 +100,16 @@
         \newcommand{\cattop}{\cat{Top}}
         \newcommand{\catmet}{\cat{Met}}
         \newcommand{\catrel}{\cat{Rel}}
+        \newcommand{\catord}{\cat{Ord}}
+        \newcommand{\catscat}{\cat{Cat}}
+        \newcommand{\catlscat}{\cat{CAT}}
+        \newcommand{\catgrpd}{\cat{Grpd}}
         \newcommand{\catring}{\cat{Ring}}
+        \newcommand{\cathtop}{\cat{hTop}}
         \newcommand{\catptop}{\cat{Top}_\blob}
+        \newcommand{\catphtop}{\cat{hTop}_\blob}
         \newcommand{\catabgrp}{\cat{Ab}}
+        \newcommand{\catman}[1][\infty]{\cat{Man}_{#1}}
         \newcommand{\cathom}[1][\sigma]{#1\textrm{-}\cat{Hom}}
         \newcommand{\catemb}[1][\sigma]{#1\textrm{-}\cat{Emb}}
         \newcommand{\catmod}[1][R]{\prescript{}{#1}{\cat{Mod}}}
@@ -102,10 +130,15 @@
         \newcommand{\incto}{\nearrow}
         \newcommand{\decto}{\searrow}
         \newcommand{\abscont}{\ll}
+        \newcommand{\esssup}{\operatorname{ess-sup}}
         \renewcommand{\d}{\,\mathrm{d}}
 
     % Topology
-        \newcommand{\rel}{\ \operatorname{rel}\ }
+        \newcommand{\rel}{\,\operatorname{rel}\,}
+        \newcommand{\tcl}{\operatorname{cl}}
+        \newcommand{\scl}{\operatorname{scl}}
+        \newcommand{\tint}{\operatorname{int}}
+        \newcommand{\sint}{\operatorname{sint}}
         \newcommand{\htopeq}{\simeq}
         \newcommand{\pathto}{\rightsquigarrow}
 
@@ -118,12 +151,10 @@
     % Group Theory
         \newcommand{\act}{\curvearrowright}
         \newcommand{\semi}{\rtimes}
-        \newcommand{\subgrp}{<}
         \newcommand{\nsubgrp}{\triangleleft}
         \newcommand{\nsupgrp}{\triangleright}
-        \newcommand{\subgrpeq}{\leq}
         \newcommand{\nsubgrpeq}{\trianglelefteq}
-        \newcommand{\nspbgrpeq}{\trianglerighteq}
+        \newcommand{\nsupgrpeq}{\trianglerighteq}
 
     % Number Theory
         \newcommand{\divides}{\,|\,}
