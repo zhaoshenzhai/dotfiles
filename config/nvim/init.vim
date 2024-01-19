@@ -8,7 +8,7 @@ set shiftwidth=4                                                      " width fo
 set fileencoding=utf-8                                                " written encoding
 set encoding=utf-8                                                    " terminal encoding
 set title                                                             " enable title
-set titlestring=\ %-25.55t\ %a%r%m                                    " remove full path; name only
+set titlestring=%f                                                    " remove full path; name only
 set incsearch                                                         " incremental search
 set wildmode=longest,list                                             " get bash-like tab completions
 set wrap                                                              " wraps text
