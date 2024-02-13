@@ -84,9 +84,9 @@ myLayoutHook =
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [
         -- Base
-        ((modm, xK_backslash), spawn myTerminal                              ),
-        ((modm, xK_Return   ), spawn "$DOTFILES_DIR/scripts/dmenuOpenFile.sh"),
-        ((modm, xK_e        ), spawn "kitty -e vifm -c normal\\ ggvGgA"      ),
+        ((modm, xK_backslash), spawn myTerminal                                     ),
+        ((modm, xK_Return   ), spawn "$DOTFILES_DIR/scripts/dmenuOpenFile.sh"       ),
+        ((modm, xK_e        ), spawn "kitty -e vifm ~/ ~/Dropbox -c normal\\ ggvGgA"),
 
         -- Browser
         ((modm,               xK_w), spawn "$DOTFILES_DIR/scripts/openQute.sh -Z"),
