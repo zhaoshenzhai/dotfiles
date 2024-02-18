@@ -31,6 +31,7 @@ set dbus-service            true
 set synctex                 true
 
 set selection-clipboard     clipboard
+set selection-notification false
 set sandbox                 none
 
 map = feedkeys              "+"
