@@ -17,83 +17,6 @@ snippet rt "sqrt" i
 \sqrt$2{$1}$0
 endsnippet
 
-priority 200
-context "math()"
-snippet isum "indexed sum" i
-\sum_{${1:i}=${2:0}}^{${3:\infty}}$0
-endsnippet
-
-priority 200
-context "math()"
-snippet iprod "indexed product" i
-\prod_{${1:i}=${2:0}}^{${3:\infty}}$0
-endsnippet
-
-priority 200
-context "math()"
-snippet icprod "indexed coproduct" i
-\coprod_{${1:i}=${2:0}}^{${3:\infty}}$0
-endsnippet
-
-priority 200
-context "math()"
-snippet idsum "indexed direct sum" i
-\bigoplus_{${1:i}=${2:0}}^{${3:\infty}}$0
-endsnippet
-
-priority 200
-context "math()"
-snippet icup "indexed bigcup" i
-\bigcup_{${1:i}=${2:0}}^{${3:\infty}}$0
-endsnippet
-
-priority 200
-context "math()"
-snippet icap "indexed bigcap" i
-\bigcap_{${1:i}=${2:0}}^{${3:\infty}}$0
-endsnippet
-
-priority 100
-context "math()"
-snippet sum "arbitrary sum" i
-\sum_{${1:i}\in${2: I}}$0
-endsnippet
-
-priority 100
-context "math()"
-snippet prod "arbitrary product" i
-\prod_{${1:i}\in${2: I}}$0
-endsnippet
-
-priority 150
-context "math()"
-snippet cprod "arbitrary coproduct" i
-\coprod_{${1:i}\in${2: I}}$0
-endsnippet
-
-priority 150
-context "math()"
-snippet dsum "arbitrary direct sum" i
-\bigoplus_{${1:i}\in${2: I}}$0
-endsnippet
-
-priority 100
-context "math()"
-snippet cup "arbitrary bigcup" i
-\bigcup_{${1:\alpha}\in${2:\mc{A}}}$0
-endsnippet
-
-priority 100
-context "math()"
-snippet cap "arbitrary bigcap" i
-\bigcap_{${1:\alpha}\in${2:\mc{A}}}$0
-endsnippet
-
-context "math()"
-snippet gra "graph of a function" i
-\Gamma_{\mathclap{${1:f}}}\,$0
-endsnippet
-
 # Analysis
 context "math()"
 snippet der "derivative" i
@@ -101,7 +24,7 @@ snippet der "derivative" i
 endsnippet
 
 context "math()"
-snippet par "partial derivative" i
+snippet del "partial derivative" i
 \frac{\del $1}{\del $2}$0
 endsnippet
 
@@ -130,12 +53,6 @@ endsnippet
 context "math()"
 snippet ip "inner product" i
 \inprod{$1}{$2}$0
-endsnippet
-
-# Number Theory
-context "math()"
-snippet div "divides" i
-$1\divides$0
 endsnippet
 
 # Let ...
@@ -265,11 +182,6 @@ Let $${1:X}$ and $${2:Y}$ be Riemann surfaces. $0
 endsnippet
 
 priority 100
-snippet SIG "Signature" i
-Let $${1:\\sigma}$ be a signature in $${2:\\FOL}$. $0
-endsnippet
-
-priority 100
-snippet STRUCT "Structure" i
-Let $\mc{${1:A}}\coloneqq($1,${2:\\sigma}^\mc{$1})$ be a $$2$-structure. $0
+snippet THEORY "Complete theory in countable language" i
+Let $${1:T}$ be a complete $${2:\\mc{L}}$-theory with infinite models over a countable language $$2$. $0
 endsnippet
