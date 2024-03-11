@@ -11,9 +11,8 @@ set inputbar-fg             "#A6B5C5"
 
 set font                    "Courier Prime normal 15"
 
-set highlight-transparency  0.5
-set highlight-active-color  "#61AFEF"
-set highlight-color         "#56B6C2"
+set highlight-active-color  "rgba(97, 175, 239, 0.5)"
+set highlight-color         "rgba(97, 175, 239, 0.5)"
 set highlight-fg            "#00FF00"
 
 set recolor
