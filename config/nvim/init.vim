@@ -29,10 +29,10 @@ set conceallevel=0                                                    " no conce
 call plug#begin('~/.config/nvim/plugged')
     " Core
     Plug 'SirVer/ultisnips'                                           " snippets
-    Plug 'ncm2/ncm2'                                                  " code completion
-    Plug 'roxma/nvim-yarp'                                            " framework required for ncm2
-    Plug 'ncm2/ncm2-bufword'                                          " complete words in buffer
-    Plug 'ncm2/ncm2-path'                                             " complete paths
+    " Plug 'ncm2/ncm2'                                                  " code completion
+    " Plug 'roxma/nvim-yarp'                                            " framework required for ncm2
+    " Plug 'ncm2/ncm2-bufword'                                          " complete words in buffer
+    " Plug 'ncm2/ncm2-path'                                             " complete paths
     Plug 'kana/vim-textobj-user'                                      " custom textObjects
     Plug 'lervag/vimtex'                                              " latex support
 
@@ -56,6 +56,6 @@ source $DOTFILES_DIR/config/nvim/config/fileTypeDefaults.vim
 source $DOTFILES_DIR/config/nvim/config/pluggins/vim-markdown.vim
 source $DOTFILES_DIR/config/nvim/config/pluggins/ultisnips.vim
 source $DOTFILES_DIR/config/nvim/config/pluggins/vimtex.vim
-source $DOTFILES_DIR/config/nvim/config/pluggins/ncm2.vim
+" source $DOTFILES_DIR/config/nvim/config/pluggins/ncm2.vim
 
 autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"
