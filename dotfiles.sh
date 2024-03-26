@@ -80,8 +80,6 @@ mkdir $HOME/Downloads
 cd $HOME/Downloads
 git clone https://aur.archlinux.org/yay-git
 git clone https://github.com/Ventto/lux.git
-git clone https://github.com/4e6/mpv-reload
-git clone https://github.com/jgreco/mpv-youtube-quality
 
 # Yay
 cd yay-git
@@ -114,10 +112,15 @@ curl https://raw.githubusercontent.com/coherentgraphics/cpdf-binaries/master/Lin
 chmod +x $HOME/.local/bin/cpdf
 
 # Mpv
+cd $HOME/Downloads
 mkdir -p $HOME/.config/mpv/scripts
+git clone https://github.com/4e6/mpv-reload
+git clone https://github.com/jgreco/mpv-youtube-quality
+git clone https://github.com/CogentRedTester/mpv-scripts.git
 mv mpv-reload/reload.lua $HOME/.config/mpv/scripts/reload.lua
 mv mpv-youtube-quality/youtube-quality.lua $HOME/.config/mpv/scripts/youtube-quality.lua
-rm -rf mpv-reload mpv-youtube-quality
+mv mpv-scripts/cycle-commands.lua $HOME/.config/mpv/scripts/cycle-commands.lua
+rm -rf mpv-reload mpv-youtube-quality mpv-scripts
 
 # Spicetify
 mkdir -p /usr/share/spicetify-cli/Themes/Dribbblish/
