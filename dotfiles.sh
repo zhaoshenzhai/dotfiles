@@ -18,12 +18,16 @@ rm $HOME/.config/nvim/UltiSnips
 rm $HOME/.config/nvim/spell/en.utf-8.add
 rm $HOME/.config/nvim/spell/en.utf-8.add.spl
 rm $HOME/.config/nvim/init.vim
+rm $HOME/.config/mpv/input.conf
+rm $HOME/.config/mpv/mpv.conf
+rm $HOME/.config/mpv/script-opts/reload.conf
+rm $HOME/.config/mpv/script-opts/youtube-quality.conf
 rm $HOME/.bashrc
 rm $HOME/.bash_profile
 
 mkdir -p $HOME/.config
 cd $HOME/.config
-mkdir -p kitty git vifm zathura xmonad qutebrowser/greasemonkey qutebrowser/bookmarks nvim/spell
+mkdir -p kitty git vifm zathura xmonad qutebrowser/greasemonkey qutebrowser/bookmarks nvim/spell mpv/script-opts
 cd ..
 
 ln -s $HOME/Dropbox/Dotfiles/config/kitty.yml $HOME/.config/kitty/kitty.yml
@@ -41,6 +45,10 @@ ln -s $HOME/Dropbox/Dotfiles/config/nvim/UltiSnips/ $HOME/.config/nvim/UltiSnips
 ln -s $HOME/Dropbox/Dotfiles/config/nvim/spell/en.utf-8.add $HOME/.config/nvim/spell/en.utf-8.add
 ln -s $HOME/Dropbox/Dotfiles/config/nvim/spell/en.utf-8.add.spl $HOME/.config/nvim/spell/en.utf-8.add.spl
 ln -s $HOME/Dropbox/Dotfiles/config/nvim/init.vim $HOME/.config/nvim/init.vim
+ln -s $HOME/Dropbox/Dotfiles/config/mpv/input.conf $HOME/.config/mpv/input.conf
+ln -s $HOME/Dropbox/Dotfiles/config/mpv/mpv.conf $HOME/.config/mpv/mpv.conf
+ln -s $HOME/Dropbox/Dotfiles/config/mpv/script-opts/reload.conf $HOME/.config/mpv/script-opts/reload.conf
+ln -s $HOME/Dropbox/Dotfiles/config/mpv/script-opts/youtube-quality.conf $HOME/.config/mpv/script-opts/youtube-quality.conf
 ln -s $HOME/Dropbox/Dotfiles/config/.bashrc $HOME/.bashrc
 ln -s $HOME/Dropbox/Dotfiles/config/.bash_profile $HOME/.bash_profile
 
@@ -72,6 +80,8 @@ mkdir $HOME/Downloads
 cd $HOME/Downloads
 git clone https://aur.archlinux.org/yay-git
 git clone https://github.com/Ventto/lux.git
+git clone https://github.com/4e6/mpv-reload
+git clone https://github.com/jgreco/mpv-youtube-quality
 
 # Yay
 cd yay-git
@@ -102,6 +112,12 @@ done <<< "$gitRepos"
 # Cpdf
 curl https://raw.githubusercontent.com/coherentgraphics/cpdf-binaries/master/Linux-Intel-64bit/cpdf -o $HOME/.local/bin/cpdf
 chmod +x $HOME/.local/bin/cpdf
+
+# Mpv
+mkdir -p $HOME/.config/mpv/scripts
+mv mpv-reload/reload.lua $HOME/.config/mpv/scripts/reload.lua
+mv mpv-youtube-quality/youtube-quality.lua $HOME/.config/mpv/scripts/youtube-quality.lua
+rm -rf mpv-reload mpv-youtube-quality
 
 # Spicetify
 mkdir -p /usr/share/spicetify-cli/Themes/Dribbblish/
