@@ -47,6 +47,7 @@
 \theoremstyle{definition}\newmdtheoremenv[style = light]{exercise}{Exercise}
 \theoremstyle{definition}\newmdtheoremenv[style = light]{exerciseUnnumbered}{Exercise\!\!}
 \setcounter{exercise}{EXERCISE_NUMBER}
+\makeatletter\renewenvironment{proof}[1][\proofname]{\par\normalfont\topsep6\p@\@plus6\p@\relax\trivlist\item[\hskip\labelsep\itshape#1\@addpunct{.}]\ignorespaces}{\endtrivlist\@endpefalse}\renewcommand\qedhere{}\makeatother
 
 % Styles
 \newgeometry{margin = 0.7in, bmargin=1in, tmargin=1in}
