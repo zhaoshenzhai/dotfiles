@@ -68,7 +68,6 @@ c.url.searchengines = {
     'yt': 'https://www.youtube.com/results?search_query={}',
     'se': 'https://math.stackexchange.com//search?q={}',
     'aw': 'https://wiki.archlinux.org/?search={}',
-    'mf': 'https://myflixer.to/search/{}',
     'lg': 'https://libgen.is/search.php?req={}'}
 
 # Download
