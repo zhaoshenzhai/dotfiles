@@ -15,9 +15,3 @@ else
     autocmd filetype tex nnoremap <F4> :w <CR>:VimtexView<CR>
     autocmd filetype tex nnoremap <F5> :w <CR>:VimtexCompile<CR>
 endif
-
-" if !empty(globpath(expand("%:p:h"), 'makefile'))
-"     nnoremap <F5> :w <CR>:!make<CR>
-" elseif !empty()
-"     nnoremap <F5> :w <CR>:!cd .. && make<CR>
-" else
