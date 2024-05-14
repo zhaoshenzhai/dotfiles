@@ -20,7 +20,7 @@ while [ ! -z "$1" ]; do
             rm -rf Site/.local
             hugo serve -d Site/.local &
             mkdir "Site/.local/qute"
-            $(qutebrowser "http://localhost:1313/mathwiki/" -s "statusbar.show" "never") &
+            $(qutebrowser "http://localhost:1313/mathwiki/" -s "statusbar.show" "never" -s "window.title_format" "MathWiki") &
             ;;
     esac
 shift
