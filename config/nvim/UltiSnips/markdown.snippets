@@ -17,6 +17,10 @@ snippet it "italics" i
 *$1*$0
 endsnippet
 
+snippet link "Links" i
+{{< link file="$1" display="$2" type="$3"$4 >}}$0
+endsnippet
+
 priority 100
 snippet qed "qed" i
 <span style="float:right;$1">$\blacksquare$</span>$0
