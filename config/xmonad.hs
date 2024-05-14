@@ -172,16 +172,16 @@ myStartupHook = do
 
 myManageHook = composeAll
     [
-        className =? "reminders"     --> viewShift (myWorkspaces !! 0),
-        className =? "qutebrowser"   --> viewShift (myWorkspaces !! 1),
-        className =? "Chromium"      --> viewShift (myWorkspaces !! 1),
-        className =? "obsidian"      --> viewShift (myWorkspaces !! 2),
-        className =? "nvim"          --> viewShift (myWorkspaces !! 2),
-        className =? "mpv"           --> viewShift (myWorkspaces !! 5),
-        className =? "media"         --> viewShift (myWorkspaces !! 5),
-        className =? "Spotify"       --> viewShift (myWorkspaces !! 6),
-        className =? "sys"           --> viewShift (myWorkspaces !! 7),
-        className =? "Pavucontrol"   --> viewShift (myWorkspaces !! 7)
+        className =? "reminders"   --> viewShift (myWorkspaces !! 0),
+        className =? "qutebrowser" --> viewShift (myWorkspaces !! 1),
+        className =? "Chromium"    --> viewShift (myWorkspaces !! 1),
+        className =? "obsidian"    --> viewShift (myWorkspaces !! 2),
+        className =? "nvim"        --> viewShift (myWorkspaces !! 2),
+        className =? "mpv"         --> viewShift (myWorkspaces !! 5),
+        className =? "media"       --> viewShift (myWorkspaces !! 5),
+        className =? "Spotify"     --> viewShift (myWorkspaces !! 6),
+        className =? "sys"         --> viewShift (myWorkspaces !! 7),
+        className =? "Pavucontrol" --> viewShift (myWorkspaces !! 7)
     ]
 
     where viewShift = doF . liftM2 (.) W.greedyView W.shift

@@ -14,6 +14,14 @@ while [ ! -z "$1" ]; do
             sleep 2
             sed -i 's/cookies_P/cookies_Z/g' $DOTFILES_DIR/config/qutebrowser/config.py
             ;;
+        -M)
+            shift
+            cd $MATHWIKI_DIR
+            rm -rf Site/.local
+            hugo serve -d Site/.local &
+            mkdir "Site/.local/qute"
+            $(qutebrowser "http://localhost:1313/mathwiki/" -s "statusbar.show" "never") &
+            ;;
     esac
 shift
 done
