@@ -108,6 +108,7 @@ else
             repo="1"
             source $MATHWIKI_DIR/.scripts/stats.sh -u
             source $MATHWIKI_DIR/.scripts/stats.sh -r
+            source $MATHWIKI_DIR/.scripts/publish.sh
             cd $MATHWIKI_DIR
     esac
 fi
@@ -127,7 +128,7 @@ if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
         read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/a/n]${NC} ")" choice
         if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
             echo ""
-            diff=$(git -c color.diff=always diff -- . ':(exclude).obsidian/*' | tee /dev/tty)
+            diff=$(git -c color.diff=always diff -- . ':(exclude)docs/*' | tee /dev/tty)
         elif [ "$choice" == "a" ] || [ "$choice" == "A" ]; then
             echo ""
             diff=$(git -c color.diff=always diff | tee /dev/tty)
