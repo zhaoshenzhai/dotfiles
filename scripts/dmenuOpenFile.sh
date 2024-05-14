@@ -18,64 +18,14 @@ mainChoice=$(printf '%s\n' "${options[@]}" | DMENU "~/")
 
 case $mainChoice in
     $(echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g'))
-        dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
-        declare -a choices=(
-            "$mainChoice/Notes"
-            "$mainChoice/Images"
-            "$mainChoice/.scripts"
-            "$mainChoice/.obsidian/snippets"
-            "$mainChoice/README.md"
-            "$mainChoice/preamble.sty"
-            "$mainChoice/imageConfig.tex"
-            "$mainChoice/imageTemplate.tex"
-            "$mainChoice/.gitignore"
-            "$mainChoice/.gitattributes"
-        )
+        dir="$MATHWIKI_DIR/Notes"
+        file=$(find $dir -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/::' | DMENU $(echo "$dir/" | sed 's:/home/zhao:~:g'))
 
-        choice=$(printf '%s\n' "${choices[@]}" | DMENU $mainChoice/)
-
-        if [[ "$choice" ]]; then
-            case $choice in
-                "$mainChoice/Notes")
-                    MathWikiNotesDir="$dir/Notes"
-                    file=$(find $MathWikiNotesDir -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/::' | DMENU $(echo "$MathWikiNotesDir/" | sed 's:/home/zhao:~:g'))
-
-                    if [[ -f "$MathWikiNotesDir/$file" ]]; then
-                        cd $MathWikiNotesDir
-                        kitty --class nvim,nvim -e nvim "$MathWikiNotesDir/$file" &
-                    fi
-                ;;
-                "$mainChoice/Images")
-                    MathWikiImagesDir="$dir/Images"
-                    folder=$(find $MathWikiImagesDir -mindepth 1 -type d | sort -r | sed 's:/home/zhao:~:g' | DMENU $(echo "$MathWikiImagesDir/" | sed 's:/home/zhao:~:g'))
-
-                    if [[ -d $(echo "$folder" | sed 's:~:/home/zhao:g') ]]; then
-                        cd $MathWikiImagesDir
-                        kitty --class media,media -e nvim $(echo "$folder/image.tex" | sed 's:~:/home/zhao:g')
-                    fi
-                ;;
-                "$mainChoice/.scripts")
-                    MathWikiScriptsDir="$dir/.scripts"
-                    file=$(find $MathWikiScriptsDir -printf "%T@ %Tc %p\n" | grep ".sh" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$MathWikiScriptsDir/" | sed 's:/home/zhao:~:g'))
-
-                    if [[ -f $(echo "$file" | sed 's:~:/home/zhao:g') ]]; then
-                        kitty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
-                    fi
-                ;;
-                "$mainChoice/.obsidian/snippets")
-                    MathWikiSnippetsDir="$dir/.obsidian/snippets"
-                    file=$(find $MathWikiSnippetsDir -printf "%T@ %Tc %p\n" | grep ".css" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$MathWikiSnippetsDir/" | sed 's:/home/zhao:~:g'))
-
-                    if [[ -f $(echo "$file" | sed 's:~:/home/zhao:g') ]]; then
-                        kitty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
-                    fi
-                ;;
-                *)
-                    if [[ -f $(echo "$choice" | sed 's:~:/home/zhao:g') ]]; then
-                        kitty --class sys,sys -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
-                    fi
-                ;;
-            esac
+        if [[ -f "$dir/$file" ]]; then
+            cd $dir
+            touch "$file"
+            echo -e "${YELLOW}$file${NC}"
+            kitty --class nvim,nvim -e nvim "$file" &
         fi
     ;;
     $(echo $DOTFILES_DIR | sed 's:/home/zhao:~:g'))
