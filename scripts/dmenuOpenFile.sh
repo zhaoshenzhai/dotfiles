@@ -21,12 +21,20 @@ case $mainChoice in
         dir="$MATHWIKI_DIR/Notes"
         file=$(find $dir -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/::' | DMENU $(echo "$dir/" | sed 's:/home/zhao:~:g'))
 
+        cd $dir
         if [[ -f "$dir/$file" ]]; then
-            cd $dir
             touch "$file"
-            echo -e "${YELLOW}$file${NC}"
-            kitty --class nvim,nvim -e nvim "$file" &
+        else
+            if [[ ! $(echo "$file" | grep ".md") ]]; then
+                file=$file.md
+            fi
+
+            cd ..
+            hugo new content "$file"
+            cd "Notes"
         fi
+
+        kitty --class nvim,nvim -e nvim "$file" &
     ;;
     $(echo $DOTFILES_DIR | sed 's:/home/zhao:~:g'))
         declare -a configs=(
