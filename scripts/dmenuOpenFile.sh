@@ -22,9 +22,11 @@ case $mainChoice in
         file=$(find $dir -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/::' | DMENU $(echo "$dir/" | sed 's:/home/zhao:~:g'))
 
         cd $dir
+        echo -e "${YELLOW}$file${NC}"
         if [[ -f "$dir/$file" ]]; then
             touch "$file"
-        else
+            kitty --class nvim,nvim -e nvim "$file" &
+        elif [[ ! -z "$file" ]]; then
             if [[ ! $(echo "$file" | grep ".md") ]]; then
                 file=$file.md
             fi
@@ -32,9 +34,9 @@ case $mainChoice in
             cd ..
             hugo new content "$file"
             cd "Notes"
-        fi
 
-        kitty --class nvim,nvim -e nvim "$file" &
+            kitty --class nvim,nvim -e nvim "$file" &
+        fi
     ;;
     $(echo $DOTFILES_DIR | sed 's:/home/zhao:~:g'))
         declare -a configs=(
