@@ -21,10 +21,6 @@ snippet _ "underscore" i
 \\_
 endsnippet
 
-snippet link "Links" i
-{{< link file="$1" display="$2" type="$3"$4 >}}$0
-endsnippet
-
 priority 100
 snippet qed "qed" i
 <span style="float:right;$1">$\blacksquare$</span>$0
@@ -105,7 +101,19 @@ $$\begin{equation}
 \end{equation}$$
 endsnippet
 
-# Templates
+# Shortcodes
+snippet link "Links" i
+{{< link file="$1" display="$2" type="$3"$4 >}}$0
+endsnippet
+
+snippet tikz "TikZ" i
+{{< tikz name="$1" width="$2" >}}
+	\begin{tikz${3:cd}}
+		$0
+	\end{tikz$3}
+{{< /tikz >}}
+endsnippet
+
 snippet def "Definition" b
 {{< env "definition"$1 >}}
 

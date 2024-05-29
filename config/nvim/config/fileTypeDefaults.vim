@@ -6,7 +6,7 @@ if $PWD == "/home/zhao/Dropbox/Others/Reminders"
 endif
 
 if ($PWD == "/home/zhao/Dropbox/MathWiki/Notes")
-    autocmd filetype markdown nnoremap <F6> :w <CR>:!$MATHWIKI_DIR/.scripts/newTikZ.sh<CR>i![[Images/<C-r>=system('$MATHWIKI_DIR/.scripts/getCurrentImage.sh')<CR>/image.svg]]<esc>I<backspace><esc>
+    autocmd filetype markdown nnoremap <F6> :w <CR>:!$MATHWIKI_DIR/.scripts/updateImages.sh -n "%"<CR><esc>
 
     let @a="?equation\<CR>dd/equation\<CR>dd?aligned\<CR>/e\<CR>xxI$$\<Esc>/aligned\<CR>/e\<CR>xxA$$\<Esc>v?align\<CR>n</align\<CR>kA\\qedin\<Esc>"
     let @g="?equation\<CR>dd/equation\<CR>dd?gathered\<CR>/e\<CR>xxI$$\<Esc>/gathered\<CR>/e\<CR>xxA$$\<Esc>v?gather\<CR>n</gather\<CR>kA\\qedin\<Esc>"
