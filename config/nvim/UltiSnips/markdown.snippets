@@ -108,9 +108,11 @@ endsnippet
 
 snippet tikz "TikZ" i
 {{< tikz name="$1" width="$2" >}}
+\begin{equation*}
 	\begin{tikz${3:cd}}
 		$0
 	\end{tikz$3}
+\end{equation*}
 {{< /tikz >}}
 endsnippet
 
