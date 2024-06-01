@@ -31,7 +31,6 @@ set synctex                 true
 
 set selection-clipboard     clipboard
 set selection-notification false
-set sandbox                 none
 
 map = feedkeys              "+"
 map ` toggle_statusbar
