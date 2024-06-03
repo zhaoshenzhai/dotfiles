@@ -104,6 +104,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         -- Applications
         ((modm,               xK_s), spawn "spotify" ),
         ((modm,               xK_o), spawn "obsidian"),
+        ((modm,               xK_z), spawn "zoom" ),
         ((modm .|. shiftMask, xK_d), spawn "discord" ),
 
         -- Windows

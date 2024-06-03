@@ -20,7 +20,18 @@ while [ ! -z "$1" ]; do
             rm -rf Site/.local
             hugo serve -d Site/.local &
             mkdir "Site/.local/qute"
-            $(qutebrowser "http://localhost:1313/mathwiki/" -s "window.title_format" "MathWiki") &
+            $(qutebrowser "http://localhost:1313/mathwiki/"\
+                :'set -u localhost:1313 input.mode_override passthrough'\
+                :'set statusbar.show never'\
+                :'mode-enter passthrough'\
+                :'bind --mode=passthrough <Meta+w> tab-close'\
+                :'bind --mode=passthrough <Meta+h> back'\
+                :'bind --mode=passthrough <Meta+j> tab-prev'\
+                :'bind --mode=passthrough <Meta+k> tab-next'\
+                :'bind --mode=passthrough <Meta+l> forward'\
+                :'bind --mode=passthrough j scroll down'\
+                :'bind --mode=passthrough k scroll up'\
+                -s "window.title_format" "MathWiki") &
             ;;
     esac
 shift
