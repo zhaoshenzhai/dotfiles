@@ -18,7 +18,7 @@ while [ ! -z "$1" ]; do
             shift
             cd $MATHWIKI_DIR
             rm -rf Site/.local
-            hugo serve -d Site/.local &
+            hugo serve -d Site/.local --disableLiveReload &
             mkdir "Site/.local/qute"
             $(qutebrowser "http://localhost:1313/mathwiki/"\
                 :'set -u localhost:1313 input.mode_override passthrough'\
@@ -29,6 +29,7 @@ while [ ! -z "$1" ]; do
                 :'bind --mode=passthrough <Meta+j> tab-prev'\
                 :'bind --mode=passthrough <Meta+k> tab-next'\
                 :'bind --mode=passthrough <Meta+l> forward'\
+                :'bind --mode=passthrough <Meta+r> reload'\
                 :'bind --mode=passthrough j scroll down'\
                 :'bind --mode=passthrough k scroll up'\
                 -s "window.title_format" "MathWiki") &
