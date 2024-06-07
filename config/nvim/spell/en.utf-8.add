@@ -449,3 +449,6 @@ colimit
 Adjunctions
 naturality
 functorially
+monoidal
+cokernels
+cocomplete
