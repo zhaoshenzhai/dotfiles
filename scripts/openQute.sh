@@ -30,8 +30,6 @@ while [ ! -z "$1" ]; do
                 :'bind --mode=passthrough <Meta+j> tab-prev'\
                 :'bind --mode=passthrough <Meta+k> tab-next'\
                 :'bind --mode=passthrough <Meta+r> reload'\
-                :'bind --mode=passthrough <Meta+j> scroll down'\
-                :'bind --mode=passthrough <Meta+k> scroll up'\
                 -s "window.title_format" "MathWiki") &
             ;;
     esac
