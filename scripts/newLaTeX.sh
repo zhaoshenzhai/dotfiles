@@ -34,3 +34,4 @@ cd $name
 
 cp $filesPath/* .
 mv file.tex $name.tex
+sed -i 's/NAME/'"$name"'/g' $name.tex
