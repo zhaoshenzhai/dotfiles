@@ -3,7 +3,6 @@ if !empty(makeFile)
     let directory = substitute(makeFile, '/makefile$', '', '')
     nnoremap <F5> :w <CR>:execute 'cd' fnameescape(directory)<CR>:execute '!make'<CR>
 else
-    autocmd filetype cs nnoremap <F5> :w <CR>:!kitty -e $DOTFILES_DIR/scripts/compileCSharp.sh $PWD<CR><CR>
     autocmd filetype python nnoremap <F5> :w <CR>:!kitty -e $DOTFILES_DIR/scripts/compilePython.sh %<CR><CR>
 
     autocmd filetype c nnoremap <F4> :w <CR>:!kitty -e $DOTFILES_DIR/scripts/compileC.sh -r %<CR><CR>
