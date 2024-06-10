@@ -2,25 +2,24 @@
 \usepackage{pgfplots}\pgfplotsset{compat=1.18}                              % plots
 \usepackage{amsfonts, amsmath, amssymb, amsthm}                             % basic maths commands
 \usepackage{mathtools, mathrsfs}                                            % more maths commands
-\usepackage{graphicx}                                                       % images and other graphics
-\usepackage{geometry}                                                       % page layout
 \usepackage{tikz, tikz-3dplot, tikzpagenodes}                               % maths figures
 \usepackage{caption, subcaption}                                            % captions outside float
-\usepackage{xcolor}                                                         % more colors
+\usepackage{graphicx, xcolor}                                               % images and other graphics
+\usepackage{geometry}                                                       % page layout
 \usepackage{enumitem}                                                       % enumerate and itemize indents
 \usepackage{nicematrix}                                                     % matrices and tables
-\usepackage{bm}                                                             % bold math
 
 % TikZ Libraries
 \usetikzlibrary{matrix, positioning, patterns, decorations.markings, arrows, arrows.meta, backgrounds, math, cd}
 
+% Style
 \definecolor{darkGreen}{HTML}{00A000}
+\newgeometry{margin = 1in}
 
+% Environments
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
 \theoremstyle{definition}\newtheorem{definition}[theorem]{Definition}
 \theoremstyle{definition}\newtheorem{remark}[theorem]{Remark}
-
-\newgeometry{margin = 1in}

@@ -1,39 +1,18 @@
-\usepackage[T1]{fontenc}                                                    % make fonts work?
 \usepackage[hidelinks]{hyperref}                                            % links
 \usepackage{pgfplots}\pgfplotsset{compat=1.18}                              % plots
-\usepackage{geometry}                                                       % page layout
-\usepackage{fancyhdr}                                                       % headers and footers
-\usepackage{titlesec}                                                       % title page
-\usepackage{tocloft}                                                        % custom table of contents
 \usepackage{amsfonts, amsmath, amssymb, amsthm}                             % basic maths commands
-\usepackage{mathtools}                                                      % more maths commands
-\usepackage{mathrsfs}                                                       % more math commands
-\usepackage{mdframed}                                                       % framed environments
-\usepackage{graphicx}                                                       % images and other graphics
-\usepackage{tikz}                                                           % maths figures
-\usepackage{tikz-3dplot}                                                    % needed by tikz
-\usepackage{tikzpagenodes}                                                  % needed by tikz
-\usepackage{ulem}                                                           % underlining
-\usepackage{xcolor}                                                         % more colors
-\usepackage{caption}                                                        % captions outside float
-\usepackage{subcaption}                                                     % sub-captions
+\usepackage{mathtools, mathrsfs}                                            % more maths commands
+\usepackage{tikz, tikz-3dplot, tikzpagenodes}                               % maths figures
+\usepackage{caption, subcaption}                                            % captions outside float
+\usepackage{graphicx, xcolor}                                               % images and other graphics
+\usepackage{geometry}                                                       % page layout
 \usepackage{enumitem}                                                       % enumerate and itemize indents
 \usepackage{nicematrix}                                                     % matrices and tables
-\usepackage{bm}                                                             % bold math
-\usepackage{dsfont}                                                         % double stroke
-\usepackage{esint}                                                          % integrals
-\usepackage{algorithm2e}                                                    % pseudocode
+\usepackage{fancyhdr}                                                       % headers and footers
+\usepackage{mdframed}                                                       % framed environments
 
 % TikZ Libraries
-\usetikzlibrary{matrix}
-\usetikzlibrary{positioning}
-\usetikzlibrary{patterns}
-\usetikzlibrary{decorations.markings}
-\usetikzlibrary{arrows}
-\usetikzlibrary{arrows.meta}
-\usetikzlibrary{backgrounds}
-\usetikzlibrary{math}
-\usetikzlibrary{cd}
+\usetikzlibrary{matrix, positioning, patterns, decorations.markings, arrows, arrows.meta, backgrounds, math, cd}
 
 % Colors
 \definecolor{lightGray}{rgb}{0.9, 0.9, 0.9}
@@ -45,9 +24,7 @@
 \theoremstyle{remark}\newtheorem*{solution}{Solution}
 \theoremstyle{definition}\newmdtheoremenv[style = light]{lemma}{Lemma}
 \theoremstyle{definition}\newmdtheoremenv[style = light]{exercise}{Exercise}
-\theoremstyle{definition}\newmdtheoremenv[style = light]{exerciseUnnumbered}{Exercise\!\!}
 \setcounter{exercise}{EXERCISE_NUMBER}
-\makeatletter\renewenvironment{proof}[1][\proofname]{\par\normalfont\topsep6\p@\@plus6\p@\relax\trivlist\item[\hskip\labelsep\itshape#1\@addpunct{.}]\ignorespaces}{\endtrivlist\@endpefalse}\renewcommand\qedhere{}\makeatother
 
 % Styles
 \newgeometry{margin = 0.7in, bmargin=1in, tmargin=1in}
