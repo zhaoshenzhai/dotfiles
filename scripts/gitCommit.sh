@@ -11,7 +11,103 @@ REPOSNUM=$(echo "$REPOS" | wc -l)
 REPONAMES=$(echo "$REPOS" | cut -f 1 -d ' ')
 REPOPATHS=$(echo "$REPOS" | cut -f 1 -d ' ' --complement | sed 's/\ *//g')
 
-if [[ -z $1 ]]; then
+specifiedRepo=
+repoNum=
+
+HELP() {
+    echo -e "Usage: ./gitCommit.sh"
+    echo -e "    Optional: [-r specifiedRepo]"
+}
+GETSTATUS() {
+    if [[ -z $1 ]]; then
+        if [[ $repoName == "MathWiki" ]]; then
+            echo $(git -c color.status=always status ':(exclude)docs/*' ':(exclude)Site/static/allFiles.json' 2>&1)
+        else
+            echo $(git -c color.status=always status 2>&1)
+        fi
+    else
+        if [[ $repoName == "MathWiki" ]]; then
+            echo $(git -c color.status=always status ':(exclude)docs/*' ':(exclude)Site/static/allFiles.json' | tee /dev/tty)
+        else
+            echo $(git -c color.status=always status | tee /dev/tty)
+        fi
+    fi
+
+}
+UPDATE() {
+    repoName=$1
+    if [[ $1 == "MathWiki" ]]; then
+        cd $MATHWIKI_DIR
+        source $MATHWIKI_DIR/.scripts/publish.sh
+        source $MATHWIKI_DIR/.scripts/stats.sh -u
+        source $MATHWIKI_DIR/.scripts/stats.sh -r
+        repoNum="1"
+    fi
+}
+SHOWDIFF() {
+    if [[ "$repoName" == "MathWiki" ]]; then
+        read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/a/n]${NC} ")" choice
+        if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
+            echo ""
+            diff=$(git -c color.diff=always diff -- . ':(exclude)docs/*' ':(exclude)Site/static/allFiles.json' | tee /dev/tty)
+        elif [ "$choice" == "a" ] || [ "$choice" == "A" ]; then
+            echo ""
+            diff=$(git -c color.diff=always diff | tee /dev/tty)
+        elif [ "$choice" == "q" ]; then
+            EXIT
+        fi
+    else
+        read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/n]${NC} ")" choice
+        if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
+            echo ""
+            diff=$(git -c color.diff=always diff | tee /dev/tty)
+        elif [ "$choice" == "q" ]; then
+            EXIT
+        fi
+    fi
+
+    if [[ $(echo "$diff" | tail -n1 | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g" | grep -E '\S') ]]; then
+        echo ""
+    fi
+}
+SHOWSTATUS() {
+    status=$(GETSTATUS -s)
+    if [[ $(echo -e "$status" | grep "no changes added to commit") ]] || [[ $(echo -e "$status" | grep "nothing added to commit") ]]; then
+        echo ""
+    fi
+}
+EXIT() {
+    if [[ -z $specifiedRepo ]]; then
+        echo ""
+        read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
+        if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
+            clear
+            $DOTFILES_DIR/scripts/gitCommit.sh
+        fi
+    fi
+    exit
+}
+
+# Input
+while [[ ! -z $1 ]]; do
+    case $1 in
+        -h|--help)
+            HELP
+            exit 0
+            ;;
+        -r)
+            specifiedRepo=$2
+            ;;
+    esac
+    shift
+    shift
+done
+
+# Update repos to prepare for git commands
+if [[ ! -z $specifiedRepo ]]; then
+    UPDATE $specifiedRepo
+else
+    # Print all repos
     while [[ -z $valid ]]; do
         echo -e "${CYAN}Repositories:${NC}"
         repoIndex=1
@@ -21,22 +117,22 @@ if [[ -z $1 ]]; then
         done <<< "$REPONAMES"
         echo ""
 
-        read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1-$REPOSNUM]${NC} ")" repo
+        read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1-$REPOSNUM]${NC} ")" repoNum
         re='^[0-9]+$'
-        if [[ "$repo" == "q" ]]; then
+        if [[ "$repoNum" == "q" ]]; then
             exit
-        elif [[ -z $repo ]] || ([[ $repo =~ $re ]] && [[ $repo -gt 0 ]] && [[ $repo -le $REPOSNUM ]]); then
+        elif [[ -z $repoNum ]] || ([[ $repoNum =~ $re ]] && [[ $repoNum -gt 0 ]] && [[ $repoNum -le $REPOSNUM ]]); then
             valid=1
         else
             clear
         fi
     done
 
-    case $repo in
+    # Process and move to selected repo
+    case $repoNum in
         "1")
             cd $MATHWIKI_DIR
-            source $MATHWIKI_DIR/.scripts/stats.sh -u
-            source $MATHWIKI_DIR/.scripts/stats.sh -r
+            UPDATE "MathWiki"
         ;;
         "2")
             cd $DOTFILES_DIR
@@ -52,11 +148,13 @@ if [[ -z $1 ]]; then
             changedReposNum=0
             repoIndex=1
             repoIndices=""
-            while IFS= read -r repo; do
-                cd $(echo $repo | cut -f 1 -d ' ' --complement | sed 's/\ *//g')
-                status=$(git -c color.status=always status 2>&1)
+            while IFS= read -r repoInfo; do
+                repoPath=$(echo $repoInfo | cut -f 1 -d ' ' --complement | sed 's/\ *//g')
+                repoName=$(echo $repoInfo | cut -f 1 -d ' ')
+                cd $repoPath
+                status=$(GETSTATUS)
                 if [[ ! $(echo -e "$status" | grep "nothing to commit, working tree clean") ]]; then
-                    changedRepos="$changedRepos\n$repo"
+                    changedRepos="$changedRepos\n$repoInfo"
                     changedReposNum=$((changedReposNum + 1))
                     repoIndices="$repoIndices$repoIndex"
                 fi
@@ -66,9 +164,9 @@ if [[ -z $1 ]]; then
             changedRepos=$(echo "$changedRepos" | sed -e 's/^\\n//g')
 
             if [[ $changedReposNum = 0 ]]; then
-                repo=1
+                repoNum=1
             elif [[ $changedReposNum = 1 ]]; then
-                repo=$(echo "$repoIndices" | head -c 1 | tail -c 1)
+                repoNum=$(echo "$repoIndices" | head -c 1 | tail -c 1)
             else
                 clear
                 while [[ -z $changedValid ]]; do
@@ -91,100 +189,47 @@ if [[ -z $1 ]]; then
                         clear
                     fi
                 done
-                repo=$(echo "$repoIndices" | head -c $changedRepo | tail -c 1)
+                repoNum=$(echo "$repoIndices" | head -c $changedRepo | tail -c 1)
+                repoName=$(echo "$changedRepoNames" | head -$changedRepo | tail -1)
             fi
 
-            cd $(echo "$REPOPATHS" | sed "${repo}q;d")
-            if [[ $repo == 1 ]]; then
-                source $MATHWIKI_DIR/.scripts/stats.sh -u
-                source $MATHWIKI_DIR/.scripts/stats.sh -r
-            fi
+            cd $(echo "$REPOPATHS" | sed "${repoNum}q;d")
+            UPDATE $repoName
         ;;
-    esac   
-else
-    prompt=$1
-    case "$1" in
-        --MathWiki|-m)
-            repo="1"
-            source $MATHWIKI_DIR/.scripts/stats.sh -u
-            source $MATHWIKI_DIR/.scripts/stats.sh -r
-            source $MATHWIKI_DIR/.scripts/publish.sh
-            cd $MATHWIKI_DIR
     esac
 fi
 
+# Ignore files
 echo ""
 ignoredFiles=$(git ls-files -i -c --exclude-from=.gitignore)
 if [[ ! -z $ignoredFiles ]]; then
     git rm --cached $ignoredFiles
 fi
-status=$(git -c color.status=always status | tee /dev/tty)
-if [[ $(echo -e "$status" | grep "no changes added to commit") ]] || [[ $(echo -e "$status" | grep "nothing added to commit") ]]; then
-    echo ""
-fi
 
-if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
-    if [[ "$repo" == "1" ]]; then
-        read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/a/n]${NC} ")" choice
-        if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
-            echo ""
-            diff=$(git -c color.diff=always diff -- . ':(exclude)docs/*' ':(exclude)Site/static/allFiles.json' | tee /dev/tty)
-        elif [ "$choice" == "a" ] || [ "$choice" == "A" ]; then
-            echo ""
-            diff=$(git -c color.diff=always diff | tee /dev/tty)
-        elif [ "$choice" == "q" ]; then
-            if [[ -z $prompt ]]; then
-                echo ""
-                read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
-                if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
-                    clear
-                    $DOTFILES_DIR/scripts/gitCommit.sh
-                fi
-            fi
-            exit
-        fi
-    else
-        read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/n]${NC} ")" choice
-        if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
-            echo ""
-            diff=$(git -c color.diff=always diff | tee /dev/tty)
-        elif [ "$choice" == "q" ]; then
-            if [[ -z $prompt ]]; then
-                echo ""
-                read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
-                if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
-                    clear
-                    $DOTFILES_DIR/scripts/gitCommit.sh
-                fi
-            fi
-            exit
-        fi
-    fi
+# Show diff and commit
+SHOWSTATUS
+if [[ $(echo "$status" | grep "nothing to commit") ]]; then
+    EXIT
+else
+    SHOWDIFF
 
-    if [[ $(echo "$diff" | tail -n1 | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g" | grep -E '\S') ]]; then
-        echo ""
-    fi
     read -n 1 -ep "$(echo -e ${PURPLE}"Commit? [Y/n]${NC} ")" choice
     if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
         git add .
         echo ""
-        status=$(git -c color.status=always status | tee /dev/tty)
-        if [[ $(echo -e "$status" | grep "no changes added to commit") ]] || [[ $(echo -e "$status" | grep "nothing added to commit") ]]; then
-            echo ""
-        fi
+        SHOWSTATUS
+
+        # Remove Files
         read -ep "$(echo -e ${PURPLE}"Remove files? [N/(string)]${NC} ")" choice
         while [[ ! -z $choice ]]; do
             git restore --staged "$choice"
-
             echo ""
-            status=$(git -c color.status=always status | tee /dev/tty)
-            if [[ $(echo -e "$status" | grep "no changes added to commit") ]] || [[ $(echo -e "$status" | grep "nothing added to commit") ]]; then
-                echo ""
-            fi
+            SHOWSTATUS
 
             read -ep "$(echo -e ${PURPLE}"Remove files? [N/(string)]${NC} ")" choice
         done
 
+        # Commit
         echo ""
         read -ep "$(echo -e ${PURPLE}"Message:${NC} ")" msg
         while [ -z "$msg" ]; do
@@ -195,6 +240,7 @@ if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
         git commit -m "$msg"
         echo ""
 
+        # Push
         res=$(git push 2>&1)
         fatal=$(echo $res | grep -o fatal)
         attempt=1
@@ -208,23 +254,5 @@ if [[ ! $(echo "$status" | grep "nothing to commit") ]]; then
         echo "$res"
     fi
 
-    if [[ -z $prompt ]]; then
-        echo ""
-        read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
-        if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
-            clear
-            $DOTFILES_DIR/scripts/gitCommit.sh
-        fi
-        exit
-    fi
-else
-    if [[ -z $prompt ]]; then
-        echo ""
-        read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
-        if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
-            clear
-            $DOTFILES_DIR/scripts/gitCommit.sh
-        fi
-        exit
-    fi
+    EXIT
 fi
