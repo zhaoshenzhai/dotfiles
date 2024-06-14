@@ -19,7 +19,6 @@ HELP() {
     echo -e "    Optional: [-r specifiedRepo]"
 }
 GETSTATUS() {
-    echo -e "${YELLOW}$repoName${NC}"
     if [[ -z $1 ]]; then
         if [[ $repoName == "MathWiki" ]]; then
             echo $(git -c color.status=always status ':(exclude)docs/*' ':(exclude)Site/static/allFiles.json' 2>&1)
