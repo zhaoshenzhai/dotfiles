@@ -153,7 +153,6 @@ else
                 repoName=$(echo $repoInfo | cut -f 1 -d ' ')
                 cd $repoPath
                 status=$(GETSTATUS)
-                echo -e "${RED}$status${NC}"
                 if [[ ! $(echo -e "$status" | grep "nothing to commit, working tree clean") ]]; then
                     changedRepos="$changedRepos\n$repoInfo"
                     changedReposNum=$((changedReposNum + 1))
