@@ -72,6 +72,7 @@ SHOWDIFF() {
 }
 SHOWSTATUS() {
     status=$(GETSTATUS -s)
+    echo -e "${YELLOW}$status${NC}"
     if [[ $(echo -e "$status" | grep "no changes added to commit") ]] || [[ $(echo -e "$status" | grep "nothing added to commit") ]]; then
         echo ""
     fi
