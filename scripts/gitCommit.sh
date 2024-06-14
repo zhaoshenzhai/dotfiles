@@ -72,7 +72,6 @@ SHOWDIFF() {
 }
 SHOWSTATUS() {
     status=$(GETSTATUS -s)
-    echo -e "${YELLOW}$status${NC}"
     if [[ $(echo -e "$status" | grep "no changes added to commit") ]] || [[ $(echo -e "$status" | grep "nothing added to commit") ]]; then
         echo ""
     fi
@@ -206,6 +205,9 @@ ignoredFiles=$(git ls-files -i -c --exclude-from=.gitignore)
 if [[ ! -z $ignoredFiles ]]; then
     git rm --cached $ignoredFiles
 fi
+
+echo -e "${YELLOW}$repoName${NC}"
+echo -e "${YELLOW}$repoNum${NC}"
 
 # Show diff and commit
 SHOWSTATUS
