@@ -19,6 +19,7 @@ HELP() {
     echo -e "    Optional: [-r specifiedRepo]"
 }
 GETSTATUS() {
+    echo -e "${YELLOW}$repoName${NC}"
     if [[ -z $1 ]]; then
         if [[ $repoName == "MathWiki" ]]; then
             echo $(git -c color.status=always status ':(exclude)docs/*' ':(exclude)Site/static/allFiles.json' 2>&1)
@@ -153,6 +154,7 @@ else
                 repoName=$(echo $repoInfo | cut -f 1 -d ' ')
                 cd $repoPath
                 status=$(GETSTATUS)
+                echo -e "${RED}$status${NC}"
                 if [[ ! $(echo -e "$status" | grep "nothing to commit, working tree clean") ]]; then
                     changedRepos="$changedRepos\n$repoInfo"
                     changedReposNum=$((changedReposNum + 1))
