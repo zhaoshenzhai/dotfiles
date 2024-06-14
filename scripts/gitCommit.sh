@@ -163,6 +163,8 @@ else
 
             changedRepos=$(echo "$changedRepos" | sed -e 's/^\\n//g')
 
+            echo -e "${YELLOW}$changedRepos${NC}"
+
             if [[ $changedReposNum = 0 ]]; then
                 repoNum=1
             elif [[ $changedReposNum = 1 ]]; then
