@@ -20,13 +20,13 @@ HELP() {
 }
 GETSTATUS() {
     if [[ -z $1 ]]; then
-        if [[ $repoName == "MathWiki" ]]; then
+        if [[ $repoName == "MathWiki" ]] || [[ $repoNum == 1 ]]; then
             echo $(git -c color.status=always status ':(exclude)docs/*' ':(exclude)Site/static/allFiles.json' 2>&1)
         else
             echo $(git -c color.status=always status 2>&1)
         fi
     else
-        if [[ $repoName == "MathWiki" ]]; then
+        if [[ $repoName == "MathWiki" ]] || [[ $repoNum == 1 ]]; then
             echo $(git -c color.status=always status ':(exclude)docs/*' ':(exclude)Site/static/allFiles.json' | tee /dev/tty)
         else
             echo $(git -c color.status=always status | tee /dev/tty)
@@ -45,7 +45,7 @@ UPDATE() {
     fi
 }
 SHOWDIFF() {
-    if [[ "$repoName" == "MathWiki" ]]; then
+    if [[ $repoName == "MathWiki" ]] || [[ $repoNum == 1 ]]; then
         read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/a/n]${NC} ")" choice
         if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
             echo ""
@@ -163,8 +163,6 @@ else
 
             changedRepos=$(echo "$changedRepos" | sed -e 's/^\\n//g')
 
-            echo -e "${YELLOW}$changedReposNum${NC}"
-
             if [[ $changedReposNum = 0 ]]; then
                 repoNum=1
             elif [[ $changedReposNum = 1 ]]; then
@@ -207,9 +205,6 @@ ignoredFiles=$(git ls-files -i -c --exclude-from=.gitignore)
 if [[ ! -z $ignoredFiles ]]; then
     git rm --cached $ignoredFiles
 fi
-
-echo -e "${YELLOW}$repoName${NC}"
-echo -e "${YELLOW}$repoNum${NC}"
 
 # Show diff and commit
 SHOWSTATUS
