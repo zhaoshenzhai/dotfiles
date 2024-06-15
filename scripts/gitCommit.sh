@@ -61,6 +61,17 @@ SHOWDIFF() {
         elif [ "$choice" == "q" ]; then
             EXIT
         fi
+    elif [[ $repoName == "SURA24S" || $repoNum == 4 ]]; then
+        read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [A/n]${NC} ")" choice
+        if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
+            echo ""
+            diff=$(git -c color.diff=always diff -- . ':(exclude)*.pdf' | tee /dev/tty)
+        elif [ "$choice" == "a" ] || [ "$choice" == "A" ]; then
+            echo ""
+            diff=$(git -c color.diff=always diff | tee /dev/tty)
+        elif [ "$choice" == "q" ]; then
+            EXIT
+        fi
     else
         read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/n]${NC} ")" choice
         if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
