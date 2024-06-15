@@ -66,9 +66,6 @@ SHOWDIFF() {
         if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
             echo ""
             diff=$(git -c color.diff=always diff -- . ':(exclude)*.pdf' | tee /dev/tty)
-        elif [ "$choice" == "a" ] || [ "$choice" == "A" ]; then
-            echo ""
-            diff=$(git -c color.diff=always diff | tee /dev/tty)
         elif [ "$choice" == "q" ]; then
             EXIT
         fi
