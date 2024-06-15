@@ -23,12 +23,16 @@ GETSTATUS() {
     if [[ -z $1 ]]; then
         if [[ $repoName == "MathWiki" ]] || [[ $repoNum == 1 ]]; then
             echo $(git -c color.status=always status ':(exclude)docs/*' ':(exclude)Site/static/allFiles.json' 2>&1)
+        elif [[ $repoName == "SURA24S" || $repoNum == 4 ]]; then
+            echo $(git -c color.status=always status ':(exclude)*.pdf' 2>&1)
         else
             echo $(git -c color.status=always status 2>&1)
         fi
     else
         if [[ $repoName == "MathWiki" ]] || [[ $repoNum == 1 ]]; then
             echo $(git -c color.status=always status ':(exclude)docs/*' ':(exclude)Site/static/allFiles.json' | tee /dev/tty)
+        elif [[ $repoName == "SURA24S" || $repoNum == 4 ]]; then
+            echo $(git -c color.status=always status ':(exclude)*.pdf' | tee /dev/tty)
         else
             echo $(git -c color.status=always status | tee /dev/tty)
         fi
