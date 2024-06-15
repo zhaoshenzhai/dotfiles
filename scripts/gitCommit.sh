@@ -51,36 +51,30 @@ UPDATE() {
 }
 SHOWDIFF() {
     if [[ $repoName == "MathWiki" ]] || [[ $repoNum == 1 ]]; then
-        read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/a/n]${NC} ")" choice
-        if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
-            echo ""
-            diff=$(git -c color.diff=always diff -- . ':(exclude)docs/*' ':(exclude)Site/static/allFiles.json' | tee /dev/tty)
-        elif [ "$choice" == "a" ] || [ "$choice" == "A" ]; then
-            echo ""
-            diff=$(git -c color.diff=always diff | tee /dev/tty)
-        elif [ "$choice" == "q" ]; then
-            EXIT
-        fi
+        SHOWDIFFHELPER "docs/*" "Site/static/allFiles.json"
     elif [[ $repoName == "SURA24S" || $repoNum == 4 ]]; then
-        read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [A/n]${NC} ")" choice
-        if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
-            echo ""
-            diff=$(git -c color.diff=always diff -- . ':(exclude)*.pdf' | tee /dev/tty)
-        elif [ "$choice" == "q" ]; then
-            EXIT
-        fi
+        SHOWDIFFHELPER "*.pdf"
     else
-        read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/n]${NC} ")" choice
-        if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
-            echo ""
-            diff=$(git -c color.diff=always diff | tee /dev/tty)
-        elif [ "$choice" == "q" ]; then
-            EXIT
-        fi
+        SHOWDIFFHELPER
     fi
 
     if [[ $(echo "$diff" | tail -n1 | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g" | grep -E '\S') ]]; then
         echo ""
+    fi
+}
+SHOWDIFFHELPER() {
+    read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/n]${NC} ")" choice
+    if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
+        echo ""
+        if [[ ! -z $2 ]]; then
+            diff=$(git -c color.diff=always diff -- . ":(exclude)$1" ":(exclude)$2" | tee /dev/tty)
+        elif [[ ! -z $1 ]]; then
+            diff=$(git -c color.diff=always diff -- . ":(exclude)$1" | tee /dev/tty)
+        else
+            diff=$(git -c color.diff=always diff | tee /dev/tty)
+        fi
+    elif [ "$choice" == "q" ]; then
+        EXIT
     fi
 }
 SHOWSTATUS() {
