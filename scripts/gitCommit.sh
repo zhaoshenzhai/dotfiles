@@ -4,6 +4,7 @@ REPOS="
 MathWiki     $MATHWIKI_DIR
 Dotfiles     $DOTFILES_DIR
 Courses      $UNIVERSITY_DIR/Courses
+SURA24S      $UNIVERSITY_DIR/Courses/SURA24S_Tree-like_Graphings_of_CBERs
 MathLinks    $MATHLINKS_DIR"
 
 REPOS=$(echo "$REPOS" | sed 1d)
