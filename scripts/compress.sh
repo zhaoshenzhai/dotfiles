@@ -1,7 +1,6 @@
 #!/bin/bash
 
 for file in "$@"; do
-    cp "$file" "$file.bak"
     echo -ne "${YELLOW}Compressing: $file${NC}\r"
     gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dPDFSETTINGS=/printer -dNOPAUSE -dQUIET -dBATCH -sOutputFile="$file.tmp" "$file"
     
