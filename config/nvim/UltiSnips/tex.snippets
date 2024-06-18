@@ -57,10 +57,18 @@ snippet prp "begin proposition" b
 \end{proposition}
 endsnippet
 
+priority 100
 snippet thm "begin theorem" b
 \begin{theorem}
 	$0
 \end{theorem}
+endsnippet
+
+priority 200
+snippet mthm "begin mainTheorem" b
+\begin{mainTheorem}
+	$0
+\end{mainTheorem}
 endsnippet
 
 snippet cor "begin corollary" b
@@ -175,8 +183,4 @@ endsnippet
 
 snippet sc "small caps" i
 \textsc{$1}$0
-endsnippet
-
-snippet ud "underline definition" i
-\uldef{$1}$0
 endsnippet
