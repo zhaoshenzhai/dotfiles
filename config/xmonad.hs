@@ -90,6 +90,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
         -- Browser
         ((modm,               xK_w), spawn "$DOTFILES_DIR/scripts/openQute.sh -Z"),
+        ((modm,               xK_m), spawn "$DOTFILES_DIR/scripts/openQute.sh -M"),
         ((modm .|. shiftMask, xK_w), spawn "$DOTFILES_DIR/scripts/openQute.sh -P"),
         ((modm,               xK_g), spawn "chromium --force-dark-mode"          ),
 
@@ -111,7 +112,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_f     ), sendMessage NextLayout  ),
         ((modm, xK_grave ), sendMessage ToggleStruts),
         ((modm, xK_Tab   ), windows W.focusDown     ),
-        ((modm, xK_m     ), windows W.swapMaster    ),
         ((modm, xK_h     ), windows W.swapUp        ),
         ((modm, xK_l     ), windows W.swapDown      ),
         ((modm, xK_j     ), sendMessage Shrink      ),
