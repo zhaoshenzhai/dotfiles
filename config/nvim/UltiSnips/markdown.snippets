@@ -99,10 +99,6 @@ snippet dequiv "colon<=>" i
 endsnippet
 
 # Environments
-snippet pro "begin proof" b
-*Proof$1.* $0
-endsnippet
-
 snippet rem "begin remark" b
 **Remark.** $0
 endsnippet
@@ -129,7 +125,7 @@ snippet tikz "TikZ" i
 endsnippet
 
 snippet def "Definition" b
-{{< env "definition"$1 >}}
+{{< env type="definition"$1 >}}
 
 $0
 
@@ -137,7 +133,7 @@ $0
 endsnippet
 
 snippet exa "Example" b
-{{< env "example"$1 >}}
+{{< env type="example"$1 >}}
 
 $0
 
@@ -145,7 +141,7 @@ $0
 endsnippet
 
 snippet prp "Proposition" b
-{{< env "proposition"$1 >}}
+{{< env type="proposition"$1 >}}
 
 $0
 
@@ -153,7 +149,15 @@ $0
 endsnippet
 
 snippet thm "Theorem" b
-{{< env "theorem"$1 >}}
+{{< env type="theorem"$1 >}}
+
+$0
+
+{{< /env >}}
+endsnippet
+
+snippet pro "Proof" b
+{{< env type="proof" hide="${1:false}"$2 >}}
 
 $0
 
