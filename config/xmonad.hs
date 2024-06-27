@@ -90,23 +90,23 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
         -- Browser
         ((modm,               xK_w), spawn "$DOTFILES_DIR/scripts/openQute.sh -Z"),
-        ((modm,               xK_m), spawn "$DOTFILES_DIR/scripts/openQute.sh -M"),
         ((modm .|. shiftMask, xK_w), spawn "$DOTFILES_DIR/scripts/openQute.sh -P"),
-        ((modm,               xK_g), spawn "chromium --force-dark-mode"          ),
+        ((modm .|. shiftMask, xK_m), spawn "$DOTFILES_DIR/scripts/openQute.sh -M"),
 
         -- Scripts
-        ((modm .|. shiftMask, xK_m), spawn "kitty $MATHWIKI_DIR/.scripts/main.sh"    ),
-        ((modm .|. shiftMask, xK_g), spawn "kitty $DOTFILES_DIR/scripts/gitCommit.sh"),
-        ((modm .|. shiftMask, xK_s), spawn "kitty $DOTFILES_DIR/scripts/stopwatch.sh"),
+        ((modm, xK_g), spawn "kitty $DOTFILES_DIR/scripts/gitCommit.sh"),
+        ((modm, xK_m), spawn "kitty $MATHWIKI_DIR/.scripts/main.sh"    ),
 
         -- Screenshot
         ((modm .|. shiftMask, xK_p), spawn "cd ~/Downloads; scrot 'Scrot_%Y_%m_%d_%H%M%S.png'"),
 
         -- Applications
-        ((modm,               xK_s), spawn "spotify" ),
-        ((modm,               xK_o), spawn "obsidian"),
-        ((modm,               xK_z), spawn "zoom" ),
-        ((modm .|. shiftMask, xK_d), spawn "discord" ),
+        ((modm,               xK_o), spawn "obsidian"                  ),
+        ((modm,               xK_z), spawn "zoom"                      ),
+        ((modm,               xK_s), spawn "spotify"                   ),
+        ((modm .|. shiftMask, xK_s), spawn "steam"                     ),
+        ((modm .|. shiftMask, xK_d), spawn "discord"                   ),
+        ((modm .|. shiftMask, xK_g), spawn "chromium --force-dark-mode"),
 
         -- Windows
         ((modm, xK_f     ), sendMessage NextLayout  ),
@@ -159,6 +159,7 @@ myWorkspaces = [
     "<fn=2>\xf05da  </fn>", -- Book2
     "<fn=2>\xf0254  </fn>", -- Media
     "<fn=2>\xf1bc  </fn>",  -- Spotify
+    "<fn=2>\xf1b6  </fn>",  -- Steam
     "<fn=2>\xf013 </fn>"    -- Config
     ]
 
@@ -181,8 +182,9 @@ myManageHook = composeAll
         className =? "mpv"         --> viewShift (myWorkspaces !! 5),
         className =? "media"       --> viewShift (myWorkspaces !! 5),
         className =? "Spotify"     --> viewShift (myWorkspaces !! 6),
-        className =? "sys"         --> viewShift (myWorkspaces !! 7),
-        className =? "Pavucontrol" --> viewShift (myWorkspaces !! 7)
+        className =? "steam"       --> viewShift (myWorkspaces !! 7),
+        className =? "sys"         --> viewShift (myWorkspaces !! 8),
+        className =? "Pavucontrol" --> viewShift (myWorkspaces !! 8)
     ]
 
     where viewShift = doF . liftM2 (.) W.greedyView W.shift
