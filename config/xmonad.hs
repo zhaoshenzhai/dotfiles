@@ -34,6 +34,7 @@ import XMonad.Actions.CopyWindow(copy, kill1, copyToAll, killAllOtherCopies)
 import XMonad.Actions.Submap(submap)
 import XMonad.Actions.SpawnOn
 import XMonad.Actions.OnScreen
+import XMonad.Actions.SinkAll
 
 -- Utils
 import XMonad.Util.Run (spawnPipe)
@@ -116,6 +117,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_l     ), windows W.swapDown      ),
         ((modm, xK_j     ), sendMessage Shrink      ),
         ((modm, xK_k     ), sendMessage Expand      ),
+        ((modm, xK_l     ), sinkAll                 ),
         ((modm, xK_Escape), kill                    ),
 
         -- Audio
