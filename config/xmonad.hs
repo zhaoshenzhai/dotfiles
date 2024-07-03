@@ -117,7 +117,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_l     ), windows W.swapDown      ),
         ((modm, xK_j     ), sendMessage Shrink      ),
         ((modm, xK_k     ), sendMessage Expand      ),
-        ((modm, xK_l     ), sinkAll                 ),
+        ((modm, xK_i     ), sinkAll                 ),
         ((modm, xK_Escape), kill                    ),
 
         -- Audio
