@@ -2,6 +2,7 @@
 
 filesPath=$DOTFILES_DIR/files/LaTeXTemplate
 name=
+title=
 
 # Help
 HELP() {
@@ -17,6 +18,7 @@ while [[ ! -z $1 ]]; do
             ;;
         -n)
             name=$2
+            title=$(echo $name | sed 's/_/ /g')
     esac
     shift
     shift
@@ -34,4 +36,4 @@ cd $name
 
 cp $filesPath/* .
 mv file.tex $name.tex
-sed -i 's/NAME/'"$name"'/g' $name.tex
+sed -i 's/NAME/'"$title"'/g' $name.tex
