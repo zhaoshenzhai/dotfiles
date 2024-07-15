@@ -61,6 +61,9 @@ config.set("fileselect.handler", "external")
 config.set("fileselect.single_file.command", ['kitty', 'vifm', '--choose-files={}'])
 config.set("fileselect.multiple_files.command", ['kitty', 'vifm', '--choose-files={}'])
 
+# Open MPV
+config.bind('<Meta+m>', 'hint links spawn -d mpv --ytdl-raw-options=\'sub-lang="en,eng,enUS,en-US",write-auto-sub=,write-sub=,cookies=~/.config/cookies_Z.txt,mark-watched=\' {hint-url} &')
+
 # Search engines
 c.url.searchengines = {
     'DEFAULT': 'https://duckduckgo.com/?q={}',
