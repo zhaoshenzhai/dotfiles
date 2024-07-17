@@ -19,7 +19,6 @@ while [ ! -z "$1" ]; do
             killall hugo
             cd $MATHWIKI_DIR
             rm -rf Site/.local
-            mkdir -p "Site/.local/qute"
             hugo serve -d Site/.local --disableLiveReload &
             $(qutebrowser "http://localhost:1313/mathwiki/"\
                 :'set -u localhost:1313 input.mode_override passthrough'\
