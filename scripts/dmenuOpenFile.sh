@@ -116,7 +116,7 @@ case $mainChoice in
     ;;
     "~/Movies_Shows")
         dir="$HOME/Movies_Shows"
-        file=$(find $dir -type f -printf "%T@ %Tc %p\n" | grep -e ".mp4" -e ".webm" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU "$mainChoice/")
+        file=$(find $dir -type f -printf "%T@ %Tc %p\n" | grep -e ".mp4" -e ".webm" -e ".mkv" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU "$mainChoice/")
         fileFull=$(echo "$file" | sed 's:~:/home/zhao:g')
 
         if [[ -f "$fileFull" ]]; then
