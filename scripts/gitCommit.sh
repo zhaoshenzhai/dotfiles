@@ -148,6 +148,9 @@ else
             cd $UNIVERSITY_DIR/Courses
         ;;
         "4")
+            cd $UNIVERSITY_DIR/Courses/SURA24S_Tree-like_Graphings_of_CBERs
+        ;;
+        "5")
             cd $MATHLINKS_DIR
         ;;
         *)
