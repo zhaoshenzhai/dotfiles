@@ -29,12 +29,12 @@ set conceallevel=0                                                    " no conce
 call plug#begin('~/.config/nvim/plugged')
     " Core
     Plug 'SirVer/ultisnips'                                           " snippets
-    Plug 'ncm2/ncm2'                                                " code completion
-    Plug 'roxma/nvim-yarp'                                          " framework required for ncm2
-    Plug 'ncm2/ncm2-bufword'                                        " complete words in buffer
-    Plug 'ncm2/ncm2-path'                                           " complete paths
-    Plug 'kana/vim-textobj-user'                                      " custom textObjects
     Plug 'lervag/vimtex'                                              " latex support
+    Plug 'ncm2/ncm2'                                                  " code completion
+    Plug 'ncm2/ncm2-bufword'                                          " complete words in buffer
+    Plug 'ncm2/ncm2-path'                                             " complete paths
+    Plug 'roxma/nvim-yarp'                                            " framework required for ncm2
+    Plug 'kana/vim-textobj-user'                                      " custom textObjects
 
     " Theme
     Plug 'joshdick/onedark.vim'                                       " onedark color scheme
