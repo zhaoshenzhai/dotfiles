@@ -3,6 +3,7 @@ Config
     font = "Anonymous Pro Bold 14",
     additionalFonts = [ 
 	    "Font Awesome 6 Free Solid 11",
+	    "Font Awesome 6 Free Solid 14",
         "Mononoki Nerd Font 15"
     ],
     bgColor = "#1E2127",
@@ -26,9 +27,9 @@ Config
             Run Battery [
                 "--template"      , "<acstatus>",
                 "--"              ,
-                "-o"              , "<fn=2>\xf0083</fn> <left>%",
-                "-O"              , "<fn=2>\xf0084</fn> <left>%",
-                "-i"              , "<fn=2>\xf0079</fn> Full"
+                "-o"              , "<fn=3>\xf0083</fn> <left>%",
+                "-O"              , "<fn=3>\xf0084</fn> <left>%",
+                "-i"              , "<fn=3>\xf0079</fn> Full"
             ] 50,
             Run Com "./Dropbox/Dotfiles/scripts/audioXmobar.sh" [] "volume" 5,
             Run Com "./Dropbox/Dotfiles/scripts/disk.sh" [] "disk" 600,

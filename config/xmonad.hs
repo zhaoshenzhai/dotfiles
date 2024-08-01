@@ -105,7 +105,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm,               xK_o), spawn "obsidian"                  ),
         ((modm,               xK_z), spawn "zoom"                      ),
         ((modm,               xK_s), spawn "spotify"                   ),
-        ((modm .|. shiftMask, xK_s), spawn "steam"                     ),
         ((modm .|. shiftMask, xK_d), spawn "discord"                   ),
         ((modm .|. shiftMask, xK_g), spawn "chromium --force-dark-mode"),
 
@@ -154,15 +153,15 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 ---------------------------------------------------------------------------------------------------------------------
 
 myWorkspaces = [
-    "<fn=2>\xf303  </fn>",  -- Arch
-    "<fn=2>\xf268  </fn>",  -- Browser
-    "<fn=2>\xf040  </fn>",  -- LaTeX
-    "<fn=2>\xf02d  </fn>",  -- Book1
-    "<fn=2>\xf05da  </fn>", -- Book2
-    "<fn=2>\xf0254  </fn>", -- Media
-    "<fn=2>\xf1bc  </fn>",  -- Spotify
-    "<fn=2>\xf1b6  </fn>",  -- Steam
-    "<fn=2>\xf013 </fn>"    -- Config
+    "<fn=3>\xf303  </fn>",  -- Arch
+    "<fn=3>\xf268  </fn>",  -- Browser
+    "<fn=3>\xf040  </fn>",  -- Write
+    "<fn=3>\xf02d  </fn>",  -- Book1
+    "<fn=3>\xf05da  </fn>", -- Book2
+    "<fn=2>\xe0bb   </fn>", -- Book3
+    "<fn=3>\xf0254  </fn>", -- Media
+    "<fn=3>\xf1bc  </fn>",  -- Spotify
+    "<fn=3>\xf013 </fn>"    -- Config
     ]
 
 myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..]
@@ -181,10 +180,9 @@ myManageHook = composeAll
         className =? "Chromium"    --> viewShift (myWorkspaces !! 1),
         className =? "obsidian"    --> viewShift (myWorkspaces !! 2),
         className =? "nvim"        --> viewShift (myWorkspaces !! 2),
-        className =? "mpv"         --> viewShift (myWorkspaces !! 5),
-        className =? "media"       --> viewShift (myWorkspaces !! 5),
-        className =? "Spotify"     --> viewShift (myWorkspaces !! 6),
-        className =? "steam"       --> viewShift (myWorkspaces !! 7),
+        className =? "mpv"         --> viewShift (myWorkspaces !! 6),
+        className =? "media"       --> viewShift (myWorkspaces !! 6),
+        className =? "Spotify"     --> viewShift (myWorkspaces !! 7),
         className =? "sys"         --> viewShift (myWorkspaces !! 8),
         className =? "Pavucontrol" --> viewShift (myWorkspaces !! 8)
     ]
