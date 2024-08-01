@@ -138,8 +138,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm .|. shiftMask, xK_F8), spawn "lux -a 1%"),
 
         -- Info
-        ((modm, xK_t), spawn "kitty --class sys,sys -e htop"),
-        ((modm, xK_p), spawn "pavucontrol"                  ),
+        ((modm, xK_t), spawn "kitty --class sys,sys -e htop"           ),
+        ((modm, xK_p), spawn "pavucontrol"                             ),
+        (modm, xK_b), spawn "kitty bluetoothctl; bluetoothctl power on"),
 
         -- Xmonad
         ((modm .|. shiftMask, xK_r), spawn "sudo ghc --make $DOTFILES_DIR/config/xmonad.hs -i -ilib -fforce-recomp -main-is main -dynamic -v0 -outputdir /home/zhao/.cache/xmonad/build-x86_64-linux -o /home/zhao/.cache/xmonad/xmonad-x86_64-linux; killall xmobar; xmonad --restart"),
