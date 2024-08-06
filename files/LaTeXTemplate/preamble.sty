@@ -1,20 +1,14 @@
-\usepackage[hidelinks]{hyperref}                                            % links
-\usepackage{pgfplots}\pgfplotsset{compat=1.18}                              % plots
-\usepackage{amsfonts, amsmath, amssymb, amsthm}                             % basic maths commands
-\usepackage{mathtools, mathrsfs}                                            % more maths commands
-\usepackage{graphicx}                                                       % images and other graphics
-\usepackage{geometry}                                                       % page layout
-\usepackage{tikz, tikz-3dplot, tikzpagenodes}                               % maths figures
-\usepackage{caption, subcaption}                                            % captions outside float
-\usepackage{xcolor}                                                         % more colors
-\usepackage{enumitem}                                                       % enumerate and itemize indents
-\usepackage{nicematrix}                                                     % matrices and tables
-\usepackage{xifthen}                                                        % if-then
+\usepackage{amsfonts, amsmath, amssymb, amsthm, amsrefs}
+\usepackage{tikz, tikz-3dplot, tikzpagenodes}
+\usepackage{graphicx, xcolor, geometry, mdframed}
+\usepackage{enumitem, nicematrix}
+\usepackage{mathtools, mathrsfs}
+\usepackage{caption, subcaption}
+\usepackage{bookmark, xifthen}
 
 \usetikzlibrary{matrix, positioning, patterns, decorations.markings, arrows, arrows.meta, backgrounds, math, cd}
 
-\hypersetup{colorlinks=true, allcolors=magenta}
-\definecolor{darkGreen}{HTML}{00A000}
+\hypersetup{colorlinks=true, allcolors=magenta, hidelinks}
 \newgeometry{margin = 1in}
 
 \newtheorem{theorem}{Theorem}[section]
@@ -39,3 +33,5 @@
 \theoremstyle{definition}\newtheorem*{remark*}{Remark}
 \theoremstyle{definition}\newtheorem*{notation*}{Notation}
 \theoremstyle{definition}\newtheorem*{question*}{Question}
+
+\newmdenv[topline=false, bottomline=false, rightline=false, skipabove=4pt, skipbelow=4pt, linewidth=0.75pt]{leftbar}

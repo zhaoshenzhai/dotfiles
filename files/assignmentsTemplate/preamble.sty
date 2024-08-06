@@ -1,36 +1,25 @@
-\usepackage[hidelinks]{hyperref}                                            % links
-\usepackage{pgfplots}\pgfplotsset{compat=1.18}                              % plots
-\usepackage{amsfonts, amsmath, amssymb, amsthm}                             % basic maths commands
-\usepackage{mathtools, mathrsfs}                                            % more maths commands
-\usepackage{tikz, tikz-3dplot, tikzpagenodes}                               % maths figures
-\usepackage{caption, subcaption}                                            % captions outside float
-\usepackage{graphicx, xcolor}                                               % images and other graphics
-\usepackage{geometry}                                                       % page layout
-\usepackage{enumitem}                                                       % enumerate and itemize indents
-\usepackage{nicematrix}                                                     % matrices and tables
-\usepackage{fancyhdr}                                                       % headers and footers
-\usepackage{mdframed}                                                       % framed environments
-\usepackage{xifthen}                                                        % if-then
+\usepackage{amsfonts, amsmath, amssymb, amsthm}
+\usepackage{tikz, tikz-3dplot, tikzpagenodes}
+\usepackage{graphicx, xcolor, geometry, fancyhdr, mdframed}
+\usepackage{enumitem, nicematrix}
+\usepackage{mathtools, mathrsfs}
+\usepackage{caption, subcaption}
+\usepackage{hyperref, xifthen}
 
-% TikZ Libraries
 \usetikzlibrary{matrix, positioning, patterns, decorations.markings, arrows, arrows.meta, backgrounds, math, cd}
 
-% Colors
-\definecolor{lightGray}{rgb}{0.9, 0.9, 0.9}
-\definecolor{darkGreen}{HTML}{00A000}
-\mdfdefinestyle{light}{backgroundcolor = lightGray, innertopmargin = -2pt, linewidth = 1pt}
-\hypersetup{colorlinks=true, allcolors=magenta}
+\hypersetup{colorlinks=true, allcolors=magenta, hidelinks}
+\newgeometry{margin = 0.7in, bmargin=1in, tmargin=1in}
 
-% Environments
+\definecolor{darkGreen}{HTML}{00A000}
+\definecolor{lightGray}{rgb}{0.9, 0.9, 0.9}
+
+\mdfdefinestyle{light}{backgroundcolor = lightGray, innertopmargin = -2pt, linewidth = 1pt}
 \theoremstyle{remark}\newtheorem*{solution}{Solution}
 \theoremstyle{definition}\newmdtheoremenv[style = light]{lemma}{Lemma}
 \theoremstyle{definition}\newmdtheoremenv[style = light]{exercise}{Exercise}
 \setcounter{exercise}{EXERCISE_NUMBER}
 
-% Styles
-\newgeometry{margin = 0.7in, bmargin=1in, tmargin=1in}
-\pagestyle{fancy}
-
-% Header
 \lhead{COURSE_NAME}
 \rhead{McGill University - TERM_YEAR}
+\pagestyle{fancy}
