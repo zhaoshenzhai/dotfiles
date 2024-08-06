@@ -184,6 +184,10 @@
         \newcommand{\st}{:}
         \newcommand{\tpl}[1]{\l(#1\r)}
         \newcommand{\gen}[1]{\l\langle#1\r\rangle}
+        \newcommand{\slot}{-}
+        \newcommand{\blob}{\bullet}
+        \renewcommand{\l}{\left}
+        \renewcommand{\r}{\right}
         \renewcommand{\bar}{\overline}
 
 % Math others
@@ -213,12 +217,6 @@
         \renewcommand{\epsilon}{\varepsilon}
 
     % Meta
-        \newcommand{\blob}{\bullet}
-        \newcommand{\slot}{-}
-        \newcommand{\cref}[1]{\tag{$\,#1\,$}}
+        \newcommand{\TODO}[1][]{{\color{red}\textbf{TODO}\ifthenelse{\isempty{#1}}{}{\textbf{:} #1}}}
         \newcommand{\qedin}{\tag*{$\blacksquare$}}
-        \newcommand{\exqedin}{\tag*{$\blacklozenge$}}
-        \renewcommand{\l}{\left}
-        \renewcommand{\r}{\right}
         \renewcommand{\qed}{\phantom\qedhere\hfill$\blacksquare$}
-        \renewcommand{\ref}[1]{\l(\,#1\,\r)}
