@@ -9,30 +9,24 @@
 \usetikzlibrary{matrix, positioning, patterns, decorations.markings, arrows, arrows.meta, backgrounds, math, cd}
 \tikzset{->-/.style={decoration={ markings, mark=at position #1 with {\arrow{>}}},postaction={decorate}}}
 
-\hypersetup{colorlinks=true, allcolors=magenta}
+\definecolor{darkBlue}{RGB}{0, 0, 138}
+\hypersetup{colorlinks=true, allcolors=darkBlue}
 \newgeometry{margin = 1in}
 
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{mainTheorem}{Theorem}
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{claim}[theorem]{Claim}
-\newtheorem{corollary}[theorem]{Corollary}
-\theoremstyle{definition}\newtheorem{example}[theorem]{Example}
-\theoremstyle{definition}\newtheorem{definition}[theorem]{Definition}
-\theoremstyle{definition}\newtheorem{remark}[theorem]{Remark}
-\theoremstyle{definition}\newtheorem{notation}[theorem]{Notation}
-\theoremstyle{definition}\newtheorem{question}[theorem]{Question}
-\renewcommand{\themainTheorem}{\Alph{mainTheorem}}
-\newtheorem*{theorem*}{Theorem}
-\newtheorem*{proposition*}{Proposition}
-\newtheorem*{lemma*}{Lemma}
-\newtheorem*{claim*}{Claim}
-\newtheorem*{corollary*}{Corollary}
-\theoremstyle{definition}\newtheorem*{example*}{Example}
-\theoremstyle{definition}\newtheorem*{definition*}{Definition}
-\theoremstyle{definition}\newtheorem*{remark*}{Remark}
-\theoremstyle{definition}\newtheorem*{notation*}{Notation}
-\theoremstyle{definition}\newtheorem*{question*}{Question}
+\newtheorem{mainTheorem}{Theorem}\renewcommand{\themainTheorem}{\Alph{mainTheorem}}
+\newtheorem{theorem}{Theorem}[section]\newtheorem*{theorem*}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}\newtheorem*{proposition*}{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}\newtheorem*{lemma*}{Lemma}
+\newtheorem{claim}[theorem]{Claim}\newtheorem*{claim*}{Claim}
+\newtheorem{corollary}[theorem]{Corollary}\newtheorem*{corollary*}{Corollary}
+
+\theoremstyle{definition}{
+    \newtheorem{example}[theorem]{Example}\newtheorem*{example*}{Example}
+    \newtheorem{definition}[theorem]{Definition}\newtheorem*{definition*}{Definition}
+    \newtheorem{remark}[theorem]{Remark}\newtheorem*{remark*}{Remark}
+    \newtheorem{notation}[theorem]{Notation}\newtheorem*{notation*}{Notation}
+    \newtheorem{observation}[theorem]{Observation}\newtheorem*{observation*}{Observation}
+    \newtheorem{question}[theorem]{Question}\newtheorem*{question*}{Question}
+}
 
 \newmdenv[topline=false, bottomline=false, rightline=false, skipabove=4pt, skipbelow=4pt, linewidth=0.75pt]{leftbar}
