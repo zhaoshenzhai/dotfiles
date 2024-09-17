@@ -17,24 +17,9 @@
 
 \mdfdefinestyle{light}{backgroundcolor = lightGray, innertopmargin = -2pt, linewidth = 1pt}
 \theoremstyle{definition}\newmdtheoremenv[style = light]{exercise}{Exercise}
-\setcounter{exercise}{EXERCISE_NUMBER}
-
-\newtheorem{mainTheorem}{Theorem}\renewcommand{\themainTheorem}{\Alph{mainTheorem}}
-\newtheorem{theorem}{Theorem}[section]\newtheorem*{theorem*}{Theorem}
-\newtheorem{proposition}[theorem]{Proposition}\newtheorem*{proposition*}{Proposition}
-\newtheorem{lemma}[theorem]{Lemma}\newtheorem*{lemma*}{Lemma}
-\newtheorem{claim}[theorem]{Claim}\newtheorem*{claim*}{Claim}
-\newtheorem{corollary}[theorem]{Corollary}\newtheorem*{corollary*}{Corollary}
-
 \theoremstyle{remark}\newtheorem*{solution}{Solution}
-\theoremstyle{definition}{
-    \newtheorem{example}[theorem]{Example}\newtheorem*{example*}{Example}
-    \newtheorem{definition}[theorem]{Definition}\newtheorem*{definition*}{Definition}
-    \newtheorem{remark}[theorem]{Remark}\newtheorem*{remark*}{Remark}
-    \newtheorem{notation}[theorem]{Notation}\newtheorem*{notation*}{Notation}
-    \newtheorem{observation}[theorem]{Observation}\newtheorem*{observation*}{Observation}
-    \newtheorem{question}[theorem]{Question}\newtheorem*{question*}{Question}
-}
+\theoremstyle{plain}{\newtheorem{lemma}[section]{Lemma}\newtheorem*{lemma*}{Lemma}}
+\setcounter{exercise}{0}
 
 \newmdenv[topline=false, bottomline=false, rightline=false, skipabove=4pt, skipbelow=4pt, linewidth=0.75pt]{leftbar}
 
