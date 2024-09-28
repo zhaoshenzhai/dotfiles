@@ -124,7 +124,7 @@ rm -rf mpv-reload mpv-youtube-quality mpv-scripts
 
 # Spicetify
 mkdir -p /usr/share/spicetify-cli/Themes/Dribbblish/
-sudo cp $HOME/Dropbox/Dotfiles/config/spicetify.ini /usr/share/spicetify-cli/Themes/Dribbblish/color.ini
+sudo cp $HOME/Dropbox/Dotfiles/config/spicetify.ini $HOME/.config/spicetify/Themes/Dribbblish/color.ini
 sudo chmod a+wr /opt/spotify
 sudo chmod a+wr /opt/spotify/Apps -R
 spicetify config current_theme Dribbblish
