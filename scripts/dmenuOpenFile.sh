@@ -9,7 +9,6 @@ declare -a options=(
     $(echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g')
     $(echo $DOTFILES_DIR | sed 's:/home/zhao:~:g')
     "~/Dropbox/Documents"
-    $(echo $MATHLINKS_DIR | sed 's:/home/zhao:~:g')
     "~/Dropbox/Others/Reminders"
     "~/Movies_Shows"
 )
@@ -80,29 +79,6 @@ case $mainChoice in
         if [[ -f "$dir/$file" ]]; then
             touch "$dir/$file"
             zathura "$dir/$file"
-        fi
-    ;;
-    $(echo $MATHLINKS_DIR | sed 's:/home/zhao:~:g'))
-        dir=$(echo "$mainChoice" | sed 's:~:/home/zhao:g')
-        declare -a choices=(
-            "$mainChoice/src/main.ts"
-            "$mainChoice/src/tools.ts"
-            "$mainChoice/src/preview.ts"
-            "$mainChoice/src/settings.ts"
-            "$mainChoice/README.md"
-            "$mainChoice/makefile"
-            "$mainChoice/package.json"
-            "$mainChoice/manifest.json"
-            "$mainChoice/tsconfig.json"
-            "$mainChoice/versions.json"
-            "$mainChoice/esbuild.config.mjs"
-            "$mainChoice/.gitignore"
-        )
-
-        choice=$(printf '%s\n' "${choices[@]}" | DMENU $mainChoice/)
-
-        if [[ -f $(echo "$choice" | sed 's:~:/home/zhao:g') ]]; then
-            kitty -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
         fi
     ;;
     "~/Dropbox/Others/Reminders")

@@ -3,8 +3,7 @@
 REPOS="
 MathWiki     $MATHWIKI_DIR
 Dotfiles     $DOTFILES_DIR
-Courses      $UNIVERSITY_DIR/Courses
-MathLinks    $MATHLINKS_DIR"
+Courses      $UNIVERSITY_DIR/Courses"
 
 REPOS=$(echo "$REPOS" | sed 1d)
 REPOSNUM=$(echo "$REPOS" | wc -l)
@@ -139,9 +138,6 @@ else
         ;;
         "3")
             cd $UNIVERSITY_DIR/Courses
-        ;;
-        "4")
-            cd $MATHLINKS_DIR
         ;;
         *)
             changedRepos=""
