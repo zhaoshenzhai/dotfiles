@@ -24,7 +24,7 @@ set foldmethod=manual                                                 " manual f
 set nohlsearch                                                        " no highlighting
 set noswapfile                                                        " disable creating a swap file
 set noshowmode                                                        " remove default mode display
-set conceallevel=2                                                    " no conceal
+set conceallevel=0                                                    " no conceal
 
 call plug#begin('~/.config/nvim/plugged')
     " Core

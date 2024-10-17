@@ -9,6 +9,7 @@ if ($PWD == "/home/zhao/Dropbox/MathWiki/Notes")
     autocmd filetype markdown nnoremap <F6> :w <CR>:!$MATHWIKI_DIR/.scripts/updateImages.sh -n "%"<CR><esc>
     autocmd filetype markdown setlocal syntax=tex
     autocmd filetype markdown match Underlined "\vdisplay\=\".{-}\""
+    autocmd filetype markdown set conceallevel=2
 
     autocmd filetype markdown syntax match Normal "\v\&emsp;\&emsp;" conceal
     autocmd filetype markdown syntax match Normal "\v\{\{\<\slink\sfile\=\".{-}\.md" conceal
