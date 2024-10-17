@@ -22,7 +22,7 @@ if ($PWD == "/home/zhao/Dropbox/MathWiki/Notes")
     autocmd filetype markdown syntax match Normal "\vtype\=\"" conceal
     autocmd filetype markdown syntax match Normal "\v\"\sname\=\"" conceal cchar=|
     autocmd filetype markdown syntax match Normal "\v\"\shide\=\"(\a)*" conceal
-    autocmd filetype markdown syntax match Normal "\v\"\shide\=\"(\a)*" conceal
+    autocmd filetype markdown syntax match Normal "\v\"\sid\=\".{-}\""me=e-1 conceal
 
     autocmd filetype markdown syntax match Normal "\v\{\{\<\s/env\s\>\}\}" conceal
     autocmd filetype markdown syntax match Normal "\v\"\s\>\}\}" conceal
