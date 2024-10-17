@@ -1,6 +1,7 @@
 let g:tex_flavor='latex'
 let g:vimtex_view_method='zathura'
 let g:vimtex_mappings_enabled='false'
+let g:vimtex_syntax_conceal_disable='1'
 let g:vimtex_quickfix_ignore_filters=[
     \'Underfull \\hbox (badness [0-9]*) in paragraph at lines',
     \'Overfull \\hbox ([0-9]*.[0-9]*pt too wide) in paragraph at lines',
