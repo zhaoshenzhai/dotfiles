@@ -28,7 +28,7 @@ if ($PWD == "/home/zhao/Dropbox/MathWiki/Notes")
     autocmd filetype markdown syntax match Normal "\v\"\s\>\}\}" conceal
     autocmd filetype markdown syntax match Normal "\v\<br\>" conceal
     autocmd filetype markdown syntax match Normal "\v\<div\s.{-}div\>" conceal
-    autocmd filetype markdown syntax match Normal "\v\<span.{-}blacksquare.{-}span\>" conceal cchar=◆
+    autocmd filetype markdown syntax match Normal "\v\<span.{-}blacksquare.{-}span\>" conceal cchar=▢
     autocmd filetype markdown syntax match Normal "\v\<h.{-}\>" conceal
     autocmd filetype markdown syntax match Normal "\v\</h.\>" conceal
 endif
