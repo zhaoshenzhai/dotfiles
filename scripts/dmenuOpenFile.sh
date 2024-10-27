@@ -6,9 +6,9 @@ DMENU()
 }
 
 declare -a options=(
-    $(echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g')
-    $(echo $DOTFILES_DIR | sed 's:/home/zhao:~:g')
     "~/Dropbox/Documents"
+    $(echo $DOTFILES_DIR | sed 's:/home/zhao:~:g')
+    $(echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g')
     "~/Dropbox/Others/Reminders"
     "~/Movies_Shows"
 )
@@ -16,25 +16,13 @@ declare -a options=(
 mainChoice=$(printf '%s\n' "${options[@]}" | DMENU "~/")
 
 case $mainChoice in
-    $(echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g'))
-        dir="$MATHWIKI_DIR/Notes"
-        file=$(find $dir -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/::' | DMENU $(echo "$dir/" | sed 's:/home/zhao:~:g'))
+    "~/Dropbox/Documents")
+        dir="$HOME/Dropbox/Documents"
+        file=$(find $dir -printf "%T@ %Tc %p\n" | grep ".pdf" | sort -nr | sed 's:.*/::' | DMENU $(echo "$mainChoice/" | sed 's:/home/zhao:~:g'))
 
-        cd $dir
-        echo -e "${YELLOW}$file${NC}"
         if [[ -f "$dir/$file" ]]; then
-            touch "$file"
-            kitty --class nvim,nvim -e nvim "$file" &
-        elif [[ ! -z "$file" ]]; then
-            if [[ ! $(echo "$file" | grep ".md") ]]; then
-                file=$file.md
-            fi
-
-            cd ..
-            hugo new content "$file"
-            cd "Notes"
-
-            kitty --class nvim,nvim -e nvim "$file" &
+            touch "$dir/$file"
+            zathura "$dir/$file"
         fi
     ;;
     $(echo $DOTFILES_DIR | sed 's:/home/zhao:~:g'))
@@ -72,13 +60,25 @@ case $mainChoice in
             esac
         fi
     ;;
-    "~/Dropbox/Documents")
-        dir="$HOME/Dropbox/Documents"
-        file=$(find $dir -printf "%T@ %Tc %p\n" | grep ".pdf" | sort -nr | sed 's:.*/::' | DMENU $(echo "$mainChoice/" | sed 's:/home/zhao:~:g'))
+    $(echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g'))
+        dir="$MATHWIKI_DIR/Notes"
+        file=$(find $dir -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/::' | DMENU $(echo "$dir/" | sed 's:/home/zhao:~:g'))
 
+        cd $dir
+        echo -e "${YELLOW}$file${NC}"
         if [[ -f "$dir/$file" ]]; then
-            touch "$dir/$file"
-            zathura "$dir/$file"
+            touch "$file"
+            kitty --class nvim,nvim -e nvim "$file" &
+        elif [[ ! -z "$file" ]]; then
+            if [[ ! $(echo "$file" | grep ".md") ]]; then
+                file=$file.md
+            fi
+
+            cd ..
+            hugo new content "$file"
+            cd "Notes"
+
+            kitty --class nvim,nvim -e nvim "$file" &
         fi
     ;;
     "~/Dropbox/Others/Reminders")
