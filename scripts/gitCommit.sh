@@ -1,7 +1,6 @@
 #!/bin/bash
 
 REPOS="
-MathWiki     $MATHWIKI_DIR
 Dotfiles     $DOTFILES_DIR
 Courses      $UNIVERSITY_DIR/Courses"
 
@@ -19,36 +18,14 @@ HELP() {
 }
 GETSTATUS() {
     if [[ -z $1 ]]; then
-        if [[ $repoName == "MathWiki" ]] || [[ $repoNum == 1 ]]; then
-            echo $(git -c color.status=always status ':(exclude)docs/*' ':(exclude)Site/static/allFiles.json' 2>&1)
-        else
-            echo $(git -c color.status=always status 2>&1)
-        fi
+        echo $(git -c color.status=always status 2>&1)
     else
-        if [[ $repoName == "MathWiki" ]] || [[ $repoNum == 1 ]]; then
-            echo $(git -c color.status=always status ':(exclude)docs/*' ':(exclude)Site/static/allFiles.json' | tee /dev/tty)
-        else
-            echo $(git -c color.status=always status | tee /dev/tty)
-        fi
+        echo $(git -c color.status=always status | tee /dev/tty)
     fi
 
 }
-UPDATE() {
-    repoName=$1
-    if [[ $1 == "MathWiki" ]]; then
-        cd $MATHWIKI_DIR
-        source $MATHWIKI_DIR/.scripts/publish.sh
-        source $MATHWIKI_DIR/.scripts/stats.sh -u
-        source $MATHWIKI_DIR/.scripts/stats.sh -r
-        repoNum="1"
-    fi
-}
 SHOWDIFF() {
-    if [[ $repoName == "MathWiki" ]] || [[ $repoNum == 1 ]]; then
-        SHOWDIFFHELPER "docs/*" "Site/static/allFiles.json"
-    else
-        SHOWDIFFHELPER
-    fi
+    SHOWDIFFHELPER
 
     if [[ $(echo "$diff" | tail -n1 | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g" | grep -E '\S') ]]; then
         echo ""
@@ -104,7 +81,7 @@ done
 
 # Update repos to prepare for git commands
 if [[ ! -z $specifiedRepo ]]; then
-    UPDATE $specifiedRepo
+    repoName=$specifiedRepo
 else
     # Print all repos
     while [[ -z $valid ]]; do
@@ -130,13 +107,9 @@ else
     # Process and move to selected repo
     case $repoNum in
         "1")
-            cd $MATHWIKI_DIR
-            UPDATE "MathWiki"
-        ;;
-        "2")
             cd $DOTFILES_DIR
         ;;
-        "3")
+        "2")
             cd $UNIVERSITY_DIR/Courses
         ;;
         *)
@@ -190,7 +163,7 @@ else
             fi
 
             cd $(echo "$REPOPATHS" | sed "${repoNum}q;d")
-            UPDATE $repoName
+            repoName=$repoName
         ;;
     esac
 fi

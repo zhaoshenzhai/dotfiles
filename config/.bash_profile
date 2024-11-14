@@ -20,7 +20,7 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 
 # Directories
 export DOTFILES_DIR="$HOME/Dropbox/Dotfiles"
-export MATHWIKI_DIR="$HOME/Dropbox/MathWiki"
+export MATHWIKI_DIR="$HOME/Dropbox/Projects/MathWiki_Site"
 export UNIVERSITY_DIR="$HOME/Dropbox/University"
 export MATHLINKS_DIR="$HOME/Dropbox/Projects/MathLinks"
 

@@ -17,5 +17,4 @@ done <<< "$notes"
 # Start applications
 $DOTFILES_DIR/scripts/openQute.sh -Z &
 $DOTFILES_DIR/scripts/openQute.sh -P &
-$DOTFILES_DIR/scripts/openQute.sh -M &
 spotify &

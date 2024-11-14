@@ -126,7 +126,6 @@ set statusline="  Hint: %z%= %A %10u:%-7g %15s %20d  "
 
 mark h ~/ Dropbox
 mark d ~/Dropbox/Dotfiles config
-mark m ~/Dropbox/MathWiki Notes
 mark p ~/Dropbox/Projects MathLinks
 mark u ~/Dropbox/University/Courses MATH570_Higher_Algebra_1
 

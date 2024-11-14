@@ -8,7 +8,6 @@ DMENU()
 declare -a options=(
     "~/Dropbox/Documents"
     $(echo $DOTFILES_DIR | sed 's:/home/zhao:~:g')
-    $(echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g')
     "~/Dropbox/Others/Reminders"
     "~/Movies_Shows"
 )
@@ -58,27 +57,6 @@ case $mainChoice in
                     fi
                 ;;
             esac
-        fi
-    ;;
-    $(echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g'))
-        dir="$MATHWIKI_DIR/Notes"
-        file=$(find $dir -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/::' | DMENU $(echo "$dir/" | sed 's:/home/zhao:~:g'))
-
-        cd $dir
-        echo -e "${YELLOW}$file${NC}"
-        if [[ -f "$dir/$file" ]]; then
-            touch "$file"
-            kitty --class nvim,nvim -e nvim "$file" &
-        elif [[ ! -z "$file" ]]; then
-            if [[ ! $(echo "$file" | grep ".md") ]]; then
-                file=$file.md
-            fi
-
-            cd ..
-            hugo new content "$file"
-            cd "Notes"
-
-            kitty --class nvim,nvim -e nvim "$file" &
         fi
     ;;
     "~/Dropbox/Others/Reminders")
