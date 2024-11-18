@@ -239,6 +239,30 @@ snippet ^ "hat" i
 \widehat{$1}$0
 endsnippet
 
+priority 100
+context "math()"
+snippet < "leq" i
+\leq$0
+endsnippet
+
+priority 100
+context "math()"
+snippet > "geq" i
+\geq$0
+endsnippet
+
+priority 200
+context "math()"
+snippet << "ll" i
+\ll$0
+endsnippet
+
+priority 200
+context "math()"
+snippet >> "gg" i
+\gg$0
+endsnippet
+
 context "math()"
 snippet d= "coloneqq" i
 \coloneqq
