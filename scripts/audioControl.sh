@@ -70,11 +70,11 @@ while [ ! -z "$1" ]; do
         --connect|-c)
             shift
             `bluetoothctl power on`
-            `bluetoothctl connect E8:07:BF:CB:CD:1A`
+            `bluetoothctl connect 50:C2:75:90:15:26`
             ;;
         --disconnect|-x)
             shift
-            `bluetoothctl disconnect E8:07:BF:CB:CD:1A`
+            `bluetoothctl disconnect 50:C2:75:90:15:26`
             `bluetoothctl power off`
             `playerctl -p spotify pause`
             ;;
