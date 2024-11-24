@@ -34,6 +34,6 @@ fi
 mkdir $name
 cd $name
 
-cp $filesPath/* .
+cp -r $filesPath/* .
 mv file.tex $name.tex
 sed -i 's/NAME/'"$title"'/g' $name.tex
