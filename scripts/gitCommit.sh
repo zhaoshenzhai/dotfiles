@@ -1,9 +1,10 @@
 #!/bin/bash
 
 REPOS="
-MathWiki     $MATHWIKI_DIR
 Courses      $UNIVERSITY_DIR/Courses
-Dotfiles     $DOTFILES_DIR"
+Dotfiles     $DOTFILES_DIR
+MathWiki     $MATHWIKI_DIR
+SURA-2024    $UNIVERSITY_DIR/Courses/.old/SURA24S_Tree-like_Graphings_of_CBERs"
 
 REPOS=$(echo "$REPOS" | sed 1d)
 REPOSNUM=$(echo "$REPOS" | wc -l)
@@ -129,14 +130,17 @@ else
     # Process and move to selected repo
     case $repoNum in
         "1")
+            cd $UNIVERSITY_DIR/Courses
+        ;;
+        "2")
+            cd $DOTFILES_DIR
+        ;;
+        "3")
             cd $MATHWIKI_DIR
             UPDATE "MathWiki"
         ;;
-        "2")
-            cd $UNIVERSITY_DIR/Courses
-        ;;
-        "3")
-            cd $DOTFILES_DIR
+        "4")
+            cd $UNIVERSITY_DIR/Courses/.old/SURA24S_Tree-like_Graphings_of_CBERs
         ;;
         *)
             changedRepos=""

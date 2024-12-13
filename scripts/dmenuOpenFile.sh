@@ -7,8 +7,8 @@ DMENU()
 
 declare -a options=(
     "~/Dropbox/Documents"
-    $(echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g')
     $(echo $DOTFILES_DIR | sed 's:/home/zhao:~:g')
+    $(echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g')
     "~/Dropbox/Others/Reminders"
     "~/Movies_Shows"
 )
