@@ -38,9 +38,9 @@ call plug#begin('~/.config/nvim/plugged')
     " Theme
     Plug 'joshdick/onedark.vim'                                       " onedark color scheme
     Plug 'itchyny/lightline.vim'                                      " lightline
-    Plug 'godlygeek/tabular'                                          " needed for vim-markdown
     Plug 'leafgarland/typescript-vim'                                 " syntax highlighting typescript
     Plug 'uiiaoo/java-syntax.vim'                                     " syntax highlighting java
+    Plug 'godlygeek/tabular'                                          " needed for vim-markdown
     Plug 'preservim/vim-markdown'                                     " syntax highlighting markdown
 call plug#end()
 
