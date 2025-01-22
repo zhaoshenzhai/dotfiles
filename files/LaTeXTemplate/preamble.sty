@@ -1,12 +1,12 @@
+\usepackage[T1]{fontenc}
 \usepackage{amsfonts, amsmath, amssymb, amsthm, amsrefs}
 \usepackage{tikz, tikz-3dplot, tikzpagenodes}
-\usepackage{graphicx, xcolor, geometry, mdframed}
+\usepackage{graphicx, xcolor, geometry, mdframed, titlesec}
 \usepackage{enumitem, nicematrix}
 \usepackage{mathtools, mathrsfs}
 \usepackage{caption, subcaption}
 \usepackage{bookmark, xifthen}
-\usepackage{algorithm2e, ulem}
-\usepackage{proof}
+\usepackage{algorithm2e, proof, ulem}
 
 \usetikzlibrary{matrix, positioning, patterns, decorations.markings, arrows, arrows.meta, backgrounds, math, cd, automata, graphs}
 \tikzset{->-/.style={decoration={ markings, mark=at position #1 with {\arrow{>}}},postaction={decorate}}}
@@ -36,4 +36,6 @@
     \newtheorem{question}[theorem]{Question}\newtheorem*{question*}{Question}
 }
 
-\newmdenv[topline=false, bottomline=false, rightline=false, skipabove=4pt, skipbelow=4pt, linewidth=0.75pt]{leftbar}
+\titleformat{name=\section}{}{\thetitle.}{0.8em}{\centering\scshape}
+\titleformat{name=\subsection}[runin]{}{\thetitle.}{0.5em}{\bfseries}[.]
+\titleformat{name=\subsubsection}[runin]{}{\thetitle.}{0.5em}{\itshape}[.]
