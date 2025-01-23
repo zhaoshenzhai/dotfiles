@@ -213,6 +213,36 @@ snippet table "begin table" b
 endsnippet
 
 # Typesetting
+context "math()"
+priority 100
+snippet bf "bold" i
+\mathbf{$1}$0
+endsnippet
+
+context "math()"
+priority 100
+snippet it "italics" i
+\mathit{$1}$0
+endsnippet
+
+context "math()"
+priority 100
+snippet sc "small caps" i
+\mathsc{$1}$0
+endsnippet
+
+context "math()"
+priority 100
+snippet rm "rm" i
+\mathrm{$1}$0
+endsnippet
+
+context "math()"
+priority 100
+snippet sf "sf" i
+\mathsf{$1}$0
+endsnippet
+
 snippet bf "bold" i
 \textbf{$1}$0
 endsnippet
@@ -223,4 +253,12 @@ endsnippet
 
 snippet sc "small caps" i
 \textsc{$1}$0
+endsnippet
+
+snippet rm "rm" i
+\textrm{$1}$0
+endsnippet
+
+snippet sf "sf" i
+\textsf{$1}$0
 endsnippet
