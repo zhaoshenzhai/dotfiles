@@ -140,7 +140,7 @@ else
             UPDATE "MathWiki"
         ;;
         "4")
-            cd $UNIVERSITY_DIR/Courses/.old/SURA24S_Tree-like_Graphings_of_CBERs
+            cd $UNIVERSITY_DIR/Courses/.old/SURA24S_Quasi-treeings_are_treeable
         ;;
         *)
             changedRepos=""
