@@ -15,7 +15,6 @@ set highlight-active-color  "rgba(97, 175, 239, 0.5)"
 set highlight-color         "rgba(86, 182, 194, 0.5)"
 set highlight-fg            "#00FF00"
 
-set recolor
 set recolor-keephue
 set recolor-lightcolor      "#1E2127"
 set recolor-darkcolor       "#C8C8CC"
