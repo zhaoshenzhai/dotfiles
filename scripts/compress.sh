@@ -2,7 +2,7 @@
 
 for file in "$@"; do
     echo -ne "${YELLOW}Compressing: $file${NC}\r"
-    gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dPDFSETTINGS=/printer -dNOPAUSE -dQUIET -dBATCH -sOutputFile="$file.tmp" "$file"
+    gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dPDFSETTINGS=/printer -dPDFFitPage -dNOPAUSE -dQUIET -dBATCH -sOutputFile="$file.tmp" "$file"
     
     oldSize=$(du "$file" | awk '{print $1}')
     newSize=$(du "$file.tmp" | awk '{print $1}')

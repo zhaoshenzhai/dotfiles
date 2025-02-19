@@ -99,7 +99,7 @@ yay -Syu xorg xorg-xinit xmonad xmonad-contrib xmobar xclip xdotool
 yay -Syu dmenu kitty vifm nitrogen neofetch zathura zathura-pdf-mupdf obsidian qutebrowser qutebrowser-profile-git dropbox spotify spicetify-cli
 yay -Syu pipewire pipewire-pulse pipewire-jack pamixer playerctl bluez bluez-utils alsa-utils sof-firmware alsa-ucm-conf pavucontrol
 yay -Syu ttf-font-awesome ttf-anonymous-pro adobe-source-han-sans-cn-fonts ttf-courier-prime ttf-cmu-serif ttf-mononoki-nerd noto-fonts
-yay -Syu htop tree bc scrot texlive biber python npm ghostscript pdf2svg zip unzip gpicview arandr colorpicker python-pynvim
+yay -Syu htop tree bc scrot texlive biber python npm ghostscript pdf2svg zip unzip gpicview arandr colorpicker python-pynvim ocrmypdf tesseract-data-eng
 
 # Dropbox
 gitRepos=$(find /home/zhao -type d -name .git)
