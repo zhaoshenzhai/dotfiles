@@ -62,7 +62,7 @@ config.set("fileselect.single_file.command", ['kitty', 'vifm', '--choose-files={
 config.set("fileselect.multiple_files.command", ['kitty', 'vifm', '--choose-files={}'])
 
 # Open MPV
-config.bind('<Meta+m>', 'hint links spawn -d mpv --ytdl-raw-options=\'sub-lang="en,eng,enUS,en-US",write-auto-sub=,write-sub=,cookies=~/.config/cookies_Z.txt,mark-watched=\' {hint-url} &')
+config.bind('<Ctrl+m>', 'hint links spawn -d mpv --ytdl-raw-options=\'sub-lang="en,eng,enUS,en-US",write-auto-sub=,write-sub=,cookies=~/.config/cookies_Z.txt,mark-watched=\' {hint-url} &')
 
 # Search engines
 c.url.searchengines = {
@@ -80,26 +80,26 @@ config.set("downloads.prevent_mixed_content", False)
 
 # Zoom
 config.set("zoom.default", "100%")
-config.bind('<Meta+=>', 'zoom-in')
-config.bind('<Meta+->', 'zoom-out')
-config.bind('<Meta+0>', 'zoom 100')
+config.bind('<Ctrl+=>', 'zoom-in')
+config.bind('<Ctrl+->', 'zoom-out')
+config.bind('<Ctrl+0>', 'zoom 100')
 
 # Toggle bars
-config.bind('<Meta+`>', 'config-cycle statusbar.show always never;; config-cycle tabs.show multiple never')
+config.bind('<Ctrl+`>', 'config-cycle statusbar.show always never;; config-cycle tabs.show multiple never')
 
 # Tab control
-config.bind('<Meta+u>', 'undo')
-config.bind('<Meta+h>', 'back')
-config.bind('<Meta+l>', 'forward')
-config.bind('<Meta+j>', 'tab-prev')
-config.bind('<Meta+k>', 'tab-next')
-config.bind('<Meta+w>', 'tab-close')
+config.bind('<Ctrl+u>', 'undo')
+config.bind('<Ctrl+h>', 'back')
+config.bind('<Ctrl+l>', 'forward')
+config.bind('<Ctrl+j>', 'tab-prev')
+config.bind('<Ctrl+k>', 'tab-next')
+config.bind('<Ctrl+w>', 'tab-close')
 for i in range (1, 9):
-    config.bind('<Meta+' + str(i) + '>', 'tab-select ' + str(i))
-    config.bind('<Meta+F' + str(i) + '>', 'tab-move ' + str(i))
+    config.bind('<Ctrl+' + str(i) + '>', 'tab-select ' + str(i))
+    config.bind('<Ctrl+F' + str(i) + '>', 'tab-move ' + str(i))
 
 # Restart
-config.bind('<Meta+Shift+r>', 'restart')
+config.bind('<Ctrl+Shift+r>', 'restart')
 
 # Auto load images
 config.set('content.images', True, 'chrome-devtools://*')
