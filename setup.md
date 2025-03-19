@@ -75,10 +75,10 @@
         - :PlugInstall
 
 # Touchpad
-    - `sudo nvim /usr/share/X11/xorg.conf.d/40-libinput.conf`
-    - Under "touchpad":
-        - `Option "NaturalScrolling" "true"`
-        - `Option "Tapping" "on"`
+    - `xinput list`
+    - Get id of touchpad
+    - `xinput list-props ID`
+    - `xinput set-prop device option setting`
 
 # Nitrogen
     - Add ~/.config/wallpapers
