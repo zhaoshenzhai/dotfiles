@@ -78,7 +78,7 @@
     - `xinput list`
     - Get id of touchpad
     - `xinput list-props ID`
-    - `xinput set-prop device option setting`
+    - `xinput set-prop ID OPTION SETTING`
 
 # Nitrogen
     - Add ~/.config/wallpapers
