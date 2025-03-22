@@ -19,11 +19,14 @@
 \hypersetup{colorlinks=true, allcolors=darkBlue}
 \newgeometry{margin = 0.7in, bmargin=1in, tmargin=1in}
 
-\mdfdefinestyle{light}{backgroundcolor = lightGray, innertopmargin = -2pt, linewidth = 1pt}
-\theoremstyle{definition}\newmdtheoremenv[style = light]{exercise}{Exercise}
-\theoremstyle{definition}{\newtheorem{claim}[section]{Claim}\newtheorem*{claim*}{Claim}}
+\newtheorem{lemma}[section]{Lemma}\newtheorem*{lemma*}{Lemma}
 \theoremstyle{remark}\newtheorem*{solution}{Solution}
-\theoremstyle{plain}{\newtheorem{lemma}[section]{Lemma}\newtheorem*{lemma*}{Lemma}}
+\mdfdefinestyle{light}{backgroundcolor = lightGray, innertopmargin = -2pt, linewidth = 1pt}
+\theoremstyle{definition}{
+    \newtheorem{claim}[section]{Claim}\newtheorem*{claim*}{Claim}
+    \newtheorem{definition}[section]{Definition}\newtheorem*{definition*}{Definition}
+    \newmdtheoremenv[style = light]{exercise}{Exercise}
+}
 \setcounter{exercise}{0}
 
 \newmdenv[topline=false, bottomline=false, rightline=false, skipabove=4pt, skipbelow=4pt, linewidth=0.75pt]{leftbar}
