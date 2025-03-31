@@ -124,7 +124,7 @@
     % Misc
         \newcommand{\st}{:}
         \newcommand{\tpl}[1]{\l(#1\r)}
-        \newcommand{\gen}[1]{\l\langle#1\r\rangle}
+        \newcommand{\gen}[2][]{\ifthenelse{\isempty{#1}}{}{\l}\langle#2\ifthenelse{\isempty{#1}}{}{\r}\rangle}
         \newcommand{\slot}{-}
         \newcommand{\blob}{\bullet}
         \renewcommand{\l}{\left}
