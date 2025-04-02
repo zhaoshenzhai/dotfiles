@@ -220,7 +220,7 @@ snippet axiom "begin axiom" b
 \end{axiom}
 endsnippet
 
-snippet notation "begin notation" b
+snippet not "begin notation" b
 \begin{notation}
 	$0
 \end{notation}
@@ -509,8 +509,8 @@ context "math()"
 snippet -> "right arrow" i
 \rightarrow
 endsnippet
-priority 200
 
+priority 200
 context "math()"
 snippet --> "long right arrow" i
 \longrightarrow
@@ -574,6 +574,12 @@ priority 300
 context "math()"
 snippet <==> "Long left right double arrow" i
 \Longleftrightarrow
+endsnippet
+
+priority 300
+context "math()"
+snippet ->> "Double head right arrow" i
+\twoheadrightarrow
 endsnippet
 
 # Greek/Hebrew letters
