@@ -34,6 +34,7 @@ import XMonad.Actions.CopyWindow(copy, kill1, copyToAll, killAllOtherCopies)
 import XMonad.Actions.Submap(submap)
 import XMonad.Actions.SpawnOn
 import XMonad.Actions.OnScreen
+import XMonad.Actions.SinkAll
 
 -- Utils
 import XMonad.Util.Run (spawnPipe)
@@ -108,14 +109,15 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm .|. shiftMask, xK_g), spawn "chromium --force-dark-mode"),
 
         -- Windows
-        ((modm, xK_f     ), sendMessage NextLayout  ),
-        ((modm, xK_grave ), sendMessage ToggleStruts),
-        ((modm, xK_Tab   ), windows W.focusDown     ),
-        ((modm, xK_h     ), windows W.swapUp        ),
-        ((modm, xK_l     ), windows W.swapDown      ),
-        ((modm, xK_j     ), sendMessage Shrink      ),
-        ((modm, xK_k     ), sendMessage Expand      ),
-        ((modm, xK_Escape), kill                    ),
+        ((modm              , xK_f     ), sendMessage NextLayout  ),
+        ((modm              , xK_grave ), sendMessage ToggleStruts),
+        ((modm              , xK_Tab   ), windows W.focusDown     ),
+        ((modm              , xK_h     ), windows W.swapUp        ),
+        ((modm              , xK_l     ), windows W.swapDown      ),
+        ((modm              , xK_j     ), sendMessage Shrink      ),
+        ((modm              , xK_k     ), sendMessage Expand      ),
+        ((modm .|. shiftMask, xK_s     ), sinkAll                 ),
+        ((modm              , xK_Escape), kill                    ),
 
         -- Audio
         ((modm,               xK_F1), spawn "$DOTFILES_DIR/scripts/audioControl.sh -t"  ),
