@@ -1,23 +1,23 @@
 \usepackage[T1]{fontenc}
 \usepackage{amsfonts, amsmath, amssymb, amsthm, amsrefs}
-\usepackage{tikz, tikz-3dplot, tikzpagenodes}
-\usepackage{graphicx, xcolor, geometry, mdframed, titlesec}
-\usepackage{enumitem, nicematrix}
-\usepackage{mathtools, mathrsfs, dsfont}
-\usepackage{caption, subcaption}
-\usepackage{bookmark, xifthen}
-\usepackage{algorithm2e, proof, ulem}
+\usepackage{tikz, tikz-3dplot, tikzpagenodes, graphicx, xcolor}
+\usepackage{geometry, mdframed, titlesec, caption, subcaption}
+\usepackage{mathtools, mathrsfs, dsfont, nicematrix}
+\usepackage{enumitem, bookmark, xifthen, authblk}
 
-\usetikzlibrary{matrix, positioning, patterns, decorations.markings, arrows, arrows.meta, backgrounds, math, cd, automata, graphs}
+\usetikzlibrary{matrix, positioning, patterns, decorations.markings, arrows, arrows.meta, backgrounds, math, cd}
 \tikzset{->-/.style={decoration={ markings, mark=at position #1 with {\arrow{>}}},postaction={decorate}}}
-\LinesNumbered\RestyleAlgo{ruled}
 
 \definecolor{darkBlue}{RGB}{0, 0, 138}
 \definecolor{darkGreen}{RGB}{0, 160, 0}
-\definecolor{lightGray}{rgb}{0.9, 0.9, 0.9}
+\definecolor{lightGray}{RGB}{128, 128, 128}
 
 \hypersetup{colorlinks=true, allcolors=darkBlue}
 \newgeometry{margin = 1in}
+
+\titleformat{name=\section}{}{\thetitle.}{0.8em}{\centering\scshape}
+\titleformat{name=\subsection}[runin]{}{\thetitle.}{0.5em}{\bfseries}[.]
+\titleformat{name=\subsubsection}[runin]{}{\thetitle.}{0.5em}{\itshape}[.]
 
 \newtheorem{mainTheorem}{Theorem}\renewcommand{\themainTheorem}{\Alph{mainTheorem}}
 \newtheorem{theorem}{Theorem}[section]\newtheorem*{theorem*}{Theorem}
@@ -36,6 +36,9 @@
     \newtheorem{question}[theorem]{Question}\newtheorem*{question*}{Question}
 }
 
-\titleformat{name=\section}{}{\thetitle.}{0.8em}{\centering\scshape}
-\titleformat{name=\subsection}[runin]{}{\thetitle.}{0.5em}{\bfseries}[.]
-\titleformat{name=\subsubsection}[runin]{}{\thetitle.}{0.5em}{\itshape}[.]
+\mdfdefinestyle{light}{backgroundcolor = white, innertopmargin = -2pt, linewidth = 0.75pt}
+\theoremstyle{definition}\newmdtheoremenv[style = light]{exercise}{Exercise}[subsection]
+\theoremstyle{remark}\newtheorem*{solution}{Solution}
+
+\newmdenv[topline=false, bottomline=false, rightline=false, skipabove=4pt, skipbelow=4pt, linewidth=0.75pt]{leftbar}
+\newcommand\freefootnote[1]{\begin{NoHyper}\renewcommand\thefootnote{}\footnote{#1}\addtocounter{footnote}{-1}\end{NoHyper}}
