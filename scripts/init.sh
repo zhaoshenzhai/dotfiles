@@ -1,9 +1,7 @@
 #!/bin/bash
 xset r rate 150 &
 xset b off &
-xsetroot -cursor_name left_ptr
-xinput --set-prop 11 332 1
-xinput --set-prop 11 359 1
+xsetroot -cursor_name left_ptr &
 
 # Open reminders
 cd /home/zhao/Dropbox/Others/Reminders
