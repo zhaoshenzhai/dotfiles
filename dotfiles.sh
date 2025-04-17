@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sudo sed -i 's/#Color/Color/g' /etc/pacman.conf
+
 # Connection
 res=$(curl -I archlinux.org 2>&1)
 fatal=$(echo $res | grep -o "Could not")
@@ -12,9 +14,17 @@ while [[ $fatal ]]; do
     attempt=$(($attempt + 1))
 done
 
-# Initialize
-sudo sed -i 's/#Color/Color/g' /etc/pacman.conf
-sudo pacman -Syu xorg xorg-xinit
+# Yay
+mkdir $HOME/Downloads
+cd $HOME/Downloads
+git clone https://aur.archlinux.org/yay-git
+cd yay-git
+makepkg -si
+cd ..
+rm -rf yay-git
+
+# Xinit
+yay -Syu xorg xorg-xinit xmonad xmonad-contrib xmobar xclip xdotool dmenu kitty vifm nitrogen neofetch 
 
 # Symlinks
 mkdir -p $HOME/.config
@@ -42,24 +52,11 @@ ln -sf $HOME/Dropbox/Dotfiles/config/nvim/spell/en.utf-8.add.spl $HOME/.config/n
 ln -sf $HOME/Dropbox/Dotfiles/config/nvim/init.vim $HOME/.config/nvim/init.vim
 ln -sf $HOME/Dropbox/Dotfiles/config/mpv/input.conf $HOME/.config/mpv/input.conf
 ln -sf $HOME/Dropbox/Dotfiles/config/mpv/mpv.conf $HOME/.config/mpv/mpv.conf
-ln -sf $HOME/Dropbox/Dotfiles/config/.bashrc $HOME/.bashrc
 ln -sf $HOME/Dropbox/Dotfiles/config/.bash_profile $HOME/.bash_profile
 
-# Downloads
-mkdir $HOME/Downloads
-cd $HOME/Downloads
-
-# Yay
-git clone https://aur.archlinux.org/yay-git
-cd yay-git
-makepkg -si
-cd ..
-rm -rf yay-git
-
 # Packages
-yay -Syu xmonad xmonad-contrib xmobar xclip xdotool dmeny kitty vifm nitrogen neofetch 
-yay -Syu zathura zathura-pdf-mupdf obsidian qutebrowser qutebrowser-profile-git dropbox spotify spicetify-cli
-yay -Syu pipewire pipewire-pulse pipewire-jack pamixer bluez bluez-utils alsa-utils also-ucm-conf playerctl htop tree bc python python-pynvim
+yay -Syu zathura zathura-pdf-mupdf obsidian github-cli qutebrowser qutebrowser-profile-git dropbox spotify spicetify-cli
+yay -Syu pipewire pipewire-pulse pipewire-jack pamixer bluez bluez-utils alsa-utils alsa-ucm-conf playerctl htop tree bc python python-pynvim
 yay -Syu ttf-font-awesome ttf-anonymous-pro ttf-courier-prime ttf-cmu-serif ttf-mononoki-nerd noto-fonts adobe-source-han-sans-cn-fonts
 yay -Syu scrot texlive biber npm ghostscript pdf2svg zip unzip gpicview arandr colorpicker
 
@@ -86,6 +83,9 @@ sudo make install
 sudo lux
 cd ..
 rm -rf lux
+
+# Github
+gh auth login
 
 # Spicetify
 # mkdir -p /usr/share/spicetify-cli/Themes/Dribbblish/

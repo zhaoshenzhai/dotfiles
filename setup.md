@@ -38,7 +38,7 @@
         - If pgp error, run `pacman -Sy archlinux-keyring` and retry
 
 # Mount
-    - `genfstab /mnt > /mnt/etc/fstab`
+    - `genfstab -U /mnt >> /mnt/etc/fstab`
     - `cat /mnt/etc/fstab`
     - `arch-chroot /mnt`
 
