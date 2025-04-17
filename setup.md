@@ -15,7 +15,6 @@
         - `exit`
         - `ping archlinux.org`
 
-# Partition disk
     - `lsblk`
     - Here, `DISK` stands for the main disk
     - `cfdisk /dev/DISK`
@@ -35,7 +34,7 @@
     - `swapon /dev/DISKp2`
 
 # Base packages
-    - `pacstrap /mnt linux linux-firmware sof-firmware base base-devel grub efibootmgr networkmanager xterm neovim git`
+    - `pacstrap /mnt linux linux-firmware sof-firmware base base-devel grub efibootmgr networkmanager xterm vim neovim git`
         - If pgp error, run `pacman -Sy archlinux-keyring` and retry
 
 # Mount
@@ -72,9 +71,6 @@
         - `umount -a`
         - Reboot and unplug usb
 
-# Xinit
-    - `sudo pacman -Syu xorg xorg-xinit`
-
 # Dotfiles
     - `mkdir ~/Dropbox`
     - `cd ~/Dropbox`
@@ -82,7 +78,6 @@
     - `mv dotfiles Dotfiles`
     - `cd Dotfiles`
     - `./dotfiles.sh`
-    - `bash`
 
 # Reboot, should `startx` immediately
 
