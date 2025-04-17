@@ -87,11 +87,12 @@ rm -rf lux
 gh auth login
 
 # Spicetify
-# mkdir -p /usr/share/spicetify-cli/Themes/Dribbblish/
-# sudo cp $HOME/Dropbox/Dotfiles/config/spicetify.ini $HOME/.config/spicetify/Themes/Dribbblish/color.ini
-# sudo chmod a+wr /opt/spotify
-# sudo chmod a+wr /opt/spotify/Apps -R
-# spicetify config current_theme Dribbblish
-# spicetify config color_scheme rosepine
-# spicetify config experimental_features 0
-# spicetify backup apply
+sudo mkdir -p /usr/share/spicetify-cli/Themes/Dribbblish/
+sudo mkdir -p $HOME/.config/spicetify/Themes/Dribbblish/
+sudo cp $HOME/Dropbox/Dotfiles/config/spicetify.ini $HOME/.config/spicetify/Themes/Dribbblish/color.ini
+sudo chmod a+wr /opt/spotify
+sudo chmod a+wr /opt/spotify/Apps -R
+spicetify config current_theme Dribbblish
+spicetify config color_scheme rosepine
+spicetify config experimental_features 0
+spicetify backup apply
