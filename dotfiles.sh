@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sudo sed -i 's/#Color/Color/g' /etc/pacman.conf
+
 # Connection
 res=$(curl -I archlinux.org 2>&1)
 fatal=$(echo $res | grep -o "Could not")
@@ -22,7 +24,6 @@ cd ..
 rm -rf yay-git
 
 # Xinit
-sudo sed -i 's/#Color/Color/g' /etc/pacman.conf
 yay -Syu xorg xorg-xinit xmonad xmonad-contrib xmobar xclip xdotool dmeny kitty vifm nitrogen neofetch 
 ln -sf $HOME/Dropbox/Dotfiles/config/.bashrc $HOME/.bashrc
 ln -sf $HOME/Dropbox/Dotfiles/config/.bash_profile $HOME/.bash_profile
@@ -53,7 +54,7 @@ ln -sf $HOME/Dropbox/Dotfiles/config/mpv/mpv.conf $HOME/.config/mpv/mpv.conf
 
 # Packages
 yay -Syu zathura zathura-pdf-mupdf obsidian github-cli qutebrowser qutebrowser-profile-git dropbox spotify spicetify-cli
-yay -Syu pipewire pipewire-pulse pipewire-jack pamixer bluez bluez-utils alsa-utils also-ucm-conf playerctl htop tree bc python python-pynvim
+yay -Syu pipewire pipewire-pulse pipewire-jack pamixer bluez bluez-utils alsa-utils alsa-ucm-conf playerctl htop tree bc python python-pynvim
 yay -Syu ttf-font-awesome ttf-anonymous-pro ttf-courier-prime ttf-cmu-serif ttf-mononoki-nerd noto-fonts adobe-source-han-sans-cn-fonts
 yay -Syu scrot texlive biber npm ghostscript pdf2svg zip unzip gpicview arandr colorpicker
 
