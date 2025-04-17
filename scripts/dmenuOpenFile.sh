@@ -10,7 +10,6 @@ declare -a options=(
     $(echo $DOTFILES_DIR | sed 's:/home/zhao:~:g')
     $(echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g')
     "~/Dropbox/Others/Reminders"
-    "~/Movies_Shows"
 )
 
 mainChoice=$(printf '%s\n' "${options[@]}" | DMENU "~/")
@@ -85,16 +84,6 @@ case $mainChoice in
         if [[ -f $(echo "$choice" | sed 's:~:/home/zhao:g') ]]; then
             cd "$dir"
             kitty --class reminders,reminders -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
-        fi
-    ;;
-    "~/Movies_Shows")
-        dir="$HOME/Movies_Shows"
-        file=$(find $dir -type f -printf "%T@ %Tc %p\n" | grep -e ".mp4" -e ".webm" -e ".mkv" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU "$mainChoice/")
-        fileFull=$(echo "$file" | sed 's:~:/home/zhao:g')
-
-        if [[ -f "$fileFull" ]]; then
-            touch $fileFull
-            mpv "$fileFull" --sub-file="$(echo "$fileFull" | sed 's/\.mp4/\.srt/g' | sed 's/\.webm/\.srt/g')"
         fi
     ;;
 esac

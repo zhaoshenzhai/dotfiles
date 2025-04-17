@@ -31,8 +31,8 @@ Config
                 "-O"              , "<fn=3>\xf0084</fn> <left>%",
                 "-i"              , "<fn=3>\xf0079</fn> Full"
             ] 50,
-            Run Com "./Dropbox/Dotfiles/scripts/audioXmobar.sh" [] "volume" 5,
-            Run Com "./Dropbox/Dotfiles/scripts/disk.sh" [] "disk" 600,
+            Run Com "/home/zhao/Dropbox/Dotfiles/scripts/audioXmobar.sh" [] "volume" 5,
+            Run Com "/home/zhao/Dropbox/Dotfiles/scripts/disk.sh" [] "disk" 600,
     		Run Date "<fn=1>\61463</fn> %H:%M:%S" "time" 10,
             Run Date "<fn=1>\61747</fn> %a %d/%m/%y" "date" 36000,
             Run StdinReader
