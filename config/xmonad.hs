@@ -68,10 +68,6 @@ full = renamed [Replace "Full"]
     $ mySpacing myWindowGap
     $ Full
 
-grid = renamed [Replace "Grid"]
-    $ mySpacing myWindowGap
-    $ Grid
-
 myLayoutHook =
     avoidStruts $ smartBorders myLayout
     where

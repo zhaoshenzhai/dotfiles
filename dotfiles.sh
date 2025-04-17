@@ -15,16 +15,15 @@ done
 # Initialize
 sudo sed -i 's/#Color/Color/g' /etc/pacman.conf
 sudo pacman -Syu xorg xorg-xinit
+ln -sf $HOME/Dropbox/Dotfiles/config/.bashrc $HOME/.bashrc
+ln -sf $HOME/Dropbox/Dotfiles/config/.bash_profile $HOME/.bash_profile
+rm /home/zhao/.bash_logout
 
-# Symlinks
+# Configuration
 mkdir -p $HOME/.config
 cd $HOME/.config
 mkdir -p kitty git vifm zathura xmonad qutebrowser/greasemonkey qutebrowser/bookmarks nvim/spell mpv
-cd ..
-rm /home/zhao/.bash_logout
 
-ln -sf $HOME/Dropbox/Dotfiles/config/.bashrc $HOME/.bashrc
-ln -sf $HOME/Dropbox/Dotfiles/config/.bash_profile $HOME/.bash_profile
 ln -sf $HOME/Dropbox/Dotfiles/config/kitty.conf $HOME/.config/kitty/kitty.conf
 ln -sf $HOME/Dropbox/Dotfiles/config/git.conf $HOME/.config/git/config
 ln -sf $HOME/Dropbox/Dotfiles/config/vifmrc $HOME/.config/vifm/vifmrc
@@ -42,8 +41,6 @@ ln -sf $HOME/Dropbox/Dotfiles/config/nvim/spell/en.utf-8.add.spl $HOME/.config/n
 ln -sf $HOME/Dropbox/Dotfiles/config/nvim/init.vim $HOME/.config/nvim/init.vim
 ln -sf $HOME/Dropbox/Dotfiles/config/mpv/input.conf $HOME/.config/mpv/input.conf
 ln -sf $HOME/Dropbox/Dotfiles/config/mpv/mpv.conf $HOME/.config/mpv/mpv.conf
-ln -sf $HOME/Dropbox/Dotfiles/config/.bashrc $HOME/.bashrc
-ln -sf $HOME/Dropbox/Dotfiles/config/.bash_profile $HOME/.bash_profile
 
 # Downloads
 mkdir $HOME/Downloads
@@ -75,6 +72,7 @@ sudo systemctl start --now bluetooth
 sh -c 'curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
 # Cpdf
+mkdir -p $HOME/.local/bin
 curl https://raw.githubusercontent.com/coherentgraphics/cpdf-binaries/master/Linux-Intel-64bit/cpdf -o $HOME/.local/bin/cpdf
 chmod +x $HOME/.local/bin/cpdf
 
