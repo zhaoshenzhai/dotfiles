@@ -1,11 +1,7 @@
 #!/bin/bash
-xset r rate 150 &                # Set keyboard repeat rate
-xset b off &                     # Remove beep
-xsetroot -cursor_name left_ptr   # Cursor
-
-# Start background applications
-dropbox &
-nitrogen --restore &
+xset r rate 150 &
+xset b off &
+xsetroot -cursor_name left_ptr
 
 # Open reminders
 cd /home/zhao/Dropbox/Others/Reminders
@@ -15,6 +11,8 @@ while IFS= read -r note; do
 done <<< "$notes"
 
 # Start applications
+dropbox &
+nitrogen --restore &
 $DOTFILES_DIR/scripts/openQute.sh -Z &
 $DOTFILES_DIR/scripts/openQute.sh -P &
 spotify &

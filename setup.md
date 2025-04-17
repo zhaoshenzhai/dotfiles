@@ -4,6 +4,7 @@
     - Download .iso file
     - Download rufus
     - Plug usb, power up, disable secure boot
+    - `cat /sys/firmware/efi/fw_platform_size`
 
 # Internet
     - `iwctl`
@@ -12,7 +13,6 @@
         - ` station wlan0 get-networks`
         - ` station wlan0 connect WIFI_NAME`
         - `exit`
-        - `ip addr`
         - `ping archlinux.org`
 
 # Partition disk
@@ -20,10 +20,12 @@
     - Here, `DISK` stands for the main disk
     - `cfdisk /dev/DISK`
         - Delete everything and make three partitions:
-            - 300M for boot
-            - 512M for swap
+            - 512M for boot
+            - 4G for swap
             - Rest for /
-        - Write, then type yes
+        - Write and Quit
+
+# Format disks
     - `mkfs.ext4 /dev/DISKp3`
     - `mkfs.fat -F 32 /dev/DISKp1`
     - `mkswap /dev/DISKp2`
@@ -33,31 +35,45 @@
     - `swapon /dev/DISKp2`
 
 # Base packages
-    - `pacstrap /mnt linux linux-firmware base base-devel grub efibootmgr networkmanager xterm neovim git`
+    - `pacstrap /mnt linux linux-firmware sof-firmware base base-devel grub efibootmgr networkmanager xterm neovim git`
         - If pgp error, run `pacman -Sy archlinux-keyring` and retry
 
-# Configure
+# Mount
     - `genfstab /mnt > /mnt/etc/fstab`
-    - `ln -sf /usr/share/zoneinfo/TIMEZONE /etc/localtime`
-    - `date`
-    - `systemctl enable systemd-timesyncd.service`
-    - `hwclock --systohc`
-    - `nvim /etc/locale.gen`
-        - Uncomment en_US.UTF-8
-    - `locale-gen`
-    - `nvim /etc/locale.conf`
-        - LANG=en_US.UTF-8
-    - `passwd`
-    - `useradd -m -G wheel -s /bin/bash zhao`
-    - `passwd zhao`
-    - `EDITOR=nvim visudo`
-        - Press G, find correct line, and uncomment
-    - `systemctl enable NetworkManager`
-    - `grub-install /dev/DISK`
-    - `grub-mkconfig -o /boot/grub/grub.cfg`
-    - `exit`
-    - `umount -a`
-    - Reboot and unplug usb
+    - `cat /mnt/etc/fstab`
+    - `arch-chroot /mnt`
+
+# Configurations
+    ## Timezone
+        - `ln -sf /usr/share/zoneinfo/Canada/Eastern /etc/localtime`
+        - `timedatectl set-timezone Canada/Eastern`
+        - `hwclock --systohc`
+        - `date`
+    ## System
+        - `systemctl enable systemd-timesyncd.service`
+        - `systemctl enable NetworkManager`
+    ## Localization
+        - `nvim /etc/locale.gen`
+            - Uncomment en_US.UTF-8
+        - `locale-gen`
+        - `nvim /etc/locale.conf`
+            - LANG=en_US.UTF-8
+    ## Users
+        - `nvim /etc/hostname`
+        - `passwd`
+        - `useradd -m -G wheel -s /bin/bash zhao`
+        - `passwd zhao`
+        - `EDITOR=nvim visudo`
+            - Press G, find correct line, and uncomment
+    ## Bootloader
+        - `grub-install /dev/DISK`
+        - `grub-mkconfig -o /boot/grub/grub.cfg`
+        - `exit`
+        - `umount -a`
+        - Reboot and unplug usb
+
+# Xinit
+    - `sudo pacman -Syu xorg xorg-xinit`
 
 # Dotfiles
     - `mkdir ~/Dropbox`
