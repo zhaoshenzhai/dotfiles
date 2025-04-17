@@ -16,4 +16,3 @@ nitrogen --restore &
 $DOTFILES_DIR/scripts/openQute.sh -Z &
 $DOTFILES_DIR/scripts/openQute.sh -P &
 spotify &
-discord &
