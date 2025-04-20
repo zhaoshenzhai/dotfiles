@@ -135,7 +135,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_b), spawn "kitty bluetoothctl; bluetoothctl power on"),
 
         -- Xmonad
-        ((modm, xK_r), spawn "killall xmobar; xmonad --restart"),
+        ((modm, xK_r), spawn "killall xmobar; xmonad --restart; $DOTFILES_DIR/scripts/initX.sh"),
         ((modm .|. shiftMask, xK_r), spawn "sudo ghc --make $DOTFILES_DIR/config/xmonad.hs -i -ilib -fforce-recomp -main-is main -dynamic -v0 -outputdir /home/zhao/.cache/xmonad/build-x86_64-linux -o /home/zhao/.cache/xmonad/xmonad-x86_64-linux; killall xmobar; xmonad --restart"),
         ((modm .|. shiftMask, xK_q), io exitSuccess)
     ]
@@ -163,7 +163,7 @@ myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..]
 ---------------------------------------------------------------------------------------------------------------------
 
 myStartupHook = do
-    spawnOnce "$DOTFILES_DIR/scripts/init.sh &"
+    spawnOnce "$DOTFILES_DIR/scripts/initX.sh &; $DOTFILES_DIR/scripts/initApplications.sh &"
 
 ---------------------------------------------------------------------------------------------------------------------
 

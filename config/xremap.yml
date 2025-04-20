@@ -1,0 +1,26 @@
+keymap:
+  - name: win-to-ctrl
+    remap:
+      Win-1: Ctrl-1
+      Win-2: Ctrl-2
+      Win-3: Ctrl-3
+      Win-4: Ctrl-4
+      Win-5: Ctrl-5
+      Win-6: Ctrl-6
+      Win-7: Ctrl-7
+      Win-8: Ctrl-8
+      Win-9: Ctrl-9
+      Win-j: Ctrl-j
+      Win-k: Ctrl-k
+      Win-h: Ctrl-h
+      Win-l: Ctrl-l
+      Win-w: Ctrl-w
+      Win-r: Ctrl-r
+      Win-s: Ctrl-s
+      Win-c: Ctrl-c
+      Win-v: Ctrl-v
+      Win-j: Ctrl-j
+      Win-v: Ctrl-v
+      Win-f: Ctrl-f
+      Win-d: Ctrl-d
+      Win-u: Ctrl-u
