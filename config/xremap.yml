@@ -1,3 +1,7 @@
+modmap:
+  - name: caps-to-esc
+    remap:
+      CapsLock: Esc
 keymap:
   - name: win-to-ctrl
     remap:
