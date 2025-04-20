@@ -30,5 +30,6 @@ keymap:
       Win-f: Ctrl-f
       Win-d: Ctrl-d
       Win-u: Ctrl-u
+      Win-p: Ctrl-p
       Win-KEY_KPPLUS: Ctrl-KEY_KPPLUS
       Win-KEY_MINUS: Ctrl-KEY_MINUS
