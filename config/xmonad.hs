@@ -163,7 +163,7 @@ myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..]
 ---------------------------------------------------------------------------------------------------------------------
 
 myStartupHook = do
-    spawnOnce "$DOTFILES_DIR/scripts/initX.sh &; $DOTFILES_DIR/scripts/initApplications.sh &"
+    spawnOnce "$DOTFILES_DIR/scripts/initX.sh && $DOTFILES_DIR/scripts/initApplications.sh &"
 
 ---------------------------------------------------------------------------------------------------------------------
 

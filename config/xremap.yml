@@ -24,3 +24,4 @@ keymap:
       Win-f: Ctrl-f
       Win-d: Ctrl-d
       Win-u: Ctrl-u
+      Win-p: Ctrl-p
