@@ -36,6 +36,5 @@ cd "$name"
 
 cp -r $filesPath/* .
 mv file.tex "$name.tex"
-echo -e "${YELLOW}$name${NC}"
 sed -i 's/NAME/'"$title"'/g' "$name.tex"
 sed -i 's/NAME/'"$title"'/g' "preamble.sty"
