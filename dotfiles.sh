@@ -56,7 +56,7 @@ ln -sf $HOME/Dropbox/Dotfiles/config/mpv/mpv.conf $HOME/.config/mpv/mpv.conf
 yay -Syu zathura zathura-pdf-poppler obsidian github-cli qutebrowser qutebrowser-profile-git dropbox spotify spicetify-cli
 yay -Syu pipewire pipewire-pulse pipewire-jack pamixer bluez bluez-utils alsa-utils alsa-ucm-conf playerctl htop tree bc python python-pynvim
 yay -Syu ttf-font-awesome ttf-anonymous-pro ttf-courier-prime ttf-cmu-serif ttf-mononoki-nerd noto-fonts adobe-source-han-sans-cn-fonts
-yay -Syu scrot texlive biber npm ghostscript pdf2svg zip unzip gpicview arandr colorpicker
+yay -Syu pdftk scrot texlive biber npm ghostscript pdf2svg zip unzip gpicview arandr colorpicker
 
 # Dmenu
 cd $HOME/Dropbox/Dotfiles/dmenu
