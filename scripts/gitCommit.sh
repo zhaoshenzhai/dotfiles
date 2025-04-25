@@ -3,10 +3,7 @@
 REPOS="
 Courses         $UNIVERSITY_DIR/Courses
 Dotfiles        $DOTFILES_DIR
-MathWiki        $MATHWIKI_DIR
-SURA-2023       $UNIVERSITY_DIR/Courses/.old/SURA23S_Curve_Systems_on_Surfaces
-SURA-2024       $UNIVERSITY_DIR/Courses/.old/SURA24S_Quasi-treeings_are_treeable
-COMP527-Project $UNIVERSITY_DIR/Courses/COMP527_Logic_and_Computation/Project"
+MathWiki        $MATHWIKI_DIR"
 
 REPOS=$(echo "$REPOS" | sed 1d)
 REPOSNUM=$(echo "$REPOS" | wc -l)
@@ -140,15 +137,6 @@ else
         "3")
             cd $MATHWIKI_DIR
             UPDATE "MathWiki"
-        ;;
-        "4")
-            cd $UNIVERSITY_DIR/Courses/.old/SURA24S_Quasi-treeings_are_treeable
-        ;;
-        "5")
-            cd $UNIVERSITY_DIR/Courses/.old/SURA23S_Curve_Systems_on_Surfaces
-        ;;
-        "6")
-            cd $UNIVERSITY_DIR/Courses/COMP527_Logic_and_Computation/Project
         ;;
         *)
             changedRepos=""
