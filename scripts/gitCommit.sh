@@ -36,9 +36,9 @@ UPDATE() {
     repoName=$1
     if [[ $1 == "MathWiki" ]]; then
         cd $MATHWIKI_DIR
-        source $MATHWIKI_DIR/.scripts/publish.sh
-        source $MATHWIKI_DIR/.scripts/stats.sh -u
-        source $MATHWIKI_DIR/.scripts/stats.sh -r
+        # source $MATHWIKI_DIR/.scripts/publish.sh
+        # source $MATHWIKI_DIR/.scripts/stats.sh -u
+        # source $MATHWIKI_DIR/.scripts/stats.sh -r
         repoNum="1"
     fi
 }
