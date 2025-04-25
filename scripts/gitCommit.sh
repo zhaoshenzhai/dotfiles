@@ -103,7 +103,7 @@ done
 
 # Update repos to prepare for git commands
 if [[ ! -z $specifiedRepo ]]; then
-    UPDATE =$specifiedRepo
+    UPDATE $specifiedRepo
 else
     # Print all repos
     while [[ -z $valid ]]; do
@@ -125,6 +125,7 @@ else
             clear
         fi
     done
+
 
     # Process and move to selected repo
     case $repoNum in
@@ -162,6 +163,7 @@ else
                 repoNum=1
             elif [[ $changedReposNum = 1 ]]; then
                 repoNum=$(echo "$repoIndices" | head -c 1 | tail -c 1)
+                repoName=$(echo "$changedRepoNames" | head -c 1 | tail -1)
             else
                 clear
                 while [[ -z $changedValid ]]; do
@@ -185,7 +187,7 @@ else
                     fi
                 done
                 repoNum=$(echo "$repoIndices" | head -c $changedRepo | tail -c 1)
-                repoName=$(echo "$changedRepoNames" | head -$changedRepo | tail -1)
+                repoName=$(echo "$changedRepoNames" | head -c $changedRepo | tail -1)
             fi
 
             cd $(echo "$REPOPATHS" | sed "${repoNum}q;d")
