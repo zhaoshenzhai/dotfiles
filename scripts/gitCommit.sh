@@ -3,7 +3,9 @@
 REPOS="
 Courses         $UNIVERSITY_DIR/Courses
 Dotfiles        $DOTFILES_DIR
-MathWiki        $MATHWIKI_DIR"
+MathWiki        $MATHWIKI_DIR
+SURA-2023       $UNIVERSITY_DIR/Courses/.old/SURA23S_Curve_Systems_on_Surfaces
+SURA-2024       $UNIVERSITY_DIR/Courses/.old/SURA24S_Quasi-treeings_are_treeable"
 
 REPOS=$(echo "$REPOS" | sed 1d)
 REPOSNUM=$(echo "$REPOS" | wc -l)
@@ -126,7 +128,6 @@ else
         fi
     done
 
-
     # Process and move to selected repo
     case $repoNum in
         "1")
@@ -138,6 +139,12 @@ else
         "3")
             cd $MATHWIKI_DIR
             UPDATE "MathWiki"
+        ;;
+        "4")
+            cd $UNIVERSITY_DIR/Courses/.old/SURA23S_Curve_Systems_on_Surfaces
+        ;;
+        "5")
+            cd $UNIVERSITY_DIR/Courses/.old/SURA24S_Quasi-treeings_are_treeable
         ;;
         *)
             changedRepos=""
