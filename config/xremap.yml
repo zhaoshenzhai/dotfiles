@@ -16,22 +16,42 @@ keymap:
       Win-7: Ctrl-7
       Win-8: Ctrl-8
       Win-9: Ctrl-9
+      Win-a: Ctrl-a
+      Win-b: Ctrl-b
+      Win-c: Ctrl-c
+      Win-d: Ctrl-d
+      Win-e: Ctrl-e
+      Win-f: Ctrl-f
+      Win-g: Ctrl-g
+      Win-h: Ctrl-h
+      Win-i: Ctrl-i
       Win-j: Ctrl-j
       Win-k: Ctrl-k
-      Win-h: Ctrl-h
       Win-l: Ctrl-l
-      Win-w: Ctrl-w
+      Win-m: Ctrl-m
+      Win-n: Ctrl-n
+      Win-o: Ctrl-o
+      Win-p: Ctrl-p
+      Win-q: Ctrl-q
       Win-r: Ctrl-r
       Win-s: Ctrl-s
-      Win-c: Ctrl-c
-      Win-v: Ctrl-v
-      Win-j: Ctrl-j
-      Win-v: Ctrl-v
-      Win-f: Ctrl-f
-      Win-d: Ctrl-d
+      Win-t: Ctrl-t
       Win-u: Ctrl-u
-      Win-p: Ctrl-p
-      Win-i: Ctrl-i
-      Win-o: Ctrl-o
-      Win-KEY_EQUAL: Ctrl-KEY_EQUAL
+      Win-v: Ctrl-v
+      Win-w: Ctrl-w
+      Win-x: Ctrl-x
+      Win-y: Ctrl-y
+      Win-z: Ctrl-z
+      Win-KEY_F1: Ctrl-KEY_F1
+      Win-KEY_F2: Ctrl-KEY_F2
+      Win-KEY_F3: Ctrl-KEY_F3
+      Win-KEY_F4: Ctrl-KEY_F4
+      Win-KEY_F5: Ctrl-KEY_F5
+      Win-KEY_F6: Ctrl-KEY_F6
+      Win-KEY_F7: Ctrl-KEY_F7
+      Win-KEY_F8: Ctrl-KEY_F8
+      Win-KEY_F9: Ctrl-KEY_F9
+      Win-KEY_ENTER: Ctrl-KEY_ENTER
       Win-KEY_MINUS: Ctrl-KEY_MINUS
+      Win-KEY_EQUAl: Ctrl-KEY_EQUAL
+      Win-KEY_SPACE: Ctrl-KEY_SPACE
