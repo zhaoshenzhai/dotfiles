@@ -20,12 +20,21 @@ while [ ! -z "$1" ]; do
                 :'set -u localhost:1313 input.mode_override passthrough'\
                 :'set statusbar.show never'\
                 :'mode-enter passthrough'\
-                :'bind --mode=passthrough <Meta+w> tab-close'\
-                :'bind --mode=passthrough <Meta+h> back'\
-                :'bind --mode=passthrough <Meta+l> forward'\
-                :'bind --mode=passthrough <Meta+j> tab-prev'\
-                :'bind --mode=passthrough <Meta+k> tab-next'\
-                :'bind --mode=passthrough <Meta+r> reload'\
+                :'bind --mode=passthrough k scroll up'\
+                :'bind --mode=passthrough j scroll down'\
+                :'bind --mode=passthrough j scroll down'\
+                :'bind --mode=passthrough gg scroll top'\
+                :'bind --mode=passthrough G scroll bottom'\
+                :'bind --mode=passthrough u undo'\
+                :'bind --mode=passthrough f hint'\
+                :'bind --mode=passthrough <Ctrl+u> cmd-repeat 20 scroll up'\
+                :'bind --mode=passthrough <Ctrl+d> cmd-repeat 20 scroll down'\
+                :'bind --mode=passthrough <Ctrl+w> tab-close'\
+                :'bind --mode=passthrough <Ctrl+h> back'\
+                :'bind --mode=passthrough <Ctrl+l> forward'\
+                :'bind --mode=passthrough <Ctrl+j> tab-prev'\
+                :'bind --mode=passthrough <Ctrl+k> tab-next'\
+                :'bind --mode=passthrough <Ctrl+r> reload'\
                 -s "window.title_format" "MathWiki") &
             ;;
     esac

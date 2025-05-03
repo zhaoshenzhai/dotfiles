@@ -85,12 +85,12 @@ config.bind('<Ctrl+0>', 'zoom 100')
 config.bind('<Ctrl+`>', 'config-cycle statusbar.show always never;; config-cycle tabs.show multiple never')
 
 # Tab control
-config.bind('<Ctrl+u>', 'undo')
 config.bind('<Ctrl+h>', 'back')
 config.bind('<Ctrl+l>', 'forward')
 config.bind('<Ctrl+j>', 'tab-prev')
 config.bind('<Ctrl+k>', 'tab-next')
 config.bind('<Ctrl+w>', 'tab-close')
+
 for i in range (1, 9):
     config.bind('<Ctrl+' + str(i) + '>', 'tab-select ' + str(i))
     config.bind('<Ctrl+F' + str(i) + '>', 'tab-move ' + str(i))
@@ -104,6 +104,8 @@ config.set('content.images', True, 'devtools://*')
 
 # Scrolling
 config.set('scrolling.smooth', True)
+config.bind('<Ctrl+u>', 'cmd-repeat 20 scroll up')
+config.bind('<Ctrl+d>', 'cmd-repeat 20 scroll down')
 
 # Enable javascript
 config.set('content.javascript.enabled', True, 'chrome-devtools://*')
