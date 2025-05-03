@@ -1,0 +1,130 @@
+# Math
+global !p
+def math():
+	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
+def notMath():
+	return vim.eval('vimtex#syntax#in_mathzone()') != '1'
+endglobal
+
+# Convenience
+context "math()"
+snippet dequiv "colon<=>" i
+\\,\colon\\!\Leftrightarrow
+endsnippet
+
+# Environments
+snippet eq "begin equiation" b
+\begin{equation}
+
+\end{equation}
+endsnippet
+
+snippet def "begin definition" b
+\begin{definition}
+
+$0
+
+\end{definition}
+endsnippet
+
+priority 100
+snippet thm "begin theorem" b
+\begin{theorem}
+
+$0
+
+\end{theorem}
+endsnippet
+
+snippet lem "begin lemma" b
+\begin{lemma}
+
+$0
+
+\end{lemma}
+endsnippet
+
+snippet fct "begin fact" b
+\begin{fact}\ref{$1}
+
+$0
+
+\end{fact}
+endsnippet
+
+snippet pro "begin proof" b
+\begin{proof}
+
+$0
+
+\end{proof}
+endsnippet
+
+snippet rem "begin remark" b
+\begin{remark}
+
+$0
+
+\end{remark}
+endsnippet
+
+snippet axiom "begin axiom" b
+\begin{axiom}
+
+$0
+
+\end{axiom}
+endsnippet
+
+snippet claim "begin claim" b
+\begin{claim}
+
+$0
+
+\end{claim}
+endsnippet
+
+snippet not "begin notation" b
+\begin{notation}
+
+$0
+
+\end{notation}
+endsnippet
+
+# Brackets
+context "math()"
+snippet br "{}" i
+\l\\\\{$1\r\\\\}$0
+endsnippet
+
+# Typesetting
+priority 100
+snippet bf "bold" i
+**$1**$0
+endsnippet
+
+priority 100
+snippet it "italics" i
+_$1_$0
+endsnippet
+
+priority 1000
+snippet link "hugo link" i
+{{< link file="$1" display="$2"$3 >}}
+endsnippet
+
+priority 1000
+snippet color "color" i
+<span style="color:$1">$0</span>
+endsnippet
+
+priority 1000
+snippet qed "qed" i
+<span style="float:right;">$\blacksquare$</span>
+endsnippet
+
+priority 1000
+snippet qedlem "qedlem" i
+<span style="float:right;">$\square$</span>
+endsnippet

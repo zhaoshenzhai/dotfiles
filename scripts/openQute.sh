@@ -20,8 +20,6 @@ while [ ! -z "$1" ]; do
                 :'set -u localhost:1313 input.mode_override passthrough'\
                 :'set statusbar.show never'\
                 :'mode-enter passthrough'\
-                :'bind --mode=passthrough <Ctrl+g> scroll top'\
-                :'bind --mode=passthrough <Ctrl+Shift+g> scroll bottom'\
                 :'bind --mode=passthrough <Ctrl+o> undo'\
                 :'bind --mode=passthrough <Ctrl+f> hint'\
                 :'bind --mode=passthrough <Ctrl+u> cmd-repeat 20 scroll up'\

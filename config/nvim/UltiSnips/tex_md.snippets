@@ -1,0 +1,562 @@
+# Math
+global !p
+def math():
+	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
+def notMath():
+	return vim.eval('vimtex#syntax#in_mathzone()') != '1'
+endglobal
+
+snippet $ "enter math mode" Ai
+\$$1\$$0
+endsnippet
+
+context "math()"
+snippet fr "fraction" i
+\frac{$1}{$2}$0
+endsnippet
+
+context "math()"
+snippet rt "sqrt" i
+\sqrt$2{$1}$0
+endsnippet
+
+context "math()"
+snippet der "derivative" i
+\frac{\d${1: f}}{\d${2: x}}$0
+endsnippet
+
+context "math()"
+snippet del "partial derivative" i
+\frac{\del $1}{\del $2}$0
+endsnippet
+
+context "math()"
+snippet int "integral" i
+\int_$1$3\d${2:\\mu}$0
+endsnippet
+
+# Convenience
+snippet SQ "single quotes" it
+\`$1'$0
+endsnippet
+
+context "notMath()"
+priority 100
+snippet S "appostrophe" it
+'s
+endsnippet
+
+snippet th "^th" it
+^\textrm{${1:th}}$0
+endsnippet
+
+snippet wlog "without loss of generality" i
+without loss of generality
+endsnippet
+
+snippet Wlog "Without loss of generality" i
+Without loss of generality
+endsnippet
+
+snippet tfae "the following are equivalent" i
+the following are equivalent
+endsnippet
+
+snippet Tfae "The following are equivalent" i
+The following are equivalent
+endsnippet
+
+snippet stac "suppose towards a contradiction" i
+suppose towards a contradiction
+endsnippet
+
+snippet Stac "Suppose towards a contradiction" i
+Suppose towards a contradiction
+endsnippet
+
+context "math()"
+snippet ~ "tilde" Ai
+\widetilde{$1}$0
+endsnippet
+
+context "math()"
+snippet ^ "hat" i
+\widehat{$1}$0
+endsnippet
+
+priority 200
+context "math()"
+snippet << "ll" i
+\ll$0
+endsnippet
+
+priority 200
+context "math()"
+snippet >> "gg" i
+\gg$0
+endsnippet
+
+context "math()"
+snippet d= "coloneqq" i
+\coloneqq
+endsnippet
+
+context "math()"
+snippet =d "eqqcolon" i
+\eqqcolon
+endsnippet
+
+context "math()"
+snippet ubrace "underbrace" i
+\underbrace{$1}_{\mathclap{$2}}$0
+endsnippet
+
+context "math()"
+snippet obrace "overbrace" i
+\overbrace{$1}_{\mathclap{$2}}$0
+endsnippet
+
+context "math()"
+snippet uset "underset" i
+\underset{$2}{$1}$0
+endsnippet
+
+context "math()"
+snippet oset "overset" i
+\overset{$2}{$1}$0
+endsnippet
+
+# Environments
+snippet eq "begin unnumbered equation" b
+\begin{equation*}
+	$0
+\end{equation*}
+endsnippet
+
+snippet eqn "begin numbered equation" b
+\begin{equation}
+	$0
+\end{equation}
+endsnippet
+
+# Brackets
+priority 100
+context "math()"
+snippet pa "()" i
+\l($1\r)$0
+endsnippet
+
+priority 100
+context "math()"
+snippet sq "[]" i
+\l[$1\r]$0
+endsnippet
+
+priority 200
+context "math()"
+snippet dsq "[[]]" i
+\l[\\!\l[$1\r]\\!\r]$0
+endsnippet
+
+priority 100
+context "math()"
+snippet no "||||" i
+\l\|$1\r\|$0
+endsnippet
+
+context "math()"
+snippet ba "||" i
+\l|$1\r|$0
+endsnippet
+
+context "math()"
+snippet su ".|" i
+\l.$1\r|_$0
+endsnippet
+
+context "math()"
+snippet an "<>" i
+\l\langle$1\r\rangle$0
+endsnippet
+
+context "math()"
+snippet fl "floor" i
+\l\lfloor$1\r\rfloor$0
+endsnippet
+
+context "math()"
+snippet cl "ceiling" i
+\l\lceil$1\r\rceil$0
+endsnippet
+
+# Typesetting
+context "math()"
+priority 200
+snippet bf "bold" i
+\mathbf{$1}$0
+endsnippet
+
+context "math()"
+priority 200
+snippet it "italics" i
+\mathit{$1}$0
+endsnippet
+
+context "math()"
+priority 200
+snippet rm "rm" i
+\mathrm{$1}$0
+endsnippet
+
+context "math()"
+priority 200
+snippet sf "sf" i
+\mathsf{$1}$0
+endsnippet
+
+# Arrows
+priority 100
+context "math()"
+snippet -> "right arrow" i
+\rightarrow
+endsnippet
+
+priority 200
+context "math()"
+snippet --> "long right arrow" i
+\longrightarrow
+endsnippet
+
+priority 100
+context "math()"
+snippet => "right double arrow" i
+\Rightarrow
+endsnippet
+
+priority 200
+context "math()"
+snippet ==> "long right double arrow" i
+\Longrightarrow
+endsnippet
+
+priority 100
+context "math()"
+snippet <- "left arrow" i
+\leftarrow
+endsnippet
+
+priority 200
+context "math()"
+snippet <-- "long left arrow" i
+\longleftarrow
+endsnippet
+
+priority 100
+context "math()"
+snippet <= "left double arrow" i
+\Leftarrow
+endsnippet
+
+priority 200
+context "math()"
+snippet <== "long left double arrow" i
+\Longleftarrow
+endsnippet
+
+priority 300
+context "math()"
+snippet <-> "left right arrow" i
+\leftrightarrow
+endsnippet
+
+priority 300
+context "math()"
+snippet <=> "Left right double arrow" i
+\Leftrightarrow
+endsnippet
+
+priority 300
+context "math()"
+snippet <--> "left right double arrow" i
+\longleftrightarrow
+endsnippet
+
+priority 300
+context "math()"
+snippet <==> "Long left right double arrow" i
+\Longleftrightarrow
+endsnippet
+
+priority 300
+context "math()"
+snippet ->> "Double head right arrow" i
+\twoheadrightarrow
+endsnippet
+
+# Greek/Hebrew letters
+priority 100
+context "math()"
+snippet A "alpha" i
+\alpha
+endsnippet
+
+priority 200
+context "math()"
+snippet AA "aleph" i
+\aleph
+endsnippet
+
+priority 100
+context "math()"
+snippet B "beta" i
+\beta
+endsnippet
+
+priority 200
+context "math()"
+snippet BB "beth" i
+\beth
+endsnippet
+
+priority 100
+context "math()"
+snippet G "gamma" i
+\gamma
+endsnippet
+
+priority 200
+context "math()"
+snippet GG "Gamma" i
+\Gamma
+endsnippet
+
+priority 100
+context "math()"
+snippet D "delta" i
+\delta
+endsnippet
+
+priority 200
+context "math()"
+snippet DD "Delta" i
+\Delta
+endsnippet
+
+priority 100
+context "math()"
+snippet E "epsilon" i
+\epsilon
+endsnippet
+
+priority 100
+context "math()"
+snippet P "pi" i
+\pi
+endsnippet
+
+priority 300
+context "math()"
+snippet PH "phi" i
+\phi
+endsnippet
+
+priority 300
+context "math()"
+snippet PHH "Phi" i
+\Phi
+endsnippet
+
+priority 300
+context "math()"
+snippet PS "psi" i
+\psi
+endsnippet
+
+priority 200
+context "math()"
+snippet PP "Pi" i
+\Pi
+endsnippet
+
+priority 100
+context "math()"
+snippet L "lambda" i
+\lambda
+endsnippet
+
+priority 200
+context "math()"
+snippet LL "Lambda" i
+\Lambda
+endsnippet
+
+priority 100
+context "math()"
+snippet T "tau" i
+\tau
+endsnippet
+
+priority 200
+context "math()"
+snippet TH "theta" i
+\theta
+endsnippet
+
+priority 300
+context "math()"
+snippet TTH "Theta" i
+\Theta
+endsnippet
+
+priority 100
+context "math()"
+snippet I "iota" i
+\iota
+endsnippet
+
+priority 100
+context "math()"
+snippet N "eta" i
+\eta
+endsnippet
+
+priority 100
+context "math()"
+snippet M "mu" i
+\mu
+endsnippet
+
+priority 100
+context "math()"
+snippet K "kappa" i
+\kappa
+endsnippet
+
+priority 100
+context "math()"
+snippet S "sigma" i
+\sigma
+endsnippet
+
+priority 200
+context "math()"
+snippet SS "Sigma" i
+\Sigma
+endsnippet
+
+priority 100
+context "math()"
+snippet R "rho" i
+\rho
+endsnippet
+
+priority 100
+context "math()"
+snippet W "omega" i
+\omega
+endsnippet
+
+priority 200
+context "math()"
+snippet WW "Omega" i
+\Omega
+endsnippet
+
+priority 100
+context "math()"
+snippet C "chi" i
+\chi
+endsnippet
+
+priority 200
+context "math()"
+snippet CC "continuum" i
+\mathfrak{c}
+endsnippet
+
+context "math()"
+snippet V "nu" i
+\nu
+endsnippet
+
+priority 100
+context "math()"
+snippet X "xi" i
+\xi
+endsnippet
+
+priority 200
+context "math()"
+snippet XX "Xi" i
+\Xi
+endsnippet
+
+context "math()"
+snippet Z "zeta" i
+\zeta
+endsnippet
+
+# Spaces with text
+snippet 4s "4 spaces" i
+\ \ \ \ $0
+endsnippet
+
+snippet 8s "8 spaces" i
+\ \ \ \ \ \ \ \ $0
+endsnippet
+
+snippet 4t "4 spaces with text" i
+\ \ \ \ \textrm{$1}\ \ \ \ $0
+endsnippet
+
+snippet 8t "8 spaces with text" i
+\ \ \ \ \ \ \ \ \textrm{$1}\ \ \ \ \ \ \ \ $0
+endsnippet
+
+snippet 4it "4 spaces with text (italic)" i
+\ \ \ \ \mathit{$1}\ \ \ \ $0
+endsnippet
+
+snippet 8it "8 spaces with text (italic)" i
+\ \ \ \ \ \ \ \ \mathit{$1}\ \ \ \ \ \ \ \ $0
+endsnippet
+
+snippet 4a "4 spaces with and" i
+\ \ \ \ \textrm{and}\ \ \ \ $0
+endsnippet
+
+snippet 8a "8 spaces with and" i
+\ \ \ \ \ \ \ \ \textrm{and}\ \ \ \ \ \ \ \ $0
+endsnippet
+
+snippet 4ia "4 spaces with and (italic)" i
+\ \ \ \ \mathit{and}\ \ \ \ $0
+endsnippet
+
+snippet 8ia "8 spaces with and (italic)" i
+\ \ \ \ \ \ \ \ \mathit{and}\ \ \ \ \ \ \ \ $0
+endsnippet
+
+snippet 4e "4 spaces with equivalence" i
+\ \ \ \ \Leftrightarrow\ \ \ \ $0
+endsnippet
+
+snippet 8e "8 spaces with equivalence" i
+\ \ \ \ \ \ \ \ \Leftrightarrow\ \ \ \ \ \ \ \ $0
+endsnippet
+
+snippet 4de "4 spaces with definitional equivalence" i
+\ \ \ \ \,\colon\!\!\!\!\Leftrightarrow\ \ \ \ $0
+endsnippet
+
+snippet 8de "8 spaces with definitional equivalence" i
+\ \ \ \ \ \ \ \ \,\colon\!\!\!\!\Leftrightarrow\ \ \ \ \ \ \ \ $0
+endsnippet
+
+snippet 4i "4 spaces with implication" i
+\ \ \ \ \Rightarrow\ \ \ \ $0
+endsnippet
+
+snippet 8i "8 spaces with implication" i
+\ \ \ \ \ \ \ \ \Rightarrow\ \ \ \ \ \ \ \ $0
+endsnippet
