@@ -52,6 +52,7 @@ keymap:
       Win-KEY_F8: Ctrl-KEY_F8
       Win-KEY_F9: Ctrl-KEY_F9
       Win-KEY_ENTER: Ctrl-KEY_ENTER
+      Win-KEY_GRAVE: Ctrl-KEY_GRAVE
       Win-KEY_MINUS: Ctrl-KEY_MINUS
       Win-KEY_EQUAl: Ctrl-KEY_EQUAL
       Win-KEY_SPACE: Ctrl-KEY_SPACE
