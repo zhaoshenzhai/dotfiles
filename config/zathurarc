@@ -29,7 +29,7 @@ set dbus-service            true
 set synctex                 true
 
 set selection-clipboard     clipboard
-set selection-notification false
+set selection-notification  false
 
 map = feedkeys              "+"
 map ` toggle_statusbar
