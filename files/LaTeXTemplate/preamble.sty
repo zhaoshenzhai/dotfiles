@@ -42,4 +42,4 @@
 }
 
 \newmdenv[topline=false, bottomline=false, rightline=false, skipabove=4pt, skipbelow=4pt, linewidth=0.75pt]{leftbar}
-\newcommand\freefootnote[1]{\renewcommand\thefootnote{}\footnote{#1}\addtocounter{footnote}{-1}}
+\newcommand\freefootnote[1]{{\renewcommand\thefootnote{}\footnote{#1}\addtocounter{footnote}{-1}}}

@@ -1,3 +1,11 @@
+# Math
+global !p
+def math():
+	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
+def notMath():
+	return vim.eval('vimtex#syntax#in_mathzone()') != '1'
+endglobal
+
 # Convenience
 snippet SQ "single quotes" it
 \`$1'$0
@@ -90,6 +98,13 @@ snippet exa "begin example" b
 \begin{example}
 	$0
 \end{example}
+endsnippet
+
+priority 100
+snippet fct "begin fact" b
+\begin{fact}
+	$0
+\end{fact}
 endsnippet
 
 snippet que "begin question" b
