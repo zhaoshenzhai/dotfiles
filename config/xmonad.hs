@@ -136,7 +136,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
         -- Xmonad
         ((modm, xK_r), spawn "killall xmobar; xmonad --restart; $DOTFILES_DIR/scripts/initX.sh"),
-        ((modm .|. shiftMask, xK_r), spawn "sudo ghc --make $DOTFILES_DIR/config/xmonad.hs -i -ilib -fforce-recomp -main-is main -dynamic -v0 -outputdir /home/zhao/.cache/xmonad/build-x86_64-linux -o /home/zhao/.cache/xmonad/xmonad-x86_64-linux; killall xmobar; xmonad --restart"),
+        ((modm .|. shiftMask, xK_r), spawn "sudo ghc --make $DOTFILES_DIR/config/xmonad.hs -i -ilib -fforce-recomp -main-is main -dynamic -v0 -outputdir /home/zhao/.config/xmonad/build-x86_64-linux -o /home/zhao/.config/xmonad/xmonad-x86_64-linux; killall xmobar; xmonad --restart"),
         ((modm .|. shiftMask, xK_q), io exitSuccess)
     ]
 
