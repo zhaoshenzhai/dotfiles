@@ -1,5 +1,5 @@
-\usepackage[T1]{fontenc}
-\usepackage{amsfonts, amsmath, amssymb, amsthm, amsrefs}
+\usepackage{fontenc, mlmodern}
+\usepackage{amsfonts, amsmath, amssymb, amsthm}
 \usepackage{mathtools, mathrsfs, dsfont, nicematrix}
 \usepackage{tikz, tikz-3dplot, tikzpagenodes, graphicx, xcolor}
 \usepackage{geometry, mdframed, titlesec, fancyhdr, caption, subcaption}
@@ -11,8 +11,8 @@
 \definecolor{darkBlue}{RGB}{0, 0, 138}
 \definecolor{darkGreen}{RGB}{0, 160, 0}
 \definecolor{lightGray}{RGB}{128, 128, 128}
-
 \hypersetup{colorlinks=true, allcolors=darkBlue}
+
 \newgeometry{margin = 1in}
 \pagestyle{fancy}\fancyhead{}\fancyfoot{}\headsep=15pt\renewcommand{\headrulewidth}{0pt}
 \fancyhead[RO, LE]{\scriptsize\thepage}
@@ -22,6 +22,9 @@
 \titleformat{name=\section}{}{\thetitle.}{0.8em}{\centering\scshape}
 \titleformat{name=\subsection}[runin]{}{\thetitle.}{0.5em}{\bfseries}[.]
 \titleformat{name=\subsubsection}[runin]{}{\thetitle.}{0.5em}{\itshape}[.]
+
+\usepackage[style=alphabetic-verb, sorting=nty]{biblatex}
+\addbibresource{refs.bib}
 
 \newtheorem{mainTheorem}{Theorem}\renewcommand{\themainTheorem}{\Alph{mainTheorem}}
 \newtheorem{theorem}{Theorem}[section]\newtheorem*{theorem*}{Theorem}
@@ -39,6 +42,7 @@
     \newtheorem{observation}[theorem]{Observation}\newtheorem*{observation*}{Observation}
     \newtheorem{axiom}[theorem]{Axiom}\newtheorem*{axiom*}{Axiom}
     \newtheorem{question}[theorem]{Question}\newtheorem*{question*}{Question}
+    \newtheorem{fact}[theorem]{Fact}\newtheorem*{fact*}{Fact}
 }
 
 \newmdenv[topline=false, bottomline=false, rightline=false, skipabove=4pt, skipbelow=4pt, linewidth=0.75pt]{leftbar}
