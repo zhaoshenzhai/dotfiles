@@ -45,7 +45,6 @@ ln -sf $HOME/Dropbox/Dotfiles/config/qutebrowser/config.py $HOME/.config/qutebro
 ln -sf $HOME/Dropbox/Dotfiles/config/qutebrowser/quickmarks $HOME/.config/qutebrowser/quickmarks
 ln -sf $HOME/Dropbox/Dotfiles/config/qutebrowser/bookmarks/urls $HOME/.config/qutebrowser/bookmarks/urls
 ln -sf $HOME/Dropbox/Dotfiles/config/qutebrowser/scripts/cssGithub.js $HOME/.config/qutebrowser/greasemonkey/cssGithub.js
-ln -sf $HOME/Dropbox/Dotfiles/config/qutebrowser/scripts/ytAdBlock.js.js $HOME/.config/qutebrowser/greasemonkey/ytAdBlock.js
 ln -sf $HOME/Dropbox/Dotfiles/config/nvim/UltiSnips/ $HOME/.config/nvim/UltiSnips
 ln -sf $HOME/Dropbox/Dotfiles/config/nvim/spell/en.utf-8.add $HOME/.config/nvim/spell/en.utf-8.add
 ln -sf $HOME/Dropbox/Dotfiles/config/nvim/spell/en.utf-8.add.spl $HOME/.config/nvim/spell/en.utf-8.add.spl
