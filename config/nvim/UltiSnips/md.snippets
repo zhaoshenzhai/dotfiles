@@ -141,40 +141,33 @@ snippet it "italics" i
 _$1_$0
 endsnippet
 
-priority 1000
 snippet link "hugo link" i
 {{< link file="$1" display="$2"$3 >}}
 endsnippet
 
-priority 1000
 context "notMath()"
 snippet br "space" i
 <div class="space"></div>
 endsnippet
 
-priority 2000
 snippet >> "new paragraph" i
 <br>
 
 &emsp;&emsp;$0
 endsnippet
 
-priority 1000
 snippet > "indent" i
 &emsp;&emsp;$0
 endsnippet
 
-priority 1000
 snippet color "color" i
 <span style="color:${1:red}">$0</span>
 endsnippet
 
-priority 1000
 snippet qed "qed" i
 <span style="float:right;">$\blacksquare$</span>
 endsnippet
 
-priority 1000
 snippet qedlem "qedlem" i
 <span style="float:right;">$\square$</span>
 endsnippet
