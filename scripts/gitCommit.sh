@@ -3,7 +3,8 @@
 REPOS="
 Courses         $UNIVERSITY_DIR/Courses
 Dotfiles        $DOTFILES_DIR
-MathWiki        $MATHWIKI_DIR"
+MathWiki        $MATHWIKI_DIR
+Ergodic         $UNIVERSITY_DIR/Courses/ERGO25S_Reading_group_on_Ergodic_Theory"
 
 REPOS=$(echo "$REPOS" | sed 1d)
 REPOSNUM=$(echo "$REPOS" | wc -l)
@@ -137,6 +138,9 @@ else
         "3")
             cd $MATHWIKI_DIR
             UPDATE "MathWiki"
+        ;;
+        "4")
+            cd $UNIVERSITY_DIR/Courses/ERGO25S_Reading_group_on_Ergodic_Theory
         ;;
         *)
             changedRepos=""
