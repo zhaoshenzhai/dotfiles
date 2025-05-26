@@ -124,10 +124,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm,               xK_d ), spawn "$DOTFILES_DIR/scripts/audioControl.sh -x"  ),
 
         -- Brightness
-        ((modm,               xK_F7), spawn "lux -s 5%"),
-        ((modm,               xK_F8), spawn "lux -a 5%"),
-        ((modm .|. shiftMask, xK_F7), spawn "lux -s 1%"),
-        ((modm .|. shiftMask, xK_F8), spawn "lux -a 1%"),
+        ((modm,               xK_F7), spawn "sudo lux -s 5%"),
+        ((modm,               xK_F8), spawn "sudo lux -a 5%"),
+        ((modm .|. shiftMask, xK_F7), spawn "sudo lux -s 1%"),
+        ((modm .|. shiftMask, xK_F8), spawn "sudo lux -a 1%"),
 
         -- Info
         ((modm, xK_t), spawn "kitty --class sys,sys -e htop"            ),

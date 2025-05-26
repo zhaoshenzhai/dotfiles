@@ -24,7 +24,7 @@ cd ..
 rm -rf yay-git
 
 # Xinit
-yay -Syu xorg xorg-xinit xmonad xmonad-contrib xmobar xclip xdotool dmeny kitty vifm nitrogen neofetch 
+yay -Syu xorg xorg-xinit xmonad xmonad-contrib xmobar xclip xdotool dmenu kitty vifm nitrogen neofetch
 ln -sf $HOME/Dropbox/Dotfiles/config/.bashrc $HOME/.bashrc
 ln -sf $HOME/Dropbox/Dotfiles/config/.bash_profile $HOME/.bash_profile
 rm /home/zhao/.bash_logout
@@ -32,7 +32,7 @@ rm /home/zhao/.bash_logout
 # Configuration
 mkdir -p $HOME/.config
 cd $HOME/.config
-mkdir -p kitty git vifm zathura xmonad qutebrowser/greasemonkey qutebrowser/bookmarks nvim/spell mpv
+mkdir -p kitty git vifm zathura xmonad xremap qutebrowser/greasemonkey qutebrowser/bookmarks nvim/spell mpv
 
 ln -sf $HOME/Dropbox/Dotfiles/config/kitty.conf $HOME/.config/kitty/kitty.conf
 ln -sf $HOME/Dropbox/Dotfiles/config/git.conf $HOME/.config/git/config
@@ -40,6 +40,7 @@ ln -sf $HOME/Dropbox/Dotfiles/config/vifmrc $HOME/.config/vifm/vifmrc
 ln -sf $HOME/Dropbox/Dotfiles/config/zathurarc $HOME/.config/zathura/zathurarc
 ln -sf $HOME/Dropbox/Dotfiles/config/xmonad.hs $HOME/.config/xmonad/xmonad.hs
 ln -sf $HOME/Dropbox/Dotfiles/config/xmobarrc $HOME/.config/xmonad/xmobarrc
+ln -sf $HOME/Dropbox/Dotfiles/config/xremap.yml $HOME/.config/xremap/config.yml
 ln -sf $HOME/Dropbox/Dotfiles/config/mimeapps.list $HOME/.config/mimeapps.list
 ln -sf $HOME/Dropbox/Dotfiles/config/qutebrowser/config.py $HOME/.config/qutebrowser/config.py
 ln -sf $HOME/Dropbox/Dotfiles/config/qutebrowser/quickmarks $HOME/.config/qutebrowser/quickmarks
@@ -53,10 +54,7 @@ ln -sf $HOME/Dropbox/Dotfiles/config/mpv/input.conf $HOME/.config/mpv/input.conf
 ln -sf $HOME/Dropbox/Dotfiles/config/mpv/mpv.conf $HOME/.config/mpv/mpv.conf
 
 # Packages
-yay -Syu zathura zathura-pdf-poppler obsidian github-cli qutebrowser qutebrowser-profile-git dropbox spotify spicetify-cli
-yay -Syu pipewire pipewire-pulse pipewire-jack pamixer bluez bluez-utils alsa-utils alsa-ucm-conf playerctl htop tree bc python python-pynvim
-yay -Syu ttf-font-awesome ttf-anonymous-pro ttf-courier-prime ttf-cmu-serif ttf-mononoki-nerd noto-fonts adobe-source-han-sans-cn-fonts
-yay -Syu pdftk scrot texlive biber npm ghostscript pdf2svg zip unzip gpicview arandr colorpicker
+yay -Syu zathura zathura-pdf-poppler github-cli qutebrowser qutebrowser-profile-git dropbox spotify spicetify-cli pipewire pipewire-pulse pipewire-jack pamixer bluez bluez-utils alsa-utils alsa-ucm-conf playerctl htop tree bc python python-pynvim ttf-font-awesome ttf-anonymous-pro ttf-courier-prime ttf-cmu-serif ttf-mononoki-nerd noto-fonts adobe-source-han-sans-cn-fonts pdftk scrot texlive biber npm ghostscript pdf2svg zip unzip gpicview
 
 # Dmenu
 cd $HOME/Dropbox/Dotfiles/dmenu
@@ -82,9 +80,6 @@ sudo make install
 sudo lux
 cd ..
 rm -rf lux
-
-# Github
-gh auth login
 
 # Spicetify
 sudo mkdir -p /usr/share/spicetify-cli/Themes/Dribbblish/

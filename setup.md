@@ -98,6 +98,9 @@
     - zo
     - :sort N
 
+# Github
+    - `gh auth login`
+
 # Vim-markdown
     - `nvim ~/.config/nvim/plugged/vim-markdown/ftplugin/markdown.vim`
         - Comment out lines on code blocks
