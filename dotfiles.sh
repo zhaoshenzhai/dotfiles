@@ -24,7 +24,7 @@ cd ..
 rm -rf yay-git
 
 # Xinit
-yay -Syu xorg xorg-xinit xmonad xmonad-contrib xmobar xclip xdotool dmenu kitty vifm nitrogen neofetch
+yay -Syu xorg xorg-xinit xmonad xmonad-contrib xmobar xclip xdotool xremap dmenu kitty vifm nitrogen neofetch
 ln -sf $HOME/Dropbox/Dotfiles/config/.bashrc $HOME/.bashrc
 ln -sf $HOME/Dropbox/Dotfiles/config/.bash_profile $HOME/.bash_profile
 rm /home/zhao/.bash_logout
