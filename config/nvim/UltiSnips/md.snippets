@@ -130,6 +130,12 @@ snippet br "{}" i
 \l\\\\{$1\r\\\\}$0
 endsnippet
 
+priority 200
+context "math()"
+snippet dsq "[[]]" i
+\l[\\!\l[$1\r]\\!\r]$0
+endsnippet
+
 # Typesetting
 priority 100
 snippet bf "bold" i
