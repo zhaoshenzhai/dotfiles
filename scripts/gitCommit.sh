@@ -4,7 +4,8 @@ REPOS="
 Courses         $UNIVERSITY_DIR/Courses
 Dotfiles        $DOTFILES_DIR
 MathWiki        $MATHWIKI_DIR
-Ergodic         $UNIVERSITY_DIR/Courses/ERGO25S_Reading_group_on_Ergodic_Theory"
+Ergodic         $UNIVERSITY_DIR/Courses/ERGO25S_Reading_group_on_Ergodic_Theory
+SURA-25         $UNIVERSITY_DIR/Courses/SURA25S_Pro-C_topologies_on_free_groups"
 
 REPOS=$(echo "$REPOS" | sed 1d)
 REPOSNUM=$(echo "$REPOS" | wc -l)
@@ -141,6 +142,9 @@ else
         ;;
         "4")
             cd $UNIVERSITY_DIR/Courses/ERGO25S_Reading_group_on_Ergodic_Theory
+        ;;
+        "5")
+            cd $UNIVERSITY_DIR/Courses/SURA25S_Pro-C_topologies_on_free_groups
         ;;
         *)
             changedRepos=""
