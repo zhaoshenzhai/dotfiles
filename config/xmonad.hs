@@ -83,8 +83,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_e        ), spawn "kitty -e vifm ~/ ~/Dropbox -c normal\\ ggvGgA"),
 
         -- Browser
-        ((modm,               xK_w), spawn "qutebrowser-profile --load 'Z'"),
-        ((modm .|. shiftMask, xK_w), spawn "qutebrowser-profile --load 'P'"),
+        ((modm, xK_w), spawn "qutebrowser-profile --load 'Z' https://calendar.google.com https://mail.google.com https://outlook.office.com"),
+        ((modm .|. shiftMask, xK_w), spawn "qutebrowser-profile --load 'P' https://web.whatsapp.com https://www.instagram.com/direct/inbox https://discord.com/channels/@me"),
 
         -- Scripts
         ((modm, xK_g), spawn "kitty $DOTFILES_DIR/scripts/gitCommit.sh"),
