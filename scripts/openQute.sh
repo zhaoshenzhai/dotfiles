@@ -15,7 +15,7 @@ while [ ! -z "$1" ]; do
             killall hugo > /dev/null 2>&1
             cd $MATHWIKI_DIR
             rm -rf Site/.local
-            hugo serve -d Site/.local --disableLiveReload > /dev/null 2>&1 &
+            hugo serve -d Site/.local --disableLiveReload --noBuildLock > /dev/null 2>&1 &
 
             name=
             if [[ ! -z "$1" ]]; then
