@@ -33,26 +33,7 @@ case $mainChoice in
             touch "$file"
             name=$(echo "$file" | sed 's/.md//g')
             kitty --class nvim,nvim -e nvim "$file" &
-
-            cd $MATHWIKI_DIR
-            killall hugo
-            rm -rf Site/.local
-            hugo serve -d Site/.local --disableLiveReload &
-            $(qutebrowser-profile --load 'M' http://localhost:1313/mathwiki/$name \
-                :'set -u localhost:1313 input.mode_override passthrough'\
-                :'set statusbar.show never'\
-                :'mode-enter passthrough'\
-                :'bind --mode=passthrough <Ctrl+o> undo'\
-                :'bind --mode=passthrough <Ctrl+f> hint'\
-                :'bind --mode=passthrough <Ctrl+u> cmd-repeat 20 scroll up'\
-                :'bind --mode=passthrough <Ctrl+d> cmd-repeat 20 scroll down'\
-                :'bind --mode=passthrough <Ctrl+w> tab-close'\
-                :'bind --mode=passthrough <Ctrl+h> back'\
-                :'bind --mode=passthrough <Ctrl+l> forward'\
-                :'bind --mode=passthrough <Ctrl+j> tab-prev'\
-                :'bind --mode=passthrough <Ctrl+k> tab-next'\
-                :'bind --mode=passthrough <Ctrl+r> reload'\
-                -s "window.title_format" "MathWiki") &
+            $DOTFILES_DIR/scripts/openQute.sh -M "$name"
         fi
     ;;
     $(echo $DOTFILES_DIR | sed 's:/home/zhao:~:g'))
