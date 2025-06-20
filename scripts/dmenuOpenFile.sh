@@ -31,14 +31,8 @@ case $mainChoice in
         echo -e "${YELLOW}$file${NC}"
         if [[ -f "$dir/$file" ]]; then
             touch "$file"
-            kitty --class nvim,nvim -e nvim "$file" &
-        elif [[ ! -z "$file" ]]; then
-            if [[ ! $(echo "$file" | grep ".md") ]]; then
-                file=$file.md
-            fi
-            cd ..
-            hugo new content "$file"
-            cd "Notes"
+            name=$(echo "$file" | sed 's/.md//g')
+            qutebrowser-profile --load 'M' http://localhost:1313/mathwiki/$name
             kitty --class nvim,nvim -e nvim "$file" &
         fi
     ;;

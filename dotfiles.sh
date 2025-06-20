@@ -44,6 +44,7 @@ ln -sf $HOME/Dropbox/Dotfiles/config/xremap.yml $HOME/.config/xremap/config.yml
 ln -sf $HOME/Dropbox/Dotfiles/config/mimeapps.list $HOME/.config/mimeapps.list
 ln -sf $HOME/Dropbox/Dotfiles/config/qutebrowser/config.py $HOME/.config/qutebrowser/config.py
 ln -sf $HOME/Dropbox/Dotfiles/config/qutebrowser/quickmarks $HOME/.config/qutebrowser/quickmarks
+ln -sf $HOME/Dropbox/Dotfiles/config/qutebrowser/profile.yaml $HOME/.config/qutebrowser-profile.yaml
 ln -sf $HOME/Dropbox/Dotfiles/config/qutebrowser/bookmarks/urls $HOME/.config/qutebrowser/bookmarks/urls
 ln -sf $HOME/Dropbox/Dotfiles/config/qutebrowser/scripts/cssGithub.js $HOME/.config/qutebrowser/greasemonkey/cssGithub.js
 ln -sf $HOME/Dropbox/Dotfiles/config/nvim/UltiSnips/ $HOME/.config/nvim/UltiSnips

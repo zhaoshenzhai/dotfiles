@@ -1,0 +1,14 @@
+profiles:
+- args:
+  - https://calendar.google.com/calendar
+  - https://mail.google.com/mail/u/0
+  - https://outlook.office.com/mail
+  name: Z
+- args:
+  - https://web.whatsapp.com
+  - https://www.instagram.com/direct/inbox
+  - https://discord.com/channels/@me
+  name: P
+- args:
+  - http://localhost:1313/mathwiki/topological_space
+  name: M

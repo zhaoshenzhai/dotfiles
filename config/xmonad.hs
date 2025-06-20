@@ -83,9 +83,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_e        ), spawn "kitty -e vifm ~/ ~/Dropbox -c normal\\ ggvGgA"),
 
         -- Browser
-        ((modm,               xK_w), spawn "$DOTFILES_DIR/scripts/openQute.sh -Z"),
-        ((modm .|. shiftMask, xK_w), spawn "$DOTFILES_DIR/scripts/openQute.sh -P"),
-        ((modm .|. shiftMask, xK_m), spawn "$DOTFILES_DIR/scripts/openQute.sh -M"),
+        ((modm,               xK_w), spawn "qutebrowser-profile --load 'Z'"),
+        ((modm .|. shiftMask, xK_w), spawn "qutebrowser-profile --load 'P'"),
 
         -- Scripts
         ((modm, xK_g), spawn "kitty $DOTFILES_DIR/scripts/gitCommit.sh"),

@@ -10,7 +10,6 @@ done <<< "$notes"
 # Applications
 dropbox &
 nitrogen --restore &
-$DOTFILES_DIR/scripts/openQute.sh -Z &
-$DOTFILES_DIR/scripts/openQute.sh -P &
-$DOTFILES_DIR/scripts/openQute.sh -M &
+qutebrowser-profile --load 'Z' &
+qutebrowser-profile --load 'P' &
 spotify &
