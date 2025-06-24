@@ -1,7 +1,7 @@
 #!/bin/bash
 
 courseFolder=$PWD
-filesPath=$DOTFILES_DIR/files/assignmentsTemplate/
+filesPath=$DOTFILES_DIR/files/LaTeXAssignmentsTemplate/
 template="template.tex"
 
 assignmentNumber=

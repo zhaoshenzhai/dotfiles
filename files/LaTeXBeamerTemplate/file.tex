@@ -1,0 +1,24 @@
+\documentclass[10pt]{beamer}
+\input{preamble.sty}
+\input{macros.sty}
+
+\title[NAME]{\normalsize{NAME}\vspace{0.05in}}
+\author[Zhaoshen Zhai]{\small Zhaoshen Zhai}
+\date[\today]{\footnotesize\today}
+
+\begin{document}
+    \frame{\titlepage}
+    \begin{frame}
+        \frametitle{Contents}
+        \tableofcontents
+    \end{frame}
+
+    \AtBeginSection[]{
+        \begin{frame}
+            \frametitle{Contents}
+            \tableofcontents[currentsection]
+        \end{frame}
+    }
+
+    
+\end{document}
