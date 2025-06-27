@@ -2,6 +2,9 @@ modmap:
   - name: caps-to-esc
     remap:
       CapsLock: Esc
+  - name: fix-zero
+    remap:
+      KEY_F10: KEY_0
 
 keymap:
   - name: win-to-ctrl
