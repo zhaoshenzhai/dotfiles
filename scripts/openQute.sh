@@ -4,7 +4,7 @@ while [ ! -z "$1" ]; do
     case "$1" in
         -Z)
             shift
-            $(qutebrowser-profile --load 'Z' --new https://calendar.google.comhttps://mail.google.com https://outlook.office.com)
+            $(qutebrowser-profile --load 'Z' --new https://calendar.google.com https://mail.google.com https://outlook.office.com)
             ;;
         -P)
             shift
