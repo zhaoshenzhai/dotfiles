@@ -3,7 +3,6 @@
 REPOS="
 Courses         $UNIVERSITY_DIR/Courses
 Dotfiles        $DOTFILES_DIR
-MathWiki        $MATHWIKI_DIR
 Ergodic         $UNIVERSITY_DIR/Courses/ERGO25S_Reading_group_on_Ergodic_Theory
 SURA-25         $UNIVERSITY_DIR/Courses/SURA25S_Pro-C_topologies_on_free_groups"
 
@@ -21,53 +20,22 @@ HELP() {
 }
 GETSTATUS() {
     if [[ -z $1 ]]; then
-        if [[ $repoName == "MathWiki" ]] || [[ $repoNum == 1 ]]; then
-            echo $(git -c color.status=always status ':(exclude)docs/*' ':(exclude)Site/static/allFiles.json' 2>&1)
-        else
-            echo $(git -c color.status=always status 2>&1)
-        fi
+        echo $(git -c color.status=always status 2>&1)
     else
-        if [[ $repoName == "MathWiki" ]] || [[ $repoNum == 1 ]]; then
-            echo $(git -c color.status=always status ':(exclude)docs/*' ':(exclude)Site/static/allFiles.json' | tee /dev/tty)
-        else
-            echo $(git -c color.status=always status | tee /dev/tty)
-        fi
-    fi
-}
-UPDATE() {
-    repoName=$1
-    if [[ $1 == "MathWiki" ]]; then
-        cd $MATHWIKI_DIR
-        source $MATHWIKI_DIR/.scripts/publish.sh
-        source $MATHWIKI_DIR/.scripts/stats.sh -u
-        source $MATHWIKI_DIR/.scripts/stats.sh -r
-        repoNum="1"
+        echo $(git -c color.status=always status | tee /dev/tty)
     fi
 }
 SHOWDIFF() {
-    if [[ $repoName == "MathWiki" ]] || [[ $repoNum == 1 ]]; then
-        SHOWDIFFHELPER "docs/*" "Site/static/allFiles.json"
-    else
-        SHOWDIFFHELPER
+    read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/n]${NC} ")" choice
+    if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
+        echo ""
+        diff=$(git -c color.diff=always diff | tee /dev/tty)
+    elif [ "$choice" == "q" ]; then
+        EXIT
     fi
 
     if [[ $(echo "$diff" | tail -n1 | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g" | grep -E '\S') ]]; then
         echo ""
-    fi
-}
-SHOWDIFFHELPER() {
-    read -n 1 -ep "$(echo -e ${PURPLE}"Show diff? [Y/n]${NC} ")" choice
-    if [ -z "$choice" ] || [ "$choice" == "Y" ]; then
-        echo ""
-        if [[ ! -z $2 ]]; then
-            diff=$(git -c color.diff=always diff -- . ":(exclude)$1" ":(exclude)$2" | tee /dev/tty)
-        elif [[ ! -z $1 ]]; then
-            diff=$(git -c color.diff=always diff -- . ":(exclude)$1" | tee /dev/tty)
-        else
-            diff=$(git -c color.diff=always diff | tee /dev/tty)
-        fi
-    elif [ "$choice" == "q" ]; then
-        EXIT
     fi
 }
 SHOWSTATUS() {
@@ -105,7 +73,7 @@ done
 
 # Update repos to prepare for git commands
 if [[ ! -z $specifiedRepo ]]; then
-    UPDATE $specifiedRepo
+    repoName=$specifiedRepo
 else
     # Print all repos
     while [[ -z $valid ]]; do
@@ -137,13 +105,9 @@ else
             cd $DOTFILES_DIR
         ;;
         "3")
-            cd $MATHWIKI_DIR
-            UPDATE "MathWiki"
-        ;;
-        "4")
             cd $UNIVERSITY_DIR/Courses/ERGO25S_Reading_group_on_Ergodic_Theory
         ;;
-        "5")
+        "4")
             cd $UNIVERSITY_DIR/Courses/SURA25S_Pro-C_topologies_on_free_groups
         ;;
         *)
@@ -198,7 +162,6 @@ else
             fi
 
             cd $(echo "$REPOPATHS" | sed "${repoNum}q;d")
-            UPDATE $repoName
         ;;
     esac
 fi
