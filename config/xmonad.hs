@@ -88,7 +88,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
         -- Scripts
         ((modm, xK_g), spawn "kitty $DOTFILES_DIR/scripts/gitCommit.sh"),
-        ((modm, xK_m), spawn "kitty $MATHWIKI_DIR/.scripts/main.sh"    ),
 
         -- Screenshot
         ((modm .|. shiftMask, xK_p), spawn "cd ~/Downloads; scrot 'Scrot_%Y_%m_%d_%H%M%S.png'"),

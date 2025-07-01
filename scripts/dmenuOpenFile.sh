@@ -8,7 +8,6 @@ DMENU()
 declare -a options=(
     "~/Dropbox/Documents"
     $(echo $DOTFILES_DIR | sed 's:/home/zhao:~:g')
-    $(echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g')
     "~/Dropbox/Others/Reminders"
 )
 
@@ -22,18 +21,6 @@ case $mainChoice in
         if [[ -f "$dir/$file" ]]; then
             touch "$dir/$file"
             zathura "$dir/$file"
-        fi
-    ;;
-    $(echo $MATHWIKI_DIR | sed 's:/home/zhao:~:g'))
-        dir="$MATHWIKI_DIR/Notes"
-        file=$(find $dir -printf "%T@ %Tc %p\n" | grep ".md" | sort -nr | sed 's:.*/::' | DMENU $(echo "$dir/" | sed 's:/home/zhao:~:g'))
-        cd $dir
-        echo -e "${YELLOW}$file${NC}"
-        if [[ -f "$dir/$file" ]]; then
-            touch "$file"
-            name=$(echo "$file" | sed 's/.md//g')
-            kitty --class nvim,nvim -e nvim "$file" &
-            $DOTFILES_DIR/scripts/openQute.sh -M "$name"
         fi
     ;;
     $(echo $DOTFILES_DIR | sed 's:/home/zhao:~:g'))
