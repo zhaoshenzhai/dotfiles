@@ -3,6 +3,7 @@
 REPOS="
 Courses         $UNIVERSITY_DIR/Courses
 Dotfiles        $DOTFILES_DIR
+Website         /home/zhao/Dropbox/Projects/Personal_Website
 Ergodic         $UNIVERSITY_DIR/Courses/ERGO25S_Reading_group_on_Ergodic_Theory
 SURA-25         $UNIVERSITY_DIR/Courses/SURA25S_Pro-C_topologies_on_free_groups"
 
@@ -105,9 +106,12 @@ else
             cd $DOTFILES_DIR
         ;;
         "3")
-            cd $UNIVERSITY_DIR/Courses/ERGO25S_Reading_group_on_Ergodic_Theory
+            cd /home/zhao/Dropbox/Projects/Personal_Website
         ;;
         "4")
+            cd $UNIVERSITY_DIR/Courses/ERGO25S_Reading_group_on_Ergodic_Theory
+        ;;
+        "5")
             cd $UNIVERSITY_DIR/Courses/SURA25S_Pro-C_topologies_on_free_groups
         ;;
         *)
