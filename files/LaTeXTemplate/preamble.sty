@@ -26,22 +26,22 @@
 \addbibresource{refs.bib}
 
 \newtheorem{mainTheorem}{Theorem}\renewcommand{\themainTheorem}{\Alph{mainTheorem}}
-\newtheorem{theorem}{Theorem}[section]\newtheorem*{theorem*}{Theorem}
+\newtheorem{observation}[theorem]{Observation}\newtheorem*{observation*}{Observation}
 \newtheorem{proposition}[theorem]{Proposition}\newtheorem*{proposition*}{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}\newtheorem*{corollary*}{Corollary}
+\newtheorem{theorem}{Theorem}\newtheorem*{theorem*}{Theorem}
+\newtheorem{thesis}[theorem]{Thesis}\newtheorem*{thesis*}{Thesis}
 \newtheorem{lemma}[theorem]{Lemma}\newtheorem*{lemma*}{Lemma}
 \newtheorem{claim}[theorem]{Claim}\newtheorem*{claim*}{Claim}
-\newtheorem{thesis}[theorem]{Thesis}\newtheorem*{thesis*}{Thesis}
-\newtheorem{corollary}[theorem]{Corollary}\newtheorem*{corollary*}{Corollary}
 \newtheorem{fact}[theorem]{Fact}\newtheorem*{fact*}{Fact}
 
 \theoremstyle{definition}{
-    \newtheorem{example}[theorem]{Example}\newtheorem*{example*}{Example}
     \newtheorem{definition}[theorem]{Definition}\newtheorem*{definition*}{Definition}
-    \newtheorem{remark}[theorem]{Remark}\newtheorem*{remark*}{Remark}
     \newtheorem{notation}[theorem]{Notation}\newtheorem*{notation*}{Notation}
-    \newtheorem{observation}[theorem]{Observation}\newtheorem*{observation*}{Observation}
-    \newtheorem{axiom}[theorem]{Axiom}\newtheorem*{axiom*}{Axiom}
     \newtheorem{question}[theorem]{Question}\newtheorem*{question*}{Question}
+    \newtheorem{example}[theorem]{Example}\newtheorem*{example*}{Example}
+    \newtheorem{remark}[theorem]{Remark}\newtheorem*{remark*}{Remark}
+    \newtheorem{axiom}[theorem]{Axiom}\newtheorem*{axiom*}{Axiom}
 }
 
 \newmdenv[topline=false, bottomline=false, rightline=false, skipabove=4pt, skipbelow=4pt, linewidth=0.75pt]{leftbar}
