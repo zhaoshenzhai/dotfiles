@@ -5,6 +5,7 @@ modmap:
   - name: fix-zero
     remap:
       KEY_F10: KEY_0
+      KEY_F11: KEY_0
 
 keymap:
   - name: win-to-ctrl
