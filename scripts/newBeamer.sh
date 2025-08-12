@@ -6,7 +6,7 @@ title=
 
 # Help
 HELP() {
-    echo -e "Usage: ./newLaTeXBeamer.sh [-n name]"
+    echo -e "Usage: ./newBeamer.sh [-n name]"
 }
 
 # Input
