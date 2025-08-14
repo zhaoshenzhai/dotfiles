@@ -124,7 +124,7 @@
         \newcommand{\gen}[2][]{\ifthenelse{\isempty{#1}}{}{\l}\langle#2\ifthenelse{\isempty{#1}}{}{\r}\rangle}
         \newcommand{\slot}{-}
         \newcommand{\blob}{\bullet}
-        \renewcommand{\l}{\left}
+        \let\lw\l\renewcommand{\l}{\left}
         \renewcommand{\r}{\right}
         \renewcommand{\bar}{\overline}
 
