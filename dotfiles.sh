@@ -82,6 +82,12 @@ sudo lux
 cd ..
 rm -rf lux
 
+# Mpv
+mkdir -p $HOME/.config/mpv/scripts
+git clone https://github.com/CogentRedTester/mpv-scripts.git
+mv mpv-scripts/cycle-commands.lua $HOME/.config/mpv/scripts/cycle-commands.lua
+rm -rf mpv-scripts
+
 # Spicetify
 sudo mkdir -p /usr/share/spicetify-cli/Themes/Dribbblish/
 sudo mkdir -p $HOME/.config/spicetify/Themes/Dribbblish/
