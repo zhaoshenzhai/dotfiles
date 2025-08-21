@@ -5,7 +5,7 @@
 \usepackage{enumitem, bookmark, xifthen, setspace, proof}
 
 \usetikzlibrary{matrix, positioning, patterns, patterns.meta, decorations.markings, decorations.pathmorphing, arrows, arrows.meta, backgrounds, math, cd}
-\tikzset{->-/.style={decoration={ markings, mark=at position #1 with {\arrow{>}}},postaction={decorate}}}
+\tikzset{->-/.style={decoration={markings, mark=at position #1 with {\arrow{>}}},postaction={decorate}}}
 
 \definecolor{darkBlue}{RGB}{0, 0, 138}
 \definecolor{darkGreen}{RGB}{0, 160, 0}
@@ -23,6 +23,7 @@
 \titleformat{name=\subsubsection}[runin]{}{\thetitle.}{0.5em}{\itshape}[.]
 
 \usepackage[style=alphabetic, sorting=nyt, maxbibnames=10]{biblatex}
+\renewcommand{\bibfont}{\footnotesize}
 \addbibresource{refs.bib}
 
 \newtheorem{theorem}{Theorem}\newtheorem*{theorem*}{Theorem}
