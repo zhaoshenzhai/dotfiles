@@ -93,9 +93,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm .|. shiftMask, xK_p), spawn "cd ~/Downloads; scrot 'Scrot_%Y_%m_%d_%H%M%S.png'"),
 
         -- Applications
-        ((modm,               xK_o), spawn "obsidian"                  ),
-        ((modm,               xK_z), spawn "zoom"                      ),
         ((modm,               xK_s), spawn "spotify"                   ),
+        ((modm .|. shiftMask, xK_s), spawn "steam"                     ),
         ((modm .|. shiftMask, xK_d), spawn "discord"                   ),
         ((modm .|. shiftMask, xK_g), spawn "chromium --force-dark-mode"),
 
@@ -145,15 +144,15 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 ---------------------------------------------------------------------------------------------------------------------
 
 myWorkspaces = [
-    "<fn=3>\xf303  </fn>",  -- Arch
-    "<fn=3>\xf268  </fn>",  -- Browser
-    "<fn=3>\xf040  </fn>",  -- Write
-    "<fn=3>\xf02d  </fn>",  -- Book1
-    "<fn=3>\xf05da  </fn>", -- Book2
-    "<fn=2>\xe0bb   </fn>", -- Book3
-    "<fn=3>\xf0254  </fn>", -- Media
-    "<fn=3>\xf1bc  </fn>",  -- Spotify
-    "<fn=3>\xf013 </fn>"    -- Config
+    "<fn=2>\xf303  </fn>",  -- Arch
+    "<fn=2>\xf268  </fn>",  -- Browser
+    "<fn=2>\xf040  </fn>",  -- Write
+    "<fn=2>\xf02d  </fn>",  -- Book1
+    "<fn=2>\xf05da  </fn>", -- Book2
+    "<fn=2>\xf02e  </fn>",  -- Book3
+    "<fn=2>\xf0254  </fn>", -- Media
+    "<fn=2>\xf1bc  </fn>",  -- Spotify
+    "<fn=2>\xf013 </fn>"    -- Config
     ]
 
 myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..]
