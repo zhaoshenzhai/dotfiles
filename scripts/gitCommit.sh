@@ -3,6 +3,7 @@
 REPOS="
 Courses         $UNIVERSITY_DIR/Courses
 Dotfiles        $DOTFILES_DIR
+Projects        /home/zhao/Dropbox/Projects
 Website         /home/zhao/Dropbox/Projects/_web"
 
 REPOS=$(echo "$REPOS" | sed 1d)
@@ -104,6 +105,9 @@ else
             cd $DOTFILES_DIR
         ;;
         "3")
+            cd /home/zhao/Dropbox/Projects
+        ;;
+        "4")
             cd /home/zhao/Dropbox/Projects/_web
         ;;
         *)
