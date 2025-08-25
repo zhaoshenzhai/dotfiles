@@ -126,8 +126,9 @@ set statusline="  Hint: %z%= %A %10u:%-7g %15s %20d  "
 
 mark h ~/ Dropbox
 mark d ~/Dropbox/Dotfiles config
-mark w ~/Dropbox/Projects/Personal_Website index.html
-mark u ~/Dropbox/University/Courses SURA25S_Pro-C_topologies_on_free_groups
+mark p ~/Dropbox/Projects _cv
+mark w ~/Dropbox/Projects/_web index.html
+mark u ~/Dropbox/University/Courses MATH480_Honours_Independent_Study_Descriptive_Set_Theory
 
 map f '
 
