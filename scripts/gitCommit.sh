@@ -3,8 +3,7 @@
 REPOS="
 Courses         $UNIVERSITY_DIR/Courses
 Dotfiles        $DOTFILES_DIR
-Website         /home/zhao/Dropbox/Projects/Personal_Website
-SURA-25         $UNIVERSITY_DIR/Courses/SURA25S_Pro-C_topologies_on_free_groups"
+Website         /home/zhao/Dropbox/Projects/_web"
 
 REPOS=$(echo "$REPOS" | sed 1d)
 REPOSNUM=$(echo "$REPOS" | wc -l)
@@ -105,10 +104,7 @@ else
             cd $DOTFILES_DIR
         ;;
         "3")
-            cd /home/zhao/Dropbox/Projects/Personal_Website
-        ;;
-        "4")
-            cd $UNIVERSITY_DIR/Courses/SURA25S_Pro-C_topologies_on_free_groups
+            cd /home/zhao/Dropbox/Projects/_web
         ;;
         *)
             changedRepos=""
