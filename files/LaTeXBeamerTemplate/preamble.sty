@@ -1,10 +1,19 @@
-\usepackage{amsfonts, amsmath, amssymb, amsthm, amsrefs}
+\usepackage{amsfonts, amsmath, amssymb, amsthm}
 \usepackage{mathtools, mathrsfs, dsfont, nicematrix}
 \usepackage{tikz, tikz-3dplot, tikzpagenodes, graphics, xcolor, mlmodern}
 \usepackage{enumitem, xifthen, proof}
 
-\usetikzlibrary{matrix, positioning, patterns, decorations.markings, arrows, arrows.meta, backgrounds, math, cd}
-\tikzset{->-/.style={decoration={ markings, mark=at position #1 with {\arrow{>}}},postaction={decorate}}}
+\usetikzlibrary{matrix, positioning, patterns, patterns.meta, decorations.markings, decorations.pathmorphing, arrows, arrows.meta, backgrounds, math, cd}
+\tikzset{->-/.style={decoration={markings, mark=at position #1 with {\arrow{>}}},postaction={decorate}}}
+
+\definecolor{darkBlue}{RGB}{0, 0, 138}
+\definecolor{darkGreen}{RGB}{0, 160, 0}
+\definecolor{lightGray}{RGB}{128, 128, 128}
+\hypersetup{colorlinks=true, allcolors=., citecolor=magenta}
+
+\usepackage[style=alphabetic, sorting=nyt, maxbibnames=10]{biblatex}
+\renewcommand{\bibfont}{\footnotesize}
+\addbibresource{refs.bib}
 
 \usetheme{CambridgeUS}
 \usecolortheme{seahorse}
