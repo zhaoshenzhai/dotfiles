@@ -4,7 +4,9 @@ REPOS="
 Courses         $UNIVERSITY_DIR/Courses
 Dotfiles        $DOTFILES_DIR
 Projects        /home/zhao/Dropbox/Projects
-Website         /home/zhao/Dropbox/Projects/_web"
+Website         /home/zhao/Dropbox/Projects/_web
+MATH480         /home/zhao/Dropbox/Projects/25_480_descriptive_set_theory
+COMP480         /home/zhao/Dropbox/Projects/25_480_recursion_theory"
 
 REPOS=$(echo "$REPOS" | sed 1d)
 REPOSNUM=$(echo "$REPOS" | wc -l)
@@ -109,6 +111,12 @@ else
         ;;
         "4")
             cd /home/zhao/Dropbox/Projects/_web
+        ;;
+        "5")
+            cd /home/zhao/Dropbox/Projects/25_480_descriptive_set_theory
+        ;;
+        "6")
+            cd /home/zhao/Dropbox/Projects/25_480_recursion_theory
         ;;
         *)
             changedRepos=""
