@@ -5,8 +5,8 @@ Courses         $UNIVERSITY_DIR/Courses
 Dotfiles        $DOTFILES_DIR
 Projects        /home/zhao/Dropbox/Projects
 Website         /home/zhao/Dropbox/Projects/_web
-MATH480         /home/zhao/Dropbox/Projects/25_480_descriptive_set_theory
-COMP480         /home/zhao/Dropbox/Projects/25_480_recursion_theory"
+MATH480         $UNIVERSITY_DIR/Courses/MATH480_Honours_Independent_Study_Descriptive_Set_Theory
+COMP480         $UNIVERSITY_DIR/Courses/COMP480_Honours_Independent_Study_Recursion_Theory"
 
 REPOS=$(echo "$REPOS" | sed 1d)
 REPOSNUM=$(echo "$REPOS" | wc -l)
@@ -113,10 +113,10 @@ else
             cd /home/zhao/Dropbox/Projects/_web
         ;;
         "5")
-            cd /home/zhao/Dropbox/Projects/25_480_descriptive_set_theory
+            cd $UNIVERSITY_DIR/Courses/MATH480_Honours_Independent_Study_Descriptive_Set_Theory
         ;;
         "6")
-            cd /home/zhao/Dropbox/Projects/25_480_recursion_theory
+            cd $UNIVERSITY_DIR/Courses/COMP480_Honours_Independent_Study_Recursion_Theory
         ;;
         *)
             changedRepos=""
