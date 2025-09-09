@@ -1,0 +1,35 @@
+\usepackage{geometry, titlesec, fancyhdr, caption, subcaption}
+
+\newgeometry{margin = 1in}
+\setstretch{1.2}
+
+\pagestyle{fancy}\fancyhead{}\fancyfoot{}\headsep=15pt\renewcommand{\headrulewidth}{0pt}
+\fancyhead[RO, LE]{\scriptsize\thepage}
+\fancyhead[CE]{\scriptsize\MakeUppercase{Zhaoshen Zhai}}
+\hypersetup{colorlinks=true, allcolors=darkBlue}
+
+\titleformat{name=\section}{}{\thetitle.}{0.8em}{\centering\scshape}
+\titleformat{name=\subsection}[runin]{}{\thetitle.}{0.5em}{\bfseries}[.]
+\titleformat{name=\subsubsection}[runin]{}{\thetitle.}{0.5em}{\itshape}[.]
+
+\newcommand\freefootnote[1]{{\renewcommand\thefootnote{}\footnote{#1}\addtocounter{footnote}{-1}}}
+\renewcommand{\bibfont}{\small}
+
+\newtheorem{theorem}{Theorem}\newtheorem*{theorem*}{Theorem}
+\newtheorem{mainTheorem}{Theorem}\renewcommand{\themainTheorem}{\Alph{mainTheorem}}
+\newtheorem{observation}[theorem]{Observation}\newtheorem*{observation*}{Observation}
+\newtheorem{proposition}[theorem]{Proposition}\newtheorem*{proposition*}{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}\newtheorem*{corollary*}{Corollary}
+\newtheorem{thesis}[theorem]{Thesis}\newtheorem*{thesis*}{Thesis}
+\newtheorem{lemma}[theorem]{Lemma}\newtheorem*{lemma*}{Lemma}
+\newtheorem{claim}[theorem]{Claim}\newtheorem*{claim*}{Claim}
+\newtheorem{fact}[theorem]{Fact}\newtheorem*{fact*}{Fact}
+
+\theoremstyle{definition}{
+    \newtheorem{definition}[theorem]{Definition}\newtheorem*{definition*}{Definition}
+    \newtheorem{notation}[theorem]{Notation}\newtheorem*{notation*}{Notation}
+    \newtheorem{question}[theorem]{Question}\newtheorem*{question*}{Question}
+    \newtheorem{example}[theorem]{Example}\newtheorem*{example*}{Example}
+    \newtheorem{remark}[theorem]{Remark}\newtheorem*{remark*}{Remark}
+    \newtheorem{axiom}[theorem]{Axiom}\newtheorem*{axiom*}{Axiom}
+}

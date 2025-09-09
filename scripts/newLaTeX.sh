@@ -1,40 +1,160 @@
 #!/bin/bash
 
-filesPath=$DOTFILES_DIR/files/LaTeXTemplate
-name=
+templatePath=$DOTFILES_DIR/files/LaTeXTemplate
+fileName=
+fileType=
 title=
 
-# Help
-HELP() {
-    echo -e "Usage: ./newLaTeX.sh [-n name]"
+assignmentCourse=
+assignmentNumber=
+assignmentDueMonth=
+assignmentDueDate=
+assignmentDueDateMod=
+
+FIX_DATE() {
+    case $assignmentDueMonth in
+        Jan|1|01)
+            assignmentDueMonth=January
+            ;;
+        Feb|2|02)
+            assignmentDueMonth=February
+            ;;
+        Mar|3|03)
+            assignmentDueMonth=March
+            ;;
+        Apr|4|04)
+            assignmentDueMonth=April
+            ;;
+        May|5|05)
+            assignmentDueMonth=May
+            ;;
+        Jun|6|06)
+            assignmentDueMonth=June
+            ;;
+        Jul|7|07)
+            assignmentDueMonth=July
+            ;;
+        Aug|8|08)
+            assignmentDueMonth=August
+            ;;
+        Sep|9|09)
+            assignmentDueMonth=September
+            ;;
+        Oct|10)
+            assignmentDueMonth=October
+            ;;
+        Nov|11)
+            assignmentDueMonth=November
+            ;;
+        Dec|12)
+            assignmentDueMonth=December
+            ;;
+    esac
+
+    case $assignmentDueDate in
+        1|21|31)
+            assignmentDueDateMod=st
+            ;;
+        2|22)
+            assignmentDueDateMod=nd
+            ;;
+        3|23)
+            assignmentDueDateMod=rd
+            ;;
+        *)
+            assignmentDueDateMod=th
+            ;;
+    esac
+}
+
+COPY_FILES() {
+    ln -s $templatePath/macros.sty .
+    ln -s $templatePath/refs.bib .
+    ln -s $templatePath/preamble.sty .
+    ln -s $templatePath/preambles/$fileType.sty .
+
+    cp $templatePath/files/$fileType.tex "$fileName.tex"
+    sed -i 's/TITLE/'"$title"'/g' "$fileName.tex"
 }
 
 # Input
 while [[ ! -z $1 ]]; do
     case $1 in
-        -h|--help)
-            HELP
-            exit 0
-            ;;
         -n)
-            name=$2
-            title=$(echo $name | sed 's/_/ /g')
+            fileName=$2
+            title=$(echo $fileName | sed 's/_/ /g')
+            ;;
+        -t)
+            fileType=$2
+            ;;
+        -a)
+            assignmentNumber=$2
+            assignmentCourse=$PWD
+            fileType=assignment
+            fileName=Assignment_$2
+            ;;
+        -d)
+            assignmentDueMonth=$2
+            assignmentDueDate=$3
+            FIX_DATE
+            shift
+            ;;
     esac
     shift
     shift
 done
 
 # Validate
-if [[ -z $name ]]; then
-    echo -e "${RED}Error: Expected [-n] flag.${NC}"
-    HELP
+if [[ -z $fileName ]]; then
+    echo -e "${RED}Error: Expected one of: [-n] and [-a].${NC}"
     exit 1
 fi
 
-mkdir "$name"
-cd "$name"
+if [[ -z "$fileType" ]]; then
+    if [[ -z "$assignmentNumber" ]]; then
+        fileTyle=paper
+    else
+        fileTyle=assignment
+    fi
+fi
 
-cp -r $filesPath/* .
-mv file.tex "$name.tex"
-sed -i 's/NAME/'"$title"'/g' "$name.tex"
-sed -i 's/NAME/'"$title"'/g' "preamble.sty"
+if [[ "$fileType" = "assignment" ]]; then
+    if [ ! -f "$PWD/.info" ]; then
+        echo -e "${RED}Error: Expected .info file.${NC}"
+        exit 1
+    fi
+
+    if [[ -z $assignmentNumber ]] || [[ -z $assignmentDueMonth ]] || [[ -z $assignmentDueDate ]]; then
+        echo -e "${RED}Error: Expected [-a] [-d] for assignmentNumber and (dueMonth dueDate).${NC}"
+        exit 1
+    fi
+
+    re='^[0-9]+$'
+    if [[ ! $assignmentNumber =~ $re ]] || [[ $assignmentNumber -lt 1 ]] || [[ ! $assignmentDueDate =~ $re ]] || [[ $assignmentDueDate -lt 1 ]] || [[ $assignmentDueDate -gt 31 ]]; then
+        echo "Error: Invalid inputs."
+        exit 2
+    fi
+fi
+
+if [[ "$fileType" != "assignment" ]]; then
+    mkdir "$fileName"
+    cd "$fileName"
+    COPY_FILES
+fi
+
+if [[ "$fileType" = "beamer" ]]; then
+    ln -s $templatePath/mcgill.png .
+elif [[ "$fileType" = "assignment" ]]; then
+    mkdir -p Assignments/$fileName
+    cd Assignments/$fileName
+    COPY_FILES
+
+    courseName=$(echo $assignmentCourse | sed -E 's/^.*([A-Z]{4}[0-9]{3})/\1/g' | sed 's/_/\ /g' | sed '0,/\ /{s/\ /\ -\ /}')
+    termYear=$(cat "$assignmentCourse/.info")
+
+    sed -i 's/COURSE_NAME/'"$courseName"'/g' $fileName.tex
+    sed -i 's/TERM_YEAR/'"$termYear"'/g' $fileName.tex
+    sed -i 's/DUE_MONTH/'"$assignmentDueMonth"'/g' $fileName.tex
+    sed -i 's/DUE_DATE_MOD/'"$assignmentDueDateMod"'/g' $fileName.tex
+    sed -i 's/DUE_DATE/'"$assignmentDueDate"'/g' $fileName.tex
+fi

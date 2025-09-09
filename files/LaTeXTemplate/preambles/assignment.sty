@@ -1,0 +1,18 @@
+\usepackage{geometry, titlesec, fancyhdr, caption, subcaption}
+\pagestyle{fancy}
+
+\usepackage{thmtools}
+\declaretheoremstyle[headfont=\color{darkBlue}\normalfont\itshape, bodyfont=\color{darkBlue}\normalfont, numbered=no]{colored}
+\declaretheorem[style=colored, name=Solution]{solution}
+
+\hypersetup{colorlinks=true, allcolors=darkBlue}
+\renewcommand{\bibfont}{\small}
+
+\setstretch{1.2}
+\newgeometry{margin = 1in}
+
+\newtheorem{lemma}[theorem]{Lemma}\newtheorem*{lemma*}{Lemma}
+\newtheorem{claim}[theorem]{Claim}\newtheorem*{claim*}{Claim}
+\newtheorem{fact}[theorem]{Fact}\newtheorem*{fact*}{Fact}
+
+\theoremstyle{definition}\newtheorem{question}[theorem]{Question}\newtheorem*{question*}{Question}
