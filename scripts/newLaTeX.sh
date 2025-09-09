@@ -92,6 +92,7 @@ while [[ ! -z $1 ]]; do
             assignmentCourse=$PWD
             fileType=assignment
             fileName=Assignment_$2
+            title=$(echo $fileName | sed 's/_/ /g')
             ;;
         -d)
             assignmentDueMonth=$2
