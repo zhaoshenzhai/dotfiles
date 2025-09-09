@@ -262,6 +262,14 @@ snippet sol "begin solution" b
 \end{solution}
 endsnippet
 
+snippet solh "begin solution hidden" b
+\if\show1
+	\begin{solution}
+		$0
+	\end{solution}
+\fi
+endsnippet
+
 snippet abs "begin abstract" b
 \begin{abstract}
 	$0
