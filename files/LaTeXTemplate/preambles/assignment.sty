@@ -1,15 +1,20 @@
 \usepackage{geometry, titlesec, fancyhdr, caption, subcaption}
+
+\newgeometry{margin = 1in}
+\setstretch{1.2}
+
+\titleformat{name=\section}{}{\thetitle.}{0.8em}{\centering\scshape}
+\titleformat{name=\subsection}[runin]{}{\thetitle.}{0.5em}{\bfseries}[.]
+\titleformat{name=\subsubsection}[runin]{}{\thetitle.}{0.5em}{\itshape}[.]
+
+\renewcommand{\bibfont}{\small}
+
 \pagestyle{fancy}
+\hypersetup{colorlinks=true, allcolors=darkBlue}
 
 \usepackage{thmtools}
 \declaretheoremstyle[headfont=\color{darkBlue}\normalfont\itshape, bodyfont=\color{darkBlue}\normalfont, numbered=no]{colored}
 \declaretheorem[style=colored, name=Solution]{solution}
-
-\hypersetup{colorlinks=true, allcolors=darkBlue}
-\renewcommand{\bibfont}{\small}
-
-\setstretch{1.2}
-\newgeometry{margin = 1in}
 
 \newtheorem{lemma}{Lemma}\newtheorem*{lemma*}{Lemma}
 \newtheorem{claim}{Claim}\newtheorem*{claim*}{Claim}

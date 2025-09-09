@@ -113,9 +113,9 @@ fi
 
 if [[ -z "$fileType" ]]; then
     if [[ -z "$assignmentNumber" ]]; then
-        fileTyle=paper
+        fileType=paper
     else
-        fileTyle=assignment
+        fileType=assignment
     fi
 fi
 
@@ -150,7 +150,7 @@ elif [[ "$fileType" = "assignment" ]]; then
     cd Assignments/$fileName
     COPY_FILES
 
-    courseName=$(echo $assignmentCourse | sed -E 's/^.*([A-Z]{4}[0-9]{3})/\1/g' | sed 's/_/\ /g' | sed '0,/\ /{s/\ /\ -\ /}')
+    courseName=$(echo $assignmentCourse | sed -E 's/^.*([A-Z]{4}[0-9]{3})/\1/g' | sed 's/_/\ /g' | sed '0,/\ /{s/\ /\ $-$\ /}')
     termYear=$(cat "$assignmentCourse/.info")
 
     sed -i 's/COURSE_NAME/'"$courseName"'/g' $fileName.tex
