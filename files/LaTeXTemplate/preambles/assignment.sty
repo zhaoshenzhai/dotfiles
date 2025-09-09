@@ -1,4 +1,4 @@
-\usepackage{geometry, titlesec, fancyhdr, caption, subcaption}
+\usepackage{geometry, titlesec, fancyhdr, caption, subcaption, thmtools}
 
 \newgeometry{margin = 1in}
 \setstretch{1.2}
@@ -7,17 +7,14 @@
 \titleformat{name=\subsection}[runin]{}{\thetitle.}{0.5em}{\bfseries}[.]
 \titleformat{name=\subsubsection}[runin]{}{\thetitle.}{0.5em}{\itshape}[.]
 
+\declaretheoremstyle[headfont=\color{darkBlue}\normalfont\itshape, bodyfont=\color{darkBlue}\normalfont, numbered=no]{colored}
+\declaretheorem[style=colored, name=Solution]{solution}
+
 \renewcommand{\bibfont}{\small}
 
 \pagestyle{fancy}
 \hypersetup{colorlinks=true, allcolors=darkBlue}
 
-\usepackage{thmtools}
-\declaretheoremstyle[headfont=\color{darkBlue}\normalfont\itshape, bodyfont=\color{darkBlue}\normalfont, numbered=no]{colored}
-\declaretheorem[style=colored, name=Solution]{solution}
-
 \newtheorem{lemma}{Lemma}\newtheorem*{lemma*}{Lemma}
 \newtheorem{claim}{Claim}\newtheorem*{claim*}{Claim}
 \newtheorem{fact}{Fact}\newtheorem*{fact*}{Fact}
-
-\theoremstyle{definition}\newtheorem{question}{Question}\newtheorem*{question*}{Question}

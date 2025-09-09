@@ -5,7 +5,6 @@ Courses         $UNIVERSITY_DIR/Courses
 Dotfiles        $DOTFILES_DIR
 Projects        /home/zhao/Dropbox/Projects
 Website         /home/zhao/Dropbox/Projects/_web
-MATH480         $UNIVERSITY_DIR/Courses/MATH480_Honours_Independent_Study_Descriptive_Set_Theory
 COMP480         $UNIVERSITY_DIR/Courses/COMP480_Honours_Independent_Study_Recursion_Theory"
 
 REPOS=$(echo "$REPOS" | sed 1d)
@@ -113,9 +112,6 @@ else
             cd /home/zhao/Dropbox/Projects/_web
         ;;
         "5")
-            cd $UNIVERSITY_DIR/Courses/MATH480_Honours_Independent_Study_Descriptive_Set_Theory
-        ;;
-        "6")
             cd $UNIVERSITY_DIR/Courses/COMP480_Honours_Independent_Study_Recursion_Theory
         ;;
         *)
