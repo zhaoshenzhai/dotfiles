@@ -1,7 +1,7 @@
 \usepackage{amsfonts, amsmath, amssymb, amsthm}
 \usepackage{mathtools, mathrsfs, dsfont, nicematrix}
-\usepackage{tikz, tikz-3dplot, tikzpagenodes, graphicx, xcolor, mlmodern}
-\usepackage{enumitem, bookmark, xifthen, setspace, proof, mdframed}
+\usepackage{tikz, tikz-3dplot, tikzpagenodes, graphicx, xcolor, mlmodern, mdframed}
+\usepackage{enumitem, bookmark, xifthen, setspace, proof, algorithm2e}
 
 \usetikzlibrary{matrix, positioning, patterns, patterns.meta, decorations.markings, decorations.pathmorphing, arrows, arrows.meta, backgrounds, math, cd}
 \tikzset{->-/.style={decoration={markings, mark=at position #1 with {\arrow{>}}},postaction={decorate}}}
@@ -12,5 +12,8 @@
 
 \usepackage[style=alphabetic, sorting=nyt, maxbibnames=10]{biblatex}
 \addbibresource{refs.bib}
+
+\LinesNumbered
+\RestyleAlgo{ruled}
 
 \newmdenv[topline=false, bottomline=false, rightline=false, skipabove=4pt, skipbelow=4pt, linewidth=0.75pt]{leftbar}
