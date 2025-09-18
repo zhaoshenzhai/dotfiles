@@ -1,7 +1,10 @@
 autocmd BufEnter * call ncm2#enable_for_buffer()
 set completeopt=noinsert,menuone,noselect
 set noshowmode
-let g:python3_host_prog='/usr/bin/python3'
+set shortmess+=c
+
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 augroup NCM2
     autocmd!

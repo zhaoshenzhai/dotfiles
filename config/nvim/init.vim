@@ -38,8 +38,6 @@ call plug#begin('~/.config/nvim/plugged')
     " Theme
     Plug 'joshdick/onedark.vim'                                       " onedark color scheme
     Plug 'itchyny/lightline.vim'                                      " lightline
-    Plug 'leafgarland/typescript-vim'                                 " syntax highlighting typescript
-    Plug 'uiiaoo/java-syntax.vim'                                     " syntax highlighting java
 call plug#end()
 
 source $DOTFILES_DIR/config/nvim/config/theme.vim
