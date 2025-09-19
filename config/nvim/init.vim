@@ -30,10 +30,10 @@ call plug#begin('~/.config/nvim/plugged')
     " Core
     Plug 'SirVer/ultisnips'                                           " snippets
     Plug 'lervag/vimtex'                                              " latex support
-    ""Plug 'ncm2/ncm2'                                                  " code completion
-    ""Plug 'ncm2/ncm2-bufword'                                          " complete words in buffer
-    ""Plug 'ncm2/ncm2-path'                                             " complete paths
-    ""Plug 'roxma/nvim-yarp'                                            " framework required for ncm2
+    Plug 'ncm2/ncm2'                                                  " code completion
+    Plug 'ncm2/ncm2-bufword'                                          " complete words in buffer
+    Plug 'ncm2/ncm2-path'                                             " complete paths
+    Plug 'roxma/nvim-yarp'                                            " framework required for ncm2
 
     " Theme
     Plug 'joshdick/onedark.vim'                                       " onedark color scheme
@@ -50,6 +50,6 @@ source $DOTFILES_DIR/config/nvim/config/fileTypeDefaults.vim
 
 source $DOTFILES_DIR/config/nvim/config/pluggins/ultisnips.vim
 source $DOTFILES_DIR/config/nvim/config/pluggins/vimtex.vim
-""source $DOTFILES_DIR/config/nvim/config/pluggins/ncm2.vim
+source $DOTFILES_DIR/config/nvim/config/pluggins/ncm2.vim
 
 autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"
