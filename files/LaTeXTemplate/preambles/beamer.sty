@@ -1,11 +1,44 @@
-\usetheme{CambridgeUS}
+\usetheme{Berlin}
 \usecolortheme{seahorse}
 \usefonttheme{serif}
 \useinnertheme{rounded}
 
-\setbeamertemplate{title page}[default][colsep=-4bp,rounded=true]
-\setbeamertemplate{blocks}[rounded][shadow=false]
-\setbeamersize{text margin left=10mm,text margin right=10mm}
+\definecolor{beamerPurple}{RGB}{194, 194, 232}
+\definecolor{beamerBlue}{RGB}{51, 51, 179}
+
+\setbeamercolor{dPurple}{bg = beamerPurple, fg = black}
+\setbeamercolor{mPurple}{bg = beamerPurple!80, fg = black}
+\setbeamercolor{lPurple}{bg = beamerPurple!60, fg = black}
+\setbeamercolor{block title}{bg = white, fg = beamerBlue}
+\setbeamercolor{block body}{bg = white, fg = black}
+\setbeamercolor{gray}{bg = black!6, fg = black}
+
+\setbeamertemplate{frametitle}{
+    \nointerlineskip
+    \begin{beamercolorbox}[wd = \paperwidth, ht = 3ex, dp = 1.3ex]{gray}
+        \hspace*{2ex}\insertframetitle%
+    \end{beamercolorbox}
+}
+\setbeamertemplate{headline}
+{
+    \begin{beamercolorbox}[ht = 6ex, dp = 0.5ex]{dPurple}
+        \vskip2pt\insertnavigation{\paperwidth}\vskip2pt
+    \end{beamercolorbox}%
+}
+\setbeamertemplate{footline}
+{
+    \hbox{%
+        \begin{beamercolorbox}[wd = .2\paperwidth, ht = 2.25ex, dp = 1.125ex, center]{dPurple}
+            \insertshortauthor
+        \end{beamercolorbox}%
+        \begin{beamercolorbox}[wd = .5\paperwidth, ht = 2.25ex, dp = 1.125ex, leftskip = .3cm, center]{mPurple}
+            \insertshorttitle
+        \end{beamercolorbox}%
+        \begin{beamercolorbox}[wd = .3\paperwidth, ht = 2.25ex, dp = 1.125ex, leftskip = .3cm, rightskip = .3cm]{lPurple}
+            \hfill\insertshortdate\hfill\insertframenumber/\inserttotalframenumber
+        \end{beamercolorbox}
+    }
+}
 
 \hypersetup{colorlinks=true, allcolors=., citecolor=magenta}
 \renewcommand{\bibfont}{\footnotesize}
