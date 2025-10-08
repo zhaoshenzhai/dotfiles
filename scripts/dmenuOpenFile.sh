@@ -7,7 +7,7 @@ DMENU()
 
 declare -a options=(
     "~/Dropbox/Documents"
-    $(echo $DOTFILES_DIR | sed 's:/home/zhao:~:g')
+    "~/Dropbox/Dotfiles"
     "~/Dropbox/Others/Reminders"
     "~/Movies_Shows"
 )
@@ -24,39 +24,13 @@ case $mainChoice in
             zathura "$dir/$file"
         fi
     ;;
-    $(echo $DOTFILES_DIR | sed 's:/home/zhao:~:g'))
-        declare -a configs=(
-            "$mainChoice/config"
-            "$mainChoice/scripts"
-            "$mainChoice/setup.md"
-            "$mainChoice/dotfiles.sh"
-        )
-        choice=$(printf '%s\n' "${configs[@]}" | DMENU "$mainChoice/")
+    "~/Dropbox/Dotfiles")
+        dir="$HOME/Dropbox/Dotfiles"
+        choice=$(find $dir -type f -printf "%T@ %Tc %p\n" | grep -v ".git\|dmenu/" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU "$mainChoice/")
 
-        if [ "$choice" ]; then
-            case $choice in
-                "$mainChoice/scripts")
-                    scriptsDir=$(echo "$mainChoice/scripts" | sed 's:~:/home/zhao:g')
-                    file=$(find $scriptsDir -printf "%T@ %Tc %p\n" | grep ".sh" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$scriptsDir/" | sed 's:/home/zhao:~:g'))
-
-                    if [[ -f $(echo "$file" | sed 's:~:/home/zhao:g') ]]; then
-                        kitty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
-                    fi
-                ;;
-                "$mainChoice/config")
-                    configDir=$(echo "$mainChoice/config" | sed 's:~:/home/zhao:g')
-                    file=$(find $configDir -type f -printf "%T@ %Tc %p\n" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU $(echo "$configDir/" | sed 's:/home/zhao:~:g'))
-
-                    if [[ -f $(echo "$file" | sed 's:~:/home/zhao:g') ]]; then
-                        kitty --class sys,sys -e nvim $(echo "$file" | sed 's:~:/home/zhao:g')
-                    fi
-                ;;
-                *)
-                    if [[ -f $(echo "$choice" | sed 's:~:/home/zhao:g') ]]; then
-                        kitty --class sys,sys -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
-                    fi
-                ;;
-            esac
+        if [[ -f $(echo "$choice" | sed 's:~:/home/zhao:g') ]]; then
+            cd "$dir"
+            kitty -e nvim $(echo "$choice" | sed 's:~:/home/zhao:g')
         fi
     ;;
     "~/Dropbox/Others/Reminders")
