@@ -32,15 +32,15 @@ while [ ! -z "$1" ]; do
             ;;
         --play/pause|-p)
             shift
-            `playerctl -p spotify play-pause`
+            `playerctl -p spotify_player play-pause`
             ;;
         --next|-n)
             shift
-            `playerctl -p spotify next`
+            `playerctl -p spotify_player next`
             ;;
         --previous|-b)
             shift
-            `playerctl -p spotify previous`
+            `playerctl -p spotify_player previous`
             ;;
         --increase|-i)
             shift
@@ -76,7 +76,7 @@ while [ ! -z "$1" ]; do
             shift
             `bluetoothctl disconnect 50:C2:75:90:15:26`
             `bluetoothctl power off`
-            `playerctl -p spotify pause`
+            `playerctl -p spotify_player pause`
             ;;
     esac
 shift
