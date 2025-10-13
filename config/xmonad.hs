@@ -93,9 +93,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm .|. shiftMask, xK_p), spawn "cd ~/Downloads; scrot 'Scrot_%Y_%m_%d_%H%M%S.png'"),
 
         -- Applications
-        ((modm,               xK_s), spawn "spotify"                   ),
-        ((modm .|. shiftMask, xK_d), spawn "discord"                   ),
-        ((modm .|. shiftMask, xK_g), spawn "chromium --force-dark-mode"),
+        ((modm,               xK_s), spawn "kitty --class spotify spotify_player"),
+        ((modm .|. shiftMask, xK_d), spawn "discord"                             ),
+        ((modm .|. shiftMask, xK_g), spawn "chromium --force-dark-mode"          ),
 
         -- Windows
         ((modm              , xK_f     ), sendMessage NextLayout  ),
@@ -126,7 +126,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm .|. shiftMask, xK_F8), spawn "sudo lux -a 1%"),
 
         -- Info
-        ((modm, xK_t), spawn "kitty --class sys,sys -e htop"            ),
+        ((modm, xK_t), spawn "kitty --class sys -e htop"                ),
         ((modm, xK_p), spawn "pavucontrol"                              ),
         ((modm, xK_b), spawn "kitty bluetoothctl; bluetoothctl power on"),
 
@@ -168,13 +168,11 @@ myManageHook = composeAll
         className =? "reminders"   --> viewShift (myWorkspaces !! 0),
         className =? "qutebrowser" --> viewShift (myWorkspaces !! 1),
         className =? "Chromium"    --> viewShift (myWorkspaces !! 1),
-        className =? "obsidian"    --> viewShift (myWorkspaces !! 2),
-        className =? "nvim"        --> viewShift (myWorkspaces !! 2),
         className =? "mpv"         --> viewShift (myWorkspaces !! 6),
         className =? "media"       --> viewShift (myWorkspaces !! 6),
-        className =? "Spotify"     --> viewShift (myWorkspaces !! 7),
+        className =? "spotify"     --> viewShift (myWorkspaces !! 7),
         className =? "sys"         --> viewShift (myWorkspaces !! 8),
-        className =? "Pavucontrol" --> viewShift (myWorkspaces !! 8)
+        className =? "pavucontrol" --> viewShift (myWorkspaces !! 8)
     ]
 
     where viewShift = doF . liftM2 (.) W.greedyView W.shift
