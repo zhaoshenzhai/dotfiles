@@ -150,18 +150,6 @@ snippet eqn "begin numbered equation" b
 \end{equation}
 endsnippet
 
-snippet item "begin itemize" b
-\begin{itemize}
-	\item $0
-\end{itemize}
-endsnippet
-
-snippet enum "begin enumerate" b
-\begin{enumerate}
-	\item $0
-\end{enumerate}
-endsnippet
-
 snippet def "begin definition" b
 \begin{definition}
 	$0
@@ -311,40 +299,6 @@ snippet 2c "begin dcases" b
 \end{dcases}
 endsnippet
 
-priority 100
-snippet mat "begin matrix" b
-\begin{${1:pNiceM}atrix}
-	$0
-\end{$1atrix}
-endsnippet
-
-priority 200
-snippet 2x2mat "begin 2x2 matrix" b
-\begin{${1:pNiceM}atrix}
-	$2 & $3 \\\\
-	$4 & $5
-\end{$1atrix}
-endsnippet
-
-priority 200
-snippet 3x3mat "begin 3x3 matrix" b
-\begin{${1:pNiceM}atrix}
-	$2 & $3 & $4 \\\\
-	$5 & $6 & $7 \\\\
-	$8 & $9 & $10
-\end{$1atrix}
-endsnippet
-
-priority 200
-snippet 4x4mat "begin 4x4 matrix" b
-\begin{${1:pNiceM}atrix}
-	$2 & $3 & $4 & $5 \\\\
-	$6 & $7 & $8 & $9 \\\\
-	$10 & $11 & $12 & $13 \\\\
-	$14 & $15 & $16 & $17
-\end{$1atrix}
-endsnippet
-
 snippet fig "begin figure" b
 \begin{figure}[h]
 	\center
@@ -426,6 +380,112 @@ snippet alg "begin algorithm" b
 		$0
 	\end{algorithm}}
 \end{center}
+endsnippet
+
+# Lists and matrices (https://github.com/SirVer/ultisnips/blob/master/doc/examples/tabstop-generation/README.md)
+global !p
+def create_placeholders(snip):
+	anon_snippet_body = ""
+	start = snip.snippet_start[0]
+	end = snip.snippet_end[0]
+
+	for i in range(start, end + 1):
+		anon_snippet_body += snip.buffer[i]
+		anon_snippet_body += "" if i == end else "\n"
+
+	for i in range(start, end): del snip.buffer[start]
+	snip.buffer[start] = ''
+	snip.expand_anon(anon_snippet_body)
+
+def create_list(count, base_indent=""):
+    res = ""
+    placeholder = 1
+    item_indent = base_indent + "    "
+    vspace_indent = item_indent + "    "
+
+    for i in range(int(count)):
+        if i == 0:
+            res += f"    \\item ${placeholder}\n"
+        if i != 0:
+            res += item_indent + f"\\item ${placeholder}\n"
+        placeholder += 1
+        if i != int(count) - 1:
+            res += vspace_indent + "\\vspace{-0.05in}\n"
+    return res.rstrip()
+
+def create_alpha_list_upto(letter, base_indent=""):
+    res = ""
+    placeholder = 1
+    item_indent = base_indent + "    "
+    vspace_indent = item_indent + "    "
+    alphabet = string.ascii_lowercase
+
+    last_index = alphabet.index(letter.lower())
+    for i in range(last_index + 1):
+        label = alphabet[i]
+        if i == 0:
+            res += f"    \\item[({label})] ${placeholder}\n"
+        else:
+            res += item_indent + f"\\item[({label})] ${placeholder}\n"
+        placeholder += 1
+        if i != last_index:
+            res += vspace_indent + "\\vspace{-0.05in}\n"
+    return res.rstrip()
+
+def create_matrix(cols, rows, sep, start, end, indent=""):
+    res = ""
+    placeholder = 1
+    for row in range(0, int(rows)):
+        line = ""
+        if row > 0:
+            line += indent
+        line += start + f"${placeholder} "
+        placeholder += 1
+        for col in range(1, int(cols)):
+            line += sep + f" ${placeholder} "
+            placeholder += 1
+        line += end
+        if row != int(rows) - 1:
+            line += "\n"
+        res += line
+    return res
+endglobal
+
+priority 1000
+post_jump "create_placeholders(snip)"
+snippet '(\d+)x(\d+)mat' "begin n x m matrix" br
+\begin{pNiceMatrix}
+`!p
+indent = re.match(r'\s*', snip.buffer[snip.snippet_start[0]]).group(0)
+snip.rv = create_matrix(match.group(1), match.group(2), "&", "\t", "\\\\\\", indent)
+`$0
+\end{pMiceMatrix}
+endsnippet
+
+priority 1000
+post_jump "create_placeholders(snip)"
+snippet '(\d+)item' "begin itemize" br
+\begin{itemize}
+`!p
+indent = re.match(r'\s*', snip.buffer[snip.snippet_start[0]]).group(0)
+snip.rv = create_list(match.group(1), indent)
+`$0
+\end{itemize}
+endsnippet
+
+priority 1000
+post_jump "create_placeholders(snip)"
+snippet '((\d+)|[a-z])enum' "begin enumerate" br
+\begin{enumerate}
+`!p
+indent = re.match(r'\s*', snip.buffer[snip.snippet_start[0]]).group(0)
+val = match.group(1)
+if val.isdigit():
+    snip.rv = create_list(val, indent)
+else:
+    snip.rv = create_alpha_list_upto(val, indent)
+`$0
+\end{enumerate}
 endsnippet
 
 # Brackets
