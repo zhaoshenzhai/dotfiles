@@ -1,7 +1,9 @@
 #!/bin/bash
 
 for file in "$@"; do
-    if [[ -f "$file" ]]; then
+    name=$(basename -- "$file")
+    ext="${name##*.}"
+    if [[ -f "$file" ]] && [[ "$ext" == "pdf" ]]; then
         echo -ne "${YELLOW}Compressing: $file${NC}\r"
         gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dPDFSETTINGS=/printer -dNOPAUSE -dQUIET -dBATCH -sOutputFile="$file.tmp" "$file"
 
