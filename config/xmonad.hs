@@ -87,7 +87,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm .|. shiftMask, xK_w), spawn "$DOTFILES_DIR/scripts/openQute.sh -P"),
 
         -- Scripts
-        ((modm, xK_g), spawn "kitty $DOTFILES_DIR/scripts/gitCommit.sh"),
+        ((modm, xK_g), spawn "kitty --class sys $DOTFILES_DIR/scripts/gitCommit.sh"),
 
         -- Screenshot
         ((modm .|. shiftMask, xK_p), spawn "cd ~/Downloads; scrot 'Scrot_%Y_%m_%d_%H%M%S.png'"),
