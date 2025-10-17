@@ -94,6 +94,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
         -- Applications
         ((modm,               xK_s), spawn "kitty --class spotify spotify_player"),
+        ((modm .|. shiftMask, xK_s), spawn "spotify"                             ),
         ((modm .|. shiftMask, xK_d), spawn "discord"                             ),
         ((modm .|. shiftMask, xK_g), spawn "chromium --force-dark-mode"          ),
 
