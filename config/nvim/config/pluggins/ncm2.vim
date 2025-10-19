@@ -4,7 +4,7 @@ set noshowmode
 set shortmess+=c
 
 inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
-inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<S-tab>"
+inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
 
 augroup NCM2
     autocmd!
