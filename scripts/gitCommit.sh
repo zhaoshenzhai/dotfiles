@@ -5,7 +5,7 @@ Courses         $UNIVERSITY_DIR/Courses
 Dotfiles        $DOTFILES_DIR
 Projects        /home/zhao/Dropbox/Projects
 Website         /home/zhao/Dropbox/Projects/_web
-COMP480         $UNIVERSITY_DIR/Courses/COMP480_Honours_Independent_Study_Recursion_Theory"
+COMP480         $UNIVERSITY_DIR/Courses/COMP480_Honours_Independent_Study_first-order_arithmetic"
 
 REPOS=$(echo "$REPOS" | sed 1d)
 REPOSNUM=$(echo "$REPOS" | wc -l)
