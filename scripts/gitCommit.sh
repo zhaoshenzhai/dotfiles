@@ -112,7 +112,7 @@ else
             cd /home/zhao/Dropbox/Projects/_web
         ;;
         "5")
-            cd $UNIVERSITY_DIR/Courses/COMP480_Honours_Independent_Study_Recursion_Theory
+            cd $UNIVERSITY_DIR/Courses/COMP480_Honours_Independent_Study_first-order_arithmetic
         ;;
         *)
             changedRepos=""
