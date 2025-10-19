@@ -26,7 +26,7 @@ case $mainChoice in
     ;;
     "~/Dropbox/Dotfiles")
         dir="$HOME/Dropbox/Dotfiles"
-        choice=$(find $dir -type f -printf "%T@ %Tc %p\n" | grep -v ".git\|dmenu/" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU "$mainChoice/")
+        choice=$(find $dir -type f -printf "%T@ %Tc %p\n" | grep -v "\.git\|dmenu/" | sort -nr | sed 's:.*/home/zhao:~:' | DMENU "$mainChoice/")
 
         if [[ -f $(echo "$choice" | sed 's:~:/home/zhao:g') ]]; then
             cd "$dir"
