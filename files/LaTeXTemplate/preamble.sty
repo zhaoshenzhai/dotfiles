@@ -1,5 +1,5 @@
 \usepackage{amsfonts, amsmath, amssymb, amsthm}
-\usepackage{mathtools, mathrsfs, dsfont, nicematrix}
+\usepackage{mathtools, mathrsfs, dsfont, nicematrix, thmtools}
 \usepackage{tikz, tikz-3dplot, tikzpagenodes, graphicx, xcolor, mlmodern, mdframed}
 \usepackage{enumitem, bookmark, xifthen, setspace, proof, algorithm2e}
 
@@ -17,3 +17,6 @@
 \RestyleAlgo{ruled}
 
 \newmdenv[topline=false, bottomline=false, rightline=false, skipabove=4pt, skipbelow=4pt, linewidth=0.75pt]{leftbar}
+
+\declaretheoremstyle[headfont=\color{violet}\normalfont\itshape, bodyfont=\color{violet}\normalfont, numbered=no]{solution}
+\declaretheorem[style=solution, name=Solution]{solution}
