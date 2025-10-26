@@ -409,9 +409,9 @@ def create_list(count, base_indent=""):
 
     for i in range(int(count)):
         if i == 0:
-            res += f"    \\item ${placeholder}\n"
+            res += f"    \\item[{i+1}.] ${placeholder}\n"
         if i != 0:
-            res += item_indent + f"\\item ${placeholder}\n"
+            res += item_indent + f"\\item[{i+1}.] ${placeholder}\n"
         placeholder += 1
         if i != int(count) - 1:
             res += vspace_indent + "\\vspace{-0.05in}\n"
