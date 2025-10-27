@@ -401,7 +401,23 @@ def create_placeholders(snip):
 	snip.buffer[start] = ''
 	snip.expand_anon(anon_snippet_body)
 
-def create_list(count, base_indent=""):
+def create_item(count, base_indent=""):
+    res = ""
+    placeholder = 1
+    item_indent = base_indent + "    "
+    vspace_indent = item_indent + "    "
+
+    for i in range(int(count)):
+        if i == 0:
+            res += f"    \\item ${placeholder}\n"
+        if i != 0:
+            res += item_indent + f"\\item ${placeholder}\n"
+        placeholder += 1
+        if i != int(count) - 1:
+            res += vspace_indent + "\\vspace{-0.05in}\n"
+    return res.rstrip()
+
+def create_enum(count, base_indent=""):
     res = ""
     placeholder = 1
     item_indent = base_indent + "    "
@@ -417,7 +433,7 @@ def create_list(count, base_indent=""):
             res += vspace_indent + "\\vspace{-0.05in}\n"
     return res.rstrip()
 
-def create_alpha_list_upto(letter, base_indent=""):
+def create_alpha_enum(letter, base_indent=""):
     res = ""
     placeholder = 1
     item_indent = base_indent + "    "
@@ -472,7 +488,7 @@ snippet '(\d+)item' "begin itemize" br
 \begin{itemize}
 `!p
 indent = re.match(r'\s*', snip.buffer[snip.snippet_start[0]]).group(0)
-snip.rv = create_list(match.group(1), indent)
+snip.rv = create_item(match.group(1), indent)
 `$0
 \end{itemize}
 endsnippet
@@ -485,9 +501,9 @@ snippet '((\d+)|[a-z])enum' "begin enumerate" br
 indent = re.match(r'\s*', snip.buffer[snip.snippet_start[0]]).group(0)
 val = match.group(1)
 if val.isdigit():
-    snip.rv = create_list(val, indent)
+    snip.rv = create_enum(val, indent)
 else:
-    snip.rv = create_alpha_list_upto(val, indent)
+    snip.rv = create_alpha_enum(val, indent)
 `$0
 \end{enumerate}
 endsnippet
