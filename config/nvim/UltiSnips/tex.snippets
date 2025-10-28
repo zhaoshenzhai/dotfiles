@@ -479,7 +479,7 @@ snippet '(\d+)x(\d+)mat' "begin n x m matrix" br
 indent = re.match(r'\s*', snip.buffer[snip.snippet_start[0]]).group(0)
 snip.rv = create_matrix(match.group(1), match.group(2), "&", "\t", "\\\\\\", indent)
 `$0
-\end{pMiceMatrix}
+\end{pNiceMatrix}
 endsnippet
 
 priority 1000
