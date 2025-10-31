@@ -93,8 +93,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm .|. shiftMask, xK_p), spawn "cd ~/Downloads; scrot 'Scrot_%Y_%m_%d_%H%M%S.png'"),
 
         -- Applications
-        ((modm,               xK_s), spawn "kitty --class spotify spotify_player"),
-        ((modm .|. shiftMask, xK_s), spawn "spotify"                             ),
+        ((modm, xK_s), spawn "spotify"                                           ),
+        ((modm .|. shiftMask, xK_s), spawn "kitty --class spotify spotify_player"),
         ((modm .|. shiftMask, xK_d), spawn "discord"                             ),
         ((modm .|. shiftMask, xK_g), spawn "chromium --force-dark-mode"          ),
 
