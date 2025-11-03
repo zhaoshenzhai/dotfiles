@@ -25,6 +25,9 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$DOTFILES_DIR/scripts:$PATH"
 export PATH="$MATHWIKI_DIR/.scripts:$PATH"
 
+# Opam
+test -r '/home/zhao/.opam/opam-init/init.sh' && . '/home/zhao/.opam/opam-init/init.sh' > /dev/null 2> /dev/null || true
+
 if [ -z "$DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then
     exec startx "$DOTFILES_DIR/config/xinitrc"
 fi
