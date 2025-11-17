@@ -55,7 +55,7 @@ ln -sf $HOME/Dropbox/Dotfiles/config/mpv/input.conf $HOME/.config/mpv/input.conf
 ln -sf $HOME/Dropbox/Dotfiles/config/mpv/mpv.conf $HOME/.config/mpv/mpv.conf
 
 # Packages
-yay -Syu zathura zathura-pdf-poppler github-cli qutebrowser qutebrowser-profile-git dropbox spotify spicetify-cli spotify_player pipewire pipewire-pulse pipewire-jack pamixer bluez bluez-utils alsa-utils alsa-ucm-conf playerctl htop tree bc python python-pynvim woff2-font-awesome ttf-anonymous-pro ttf-courier-prime ttf-cmu-serif ttf-mononoki-nerd noto-fonts adobe-source-han-sans-cn-fonts pdftk scrot texlive biber ghostscript pdf2svg zip unzip gpicview
+yay -Syu zathura zathura-pdf-poppler github-cli qutebrowser qutebrowser-profile-git dropbox spotify spicetify-cli pipewire pipewire-pulse pipewire-jack pamixer bluez bluez-utils alsa-utils alsa-ucm-conf playerctl htop tree bc python python-pynvim woff2-font-awesome ttf-anonymous-pro ttf-courier-prime ttf-cmu-serif ttf-mononoki-nerd noto-fonts adobe-source-han-sans-cn-fonts pdftk scrot texlive biber ghostscript pdf2svg zip unzip gpicview
 
 # Dmenu
 cd $HOME/Dropbox/Dotfiles/dmenu
