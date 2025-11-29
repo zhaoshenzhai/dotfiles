@@ -4,8 +4,7 @@ REPOS="
 Courses         $UNIVERSITY_DIR/Courses
 Dotfiles        $DOTFILES_DIR
 Projects        /home/zhao/Dropbox/Projects
-Website         /home/zhao/Dropbox/Projects/_web
-COMP480         $UNIVERSITY_DIR/Courses/COMP480_Honours_Independent_Study_first-order_arithmetic"
+Website         /home/zhao/Dropbox/Projects/_web"
 
 REPOS=$(echo "$REPOS" | sed 1d)
 REPOSNUM=$(echo "$REPOS" | wc -l)
@@ -16,7 +15,7 @@ specifiedRepo=
 repoNum=
 
 HELP() {
-    echo -e "Usage: ./gitCommit.sh"
+    echo -e "Usage: ./git.sh"
     echo -e "    Optional: [-r specifiedRepo]"
 }
 GETSTATUS() {
@@ -51,7 +50,7 @@ EXIT() {
         read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
         if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
             clear
-            $DOTFILES_DIR/scripts/gitCommit.sh
+            $DOTFILES_DIR/scripts/git.sh
         fi
     fi
     exit
@@ -110,9 +109,6 @@ else
         ;;
         "4")
             cd /home/zhao/Dropbox/Projects/_web
-        ;;
-        "5")
-            cd $UNIVERSITY_DIR/Courses/COMP480_Honours_Independent_Study_first-order_arithmetic
         ;;
         *)
             changedRepos=""
