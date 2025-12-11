@@ -1,4 +1,4 @@
-\usepackage{geometry, titlesec, fancyhdr, caption, subcaption}
+\usepackage{geometry, titlesec, thmtools, fancyhdr, caption, subcaption}
 
 \newgeometry{margin = 1in}
 \setstretch{1.2}
@@ -17,3 +17,5 @@
 \newtheorem{fact}{Fact}\newtheorem*{fact*}{Fact}
 
 \theoremstyle{definition}\newtheorem{question}{Question}
+\declaretheoremstyle[headfont=\color{violet}\normalfont\itshape, bodyfont=\color{violet}\normalfont, numbered=no]{solution}
+\declaretheorem[style=solution, name=Solution]{solution}
