@@ -12,4 +12,4 @@ dropbox &
 nitrogen --restore &
 qutebrowser-profile --load 'Z' &
 qutebrowser-profile --load 'P' &
-spotify_player &
+spotify &
