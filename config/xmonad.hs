@@ -143,15 +143,15 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 ---------------------------------------------------------------------------------------------------------------------
 
 myWorkspaces = [
-    "<fn=2>\xf303  </fn>",  -- Arch
-    "<fn=2>\xf268  </fn>",  -- Browser
-    "<fn=1>\xf040  </fn>",  -- Write
-    "<fn=1>\xf02d  </fn>",  -- Book1
-    "<fn=1>\xf05da  </fn>", -- Book2
-    "<fn=1>\xf02e  </fn>",  -- Book3
-    "<fn=1>\xf0254  </fn>", -- Media
-    "<fn=2>\xf1bc  </fn>",  -- Spotify
-    "<fn=1>\xf013 </fn>"    -- Config
+    "<fn=2>\xf303</fn><hspace=20/>",  -- Arch
+    "<fn=2>\xf268</fn><hspace=15/>",  -- Browser
+    "<fn=1>\xf040</fn><hspace=18/>",  -- Write
+    "<fn=1>\xf02d</fn><hspace=18/>",  -- Book1
+    "<fn=1>\xf05da</fn><hspace=20/>", -- Book2
+    "<fn=1>\xf02e</fn><hspace=18/>",  -- Book3
+    "<fn=1>\xf0254</fn><hspace=20/>", -- Media
+    "<fn=2>\xf1bc</fn><hspace=15/>",  -- Spotify
+    "<fn=1>\xf013</fn><hspace=5/>"   -- Config
     ]
 
 myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..]
