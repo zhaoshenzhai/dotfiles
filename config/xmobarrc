@@ -2,7 +2,8 @@ Config
 {
     font = "xft:AnonymousPro-Bold-14",
     additionalFonts = [ 
-        "Font Awesome 7 Free Solid:style=Solid 14"
+        "xft:Font Awesome 7 Free Solid-13",
+        "xft:Font Awesome 7 Brands-13"
     ],
     bgColor = "#1E2127",
     fgColor = "#A8A8AA",
@@ -17,17 +18,17 @@ Config
     commands = 
         [
             Run MultiCpu [
-                "--template"      , "<fn=1>\62171</fn>  <total>%"
+                "--template"      , "<fn=1>\xf2db</fn>  <total>%"
             ] 10,
             Run Memory [
-                "--template"      , "<fn=1>\xf1c0</fn>  <usedratio>%"
+                "--template"      , "<fn=1>\xf538</fn>  <usedratio>%"
             ] 200,
             Run Battery [
                 "--template"      , "<acstatus>",
                 "--"              ,
-                "-o"              , "<fn=1>\xf0083</fn> <left>%",
-                "-O"              , "<fn=1>\xf0084</fn> <left>%",
-                "-i"              , "<fn=1>\xf0079</fn> Full"
+                "-o"              , "<fn=1>\xf242 </fn> <left>%",
+                "-O"              , "<fn=1>\xf0e7 </fn> <left>%",
+                "-i"              , "<fn=1>\xf240 </fn> Full"
             ] 50,
             Run Com "/home/zhao/Dropbox/Dotfiles/scripts/audioXmobar.sh" [] "volume" 5,
             Run Com "/home/zhao/Dropbox/Dotfiles/scripts/disk.sh" [] "disk" 600,

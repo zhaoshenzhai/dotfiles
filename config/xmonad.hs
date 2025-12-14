@@ -143,14 +143,14 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 ---------------------------------------------------------------------------------------------------------------------
 
 myWorkspaces = [
-    "<fn=1>\xf303  </fn>",  -- Arch
-    "<fn=1>\xf268  </fn>",  -- Browser
+    "<fn=2>\xf303  </fn>",  -- Arch
+    "<fn=2>\xf268  </fn>",  -- Browser
     "<fn=1>\xf040  </fn>",  -- Write
     "<fn=1>\xf02d  </fn>",  -- Book1
     "<fn=1>\xf05da  </fn>", -- Book2
     "<fn=1>\xf02e  </fn>",  -- Book3
     "<fn=1>\xf0254  </fn>", -- Media
-    "<fn=1>\xf1bc  </fn>",  -- Spotify
+    "<fn=2>\xf1bc  </fn>",  -- Spotify
     "<fn=1>\xf013 </fn>"    -- Config
     ]
 
