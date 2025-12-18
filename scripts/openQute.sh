@@ -8,7 +8,7 @@ while [ ! -z "$1" ]; do
             ;;
         -P)
             shift
-            $(qutebrowser-profile --load 'P' --new https://web.whatsapp.com https://www.instagram.com/direct/inbox https://discord.com/channels/@me https://www.facebook.com/messages)
+            $(qutebrowser-profile --load 'P' --new https://web.whatsapp.com https://discord.com/channels/@me https://www.facebook.com/messages)
             ;;
     esac
 shift
