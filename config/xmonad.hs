@@ -93,7 +93,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm .|. shiftMask, xK_p), spawn "cd ~/Downloads; scrot 'Scrot_%Y_%m_%d_%H%M%S.png'"),
 
         -- Applications
-        ((modm, xK_s), spawn "spotify"                                           ),
+        ((modm, xK_s),               spawn "spotify"                             ),
+        ((modm .|. shiftMask, xK_s), spawn "steam"                               ),
         ((modm .|. shiftMask, xK_d), spawn "discord"                             ),
         ((modm .|. shiftMask, xK_g), spawn "chromium --force-dark-mode"          ),
 
@@ -159,7 +160,8 @@ myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..]
 ---------------------------------------------------------------------------------------------------------------------
 
 myStartupHook = do
-    spawnOnce "$DOTFILES_DIR/scripts/initX.sh && $DOTFILES_DIR/scripts/initApplications.sh &"
+    spawnOnce "/home/zhao/Dropbox/Dotfiles/scripts/initX.sh &"
+    spawnOnce "/home/zhao/Dropbox/Dotfiles/scripts/initApplications.sh &"
 
 ---------------------------------------------------------------------------------------------------------------------
 

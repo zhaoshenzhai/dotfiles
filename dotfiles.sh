@@ -55,7 +55,7 @@ ln -sf $HOME/Dropbox/Dotfiles/config/mpv/input.conf $HOME/.config/mpv/input.conf
 ln -sf $HOME/Dropbox/Dotfiles/config/mpv/mpv.conf $HOME/.config/mpv/mpv.conf
 
 # Packages
-yay -Syu zathura zathura-pdf-poppler github-cli qutebrowser qutebrowser-profile-git dropbox spotify spicetify-cli pipewire pipewire-pulse pipewire-jack pamixer bluez bluez-utils alsa-utils alsa-ucm-conf playerctl htop tree bc python python-pynvim otf-font-awesome ttf-anonymous-pro ttf-courier-prime ttf-cmu-serif ttf-mononoki-nerd noto-fonts adobe-source-han-sans-cn-fonts pdftk scrot texlive biber ghostscript pdf2svg zip unzip gpicview
+yay -Syu zathura zathura-pdf-poppler github-cli qutebrowser qutebrowser-profile-git dropbox spotify pipewire pipewire-pulse pipewire-jack pamixer bluez bluez-utils alsa-utils alsa-ucm-conf playerctl htop tree bc python python-pynvim otf-font-awesome ttf-anonymous-pro ttf-courier-prime ttf-cmu-serif ttf-mononoki-nerd noto-fonts adobe-source-han-sans-cn-fonts pdftk scrot texlive biber ghostscript pdf2svg zip unzip gpicview
 
 # Dmenu
 cd $HOME/Dropbox/Dotfiles/dmenu
@@ -87,14 +87,3 @@ mkdir -p $HOME/.config/mpv/scripts
 git clone https://github.com/CogentRedTester/mpv-scripts.git
 mv mpv-scripts/cycle-commands.lua $HOME/.config/mpv/scripts/cycle-commands.lua
 rm -rf mpv-scripts
-
-# Spicetify
-sudo mkdir -p /usr/share/spicetify-cli/Themes/Dribbblish/
-sudo mkdir -p $HOME/.config/spicetify/Themes/Dribbblish/
-sudo cp $HOME/Dropbox/Dotfiles/config/spicetify.ini $HOME/.config/spicetify/Themes/Dribbblish/color.ini
-sudo chmod a+wr /opt/spotify
-sudo chmod a+wr /opt/spotify/Apps -R
-spicetify config current_theme Dribbblish
-spicetify config color_scheme rosepine
-spicetify config experimental_features 0
-spicetify backup apply
