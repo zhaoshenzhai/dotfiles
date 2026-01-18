@@ -4,6 +4,7 @@ templatePath=$DOTFILES_DIR/files/LaTeXTemplate
 fileName=
 fileType=
 title=
+solutions=
 
 assignmentCourse=
 assignmentNumber=
@@ -94,6 +95,9 @@ while [[ ! -z $1 ]]; do
             fileName=Assignment_$2
             title=$(echo $fileName | sed 's/_/ /g')
             ;;
+        -s)
+            solutions=1
+            ;;
         -d)
             assignmentDueMonth=$2
             assignmentDueDate=$3
@@ -158,4 +162,10 @@ elif [[ "$fileType" = "assignment" ]]; then
     sed -i 's/DUE_MONTH/'"$assignmentDueMonth"'/g' $fileName.tex
     sed -i 's/DUE_DATE_MOD/'"$assignmentDueDateMod"'/g' $fileName.tex
     sed -i 's/DUE_DATE/'"$assignmentDueDate"'/g' $fileName.tex
+fi
+
+if [[ "$solutions" ]]; then
+    ln -s $templatePath/preambles/solutions.sty .
+    ln -s $templatePath/.latexmkrc .
+    sed -i 's/\\input{macros.sty}/\\input{macros.sty}\n\\input{solutions.sty}/g' $fileName.tex
 fi

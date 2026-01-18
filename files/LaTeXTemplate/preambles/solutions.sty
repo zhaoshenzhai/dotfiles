@@ -1,0 +1,6 @@
+\usepackage{thmtools, xstring, environ}
+
+\newif\ifsolution
+\IfSubStr{\jobname}{\detokenize{_Solutions}}{\solutiontrue}{}
+\declaretheoremstyle[headfont=\color{violet}\normalfont\itshape, bodyfont=\color{violet}\normalfont, numbered=no]{solution}
+\ifsolution\declaretheorem[style=solution, name=Solution]{solution}\else\NewEnviron{solution}[1][]{}\fi
