@@ -166,6 +166,6 @@ fi
 
 if [[ "$solutions" ]]; then
     ln -s $templatePath/preambles/solutions.sty .
-    ln -s $templatePath/.latexmkrc .
+    cp $templatePath/.latexmkrc .
     sed -i 's/\\input{macros.sty}/\\input{macros.sty}\n\\input{solutions.sty}/g' $fileName.tex
 fi
