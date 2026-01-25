@@ -90,7 +90,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         ((modm, xK_g), spawn "kitty --class sys $DOTFILES_DIR/scripts/git.sh"),
 
         -- Screenshot
-        ((modm .|. shiftMask, xK_p), spawn "cd ~/Downloads; scrot 'Scrot_%Y_%m_%d_%H%M%S.png'"),
+        ((modm .|. shiftMask, xK_p), spawn "cd ~/Downloads; scrot 'Screenshot_%Y_%m_%d_%H%M%S.png'"),
 
         -- Applications
         ((modm, xK_s),               spawn "spotify"                             ),
