@@ -1,62 +1,7 @@
 modmap:
-  - name: caps-to-esc
+  - name: global-remap
     remap:
       CapsLock: Esc
-  - name: fix-zero
-    remap:
       KEY_F10: KEY_0
       KEY_F11: KEY_0
-
-keymap:
-  - name: win-to-ctrl
-    remap:
-      Win-0: Ctrl-0
-      Win-1: Ctrl-1
-      Win-2: Ctrl-2
-      Win-3: Ctrl-3
-      Win-4: Ctrl-4
-      Win-5: Ctrl-5
-      Win-6: Ctrl-6
-      Win-7: Ctrl-7
-      Win-8: Ctrl-8
-      Win-9: Ctrl-9
-      Win-a: Ctrl-a
-      Win-b: Ctrl-b
-      Win-c: Ctrl-c
-      Win-d: Ctrl-d
-      Win-e: Ctrl-e
-      Win-f: Ctrl-f
-      Win-g: Ctrl-g
-      Win-h: Ctrl-h
-      Win-i: Ctrl-i
-      Win-j: Ctrl-j
-      Win-k: Ctrl-k
-      Win-l: Ctrl-l
-      Win-m: Ctrl-m
-      Win-n: Ctrl-n
-      Win-o: Ctrl-o
-      Win-p: Ctrl-p
-      Win-q: Ctrl-q
-      Win-r: Ctrl-r
-      Win-s: Ctrl-s
-      Win-t: Ctrl-t
-      Win-u: Ctrl-u
-      Win-v: Ctrl-v
-      Win-w: Ctrl-w
-      Win-x: Ctrl-x
-      Win-y: Ctrl-y
-      Win-z: Ctrl-z
-      Win-KEY_F1: Ctrl-KEY_F1
-      Win-KEY_F2: Ctrl-KEY_F2
-      Win-KEY_F3: Ctrl-KEY_F3
-      Win-KEY_F4: Ctrl-KEY_F4
-      Win-KEY_F5: Ctrl-KEY_F5
-      Win-KEY_F6: Ctrl-KEY_F6
-      Win-KEY_F7: Ctrl-KEY_F7
-      Win-KEY_F8: Ctrl-KEY_F8
-      Win-KEY_F9: Ctrl-KEY_F9
-      Win-KEY_ENTER: Ctrl-KEY_ENTER
-      Win-KEY_GRAVE: Ctrl-KEY_GRAVE
-      Win-KEY_MINUS: Ctrl-KEY_MINUS
-      Win-KEY_EQUAl: Ctrl-KEY_EQUAL
-      Win-KEY_SPACE: Ctrl-KEY_SPACE
+      LeftMeta: LeftCtrl
