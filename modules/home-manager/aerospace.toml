@@ -58,11 +58,14 @@ outer.right =      10
 
     cmd-f = 'layout v_accordion v_tiles'
     cmd-tab = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next'
-    cmd-shift-f = 'fullscreen'
+    cmd-shift-f = 'fullscreen --no-outer-gaps'
 
     cmd-r = 'mode resize'
     cmd-q = []
-    cmd-esc = [ 'close', 'focus --boundaries workspace dfs-next' ]
+    cmd-esc = [ 
+        'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"',
+        'focus --boundaries workspace dfs-next' 
+    ]
 
 [mode.launcher.binding]
     ctrl-q = []
@@ -91,7 +94,11 @@ run = [ 'layout floating', 'move-node-to-workspace 1' ]
 
 [[on-window-detected]]
 if.app-id = 'org.nixos.qutebrowser'
-run = ['layout tiling', 'move-node-to-workspace w', 'fullscreen']
+run = [
+    'layout tiling',
+    'move-node-to-workspace w',
+    'fullscreen'
+]
 
 [[on-window-detected]]
 if.app-id = 'com.apple.MobileSMS'

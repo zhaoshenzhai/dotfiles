@@ -13,6 +13,7 @@
             url.default_page = "https://duckduckgo.com";
             "auto_save.session" = false;
             "window.hide_decoration" = true; 
+            "window.title_format" = " ";
             "qt.args" = [ 
                 "disable-gpu-driver-bug-workarounds"
                 "enable-native-gpu-memory-buffers"
@@ -132,11 +133,6 @@
                 "<Ctrl+Shift+8>" = "tab-move 8";
             };
         };
-
-        extraConfig = ''
-            from qutebrowser.api import message
-            config.add_event_handler('window-object-cleared', 'fullscreen')
-        '';
     };
 
     home.file = {
