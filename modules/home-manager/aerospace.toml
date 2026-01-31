@@ -24,7 +24,7 @@ outer.right =      10
     cmd-shift-m = 'exec-and-forget open -a music'
     cmd-s       = 'exec-and-forget open -a settings'
     cmd-p       = 'exec-and-forget screencapture ~/Downloads/Screenshot_$(date +%Y_%m_%d_%H%M%S).png'
-    cmd-g       = 'exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty --title git -e ~/iCloud/Dotfiles/scripts/git.sh'
+    cmd-g       = 'exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty --title git -e zsh -ic "~/iCloud/Dotfiles/scripts/git.sh"'
 
     cmd-h = 'focus left'
     cmd-j = 'focus down'
@@ -103,6 +103,10 @@ run = 'move-node-to-workspace M'
 
 [[on-window-detected]]
 if.window-title-regex-substring = 'vifm-float'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.window-title-regex-substring = 'git'
 run = 'layout floating'
 
 [[on-window-detected]]

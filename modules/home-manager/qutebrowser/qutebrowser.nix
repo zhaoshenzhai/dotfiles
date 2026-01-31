@@ -12,6 +12,8 @@
             url.start_pages = [ "https://duckduckgo.com" ];
             url.default_page = "https://duckduckgo.com";
             "auto_save.session" = false;
+            "window.hide_decoration" = true;
+            "qt.args" = [ "disable-gpu-driver-bug-workarounds" ];
 
             statusbar.show = "always";
             tabs.show = "multiple";
@@ -36,6 +38,7 @@
             downloads.location.directory = "~/Downloads";
             downloads.prevent_mixed_content = false;
 
+            content.fullscreen.window = true;
             content.tls.certificate_errors = "block";
             colors.webpage.preferred_color_scheme = "dark";
 
@@ -125,25 +128,21 @@
                 "<Ctrl+Shift+8>" = "tab-move 8";
             };
         };
+    };
 
-        extraConfig = ''
+    home.file = {
+        ".qutebrowser/quickmarks".source = ./quickmarks;
+
+        ".qutebrowser/config.py".text = ''
             config.set('content.images', True, 'chrome-devtools://*')
             config.set('content.images', True, 'devtools://*')
             config.set('content.javascript.enabled', True, 'chrome-devtools://*')
             config.set('content.javascript.enabled', True, 'devtools://*')
             config.set('content.javascript.enabled', True, 'chrome://*/*')
             config.set('content.javascript.enabled', True, 'qute://*/*')
-        '';
-    };
-        
-    home.file = {
-        ".qutebrowser/quickmarks".source = ./quickmarks;
 
-        ".qutebrowser/config.py".text = ''
             import os
-            
             config_path = os.path.expanduser("~/.config/qutebrowser/config.py")
-            
             if os.path.exists(config_path):
                 with open(config_path, "r") as f:
                     exec(f.read())
