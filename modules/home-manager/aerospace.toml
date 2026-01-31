@@ -22,7 +22,7 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
     cmd-e = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
         --title vifm \
         -e /etc/profiles/per-user/zhao/bin/vifm ~/ ~/iCloud \
-        -c StartVifm"""
+        -c "filter Applications|Desktop|Documents|Library|Movies|Music|Pictures | normal ggvGgA""""
 
     cmd-g = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
         --title git \

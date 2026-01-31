@@ -34,8 +34,6 @@
             filetype *.pdf zathura %c 2>/dev/null &
             filetype *.jpg,*.jpeg,*.png,*.gif open %c &
 
-            command! StartVifm filter Applications\|Desktop\|Documents\|Library\|Movies\|Music\|Pictures | normal ggjvGgA
-
             highlight clear
             highlight Border	cterm=none	ctermfg=035	ctermbg=default
             highlight TopLine	cterm=none	ctermfg=002	ctermbg=default

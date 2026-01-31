@@ -52,7 +52,7 @@
                 "--option" "window.dimensions={columns=100,lines=35}"
                 "--option" "window.position={x=525,y=250}"
                 "-e" "${pkgs.vifm}/bin/vifm"
-                "-c" ":only"
+                "-c" ":set nodotfiles | filter Applications|Desktop|Documents|Library|Movies|Music|Pictures | :only"
                 "--choose-files" "{}"
             ];
 
