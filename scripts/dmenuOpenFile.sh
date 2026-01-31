@@ -6,7 +6,7 @@ DMENU()
 }
 
 declare -a options=(
-    "~/iCloud/Documents"
+    "~/Dropbox/Documents"
     "~/Dropbox/Dotfiles"
     "~/Dropbox/Others/Reminders"
     "~/Movies_Shows"
@@ -15,8 +15,8 @@ declare -a options=(
 mainChoice=$(printf '%s\n' "${options[@]}" | DMENU "~/")
 
 case $mainChoice in
-    "~/iCloud/Documents")
-        dir="$HOME/iCloud/Documents"
+    "~/Dropbox/Documents")
+        dir="$HOME/Dropbox/Documents"
         file=$(find $dir -printf "%T@ %Tc %p\n" | grep ".pdf" | sort -nr | sed 's:.*/::' | DMENU $(echo "$mainChoice/" | sed 's:/home/zhao:~:g'))
 
         if [[ -f "$dir/$file" ]]; then
