@@ -19,12 +19,22 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
     # Applications & Terminal
     cmd-backslash = 'exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty'
 
-    cmd-e = 'exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty --title vifm -e /etc/profiles/per-user/zhao/bin/vifm ~/ ~/iCloud -c "normal ggvGgA"'
+    cmd-e = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
+        --title vifm \
+        -e /etc/profiles/per-user/zhao/bin/vifm ~/ ~/iCloud \
+        -c "normal ggvGgA" """
 
-    cmd-g = 'exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty --title git --option "window.dimensions={columns=100,lines=35}" --option "window.position={x=525,y=250}" -e zsh -ic "~/iCloud/Dotfiles/scripts/git.sh"'
+    cmd-g = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
+        --title git \
+        --option "window.dimensions={columns=100,lines=35}" \
+        --option "window.position={x=525,y=250}" \
+        -e zsh -ic "~/iCloud/Dotfiles/scripts/git.sh" """
 
     cmd-enter = [
-        'exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty --config-file ~/.config/alacritty/launcher.toml --title launcher -e /etc/profiles/per-user/zhao/bin/launcher',
+        """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
+            --config-file ~/.config/alacritty/launcher.toml \
+            --title launcher \
+            -e /etc/profiles/per-user/zhao/bin/launcher""",
         'mode launcher'
     ]
 

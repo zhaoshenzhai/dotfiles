@@ -25,15 +25,17 @@ in
         decorations = "buttonless"
         startup_mode = "Windowed"
         title = "launcher"
-        dimensions = { columns = 100, lines = 20 }
+        dimensions = { columns = 120, lines = 15 }
         padding = { x = 20, y = 20 }
+        position = { x = 275, y = 400 }
         
-        opacity = 0.75
+        opacity = 0.65
         blur = true
 
         [font]
         normal = { family = "Courier Prime" }
-        size = 18.0
+        size = 20.0
+        offset = { x = 0, y = 12 }
 
         [colors.primary]
         background = "#282c34"

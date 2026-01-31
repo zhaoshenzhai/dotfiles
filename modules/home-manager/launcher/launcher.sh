@@ -12,7 +12,7 @@ trap "rm -f $LOCKFILE" EXIT
 
 declare -a RULES=(
     "$HOME/iCloud/Documents|zathura"
-    "$HOME/nix|nvim"
+    "$HOME/iCloud/Dotfiles|nvim"
 )
 
 ALL_FILES=""
@@ -28,7 +28,8 @@ SELECTED=$(echo "$ALL_FILES" | sed '/^$/d' | fzf \
     --reverse \
     --info=hidden \
     --delimiter / \
-    --with-nth -1)
+    --with-nth -1 \
+    --pointer='▶')
 
 if [ -z "$SELECTED" ]; then
     exit 0
