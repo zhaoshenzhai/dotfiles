@@ -34,7 +34,7 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
         """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
             --config-file ~/.config/alacritty/launcher.toml \
             --title launcher \
-            -e /etc/profiles/per-user/zhao/bin/launcher""",
+            -e zsh -ic /etc/profiles/per-user/zhao/bin/launcher""",
         'mode launcher'
     ]
 
@@ -94,9 +94,9 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
 # --- Key Bindings: Launcher Mode ---
 [mode.launcher.binding]
     ctrl-q  = []
-    cmd-esc = [ 'close', 'mode main' ]
-    cmd-q   = [ 'close', 'mode main' ]
-    esc     = [ 'close', 'mode main' ]
+    cmd-esc = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
+    cmd-q   = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
+    esc     = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
 
 # --- Key Bindings: Resize Mode ---
 [mode.resize.binding]

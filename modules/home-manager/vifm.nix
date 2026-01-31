@@ -28,8 +28,8 @@
 
             map f '
             nnoremap l :file<cr><cr>
-            nnoremap S :!alacritty --working-directory %d &<cr>
-            nnoremap s :!alacritty --title vifm-float --option "window.dimensions={columns=100,lines=35}" --option "window.position={x=525,y=250}" --working-directory %d &<cr>
+            nnoremap T :!alacritty --working-directory %d &<cr>
+            nnoremap t :!alacritty --title vifm-float --option "window.dimensions={columns=100,lines=35}" --option "window.position={x=525,y=250}" --working-directory %d &<cr>
             
             filetype *.pdf zathura %c &
             filetype *.jpg,*.jpeg,*.png,*.gif open %c &

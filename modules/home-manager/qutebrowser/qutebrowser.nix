@@ -36,8 +36,25 @@
 
             editor.command = [ "alacritty" "-e" "nvim" "{}" ];
             fileselect.handler = "external";
-            fileselect.single_file.command = [ "${pkgs.alacritty}/bin/alacritty" "--title" "vifm-float" "-e" "${pkgs.vifm}/bin/vifm" "-c" ":only" "--choose-files" "{}" ];
-            fileselect.multiple_files.command = [ "${pkgs.alacritty}/bin/alacritty" "--title" "vifm-float" "-e" "${pkgs.vifm}/bin/vifm" "-c" ":only" "--choose-files" "{}" ];
+
+            fileselect.single_file.command = [
+                "${pkgs.alacritty}/bin/alacritty"
+                "--title" "vifm-float"
+                "--option" "window.dimensions={columns=100,lines=35}"
+                "--option" "window.position={x=525,y=250}"
+                "-e" "${pkgs.vifm}/bin/vifm"
+                "-c" ":only"
+                "--choose-files" "{}"
+            ];
+            fileselect.multiple_files.command = [
+                "${pkgs.alacritty}/bin/alacritty"
+                "--title" "vifm-float"
+                "--option" "window.dimensions={columns=100,lines=35}"
+                "--option" "window.position={x=525,y=250}"
+                "-e" "${pkgs.vifm}/bin/vifm"
+                "-c" ":only"
+                "--choose-files" "{}"
+            ];
 
             downloads.remove_finished = 1000;
             downloads.location.directory = "~/Downloads";
