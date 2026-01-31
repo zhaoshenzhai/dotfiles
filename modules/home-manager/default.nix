@@ -9,6 +9,7 @@
     home.packages = with pkgs; [
         coreutils
         zathura
+        zathuraPkgs.zathura_pdf_mupdf
         aerospace
         tree
         neofetch

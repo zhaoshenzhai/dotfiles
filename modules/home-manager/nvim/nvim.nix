@@ -1,4 +1,15 @@
-{ pkgs, ... }: {
+{ pkgs, lib, ... }:
+    let
+        snippetDir = ./UltiSnips;
+            snippetFiles = builtins.filter
+                (name: lib.hasSuffix ".snippets" name)
+                (builtins.attrNames (builtins.readDir snippetDir));
+
+            snippetExtraFiles = lib.listToAttrs (map (name: {
+                name = "UltiSnips/${name}";
+                value = { source = "${snippetDir}/${name}"; };
+            }) snippetFiles);
+    in {
     programs.nixvim = {
         enable = true;
         defaultEditor = true;
@@ -35,14 +46,6 @@
         };
 
         plugins = {
-            treesitter = {
-                enable = true;
-                settings = {
-                    highlight.enable = true;
-                    indent.enable = true;
-                };
-            };
-
             vimtex = {
                 enable = true;
                 settings = {
@@ -131,7 +134,6 @@
         };
 
         extraFiles = {
-            "UltiSnips/all.snippets".source = ./UltiSnips/all.snippets;
             "spell/en.utf-8.add".source = ./spell/en.utf-8.add;
             "spell/en.utf-8.add.spl".source = ./spell/en.utf-8.add.spl;
 
@@ -143,8 +145,10 @@
                 
                 " Note: 'wmctrl' is a Linux tool. On macOS, this part of the command might fail
                 nnoremap <buffer> <F4> :w <CR>:silent !test -f %:r_Student.pdf && (wmctrl -a "%:t:r_Student.pdf" <Bar><Bar> zathura %:r_Student.pdf &)<CR><CR>
+
+                inoremap <buffer> ' \
             '';
-        };
+        } // snippetExtraFiles;
 
         extraConfigLua = ''
             vim.opt.shortmess:append("c")

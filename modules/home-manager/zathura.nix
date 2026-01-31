@@ -25,9 +25,12 @@
             recolor-darkcolor       = "#E8E8EE";
 
             first-page-column       = "1:1";
-            guioptions              = "none";
+            guioptions              = "";
             window-title-basename   = "true";
             adjust-open             = "width";
+
+            scroll-step             = "1";
+            scroll-hstep            = "1";
 
             dbus-service            = "true";
             synctex                 = "true";
@@ -36,7 +39,12 @@
         };
 
         mappings = {
-            "=" = "feedkeys \"+\"";
+            "j" = "scroll half-down";
+            "k" = "scroll half-up";
+
+            "<C-j>" = "zoom out";
+            "<C-k>" = "zoom in";
+
             "`" = "toggle_statusbar";
             "D" = "set \"first-page-column 1:1\"";
         };
