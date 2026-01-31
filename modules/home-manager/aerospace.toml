@@ -91,7 +91,7 @@ run = [ 'layout floating', 'move-node-to-workspace 1' ]
 
 [[on-window-detected]]
 if.app-id = 'org.nixos.qutebrowser'
-run = 'move-node-to-workspace w'
+run = ['layout tiling', 'move-node-to-workspace w', 'fullscreen']
 
 [[on-window-detected]]
 if.app-id = 'com.apple.MobileSMS'

@@ -8,8 +8,6 @@ Website         /Users/zhao/iCloud/Projects/_web"
 
 REPOS=$(echo "$REPOS" | sed 1d)
 REPOSNUM=$(echo "$REPOS" | wc -l)
-# REPONAMES=$(echo "$REPOS" | cut -f 1 -d ' ')
-# REPOPATHS=$(echo "$REPOS" | cut -f 1 -d ' ' --complement | sed 's/\ *//g')
 REPONAMES=$(echo "$REPOS" | awk '{print $1}')
 REPOPATHS=$(echo "$REPOS" | awk '{$1=""; print $0}' | sed 's/^[ \t]*//')
 
@@ -101,16 +99,16 @@ else
     # Process and move to selected repo
     case $repoNum in
         "1")
-            cd $UNIVERSITY_DIR/Courses
+            cd /Users/zhao/iCloud/University/Courses
         ;;
         "2")
-            cd $DOTFILES_DIR
+            cd /Users/zhao/iCloud/Dotfiles
         ;;
         "3")
-            cd /home/zhao/Dropbox/Projects
+            cd /Users/zhao/iCloud/Projects
         ;;
         "4")
-            cd /home/zhao/Dropbox/Projects/_web
+            cd /Users/zhao/iCloud/Projects/_web
         ;;
         *)
             changedRepos=""
