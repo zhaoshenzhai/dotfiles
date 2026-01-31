@@ -30,18 +30,6 @@
     system.keyboard = {
         enableKeyMapping = true;
         remapCapsLockToEscape = true;
-
-        # Swap options and control
-        userKeyMapping = [
-            {
-                HIDKeyboardModifierMappingSrc = 30064771298;
-                HIDKeyboardModifierMappingDst = 30064771296;
-            }
-            {
-                HIDKeyboardModifierMappingDst = 30064771296;
-                HIDKeyboardModifierMappingSrc = 30064771298;
-            }
-        ];
     };
 
     # MacOS settings

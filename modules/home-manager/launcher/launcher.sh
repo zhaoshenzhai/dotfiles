@@ -57,6 +57,6 @@ else
     nohup "$CMD" "$SELECTED" >/dev/null 2>&1 &
 fi
 
-aerospace mode main
+/etc/profiles/per-user/zhao/bin/aerospace mode main
 sleep 0.5
 exit 0

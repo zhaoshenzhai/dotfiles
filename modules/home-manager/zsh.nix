@@ -10,7 +10,7 @@
             la = "ls -lhAr --color=auto -F --group-directories-first";
             tree = "tree -C";
             nixs = "sudo darwin-rebuild switch --flake ~/iCloud/Dotfiles#puppy; aerospace reload-config";
-            nixu = "sudo pushd ~/iCloud/Dotfiles; nix flake update; nixs; popd";
+            nixu = "pushd ~/iCloud/Dotfiles; nix flake update; nixs; popd";
         };
 
         initContent = ''
