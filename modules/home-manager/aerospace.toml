@@ -1,19 +1,28 @@
 start-at-login = true
 
+# --- Mouse Behavior ---
 on-focused-monitor-changed = [ 'move-mouse monitor-lazy-center' ]
-on-focus-changed = [ 'move-mouse window-lazy-center' ]
+on-focus-changed           = [ 'move-mouse window-lazy-center' ]
 
+# --- Layout Gaps ---
 [gaps]
-inner.horizontal = 10
-inner.vertical =   10
-outer.left =       10
-outer.bottom =     10
-outer.top =        10
-outer.right =      10
+    inner.horizontal = 10
+    inner.vertical   = 10
+    outer.left       = 10
+    outer.bottom     = 10
+    outer.top        = 10
+    outer.right      = 10
 
+# --- Key Bindings: Main Mode ---
 [mode.main.binding]
+
+    # Applications & Terminal
     cmd-backslash = 'exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty'
+
     cmd-e = 'exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty --title vifm -e /etc/profiles/per-user/zhao/bin/vifm ~/ ~/iCloud -c "normal ggvGgA"'
+
+    cmd-g = 'exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty --title git --option "window.dimensions={columns=120,lines=35}" --option "window.position=center" -e zsh -ic "~/iCloud/Dotfiles/scripts/git.sh"'
+
     cmd-enter = [
         'exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty --config-file ~/.config/alacritty/launcher.toml --title launcher -e /etc/profiles/per-user/zhao/bin/launcher',
         'mode launcher'
@@ -24,18 +33,20 @@ outer.right =      10
     cmd-shift-m = 'exec-and-forget open -a music'
     cmd-s       = 'exec-and-forget open -a settings'
     cmd-p       = 'exec-and-forget screencapture ~/Downloads/Screenshot_$(date +%Y_%m_%d_%H%M%S).png'
-    cmd-g       = 'exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty --title git -e zsh -ic "~/iCloud/Dotfiles/scripts/git.sh"'
 
+    # Focus Movement
     cmd-h = 'focus left'
     cmd-j = 'focus down'
     cmd-k = 'focus up'
     cmd-l = 'focus right'
 
+    # Node Movement
     cmd-shift-h = 'move left'
     cmd-shift-j = 'move down'
     cmd-shift-k = 'move up'
     cmd-shift-l = 'move right'
 
+    # Workspace Switching
     cmd-1 = 'workspace 1'
     cmd-2 = 'workspace 2'
     cmd-3 = 'workspace 3'
@@ -46,6 +57,7 @@ outer.right =      10
     cmd-8 = 'workspace 8'
     cmd-9 = 'workspace 9'
 
+    # Move Node to Workspace
     cmd-shift-1 = 'move-node-to-workspace 1'
     cmd-shift-2 = 'move-node-to-workspace 2'
     cmd-shift-3 = 'move-node-to-workspace 3'
@@ -56,23 +68,27 @@ outer.right =      10
     cmd-shift-8 = 'move-node-to-workspace 8'
     cmd-shift-9 = 'move-node-to-workspace 9'
 
-    cmd-f = 'layout v_accordion v_tiles'
-    cmd-tab = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next'
+    # Layout Controls
+    cmd-f       = 'layout v_accordion v_tiles'
+    cmd-tab     = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next'
     cmd-shift-f = 'fullscreen --no-outer-gaps'
 
-    cmd-r = 'mode resize'
-    cmd-q = []
-    cmd-esc = [ 
+    # Modes & System
+    cmd-r   = 'mode resize'
+    cmd-q   = []
+    cmd-esc = [
         'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"',
         'focus --boundaries workspace dfs-next' 
     ]
 
+# --- Key Bindings: Launcher Mode ---
 [mode.launcher.binding]
-    ctrl-q = []
+    ctrl-q  = []
     cmd-esc = [ 'close', 'mode main' ]
-    cmd-q = [ 'close', 'mode main' ]
-    esc = [ 'close', 'mode main' ]
+    cmd-q   = [ 'close', 'mode main' ]
+    esc     = [ 'close', 'mode main' ]
 
+# --- Key Bindings: Resize Mode ---
 [mode.resize.binding]
     cmd-h = 'join-with left'
     cmd-j = 'join-with down'
@@ -86,36 +102,37 @@ outer.right =      10
 
     cmd-r = 'mode main'
     cmd-q = 'mode main'
-    esc = 'mode main'
+    esc   = 'mode main'
+
+# --- Window Detection Rules ---
+[[on-window-detected]]
+    if.app-id = 'com.apple.systempreferences'
+    run = [ 'layout floating', 'move-node-to-workspace 1' ]
 
 [[on-window-detected]]
-if.app-id = 'com.apple.systempreferences'
-run = [ 'layout floating', 'move-node-to-workspace 1' ]
+    if.app-id = 'org.nixos.qutebrowser'
+    run = [
+        'layout tiling',
+        'move-node-to-workspace w',
+        'fullscreen'
+    ]
 
 [[on-window-detected]]
-if.app-id = 'org.nixos.qutebrowser'
-run = [
-    'layout tiling',
-    'move-node-to-workspace w',
-    'fullscreen'
-]
+    if.app-id = 'com.apple.MobileSMS'
+    run = 'move-node-to-workspace m'
 
 [[on-window-detected]]
-if.app-id = 'com.apple.MobileSMS'
-run = 'move-node-to-workspace m'
+    if.app-id = 'com.apple.Music'
+    run = 'move-node-to-workspace M'
 
 [[on-window-detected]]
-if.app-id = 'com.apple.Music'
-run = 'move-node-to-workspace M'
+    if.window-title-regex-substring = 'vifm-float'
+    run = 'layout floating'
 
 [[on-window-detected]]
-if.window-title-regex-substring = 'vifm-float'
-run = 'layout floating'
+    if.window-title-regex-substring = 'git'
+    run = 'layout floating'
 
 [[on-window-detected]]
-if.window-title-regex-substring = 'git'
-run = 'layout floating'
-
-[[on-window-detected]]
-if.window-title-regex-substring = 'launcher'
-run = 'layout floating'
+    if.window-title-regex-substring = 'launcher'
+    run = 'layout floating'
