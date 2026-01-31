@@ -215,7 +215,7 @@ else
             echo -ne "${YELLOW}Connecting... (x$attempt)${NC}\r"
             sleep 1
             res=$(git push 2>&1)
-            fatal=$(echo $res | grep -o fatal)
+            fatal=$(echo "$res" | grep -o fatal)
             attempt=$(($attempt + 1))
         done
         echo "$res"

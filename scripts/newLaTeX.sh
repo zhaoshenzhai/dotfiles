@@ -1,6 +1,6 @@
 #!/bin/bash
 
-templatePath=$DOTFILES_DIR/files/LaTeXTemplate
+templatePath=~/iCloud/Dotfiles/files/LaTeXTemplate
 fileName=
 fileType=
 title=
@@ -69,12 +69,12 @@ FIX_DATE() {
 }
 
 COPY_FILES() {
-    ln -s $templatePath/macros.sty .
-    ln -s $templatePath/refs.bib .
-    ln -s $templatePath/preamble.sty .
-    ln -s $templatePath/preambles/$fileType.sty .
+    ln -s "$templatePath/macros.sty" .
+    ln -s "$templatePath/refs.bib" .
+    ln -s "$templatePath/preamble.sty" .
+    ln -s "$templatePath/preambles/$fileType.sty" .
 
-    cp $templatePath/files/$fileType.tex "$fileName.tex"
+    cp "$templatePath/files/$fileType.tex" "$fileName.tex"
     sed -i 's/TITLE/'"$title"'/g' "$fileName.tex"
 }
 
@@ -148,24 +148,24 @@ if [[ "$fileType" != "assignment" ]]; then
 fi
 
 if [[ "$fileType" = "beamer" ]]; then
-    ln -s $templatePath/mcgill.png .
+    ln -s "$templatePath/mcgill.png" .
 elif [[ "$fileType" = "assignment" ]]; then
-    mkdir -p Assignments/$fileName
-    cd Assignments/$fileName
+    mkdir -p "Assignments/$fileName"
+    cd "Assignments/$fileName"
     COPY_FILES
 
-    courseName=$(echo $assignmentCourse | sed -E 's/^.*([A-Z]{4}[0-9]{3})/\1/g' | sed 's/_/\ /g' | sed '0,/\ /{s/\ /\ $-$\ /}')
+    courseName=$(echo "$assignmentCourse" | sed -E 's/^.*([A-Z]{4}[0-9]{3})/\1/g' | sed 's/_/\ /g' | sed '0,/\ /{s/\ /\ $-$\ /}')
     termYear=$(cat "$assignmentCourse/.info")
 
-    sed -i 's/COURSE_NAME/'"$courseName"'/g' $fileName.tex
-    sed -i 's/TERM_YEAR/'"$termYear"'/g' $fileName.tex
-    sed -i 's/DUE_MONTH/'"$assignmentDueMonth"'/g' $fileName.tex
-    sed -i 's/DUE_DATE_MOD/'"$assignmentDueDateMod"'/g' $fileName.tex
-    sed -i 's/DUE_DATE/'"$assignmentDueDate"'/g' $fileName.tex
+    sed -i 's/COURSE_NAME/'"$courseName"'/g' "$fileName.tex"
+    sed -i 's/TERM_YEAR/'"$termYear"'/g' "$fileName.tex"
+    sed -i 's/DUE_MONTH/'"$assignmentDueMonth"'/g' "$fileName.tex"
+    sed -i 's/DUE_DATE_MOD/'"$assignmentDueDateMod"'/g' "$fileName.tex"
+    sed -i 's/DUE_DATE/'"$assignmentDueDate"'/g' "$fileName.tex"
 fi
 
 if [[ "$solutions" ]]; then
-    ln -s $templatePath/preambles/solutions.sty .
-    cp $templatePath/.latexmkrc .
-    sed -i 's/\\input{macros.sty}/\\input{macros.sty}\n\\input{solutions.sty}/g' $fileName.tex
+    ln -s "$templatePath/preambles/solutions.sty" .
+    cp "$templatePath/.latexmkrc" .
+    sed -i 's/\\input{macros.sty}/\\input{macros.sty}\n\\input{solutions.sty}/g' "$fileName.tex"
 fi
