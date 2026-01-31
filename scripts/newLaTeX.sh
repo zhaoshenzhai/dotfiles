@@ -69,24 +69,26 @@ FIX_DATE() {
 }
 
 COPY_FILES() {
-    ln -s "$templatePath/macros.sty" .
-    ln -s "$templatePath/refs.bib" .
-    ln -s "$templatePath/preamble.sty" .
-    ln -s "$templatePath/preambles/$fileType.sty" .
-
+    cp "$templatePath/macros.sty" .
+    cp "$templatePath/refs.bib" .
+    cp "$templatePath/preamble.sty" .
+    cp "$templatePath/preambles/$fileType.sty" .
     cp "$templatePath/files/$fileType.tex" "$fileName.tex"
+
     sed -i 's/TITLE/'"$title"'/g' "$fileName.tex"
 }
 
 # Input
-while [[ ! -z $1 ]]; do
-    case $1 in
+while [[ -n "$\{1-}" ]]; do
+    case "$\{1-}" in
         -n)
             fileName=$2
             title=$(echo $fileName | sed 's/_/ /g')
+            shift 2
             ;;
         -t)
             fileType=$2
+            shift 2
             ;;
         -a)
             assignmentNumber=$2
@@ -94,14 +96,19 @@ while [[ ! -z $1 ]]; do
             fileType=assignment
             fileName=Assignment_$2
             title=$(echo $fileName | sed 's/_/ /g')
+            shift 2
             ;;
         -s)
             solutions=1
+            shift 1
             ;;
         -d)
             assignmentDueMonth=$2
             assignmentDueDate=$3
             FIX_DATE
+            shift 3
+            ;;
+        *)
             shift
             ;;
     esac
