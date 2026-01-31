@@ -1,15 +1,17 @@
 #!/bin/bash
 
 REPOS="
-Courses         $UNIVERSITY_DIR/Courses
-Dotfiles        $DOTFILES_DIR
-Projects        /home/zhao/Dropbox/Projects
-Website         /home/zhao/Dropbox/Projects/_web"
+Courses         /Users/zhao/iCloud/University/Courses
+Dotfiles        /Users/zhao/iCloud/Dotfiles
+Projects        /Users/zhao/iCloud/Projects
+Website         /Users/zhao/iCloud/Projects/_web"
 
 REPOS=$(echo "$REPOS" | sed 1d)
 REPOSNUM=$(echo "$REPOS" | wc -l)
-REPONAMES=$(echo "$REPOS" | cut -f 1 -d ' ')
-REPOPATHS=$(echo "$REPOS" | cut -f 1 -d ' ' --complement | sed 's/\ *//g')
+# REPONAMES=$(echo "$REPOS" | cut -f 1 -d ' ')
+# REPOPATHS=$(echo "$REPOS" | cut -f 1 -d ' ' --complement | sed 's/\ *//g')
+REPONAMES=$(echo "$REPOS" | awk '{print $1}')
+REPOPATHS=$(echo "$REPOS" | awk '{$1=""; print $0}' | sed 's/^[ \t]*//')
 
 specifiedRepo=
 repoNum=
@@ -50,7 +52,7 @@ EXIT() {
         read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
         if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
             clear
-            $DOTFILES_DIR/scripts/git.sh
+            /Users/zhao/iCloud/Dotfiles/scripts/git.sh
         fi
     fi
     exit

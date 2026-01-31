@@ -1,0 +1,110 @@
+start-at-login = true
+
+on-focused-monitor-changed = [ 'move-mouse monitor-lazy-center' ]
+on-focus-changed = [ 'move-mouse window-lazy-center' ]
+
+[gaps]
+inner.horizontal = 10
+inner.vertical =   10
+outer.left =       10
+outer.bottom =     10
+outer.top =        10
+outer.right =      10
+
+[mode.main.binding]
+    cmd-backslash = 'exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty'
+    cmd-e = 'exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty --title vifm -e /etc/profiles/per-user/zhao/bin/vifm ~/ ~/iCloud -c "normal ggvGgA"'
+    cmd-enter = [
+        'exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty --config-file ~/.config/alacritty/launcher.toml --title launcher -e /etc/profiles/per-user/zhao/bin/launcher',
+        'mode launcher'
+    ]
+
+    cmd-w       = 'exec-and-forget open -a qutebrowser'
+    cmd-m       = 'exec-and-forget open -a messages'
+    cmd-shift-m = 'exec-and-forget open -a music'
+    cmd-s       = 'exec-and-forget open -a settings'
+    cmd-p       = 'exec-and-forget screencapture ~/Downloads/Screenshot_$(date +%Y_%m_%d_%H%M%S).png'
+    cmd-g       = 'exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty --title git -e ~/iCloud/Dotfiles/scripts/git.sh'
+
+    cmd-h = 'focus left'
+    cmd-j = 'focus down'
+    cmd-k = 'focus up'
+    cmd-l = 'focus right'
+
+    cmd-shift-h = 'move left'
+    cmd-shift-j = 'move down'
+    cmd-shift-k = 'move up'
+    cmd-shift-l = 'move right'
+
+    cmd-1 = 'workspace 1'
+    cmd-2 = 'workspace 2'
+    cmd-3 = 'workspace 3'
+    cmd-4 = 'workspace 4'
+    cmd-5 = 'workspace 5'
+    cmd-6 = 'workspace 6'
+    cmd-7 = 'workspace 7'
+    cmd-8 = 'workspace 8'
+    cmd-9 = 'workspace 9'
+
+    cmd-shift-1 = 'move-node-to-workspace 1'
+    cmd-shift-2 = 'move-node-to-workspace 2'
+    cmd-shift-3 = 'move-node-to-workspace 3'
+    cmd-shift-4 = 'move-node-to-workspace 4'
+    cmd-shift-5 = 'move-node-to-workspace 5'
+    cmd-shift-6 = 'move-node-to-workspace 6'
+    cmd-shift-7 = 'move-node-to-workspace 7'
+    cmd-shift-8 = 'move-node-to-workspace 8'
+    cmd-shift-9 = 'move-node-to-workspace 9'
+
+    cmd-f = 'layout v_accordion v_tiles'
+    cmd-tab = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next'
+    cmd-shift-f = 'fullscreen'
+
+    cmd-r = 'mode resize'
+    cmd-q = []
+    cmd-esc = [ 'close', 'focus --boundaries workspace dfs-next' ]
+
+[mode.launcher.binding]
+    ctrl-q = []
+    cmd-esc = [ 'close', 'mode main' ]
+    cmd-q = [ 'close', 'mode main' ]
+    esc = [ 'close', 'mode main' ]
+
+[mode.resize.binding]
+    cmd-h = 'join-with left'
+    cmd-j = 'join-with down'
+    cmd-k = 'join-with up'
+    cmd-l = 'join-with right'
+
+    cmd-shift-h = []
+    cmd-shift-l = []
+    cmd-shift-j = 'resize smart -50'
+    cmd-shift-k = 'resize smart +50'
+
+    cmd-r = 'mode main'
+    cmd-q = 'mode main'
+    esc = 'mode main'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.systempreferences'
+run = [ 'layout floating', 'move-node-to-workspace 1' ]
+
+[[on-window-detected]]
+if.app-id = 'org.nixos.qutebrowser'
+run = 'move-node-to-workspace w'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.MobileSMS'
+run = 'move-node-to-workspace m'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Music'
+run = 'move-node-to-workspace M'
+
+[[on-window-detected]]
+if.window-title-regex-substring = 'vifm-float'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.window-title-regex-substring = 'launcher'
+run = 'layout floating'

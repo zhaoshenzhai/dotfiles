@@ -1,0 +1,159 @@
+{ pkgs, lib, ... }: {
+    programs.qutebrowser = {
+        enable = true;
+        loadAutoconfig = false;
+
+        searchEngines = {
+            DEFAULT = "https://duckduckgo.com/?q={}";
+            yt = "https://www.youtube.com/results?search_query={}";
+        };
+
+        settings = {
+            url.start_pages = [ "https://duckduckgo.com" ];
+            url.default_page = "https://duckduckgo.com";
+            "auto_save.session" = false;
+
+            statusbar.show = "always";
+            tabs.show = "multiple";
+            tabs.favicons.scale = 0.9;
+            tabs.indicator.width = 0;
+            tabs.max_width = 350;
+            zoom.default = "100%";
+            scrolling.smooth = true;
+
+            fonts.default_family = "Anonymous Pro";
+            fonts.default_size = "15pt";
+            fonts.tabs.selected = "bold default_size default_family";
+            fonts.tabs.unselected = "bold default_size default_family";
+            fonts.statusbar = "bold default_size default_family";
+
+            editor.command = [ "alacritty" "-e" "nvim" "{}" ];
+            fileselect.handler = "external";
+            fileselect.single_file.command = [ "${pkgs.alacritty}/bin/alacritty" "--title" "vifm-float" "-e" "${pkgs.vifm}/bin/vifm" "--choose-files" "{}" ];
+            fileselect.multiple_files.command = [ "${pkgs.alacritty}/bin/alacritty" "--title" "vifm-float" "-e" "${pkgs.vifm}/bin/vifm" "--choose-files" "{}" ];
+
+            downloads.remove_finished = 1000;
+            downloads.location.directory = "~/Downloads";
+            downloads.prevent_mixed_content = false;
+
+            content.tls.certificate_errors = "block";
+            colors.webpage.preferred_color_scheme = "dark";
+
+            colors = {
+                messages = {
+                    info.bg = "#1e2127";
+                    warning.bg = "#1e2127";
+                    error.bg = "#1e2127";
+                    info.border = "#1e2127";
+                    warning.border = "#1e2127";
+                    error.border = "#1e2127";
+                    warning.fg = "#a8a8aa";
+                };
+                prompts.bg = "#1e2127";
+                statusbar = {
+                    normal.bg = "#1e2127";
+                    normal.fg = "#a8a8aa";
+                    insert.bg = "#1e2127";
+                    insert.fg = "#a8a8aa";
+                    command.bg = "#1e2127";
+                    command.fg = "#a8a8aa";
+                    url.fg = "#a8a8aa";
+                    url.hover.fg = "#f8f8ff";
+                    url.success.http.fg = "#a8a8aa";
+                    url.success.https.fg = "#a8a8aa";
+                };
+                tabs = {
+                    bar.bg = "#1e2127";
+                    even.bg = "#1e2127";
+                    odd.bg = "#1e2127";
+                    even.fg = "#a8a8a8";
+                    odd.fg = "#a8a8a8";
+                    selected.even.bg = "#1e2127";
+                    selected.odd.bg = "#1e2127";
+                    selected.even.fg = "#f8f8ff";
+                    selected.odd.fg = "#f8f8ff";
+                    pinned = {
+                        even.bg = "#1e2127";
+                        odd.bg = "#1e2127";
+                        even.fg = "#a8a8a8";
+                        odd.fg = "#a8a8a8";
+                        selected.even.bg = "#1e2127";
+                        selected.odd.bg = "#1e2127";
+                        selected.even.fg = "#f8f8ff";
+                        selected.odd.fg = "#f8f8ff";
+                    };
+                };
+                downloads.bar.bg = "#1e2127";
+            };
+        };
+
+        # Key Bindings
+        keyBindings = {
+            normal = {
+                "<Ctrl+=>" = "zoom-in";
+                "<Ctrl+->" = "zoom-out";
+                "<Ctrl+0>" = "zoom 100";
+                
+                "<Ctrl+h>" = "back";
+                "<Ctrl+l>" = "forward";
+                "<Ctrl+j>" = "tab-prev";
+                "<Ctrl+k>" = "tab-next";
+                "<Ctrl+w>" = "tab-close";
+                "<Ctrl+u>" = "cmd-repeat 20 scroll up";
+                "<Ctrl+d>" = "cmd-repeat 20 scroll down";
+                
+                "<Ctrl+Shift+r>" = "restart";
+                "<Ctrl+`>" = "config-cycle statusbar.show always never;; config-cycle tabs.show multiple never";
+
+                "<Ctrl+1>" = "tab-select 1";
+                "<Ctrl+2>" = "tab-select 2";
+                "<Ctrl+3>" = "tab-select 3";
+                "<Ctrl+4>" = "tab-select 4";
+                "<Ctrl+5>" = "tab-select 5";
+                "<Ctrl+6>" = "tab-select 6";
+                "<Ctrl+7>" = "tab-select 7";
+                "<Ctrl+8>" = "tab-select 8";
+                "<Ctrl+9>" = "tab-select 9";
+
+                "<Ctrl+Shift+1>" = "tab-move 1";
+                "<Ctrl+Shift+2>" = "tab-move 2";
+                "<Ctrl+Shift+3>" = "tab-move 3";
+                "<Ctrl+Shift+4>" = "tab-move 4";
+                "<Ctrl+Shift+5>" = "tab-move 5";
+                "<Ctrl+Shift+6>" = "tab-move 6";
+                "<Ctrl+Shift+7>" = "tab-move 7";
+                "<Ctrl+Shift+8>" = "tab-move 8";
+            };
+        };
+
+        extraConfig = ''
+            config.set('content.images', True, 'chrome-devtools://*')
+            config.set('content.images', True, 'devtools://*')
+            config.set('content.javascript.enabled', True, 'chrome-devtools://*')
+            config.set('content.javascript.enabled', True, 'devtools://*')
+            config.set('content.javascript.enabled', True, 'chrome://*/*')
+            config.set('content.javascript.enabled', True, 'qute://*/*')
+        '';
+    };
+        
+    home.file = {
+        ".qutebrowser/quickmarks".source = ./quickmarks;
+
+        ".qutebrowser/config.py".text = ''
+            import os
+            
+            config_path = os.path.expanduser("~/.config/qutebrowser/config.py")
+            
+            if os.path.exists(config_path):
+                with open(config_path, "r") as f:
+                    exec(f.read())
+        '';
+    };
+
+    home.activation.installQutebrowserBookmarks = lib.hm.dag.entryAfter ["writeBoundary"] ''
+        DATA_DIR="$HOME/.qutebrowser/bookmarks"
+        mkdir -p "$DATA_DIR"
+        cp -f "${./bookmarks}" "$DATA_DIR/urls"
+        chmod u+w "$DATA_DIR/urls"
+    '';
+}

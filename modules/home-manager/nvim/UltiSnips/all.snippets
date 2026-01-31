@@ -1,0 +1,152 @@
+# Math
+global !p
+def math():
+	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
+def notMath():
+	return vim.eval('vimtex#syntax#in_mathzone()') != '1'
+endglobal
+
+# General
+snippet { "braces" Ait
+\{$1}$0
+endsnippet
+
+snippet [ "square brackets" Ait
+[$1]$0
+endsnippet
+
+snippet ( "parenthesis" Ait
+($1)$0
+endsnippet
+
+snippet " "double quotes" Ait
+"$1"$0
+endsnippet
+
+context "notMath()"
+snippet ' "single quotes" Ait
+'$1'$0
+endsnippet
+
+context "notMath()"
+priority 100
+snippet S "appostrophe" it
+'s
+endsnippet
+
+# Accents
+snippet etale "étalé" iA
+étalé
+endsnippet
+
+snippet Holder "Hölder" iA
+Hölder
+endsnippet
+
+snippet Godel "Gödel" iA
+Gödel
+endsnippet
+
+snippet Schroder "Schröder" iA
+Schröder
+endsnippet
+
+snippet Lowenheim "Löwenheim" iA
+Löwenheim
+endsnippet
+
+snippet Lindelof "Lindelöf" iA
+Lindelöf
+endsnippet
+
+snippet Bezout "Bézout" iA
+Bézout
+endsnippet
+
+snippet Frechet "Fréchet" iA
+Fréchet
+endsnippet
+
+snippet Poincare "Poincaré" iA
+Poincaré
+endsnippet
+
+snippet Teichmuller "Teichmüller" iA
+Teichmüller
+endsnippet
+
+snippet Mobius "Möbius" iA
+Möbius
+endsnippet
+
+snippet Caratheodory "Carathéodory" iA
+Carathéodory
+endsnippet
+
+snippet Fraisse "Fraïssé" iA
+Fraïssé
+endsnippet
+
+snippet Konig "König" iA
+König
+endsnippet
+
+snippet Los "Łoś" iA
+Łoś
+endsnippet
+
+snippet Cech "Čech" iA
+Čech
+endsnippet
+
+snippet Prufer "Prüfer" iA
+Prüfer
+endsnippet
+
+snippet Arzela "Arzelà" iA
+Arzelà
+endsnippet
+
+snippet Chvatal "Chvátal" iA
+Chvátal
+endsnippet
+
+snippet Levy "Lévy" iA
+Lévy
+endsnippet
+
+snippet Szemeredi "Szemerédi" iA
+Szemerédi
+endsnippet
+
+snippet Erdos "Erdős" iA
+Erdős
+endsnippet
+
+snippet Turan "Turán" iA
+Turán
+endsnippet
+
+snippet Folner "Følner" iA
+Følner
+endsnippet
+
+snippet Sarkozy "Sárközy" iA
+Sárközy
+endsnippet
+
+snippet Cesaro "Cesàro" iA
+Cesàro
+endsnippet
+
+snippet Zalesskii "Zalesskiĭ" iA
+Zalesskiĭ
+endsnippet
+
+snippet Montreal "Montréal" iA
+Montréal
+endsnippet
+
+snippet Munster "Münster" iA
+Münster
+endsnippet
