@@ -138,13 +138,13 @@
             "spell/en.utf-8.add.spl".source = ./spell/en.utf-8.add.spl;
 
             "ftplugin/tex.vim".text = ''
-                nnoremap <buffer> <F1> :w <CR>:VimtexCompile<CR>
-                nnoremap <buffer> <F2> :w <CR>:VimtexView<CR>
+                nnoremap <buffer> <C-1> :w <CR>:VimtexCompile<CR><CR>
+                nnoremap <buffer> <C-2> :w <CR>:VimtexView<CR><CR>
                 
-                nnoremap <buffer> <F3> :w <CR>:!rm -f *.aux *.bbl *.bcf *.blg *.fdb_latexmk *.fls *.log *.run.xml *.synctex.gz *.synctex\(busy\) *.out *.xdv<CR><CR>
+                nnoremap <buffer> <C-3> :w <CR>:!rm -f *.aux *.bbl *.bcf *.blg *.fdb_latexmk *.fls *.log *.run.xml *.synctex.gz *.synctex\(busy\) *.out *.xdv<CR><CR>
                 
                 " Note: 'wmctrl' is a Linux tool. On macOS, this part of the command might fail
-                nnoremap <buffer> <F4> :w <CR>:silent !test -f %:r_Student.pdf && (wmctrl -a "%:t:r_Student.pdf" <Bar><Bar> zathura %:r_Student.pdf &)<CR><CR>
+                nnoremap <buffer> <C-4> :w <CR>:silent !test -f %:r_Student.pdf && (wmctrl -a "%:t:r_Student.pdf" <Bar><Bar> zathura %:r_Student.pdf &)<CR><CR>
 
                 inoremap <buffer> ' \
             '';

@@ -1,70 +1,38 @@
 #!/bin/bash
 
-templatePath=~/iCloud/Dotfiles/files/LaTeXTemplate
-fileName=
-fileType=
-title=
-solutions=
+templatePath=~/iCloud/Dotfiles/modules/darwin/LaTeXTemplate
+fileName=""
+fileType=""
+title=""
+solutions=""
 
-assignmentCourse=
-assignmentNumber=
-assignmentDueMonth=
-assignmentDueDate=
-assignmentDueDateMod=
+assignmentCourse=""
+assignmentNumber=""
+assignmentDueMonth=""
+assignmentDueDate=""
+assignmentDueDateMod=""
 
 FIX_DATE() {
     case $assignmentDueMonth in
-        Jan|1|01)
-            assignmentDueMonth=January
-            ;;
-        Feb|2|02)
-            assignmentDueMonth=February
-            ;;
-        Mar|3|03)
-            assignmentDueMonth=March
-            ;;
-        Apr|4|04)
-            assignmentDueMonth=April
-            ;;
-        May|5|05)
-            assignmentDueMonth=May
-            ;;
-        Jun|6|06)
-            assignmentDueMonth=June
-            ;;
-        Jul|7|07)
-            assignmentDueMonth=July
-            ;;
-        Aug|8|08)
-            assignmentDueMonth=August
-            ;;
-        Sep|9|09)
-            assignmentDueMonth=September
-            ;;
-        Oct|10)
-            assignmentDueMonth=October
-            ;;
-        Nov|11)
-            assignmentDueMonth=November
-            ;;
-        Dec|12)
-            assignmentDueMonth=December
-            ;;
+        Jan|1|01) assignmentDueMonth=January ;;
+        Feb|2|02) assignmentDueMonth=February ;;
+        Mar|3|03) assignmentDueMonth=March ;;
+        Apr|4|04) assignmentDueMonth=April ;;
+        May|5|05) assignmentDueMonth=May ;;
+        Jun|6|06) assignmentDueMonth=June ;;
+        Jul|7|07) assignmentDueMonth=July ;;
+        Aug|8|08) assignmentDueMonth=August ;;
+        Sep|9|09) assignmentDueMonth=September ;;
+        Oct|10)    assignmentDueMonth=October ;;
+        Nov|11)    assignmentDueMonth=November ;;
+        Dec|12)    assignmentDueMonth=December ;;
     esac
 
     case $assignmentDueDate in
-        1|21|31)
-            assignmentDueDateMod=st
-            ;;
-        2|22)
-            assignmentDueDateMod=nd
-            ;;
-        3|23)
-            assignmentDueDateMod=rd
-            ;;
-        *)
-            assignmentDueDateMod=th
-            ;;
+        1|21|31) assignmentDueDateMod=st ;;
+        2|22)    assignmentDueDateMod=nd ;;
+        3|23)    assignmentDueDateMod=rd ;;
+        *)       assignmentDueDateMod=th ;;
     esac
 }
 
@@ -79,23 +47,23 @@ COPY_FILES() {
 }
 
 # Input
-while [[ -n "$\{1-}" ]]; do
-    case "$\{1-}" in
+while [[ $# -gt 0 ]]; do
+    case "$1" in
         -n)
-            fileName=$2
-            title=$(echo $fileName | sed 's/_/ /g')
+            fileName="$2"
+            title=$(echo "$fileName" | sed 's/_/ /g')
             shift 2
             ;;
         -t)
-            fileType=$2
+            fileType="$2"
             shift 2
             ;;
         -a)
-            assignmentNumber=$2
-            assignmentCourse=$PWD
+            assignmentNumber="$2"
+            assignmentCourse="$PWD"
             fileType=assignment
-            fileName=Assignment_$2
-            title=$(echo $fileName | sed 's/_/ /g')
+            fileName="Assignment_$2"
+            title=$(echo "$fileName" | sed 's/_/ /g')
             shift 2
             ;;
         -s)
@@ -103,8 +71,8 @@ while [[ -n "$\{1-}" ]]; do
             shift 1
             ;;
         -d)
-            assignmentDueMonth=$2
-            assignmentDueDate=$3
+            assignmentDueMonth="$2"
+            assignmentDueDate="$3"
             FIX_DATE
             shift 3
             ;;
@@ -112,12 +80,10 @@ while [[ -n "$\{1-}" ]]; do
             shift
             ;;
     esac
-    shift
-    shift
 done
 
 # Validate
-if [[ -z $fileName ]]; then
+if [[ -z "$fileName" ]]; then
     echo -e "${RED}Error: Expected one of: [-n] and [-a].${NC}"
     exit 1
 fi
@@ -136,7 +102,7 @@ if [[ "$fileType" = "assignment" ]]; then
         exit 1
     fi
 
-    if [[ -z $assignmentNumber ]] || [[ -z $assignmentDueMonth ]] || [[ -z $assignmentDueDate ]]; then
+    if [[ -z "$assignmentNumber" ]] || [[ -z "$assignmentDueMonth" ]] || [[ -z "$assignmentDueDate" ]]; then
         echo -e "${RED}Error: Expected [-a] [-d] for assignmentNumber and (dueMonth dueDate).${NC}"
         exit 1
     fi
@@ -148,8 +114,9 @@ if [[ "$fileType" = "assignment" ]]; then
     fi
 fi
 
+# Execute
 if [[ "$fileType" != "assignment" ]]; then
-    mkdir "$fileName"
+    mkdir -p "$fileName"
     cd "$fileName"
     COPY_FILES
 fi
@@ -171,7 +138,7 @@ elif [[ "$fileType" = "assignment" ]]; then
     sed -i 's/DUE_DATE/'"$assignmentDueDate"'/g' "$fileName.tex"
 fi
 
-if [[ "$solutions" ]]; then
+if [[ -n "$solutions" ]]; then
     ln -s "$templatePath/preambles/solutions.sty" .
     cp "$templatePath/.latexmkrc" .
     sed -i 's/\\input{macros.sty}/\\input{macros.sty}\n\\input{solutions.sty}/g' "$fileName.tex"

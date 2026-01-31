@@ -8,7 +8,7 @@
             gawk 
         ];
         checkPhase = "";
-        text = builtins.readFile ../../scripts/compress.sh;
+        text = builtins.readFile ./compress.sh;
     };
 
     newLatex = pkgs.writeShellApplication {
@@ -18,7 +18,7 @@
             gnused 
         ];
         checkPhase = "";
-        text = builtins.readFile ../../scripts/newLaTeX.sh;
+        text = builtins.readFile ./newLaTeX.sh;
     };
 in
 {

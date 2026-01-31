@@ -8,14 +8,20 @@
 
     home.packages = with pkgs; [
         coreutils
-        zathura
-        zathuraPkgs.zathura_pdf_mupdf
         aerospace
-        tree
+        zathura
         neofetch
         courier-prime
         nerd-fonts.symbols-only
         nerd-fonts.jetbrains-mono
+        (pkgs.texlive.combine {
+            inherit (pkgs.texlive) 
+                scheme-small
+                doublestroke
+                collection-fontsrecommended
+                collection-latexextra
+                latexmk;
+        })
     ];
 
     imports = [
@@ -25,7 +31,7 @@
         ./starship.nix
         ./nvim/nvim.nix
         ./alacritty.nix
-        ./launcher/launcher.nix
+        ./launcher.nix
         ./qutebrowser/qutebrowser.nix
     ];
 
