@@ -11,6 +11,8 @@
         coreutils
         aerospace
         zathura
+        pdftk
+        ocamlPackages.cpdf
         neofetch
         courier-prime
         nerd-fonts.symbols-only
