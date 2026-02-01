@@ -4,6 +4,9 @@
         enableCompletion = true;
         autosuggestion.enable = true;
         syntaxHighlighting.enable = true;
+
+        dotDir = "/Users/zhao/.config/zsh";
+        history.path = "/Users/zhao/.config/zsh/.zsh_history";
         
         shellAliases = {
             ls = "ls --color=auto -F";

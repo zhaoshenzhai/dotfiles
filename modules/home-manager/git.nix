@@ -1,5 +1,5 @@
 { pkgs, ... }: {
-    programs.zsh = {
+    programs.git = {
         enable = true;
 
         settings.user.name = "Zhaoshen Zhai";
@@ -18,4 +18,5 @@
             push.autoSetupRemote = true;
           };
     };
+    xdg.configFile."git/config".source = config.lib.file.mkOutOfStoreSymlink config.home.homeDirectory + "/.config/git/config";
 }

@@ -4,6 +4,7 @@
 
     home.sessionVariables = {
         EDITOR = "nvim";
+        SHELL_SESSIONS_DISABLE = "1";
     };
 
     home.packages = with pkgs; [
