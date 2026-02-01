@@ -124,6 +124,9 @@
         };
 
         extraPlugins = with pkgs.vimPlugins; [ ultisnips ];
+        extraPackages = with pkgs; [
+            texlive.combined.scheme-full
+        ];
 
         globals = {
             UltiSnipsExpandTrigger = "<S-tab>";
