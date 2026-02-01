@@ -11,7 +11,7 @@ echo $$ > "$LOCKFILE"
 trap "rm -f $LOCKFILE" EXIT
 
 declare -a RULES=(
-    "/Users/zhao/iCloud/Documents|zathura"
+    "/Users/zhao/iCloud/Documents|sioyek"
     "/Users/zhao/iCloud/Dotfiles|nvim"
 )
 

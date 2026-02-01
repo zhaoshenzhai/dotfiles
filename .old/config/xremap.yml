@@ -1,7 +1,0 @@
-modmap:
-  - name: global-remap
-    remap:
-      CapsLock: Esc
-      KEY_F10: KEY_0
-      KEY_F11: KEY_0
-      LeftMeta: LeftCtrl

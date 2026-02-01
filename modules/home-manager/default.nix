@@ -27,7 +27,6 @@
         ./nvim.nix
         ./vifm.nix
         ./sioyek.nix
-        ./borders.nix
         ./starship.nix
         ./alacritty.nix
         ./launcher.nix

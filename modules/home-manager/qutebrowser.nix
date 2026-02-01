@@ -12,7 +12,7 @@
             url.start_pages = [ "https://duckduckgo.com" ];
             url.default_page = "https://duckduckgo.com";
             "auto_save.session" = false;
-            "window.hide_decoration" = true; 
+            # "window.hide_decoration" = true; 
             "window.title_format" = " ";
             "qt.args" = [ 
                 "disable-gpu-driver-bug-workarounds"
