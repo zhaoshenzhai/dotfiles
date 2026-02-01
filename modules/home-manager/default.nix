@@ -17,6 +17,7 @@
         courier-prime
         nerd-fonts.symbols-only
         nerd-fonts.jetbrains-mono
+        texlive.combined.scheme-full
     ];
 
     imports = [

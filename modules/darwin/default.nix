@@ -21,22 +21,9 @@
             VISUAL = "nvim";
             TERMINAL = "alacritty";
         };
-
-        systemPackages = with pkgs; [
-            (texlive.combine {
-                inherit (texlive)
-                    scheme-small
-                    collection-latexextra
-                    collection-fontsextra
-                    collection-fontsrecommended
-                    latexmk;
-            })
-        ];
     };
 
-    imports = [
-        ./scripts.nix
-    ];
+    imports = [ ./scripts.nix ];
 
     # --- Security & Input ---
     security.pam.services.sudo_local.touchIdAuth = true;
