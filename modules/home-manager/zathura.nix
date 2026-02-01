@@ -25,7 +25,7 @@
             recolor-darkcolor       = "#E8E8EE";
 
             first-page-column       = "1:1";
-            guioptions              = "";
+            guioptions              = "none";
             window-title-basename   = "true";
             adjust-open             = "width";
 

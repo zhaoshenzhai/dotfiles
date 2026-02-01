@@ -1,4 +1,5 @@
 start-at-login = true
+after-startup-command = [ 'exec-and-forget borders' ]
 
 # --- Mouse Behavior ---
 on-focused-monitor-changed = [ 'move-mouse monitor-lazy-center' ]
@@ -148,5 +149,5 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
     run = 'layout floating'
 
 [[on-window-detected]]
-    if.window-title-regex-substring = 'zathura'
-    run = 'fullscreen'
+    if.app-id = 'info.sioyek.sioyek'
+    run = 'layout tiling'

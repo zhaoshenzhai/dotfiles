@@ -1,18 +1,4 @@
-{ pkgs, ... }:
-let
-    zathuraSync = pkgs.writeShellScriptBin "zathura-sync" ''
-        export DBUS_SESSION_BUS_ADDRESS="unix:path=/tmp/dbus-custom-$(whoami)"
-        LINE="$1"
-        COL="$2"
-        TEX="$3"
-        PDF="$4"
-
-        ${pkgs.zathura}/bin/zathura --synctex-forward "$LINE:$COL:$TEX" "$PDF" 2>/dev/null
-        if [ $? -ne 0 ]; then
-            ${pkgs.zathura}/bin/zathura "$PDF" &
-        fi
-      '';
-in {
+{ pkgs, ... }: {
     manual.json.enable = false;
     home.stateVersion = "22.11";
 
@@ -25,8 +11,7 @@ in {
         coreutils
         dbus
         aerospace
-        zathura
-        zathuraSync
+        sioyek
         pdftk
         ocamlPackages.cpdf
         neofetch
@@ -41,7 +26,8 @@ in {
         ./zsh.nix
         ./nvim.nix
         ./vifm.nix
-        ./zathura.nix
+        ./sioyek.nix
+        ./borders.nix
         ./starship.nix
         ./alacritty.nix
         ./launcher.nix
@@ -49,10 +35,6 @@ in {
     ];
 
     home.file = { ".hushlogin".text = ""; };
-    home.sessionVariables = {
-        DBUS_SESSION_BUS_ADDRESS = "unix:path=/tmp/dbus-launch"; 
-    };
-
     xdg.configFile."aerospace/aerospace.toml".source = ./aerospace.toml;
 
     programs = {
