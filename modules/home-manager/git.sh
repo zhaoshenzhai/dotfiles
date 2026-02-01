@@ -50,7 +50,7 @@ EXIT() {
         read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
         if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
             clear
-            /Users/zhao/iCloud/Dotfiles/scripts/git.sh
+            /Users/zhao/iCloud/modules/home-manager/git.sh
         fi
     fi
     exit
