@@ -93,8 +93,8 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
 
 # --- Key Bindings: Launcher Mode ---
 [mode.launcher.binding]
-    ctrl-q  = []
     cmd-esc = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
+    ctrl-q  = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
     cmd-q   = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
     esc     = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
 

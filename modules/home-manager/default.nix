@@ -15,6 +15,7 @@
         ocamlPackages.cpdf
         neofetch
         courier-prime
+        texlive.combined.scheme-full
         nerd-fonts.symbols-only
         nerd-fonts.jetbrains-mono
     ];
