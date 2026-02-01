@@ -31,16 +31,18 @@
 
             scroll-step             = "1";
             scroll-hstep            = "1";
+            scroll-full-overlap     = "0.75";
 
             dbus-service            = "true";
             synctex                 = "true";
+            synctex-editor-command  = "nvr --remote-silent +%{line} %{input}";
             selection-clipboard     = "clipboard";
             selection-notification  = "false";
         };
 
         mappings = {
-            "j" = "scroll half-down";
-            "k" = "scroll half-up";
+            "j" = "scroll full-down";
+            "k" = "scroll full-up";
 
             "<C-j>" = "zoom out";
             "<C-k>" = "zoom in";

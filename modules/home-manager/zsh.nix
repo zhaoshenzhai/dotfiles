@@ -31,6 +31,18 @@
             export BLUE='\033[0;34m'
             export RED='\033[0;31m'
             export NC='\033[0m'
+
+            export DBUS_SESSION_BUS_ADDRESS="unix:path=/tmp/dbus-custom-$(whoami)"
+            if [ ! -f $HOME/.config/dbus/machine-id ]; then
+                mkdir -p $HOME/.config/dbus
+                ${pkgs.dbus}/bin/dbus-uuidgen > $HOME/.config/dbus/machine-id
+            fi
+            export DBUS_MACHINE_ID_MACHINE_ID_FILE=$HOME/.config/dbus/machine-id
+
+            if [ ! -S "/tmp/dbus-custom-$(whoami)" ] || ! pgrep -f "$DBUS_SESSION_BUS_ADDRESS" > /dev/null; then
+                rm -f "/tmp/dbus-custom-$(whoami)"
+                ${pkgs.dbus}/bin/dbus-daemon --session --address="$DBUS_SESSION_BUS_ADDRESS" --fork --print-address > /dev/null
+            fi
         '';
     };
 }

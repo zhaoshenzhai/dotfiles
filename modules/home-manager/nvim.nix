@@ -50,7 +50,8 @@
                 enable = true;
                 settings = {
                     view_method = "general";
-                    view_general_viewer = "zathura";
+                    view_general_viewer = "zathura-sync";
+                    view_general_options = "@line @col @tex @pdf";
                     mappings_enabled = false;
                     quickfix_ignore_filters = [
                         "Underfull \\\\hbox (badness [0-9]*) in paragraph at lines"
@@ -150,7 +151,6 @@
                 nnoremap <buffer> <C-1> :w <CR>:VimtexCompile<CR><CR>
                 nnoremap <buffer> <C-2> :w <CR>:VimtexView<CR><CR>
                 nnoremap <buffer> <C-3> :w <CR>:VimtexClean<CR><CR>
-                
                 nnoremap <buffer> <C-4> :w <CR>:silent !test -f %:r_Student.pdf && (zathura %:r_Student.pdf &)<CR><CR>
 
                 inoremap <buffer> ' \
