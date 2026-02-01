@@ -123,6 +123,18 @@
             };
         };
 
+        extraPackages = let
+            tex = (pkgs.texlive.combined.scheme-full.withPackages (ps: [
+                ps.collection-fontsextra
+                ps.latexmk
+                ps.doublestroke
+                ps.tikz-3dplot
+                ps.tikz-cd
+            ]));
+        in [
+            tex
+        ];
+
         extraPlugins = with pkgs.vimPlugins; [
             ultisnips
         ];

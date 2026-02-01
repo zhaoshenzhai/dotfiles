@@ -17,10 +17,6 @@
         courier-prime
         nerd-fonts.symbols-only
         nerd-fonts.jetbrains-mono
-        (texlive.combined.scheme-full.withPackages (ps: [
-            ps.doublestroke
-            ps.latexmk
-        ]))
     ];
 
     imports = [
