@@ -4,15 +4,15 @@
     xdg.configFile."borders/bordersrc" = {
         executable = true;
         text = ''
-            #!/bin/sh
+            #!/bin/bash
             options=(
                 style=round
-                width=3.0
+                width=2
                 hidpi=off
                 order=above
                 active_color=0xff56B6C2
-                inactive_color=0xff1E2127
-                background_color=0x30141A1F
+                inactive_color=0x00000000
+                background_color=0x00000000
             )
             "${pkgs.jankyborders}/bin/borders" "''${options[@]}"
         '';
