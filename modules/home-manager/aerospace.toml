@@ -149,5 +149,5 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
     run = 'layout floating'
 
 [[on-window-detected]]
-    if.app-id = 'info.sioyek.sioyek'
+    if.window-title-regex-substring = 'zathura'
     run = 'layout tiling'

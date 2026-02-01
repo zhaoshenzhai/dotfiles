@@ -11,7 +11,7 @@
         coreutils
         dbus
         aerospace
-        sioyek
+        zathura
         pdftk
         ocamlPackages.cpdf
         neofetch
@@ -26,7 +26,7 @@
         ./zsh.nix
         ./nvim.nix
         ./vifm.nix
-        ./sioyek.nix
+        ./zathura.nix
         ./starship.nix
         ./alacritty.nix
         ./launcher.nix

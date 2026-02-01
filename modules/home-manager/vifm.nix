@@ -31,7 +31,7 @@
             nnoremap t :!alacritty --working-directory %d &<cr>
             nnoremap s :!alacritty --title vifm-float --option "window.dimensions={columns=100,lines=35}" --option "window.position={x=525,y=250}" --working-directory %d &<cr>
             
-            filetype *.pdf sioyek %c >/dev/null 2>&1 &
+            filetype *.pdf zathura %c >/dev/null 2>&1 &
             filetype *.jpg,*.jpeg,*.png,*.gif open %c &
 
             highlight clear

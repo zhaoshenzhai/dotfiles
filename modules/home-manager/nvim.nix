@@ -49,7 +49,8 @@
             vimtex = {
                 enable = true;
                 settings = {
-                    view_method = "sioyek";
+                    view_method = "general";
+                    view_general_viewer = "zathura";
                     mappings_enabled = false;
                     quickfix_ignore_filters = [
                         "Underfull \\\\hbox (badness [0-9]*) in paragraph at lines"
@@ -149,9 +150,9 @@
                 nnoremap <buffer> <C-1> :w <CR>:VimtexCompile<CR>:VimtexView<CR><CR>
                 nnoremap <buffer> <C-2> :w <CR>:VimtexView<CR><CR>
 
-                nnoremap <buffer> <C-3> :w <CR>:!rm -f *.aux(N) *.bbl(N) *.bcf(N) *.blg(N) *.fdb_latexmk(N) *.fls(N) *.log(N) *.pdf.sioyek.extras(N) *.run.xml(N) *.synctex.gz(N)<CR><CR>
+                nnoremap <buffer> <C-3> :w <CR>:!rm -f *.aux(N) *.bbl(N) *.bcf(N) *.blg(N) *.fdb_latexmk(N) *.fls(N) *.log(N) *.run.xml(N) *.synctex.gz(N)<CR><CR>
 
-                nnoremap <buffer> <C-4> :w <CR>:lua local f=vim.fn.expand('%:p:r')..'_Student.pdf'; if vim.fn.filereadable(f)==1 then vim.fn.jobstart({'sioyek', f}, {detach=true}) end<CR><CR>
+                nnoremap <buffer> <C-4> :w <CR>:lua local f=vim.fn.expand('%:p:r')..'_Student.pdf'; if vim.fn.filereadable(f)==1 then vim.fn.jobstart({'zathura', f}, {detach=true}) end<CR><CR>
 
                 inoremap <buffer> ' \
             '';
