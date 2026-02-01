@@ -133,6 +133,13 @@
             UltiSnipsJumpForwardTrigger = "<tab>";
             UltiSnipsJumpBackwardTrigger = "<S-tab>";
             UltiSnipsSnippetDirectories = [ "UltiSnips" ];
+            vimtex_compiler_latexmk = {
+                executable = "${pkgs.texlive.combined.scheme-full}/bin/latexmk";
+                options = [
+                    "-synctex=1"
+                    "-interaction=nonstopmode"
+                ];
+            };
         };
 
         extraFiles = {
