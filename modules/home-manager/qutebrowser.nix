@@ -153,7 +153,7 @@
     };
 
     home.file = {
-        ".qutebrowser/quickmarks".source = ./quickmarks;
+        ".qutebrowser/quickmarks".source = ./qutebrowser/quickmarks;
 
         ".qutebrowser/config.py".text = ''
             config.set('content.images', True, 'chrome-devtools://*')
@@ -174,7 +174,7 @@
     home.activation.installQutebrowserBookmarks = lib.hm.dag.entryAfter ["writeBoundary"] ''
         DATA_DIR="$HOME/.qutebrowser/bookmarks"
         mkdir -p "$DATA_DIR"
-        cp -f "${./bookmarks}" "$DATA_DIR/urls"
+        cp -f "${./qutebrowser/bookmarks}" "$DATA_DIR/urls"
         chmod u+w "$DATA_DIR/urls"
     '';
 }

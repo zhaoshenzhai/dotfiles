@@ -27,19 +27,20 @@
 
     imports = [
         ./zsh.nix
+        ./nvim.nix
         ./vifm.nix
         ./zathura.nix
         ./starship.nix
-        ./nvim/nvim.nix
         ./alacritty.nix
         ./launcher.nix
-        ./qutebrowser/qutebrowser.nix
+        ./qutebrowser.nix
     ];
 
     home.file = {
         ".hushlogin".text = "";
-        ".aerospace.toml".source = ./aerospace.toml;
     };
+
+    xdg.configFile."aerospace/aerospace.toml".source = ./aerospace.toml;
 
     programs = {
         fzf = {

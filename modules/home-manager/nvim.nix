@@ -1,12 +1,12 @@
 { pkgs, lib, ... }:
     let
-        snippetDir = ./UltiSnips;
+        snippetDir = ./nvim/UltiSnips;
             snippetFiles = builtins.filter
                 (name: lib.hasSuffix ".snippets" name)
                 (builtins.attrNames (builtins.readDir snippetDir));
 
             snippetExtraFiles = lib.listToAttrs (map (name: {
-                name = "UltiSnips/${name}";
+                name = "/UltiSnips/${name}";
                 value = { source = "${snippetDir}/${name}"; };
             }) snippetFiles);
     in {
@@ -134,8 +134,8 @@
         };
 
         extraFiles = {
-            "spell/en.utf-8.add".source = ./spell/en.utf-8.add;
-            "spell/en.utf-8.add.spl".source = ./spell/en.utf-8.add.spl;
+            "spell/en.utf-8.add".source = ./nvim/spell/en.utf-8.add;
+            "spell/en.utf-8.add.spl".source = ./nvim/spell/en.utf-8.add.spl;
 
             "ftplugin/tex.vim".text = ''
                 nnoremap <buffer> <C-1> :w <CR>:VimtexCompile<CR><CR>
