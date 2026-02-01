@@ -21,6 +21,15 @@
             VISUAL = "nvim";
             TERMINAL = "alacritty";
         };
+
+        systemPackages = with pkgs; [
+            (texlive.combine {
+                inherit (texlive)
+                    scheme-medium
+                    collection-latexextra
+                    doublestroke;
+            })
+        ];
     };
 
     imports = [

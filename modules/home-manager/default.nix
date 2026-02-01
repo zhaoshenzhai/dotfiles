@@ -17,14 +17,6 @@
         courier-prime
         nerd-fonts.symbols-only
         nerd-fonts.jetbrains-mono
-        (pkgs.texlive.combine {
-            inherit (pkgs.texlive) 
-                scheme-small
-                doublestroke
-                collection-fontsrecommended
-                collection-latexextra
-                latexmk;
-        })
     ];
 
     imports = [
