@@ -1,6 +1,7 @@
 { pkgs, ... }: {
     programs.git = {
         enable = true;
+        xdg.enable = true;
 
         settings.user.name = "Zhaoshen Zhai";
         settings.user.email = "zhaoshen.zhai@gmail.com";
@@ -16,6 +17,6 @@
             
             init.defaultBranch = "main";
             push.autoSetupRemote = true;
-          };
+        };
     };
 }
