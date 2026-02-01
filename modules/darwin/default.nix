@@ -25,9 +25,11 @@
         systemPackages = with pkgs; [
             (texlive.combine {
                 inherit (texlive)
-                    scheme-medium
+                    scheme-small
                     collection-latexextra
-                    doublestroke;
+                    collection-fontsextra
+                    collection-fontsrecommended
+                    latexmk;
             })
         ];
     };
