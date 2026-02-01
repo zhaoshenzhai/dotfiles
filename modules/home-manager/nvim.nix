@@ -146,10 +146,12 @@
             "spell/en.utf-8.add.spl".source = ./nvim/spell/en.utf-8.add.spl;
 
             "ftplugin/tex.vim".text = ''
-                nnoremap <buffer> <C-1> :w <CR>:VimtexCompile<CR>:VimtexView<CR>
+                nnoremap <buffer> <C-1> :w <CR>:VimtexCompile<CR>:VimtexView<CR><CR>
                 nnoremap <buffer> <C-2> :w <CR>:VimtexView<CR><CR>
+
                 nnoremap <buffer> <C-3> :w <CR>:!rm -f *.aux(N) *.bbl(N) *.bcf(N) *.blg(N) *.fdb_latexmk(N) *.fls(N) *.log(N) *.pdf.sioyek.extras(N) *.run.xml(N) *.synctex.gz(N)<CR><CR>
-                nnoremap <buffer> <C-4> :w <CR>:silent !test -f %:r_Student.pdf && (sioyek %:r_Student.pdf &)<CR><CR>
+
+                nnoremap <buffer> <C-4> :w <CR>:lua local f=vim.fn.expand('%:p:r')..'_Student.pdf'; if vim.fn.filereadable(f)==1 then vim.fn.jobstart({'sioyek', f}, {detach=true}) end<CR><CR>
 
                 inoremap <buffer> ' \
             '';
