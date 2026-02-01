@@ -51,6 +51,7 @@
                 settings = {
                     view_method = "general";
                     view_general_viewer = "zathura";
+                    view_forward_search_on_start = true;
                     mappings_enabled = false;
                     quickfix_ignore_filters = [
                         "Underfull \\\\hbox (badness [0-9]*) in paragraph at lines"
@@ -73,12 +74,10 @@
                 autoEnableSources = true;
 
                 settings = {
-                    snippet.expand = "function(args) vim.fn[\"UltiSnips#Anon\"](args.body) end";
-
                     mapping = {
                         "<C-j>" = "cmp.mapping.select_next_item()";
                         "<C-k>" = "cmp.mapping.select_prev_item()";
-                        "<CR>" = "cmp.mapping.confirm({ select = true })";
+                        "<C-l>" = "cmp.mapping.confirm({ select = true })";
                         "<C-Space>" = "cmp.mapping.complete()";
                     };
 
@@ -90,10 +89,6 @@
                     ];
                 };
             };
-            cmp-nvim-ultisnips.enable = true;
-            cmp-omni.enable = true;
-            cmp-buffer.enable = true;
-            cmp-path.enable = true;
 
             lualine = {
                 enable = true;
@@ -131,7 +126,6 @@
         globals = {
             UltiSnipsExpandTrigger = "<S-tab>";
             UltiSnipsJumpForwardTrigger = "<tab>";
-            UltiSnipsJumpBackwardTrigger = "<S-tab>";
             UltiSnipsSnippetDirectories = [ "UltiSnips" ];
             vimtex_compiler_latexmk = {
                 executable = "${pkgs.texlive.combined.scheme-full}/bin/latexmk";
@@ -150,7 +144,7 @@
                 nnoremap <buffer> <C-1> :w <CR>:VimtexCompile<CR>:VimtexView<CR><CR>
                 nnoremap <buffer> <C-2> :w <CR>:VimtexView<CR><CR>
 
-                nnoremap <buffer> <C-3> :w <CR>:!rm -f *.aux(N) *.bbl(N) *.bcf(N) *.blg(N) *.fdb_latexmk(N) *.fls(N) *.log(N) *.run.xml(N) *.synctex.gz(N)<CR><CR>
+                nnoremap <buffer> <C-3> :w <CR>:!rm -f *.aux(N) *.bbl(N) *.bcf(N) *.blg(N) *.fdb_latexmk(N) *.fls(N) *.log(N) *.run.xml(N) *.synctex.gz(N) *.synctex\(busy\)(N)<CR><CR>
 
                 nnoremap <buffer> <C-4> :w <CR>:lua local f=vim.fn.expand('%:p:r')..'_Student.pdf'; if vim.fn.filereadable(f)==1 then vim.fn.jobstart({'zathura', f}, {detach=true}) end<CR><CR>
 

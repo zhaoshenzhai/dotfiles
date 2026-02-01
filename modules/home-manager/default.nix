@@ -1,10 +1,14 @@
-{ pkgs, ... }: {
+{ config, pkgs, ... }:
+let
+    dbusSocket = "${config.home.homeDirectory}/.cache/dbus-session-socket";
+in {
     manual.json.enable = false;
     home.stateVersion = "22.11";
 
     home.sessionVariables = {
         EDITOR = "nvim";
         SHELL_SESSIONS_DISABLE = "1";
+        DBUS_SESSION_BUS_ADDRESS = "unix:path=${dbusSocket}";
     };
 
     home.packages = with pkgs; [
@@ -40,6 +44,20 @@
         fzf = {
             enable = true;
             enableZshIntegration = true;
+        };
+    };
+
+    launchd.agents.dbus = {
+        enable = true;
+        config = {
+            Label = "org.freedesktop.dbus-session";
+            ProgramArguments = [
+                "${pkgs.dbus}/bin/dbus-daemon"
+                "--nofork"
+                "--session"
+                "--address=unix:path=${dbusSocket}"
+            ];
+            KeepAlive = true;
         };
     };
 }
