@@ -13,6 +13,7 @@
     };
 
     programs.zsh.enable = true;
+    imports = [ ./scripts.nix ];
 
     environment = {
         shells = [ pkgs.zsh ];
@@ -22,8 +23,6 @@
             TERMINAL = "alacritty";
         };
     };
-
-    imports = [ ./scripts.nix ];
 
     # --- Security & Input ---
     security.pam.services.sudo_local.touchIdAuth = true;

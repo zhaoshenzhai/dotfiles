@@ -17,7 +17,10 @@
         courier-prime
         nerd-fonts.symbols-only
         nerd-fonts.jetbrains-mono
-        texlive.combined.scheme-full
+        (texlive.combined.scheme-full.withPackages (ps: [
+            ps.doublestroke
+            ps.latexmk
+        ]))
     ];
 
     imports = [
@@ -31,10 +34,7 @@
         ./qutebrowser.nix
     ];
 
-    home.file = {
-        ".hushlogin".text = "";
-    };
-
+    home.file = { ".hushlogin".text = ""; };
     xdg.configFile."aerospace/aerospace.toml".source = ./aerospace.toml;
 
     programs = {
