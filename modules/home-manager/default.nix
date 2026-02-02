@@ -25,7 +25,6 @@ in {
         neovim-remote
         nerd-fonts.symbols-only
         nerd-fonts.jetbrains-mono
-        zoom-us
     ];
 
     imports = [
