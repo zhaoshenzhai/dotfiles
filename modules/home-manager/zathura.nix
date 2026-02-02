@@ -18,7 +18,7 @@
             highlight-color         = "rgba(86, 182, 194, 0.5)";
             highlight-fg            = "#00FF00";
 
-            font                    = "Courier Prime normal 15";
+            font                    = "Courier Prime normal 17";
 
             recolor-keephue         = "true";
             recolor-lightcolor      = "#1E2127";
@@ -47,7 +47,6 @@
             "<C-j>" = "zoom out";
             "<C-k>" = "zoom in";
 
-            "`" = "toggle_statusbar";
             "D" = "set \"first-page-column 1:1\"";
         };
     };

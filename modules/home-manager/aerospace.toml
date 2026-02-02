@@ -47,7 +47,8 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
 
     cmd-w       = [ 'workspace w', 'exec-and-forget open -a qutebrowser' ]
     cmd-m       = [ 'workspace m', 'exec-and-forget open -a messages' ]
-    cmd-shift-m = [ 'workspace M', 'exec-and-forget open -a music' ]
+    cmd-s       = [ 'workspace m', 'exec-and-forget open -a music' ]
+    cmd-shift-m = [ 'workspace M', 'exec-and-forget open -a mail' ]
     cmd-p       = 'exec-and-forget screencapture ~/Downloads/Screenshot_$(date +%Y_%m_%d_%H%M%S).png'
 
     # Focus Movement
@@ -139,7 +140,11 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
 
 [[on-window-detected]]
     if.app-id = 'com.apple.Music'
-    run = 'move-node-to-workspace M'
+    run = 'move-node-to-workspace s'
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.Mail'
+    run = 'move-node-to-workspace o'
 
 [[on-window-detected]]
     if.window-title-regex-substring = 'vifm-float'
