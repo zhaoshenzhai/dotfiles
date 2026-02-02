@@ -14,6 +14,7 @@ in {
     home.packages = with pkgs; [
         coreutils
         dbus
+        htop
         aerospace
         zathura
         pdftk
