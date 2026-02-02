@@ -39,10 +39,15 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
         'mode launcher'
     ]
 
+    cmd-t = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
+        --title htop \
+        --option "window.dimensions={columns=100,lines=35}" \
+        --option "window.position={x=525,y=250}" \
+        -e zsh -ic /etc/profiles/per-user/zhao/bin/htop"""
+
     cmd-w       = [ 'workspace w', 'exec-and-forget open -a qutebrowser' ]
     cmd-m       = [ 'workspace m', 'exec-and-forget open -a messages' ]
     cmd-shift-m = [ 'workspace M', 'exec-and-forget open -a music' ]
-    cmd-s       = [ 'workspace 1', 'exec-and-forget open -a settings' ]
     cmd-p       = 'exec-and-forget screencapture ~/Downloads/Screenshot_$(date +%Y_%m_%d_%H%M%S).png'
 
     # Focus Movement
@@ -146,6 +151,10 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
 
 [[on-window-detected]]
     if.window-title-regex-substring = 'launcher'
+    run = 'layout floating'
+
+[[on-window-detected]]
+    if.window-title-regex-substring = 'htop'
     run = 'layout floating'
 
 [[on-window-detected]]
