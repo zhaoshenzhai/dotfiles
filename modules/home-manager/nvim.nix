@@ -269,13 +269,13 @@
             {
                 event = [ "BufWinLeave" ];
                 pattern = [ "*" ];
-                command = "mkview";
+                command = "if expand('%') != '' && &buftype == '' | mkview | endif";
                 group = "remember_folds";
             }
             {
                 event = [ "BufWinEnter" ];
                 pattern = [ "*" ];
-                command = "silent! loadview";
+                command = "if expand('%') != '' && &buftype == '' | silent! loadview | endif";
                 group = "remember_folds";
             }
         ];
