@@ -43,6 +43,8 @@
             swapfile = false;
             showmode = false;
             laststatus = 3;
+
+            spellfile = "/Users/zhao/iCloud/Dotfiles/modules/home-manager/nvim/spell/en.utf-8.add";
         };
 
         plugins = {
@@ -63,8 +65,10 @@
                         "Package typearea Warning: Bad type area settings!"
                         "LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right."
                         "Dimension too large."
-                        "LaTeX Warning: Marginpar on page * moved."
                         "I found no \\\\bibdata command"
+                        "LaTeX Warning: Marginpar on page * moved."
+                        "LaTeX Warning: There were undefined references."
+                        "Package biblatex Warning: Please rerun LaTeX."
                     ];
                 };
             };
@@ -137,14 +141,11 @@
         };
 
         extraFiles = {
-            "spell/en.utf-8.add".source = ./nvim/spell/en.utf-8.add;
-            "spell/en.utf-8.add.spl".source = ./nvim/spell/en.utf-8.add.spl;
-
             "ftplugin/tex.vim".text = ''
-                nnoremap <buffer> <C-1> :w <CR>:VimtexCompile<CR>:VimtexView<CR><CR>
+                nnoremap <buffer> <C-1> :w <CR>:VimtexCompile<CR><CR>
                 nnoremap <buffer> <C-2> :w <CR>:VimtexView<CR><CR>
 
-                nnoremap <buffer> <C-3> :w <CR>:!rm -f *.aux(N) *.bbl(N) *.bcf(N) *.blg(N) *.fdb_latexmk(N) *.fls(N) *.log(N) *.run.xml(N) *.synctex.gz(N) *.synctex\(busy\)(N)<CR><CR>
+                nnoremap <buffer> <C-3> :w <CR>:!rm -f *.aux(N) *.bbl(N) *.bcf(N) *bcf-SAVE-ERROR(N) *.blg(N) *.fdb_latexmk(N) *.fls(N) *.log(N) *.run.xml(N) *.synctex.gz(N) *.synctex\(busy\)(N)<CR><CR>
 
                 nnoremap <buffer> <C-4> :w <CR>:lua local f=vim.fn.expand('%:p:r')..'_Student.pdf'; if vim.fn.filereadable(f)==1 then vim.fn.jobstart({'zathura', f}, {detach=true}) end<CR><CR>
             '';

@@ -12,7 +12,7 @@
             ls = "ls --color=auto -F";
             la = "ls -lhAr --color=auto -F --group-directories-first";
             tree = "tree -C";
-            nixs = "sudo darwin-rebuild switch --flake ~/icloud/dotfiles#puppy; aerospace reload-config; pkill borders && borders &";
+            nixs = "sudo darwin-rebuild switch --flake ~/iCloud/Dotfiles#puppy; aerospace reload-config";
             nixu = "pushd ~/iCloud/Dotfiles; nix flake update; nixs; popd";
             zoom = "open -a zoom.us &";
         };
