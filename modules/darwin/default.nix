@@ -85,9 +85,9 @@
         caskArgs.no_quarantine = true;
         global.brewfile = true;
         onActivation.cleanup = "zap";
-        
+
         casks = [
-            "zoom" 
+            "zoom"
         ];
     };
 }
