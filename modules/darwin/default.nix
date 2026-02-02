@@ -1,6 +1,7 @@
 { pkgs, ... }: {
     # --- System Core ---
     nixpkgs.hostPlatform = "aarch64-darwin";
+    nixpkgs.config.allowUnfree = true;
     nix.extraOptions = "experimental-features = nix-command flakes";
     nix.enable = false;
     system.stateVersion = 6;
