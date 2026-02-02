@@ -4,6 +4,7 @@ let
 in {
     manual.json.enable = false;
     home.stateVersion = "22.11";
+    home.file = { ".hushlogin".text = ""; };
 
     home.sessionVariables = {
         EDITOR = "nvim";
@@ -12,19 +13,27 @@ in {
     };
 
     home.packages = with pkgs; [
+        # System
         coreutils
-        dbus
-        htop
         aerospace
-        zathura
-        pdftk
-        ocamlPackages.cpdf
+        htop
         neofetch
-        courier-prime
+
+        # TeX and pdfs
         texlive.combined.scheme-full
+        ocamlPackages.cpdf
+        pdftk
+        zathura
         neovim-remote
+        dbus
+
+        #Fonts
+        courier-prime
         nerd-fonts.symbols-only
         nerd-fonts.jetbrains-mono
+
+        # COMP308
+        dosbox-staging
     ];
 
     imports = [
@@ -33,32 +42,24 @@ in {
         ./vifm.nix
         ./zathura.nix
         ./starship.nix
-        ./alacritty.nix
         ./launcher.nix
+        ./alacritty.nix
         ./qutebrowser.nix
     ];
 
-    home.file = { ".hushlogin".text = ""; };
     xdg.configFile."aerospace/aerospace.toml".source = ./aerospace.toml;
 
-    programs = {
-        fzf = {
-            enable = true;
-            enableZshIntegration = true;
-        };
-    };
-
-    launchd.agents.dbus = {
-        enable = true;
-        config = {
-            Label = "org.freedesktop.dbus-session";
-            ProgramArguments = [
-                "${pkgs.dbus}/bin/dbus-daemon"
-                "--nofork"
-                "--session"
-                "--address=unix:path=${dbusSocket}"
-            ];
-            KeepAlive = true;
-        };
-    };
+    # launchd.agents.dbus = {
+    #     enable = true;
+    #     config = {
+    #         Label = "org.freedesktop.dbus-session";
+    #         ProgramArguments = [
+    #             "${pkgs.dbus}/bin/dbus-daemon"
+    #             "--nofork"
+    #             "--session"
+    #             "--address=unix:path=${dbusSocket}"
+    #         ];
+    #         KeepAlive = true;
+    #     };
+    # };
 }
