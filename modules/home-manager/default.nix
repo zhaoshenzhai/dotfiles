@@ -2,7 +2,6 @@
 let
     dbusSocket = "${config.home.homeDirectory}/.cache/dbus-session-socket";
 in {
-    manual.json.enable = false;
     home.stateVersion = "22.11";
     home.file = { ".hushlogin".text = ""; };
 
@@ -15,9 +14,12 @@ in {
     home.packages = with pkgs; [
         # System
         coreutils
-        aerospace
         btop
         neofetch
+        aerospace
+        alacritty
+        sketchybar
+        sketchybar-app-font
 
         # TeX and pdfs
         texlive.combined.scheme-full
@@ -44,6 +46,7 @@ in {
         ./starship.nix
         ./launcher.nix
         ./alacritty.nix
+        ./sketchybar.nix
         ./qutebrowser.nix
     ];
 
