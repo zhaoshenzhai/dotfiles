@@ -4,13 +4,13 @@
         loadAutoconfig = false;
 
         searchEngines = {
-            DEFAULT = "https://duckduckgo.com/?q={}";
+            DEFAULT = "https://www.google.com/search?q={}";
             yt = "https://www.youtube.com/results?search_query={}";
         };
 
         settings = {
-            url.start_pages = [ "https://duckduckgo.com" ];
-            url.default_page = "https://duckduckgo.com";
+            url.start_pages = [ "https://google.com" ];
+            url.default_page = "https://google.com";
             "auto_save.session" = false;
             "window.hide_decoration" = true; 
             "window.title_format" = " ";
@@ -143,6 +143,9 @@
         # Key Bindings
         keyBindings = {
             normal = {
+                "<Ctrl+Return>" = "cmd-set-text -s :open";
+                "<Ctrl+Shift+Return>" = "cmd-set-text -s :open -t";
+
                 "<Ctrl+=>" = "zoom-in";
                 "<Ctrl+->" = "zoom-out";
                 "<Ctrl+0>" = "zoom 100";
@@ -186,21 +189,6 @@
 
     home.file = {
         ".qutebrowser/quickmarks".source = ./qutebrowser/quickmarks;
-
-        ".qutebrowser/config.py".text = ''
-            config.set('content.images', True, 'chrome-devtools://*')
-            config.set('content.images', True, 'devtools://*')
-            config.set('content.javascript.enabled', True, 'chrome-devtools://*')
-            config.set('content.javascript.enabled', True, 'devtools://*')
-            config.set('content.javascript.enabled', True, 'chrome://*/*')
-            config.set('content.javascript.enabled', True, 'qute://*/*')
-
-            import os
-            config_path = os.path.expanduser("~/.config/qutebrowser/config.py")
-            if os.path.exists(config_path):
-                with open(config_path, "r") as f:
-                    exec(f.read())
-        '';
     };
 
     home.activation.installQutebrowserBookmarks = lib.hm.dag.entryAfter ["writeBoundary"] ''
