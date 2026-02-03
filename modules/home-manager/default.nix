@@ -1,4 +1,5 @@
 { config, pkgs, lib, ... }: {
+    manual.json.enable = false;
     home.stateVersion = "22.11";
     home.file = { ".hushlogin".text = ""; };
 
@@ -11,13 +12,17 @@
     home.packages = with pkgs; [
         # System
         coreutils
-        btop
-        neofetch
         aerospace
         alacritty
+        dbus
+
+        # Ricing
         jankyborders
-        # sketchybar
-        # sketchybar-app-font
+        sketchybar
+        sketchybar-app-font
+        neofetch
+        btop
+        jq
 
         # TeX and pdfs
         texlive.combined.scheme-full
@@ -25,7 +30,6 @@
         pdftk
         zathura
         neovim-remote
-        dbus
 
         #Fonts
         courier-prime
@@ -45,11 +49,14 @@
         ./starship.nix
         ./launcher.nix
         ./alacritty.nix
-        # ./sketchybar.nix
+        ./sketchybar.nix
         ./qutebrowser.nix
     ];
 
-    xdg.configFile."aerospace/aerospace.toml".source = ./aerospace.toml;
+    xdg.configFile = {
+        "aerospace/aerospace.toml".source = ./aerospace.toml;
+        ".config/sketchybar".source = ./sketchybar;
+    };
 
     launchd.agents.dbus = {
         enable = true;

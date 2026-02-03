@@ -143,8 +143,7 @@
         # Key Bindings
         keyBindings = {
             normal = {
-                "<Ctrl+Return>" = "cmd-set-text -s :open";
-                "<Ctrl+Shift+Return>" = "cmd-set-text -s :open -t";
+                "<Ctrl+Return>" = "cmd-set-text -s :open -t";
 
                 "<Ctrl+=>" = "zoom-in";
                 "<Ctrl+->" = "zoom-out";

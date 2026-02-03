@@ -1,14 +1,17 @@
 start-at-login = true
 after-startup-command = [
-    'exec-and-forget borders'
-    # 'exec-and-forget sketchybar'
+    'exec-and-forget borders',
+    'exec-and-forget sketchybar'
 ]
 
-# --- Mouse Behavior ---
+exec-on-workspace-change = ['/bin/bash', '-c',
+    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
+    'exec-and-forget borders'
+]
+
 on-focused-monitor-changed = [ 'move-mouse monitor-lazy-center' ]
 on-focus-changed           = [ 'move-mouse window-lazy-center' ]
 
-# --- Layout Gaps ---
 [gaps]
     inner.horizontal = 10
     inner.vertical   = 10
@@ -17,10 +20,8 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
     outer.top        = 10
     outer.right      = 10
 
-# --- Key Bindings: Main Mode ---
 [mode.main.binding]
 
-    # Applications & Terminal
     cmd-backslash = 'exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty'
 
     cmd-e = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
@@ -54,19 +55,16 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
     cmd-shift-m = [ 'workspace M', 'exec-and-forget open -a mail' ]
     cmd-p       = 'exec-and-forget screencapture ~/Downloads/Screenshot_$(date +%Y_%m_%d_%H%M%S).png'
 
-    # Focus Movement
     cmd-h = 'focus left'
     cmd-j = 'focus down'
     cmd-k = 'focus up'
     cmd-l = 'focus right'
 
-    # Node Movement
     cmd-shift-h = 'move left'
     cmd-shift-j = 'move down'
     cmd-shift-k = 'move up'
     cmd-shift-l = 'move right'
 
-    # Workspace Switching
     cmd-1 = 'workspace 1'
     cmd-2 = 'workspace 2'
     cmd-3 = 'workspace 3'
@@ -77,7 +75,6 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
     cmd-8 = 'workspace 8'
     cmd-9 = 'workspace 9'
 
-    # Move Node to Workspace
     cmd-shift-1 = 'move-node-to-workspace 1'
     cmd-shift-2 = 'move-node-to-workspace 2'
     cmd-shift-3 = 'move-node-to-workspace 3'
@@ -88,12 +85,10 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
     cmd-shift-8 = 'move-node-to-workspace 8'
     cmd-shift-9 = 'move-node-to-workspace 9'
 
-    # Layout Controls
     cmd-f       = 'layout v_accordion v_tiles'
     cmd-tab     = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next'
     cmd-shift-f = 'fullscreen --no-outer-gaps'
 
-    # Modes & System
     cmd-r   = 'mode resize'
     cmd-q   = []
     cmd-esc = [
@@ -101,14 +96,12 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
         'focus --boundaries workspace dfs-next' 
     ]
 
-# --- Key Bindings: Launcher Mode ---
 [mode.launcher.binding]
     cmd-esc = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
     ctrl-q  = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
     cmd-q   = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
     esc     = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
 
-# --- Key Bindings: Resize Mode ---
 [mode.resize.binding]
     cmd-h = 'join-with left'
     cmd-j = 'join-with down'
@@ -124,7 +117,6 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
     cmd-q = 'mode main'
     esc   = 'mode main'
 
-# --- Window Detection Rules ---
 [[on-window-detected]]
     if.app-id = 'com.apple.systempreferences'
     run = [ 'layout floating', 'move-node-to-workspace 1' ]
