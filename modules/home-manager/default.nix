@@ -1,14 +1,14 @@
-{ config, pkgs, ... }: {
-# let
-#     dbusSocket = "${config.home.homeDirectory}/.cache/dbus-session-socket";
-# in {
+{ config, pkgs, ... }:
+let
+    dbusSocket = "${config.home.homeDirectory}/.cache/dbus-session-socket";
+in {
     home.stateVersion = "22.11";
     home.file = { ".hushlogin".text = ""; };
 
     home.sessionVariables = {
         EDITOR = "nvim";
         SHELL_SESSIONS_DISABLE = "1";
-        # DBUS_SESSION_BUS_ADDRESS = "unix:path=${dbusSocket}";
+        DBUS_SESSION_BUS_ADDRESS = "unix:path=${dbusSocket}";
     };
 
     home.packages = with pkgs; [
@@ -54,17 +54,17 @@
 
     xdg.configFile."aerospace/aerospace.toml".source = ./aerospace.toml;
 
-    # launchd.agents.dbus = {
-    #     enable = true;
-    #     config = {
-    #         Label = "org.freedesktop.dbus-session";
-    #         ProgramArguments = [
-    #             "${pkgs.dbus}/bin/dbus-daemon"
-    #             "--nofork"
-    #             "--session"
-    #             "--address=unix:path=${dbusSocket}"
-    #         ];
-    #         KeepAlive = true;
-    #     };
-    # };
+    launchd.agents.dbus = {
+        enable = true;
+        config = {
+            Label = "org.freedesktop.dbus-session";
+            ProgramArguments = [
+                "${pkgs.dbus}/bin/dbus-daemon"
+                "--nofork"
+                "--session"
+                "--address=unix:path=${dbusSocket}"
+            ];
+            KeepAlive = true;
+        };
+    };
 }

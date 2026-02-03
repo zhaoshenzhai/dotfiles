@@ -53,6 +53,7 @@
                 settings = {
                     view_method = "general";
                     view_general_viewer = "zathura";
+                    view_general_options = "--synctex-forward @line:@col:@tex @pdf";
                     view_forward_search_on_start = true;
                     mappings_enabled = false;
                     quickfix_ignore_filters = [
