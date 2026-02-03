@@ -22,7 +22,11 @@
             EDITOR = "nvim";
             VISUAL = "nvim";
             TERMINAL = "alacritty";
+            DBUS_SESSION_BUS_ADDRESS = "unix:path=/Users/zhao/.cache/dbus-session-socket";
         };
+        systemPackages = [
+            pkgs.dbus
+        ];
     };
 
     # --- Security & Input ---
@@ -80,6 +84,7 @@
         };
     };
 
+    # --- Homebrew ---
     homebrew = {
         enable = true;
         caskArgs.no_quarantine = true;
@@ -89,5 +94,19 @@
         casks = [
             "zoom"
         ];
+    };
+
+    # --- Dbus ---
+    launchd.user.agents.dbus = {
+        serviceConfig = {
+            ProgramArguments = [
+                "${pkgs.dbus}/bin/dbus-daemon"
+                "--session"
+                "--address=unix:path=/Users/zhao/.cache/dbus-session-socket"
+                "--nofork"
+            ];
+            KeepAlive = true;
+            ProcessType = "Interactive";
+        };
     };
 }
