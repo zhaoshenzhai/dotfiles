@@ -3,26 +3,27 @@
         enable = true;
 
         options = {
-            default-fg              = "#A6B5C5";
+            default-fg              = "#1E2127";
             default-bg              = "#141A1F";
 
-            statusbar-bg            = "#1A2128";
+            statusbar-bg            = "#1E2127";
             statusbar-fg            = "#A8A8AA";
-            notification-bg         = "#1A2128";
+            notification-bg         = "#1E2127";
             notification-fg         = "#F8F8FF";
 
-            inputbar-bg             = "#141A1F";
+            inputbar-bg             = "#1E2127";
             inputbar-fg             = "#A6B5C5";
 
             highlight-active-color  = "rgba(97, 175, 239, 0.5)";
             highlight-color         = "rgba(86, 182, 194, 0.5)";
             highlight-fg            = "#00FF00";
 
-            font                    = "Courier Prime normal 17";
+            font                    = "Courier Prime normal 20";
 
+            recolor                 = "true";
             recolor-keephue         = "true";
             recolor-lightcolor      = "#1E2127";
-            recolor-darkcolor       = "#E8E8EE";
+            recolor-darkcolor       = "#D8D8DD";
 
             first-page-column       = "1:1";
             guioptions              = "none";

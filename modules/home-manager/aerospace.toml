@@ -1,6 +1,6 @@
 start-at-login = true
 after-startup-command = [
-    'exec-and-forget ${pkgs.jankyborders}/bin/borders'
+    'exec-and-forget borders'
     # 'exec-and-forget sketchybar'
 ]
 
