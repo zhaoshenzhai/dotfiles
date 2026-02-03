@@ -170,15 +170,6 @@
                 "<Ctrl+7>" = "tab-select 7";
                 "<Ctrl+8>" = "tab-select 8";
                 "<Ctrl+9>" = "tab-select 9";
-
-                "<Ctrl+Shift+1>" = "tab-move 1";
-                "<Ctrl+Shift+2>" = "tab-move 2";
-                "<Ctrl+Shift+3>" = "tab-move 3";
-                "<Ctrl+Shift+4>" = "tab-move 4";
-                "<Ctrl+Shift+5>" = "tab-move 5";
-                "<Ctrl+Shift+6>" = "tab-move 6";
-                "<Ctrl+Shift+7>" = "tab-move 7";
-                "<Ctrl+Shift+8>" = "tab-move 8";
             };
             command = {
                 "<Ctrl+j>" = "completion-item-focus next";
