@@ -80,6 +80,15 @@
         };
     };
 
+    # --- Fonts ---
+    fonts.packages = with pkgs; [
+        sketchybar-app-font
+        nerd-fonts.symbols-only
+        nerd-fonts.jetbrains-mono
+        nerd-fonts.hack
+        courier-prime
+    ];
+
     # --- Homebrew ---
     homebrew = {
         enable = true;

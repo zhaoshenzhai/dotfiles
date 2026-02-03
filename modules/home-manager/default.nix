@@ -19,7 +19,6 @@
         # Ricing
         jankyborders
         sketchybar
-        sketchybar-app-font
         neofetch
         btop
         jq
@@ -30,12 +29,6 @@
         pdftk
         zathura
         neovim-remote
-
-        #Fonts
-        courier-prime
-        nerd-fonts.symbols-only
-        nerd-fonts.jetbrains-mono
-        nerd-fonts.hack
 
         # COMP308
         dosbox-staging
