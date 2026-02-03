@@ -170,10 +170,13 @@
                 "<Ctrl+7>" = "tab-select 7";
                 "<Ctrl+8>" = "tab-select 8";
                 "<Ctrl+9>" = "tab-select 9";
+
+                "<Ctrl+q>" = "nop";
             };
             command = {
                 "<Ctrl+j>" = "completion-item-focus next";
                 "<Ctrl+k>" = "completion-item-focus prev";
+                "<Ctrl+q>" = "mode-enter normal";
             };
         };
     };
