@@ -28,11 +28,13 @@
             zoom.default = "100%";
             scrolling.smooth = true;
 
-            fonts.default_family = "Anonymous Pro";
-            fonts.default_size = "15pt";
-            fonts.tabs.selected = "bold default_size default_family";
-            fonts.tabs.unselected = "bold default_size default_family";
-            fonts.statusbar = "bold default_size default_family";
+            fonts = {
+                default_family = "Courier Prime";
+                default_size = "20pt";
+                tabs.selected = "bold default_size default_family";
+                tabs.unselected = "bold default_size default_family";
+                statusbar = "bold default_size default_family";
+            };
 
             editor.command = [ "alacritty" "-e" "nvim" "{}" ];
             fileselect.handler = "external";
@@ -74,7 +76,6 @@
                     error.border = "#1e2127";
                     warning.fg = "#a8a8aa";
                 };
-                prompts.bg = "#1e2127";
                 statusbar = {
                     normal.bg = "#1e2127";
                     normal.fg = "#a8a8aa";
@@ -108,6 +109,33 @@
                         selected.odd.fg = "#f8f8ff";
                     };
                 };
+                completion = {
+                    fg = "#abb2bf";
+                    odd.bg = "#1e2127";
+                    even.bg = "#1e2127";
+                    match.fg = "#e06c75";
+
+                    category = {
+                        fg = "#61afef";
+                        bg = "#1e2127";
+                        border.top = "#1e2127";
+                        border.bottom = "#1e2127";
+                    };
+
+                    item.selected = {
+                        fg = "#282c34";
+                        bg = "#98c379";
+                        border.top = "#98c379";
+                        border.bottom = "#98c379";
+                        match.fg = "#e06c75";
+                    };
+
+                    scrollbar = {
+                        fg = "#abb2bf";
+                        bg = "#1e2127";
+                    };
+                };
+                prompts.bg = "#1e2127";
                 downloads.bar.bg = "#1e2127";
             };
         };
@@ -148,6 +176,10 @@
                 "<Ctrl+Shift+6>" = "tab-move 6";
                 "<Ctrl+Shift+7>" = "tab-move 7";
                 "<Ctrl+Shift+8>" = "tab-move 8";
+            };
+            command = {
+                "<Ctrl+j>" = "completion-item-focus next";
+                "<Ctrl+k>" = "completion-item-focus prev";
             };
         };
     };
