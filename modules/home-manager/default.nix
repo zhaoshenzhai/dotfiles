@@ -35,6 +35,7 @@
         courier-prime
         nerd-fonts.symbols-only
         nerd-fonts.jetbrains-mono
+        nerd-fonts.hack
 
         # COMP308
         dosbox-staging
@@ -55,7 +56,6 @@
 
     xdg.configFile = {
         "aerospace/aerospace.toml".source = ./aerospace.toml;
-        ".config/sketchybar".source = ./sketchybar;
     };
 
     launchd.agents.dbus = {

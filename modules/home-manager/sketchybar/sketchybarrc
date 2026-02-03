@@ -7,6 +7,9 @@ ITEM_DIR="$HOME/.config/sketchybar/items" # Directory where the items are config
 PLUGIN_DIR="$HOME/.config/sketchybar/plugins" # Directory where all the plugin scripts are stored
 
 FONT="Courier Prime" # Needs to have Regular, Bold, Semibold, Heavy and Black variants
+ICON_FONT="Hack Nerd Font"
+
+HELPER="sketchybar-helper"
 
 PADDINGS=3 # All paddings use this value (icon, label, background)
 
@@ -16,10 +19,10 @@ POPUP_CORNER_RADIUS=11
 SHADOW=on
 
 # Setting up the general bar appearance and default values
-sketchybar --bar     height=50                                         \
+sketchybar --bar     height=35                                         \
                      color=$BAR_COLOR                                  \
                      shadow=$SHADOW                                    \
-                     position=right                                    \
+                     position=top                                      \
                      sticky=on                                         \
                      padding_right=18                                  \
                      padding_left=18                                   \

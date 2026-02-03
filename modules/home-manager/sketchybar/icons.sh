@@ -10,6 +10,7 @@ MAIL=􀍜
 MAIL_OPEN=􀍜
 BELL=􀋚
 BELL_DOT=􀝗
+CALENDAR=􀉉
 
 # Git Icons
 GIT_ISSUE=􀍷
