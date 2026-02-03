@@ -16,7 +16,7 @@ in {
         # System
         coreutils
         aerospace
-        htop
+        btop
         neofetch
 
         # TeX and pdfs

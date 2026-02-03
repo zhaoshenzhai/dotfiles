@@ -40,10 +40,10 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
     ]
 
     cmd-t = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
-        --title htop \
+        --title btop \
         --option "window.dimensions={columns=100,lines=35}" \
         --option "window.position={x=525,y=250}" \
-        -e zsh -ic /etc/profiles/per-user/zhao/bin/htop"""
+        -e zsh -ic /etc/profiles/per-user/zhao/bin/btop"""
 
     cmd-w       = [ 'workspace w', 'exec-and-forget open -a qutebrowser' ]
     cmd-m       = [ 'workspace m', 'exec-and-forget open -a messages' ]
@@ -159,7 +159,7 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
     run = 'layout floating'
 
 [[on-window-detected]]
-    if.window-title-regex-substring = 'htop'
+    if.window-title-regex-substring = 'btop'
     run = 'layout floating'
 
 [[on-window-detected]]
