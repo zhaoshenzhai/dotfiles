@@ -15,14 +15,8 @@ sketchybar --add item           apple.logo left                             \
            --add item           apple.prefs popup.apple.logo                \
            --set apple.prefs    icon=$PREFERENCES                           \
                                 label="Preferences"                         \
-                                click_script="open -a 'System Preferences';
+                                click_script="open -a 'System Preferences'; 
                                               $POPUP_OFF"                   \
-                                                                            \
-           --add item           apple.activity popup.apple.logo             \
-           --set apple.activity icon=$ACTIVITY                              \
-                                label="Activity"                            \
-                                click_script="open -a 'Activity Monitor';
-                                              $POPUP_OFF"\
                                                                             \
            --add item           apple.lock popup.apple.logo                 \
            --set apple.lock     icon=$LOCK                                  \

@@ -98,6 +98,7 @@
 
         casks = [
             "zoom"
+            "sf-symbols"
         ];
     };
 }

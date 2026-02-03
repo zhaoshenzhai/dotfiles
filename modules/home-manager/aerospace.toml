@@ -118,10 +118,6 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
     esc   = 'mode main'
 
 [[on-window-detected]]
-    if.app-id = 'com.apple.systempreferences'
-    run = [ 'layout floating', 'move-node-to-workspace 1' ]
-
-[[on-window-detected]]
     if.app-id = 'org.nixos.qutebrowser'
     run = [
         'layout tiling',
