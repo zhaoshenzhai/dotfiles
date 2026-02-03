@@ -1,5 +1,8 @@
 start-at-login = true
-after-startup-command = [ 'exec-and-forget sketchybar' ]
+after-startup-command = [
+    'exec-and-forget borders',
+    'exec-and-forget sketchybar'
+]
 
 # --- Mouse Behavior ---
 on-focused-monitor-changed = [ 'move-mouse monitor-lazy-center' ]

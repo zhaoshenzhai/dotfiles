@@ -1,14 +1,14 @@
-{ config, pkgs, ... }:
-let
-    dbusSocket = "${config.home.homeDirectory}/.cache/dbus-session-socket";
-in {
+{ config, pkgs, ... }: {
+# let
+#     dbusSocket = "${config.home.homeDirectory}/.cache/dbus-session-socket";
+# in {
     home.stateVersion = "22.11";
     home.file = { ".hushlogin".text = ""; };
 
     home.sessionVariables = {
         EDITOR = "nvim";
         SHELL_SESSIONS_DISABLE = "1";
-        DBUS_SESSION_BUS_ADDRESS = "unix:path=${dbusSocket}";
+        # DBUS_SESSION_BUS_ADDRESS = "unix:path=${dbusSocket}";
     };
 
     home.packages = with pkgs; [
@@ -18,8 +18,9 @@ in {
         neofetch
         aerospace
         alacritty
-        sketchybar
-        sketchybar-app-font
+        jankyborders
+        # sketchybar
+        # sketchybar-app-font
 
         # TeX and pdfs
         texlive.combined.scheme-full
@@ -43,10 +44,11 @@ in {
         ./nvim.nix
         ./vifm.nix
         ./zathura.nix
+        ./borders.nix
         ./starship.nix
         ./launcher.nix
         ./alacritty.nix
-        ./sketchybar.nix
+        # ./sketchybar.nix
         ./qutebrowser.nix
     ];
 

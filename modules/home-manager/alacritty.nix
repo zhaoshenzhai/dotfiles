@@ -23,6 +23,8 @@
                 padding = { x = 10; y = 10; };
                 decorations = "buttonless";
                 dynamic_title = true;
+                opacity = 0.5;
+                blur = true;
             };
 
             selection.save_to_clipboard = true;
