@@ -35,9 +35,8 @@ sketchybar --bar     height=35                                         \
                      background.padding_left=5
 
 # Left
-source "$ITEM_DIR/spaces.sh"
 source "$ITEM_DIR/openApp.sh"
-# source "$ITEM_DIR/apple.sh"
+source "$ITEM_DIR/spaces.sh"
 
 # Right
 source "$ITEM_DIR/time.sh"
