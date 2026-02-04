@@ -939,7 +939,8 @@ function icon_map() {
         icon_result=":premiere:"
         ;;
    "Preview" | "预览" | "Skim" | "zathura" | "Aperçu" | "プレビュー" | "Vorschau")
-        icon_result=":preview:"
+        # icon_result=":preview:"
+        icon_result=""
         ;;
    "Pro Tools")
         icon_result=":pro_tools:"

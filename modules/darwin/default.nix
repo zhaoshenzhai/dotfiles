@@ -86,6 +86,7 @@
         nerd-fonts.symbols-only
         nerd-fonts.jetbrains-mono
         nerd-fonts.hack
+        font-awesome
         courier-prime
     ];
 
