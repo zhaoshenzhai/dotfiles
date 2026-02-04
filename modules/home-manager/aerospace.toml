@@ -4,9 +4,9 @@ after-startup-command = [
     'exec-and-forget sketchybar'
 ]
 
-exec-on-workspace-change = ['/bin/bash', '-c',
-    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-]
+# exec-on-workspace-change = ['/bin/bash', '-c',
+#     'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+# ]
 
 on-focused-monitor-changed = [ 'move-mouse monitor-lazy-center' ]
 on-focus-changed           = [ 'move-mouse window-lazy-center' ]
@@ -47,29 +47,10 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
         --option "window.position={x=525,y=250}" \
         -e zsh -ic /etc/profiles/per-user/zhao/bin/btop"""
 
-    cmd-w = [
-        'workspace w',
-        'exec-and-forget open -a qutebrowser',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
-
-    cmd-m = [
-        'workspace m',
-        'exec-and-forget open -a messages',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
-
-    cmd-s = [
-        'workspace s',
-        'exec-and-forget open -a music',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
-
-    cmd-shift-m = [
-        'workspace M',
-        'exec-and-forget open -a mail',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
+    cmd-w       = [ 'workspace w', 'exec-and-forget open -a qutebrowser', ]
+    cmd-m       = [ 'workspace m', 'exec-and-forget open -a messages', ]
+    cmd-s       = [ 'workspace s', 'exec-and-forget open -a music', ]
+    cmd-shift-m = [ 'workspace M', 'exec-and-forget open -a mail', ]
 
     cmd-p = 'exec-and-forget screencapture ~/Downloads/Screenshot_$(date +%Y_%m_%d_%H%M%S).png'
 
@@ -93,42 +74,15 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
     cmd-8 = 'workspace 8'
     cmd-9 = 'workspace 9'
 
-    cmd-shift-1 = [
-        'move-node-to-workspace 1',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
-    cmd-shift-2 = [
-        'move-node-to-workspace 2',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
-    cmd-shift-3 = [
-        'move-node-to-workspace 3',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
-    cmd-shift-4 = [
-        'move-node-to-workspace 4',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
-    cmd-shift-5 = [
-        'move-node-to-workspace 5',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
-    cmd-shift-6 = [
-        'move-node-to-workspace 6',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
-    cmd-shift-7 = [
-        'move-node-to-workspace 7',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
-    cmd-shift-8 = [
-        'move-node-to-workspace 8',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
-    cmd-shift-9 = [
-        'move-node-to-workspace 9',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
+    cmd-shift-1 = 'move-node-to-workspace 1'
+    cmd-shift-2 = 'move-node-to-workspace 2'
+    cmd-shift-3 = 'move-node-to-workspace 3'
+    cmd-shift-4 = 'move-node-to-workspace 4'
+    cmd-shift-5 = 'move-node-to-workspace 5'
+    cmd-shift-6 = 'move-node-to-workspace 6'
+    cmd-shift-7 = 'move-node-to-workspace 7'
+    cmd-shift-8 = 'move-node-to-workspace 8'
+    cmd-shift-9 = 'move-node-to-workspace 9'
 
     cmd-f       = 'layout v_accordion v_tiles'
     cmd-tab     = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next'
