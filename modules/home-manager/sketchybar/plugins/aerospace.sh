@@ -2,22 +2,31 @@
 
 source "$HOME/.config/sketchybar/colors.sh"
 
-# If we didn't get the focused workspace from the event, ask Aerospace for it
+# 1. Get the current state ONCE
 if [ -z "$FOCUSED_WORKSPACE" ]; then
     FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)
 fi
 
-# Ask Aerospace if this workspace ($1) has any windows
-# We check if the output is non-empty
-HAS_WINDOWS=$(aerospace list-windows --workspace "$1")
+# Get a list of all workspaces that have windows (non-empty)
+# We store this in a string for easy grep checking
+OCCUPIED_WORKSPACES=$(aerospace list-workspaces --monitor all --empty no)
 
-if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
-    # Case 1: It's the focused workspace. ALWAYS show it.
-    sketchybar --set $NAME drawing=on label.drawing=on background.drawing=on label.color=$WHITE icon.color=$WHITE
-elif [ -n "$HAS_WINDOWS" ]; then
-    # Case 2: It's NOT focused, but it HAS windows. Show it (but no background highlight).
-    sketchybar --set $NAME drawing=on label.drawing=on background.drawing=off label.color=$GRAY icon.color=$GRAY
-else
-    # Case 3: It's NOT focused and EMPTY. Hide it.
-    sketchybar --set $NAME drawing=off
-fi
+# 2. Prepare the Sketchybar command
+# We will build a long argument string to update everything in ONE call
+ARGS=()
+
+for sid in $(aerospace list-workspaces --all); do
+    if [ "$sid" = "$FOCUSED_WORKSPACE" ]; then
+        # Focused: White text, Border ON
+        ARGS+=(--set "space.$sid" drawing=on label.drawing=on background.drawing=on label.color=$WHITE icon.color=$WHITE)
+    elif echo "$OCCUPIED_WORKSPACES" | grep -q "$sid"; then
+        # Occupied: Gray text, Border OFF
+        ARGS+=(--set "space.$sid" drawing=on label.drawing=on background.drawing=off label.color=$GRAY icon.color=$GRAY)
+    else
+        # Empty: Hidden
+        ARGS+=(--set "space.$sid" drawing=off)
+    fi
+done
+
+# 3. Execute the batch update
+sketchybar "${ARGS[@]}"

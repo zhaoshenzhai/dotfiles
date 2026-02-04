@@ -103,8 +103,8 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
     esc     = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
 
 [[on-window-detected]]
+    check-further-callbacks = true
     run = [
-        'layout tiling',
         'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
     ]
 
