@@ -144,7 +144,7 @@
         extraFiles = {
             "ftplugin/tex.vim".text = ''
                 nnoremap <buffer> <C-1> :w <CR>:VimtexCompile<CR><CR>
-                nnoremap <buffer> <C-2> :w <CR>:VimtexView<CR>:call system("osascript -e 'tell application \"System Events\" to set frontmost of first process whose name contains \"zathura\" to true'")<CR><CR>
+                nnoremap <buffer> <C-2> :w <CR>:VimtexView<CR><CR>
 
                 nnoremap <buffer> <C-3> :w <CR>:!rm -f *.aux(N) *.bbl(N) *.bcf(N) *bcf-SAVE-ERROR(N) *.blg(N) *.fdb_latexmk(N) *.fls(N) *.log(N) *.run.xml(N) *.synctex.gz(N) *.synctex\(busy\)(N)<CR><CR>
 
