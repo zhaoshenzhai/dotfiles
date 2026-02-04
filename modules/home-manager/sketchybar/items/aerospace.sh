@@ -4,7 +4,6 @@ sketchybar --add event aerospace_workspace_change
 for sid in $(aerospace list-workspaces --all); do
     sketchybar --add item "space.$sid" left                          \
                --subscribe "space.$sid" aerospace_workspace_change   \
-                                        front_app_switched           \
                --set "space.$sid" label="$sid"                       \
                                   label.padding_left=5               \
                                   label.padding_right=5              \
