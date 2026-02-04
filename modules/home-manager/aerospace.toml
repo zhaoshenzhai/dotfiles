@@ -103,6 +103,12 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
     esc     = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
 
 [[on-window-detected]]
+    run = [
+        'layout tiling',
+        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+    ]
+
+[[on-window-detected]]
     if.app-id = 'org.nixos.qutebrowser'
     run = 'move-node-to-workspace w'
 
@@ -137,9 +143,3 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
 [[on-window-detected]]
     if.window-title-regex-substring = 'btop'
     run = 'layout floating'
-
-[[on-window-detected]]
-    run = [
-        'layout tiling',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
