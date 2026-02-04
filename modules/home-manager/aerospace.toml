@@ -89,7 +89,6 @@ exec-on-workspace-change = ['/bin/bash', '-c',
     cmd-tab     = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next'
     cmd-shift-f = 'fullscreen --no-outer-gaps'
 
-    cmd-r   = 'mode resize'
     cmd-q   = []
     cmd-esc = [
         'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"',
@@ -105,7 +104,10 @@ exec-on-workspace-change = ['/bin/bash', '-c',
 
 [[on-window-detected]]
     if.app-id = 'org.nixos.qutebrowser'
-    run = 'move-node-to-workspace w'
+    run = [
+        'move-node-to-workspace w',
+        'layout tiling'
+    ]
 
 [[on-window-detected]]
     if.app-id = 'com.apple.MobileSMS'
