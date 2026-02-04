@@ -11,26 +11,44 @@ OCCUPIED_WORKSPACES=$(aerospace list-workspaces --monitor all --empty no)
 ARGS=()
 for sid in $(aerospace list-workspaces --all); do
     apps=$(aerospace list-windows --workspace "$sid" --format "%{app-name}" | sort -u)
-    icon_strip=""
+    iconStrip=""
+
     if [ "${apps}" != "" ]; then
         while IFS= read -r app; do
             if [ "$app" = ".zathura-wrapped" ]; then
                 app=zathura
             fi
-            icon_strip+=" $("$ICON_MAP" "$app")"
+            iconStrip+="$("$ICON_MAP" "$app")"
         done <<< "$apps"
-        ARGS+=(--set "space.$sid" icon="$icon_strip" icon.padding_left=5 icon.padding_right=0 label.padding_left=10)
+        iconPaddingLeft=2
+        iconDrawing="on"
+        labelPadding=5
     else
-        ARGS+=(--set "space.$sid" icon="" icon.drawing=off icon.padding_left=0 icon.padding_right=0 label.padding_left=5)
+        iconStrip=""
+        iconPaddingLeft=0
+        iconDrawing="off"
+        labelPadding=10
     fi
 
     if [ "$sid" = "$FOCUSED_WORKSPACE" ]; then
-        ARGS+=(--set "space.$sid" drawing=on label.drawing=on icon.drawing=on background.drawing=on)
+        drawing="on"
+        bgDrawing="on"
     elif echo "$OCCUPIED_WORKSPACES" | grep -q "$sid"; then
-        ARGS+=(--set "space.$sid" drawing=on label.drawing=on icon.drawing=on background.drawing=off)
+        drawing="on"
+        bgDrawing="off"
     else
-        ARGS+=(--set "space.$sid" drawing=off)
+        drawing="off"
+        bgDrawing="off"
     fi
+
+    ARGS+=(--set "space.$sid"               \
+        drawing="$drawing"                  \
+        background.drawing="$bgDrawing"     \
+        label.drawing="$drawing"            \
+        label.padding_left="$labelPadding"  \
+        icon.drawing="$iconDrawing"         \
+        icon.pading_left="$iconPaddingLeft" \
+        icon="$iconStrip")
 done
 
 sketchybar "${ARGS[@]}"
