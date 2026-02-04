@@ -23,5 +23,4 @@ sketchybar --add item aerospace_listener left                        \
            --set aerospace_listener drawing=off                      \
                                     updates=on                       \
            --subscribe aerospace_listener aerospace_workspace_change \
-                                          front_app_switched         \
            --set aerospace_listener script="$HOME/.config/sketchybar/plugins/aerospace.sh"
