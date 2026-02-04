@@ -110,7 +110,7 @@
                         lualine_b = [
                             {
                                 __unkeyed-1 = "filename";
-                                path = 1;
+                                path = 3;
                             }
                         ];
                         lualine_c = { __raw = "{}"; };
