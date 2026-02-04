@@ -437,6 +437,9 @@ function icon_map() {
    "System Preferences" | "System Settings" | "系统设置" | "Réglages Système" | "システム設定" | "Systemeinstellungen" | "System­einstellungen")
         icon_result=":gear:"
         ;;
+   "SecurityAgent")
+        icon_result=":bruno:"
+        ;;
    "Gemini" | "Google Gemini")
         icon_result=":gemini:"
         ;;
@@ -939,8 +942,9 @@ function icon_map() {
         icon_result=":premiere:"
         ;;
    "Preview" | "预览" | "Skim" | "zathura" | "Aperçu" | "プレビュー" | "Vorschau")
+        icon_result=":book:"
         # icon_result=":preview:"
-        icon_result=""
+        # icon_result=""
         ;;
    "Pro Tools")
         icon_result=":pro_tools:"
