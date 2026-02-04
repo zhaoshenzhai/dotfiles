@@ -112,6 +112,7 @@ exec-on-workspace-change = ['/bin/bash', '-c',
         'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
     ]
 
+    cmd-r       = 'flatten-workspace-tree'
     cmd-f       = 'layout v_accordion v_tiles'
     cmd-tab     = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next'
     cmd-shift-f = 'fullscreen --no-outer-gaps'
