@@ -47,11 +47,31 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
         --option "window.position={x=525,y=250}" \
         -e zsh -ic /etc/profiles/per-user/zhao/bin/btop"""
 
-    cmd-w       = [ 'workspace w', 'exec-and-forget open -a qutebrowser' ]
-    cmd-m       = [ 'workspace m', 'exec-and-forget open -a messages' ]
-    cmd-s       = [ 'workspace s', 'exec-and-forget open -a music' ]
-    cmd-shift-m = [ 'workspace M', 'exec-and-forget open -a mail' ]
-    cmd-p       = 'exec-and-forget screencapture ~/Downloads/Screenshot_$(date +%Y_%m_%d_%H%M%S).png'
+    cmd-w = [
+        'workspace w',
+        'exec-and-forget open -a qutebrowser',
+        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+    ]
+
+    cmd-m = [
+        'workspace m',
+        'exec-and-forget open -a messages',
+        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+    ]
+
+    cmd-s = [
+        'workspace s',
+        'exec-and-forget open -a music',
+        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+    ]
+
+    cmd-shift-m = [
+        'workspace M',
+        'exec-and-forget open -a mail',
+        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+    ]
+
+    cmd-p = 'exec-and-forget screencapture ~/Downloads/Screenshot_$(date +%Y_%m_%d_%H%M%S).png'
 
     cmd-h = 'focus left'
     cmd-j = 'focus down'
@@ -118,7 +138,8 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
     cmd-q   = []
     cmd-esc = [
         'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"',
-        'focus --boundaries workspace dfs-next' 
+        'focus --boundaries workspace dfs-next',
+        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
     ]
 
 [mode.launcher.binding]
@@ -126,21 +147,6 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
     ctrl-q  = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
     cmd-q   = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
     esc     = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
-
-[mode.resize.binding]
-    cmd-h = 'join-with left'
-    cmd-j = 'join-with down'
-    cmd-k = 'join-with up'
-    cmd-l = 'join-with right'
-
-    cmd-shift-h = []
-    cmd-shift-l = []
-    cmd-shift-j = 'resize smart -50'
-    cmd-shift-k = 'resize smart +50'
-
-    cmd-r = 'mode main'
-    cmd-q = 'mode main'
-    esc   = 'mode main'
 
 [[on-window-detected]]
     if.app-id = 'org.nixos.qutebrowser'
@@ -167,6 +173,13 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
     if.app-id = 'com.apple.Mail'
     run = [
         'move-node-to-workspace M',
+        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+    ]
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.SecurityAgent'
+    run = [
+        'layout floating',
         'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
     ]
 

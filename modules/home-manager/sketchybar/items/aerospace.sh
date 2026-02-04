@@ -6,8 +6,6 @@ for sid in $(aerospace list-workspaces --all); do
                --subscribe "space.$sid" aerospace_workspace_change     \
                                         front_app_switched             \
                --set "space.$sid" label="$sid"                         \
-                                  label.drawing=off                    \
-                                  background.drawing=off               \
                                   # label.padding_right=33               \
                                   # icon.padding_left=10                 \
                                   # icon.padding_right=10                \
