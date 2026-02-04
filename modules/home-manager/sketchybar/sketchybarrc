@@ -8,7 +8,7 @@ PLUGIN_DIR="$HOME/.config/sketchybar/plugins"
 FONT="Courier Prime"
 ICON_FONT="SF Pro"
 
-sketchybar --bar     height=35                                         \
+sketchybar --bar     height=32                                         \
                      color=$TRANSPARENT                                \
                      shadow=on                                         \
                      position=top                                      \
