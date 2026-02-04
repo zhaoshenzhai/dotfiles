@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 sketchybar --add item     calendar right                    \
            --set calendar icon=􀉉                            \

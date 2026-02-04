@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 sketchybar --add item openApp right                      \
            --set openApp script="$PLUGIN_DIR/openApp.sh" \
