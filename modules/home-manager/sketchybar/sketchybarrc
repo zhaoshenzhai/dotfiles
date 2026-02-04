@@ -8,39 +8,39 @@ PLUGIN_DIR="$HOME/.config/sketchybar/plugins"
 FONT="Courier Prime"
 ICON_FONT="SF Pro"
 
-sketchybar --bar     height=32                                         \
-                     color=$TRANSPARENT                                \
-                     shadow=on                                         \
-                     position=top                                      \
-                     sticky=on                                         \
-                     padding_right=5                                   \
-                     padding_left=5                                    \
-                     y_offset=5                                        \
-           --default updates=when_shown                                \
-                     icon.font="$ICON_FONT:Bold:14.0"                  \
-                     icon.color=$ICON_COLOR                            \
-                     icon.padding_left=10                              \
-                     icon.padding_right=5                              \
-                     icon.drawing=on                                   \
-                     icon.y_offset=1                                   \
-                     label.font="$FONT:Bold:16.0"                      \
-                     label.color=$LABEL_COLOR                          \
-                     label.padding_left=5                              \
-                     label.padding_right=10                            \
-                     background.color=$BAR_COLOR                       \
-                     background.border_width=1                         \
-                     background.border_color=0xff333333                \
-                     background.corner_radius=9                        \
-                     background.padding_right=5                        \
+sketchybar --bar     height=32                             \
+                     color=$TRANSPARENT                    \
+                     shadow=on                             \
+                     position=top                          \
+                     sticky=on                             \
+                     padding_right=5                       \
+                     padding_left=5                        \
+                     y_offset=5                            \
+           --default updates=when_shown                    \
+                     icon.font="$ICON_FONT:Bold:14.0"      \
+                     icon.color=$ICON_COLOR                \
+                     icon.padding_left=10                  \
+                     icon.padding_right=5                  \
+                     icon.drawing=on                       \
+                     icon.y_offset=1                       \
+                     label.font="$FONT:Bold:16.0"          \
+                     label.color=$LABEL_COLOR              \
+                     label.padding_left=5                  \
+                     label.padding_right=10                \
+                     background.color=$BAR_COLOR           \
+                     background.border_width=1             \
+                     background.border_color=$BORDER_COLOR \
+                     background.corner_radius=9            \
+                     background.padding_right=5            \
                      background.padding_left=5
 
 # Left
 source "$ITEM_DIR/aerospace.sh"
-source "$ITEM_DIR/openApp.sh"
 
 # Right
-source "$ITEM_DIR/time.sh"
-source "$ITEM_DIR/cpu.sh"
+source "$ITEM_DIR/openApp.sh"
 source "$ITEM_DIR/volume.sh"
+source "$ITEM_DIR/cpu.sh"
+source "$ITEM_DIR/time.sh"
 
 sketchybar --update
