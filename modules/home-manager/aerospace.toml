@@ -150,66 +150,39 @@ on-focus-changed           = [ 'move-mouse window-lazy-center' ]
 
 [[on-window-detected]]
     if.app-id = 'org.nixos.qutebrowser'
-    run = [
-        'move-node-to-workspace w',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
+    run = 'move-node-to-workspace w'
 
 [[on-window-detected]]
     if.app-id = 'com.apple.MobileSMS'
-    run = [
-        'move-node-to-workspace m',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
+    run = 'move-node-to-workspace m'
 
 [[on-window-detected]]
     if.app-id = 'com.apple.Music'
-    run = [
-        'move-node-to-workspace s',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
+    run = 'move-node-to-workspace s'
 
 [[on-window-detected]]
     if.app-id = 'com.apple.Mail'
-    run = [
-        'move-node-to-workspace M',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
+    run = 'move-node-to-workspace M'
 
 [[on-window-detected]]
     if.app-id = 'com.apple.SecurityAgent'
-    run = [
-        'layout floating',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
+    run = 'layout floating'
 
 [[on-window-detected]]
     if.window-title-regex-substring = 'vifm-float'
-    run = [
-        'layout floating',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
+    run = 'layout floating'
 
 [[on-window-detected]]
     if.window-title-regex-substring = 'git'
-    run = [
-        'layout floating',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
+    run = 'layout floating'
 
 [[on-window-detected]]
     if.window-title-regex-substring = 'launcher'
-    run = [
-        'layout floating',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
+    run = 'layout floating'
 
 [[on-window-detected]]
     if.window-title-regex-substring = 'btop'
-    run = [
-        'layout floating',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
+    run = 'layout floating'
 
 [[on-window-detected]]
     run = [
