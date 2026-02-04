@@ -1,17 +1,15 @@
+
 start-at-login = true
 after-startup-command = [
     'exec-and-forget borders',
     'exec-and-forget sketchybar'
 ]
 
+on-focused-monitor-changed = 'move-mouse monitor-lazy-center'
+on-focus-changed = 'move-mouse window-lazy-center'
+
 exec-on-workspace-change = ['/bin/bash', '-c',
     'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-]
-
-on-focused-monitor-changed = [ 'move-mouse monitor-lazy-center' ]
-on-focus-changed = [
-    'move-mouse window-lazy-center',
-    'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
 ]
 
 [gaps]
@@ -104,12 +102,6 @@ on-focus-changed = [
     ctrl-q  = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
     cmd-q   = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
     esc     = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
-
-[[on-window-detected]]
-    check-further-callbacks = true
-    run = [
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
 
 [[on-window-detected]]
     if.app-id = 'org.nixos.qutebrowser'

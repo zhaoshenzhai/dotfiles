@@ -18,9 +18,9 @@ for sid in $(aerospace list-workspaces --all); do
                click_script="aerospace workspace $sid"               \
                script="$CONFIG_DIR/plugins/aerospace.sh $sid"
 done
-#
-sketchybar --add item aerospace_listener left                        \
-           --set aerospace_listener drawing=off                      \
-                                    updates=on                       \
-           --subscribe aerospace_listener aerospace_workspace_change \
-           --set aerospace_listener script="$HOME/.config/sketchybar/plugins/aerospace.sh"
+
+sketchybar --add item aerospace_listener left                                              \
+           --set aerospace_listener drawing=off                                            \
+                                    updates=on                                             \
+                                    script="$HOME/.config/sketchybar/plugins/aerospace.sh" \
+           --subscribe aerospace_listener aerospace_workspace_change
