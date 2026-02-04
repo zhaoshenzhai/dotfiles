@@ -29,6 +29,7 @@
         pdftk
         zathura
         neovim-remote
+        poppler-utils
 
         # COMP308
         dosbox-staging
