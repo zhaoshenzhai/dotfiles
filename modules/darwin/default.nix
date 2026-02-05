@@ -39,7 +39,7 @@
             autohide = true;
             mru-spaces = false;
             showMissionControlGestureEnabled = false;
-            expose-group-apps = false;
+            expose-group-apps = true;
         };
 
         finder = {
@@ -78,6 +78,8 @@
             EnableStandardClickToShowDesktop = false;
             EnableTilingByEdgeDrag = false;
         };
+
+        spaces.spans-displays = true;
     };
 
     # --- Fonts ---
