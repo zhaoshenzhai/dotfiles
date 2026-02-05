@@ -21,7 +21,7 @@
             ];
 
             statusbar.show = "always";
-            tabs.show = "multiple";
+            tabs.show = "always";
             tabs.favicons.scale = 0.9;
             tabs.indicator.width = 0;
             tabs.max_width = 350;
