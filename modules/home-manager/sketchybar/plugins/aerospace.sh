@@ -1,39 +1,48 @@
 #!/usr/bin/env bash
 
-ICON_MAP="$HOME/.config/sketchybar/plugins/icon_map.sh"
+source "$HOME/.config/sketchybar/plugins/icon_map.sh" > /dev/null
 
 if [ -z "$FOCUSED_WORKSPACE" ]; then
     FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)
 fi
 
-OCCUPIED_WORKSPACES=$(aerospace list-workspaces --monitor all --empty no)
+WINDOWS_DATA=$(aerospace list-windows --all --format "%{workspace}|%{app-name}")
+ALL_WORKSPACES=$(aerospace list-workspaces --all)
 
 ARGS=()
-for sid in $(aerospace list-workspaces --all); do
-    apps=$(aerospace list-windows --workspace "$sid" --format "%{app-name}" | sort -u)
-    iconStrip=""
 
-    if [ "${apps}" != "" ]; then
+while IFS= read -r sid; do
+    workspace_apps=$(echo "$WINDOWS_DATA" | grep "^$sid|" | cut -d'|' -f2 | sort -u)
+
+    iconStrip=""
+    if [ -n "$workspace_apps" ]; then
         while IFS= read -r app; do
-            if [ "$app" = ".zathura-wrapped" ]; then
-                app=zathura
+            if [ -n "$app" ]; then
+                if [ "$app" = ".zathura-wrapped" ]; then
+                    app=zathura
+                fi
+
+                icon_map "$app"
+                iconStrip+="$icon_result"
             fi
-            iconStrip+="$("$ICON_MAP" "$app")"
-        done <<< "$apps"
+        done <<< "$workspace_apps"
+
         iconPaddingLeft=10
         iconDrawing="on"
         labelPaddingLeft=5
+        is_occupied=true
     else
         iconStrip=""
         iconPaddingLeft=0
         iconDrawing="off"
         labelPaddingLeft=10
+        is_occupied=false
     fi
 
     if [ "$sid" = "$FOCUSED_WORKSPACE" ]; then
         drawing="on"
         bgDrawing="on"
-    elif echo "$OCCUPIED_WORKSPACES" | grep -q "$sid"; then
+    elif [ "$is_occupied" = true ]; then
         drawing="on"
         bgDrawing="off"
     else
@@ -62,6 +71,7 @@ for sid in $(aerospace list-workspaces --all); do
         icon.padding_left="$iconPaddingLeft"     \
         icon.padding_right="$iconPaddingRight"   \
         icon="$iconStrip")
-done
+
+done <<< "$ALL_WORKSPACES"
 
 sketchybar "${ARGS[@]}"
