@@ -4,9 +4,7 @@ sketchybar --add event aerospace_workspace_change
 for sid in $(aerospace list-workspaces --all); do
     sketchybar --add item "space.$sid" left                                    \
                --set "space.$sid" label="$sid"                                 \
-                                  label.padding_right=10                       \
                                   icon.font="sketchybar-app-font:Regular:16.0" \
-                                  icon.pading_right=0                          \
                                   background.color=$BAR_COLOR                  \
                                   background.border_width=1                    \
                                   background.border_color=$BORDER_COLOR        \

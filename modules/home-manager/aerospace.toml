@@ -5,9 +5,7 @@ after-startup-command = [
     'exec-and-forget sketchybar'
 ]
 
-on-focused-monitor-changed = 'move-mouse monitor-lazy-center'
 on-focus-changed = 'move-mouse window-lazy-center'
-
 exec-on-workspace-change = ['/bin/bash', '-c',
     'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
 ]
@@ -50,8 +48,8 @@ exec-on-workspace-change = ['/bin/bash', '-c',
 
     cmd-w       = [ 'workspace w', 'exec-and-forget open -a qutebrowser', ]
     cmd-m       = [ 'workspace m', 'exec-and-forget open -a messages', ]
-    cmd-s       = [ 'workspace s', 'exec-and-forget open -a music', ]
-    cmd-shift-m = [ 'workspace M', 'exec-and-forget open -a mail', ]
+    cmd-s       = [ 'workspace m', 'exec-and-forget open -a music', ]
+    cmd-shift-m = [ 'workspace m', 'exec-and-forget open -a mail', ]
 
     cmd-p = 'exec-and-forget screencapture ~/Downloads/Screenshot_$(date +%Y_%m_%d_%H%M%S).png'
 
@@ -120,7 +118,6 @@ exec-on-workspace-change = ['/bin/bash', '-c',
     cmd-q   = []
     cmd-esc = [
         'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"',
-        'focus --boundaries workspace dfs-next',
         'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
     ]
 
@@ -143,11 +140,11 @@ exec-on-workspace-change = ['/bin/bash', '-c',
 
 [[on-window-detected]]
     if.app-id = 'com.apple.Music'
-    run = 'move-node-to-workspace s'
+    run = 'move-node-to-workspace m'
 
 [[on-window-detected]]
     if.app-id = 'com.apple.Mail'
-    run = 'move-node-to-workspace M'
+    run = 'move-node-to-workspace m'
 
 [[on-window-detected]]
     if.app-id = 'com.apple.SecurityAgent'

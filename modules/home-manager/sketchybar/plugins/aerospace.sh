@@ -20,14 +20,14 @@ for sid in $(aerospace list-workspaces --all); do
             fi
             iconStrip+="$("$ICON_MAP" "$app")"
         done <<< "$apps"
-        iconPaddingLeft=2
+        iconPaddingLeft=10
         iconDrawing="on"
-        labelPadding=5
+        labelPaddingLeft=5
     else
         iconStrip=""
         iconPaddingLeft=0
         iconDrawing="off"
-        labelPadding=10
+        labelPaddingLeft=10
     fi
 
     if [ "$sid" = "$FOCUSED_WORKSPACE" ]; then
@@ -41,13 +41,26 @@ for sid in $(aerospace list-workspaces --all); do
         bgDrawing="off"
     fi
 
-    ARGS+=(--set "space.$sid"               \
-        drawing="$drawing"                  \
-        background.drawing="$bgDrawing"     \
-        label.drawing="$drawing"            \
-        label.padding_left="$labelPadding"  \
-        icon.drawing="$iconDrawing"         \
-        icon.pading_left="$iconPaddingLeft" \
+    if [[ "$sid" =~ ^[0-9]$ ]]; then
+        labelDrawing="$drawing"
+        labelPaddingRight=10
+        iconPaddingRight=0
+    else
+        labelDrawing="off"
+        labelPaddingLeft=0
+        labelPaddingRight=0
+        iconPaddingRight="$iconPaddingLeft"
+    fi
+
+    ARGS+=(--set "space.$sid"                    \
+        drawing="$drawing"                       \
+        background.drawing="$bgDrawing"          \
+        label.drawing="$labelDrawing"            \
+        label.padding_left="$labelPaddingLeft"   \
+        label.padding_right="$labelPaddingRight" \
+        icon.drawing="$iconDrawing"              \
+        icon.padding_left="$iconPaddingLeft"     \
+        icon.padding_right="$iconPaddingRight"   \
         icon="$iconStrip")
 done
 
