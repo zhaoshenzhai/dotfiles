@@ -45,8 +45,8 @@
             "j" = "scroll full-down";
             "k" = "scroll full-up";
 
-            "<C-j>" = "zoom out";
-            "<C-k>" = "zoom in";
+            "<C-j>" = "scroll half-down";
+            "<C-k>" = "scroll half-up";
 
             "D" = "set \"first-page-column 1:1\"";
         };
