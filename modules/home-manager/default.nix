@@ -23,6 +23,10 @@
         btop
         jq
 
+        # Bluetooth
+        switchaudio-osx
+        blueutil
+
         # TeX and pdfs
         texlive.combined.scheme-full
         ocamlPackages.cpdf

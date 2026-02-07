@@ -13,5 +13,12 @@ if [ "$SENDER" = "volume_change" ]; then
         *) ICON="􀊣"
     esac
 
+    if command -v SwitchAudioSource >/dev/null; then
+        CURRENT_DEVICE=$(SwitchAudioSource -c)
+        case "$CURRENT_DEVICE" in
+            *"headphone"*|*"AirPods"*) ICON="􀑈" ;;
+        esac
+    fi
+
     sketchybar --set $NAME icon="$ICON" label="$VOLUME%"
 fi

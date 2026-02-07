@@ -53,6 +53,9 @@ exec-on-workspace-change = ['/bin/bash', '-c',
 
     cmd-p = 'exec-and-forget screencapture ~/Downloads/Screenshot_$(date +%Y_%m_%d_%H%M%S).png'
 
+    cmd-c = "exec-and-forget blueutil --connect \"Zhaoshen's headphones\""
+    cmd-d = "exec-and-forget sh -c \"osascript -e 'tell application \\\"Music\\\" to pause'; blueutil --disconnect \\\"Zhaoshen's headphones\\\"\""
+
     cmd-h = 'focus left'
     cmd-j = 'focus down'
     cmd-k = 'focus up'
