@@ -24,16 +24,16 @@ else
         9[0-9]|100) ICON="􀛨"
                     COLOR=$YELLOW
         ;;
-        [6-8][0-9]) ICON="􀛧"
+        [6-8][0-9]) ICON="􀺸"
                     COLOR=$YELLOW
         ;;
-        [3-5][0-9]) ICON="􀛩"
+        [3-5][0-9]) ICON="􀺶"
                     COLOR=$ORANGE
         ;;
-        [1-2][0-9]) ICON="􀛪"
+        [1-2][0-9]) ICON="􀛩"
                     COLOR=$RED
         ;;
-        *)          ICON="􀛪"
+        *)          ICON="􀛩"
                     COLOR=$RED
     esac
 fi
