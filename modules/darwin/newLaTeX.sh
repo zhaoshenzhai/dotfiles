@@ -37,10 +37,10 @@ FIX_DATE() {
 }
 
 COPY_FILES() {
-    cp "$templatePath/macros.sty" .
-    cp "$templatePath/refs.bib" .
-    cp "$templatePath/preamble.sty" .
-    cp "$templatePath/preambles/$fileType.sty" .
+    ln -s "$templatePath/macros.sty" .
+    ln -s "$templatePath/refs.bib" .
+    ln -s "$templatePath/preamble.sty" .
+    ln -s "$templatePath/preambles/$fileType.sty" .
     cp "$templatePath/files/$fileType.tex" "$fileName.tex"
 
     sed -i 's/TITLE/'"$title"'/g' "$fileName.tex"
