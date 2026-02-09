@@ -47,6 +47,7 @@
 
             "<C-j>" = "scroll half-down";
             "<C-k>" = "scroll half-up";
+            "<C-`>" = "toggle_statusbar";
 
             "=" = "zoom in";
             "D" = "set \"first-page-column 1:1\"";
