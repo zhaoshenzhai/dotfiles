@@ -12,8 +12,6 @@
             url.start_pages = [ "https://google.com" ];
             url.default_page = "https://google.com";
             "auto_save.session" = false;
-            "window.hide_decoration" = true; 
-            "window.title_format" = " ";
             "qt.args" = [ 
                 "disable-gpu-driver-bug-workarounds"
                 "enable-native-gpu-memory-buffers"
@@ -158,7 +156,7 @@
                 "<Ctrl+d>" = "cmd-repeat 20 scroll down";
                 
                 "<Ctrl+Shift+r>" = "restart";
-                "<Ctrl+`>" = "config-cycle statusbar.show always never;; config-cycle tabs.show multiple never";
+                "<Ctrl+`>" = "config-cycle statusbar.show always never;; config-cycle tabs.show always never";
 
                 "<Ctrl+1>" = "tab-select 1";
                 "<Ctrl+2>" = "tab-select 2";
