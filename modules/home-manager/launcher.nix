@@ -22,11 +22,11 @@ in
     home.packages = [ launcher pkgs.fzf ];
     xdg.configFile."alacritty/launcher.toml".text = ''
         [window]
-        decorations = "buttonless"
+        decorations = "transparent"
         startup_mode = "Windowed"
         title = "launcher"
         dimensions = { columns = 120, lines = 15 }
-        padding = { x = 20, y = 20 }
+        padding = { x = 20, y = 25 }
         position = { x = 275, y = 400 }
         
         opacity = 0.5

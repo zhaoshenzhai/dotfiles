@@ -22,7 +22,6 @@
             softtabstop = 4;
             expandtab = true;
             shiftwidth = 4;
-            cmdheight = 0;
 
             termguicolors = true;
             title = true;
