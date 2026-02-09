@@ -20,9 +20,9 @@
             };
 
             window = {
-                padding = { x = 10; y = 10; };
-                decorations = "buttonless";
-                dynamic_title = true;
+                padding = { x = 10; y = 25; };
+                decorations = "transparent";
+                dynamic_padding = false;
                 opacity = 0.5;
                 blur = true;
             };
