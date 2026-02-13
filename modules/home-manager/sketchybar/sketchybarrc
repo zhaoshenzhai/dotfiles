@@ -37,12 +37,12 @@ sketchybar --bar     height=32                             \
 # Left
 source "$ITEM_DIR/apple.sh"
 source "$ITEM_DIR/aerospace.sh"
+source "$ITEM_DIR/openApp.sh"
 
 # Right
 source "$ITEM_DIR/time.sh"
 source "$ITEM_DIR/battery.sh"
 source "$ITEM_DIR/cpu.sh"
 source "$ITEM_DIR/volume.sh"
-source "$ITEM_DIR/openApp.sh"
 
 sketchybar --update
