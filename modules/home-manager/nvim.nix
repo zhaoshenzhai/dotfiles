@@ -257,6 +257,7 @@
             LineNr = { ctermbg = "none"; bg = "none"; };
             SignColumn = { ctermbg = "none"; bg = "none"; };
             EndOfBuffer = { ctermbg = "none"; bg = "none"; };
+            Folded = { ctermbg = "none"; bg = "none"; fg = "#abb2bf"; };
         };
 
         autoGroups = {

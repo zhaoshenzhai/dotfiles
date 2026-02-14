@@ -43,7 +43,7 @@ in
         style = { shape = "Beam", blinking = "On" }
 
         [colors.primary]
-        background = "#111111"
+        background = "#1e2127"
         foreground = "#abb2bf"
 
         [colors.cursor]
