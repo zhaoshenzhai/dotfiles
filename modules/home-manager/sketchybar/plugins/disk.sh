@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-sketchybar --set "$NAME" label="$(df -H / | awk 'NR==2 {print $5}')"
+sketchybar --set "$NAME" label="$(df -k / | awk 'NR==2 {print int(($2-$4)/$2*100) "%"}')"
