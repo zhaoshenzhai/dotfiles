@@ -7,7 +7,7 @@ Projects        /Users/zhao/iCloud/Projects
 Website         /Users/zhao/iCloud/Projects/_web"
 
 REPOS=$(echo "$REPOS" | sed 1d)
-REPOSNUM=$(echo "$REPOS" | wc -l)
+REPOSNUM=$(echo "$REPOS" | wc -l | awk '{$1=$1};1')
 REPONAMES=$(echo "$REPOS" | awk '{print $1}')
 REPOPATHS=$(echo "$REPOS" | awk '{$1=""; print $0}' | sed 's/^[ \t]*//')
 
@@ -49,7 +49,7 @@ EXIT() {
         echo ""
         read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
         if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
-            # clear
+            clear
             "$0"
         fi
     fi
@@ -85,15 +85,14 @@ else
         done <<< "$REPONAMES"
         echo ""
 
-        read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1-$REPOSNUM]${NC}")" repoNum
+        read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1-$REPOSNUM]${NC}") " repoNum
         re='^[0-9]+$'
         if [[ "$repoNum" == "q" ]]; then
             exit
         elif [[ -z $repoNum ]] || ([[ $repoNum =~ $re ]] && [[ $repoNum -gt 0 ]] && [[ $repoNum -le $REPOSNUM ]]); then
             valid=1
         else
-            echo ""
-            # clear
+            clear
         fi
     done
 
@@ -138,7 +137,7 @@ else
                 repoNum=$(echo "$repoIndices" | head -c 1 | tail -c 1)
                 repoName=$(echo "$changedRepoNames" | head -c 1 | tail -1)
             else
-                # clear
+                clear
                 while [[ -z $changedValid ]]; do
                     changedRepoNames=$(echo -e "$changedRepos" | cut -f 1 -d ' ')
                     echo -e "${CYAN}Changed Repositories:${NC}"
@@ -156,8 +155,7 @@ else
                     elif [[ $changedRepo =~ $re ]] && [[ "$changedRepo" -gt "0" ]] && [[ "$changedRepo" -le "$changedReposNum" ]]; then
                         changedValid=1
                     else
-                        echo ""
-                        # clear
+                        clear
                     fi
                 done
                 repoNum=$(echo "$repoIndices" | head -c $changedRepo | tail -c 1)
