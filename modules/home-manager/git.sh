@@ -34,7 +34,7 @@ SHOWDIFF() {
         EXIT
     fi
 
-    if [[ $(echo "$diff" | tail -n1 | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g" | grep -E '\S') ]]; then
+    if [[ $(echo "$diff" | tail -n1 | sed -E "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g" | grep -E '\S') ]]; then
         echo ""
     fi
 }
@@ -49,8 +49,8 @@ EXIT() {
         echo ""
         read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
         if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
-            clear
-            /Users/zhao/iCloud/Dotfiles/modules/home-manager/git.sh
+            # clear
+            "$0"
         fi
     fi
     exit
@@ -85,14 +85,15 @@ else
         done <<< "$REPONAMES"
         echo ""
 
-        read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1-$REPOSNUM]${NC} ")" repoNum
+        read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1-$REPOSNUM]${NC}")" repoNum
         re='^[0-9]+$'
         if [[ "$repoNum" == "q" ]]; then
             exit
         elif [[ -z $repoNum ]] || ([[ $repoNum =~ $re ]] && [[ $repoNum -gt 0 ]] && [[ $repoNum -le $REPOSNUM ]]); then
             valid=1
         else
-            clear
+            echo ""
+            # clear
         fi
     done
 
@@ -116,7 +117,8 @@ else
             repoIndex=1
             repoIndices=""
             while IFS= read -r repoInfo; do
-                repoPath=$(echo $repoInfo | cut -f 1 -d ' ' --complement | sed 's/\ *//g')
+                # repoPath=$(echo $repoInfo | cut -f 1 -d ' ' --complement | sed 's/\ *//g')
+                repoPath=$(echo "$repoInfo" | awk '{$1=""; print $0}' | sed 's/^[ \t]*//')
                 repoName=$(echo $repoInfo | cut -f 1 -d ' ')
                 cd $repoPath
                 status=$(GETSTATUS)
@@ -136,7 +138,7 @@ else
                 repoNum=$(echo "$repoIndices" | head -c 1 | tail -c 1)
                 repoName=$(echo "$changedRepoNames" | head -c 1 | tail -1)
             else
-                clear
+                # clear
                 while [[ -z $changedValid ]]; do
                     changedRepoNames=$(echo -e "$changedRepos" | cut -f 1 -d ' ')
                     echo -e "${CYAN}Changed Repositories:${NC}"
@@ -154,7 +156,8 @@ else
                     elif [[ $changedRepo =~ $re ]] && [[ "$changedRepo" -gt "0" ]] && [[ "$changedRepo" -le "$changedReposNum" ]]; then
                         changedValid=1
                     else
-                        clear
+                        echo ""
+                        # clear
                     fi
                 done
                 repoNum=$(echo "$repoIndices" | head -c $changedRepo | tail -c 1)
