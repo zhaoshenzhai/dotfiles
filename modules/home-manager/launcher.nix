@@ -15,7 +15,7 @@ let
             . "${config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh"
         fi
 
-        export FZF_DEFAULT_OPTS="--color=bg+:-1,gutter:-1,pointer:#98c379"
+        export FZF_DEFAULT_OPTS="--color='bg+:-1,gutter:-1,pointer:#98c379'"
 
         ${builtins.readFile ./launcher.sh}
     '';
