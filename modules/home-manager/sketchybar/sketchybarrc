@@ -43,6 +43,8 @@ source "$ITEM_DIR/openApp.sh"
 source "$ITEM_DIR/time.sh"
 source "$ITEM_DIR/battery.sh"
 source "$ITEM_DIR/cpu.sh"
+source "$ITEM_DIR/memory.sh"
+source "$ITEM_DIR/disk.sh"
 source "$ITEM_DIR/volume.sh"
 
 sketchybar --update
