@@ -29,7 +29,7 @@ SELECTED=$(echo "$ALL_FILES" | sed '/^$/d' | fzf \
     --info=hidden \
     --delimiter / \
     --tiebreak=index \
-    --pointer='▶')
+    --pointer='➜')
 
 if [ -z "$SELECTED" ]; then
     exit 0

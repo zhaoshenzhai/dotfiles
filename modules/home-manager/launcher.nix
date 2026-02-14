@@ -10,10 +10,12 @@ let
 
     launcher = pkgs.writeShellScriptBin "launcher" ''
         export PATH="${runtimePath}:/usr/bin:$PATH"
-        
+
         if [ -f "${config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh" ]; then
             . "${config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh"
         fi
+
+        export FZF_DEFAULT_OPTS="--color=bg+:-1,gutter:-1,pointer:#98c379"
 
         ${builtins.readFile ./launcher.sh}
     '';
@@ -37,13 +39,15 @@ in
         size = 20.0
         offset = { x = 0, y = 12 }
 
+        [cursor]
+        style = { shape = "Beam", blinking = "On" }
+
         [colors.primary]
-        background = "#282c34"
+        background = "#111111"
         foreground = "#abb2bf"
 
         [colors.cursor]
-        text = "#282c34"
-        cursor = "#61afef"
+        cursor = "#abb2bf"
 
         [colors.normal]
         red     = "#e06c75"
