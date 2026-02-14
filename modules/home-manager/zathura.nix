@@ -53,4 +53,10 @@
             "D" = "set \"first-page-column 1:1\"";
         };
     };
+
+    xdg.configFile."gtk-3.0/gtk.css".text = ''
+        entry {
+            caret-color: #A6B5C5;
+        }
+    '';
 }
