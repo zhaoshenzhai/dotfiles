@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 REPOS="
 Courses         /Users/zhao/iCloud/University/Courses

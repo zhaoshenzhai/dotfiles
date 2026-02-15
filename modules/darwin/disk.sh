@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 avail=$(df --output=avail | sed -n 2p | awk '{$1=$1};1')
 used=$(df --output=used | sed -n 2p | awk '{$1=$1};1')

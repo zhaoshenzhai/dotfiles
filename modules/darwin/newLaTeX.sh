@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 templatePath=~/iCloud/Dotfiles/modules/darwin/LaTeXTemplate
 fileName=""

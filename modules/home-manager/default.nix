@@ -15,6 +15,10 @@
         aerospace
         alacritty
         dbus
+        ncdu
+        ghostscript
+        gnused
+        gawk
 
         # Ricing
         jankyborders
@@ -28,7 +32,7 @@
         blueutil
 
         # TeX and pdfs
-        texlive.combined.scheme-full
+        texlive.combined.scheme-minimal
         ocamlPackages.cpdf
         pdftk
         zathura
