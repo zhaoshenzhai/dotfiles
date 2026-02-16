@@ -1,6 +1,6 @@
 { pkgs, ... }: let
-    compress = pkgs.writeShellApplication {
-        name = "compress";
+    pdfcp = pkgs.writeShellApplication {
+        name = "pdfcp";
         runtimeInputs = with pkgs; [
             ghostscript
             coreutils
@@ -8,7 +8,7 @@
             gawk
         ];
         checkPhase = "";
-        text = builtins.readFile ./compress.sh;
+        text = builtins.readFile ./pdfcp.sh;
     };
 
     newLatex = pkgs.writeShellApplication {
@@ -23,7 +23,7 @@
 in
 {
     environment.systemPackages = [
-        compress
+        pdfcp
         newLatex
     ];
 }

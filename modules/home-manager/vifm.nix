@@ -28,9 +28,9 @@
 
             map f '
             nnoremap l :file<cr><cr>
+            nnoremap <C-c> :!pdfcp *.pdf >/dev/null 2>&1 &
             nnoremap <C-t> :!alacritty --working-directory %d &<cr>
             nnoremap <C-s> :!alacritty --title vifm-float --option "window.dimensions={columns=100,lines=35}" --option "window.position={x=525,y=250}" --working-directory %d &<cr>
-            nnoremap <C-c> :!~/iCloud/Dotfiles/modules/darwin/compress.sh *.pdf >/dev/null 2>&1 &
             
             filetype *.pdf zathura %c >/dev/null 2>&1 &
             filetype *.jpg,*.jpeg,*.png,*.gif open %c &
