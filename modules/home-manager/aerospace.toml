@@ -1,4 +1,3 @@
-
 start-at-login = true
 after-startup-command = [
     'exec-and-forget borders',
@@ -48,6 +47,8 @@ exec-on-workspace-change = ['/bin/bash', '-c',
         -e zsh -ic /etc/profiles/per-user/zhao/bin/btop"""
 
     cmd-w       = [ 'workspace w', 'exec-and-forget open -a qutebrowser', ]
+    cmd-shift-w = [ 'workspace w', 'exec-and-forget open -a safari', ]
+
     cmd-m       = [ 'workspace m', 'exec-and-forget open -a messages', ]
     cmd-s       = [ 'workspace m', 'exec-and-forget open -a music', ]
     cmd-shift-m = [ 'workspace m', 'exec-and-forget open -a mail', ]
@@ -134,10 +135,11 @@ exec-on-workspace-change = ['/bin/bash', '-c',
 
 [[on-window-detected]]
     if.app-id = 'org.nixos.qutebrowser'
-    run = [
-        'move-node-to-workspace w',
-        'layout tiling'
-    ]
+    run = 'move-node-to-workspace w'
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.Safari'
+    run = 'move-node-to-workspace w'
 
 [[on-window-detected]]
     if.app-id = 'com.apple.MobileSMS'
@@ -153,6 +155,10 @@ exec-on-workspace-change = ['/bin/bash', '-c',
 
 [[on-window-detected]]
     if.app-id = 'com.apple.SecurityAgent'
+    run = 'layout floating'
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.finder'
     run = 'layout floating'
 
 [[on-window-detected]]
