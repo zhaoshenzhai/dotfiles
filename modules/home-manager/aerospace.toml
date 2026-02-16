@@ -46,6 +46,8 @@ exec-on-workspace-change = ['/bin/bash', '-c',
         --option "window.position={x=525,y=250}" \
         -e zsh -ic /etc/profiles/per-user/zhao/bin/btop"""
 
+    cmd-shift-t = 'exec-and-forget open -a activity\ monitor'
+
     cmd-w       = [ 'workspace w', 'exec-and-forget open -a qutebrowser', ]
     cmd-shift-w = [ 'workspace w', 'exec-and-forget open -a safari', ]
 
@@ -159,6 +161,10 @@ exec-on-workspace-change = ['/bin/bash', '-c',
 
 [[on-window-detected]]
     if.app-id = 'com.apple.finder'
+    run = 'layout floating'
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.ActivityMonitor'
     run = 'layout floating'
 
 [[on-window-detected]]
