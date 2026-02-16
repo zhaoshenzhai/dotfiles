@@ -20,6 +20,7 @@ exec-on-workspace-change = ['/bin/bash', '-c',
 
 [mode.main.binding]
     cmd-backslash = 'exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty'
+    cmd-shift-backslash = 'exec-and-forget open -a finder'
 
     cmd-e = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
         --title vifm \

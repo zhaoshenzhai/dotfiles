@@ -38,7 +38,6 @@
         dock = {
             autohide = true;
             mru-spaces = false;
-            showMissionControlGestureEnabled = false;
             expose-group-apps = true;
         };
 
