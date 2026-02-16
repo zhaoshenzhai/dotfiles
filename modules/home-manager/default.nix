@@ -31,7 +31,7 @@
         blueutil
 
         # TeX and pdfs
-        # texlive.combined.scheme-minimal
+        texlive.combined.scheme-minimal
         ocamlPackages.cpdf
         pdftk
         zathura

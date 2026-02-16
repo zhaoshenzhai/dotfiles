@@ -123,21 +123,18 @@
         };
 
         extraPlugins = with pkgs.vimPlugins; [ ultisnips ];
-        # extraPackages = with pkgs; [
-        #     texlive.combined.scheme-full
-        # ];
 
         globals = {
             UltiSnipsExpandTrigger = "<S-tab>";
             UltiSnipsJumpForwardTrigger = "<tab>";
             UltiSnipsSnippetDirectories = [ "UltiSnips" ];
-            # vimtex_compiler_latexmk = {
-            #     executable = "${pkgs.texlive.combined.scheme-full}/bin/latexmk";
-            #     options = [
-            #         "-synctex=1"
-            #         "-interaction=nonstopmode"
-            #     ];
-            # };
+            vimtex_compiler_latexmk = {
+                executable = "${pkgs.texlive.combined.scheme-full}/bin/latexmk";
+                options = [
+                    "-synctex=1"
+                    "-interaction=nonstopmode"
+                ];
+            };
         };
 
         extraFiles = {
