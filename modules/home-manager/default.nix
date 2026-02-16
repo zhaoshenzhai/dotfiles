@@ -15,9 +15,7 @@
         aerospace
         alacritty
         dbus
-        # ghostscript
-        # gnused
-        # gawk
+        python3
 
         # Ricing
         jankyborders
