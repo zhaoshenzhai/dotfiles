@@ -1,5 +1,6 @@
 { pkgs, lib, ... }:
     let
+        myPython = pkgs.python3.withPackages (ps: [ ps.pynvim ]);
         snippetDir = ./nvim/UltiSnips;
             snippetFiles = builtins.filter
                 (name: lib.hasSuffix ".snippets" name)
@@ -12,6 +13,9 @@
     in {
     programs.nixvim = {
         enable = true;
+        withPython3 = true;
+        extraPython3Packages = ps: [ ps.pynvim ];
+        globals.python3_host_prog = "${myPython}/bin/python3";
         defaultEditor = true;
         colorschemes.onedark.enable = true;
 
