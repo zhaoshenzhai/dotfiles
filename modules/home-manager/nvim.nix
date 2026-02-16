@@ -13,9 +13,6 @@
     in {
     programs.nixvim = {
         enable = true;
-        withPython3 = true;
-        extraPython3Packages = ps: [ ps.pynvim ];
-        globals.python3_host_prog = "${myPython}/bin/python3";
         defaultEditor = true;
         colorschemes.onedark.enable = true;
 
@@ -281,5 +278,9 @@
                 group = "remember_folds";
             }
         ];
+
+        withPython3 = true;
+        extraPython3Packages = ps: [ ps.pynvim ];
+        globals.python3_host_prog = "${myPython}/bin/python3";
     };
 }
