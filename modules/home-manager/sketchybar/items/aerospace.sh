@@ -6,6 +6,7 @@ WS_LIST=$(aerospace list-workspaces --all)
 ORDERED_WS="m w "
 NUMERIC_WS=$(echo "$WS_LIST" | grep -v -E '^(m|w)$' | sort -n | tr '\n' ' ')
 ORDERED_WS+="$NUMERIC_WS"
+
 for sid in $ORDERED_WS; do
     sketchybar --add item "space.$sid" left                                    \
                --set "space.$sid" label="$sid"                                 \

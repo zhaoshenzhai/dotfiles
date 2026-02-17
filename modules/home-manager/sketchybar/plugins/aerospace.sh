@@ -7,26 +7,29 @@ if [ -z "$FOCUSED_WORKSPACE" ]; then
     FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)
 fi
 
-WINDOWS_DATA=$(aerospace list-windows --all --format "%{workspace}|%{app-name}")
+DATA=$(aerospace list-windows --all --format "%{workspace}|%{app-name}" | sort | uniq)
+
+while IFS='|' read -r sid app; do
+    if [[ -z "$sid" || -z "$app" ]]; then continue; fi
+
+    if [[ "$app" = ".zathura-wrapped" ]]; then
+        app=zathura
+    fi
+
+    iconMap "$app"
+
+    eval "current_strip=\${ICON_STRIP_${sid}}"
+    printf -v "ICON_STRIP_${sid}" "%s" "${current_strip}${icon_result}"
+done <<< "$DATA"
+
 ALL_WORKSPACES=$(aerospace list-workspaces --all)
-
 ARGS=()
+
 while IFS= read -r sid; do
-    workspace_apps=$(echo "$WINDOWS_DATA" | grep "^$sid|" | cut -d'|' -f2 | sort -u)
+    eval "iconStrip=\${ICON_STRIP_${sid}}"
+    iconStrip="${iconStrip#" "}"
 
-    iconStrip=""
-    if [[ -n "$workspace_apps" ]]; then
-        while IFS= read -r app; do
-            if [[ -n "$app" ]]; then
-                if [[ "$app" = ".zathura-wrapped" ]]; then
-                    app=zathura
-                fi
-
-                iconMap "$app"
-                iconStrip+="$icon_result"
-            fi
-        done <<< "$workspace_apps"
-
+    if [[ -n "$iconStrip" ]]; then
         isOccupied=true
     else
         isOccupied=false
@@ -78,19 +81,19 @@ while IFS= read -r sid; do
     fi
 
     ARGS+=(
-        --animate tanh 8                                \
-        --set "space.$sid"                              \
-        background.color="$bgColor"                     \
-        background.border_color="$borderColor"          \
-        background.padding_left="$backgroundPadding"    \
-        background.padding_right="$backgroundPadding"   \
-        icon="$iconStrip"                               \
-        icon.color="$iconColor"                         \
-        icon.padding_left="$iconPaddingLeft"            \
-        icon.padding_right="$iconPaddingRight"          \
-        label.color="$labelColor"                       \
-        label.padding_left="$labelPaddingLeft"          \
-        label.padding_right="$labelPaddingRight"        )
+        --animate tanh 8                              \
+        --set "space.$sid"                            \
+        background.color="$bgColor"                   \
+        background.border_color="$borderColor"        \
+        background.padding_left="$backgroundPadding"  \
+        background.padding_right="$backgroundPadding" \
+        icon="$iconStrip"                             \
+        icon.color="$iconColor"                       \
+        icon.padding_left="$iconPaddingLeft"          \
+        icon.padding_right="$iconPaddingRight"        \
+        label.color="$labelColor"                     \
+        label.padding_left="$labelPaddingLeft"        \
+        label.padding_right="$labelPaddingRight"      )
 
 done <<< "$ALL_WORKSPACES"
 
