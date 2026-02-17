@@ -30,11 +30,12 @@ while IFS= read -r sid; do
 
         isOccupied=true
     else
-        iconStrip=""
         isOccupied=false
     fi
 
     if [[ "$sid" = "$FOCUSED_WORKSPACE" ]] || [[ "$isOccupied" = true ]]; then
+        backgroundPadding=5
+
         if [[ "$sid" =~ ^[0-9]$ ]]; then
             iconPaddingLeft=10
             iconPaddingRight=5
@@ -52,8 +53,12 @@ while IFS= read -r sid; do
         if [[ "$isOccupied" = false ]]; then
             iconPaddingLeft=0
             iconPaddingRight=0
+            labelPaddingLeft=10
+            labelPaddingRight=10
+            labelDrawing="on"
         fi
     else
+        backgroundPadding=0
         iconPaddingLeft=0
         iconPaddingRight=0
         labelPaddingLeft=0
@@ -62,19 +67,16 @@ while IFS= read -r sid; do
     fi
 
     if [[ "$sid" = "$FOCUSED_WORKSPACE" ]]; then
-        width="dynamic"
         bgColor="$BAR_COLOR"
         borderColor="$BORDER_COLOR"
         iconColor="$ICON_COLOR"
         labelColor="$LABEL_COLOR"
     elif [[ "$isOccupied" = true ]]; then
-        width="dynamic"
         bgColor="$TRANSPARENT"
         borderColor="$TRANSPARENT"
         iconColor="$ICON_COLOR"
         labelColor="$LABEL_COLOR"
     else
-        width="0"
         bgColor="$TRANSPARENT"
         borderColor="$TRANSPARENT"
         iconColor="$TRANSPARENT"
@@ -82,19 +84,20 @@ while IFS= read -r sid; do
     fi
 
     ARGS+=(
-        --animate tanh 20                        \
-        --set "space.$sid"                       \
-        width="$width"                           \
-        background.color="$bgColor"              \
-        background.border_color="$borderColor"   \
-        icon="$iconStrip"                        \
-        icon.color="$iconColor"                  \
-        icon.padding_left="$iconPaddingLeft"     \
-        icon.padding_right="$iconPaddingRight"   \
-        label.drawing="$labelDrawing"            \
-        label.color="$labelColor"                \
-        label.padding_left="$labelPaddingLeft"   \
-        label.padding_right="$labelPaddingRight" )
+        --animate tanh 60                             \
+        --set "space.$sid"                            \
+        background.color="$bgColor"                   \
+        background.border_color="$borderColor"        \
+        background.padding_left="$backgroundPadding"  \
+        background.padding_right="$backgroundPadding" \
+        icon="$iconStrip"                             \
+        icon.color="$iconColor"                       \
+        icon.padding_left="$iconPaddingLeft"          \
+        icon.padding_right="$iconPaddingRight"        \
+        label.drawing="$labelDrawing"                 \
+        label.color="$labelColor"                     \
+        label.padding_left="$labelPaddingLeft"        \
+        label.padding_right="$labelPaddingRight"      )
 
 done <<< "$ALL_WORKSPACES"
 
