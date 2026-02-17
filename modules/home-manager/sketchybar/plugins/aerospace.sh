@@ -51,7 +51,7 @@ while IFS= read -r sid; do
 
         if [[ "$isOccupied" = false ]]; then
             iconPaddingLeft=0
-            iconPaddingRIght=0
+            iconPaddingRight=0
         fi
     else
         iconPaddingLeft=0
