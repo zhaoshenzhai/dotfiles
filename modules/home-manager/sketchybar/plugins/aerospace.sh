@@ -34,8 +34,6 @@ while IFS= read -r sid; do
     fi
 
     if [[ "$sid" = "$FOCUSED_WORKSPACE" ]] || [[ "$isOccupied" = true ]]; then
-        backgroundPadding=5
-
         if [[ "$sid" =~ ^[0-9]$ ]]; then
             iconPaddingLeft=10
             iconPaddingRight=5
@@ -58,7 +56,6 @@ while IFS= read -r sid; do
             labelDrawing="on"
         fi
     else
-        backgroundPadding=0
         iconPaddingLeft=0
         iconPaddingRight=0
         labelPaddingLeft=0
@@ -88,8 +85,6 @@ while IFS= read -r sid; do
         --set "space.$sid"                            \
         background.color="$bgColor"                   \
         background.border_color="$borderColor"        \
-        background.padding_left="$backgroundPadding"  \
-        background.padding_right="$backgroundPadding" \
         icon="$iconStrip"                             \
         icon.color="$iconColor"                       \
         icon.padding_left="$iconPaddingLeft"          \
