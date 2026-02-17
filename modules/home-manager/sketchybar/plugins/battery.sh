@@ -38,4 +38,4 @@ else
     esac
 fi
 
-sketchybar --set $NAME icon="$ICON" label="${PERCENTAGE}%" icon.color=$COLOR
+sketchybar --animate tanh 8 --set $NAME icon="$ICON" label="${PERCENTAGE}%" icon.color=$COLOR

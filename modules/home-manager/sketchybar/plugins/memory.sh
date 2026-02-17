@@ -15,4 +15,4 @@ AVAILABLE_BYTES=$((AVAILABLE_PAGES * PAGE_SIZE))
 USED_BYTES=$((TOTAL_BYTES - AVAILABLE_BYTES))
 PERCENTAGE=$((USED_BYTES * 100 / TOTAL_BYTES))
 
-sketchybar --set "$NAME" label="$PERCENTAGE%"
+sketchybar --animate tanh 8 --set "$NAME" label="$PERCENTAGE%"

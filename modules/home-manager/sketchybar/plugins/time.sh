@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sketchybar --set $NAME label="$(date '+%a %d %b %H:%M:%S')"
+sketchybar --animate tanh 8 --set $NAME label="$(date '+%a %d %b %H:%M:%S')"
