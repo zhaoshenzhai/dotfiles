@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 source "$HOME/.config/sketchybar/plugins/icon_map.sh" > /dev/null
+source "$HOME/.config/sketchybar/colors.sh" > /dev/null
 
 if [ -z "$FOCUSED_WORKSPACE" ]; then
     FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)
@@ -15,10 +16,10 @@ while IFS= read -r sid; do
     workspace_apps=$(echo "$WINDOWS_DATA" | grep "^$sid|" | cut -d'|' -f2 | sort -u)
 
     iconStrip=""
-    if [ -n "$workspace_apps" ]; then
+    if [[ -n "$workspace_apps" ]]; then
         while IFS= read -r app; do
-            if [ -n "$app" ]; then
-                if [ "$app" = ".zathura-wrapped" ]; then
+            if [[ -n "$app" ]]; then
+                if [[ "$app" = ".zathura-wrapped" ]]; then
                     app=zathura
                 fi
 
@@ -27,50 +28,73 @@ while IFS= read -r sid; do
             fi
         done <<< "$workspace_apps"
 
-        iconPaddingLeft=10
-        iconDrawing="on"
-        labelPaddingLeft=5
-        is_occupied=true
+        isOccupied=true
     else
         iconStrip=""
+        isOccupied=false
+    fi
+
+    if [[ "$sid" = "$FOCUSED_WORKSPACE" ]] || [[ "$isOccupied" = true ]]; then
+        if [[ "$sid" =~ ^[0-9]$ ]]; then
+            iconPaddingLeft=10
+            iconPaddingRight=5
+            labelPaddingLeft=5
+            labelPaddingRight=10
+            labelDrawing="on"
+        else
+            iconPaddingLeft=10
+            iconPaddingRight=10
+            labelPaddingLeft=0
+            labelPaddingRight=0
+            labelDrawing="off"
+        fi
+
+        if [[ "$isOccupied" = false ]]; then
+            iconPaddingLeft=0
+            iconPaddingRIght=0
+        fi
+    else
         iconPaddingLeft=0
-        iconDrawing="off"
-        labelPaddingLeft=10
-        is_occupied=false
-    fi
-
-    if [ "$sid" = "$FOCUSED_WORKSPACE" ]; then
-        drawing="on"
-        bgDrawing="on"
-    elif [ "$is_occupied" = true ]; then
-        drawing="on"
-        bgDrawing="off"
-    else
-        drawing="off"
-        bgDrawing="off"
-    fi
-
-    if [[ "$sid" =~ ^[0-9]$ ]]; then
-        labelDrawing="$drawing"
-        labelPaddingRight=10
         iconPaddingRight=0
-    else
-        labelDrawing="off"
         labelPaddingLeft=0
         labelPaddingRight=0
-        iconPaddingRight="$iconPaddingLeft"
+        labelDrawing="off"
     fi
 
-    ARGS+=(--set "space.$sid"                    \
-        drawing="$drawing"                       \
-        background.drawing="$bgDrawing"          \
-        label.drawing="$labelDrawing"            \
-        label.padding_left="$labelPaddingLeft"   \
-        label.padding_right="$labelPaddingRight" \
-        icon.drawing="$iconDrawing"              \
+    if [[ "$sid" = "$FOCUSED_WORKSPACE" ]]; then
+        width="dynamic"
+        bgColor="$BAR_COLOR"
+        borderColor="$BORDER_COLOR"
+        iconColor="$ICON_COLOR"
+        labelColor="$LABEL_COLOR"
+    elif [[ "$isOccupied" = true ]]; then
+        width="dynamic"
+        bgColor="$TRANSPARENT"
+        borderColor="$TRANSPARENT"
+        iconColor="$ICON_COLOR"
+        labelColor="$LABEL_COLOR"
+    else
+        width="0"
+        bgColor="$TRANSPARENT"
+        borderColor="$TRANSPARENT"
+        iconColor="$TRANSPARENT"
+        labelColor="$TRANSPARENT"
+    fi
+
+    ARGS+=(
+        --animate tanh 20                        \
+        --set "space.$sid"                       \
+        width="$width"                           \
+        background.color="$bgColor"              \
+        background.border_color="$borderColor"   \
+        icon="$iconStrip"                        \
+        icon.color="$iconColor"                  \
         icon.padding_left="$iconPaddingLeft"     \
         icon.padding_right="$iconPaddingRight"   \
-        icon="$iconStrip")
+        label.drawing="$labelDrawing"            \
+        label.color="$labelColor"                \
+        label.padding_left="$labelPaddingLeft"   \
+        label.padding_right="$labelPaddingRight" )
 
 done <<< "$ALL_WORKSPACES"
 
