@@ -39,13 +39,11 @@ while IFS= read -r sid; do
             iconPaddingRight=5
             labelPaddingLeft=5
             labelPaddingRight=10
-            labelDrawing="on"
         else
             iconPaddingLeft=10
             iconPaddingRight=10
             labelPaddingLeft=0
             labelPaddingRight=0
-            labelDrawing="off"
         fi
 
         if [[ "$isOccupied" = false ]]; then
@@ -53,14 +51,12 @@ while IFS= read -r sid; do
             iconPaddingRight=0
             labelPaddingLeft=10
             labelPaddingRight=10
-            labelDrawing="on"
         fi
     else
         iconPaddingLeft=0
         iconPaddingRight=0
         labelPaddingLeft=0
         labelPaddingRight=0
-        labelDrawing="off"
     fi
 
     if [[ "$sid" = "$FOCUSED_WORKSPACE" ]]; then
@@ -81,7 +77,7 @@ while IFS= read -r sid; do
     fi
 
     ARGS+=(
-        --animate tanh 60                             \
+        --animate tanh 10                             \
         --set "space.$sid"                            \
         background.color="$bgColor"                   \
         background.border_color="$borderColor"        \
@@ -89,7 +85,6 @@ while IFS= read -r sid; do
         icon.color="$iconColor"                       \
         icon.padding_left="$iconPaddingLeft"          \
         icon.padding_right="$iconPaddingRight"        \
-        label.drawing="$labelDrawing"                 \
         label.color="$labelColor"                     \
         label.padding_left="$labelPaddingLeft"        \
         label.padding_right="$labelPaddingRight"      )

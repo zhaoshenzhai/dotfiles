@@ -21,7 +21,6 @@ sketchybar --bar     height=32                             \
                      icon.color=$ICON_COLOR                \
                      icon.padding_left=10                  \
                      icon.padding_right=5                  \
-                     icon.drawing=on                       \
                      icon.y_offset=1                       \
                      label.font="$FONT:Bold:16.0"          \
                      label.color=$LABEL_COLOR              \
@@ -31,8 +30,8 @@ sketchybar --bar     height=32                             \
                      background.border_width=1             \
                      background.border_color=$BORDER_COLOR \
                      background.corner_radius=9            \
-                     background.padding_right=5            \
-                     background.padding_left=5
+                     background.padding_left=5             \
+                     background.padding_right=5
 
 # Left
 source "$ITEM_DIR/apple.sh"
