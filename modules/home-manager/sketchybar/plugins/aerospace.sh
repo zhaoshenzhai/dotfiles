@@ -34,14 +34,14 @@ while IFS= read -r sid; do
     fi
 
     if [[ "$sid" = "$FOCUSED_WORKSPACE" ]] || [[ "$isOccupied" = true ]]; then
-        if [[ "$sid" =~ ^[0-9]$ ]]; then
+        if [[ "$sid" =~ ^[1-9]$ ]]; then
             iconPaddingLeft=10
             iconPaddingRight=5
             labelPaddingLeft=5
             labelPaddingRight=10
         else
-            iconPaddingLeft=10
-            iconPaddingRight=10
+            iconPaddingLeft=8
+            iconPaddingRight=6
             labelPaddingLeft=0
             labelPaddingRight=0
         fi
@@ -52,11 +52,13 @@ while IFS= read -r sid; do
             labelPaddingLeft=10
             labelPaddingRight=10
         fi
+        backgroundPadding=2
     else
         iconPaddingLeft=0
         iconPaddingRight=0
         labelPaddingLeft=0
         labelPaddingRight=0
+        backgroundPadding=0
     fi
 
     if [[ "$sid" = "$FOCUSED_WORKSPACE" ]]; then
@@ -77,17 +79,19 @@ while IFS= read -r sid; do
     fi
 
     ARGS+=(
-        --animate tanh 40                             \
-        --set "space.$sid"                            \
-        background.color="$bgColor"                   \
-        background.border_color="$borderColor"        \
-        icon="$iconStrip"                             \
-        icon.color="$iconColor"                       \
-        icon.padding_left="$iconPaddingLeft"          \
-        icon.padding_right="$iconPaddingRight"        \
-        label.color="$labelColor"                     \
-        label.padding_left="$labelPaddingLeft"        \
-        label.padding_right="$labelPaddingRight"      )
+        --animate tanh 8                                \
+        --set "space.$sid"                              \
+        background.color="$bgColor"                     \
+        background.border_color="$borderColor"          \
+        background.padding_left="$backgroundPadding"    \
+        background.padding_right="$backgroundPadding"   \
+        icon="$iconStrip"                               \
+        icon.color="$iconColor"                         \
+        icon.padding_left="$iconPaddingLeft"            \
+        icon.padding_right="$iconPaddingRight"          \
+        label.color="$labelColor"                       \
+        label.padding_left="$labelPaddingLeft"          \
+        label.padding_right="$labelPaddingRight"        )
 
 done <<< "$ALL_WORKSPACES"
 
