@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source "$HOME/.config/sketchybar/plugins/icon_map.sh" > /dev/null
+source "$HOME/.config/sketchybar/plugins/iconMap.sh" > /dev/null
 source "$HOME/.config/sketchybar/colors.sh" > /dev/null
 
 if [ -z "$FOCUSED_WORKSPACE" ]; then
@@ -11,7 +11,6 @@ WINDOWS_DATA=$(aerospace list-windows --all --format "%{workspace}|%{app-name}")
 ALL_WORKSPACES=$(aerospace list-workspaces --all)
 
 ARGS=()
-
 while IFS= read -r sid; do
     workspace_apps=$(echo "$WINDOWS_DATA" | grep "^$sid|" | cut -d'|' -f2 | sort -u)
 
@@ -23,7 +22,7 @@ while IFS= read -r sid; do
                     app=zathura
                 fi
 
-                icon_map "$app"
+                iconMap "$app"
                 iconStrip+="$icon_result"
             fi
         done <<< "$workspace_apps"

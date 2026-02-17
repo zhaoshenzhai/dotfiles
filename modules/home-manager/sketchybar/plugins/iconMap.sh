@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-function icon_map() {
+function iconMap() {
     case "$1" in
    "Live")
         icon_result=":ableton:"
@@ -1345,5 +1345,5 @@ function icon_map() {
     esac
 }
 
-icon_map "$1"
+iconMap "$1"
 echo $icon_result
