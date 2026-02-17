@@ -77,7 +77,7 @@ while IFS= read -r sid; do
     fi
 
     ARGS+=(
-        --animate tanh 10                             \
+        --animate tanh 40                             \
         --set "space.$sid"                            \
         background.color="$bgColor"                   \
         background.border_color="$borderColor"        \
