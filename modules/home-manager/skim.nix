@@ -3,7 +3,8 @@
         SKUISetupPreferTabs = 1;
         AppleWindowTabbingMode = "manual";
 
-        SKPageBackgroundColor = [ 0.9216 0.8980 0.8784 1.0 ];
+        SKBackgroundColor = [ 0.8824 0.8706 0.8471 1.0 ];
+        SKPageBackgroundColor = [ 0.8824 0.8706 0.8471 1.0 ];
         SKInvertColorsInDarkMode = true;
 
         SKTeXEditorPreset = "Custom";
