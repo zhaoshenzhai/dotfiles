@@ -168,6 +168,10 @@ exec-on-workspace-change = ['/bin/bash', '-c',
     run = 'layout floating'
 
 [[on-window-detected]]
+    if.app-id = 'org.pqrs.Karabiner-Elements.Settings'
+    run = 'layout floating'
+
+[[on-window-detected]]
     if.window-title-regex-substring = 'vifm-float'
     run = 'layout floating'
 

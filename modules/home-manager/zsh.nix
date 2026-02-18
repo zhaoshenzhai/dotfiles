@@ -14,7 +14,8 @@
             tree = "tree -C";
             nixs = "sudo darwin-rebuild switch --flake ~/iCloud/Dotfiles#puppy; aerospace reload-config; sketchybar --reload";
             nixu = "pushd ~/iCloud/Dotfiles; nix flake update; nixs; popd";
-            zoom = "open -a zoom.us &";
+            zoom = "open -a zoom.us";
+            skim = "open -a Skim";
         };
 
         initContent = ''

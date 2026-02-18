@@ -5,7 +5,6 @@
 
     home.sessionVariables = {
         EDITOR = "nvim";
-        SHELL_SESSIONS_DISABLE = "1";
         DBUS_SESSION_BUS_ADDRESS = "unix:path=${config.home.homeDirectory}/.cache/dbus-session-socket";
     };
 
@@ -44,11 +43,13 @@
         ./zsh.nix
         ./nvim.nix
         ./vifm.nix
+        ./skim.nix
         ./zathura.nix
         ./borders.nix
         ./starship.nix
         ./launcher.nix
         ./alacritty.nix
+        ./karabiner.nix
         ./sketchybar.nix
         ./qutebrowser.nix
     ];

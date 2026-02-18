@@ -11,7 +11,7 @@ echo $$ > "$LOCKFILE"
 trap "rm -f $LOCKFILE" EXIT
 
 declare -a RULES=(
-    "/Users/zhao/iCloud/Documents|zathura"
+    "/Users/zhao/iCloud/Documents|skim"
     "/Users/zhao/iCloud/Dotfiles|nvim"
 )
 
@@ -54,10 +54,8 @@ if [[ "$CMD" == "nvim" ]]; then
     EXEC_CMD="[ -f $HM_SESSION ] && . $HM_SESSION; exec $NVIM_PATH \"$SELECTED\""
     
     nohup alacritty -e zsh -c "$EXEC_CMD" >/dev/null 2>&1 &
-elif [[ "$CMD" == "open" ]]; then
-    /usr/bin/open "$SELECTED"
-else
-    nohup "$CMD" "$SELECTED" >/dev/null 2>&1 &
+elif [[ "$CMD" == "skim" ]]; then
+    open -a Skim "$SELECTED"
 fi
 
 /etc/profiles/per-user/zhao/bin/aerospace mode main

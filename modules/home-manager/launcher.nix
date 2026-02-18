@@ -3,7 +3,6 @@
 let
     runtimePath = lib.makeBinPath [
         pkgs.fzf
-        pkgs.zathura
         pkgs.neovim
         pkgs.alacritty
     ];

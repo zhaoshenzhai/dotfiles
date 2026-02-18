@@ -28,11 +28,6 @@
     # --- Security & Input ---
     security.pam.services.sudo_local.touchIdAuth = true;
 
-    system.keyboard = {
-        enableKeyMapping = true;
-        remapCapsLockToEscape = true;
-    };
-
     # --- macOS System Defaults ---
     system.defaults = {
         dock = {
@@ -100,6 +95,8 @@
         casks = [
             "zoom"
             "sf-symbols"
+            "skim"
+            "karabiner-elements"
         ];
     };
 }
