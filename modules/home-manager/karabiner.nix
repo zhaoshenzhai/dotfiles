@@ -34,9 +34,9 @@
                                 ];
                             }
                             { # Skim
-                                description = "Skim Vim-like Navigation";
+                                description = "Skim";
                                 manipulators = [
-                                    { # gg
+                                    { # gg -> top
                                         type = "basic";
                                         from = { key_code = "g"; };
                                         conditions = [
@@ -68,7 +68,7 @@
                                             to_if_canceled = [ { set_variable = { name = "skim_g_pressed"; value = 0; }; } ];
                                         };
                                     }
-                                    { # G
+                                    { # G -> bottom
                                         type = "basic";
                                         from = { key_code = "g"; modifiers = { mandatory = [ "shift" ]; }; };
                                         to = [ { key_code = "down_arrow"; modifiers = [ "command" ]; } ];
@@ -80,7 +80,7 @@
                                             }
                                         ];
                                     }
-                                    { # j
+                                    { # j -> down
                                         type = "basic";
                                         from = { key_code = "j"; };
                                         to = { key_code = "down_arrow"; };
@@ -92,7 +92,7 @@
                                             }
                                         ];
                                     }
-                                    { # k
+                                    { # k -> up
                                         type = "basic";
                                         from = { key_code = "k"; };
                                         to = { key_code = "up_arrow"; };
