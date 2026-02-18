@@ -34,6 +34,8 @@
             autohide = true;
             mru-spaces = false;
             expose-group-apps = true;
+            # workspaces-only-with-active-apps = false;
+            # persistent-apps = false;
         };
 
         finder = {
@@ -52,7 +54,7 @@
             AppleShowAllFiles = true;
             AppleShowAllExtensions = true;
             AppleSpacesSwitchOnActivate = false;
-            AppleWindowTabbingMode = "always";
+            AppleWindowTabbingMode = "manual";
 
             InitialKeyRepeat = 15;
             KeyRepeat = 1;

@@ -55,7 +55,7 @@ if [[ "$CMD" == "nvim" ]]; then
     
     nohup alacritty -e zsh -c "$EXEC_CMD" >/dev/null 2>&1 &
 elif [[ "$CMD" == "skim" ]]; then
-    open -a Skim "$SELECTED"
+    open -n -a Skim "$SELECTED" >/dev/null 2>&1 &
 fi
 
 /etc/profiles/per-user/zhao/bin/aerospace mode main
