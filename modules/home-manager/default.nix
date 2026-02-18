@@ -33,7 +33,6 @@
         ocamlPackages.cpdf
         pdftk
         zathuraPkgs.zathura_pdf_mupdf
-        girara
         neovim-remote
         poppler-utils
 
