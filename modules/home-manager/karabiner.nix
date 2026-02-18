@@ -80,7 +80,7 @@
                                     { # j
                                         type = "basic";
                                         from = { key_code = "j"; };
-                                        to = [ { mouse_key = { vertical_wheel = 500; }; } ];
+                                        to = { key_code = "down_arrow"; };
                                         conditions = [
                                             {
                                                 type = "frontmost_application_if";
@@ -91,7 +91,7 @@
                                     { # k
                                         type = "basic";
                                         from = { key_code = "k"; };
-                                        to = [ { mouse_key = { vertical_wheel = -500; }; } ];
+                                        to = { key_code = "up_arrow"; };
                                         conditions = [
                                             {
                                                 type = "frontmost_application_if";
@@ -102,7 +102,7 @@
                                     { # Cmd+j
                                         type = "basic";
                                         from = { key_code = "j"; modifiers = { mandatory = [ "control" ]; }; };
-                                        to = [ { key_code = "page_down"; } ];
+                                        to = [ { mouse_key = { vertical_wheel = 500; }; } ];
                                         conditions = [
                                             {
                                                 type = "frontmost_application_if";
@@ -113,7 +113,7 @@
                                     { # Cmd+k
                                         type = "basic";
                                         from = { key_code = "k"; modifiers = { mandatory = [ "control" ]; }; };
-                                        to = [ { key_code = "page_up"; } ];
+                                        to = [ { mouse_key = { vertical_wheel = -500; }; } ];
                                         conditions = [
                                             {
                                                 type = "frontmost_application_if";
