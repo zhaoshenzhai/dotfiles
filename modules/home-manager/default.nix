@@ -32,7 +32,8 @@
         texlive.combined.scheme-minimal
         ocamlPackages.cpdf
         pdftk
-        zathura
+        zathuraPkgs.zathura_pdf_mupdf
+        girara
         neovim-remote
         poppler-utils
 
