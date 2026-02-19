@@ -44,6 +44,5 @@
         ./alacritty.nix
         ./karabiner.nix
         ./sketchybar.nix
-        # ./qutebrowser.nix
     ];
 }

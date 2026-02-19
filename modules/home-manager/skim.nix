@@ -12,11 +12,11 @@
         SKAutoReloadFileUpdate = true;
 
         SKRememberLastPageView = true;
-        SKRememberDefaults = true;
+        SKRememberDefaults = false;
 
         SKInitialPDFViewSettings = {
             autoScales = true;
-            displayMode = 2;
+            displayMode = 1;
             displaysAsBook = false;
         };
     };

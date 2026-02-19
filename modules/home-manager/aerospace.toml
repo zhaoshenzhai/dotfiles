@@ -48,7 +48,7 @@ exec-on-workspace-change = ['/bin/bash', '-c',
 
     cmd-shift-t = 'exec-and-forget open -a activity\ monitor'
 
-    cmd-w       = [ 'workspace w', 'exec-and-forget open -a qutebrowser', ]
+    # cmd-w       = [ 'workspace w', 'exec-and-forget open -a qutebrowser', ]
     cmd-shift-w = [ 'workspace w', 'exec-and-forget open -a safari', ]
 
     cmd-m       = [ 'workspace m', 'exec-and-forget open -a messages', ]
@@ -136,9 +136,9 @@ exec-on-workspace-change = ['/bin/bash', '-c',
     ctrl-q    = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
     esc       = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
 
-[[on-window-detected]]
-    if.app-id = 'org.nixos.qutebrowser'
-    run = 'move-node-to-workspace w'
+# [[on-window-detected]]
+#     if.app-id = 'org.nixos.qutebrowser'
+#     run = 'move-node-to-workspace w'
 
 [[on-window-detected]]
     if.app-id = 'com.apple.Safari'
