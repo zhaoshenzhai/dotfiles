@@ -58,8 +58,6 @@
             InitialKeyRepeat = 15;
             KeyRepeat = 1;
 
-            "com.apple.swipescrolldirection" = true;
-
             NSAutomaticSpellingCorrectionEnabled = false;
             NSAutomaticCapitalizationEnabled = false;
             NSAutomaticQuoteSubstitutionEnabled = false;
@@ -69,6 +67,8 @@
 
             "com.apple.sound.beep.volume" = 0.0;
             "com.apple.sound.beep.feedback" = 0;
+
+            "com.apple.swipescrolldirection" = true;
         };
 
         WindowManager = {
