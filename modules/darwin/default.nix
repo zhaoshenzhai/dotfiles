@@ -85,6 +85,8 @@
                     "Find..." = "~@f";
                     "Find Next" = "~@g";
                     "Find Previous" = "~@h";
+                    "Single Page Continuous" = "^~@1";
+                    "Two Pages Continuous" = "^~@2";
                 };
             };
         };

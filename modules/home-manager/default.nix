@@ -31,7 +31,6 @@
         texlive.combined.scheme-minimal
         ocamlPackages.cpdf
         pdftk
-        zathuraPkgs.zathura_pdf_mupdf
         neovim-remote
         poppler-utils
 
@@ -44,7 +43,6 @@
         ./nvim.nix
         ./vifm.nix
         ./skim.nix
-        ./zathura.nix
         ./borders.nix
         ./starship.nix
         ./launcher.nix

@@ -11,11 +11,6 @@ DATA=$(aerospace list-windows --all --format "%{workspace}|%{app-name}" | sort |
 
 while IFS='|' read -r sid app; do
     if [[ -z "$sid" || -z "$app" ]]; then continue; fi
-
-    if [[ "$app" = ".zathura-wrapped" ]]; then
-        app=zathura
-    fi
-
     iconMap "$app"
 
     eval "current_strip=\${ICON_STRIP_${sid}}"

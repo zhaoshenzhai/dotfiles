@@ -1,7 +1,8 @@
 { pkgs, lib, ... }: {
     targets.darwin.defaults."net.sourceforge.skim-app.skim" = {
         SKUISetupPreferTabs = 1;
-        AppleWindowTabbingMode = "manual";
+
+        SKWhitePoint = [0.99 0.995 1 0.95];
 
         SKTeXEditorPreset = "Custom";
         SKTeXEditorCommand = "${pkgs.neovim-remote}/bin/nvr";
@@ -10,12 +11,13 @@
         SKAutoCheckFileUpdate = true;
         SKAutoReloadFileUpdate = true;
 
-        SKAutoScales = true;
-        SKRememberLastPageView = false;
-        SKRememberDefaults = false;
+        SKRememberLastPageView = true;
+        SKRememberDefaults = true;
+
         SKInitialPDFViewSettings = {
             autoScales = true;
             displayMode = 2;
+            displaysAsBook = false;
         };
     };
 }

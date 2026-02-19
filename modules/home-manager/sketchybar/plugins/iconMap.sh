@@ -941,10 +941,8 @@ function iconMap() {
    "Premiere" | "Adobe Premiere" | "Adobe Premiere Pro 2024")
         icon_result=":premiere:"
         ;;
-   "Preview" | "预览" | "Skim" | "zathura" | "Aperçu" | "プレビュー" | "Vorschau")
+   "Preview" | "预览" | "Skim" | "Aperçu" | "プレビュー" | "Vorschau")
         icon_result=":book:"
-        # icon_result=":preview:"
-        # icon_result=""
         ;;
    "Pro Tools")
         icon_result=":pro_tools:"
