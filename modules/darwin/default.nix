@@ -113,6 +113,7 @@
             "sf-symbols"
             "skim"
             "karabiner-elements"
+            "qutebrowser"
         ];
     };
 }
