@@ -176,6 +176,37 @@
                 "<Ctrl+q>" = "mode-enter normal";
             };
         };
+
+        # extraConfig = ''
+        #     # Fix the macOS dock icon reverting to the default blue Qt icon.
+        #     # We inject a QTimer to override the window icon at runtime using PyQt.
+        #     def fix_mac_dock_icon():
+        #         try:
+        #             try:
+        #                 from PyQt6.QtGui import QIcon
+        #                 from PyQt6.QtWidgets import QApplication
+        #             except ImportError:
+        #                 from PyQt5.QtGui import QIcon
+        #                 from PyQt5.QtWidgets import QApplication
+        #             
+        #             app = QApplication.instance()
+        #             if app:
+        #                 # Nix will substitute the absolute store path to the PNG here
+        #                 app.setWindowIcon(QIcon("${./qutebrowser/qutebrowser.png}"))
+        #         except Exception:
+        #             pass
+
+        #     try:
+        #         try:
+        #             from PyQt6.QtCore import QTimer
+        #         except ImportError:
+        #             from PyQt5.QtCore import QTimer
+        #         
+        #         # 500ms delay ensures Qutebrowser has finished its own icon initialization
+        #         QTimer.singleShot(500, fix_mac_dock_icon)
+        #     except Exception:
+        #         pass
+        # '';
     };
 
     home.file = {
@@ -188,4 +219,26 @@
         cp -f "${./qutebrowser/bookmarks}" "$DATA_DIR/urls"
         chmod u+w "$DATA_DIR/urls"
     '';
+
+    # home.activation.fixQutebrowserIcon = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    #     APP_PATH="/Applications/qutebrowser.app"
+    #     if [ -d "$APP_PATH" ]; then
+    #         # 1. Replace the macOS app bundle icon
+    #         cp -f "${./qutebrowser/qutebrowser.icns}" "$APP_PATH/Contents/Resources/qutebrowser.icns"
+
+    #         # 2. Overwrite the internal Qt SVGs instead of deleting them.
+    #         # Qt explicitly looks for qutebrowser.svg for the runtime window icon.
+    #         # Qt's image reader sniffs the PNG header automatically despite the .svg extension.
+    #         find "$APP_PATH" -type f -name "*.svg" -exec cp -f "${./qutebrowser/qutebrowser.png}" {} \;
+
+    #         # 3. Replace all internal PNGs with correctly sized versions of your gray icon
+    #         find "$APP_PATH" -type f -name "qutebrowser-*.png" | while read -r img; do
+    #             dim=$(basename "$img" .png | cut -d'-' -f2 | cut -d'x' -f1)
+    #             /usr/bin/sips -z "$dim" "$dim" "${./qutebrowser/qutebrowser.png}" --out "$img" >/dev/null 2>&1
+    #         done
+
+    #         # 4. Touch the app bundle to force macOS to register the modification
+    #         touch "$APP_PATH"
+    #     fi
+    # '';
 }
