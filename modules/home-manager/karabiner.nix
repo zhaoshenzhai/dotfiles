@@ -8,31 +8,6 @@
                     selected = true;
                     complex_modifications = {
                         rules = [
-                            { # caps lock -> esc
-                                description = "Change caps_lock to escape";
-                                manipulators = [
-                                    {
-                                        type = "basic";
-                                        from = { key_code = "caps_lock"; };
-                                        to = [ { key_code = "escape"; } ];
-                                    }
-                                ];
-                            }
-                            { # option <-> ctrl
-                                description = "Swap Left Option and Left Control";
-                                manipulators = [
-                                    {
-                                        type = "basic";
-                                        from = { key_code = "left_option"; };
-                                        to = [ { key_code = "left_control"; } ];
-                                    }
-                                    {
-                                        type = "basic";
-                                        from = { key_code = "left_control"; };
-                                        to = [ { key_code = "left_option"; } ];
-                                    }
-                                ];
-                            }
                             { # Skim
                                 description = "Skim";
                                 manipulators = [
@@ -172,6 +147,7 @@
                                         from = { key_code = "return_or_enter"; };
                                         to = [
                                             { key_code = "return_or_enter"; }
+                                            { key_code = "escape"; }
                                             { set_variable = { name = "skim_search_mode"; value = 0; }; }
                                         ];
                                         conditions = [
@@ -182,15 +158,30 @@
                                             }
                                         ];
                                     }
-                                    { # escape -> exit search mode
+                                    { # escape -> exit search mode and deselect
                                         type = "basic";
                                         from = { key_code = "escape"; };
                                         to = [
                                             { key_code = "escape"; }
                                             { set_variable = { name = "skim_search_mode"; value = 0; }; }
+                                            { key_code = "a"; modifiers = [ "command" "shift" ]; }
                                         ];
                                         conditions = [
-                                            { type = "variable_if"; name = "skim_search_mode"; value = 1; }
+                                            {
+                                                type = "frontmost_application_if";
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                            }
+                                        ];
+                                    }
+                                    { # caps lock -> exit search mode and deselect
+                                        type = "basic";
+                                        from = { key_code = "caps_lock"; };
+                                        to = [
+                                            { key_code = "escape"; }
+                                            { set_variable = { name = "skim_search_mode"; value = 0; }; }
+                                            { key_code = "a"; modifiers = [ "command" "shift" ]; }
+                                        ];
+                                        conditions = [
                                             {
                                                 type = "frontmost_application_if";
                                                 bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
@@ -220,6 +211,69 @@
                                                 bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
                                             }
                                         ];
+                                    }
+                                    { # ctrl+r -> recolor
+                                        type = "basic";
+                                        from = {
+                                            key_code = "r";
+                                            modifiers = { mandatory = [ "control" ]; };
+                                        };
+                                        to = [
+                                            {
+                                                shell_command = ''
+                                                    CURRENT=$(defaults read net.sourceforge.skim-app.skim SKInvertColorsInDarkMode 2>/dev/null || echo 0); \
+                                                    if [ \"$CURRENT\" = \"1\" ]; then \
+                                                        defaults write net.sourceforge.skim-app.skim SKInvertColorsInDarkMode -bool false; \
+                                                    else \
+                                                        defaults write net.sourceforge.skim-app.skim SKInvertColorsInDarkMode -bool true; \
+                                                    fi
+                                                '';
+                                            }
+                                        ];
+                                        conditions = [
+                                            { type = "variable_if"; name = "skim_search_mode"; value = 0; }
+                                            {
+                                                type = "frontmost_application_if";
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                            }
+                                        ];
+                                    }
+                                    { # s -> fit to width
+                                        type = "basic";
+                                        from = { key_code = "s"; };
+                                        to = [ { key_code = "r"; modifiers = [ "command" "shift" ]; } ];
+                                        conditions = [
+                                            { type = "variable_if"; name = "skim_search_mode"; value = 0; }
+                                            {
+                                                type = "frontmost_application_if";
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                            }
+                                        ];
+                                    }
+                                ];
+                            }
+                            { # option <-> ctrl
+                                description = "Swap Left Option and Left Control";
+                                manipulators = [
+                                    {
+                                        type = "basic";
+                                        from = { key_code = "left_option"; };
+                                        to = [ { key_code = "left_control"; } ];
+                                    }
+                                    {
+                                        type = "basic";
+                                        from = { key_code = "left_control"; };
+                                        to = [ { key_code = "left_option"; } ];
+                                    }
+                                ];
+                            }
+                            { # caps lock -> esc
+                                description = "Change caps_lock to escape";
+                                manipulators = [
+                                    {
+                                        type = "basic";
+                                        from = { key_code = "caps_lock"; };
+                                        to = [ { key_code = "escape"; } ];
                                     }
                                 ];
                             }

@@ -124,6 +124,7 @@ exec-on-workspace-change = ['/bin/bash', '-c',
 
     cmd-q   = []
     cmd-esc = [
+        # 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to close front window"',
         'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"',
         'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
     ]
