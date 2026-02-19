@@ -178,14 +178,14 @@
         };
     };
 
-    # home.file = {
-    #     ".qutebrowser/quickmarks".source = ./qutebrowser/quickmarks;
-    # };
+    home.file = {
+        ".qutebrowser/quickmarks".source = ./qutebrowser/quickmarks;
+    };
 
-    # home.activation.installQutebrowserBookmarks = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    #     DATA_DIR="$HOME/.qutebrowser/bookmarks"
-    #     mkdir -p "$DATA_DIR"
-    #     cp -f "${./qutebrowser/bookmarks}" "$DATA_DIR/urls"
-    #     chmod u+w "$DATA_DIR/urls"
-    # '';
+    home.activation.installQutebrowserBookmarks = lib.hm.dag.entryAfter ["writeBoundary"] ''
+        DATA_DIR="$HOME/.qutebrowser/bookmarks"
+        mkdir -p "$DATA_DIR"
+        cp -f "${./qutebrowser/bookmarks}" "$DATA_DIR/urls"
+        chmod u+w "$DATA_DIR/urls"
+    '';
 }
