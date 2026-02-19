@@ -3,7 +3,6 @@
     home.stateVersion = "22.11";
     home.file = { ".hushlogin".text = ""; };
     home.sessionVariables = { EDITOR = "nvim"; };
-    xdg.configFile = { "aerospace/aerospace.toml".source = ./aerospace.toml; };
 
     home.packages = with pkgs; [
         # System
@@ -46,4 +45,8 @@
         ./sketchybar.nix
         ./qutebrowser.nix
     ];
+
+    xdg.configFile = {
+        "aerospace/aerospace.toml".source = ./aerospace.toml;
+    };
 }

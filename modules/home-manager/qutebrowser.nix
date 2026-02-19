@@ -3,6 +3,28 @@
         enable = true;
         loadAutoconfig = false;
 
+package = pkgs.qutebrowser.overrideAttrs (old: {
+      postPatch = (old.postPatch or "") + ''
+        # Remove the default blue SVG so Qt is forced to use the PNGs
+        rm -f qutebrowser/icons/qutebrowser.svg
+        
+        # Replace the internal PNGs with your custom gray PNG
+        # Note: Qt will downscale the 512x512 PNG automatically for smaller sizes
+        for size in 16 24 32 48 64 128 256 512; do
+          if [ -f "qutebrowser/icons/qutebrowser-$sizex$size.png" ]; then
+            cp ${./qutebrowser/qutebrowser.png} "qutebrowser/icons/qutebrowser-$sizex$size.png"
+          fi
+        done
+      '';
+
+      postInstall = (old.postInstall or "") + ''
+        # Replace the macOS .app bundle icon
+        if [ -d "$out/Applications/qutebrowser.app/Contents/Resources" ]; then
+          cp ${./qutebrowser/qutebrowser.icns} "$out/Applications/qutebrowser.app/Contents/Resources/qutebrowser.icns"
+        fi
+      '';
+    });
+
         searchEngines = {
             DEFAULT = "https://www.google.com/search?q={}";
             yt = "https://www.youtube.com/results?search_query={}";

@@ -137,7 +137,7 @@ exec-on-workspace-change = ['/bin/bash', '-c',
     esc       = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
 
 [[on-window-detected]]
-    if.app-id = 'org.nixos.qutebrowser'
+    if.app-id = 'org.qutebrowser.qutebrowser'
     run = 'move-node-to-workspace w'
 
 [[on-window-detected]]
