@@ -43,7 +43,7 @@
         ./alacritty.nix
         ./karabiner.nix
         ./sketchybar.nix
-        # ./qutebrowser.nix
+        ./qutebrowser.nix
     ];
 
     xdg.configFile = {
