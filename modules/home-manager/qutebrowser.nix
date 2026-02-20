@@ -177,53 +177,6 @@
                 "<Ctrl+q>" = "mode-enter normal";
             };
         };
-
-        # extraConfig = ''
-        #     # Qt overrides the macOS dock icon with a non-tintable raster image at runtime.
-        #     # We use ctypes to directly call the macOS Objective-C API to remove this 
-        #     # runtime override, allowing macOS to fall back to the dynamic/tintable .icns file.
-        #     def release_mac_dock_icon():
-        #         try:
-        #             import ctypes
-        #             import ctypes.util
-
-        #             objc_path = ctypes.util.find_library('objc')
-        #             if not objc_path: return
-        #             objc = ctypes.cdll.LoadLibrary(objc_path)
-
-        #             # Strictly define argtypes and restype for ARM64 (Apple Silicon) compatibility
-        #             objc.objc_getClass.restype = ctypes.c_void_p
-        #             objc.objc_getClass.argtypes = [ctypes.c_char_p]
-        #             objc.sel_registerName.restype = ctypes.c_void_p
-        #             objc.sel_registerName.argtypes = [ctypes.c_char_p]
-
-        #             # Cast objc_msgSend to the exact function signatures required
-        #             msgSend_sharedApp = ctypes.cast(objc.objc_msgSend, ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p))
-        #             msgSend_setIcon = ctypes.cast(objc.objc_msgSend, ctypes.CFUNCTYPE(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p))
-
-        #             NSApplication = objc.objc_getClass(b"NSApplication")
-        #             sharedApp_sel = objc.sel_registerName(b"sharedApplication")
-        #             setIcon_sel = objc.sel_registerName(b"setApplicationIconImage:")
-
-        #             # Execute: app = [NSApplication sharedApplication]
-        #             app = msgSend_sharedApp(NSApplication, sharedApp_sel)
-        #             
-        #             # Execute: [app setApplicationIconImage:nil]
-        #             msgSend_setIcon(app, setIcon_sel, None)
-        #         except Exception:
-        #             pass
-
-        #     try:
-        #         try:
-        #             from PyQt6.QtCore import QTimer
-        #         except ImportError:
-        #             from PyQt5.QtCore import QTimer
-        #         
-        #         # Wait 1 second to ensure Qutebrowser has completely finished loading
-        #         QTimer.singleShot(1000, release_mac_dock_icon)
-        #     except Exception:
-        #         pass
-        # '';
     };
 
     home.file = {
@@ -235,14 +188,5 @@
         mkdir -p "$DATA_DIR"
         cp -f "${./qutebrowser/bookmarks}" "$DATA_DIR/urls"
         chmod u+w "$DATA_DIR/urls"
-    '';
-
-    home.activation.injectQutebrowserIcns = lib.hm.dag.entryAfter ["writeBoundary"] ''
-        APP_PATH="/Applications/qutebrowser.app"
-        if [ -d "$APP_PATH" ]; then
-            cp -f "${./qutebrowser/qutebrowser.icns}" "$APP_PATH/Contents/Resources/qutebrowser.icns"
-            touch "$APP_PATH"
-            touch "$APP_PATH/Contents/Info.plist"
-        fi
     '';
 }
