@@ -32,7 +32,7 @@
             nnoremap <C-t> :!alacritty --working-directory %d &<cr>
             nnoremap <C-s> :!alacritty --title vifm-float --option "window.dimensions={columns=100,lines=35}" --option "window.position={x=525,y=250}" --working-directory %d &<cr>
             
-            filetype *.pdf open -n -a Skim %c >/dev/null 2>&1 &
+            filetype *.pdf open -n -a Skim %c &
             filetype *.jpg,*.jpeg,*.png,*.gif open %c &
 
             highlight clear
