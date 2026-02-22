@@ -122,19 +122,41 @@ exec-on-workspace-change = ['/bin/bash', '-c',
     cmd-tab     = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next'
     cmd-shift-f = 'fullscreen --no-outer-gaps'
 
-    cmd-q   = []
     cmd-esc = [
-        # 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to close front window"',
-        'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"',
+        'close --quit-if-last-window',
+        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+    ]
+    cmd-q = [
+        'close --quit-if-last-window',
         'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
     ]
 
 [mode.launcher.binding]
-    cmd-esc   = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
-    cmd-q     = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
-    ctrl-esc  = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
-    ctrl-q    = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
-    esc       = [ 'exec-and-forget osascript -e "tell application (path to frontmost application as text) to quit"', 'mode main' ]
+    cmd-esc = [
+        'close --quit-if-last-window',
+        'mode main',
+        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+    ]
+    cmd-q = [
+        'close --quit-if-last-window',
+        'mode main',
+        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+    ]
+    ctrl-esc = [
+        'close --quit-if-last-window',
+        'mode main',
+        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+    ]
+    ctrl-q = [
+        'close --quit-if-last-window',
+        'mode main',
+        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+    ]
+    esc = [
+        'close --quit-if-last-window',
+        'mode main',
+        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+    ]
 
 [[on-window-detected]]
     if.app-id = 'org.qutebrowser.qutebrowser'

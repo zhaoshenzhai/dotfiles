@@ -59,5 +59,5 @@ elif [[ "$CMD" == "skim" ]]; then
 fi
 
 /etc/profiles/per-user/zhao/bin/aerospace mode main
-sleep 0.5
+sleep 0.1
 exit 0
