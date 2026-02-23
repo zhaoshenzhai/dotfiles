@@ -33,6 +33,7 @@
         dock = {
             autohide = true;
             mru-spaces = false;
+            show-recents = false;
             expose-group-apps = true;
         };
 
