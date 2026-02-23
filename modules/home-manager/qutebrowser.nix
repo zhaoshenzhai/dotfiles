@@ -61,7 +61,7 @@
             downloads.location.directory = "~/Downloads";
             downloads.prevent_mixed_content = false;
 
-            content.fullscreen.window = true;
+            content.fullscreen.window = false;
             content.tls.certificate_errors = "block";
             colors.webpage.preferred_color_scheme = "dark";
 
