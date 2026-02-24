@@ -63,7 +63,6 @@
 
             content.fullscreen.window = false;
             content.tls.certificate_errors = "block";
-            content.javascript.enabled = true;
 
             colors = {
                 webpage.preferred_color_scheme = "dark";
@@ -171,6 +170,9 @@
                 "<Ctrl+9>" = "tab-select 9";
 
                 "<Ctrl+q>" = "nop";
+
+                ";s" = "spawn open -a Safari {url}";
+                ";S" = "hint links spawn open -a Safari {hint-url}";
             };
             command = {
                 "<Ctrl+j>" = "completion-item-focus next";
@@ -182,14 +184,6 @@
 
     home.file = {
         ".qutebrowser/quickmarks".source = ./qutebrowser/quickmarks;
-        ".qutebrowser/config.py".text = ''
-            config.set('content.images', True, 'chrome-devtools://*')
-            config.set('content.images', True, 'devtools://*')
-            config.set('content.javascript.enabled', True, 'chrome-devtools://*')
-            config.set('content.javascript.enabled', True, 'devtools://*')
-            config.set('content.javascript.enabled', True, 'chrome://*/*')
-            config.set('content.javascript.enabled', True, 'qute://*/*')
-        '';
     };
 
     home.activation.installQutebrowserBookmarks = lib.hm.dag.entryAfter ["writeBoundary"] ''
