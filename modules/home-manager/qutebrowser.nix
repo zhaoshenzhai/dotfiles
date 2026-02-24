@@ -1,4 +1,34 @@
-{ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+let
+    vifmPicker = pkgs.writeShellScript "vifm-picker" ''
+        mkdir -p ~/.cache
+        lastdir=$(cat ~/.cache/vifm_picker_dir 2>/dev/null || echo "$HOME")
+        ${pkgs.alacritty}/bin/alacritty \
+            --title vifm-float \
+            --option "window.dimensions={columns=100,lines=35}" \
+            --option "window.position={x=525,y=250}" \
+            -e "${pkgs.vifm}/bin/vifm" \
+            -c ":only" \
+            -c ":set nodotfiles | filter Applications|Desktop|Documents|Library|Movies|Music|Pictures | :only" \
+            -c 'autocmd DirEnter * !echo "%d" > ~/.cache/vifm_picker_dir &' \
+            "--choose-files" "$1" \
+            "$lastdir"
+    '';
+
+    vifmPickerMulti = pkgs.writeShellScript "vifm-picker-multi" ''
+        mkdir -p ~/.cache
+        lastdir=$(cat ~/.cache/vifm_picker_dir 2>/dev/null || echo "$HOME")
+        ${pkgs.alacritty}/bin/alacritty \
+            --title vifm-float \
+            --option "window.dimensions={columns=100,lines=35}" \
+            --option "window.position={x=525,y=250}" \
+            -e "${pkgs.vifm}/bin/vifm" \
+            -c ":set nodotfiles | filter Applications|Desktop|Documents|Library|Movies|Music|Pictures | :only" \
+            -c 'autocmd DirEnter * !echo "%d" > ~/.cache/vifm_picker_dir &' \
+            "--choose-files" "$1" \
+            "$lastdir"
+    '';
+in {
     programs.qutebrowser = {
         enable = true;
         loadAutoconfig = false;
@@ -37,25 +67,8 @@
 
             editor.command = [ "alacritty" "-e" "nvim" "{}" ];
             fileselect.handler = "external";
-
-            fileselect.single_file.command = [
-                "${pkgs.alacritty}/bin/alacritty"
-                "--title" "vifm-float"
-                "--option" "window.dimensions={columns=100,lines=35}"
-                "--option" "window.position={x=525,y=250}"
-                "-e" "${pkgs.vifm}/bin/vifm"
-                "-c" ":only"
-                "--choose-files" "{}"
-            ];
-            fileselect.multiple_files.command = [
-                "${pkgs.alacritty}/bin/alacritty"
-                "--title" "vifm-float"
-                "--option" "window.dimensions={columns=100,lines=35}"
-                "--option" "window.position={x=525,y=250}"
-                "-e" "${pkgs.vifm}/bin/vifm"
-                "-c" ":set nodotfiles | filter Applications|Desktop|Documents|Library|Movies|Music|Pictures | :only"
-                "--choose-files" "{}"
-            ];
+            fileselect.single_file.command = [ "${vifmPicker}" "{}" ];
+            fileselect.multiple_files.command = [ "${vifmPickerMulti}" "{}" ];
 
             downloads.remove_finished = 1000;
             downloads.location.directory = "~/Downloads";
