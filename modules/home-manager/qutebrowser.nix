@@ -63,9 +63,10 @@
 
             content.fullscreen.window = false;
             content.tls.certificate_errors = "block";
-            colors.webpage.preferred_color_scheme = "dark";
+            content.javascript.enabled = true;
 
             colors = {
+                webpage.preferred_color_scheme = "dark";
                 messages = {
                     info.bg = "#1e2127";
                     warning.bg = "#1e2127";
@@ -181,6 +182,14 @@
 
     home.file = {
         ".qutebrowser/quickmarks".source = ./qutebrowser/quickmarks;
+        ".qutebrowser/config.py".text = ''
+            config.set('content.images', True, 'chrome-devtools://*')
+            config.set('content.images', True, 'devtools://*')
+            config.set('content.javascript.enabled', True, 'chrome-devtools://*')
+            config.set('content.javascript.enabled', True, 'devtools://*')
+            config.set('content.javascript.enabled', True, 'chrome://*/*')
+            config.set('content.javascript.enabled', True, 'qute://*/*')
+        '';
     };
 
     home.activation.installQutebrowserBookmarks = lib.hm.dag.entryAfter ["writeBoundary"] ''
