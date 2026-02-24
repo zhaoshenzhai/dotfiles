@@ -15,9 +15,9 @@
         SKRememberDefaults = false;
 
         SKInitialPDFViewSettings = {
-            autoScales = true;
             displayMode = 1;
             displaysAsBook = false;
+            displaysPageBreaks = false;
         };
     };
 }

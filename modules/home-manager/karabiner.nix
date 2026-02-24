@@ -242,7 +242,7 @@
                                         type = "basic";
                                         from = { key_code = "s"; };
                                         to = [
-                                            { key_code = "r"; modifiers = [ "command" "shift" ]; }
+                                            { key_code = "hyphen"; modifiers = [ "command" "shift" ]; }
                                             { set_variable = { name = "skim_fit_to_height"; value = 0; }; }
                                         ];
                                         conditions = [
@@ -258,7 +258,7 @@
                                         from = { key_code = "a"; };
                                         to = [
                                             { key_code = "3"; modifiers = [ "control" "option" "command" ]; }
-                                            { key_code = "r"; modifiers = [ "command" "shift" ]; }
+                                            { key_code = "hyphen"; modifiers = [ "command" "shift" ]; }
                                             { key_code = "2"; modifiers = [ "control" "option" "command" ]; }
                                             { set_variable = { name = "skim_fit_to_height"; value = 1; }; }
                                         ];
@@ -277,7 +277,7 @@
                                         from = { key_code = "a"; };
                                         to = [
                                             { key_code = "3"; modifiers = [ "control" "option" "command" ]; }
-                                            { key_code = "r"; modifiers = [ "command" "shift" ]; }
+                                            { key_code = "hyphen"; modifiers = [ "command" "shift" ]; }
                                             { key_code = "1"; modifiers = [ "control" "option" "command" ]; }
                                             { set_variable = { name = "skim_fit_to_height"; value = 1; }; }
                                         ];
