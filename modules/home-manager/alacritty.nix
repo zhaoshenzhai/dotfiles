@@ -23,7 +23,7 @@
                 padding = { x = 10; y = 25; };
                 decorations = "transparent";
                 dynamic_padding = false;
-                opacity = 0.5;
+                opacity = 0.75;
                 blur = true;
             };
 
@@ -32,7 +32,7 @@
 
             colors = {
                 primary = {
-                    background = "#1e2127";
+                    background = "#111111";
                     foreground = "#abb2bf";
                 };
                 normal = {

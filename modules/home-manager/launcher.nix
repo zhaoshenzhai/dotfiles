@@ -30,7 +30,7 @@ in
         padding = { x = 20, y = 25 }
         position = { x = 275, y = 400 }
         
-        opacity = 0.5
+        opacity = 0.75
         blur = true
 
         [font]
@@ -42,7 +42,7 @@ in
         style = { shape = "Beam", blinking = "On" }
 
         [colors.primary]
-        background = "#1e2127"
+        background = "#111111"
         foreground = "#abb2bf"
 
         [colors.cursor]
