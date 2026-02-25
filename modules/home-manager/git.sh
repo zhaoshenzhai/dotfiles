@@ -53,7 +53,7 @@ EXIT() {
             "$0"
         fi
     fi
-    exit
+    aerospace close --quit-if-last-window
 }
 
 # Input
@@ -88,7 +88,7 @@ else
         read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1-$REPOSNUM]${NC}") " repoNum
         re='^[0-9]+$'
         if [[ "$repoNum" == "q" ]]; then
-            exit
+            aerospace close --quit-if-last-window
         elif [[ -z $repoNum ]] || ([[ $repoNum =~ $re ]] && [[ $repoNum -gt 0 ]] && [[ $repoNum -le $REPOSNUM ]]); then
             valid=1
         else
@@ -151,7 +151,7 @@ else
                     read -n 1 -ep "$(echo -e ${CYAN}"Select repository: [1-$changedReposNum]${NC} ")" changedRepo
                     re='^[0-9]+$'
                     if [[ "$changedRepo" == "q" ]]; then
-                        exit
+                        aerospace close --quit-if-last-window
                     elif [[ $changedRepo =~ $re ]] && [[ "$changedRepo" -gt "0" ]] && [[ "$changedRepo" -le "$changedReposNum" ]]; then
                         changedValid=1
                     else

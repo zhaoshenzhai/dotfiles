@@ -58,4 +58,12 @@
             };
         };
     };
+
+    xdg.configFile."alacritty/btop.toml".text = ''
+        general.import = [ "~/.config/alacritty/alacritty.toml" ]
+
+        [[keyboard.bindings]]
+        key = "Q"
+        command = { program = "sh", args = ["-c", "aerospace close --quit-if-last-window"] }
+    '';
 }

@@ -44,6 +44,7 @@ exec-on-workspace-change = ['/bin/bash', '-c',
     ]
 
     cmd-t = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
+        --config-file ~/.config/alacritty/btop.toml \
         --title btop \
         --option "window.dimensions={columns=100,lines=35}" \
         --option "window.position={x=525,y=250}" \
