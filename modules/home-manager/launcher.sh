@@ -59,4 +59,4 @@ elif [[ "$CMD" == "skim" ]]; then
 fi
 
 aerospace mode main
-sleep 0.1
+sleep 0.5
