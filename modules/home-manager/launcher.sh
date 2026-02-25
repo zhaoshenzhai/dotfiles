@@ -58,6 +58,5 @@ elif [[ "$CMD" == "skim" ]]; then
     open -n -a Skim "$SELECTED" >/dev/null 2>&1 &
 fi
 
-/etc/profiles/per-user/zhao/bin/aerospace mode main
+aerospace mode main
 sleep 0.1
-exit 0

@@ -1,14 +1,8 @@
 start-at-login = true
-after-startup-command = [
-    'exec-and-forget borders',
-    'exec-and-forget sketchybar'
-]
+after-startup-command = [ 'exec-and-forget borders', 'exec-and-forget sketchybar' ]
 
-on-focus-changed = [
-    'move-mouse window-lazy-center',
-    'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-]
-exec-on-workspace-change = ['/bin/bash', '-c',
+on-focus-changed = 'move-mouse window-lazy-center'
+exec-on-workspace-change = [ '/bin/bash', '-c',
     'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
 ]
 
@@ -126,41 +120,15 @@ exec-on-workspace-change = ['/bin/bash', '-c',
     cmd-tab     = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next'
     cmd-shift-f = 'fullscreen --no-outer-gaps'
 
-    cmd-esc = [
-        'close --quit-if-last-window',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
-    cmd-q = [
-        'close --quit-if-last-window',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
+    cmd-esc = 'close --quit-if-last-window'
+    cmd-q = 'close --quit-if-last-window'
 
 [mode.launcher.binding]
-    cmd-esc = [
-        'close --quit-if-last-window',
-        'mode main',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
-    cmd-q = [
-        'close --quit-if-last-window',
-        'mode main',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
-    ctrl-esc = [
-        'close --quit-if-last-window',
-        'mode main',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
-    ctrl-q = [
-        'close --quit-if-last-window',
-        'mode main',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
-    esc = [
-        'close --quit-if-last-window',
-        'mode main',
-        'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-    ]
+    cmd-esc = [ 'close --quit-if-last-window', 'mode main' ]
+    cmd-q = [ 'close --quit-if-last-window', 'mode main' ]
+    ctrl-esc = [ 'close --quit-if-last-window', 'mode main' ]
+    ctrl-q = [ 'close --quit-if-last-window', 'mode main' ]
+    esc = [ 'close --quit-if-last-window', 'mode main' ]
 
 [[on-window-detected]]
     if.app-id = 'org.qutebrowser.qutebrowser'
