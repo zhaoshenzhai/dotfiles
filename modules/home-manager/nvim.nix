@@ -160,19 +160,6 @@
                     return a:movement
                 endif
             endfunction
-
-            function! InterceptQuit()
-                let cmd = getcmdline()
-                if cmd ==# 'q' || cmd ==# 'wq'
-                    return "\<C-u>silent! wa \| silent !aerospace close --quit-if-last-window >/dev/null 2>&1 &\<CR>"
-                elseif cmd ==# 'q!'
-                    return "\<C-u>silent !aerospace close --quit-if-last-window >/dev/null 2>&1 &\<CR>"
-                else
-                    return "\<CR>"
-                endif
-            endfunction
-
-            cnoremap <expr> <CR> getcmdtype() ==# ':' ? InterceptQuit() : "\<CR>"
         '';
 
         keymaps = [
