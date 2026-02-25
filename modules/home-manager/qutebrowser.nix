@@ -11,6 +11,7 @@ let
             -c ":only" \
             -c ":set nodotfiles | filter Applications|Desktop|Documents|Library|Movies|Music|Pictures | :only" \
             -c 'autocmd DirEnter * !echo "%d" > ~/.cache/vifm_picker_dir &' \
+            -c 'nnoremap l <cr>' \
             "--choose-files" "$1" \
             "$lastdir"
     '';
@@ -25,6 +26,7 @@ let
             -e "${pkgs.vifm}/bin/vifm" \
             -c ":set nodotfiles | filter Applications|Desktop|Documents|Library|Movies|Music|Pictures | :only" \
             -c 'autocmd DirEnter * !echo "%d" > ~/.cache/vifm_picker_dir &' \
+            -c 'nnoremap l <cr>' \
             "--choose-files" "$1" \
             "$lastdir"
     '';

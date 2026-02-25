@@ -36,6 +36,7 @@
             filetype *.jpg,*.jpeg,*.png,*.gif open %c &
 
             cabbrev q !aerospace close --quit-if-last-window
+            cabbrev wq !aerospace close --quit-if-last-window
 
             highlight clear
             highlight Border	 cterm=none	         ctermfg=035     ctermbg=default
