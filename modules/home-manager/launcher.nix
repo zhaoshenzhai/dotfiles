@@ -30,7 +30,7 @@ in
         padding = { x = 20, y = 25 }
         position = { x = 275, y = 400 }
         
-        opacity = 0.75
+        opacity = 0.5
         blur = true
 
         [font]

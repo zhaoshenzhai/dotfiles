@@ -23,7 +23,7 @@
                 padding = { x = 10; y = 25; };
                 decorations = "transparent";
                 dynamic_padding = false;
-                opacity = 0.75;
+                opacity = 0.5;
                 blur = true;
             };
 
