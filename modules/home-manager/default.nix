@@ -21,8 +21,8 @@
         switchaudio-osx
         blueutil
 
-        # TeX and pdfs
-        texlive.combined.scheme-minimal
+        # pdfs
+        texlive.combined.scheme-full
         ocamlPackages.cpdf
         pdftk
         neovim-remote
