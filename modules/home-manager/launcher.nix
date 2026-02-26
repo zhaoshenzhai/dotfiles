@@ -5,22 +5,26 @@ let
         pkgs.fzf
         pkgs.neovim
         pkgs.alacritty
+        pkgs.fd
+        pkgs.gawk
+        pkgs.coreutils
     ];
 
     launcher = pkgs.writeShellScriptBin "launcher" ''
         export PATH="${runtimePath}:/usr/bin:$PATH"
-
-        if [ -f "${config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh" ]; then
-            . "${config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh"
-        fi
-
         export FZF_DEFAULT_OPTS="--color='bg+:-1,gutter:-1,pointer:#98c379'"
 
         ${builtins.readFile ./launcher.sh}
     '';
 in
 {
-    home.packages = [ launcher pkgs.fzf ];
+    home.packages = [
+        launcher
+        pkgs.fzf
+        pkgs.fd
+        pkgs.gawk
+    ];
+
     xdg.configFile."alacritty/launcher.toml".text = ''
         [window]
         decorations = "transparent"

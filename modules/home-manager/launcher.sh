@@ -10,21 +10,21 @@ fi
 echo $$ > "$LOCKFILE"
 trap "rm -f $LOCKFILE" EXIT
 
-declare -a RULES=(
-    "/Users/zhao/iCloud/Documents|skim"
-    "/Users/zhao/iCloud/Dotfiles|nvim"
-)
+CACHE_DIR="$HOME/.cache/launcher"
+CACHE_FILE="$CACHE_DIR/files.txt"
+RECENT_FILE="$CACHE_DIR/recent.txt"
 
-SEARCH_DIRS=()
-for rule in "${RULES[@]}"; do
-    DIR="${rule%%|*}"
-    if [ -d "$DIR" ]; then
-        SEARCH_DIRS+=("$DIR")
-    fi
-done
+mkdir -p "$CACHE_DIR"
+touch "$RECENT_FILE"
 
-ALL_FILES=$(find "${SEARCH_DIRS[@]}" -type f -not -path '*/.*' -maxdepth 10 -print0 | xargs -0 ls -dtu 2>/dev/null)
-SELECTED=$(echo "$ALL_FILES" | sed '/^$/d' | fzf \
+(
+    fd --type f --hidden --exclude .git . \
+        "/Users/zhao/iCloud/Documents" \
+        "/Users/zhao/iCloud/Dotfiles" > "$CACHE_FILE.tmp" 2>/dev/null
+    mv "$CACHE_FILE.tmp" "$CACHE_FILE"
+) &
+
+SELECTED=$(cat "$RECENT_FILE" "$CACHE_FILE" 2>/dev/null | awk '!seen[$0]++' | fzf \
     --reverse \
     --info=hidden \
     --delimiter / \
@@ -35,26 +35,17 @@ if [ -z "$SELECTED" ]; then
     exit 0
 fi
 
-touch -a "$SELECTED"
+grep -vF -x "$SELECTED" "$RECENT_FILE" > "$RECENT_FILE.tmp" 2>/dev/null || true
+echo "$SELECTED" | cat - "$RECENT_FILE.tmp" | head -n 100 > "$RECENT_FILE"
+rm -f "$RECENT_FILE.tmp"
 
-CMD="open"
-for rule in "${RULES[@]}"; do
-    DIR="${rule%%|*}"
-    APP="${rule#*|}"
-    
-    if echo "$SELECTED" | grep -q -i "^$DIR"; then
-        CMD="$APP"
-        break
-    fi
-done
-
-if [[ "$CMD" == "nvim" ]]; then
+if [[ "$SELECTED" == /Users/zhao/iCloud/Dotfiles* ]]; then
     NVIM_PATH="/etc/profiles/per-user/$USER/bin/nvim"
     HM_SESSION="$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
     EXEC_CMD="[ -f $HM_SESSION ] && . $HM_SESSION; export FROM_LAUNCHER=1; exec $NVIM_PATH \"$SELECTED\""
     
-    nohup alacritty -e zsh -c "$EXEC_CMD" >/dev/null 2>&1 &
-elif [[ "$CMD" == "skim" ]]; then
+    nohup alacritty -e sh -c "$EXEC_CMD" >/dev/null 2>&1 &
+elif [[ "$SELECTED" == /Users/zhao/iCloud/Documents* ]]; then
     open -n -a Skim "$SELECTED" >/dev/null 2>&1 &
 fi
 

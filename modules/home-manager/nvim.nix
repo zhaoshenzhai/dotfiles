@@ -167,6 +167,25 @@
                     return a:movement
                 endif
             endfunction
+
+            function! TexFold(lnum)
+                let l:line = getline(a:lnum)
+
+                if l:line =~# '^\s*\\begin{question}'
+                    return '>1'
+                elseif l:line =~# '^\s*\\end{solution}'
+                    return '<1'
+                elseif l:line =~# '^\s*\\end{question}'
+                    let l:next_lnum = nextnonblank(a:lnum + 1)
+                    if l:next_lnum > 0 && getline(l:next_lnum) =~# '^\s*\\begin{solution}'
+                        return '1' " Continue the fold
+                    else
+                        return '<1' " End the fold
+                    endif
+                endif
+
+                return '='
+            endfunction
         '';
 
         keymaps = [
@@ -282,6 +301,11 @@
                 pattern = [ "*" ];
                 command = "if expand('%') != '' && &buftype == '' | silent! loadview | endif";
                 group = "remember_folds";
+            }
+            {
+                event = [ "FileType" "BufWinEnter" ];
+                pattern = [ "*.tex" ];
+                command = "setlocal foldmethod=expr foldexpr=TexFold(v:lnum) foldlevel=0";
             }
         ];
 
