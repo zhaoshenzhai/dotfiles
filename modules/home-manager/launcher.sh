@@ -51,7 +51,7 @@ done
 if [[ "$CMD" == "nvim" ]]; then
     NVIM_PATH="/etc/profiles/per-user/$USER/bin/nvim"
     HM_SESSION="$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
-    EXEC_CMD="[ -f $HM_SESSION ] && . $HM_SESSION; exec $NVIM_PATH \"$SELECTED\""
+    EXEC_CMD="[ -f $HM_SESSION ] && . $HM_SESSION; export FROM_LAUNCHER=1; exec $NVIM_PATH \"$SELECTED\""
     
     nohup alacritty -e zsh -c "$EXEC_CMD" >/dev/null 2>&1 &
 elif [[ "$CMD" == "skim" ]]; then

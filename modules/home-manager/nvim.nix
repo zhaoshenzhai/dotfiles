@@ -150,6 +150,13 @@
 
         extraConfigLua = ''
             vim.opt.shortmess:append("c")
+
+            if vim.env.FROM_LAUNCHER == "1" then
+                vim.cmd([[
+                    cnoreabbrev <expr> q getcmdtype() == ":" && getcmdline() == 'q' ? 'silent !aerospace close --quit-if-last-window' : 'q'
+                    cnoreabbrev <expr> wq getcmdtype() == ":" && getcmdline() == 'wq' ? 'w <bar> silent !aerospace close --quit-if-last-window' : 'wq'
+                ]])
+            end
         '';
 
         extraConfigVim = ''
