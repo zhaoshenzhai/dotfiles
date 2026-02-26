@@ -307,6 +307,11 @@
                 pattern = [ "*.tex" ];
                 command = "setlocal foldmethod=expr foldexpr=TexFold(v:lnum) foldlevel=0";
             }
+            {
+                event = [ "InsertLeave" "TextChanged" ];
+                pattern = [ "*.tex" ];
+                command = "let &l:foldexpr = &l:foldexpr";
+            }
         ];
 
         withPython3 = true;
