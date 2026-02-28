@@ -17,14 +17,15 @@
             set ignorecase
             set statusline=" "
 
+            set viewcolumns=-{name}..,6{size},12{mtime}
+            set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,phistory,fhistory,dirstack,registers,bookmarks,tabs
+
             mark h ~/ iCloud
             mark n ~/iCloud/Dotfiles modules
             mark d ~/iCloud/Documents
             mark p ~/iCloud/Projects _cv
             mark w ~/iCloud/Projects/_web index.html
             mark u ~/iCloud/University/Courses MATH565_Functional_Analysis_AUDIT
-
-            set viewcolumns=-{name}..,6{size},12{mtime}
 
             map f '
             nnoremap l :file<cr><cr>
