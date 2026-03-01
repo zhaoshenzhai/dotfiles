@@ -8,6 +8,66 @@
                     selected = true;
                     complex_modifications = {
                         rules = [
+                            { # Spotlight
+                                description = "Spotlight";
+                                manipulators = [
+                                    { # cmd+shift+enter when spotlight is off -> turn on
+                                        type = "basic";
+                                        from = { key_code = "return_or_enter"; modifiers = { mandatory = [ "command" "shift" ]; }; };
+                                        conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
+                                        ];
+                                        to = [
+                                            { key_code = "return_or_enter"; modifiers = [ "command" "shift" ]; }
+                                            { set_variable = { name = "spotlight_mode"; value = 1; }; }
+                                        ];
+                                    }
+                                    { # cmd+shift+enter when spotlight is on -> turn off
+                                        type = "basic";
+                                        from = { key_code = "return_or_enter"; modifiers = { mandatory = [ "command" "shift" ]; }; };
+                                        conditions = [
+                                            { type = "variable_if"; name = "spotlight_mode"; value = 1; }
+                                        ];
+                                        to = [
+                                            { key_code = "return_or_enter"; modifiers = [ "command" "shift" ]; }
+                                            { set_variable = { name = "spotlight_mode"; value = 0; }; }
+                                        ];
+                                    }
+                                    { # return when spotlight is on -> turn off
+                                        type = "basic";
+                                        from = { key_code = "return_or_enter"; };
+                                        conditions = [
+                                            { type = "variable_if"; name = "spotlight_mode"; value = 1; }
+                                        ];
+                                        to = [
+                                            { key_code = "return_or_enter"; }
+                                            { set_variable = { name = "spotlight_mode"; value = 0; }; }
+                                        ];
+                                    }
+                                    { # escape when spotlight is on -> turn off
+                                        type = "basic";
+                                        from = { key_code = "escape"; };
+                                        conditions = [
+                                            { type = "variable_if"; name = "spotlight_mode"; value = 1; }
+                                        ];
+                                        to = [
+                                            { key_code = "escape"; }
+                                            { set_variable = { name = "spotlight_mode"; value = 0; }; }
+                                        ];
+                                    }
+                                    { # caps lock when spotlight is on -> turn off
+                                        type = "basic";
+                                        from = { key_code = "caps_lock"; };
+                                        conditions = [
+                                            { type = "variable_if"; name = "spotlight_mode"; value = 1; }
+                                        ];
+                                        to = [
+                                            { key_code = "escape"; }
+                                            { set_variable = { name = "spotlight_mode"; value = 0; }; }
+                                        ];
+                                    }
+                                ];
+                            }
                             { # Skim
                                 description = "Skim";
                                 manipulators = [
@@ -15,6 +75,7 @@
                                         type = "basic";
                                         from = { key_code = "g"; };
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             { type = "variable_if"; name = "skim_g_pressed"; value = 1; }
                                             {
@@ -31,6 +92,7 @@
                                         type = "basic";
                                         from = { key_code = "g"; };
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
@@ -48,6 +110,7 @@
                                         from = { key_code = "g"; modifiers = { mandatory = [ "shift" ]; }; };
                                         to = [ { key_code = "down_arrow"; modifiers = [ "command" ]; } ];
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
@@ -60,6 +123,7 @@
                                         from = { key_code = "j"; };
                                         to = { key_code = "down_arrow"; };
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
@@ -72,6 +136,7 @@
                                         from = { key_code = "k"; };
                                         to = { key_code = "up_arrow"; };
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
@@ -84,6 +149,7 @@
                                         from = { key_code = "j"; modifiers = { mandatory = [ "control" ]; }; };
                                         to = [ { mouse_key = { vertical_wheel = 500; }; } ];
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
@@ -96,6 +162,7 @@
                                         from = { key_code = "k"; modifiers = { mandatory = [ "control" ]; }; };
                                         to = [ { mouse_key = { vertical_wheel = -500; }; } ];
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
@@ -108,6 +175,7 @@
                                         from = { key_code = "j"; modifiers = { mandatory = [ "shift" ]; }; };
                                         to = [ { key_code = "down_arrow"; modifiers = [ "option" ]; } ];
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
@@ -120,6 +188,7 @@
                                         from = { key_code = "k"; modifiers = { mandatory = [ "shift" ]; }; };
                                         to = [ { key_code = "up_arrow"; modifiers = [ "option" ]; } ];
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
@@ -135,6 +204,7 @@
                                             { set_variable = { name = "skim_search_mode"; value = 1; }; }
                                         ];
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
@@ -151,6 +221,7 @@
                                             { set_variable = { name = "skim_search_mode"; value = 0; }; }
                                         ];
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 1; }
                                             {
                                                 type = "frontmost_application_if";
@@ -167,6 +238,7 @@
                                             { key_code = "a"; modifiers = [ "command" "shift" ]; }
                                         ];
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             {
                                                 type = "frontmost_application_if";
                                                 bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
@@ -182,6 +254,7 @@
                                             { key_code = "a"; modifiers = [ "command" "shift" ]; }
                                         ];
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             {
                                                 type = "frontmost_application_if";
                                                 bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
@@ -193,6 +266,7 @@
                                         from = { key_code = "n"; modifiers = { mandatory = [ ]; }; };
                                         to = [ { key_code = "g"; modifiers = [ "command" "option" ]; } ];
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
@@ -205,6 +279,7 @@
                                         from = { key_code = "n"; modifiers = { mandatory = [ "shift" ]; }; };
                                         to = [ { key_code = "h"; modifiers = [ "command" "option" ]; } ];
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
@@ -231,6 +306,7 @@
                                             }
                                         ];
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
@@ -246,6 +322,7 @@
                                             { set_variable = { name = "skim_fit_to_height"; value = 0; }; }
                                         ];
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
@@ -263,6 +340,7 @@
                                             { set_variable = { name = "skim_fit_to_height"; value = 1; }; }
                                         ];
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             { type = "variable_if"; name = "skim_fit_to_height"; value = 0; }
                                             { type = "variable_if"; name = "skim_double_page_mode"; value = 1; }
@@ -282,6 +360,7 @@
                                             { set_variable = { name = "skim_fit_to_height"; value = 1; }; }
                                         ];
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             { type = "variable_if"; name = "skim_fit_to_height"; value = 0; }
                                             { type = "variable_if"; name = "skim_double_page_mode"; value = 0; }
@@ -299,6 +378,7 @@
                                             { set_variable = { name = "skim_double_page_mode"; value = 1; }; }
                                         ];
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             { type = "variable_unless"; name = "skim_double_page_mode"; value = 1; }
                                             {
@@ -315,6 +395,7 @@
                                             { set_variable = { name = "skim_double_page_mode"; value = 0; }; }
                                         ];
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             { type = "variable_if"; name = "skim_double_page_mode"; value = 1; }
                                             {
@@ -331,6 +412,7 @@
                                             { set_variable = { name = "skim_fit_to_height"; value = 0; }; }
                                             ];
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
@@ -346,6 +428,7 @@
                                             { set_variable = { name = "skim_fit_to_height"; value = 0; }; }
                                         ];
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
@@ -361,6 +444,7 @@
                                             { set_variable = { name = "skim_fit_to_height"; value = 0; }; }
                                         ];
                                         conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
@@ -370,25 +454,20 @@
                                     }
                                 ];
                             }
-                            { # option <-> ctrl
-                                description = "Swap Left Option and Left Control";
+                            { # Default
+                                description = "Default";
                                 manipulators = [
-                                    {
+                                    { # option -> ctrl
                                         type = "basic";
                                         from = { key_code = "left_option"; };
                                         to = [ { key_code = "left_control"; } ];
                                     }
-                                    {
+                                    { # ctrl -> option
                                         type = "basic";
                                         from = { key_code = "left_control"; };
                                         to = [ { key_code = "left_option"; } ];
                                     }
-                                ];
-                            }
-                            { # caps lock -> esc
-                                description = "Change caps_lock to escape";
-                                manipulators = [
-                                    {
+                                    { # caps lock -> esc
                                         type = "basic";
                                         from = { key_code = "caps_lock"; };
                                         to = [ { key_code = "escape"; } ];
