@@ -79,14 +79,14 @@
 
                 settings = {
                     mapping = {
-                        "<C-j>" = "cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select })";
-                        "<C-k>" = "cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select })";
+                        "<C-j>" = "cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert })";
+                        "<C-k>" = "cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert })";
                         "<C-l>" = "cmp.mapping.confirm({ select = true })";
                         "<C-Space>" = "cmp.mapping.complete()";
                     };
 
                     sources = [
-                        { name = "ultisnips"; }
+                        # { name = "ultisnips"; }
                         { name = "omni"; }
                         { name = "buffer"; }
                         { name = "path"; }
