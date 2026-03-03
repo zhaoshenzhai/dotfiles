@@ -50,18 +50,21 @@ void push_load(unsigned long long start_total, unsigned long long start_used,
 int main() {
     unsigned long long t0_total, t0_used;
     unsigned long long t05_total, t05_used;
-    unsigned long long t20_total, t20_used;
-    unsigned long long t25_total, t25_used;
+    unsigned long long t10_total, t10_used;
+    unsigned long long t15_total, t15_used;
 
     get_cpu_ticks(&t0_total, &t0_used);
-    usleep(500000); 
+    usleep(500000);
+    
     get_cpu_ticks(&t05_total, &t05_used);
-    usleep(1500000); 
-    get_cpu_ticks(&t20_total, &t20_used);
-    push_load(t0_total, t0_used, t20_total, t20_used);
-    usleep(500000); 
-    get_cpu_ticks(&t25_total, &t25_used);
-    push_load(t05_total, t05_used, t25_total, t25_used);
+    usleep(500000);
+    
+    get_cpu_ticks(&t10_total, &t10_used);
+    push_load(t0_total, t0_used, t10_total, t10_used);
+    
+    usleep(500000);
+    get_cpu_ticks(&t15_total, &t15_used);
+    push_load(t05_total, t05_used, t15_total, t15_used);
 
     return 0;
 }
