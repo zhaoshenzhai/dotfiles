@@ -1,7 +1,5 @@
 #include "sketchybar.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include "sketchybar.h"
+#include "colors.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -31,14 +29,14 @@ void push_load(unsigned long long start_total, unsigned long long start_used,
     char* color_fill;
 
     if (load > 0.4f) {
-        color = "0xffe06c75";      // RED
-        color_fill = "0x55e06c75"; // RED_
+        color = RED;
+        color_fill = RED_;
     } else if (load > 0.1f) {
-        color = "0xfff5a97f";      // ORANGE
-        color_fill = "0x55f5a97f"; // ORANGE_
+        color = ORANGE;
+        color_fill = ORANGE_;
     } else {
-        color = "0xffabb2bf";      // WHITE
-        color_fill = "0x55abb2bf"; // WHITE_
+        color = WHITE;
+        color_fill = WHITE_;
     }
 
     char command[512];

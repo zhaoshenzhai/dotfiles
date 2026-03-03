@@ -1,5 +1,6 @@
 #include "sketchybar.h"
 #include "icon_map.h"
+#include "colors.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,12 +9,6 @@
 
 #define MAX_WORKSPACES 20
 #define MAX_ICON_STRIP 1024
-
-#define BAR_COLOR         "0xaa1e2127"
-#define BORDER_COLOR      "0xff444444"
-#define ICON_COLOR        "0xffabb2bf"
-#define LABEL_COLOR       "0xffabb2bf"
-#define TRANSPARENT       "0x00000000"
 
 struct workspace {
     char name[32];
