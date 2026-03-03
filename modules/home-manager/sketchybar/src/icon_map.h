@@ -11,6 +11,7 @@ static inline const char* get_icon_for_app(const char* app) {
     if (strstr(app, "Karabiner")     != NULL) return ":karabiner_elements:";
     if (strcmp(app, "alacritty")        == 0) return ":terminal:";
     if (strcmp(app, "zoom.us")          == 0) return ":zoom:";
+    if (strcmp(app, "Skim")             == 0) return ":book:";
     if (strcmp(app, "mpv")              == 0) return ":mpv:";
 
     // macOS
@@ -24,6 +25,7 @@ static inline const char* get_icon_for_app(const char* app) {
     if (strcmp(app, "Passwords")        == 0) return ":passwords:";
     if (strcmp(app, "Calendar")         == 0) return ":calendar:";
     if (strcmp(app, "Messages")         == 0) return ":messages:";
+    if (strcmp(app, "Preview")          == 0) return ":book:";
     if (strcmp(app, "Weather")          == 0) return ":weather:";
     if (strcmp(app, "Find My")          == 0) return ":find_my:";
     if (strcmp(app, "Safari")           == 0) return ":safari:";

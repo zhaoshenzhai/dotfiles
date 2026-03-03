@@ -22,4 +22,3 @@ sketchybar --add item aerospace_listener left                                   
                                     updates="on"                                        \
                                     script="aerospace_plugin"                           \
            --subscribe aerospace_listener aerospace_workspace_change front_app_switched
-                                    # script="$HOME/.config/sketchybar/plugins/aerospace.sh" \
