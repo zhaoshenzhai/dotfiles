@@ -86,6 +86,7 @@
                                         to = [
                                             { key_code = "up_arrow"; modifiers = [ "command" ]; }
                                             { set_variable = { name = "skim_g_pressed"; value = 0; }; }
+                                            { set_variable = { name = "skim_search_sequence"; value = 0; }; }
                                         ];
                                     }
                                     {
@@ -108,7 +109,10 @@
                                     { # G -> bottom
                                         type = "basic";
                                         from = { key_code = "g"; modifiers = { mandatory = [ "shift" ]; }; };
-                                        to = [ { key_code = "down_arrow"; modifiers = [ "command" ]; } ];
+                                        to = [
+                                            { key_code = "down_arrow"; modifiers = [ "command" ]; }
+                                            { set_variable = { name = "skim_search_sequence"; value = 0; }; }
+                                        ];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
@@ -121,7 +125,10 @@
                                     { # j -> down
                                         type = "basic";
                                         from = { key_code = "j"; };
-                                        to = { key_code = "down_arrow"; };
+                                        to = [ { key_code = "down_arrow"; } ];
+                                        to_after_key_up = [
+                                            { set_variable = { name = "skim_search_sequence"; value = 0; }; }
+                                        ];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
@@ -134,7 +141,10 @@
                                     { # k -> up
                                         type = "basic";
                                         from = { key_code = "k"; };
-                                        to = { key_code = "up_arrow"; };
+                                        to = [ { key_code = "up_arrow"; } ];
+                                        to_after_key_up = [
+                                            { set_variable = { name = "skim_search_sequence"; value = 0; }; }
+                                        ];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
@@ -148,6 +158,9 @@
                                         type = "basic";
                                         from = { key_code = "j"; modifiers = { mandatory = [ "control" ]; }; };
                                         to = [ { mouse_key = { vertical_wheel = 500; }; } ];
+                                        to_after_key_up = [
+                                            { set_variable = { name = "skim_search_sequence"; value = 0; }; }
+                                        ];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
@@ -161,6 +174,9 @@
                                         type = "basic";
                                         from = { key_code = "k"; modifiers = { mandatory = [ "control" ]; }; };
                                         to = [ { mouse_key = { vertical_wheel = -500; }; } ];
+                                        to_after_key_up = [
+                                            { set_variable = { name = "skim_search_sequence"; value = 0; }; }
+                                        ];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
@@ -174,6 +190,9 @@
                                         type = "basic";
                                         from = { key_code = "j"; modifiers = { mandatory = [ "shift" ]; }; };
                                         to = [ { key_code = "down_arrow"; modifiers = [ "option" ]; } ];
+                                        to_after_key_up = [
+                                            { set_variable = { name = "skim_search_sequence"; value = 0; }; }
+                                        ];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
@@ -187,6 +206,9 @@
                                         type = "basic";
                                         from = { key_code = "k"; modifiers = { mandatory = [ "shift" ]; }; };
                                         to = [ { key_code = "up_arrow"; modifiers = [ "option" ]; } ];
+                                        to_after_key_up = [
+                                            { set_variable = { name = "skim_search_sequence"; value = 0; }; }
+                                        ];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
@@ -200,8 +222,26 @@
                                         type = "basic";
                                         from = { key_code = "slash"; };
                                         to = [
-                                            { key_code = "f"; modifiers = [ "command" "option" ]; }
+                                            {
+                                                shell_command = ''
+                                                    osascript <<'EOF'
+                                                    tell application "Skim"
+                                                        try
+                                                            tell front document
+                                                                set selection to {character 1 of text of current page}
+                                                            end tell
+                                                        end try
+                                                    end tell
+                                                    tell application "System Events"
+                                                        tell process "Skim"
+                                                            keystroke "f" using {command down, option down}
+                                                        end tell
+                                                    end tell
+                                                    EOF
+                                                '';
+                                            }
                                             { set_variable = { name = "skim_search_mode"; value = 1; }; }
+                                            { set_variable = { name = "skim_search_sequence"; value = 0; }; }
                                         ];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
@@ -219,6 +259,7 @@
                                             { key_code = "return_or_enter"; }
                                             { key_code = "escape"; }
                                             { set_variable = { name = "skim_search_mode"; value = 0; }; }
+                                            { set_variable = { name = "skim_search_sequence"; value = 0; }; }
                                         ];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
@@ -236,6 +277,7 @@
                                             { key_code = "escape"; }
                                             { set_variable = { name = "skim_search_mode"; value = 0; }; }
                                             { key_code = "a"; modifiers = [ "command" "shift" ]; }
+                                            { set_variable = { name = "skim_search_sequence"; value = 0; }; }
                                         ];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
@@ -252,6 +294,7 @@
                                             { key_code = "escape"; }
                                             { set_variable = { name = "skim_search_mode"; value = 0; }; }
                                             { key_code = "a"; modifiers = [ "command" "shift" ]; }
+                                            { set_variable = { name = "skim_search_sequence"; value = 0; }; }
                                         ];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
@@ -264,10 +307,47 @@
                                     { # n -> next occurrence
                                         type = "basic";
                                         from = { key_code = "n"; modifiers = { mandatory = [ ]; }; };
-                                        to = [ { key_code = "g"; modifiers = [ "command" "option" ]; } ];
+                                        to = [
+                                            {
+                                                shell_command = ''
+                                                    osascript <<'EOF'
+                                                    tell application "Skim"
+                                                        try
+                                                            tell front document
+                                                                set selection to {character 1 of text of current page}
+                                                            end tell
+                                                        end try
+                                                    end tell
+                                                    tell application "System Events"
+                                                        tell process "Skim"
+                                                            keystroke "g" using {command down, option down}
+                                                        end tell
+                                                    end tell
+                                                    EOF
+                                                '';
+                                            }
+                                            { set_variable = { name = "skim_search_sequence"; value = 1; }; }
+                                        ];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
+                                            { type = "variable_unless"; name = "skim_search_sequence"; value = 1; }
+                                            {
+                                                type = "frontmost_application_if";
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                            }
+                                        ];
+                                    }
+                                    {
+                                        type = "basic";
+                                        from = { key_code = "n"; modifiers = { mandatory = [ ]; }; };
+                                        to = [
+                                            { key_code = "g"; modifiers = [ "command" "option" ]; }
+                                        ];
+                                        conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
+                                            { type = "variable_if"; name = "skim_search_mode"; value = 0; }
+                                            { type = "variable_if"; name = "skim_search_sequence"; value = 1; }
                                             {
                                                 type = "frontmost_application_if";
                                                 bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
@@ -277,10 +357,47 @@
                                     { # N -> previous occurrence
                                         type = "basic";
                                         from = { key_code = "n"; modifiers = { mandatory = [ "shift" ]; }; };
-                                        to = [ { key_code = "h"; modifiers = [ "command" "option" ]; } ];
+                                        to = [
+                                            {
+                                                shell_command = ''
+                                                    osascript <<'EOF'
+                                                    tell application "Skim"
+                                                        try
+                                                            tell front document
+                                                                set selection to {character 1 of text of current page}
+                                                            end tell
+                                                        end try
+                                                    end tell
+                                                    tell application "System Events"
+                                                        tell process "Skim"
+                                                            keystroke "h" using {command down, option down}
+                                                        end tell
+                                                    end tell
+                                                    EOF
+                                                '';
+                                            }
+                                            { set_variable = { name = "skim_search_sequence"; value = 1; }; }
+                                        ];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
+                                            { type = "variable_unless"; name = "skim_search_sequence"; value = 1; }
+                                            {
+                                                type = "frontmost_application_if";
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                            }
+                                        ];
+                                    }
+                                    {
+                                        type = "basic";
+                                        from = { key_code = "n"; modifiers = { mandatory = [ "shift" ]; }; };
+                                        to = [
+                                            { key_code = "h"; modifiers = [ "command" "option" ]; }
+                                        ];
+                                        conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
+                                            { type = "variable_if"; name = "skim_search_mode"; value = 0; }
+                                            { type = "variable_if"; name = "skim_search_sequence"; value = 1; }
                                             {
                                                 type = "frontmost_application_if";
                                                 bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
@@ -454,8 +571,8 @@
                                     }
                                 ];
                             }
-                            { # Default
-                                description = "Default";
+                            { # System
+                                description = "System";
                                 manipulators = [
                                     { # option -> ctrl
                                         type = "basic";
