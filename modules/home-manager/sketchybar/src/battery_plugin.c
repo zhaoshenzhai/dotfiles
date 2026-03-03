@@ -30,18 +30,18 @@ int main(int argc, char** argv) {
 
     if (percentage != -1) {
         char* icon = "􀛩";
-        char* color = "0xffe06c75"; // RED
+        char* color = "0xffe06c75";                                          // RED
 
         if (charging) {
             if (percentage == 100) {
                 icon = "􀛨";
-                color = "0xffabb2bf"; // WHITE
+                color = "0xffabb2bf";                                        // WHITE
             } else {
                 icon = "􀢋";
-                color = "0xff98c379"; // GREEN
+                color = "0xff98c379";                                        // GREEN
             }
         } else {
-            if (percentage >= 90) { icon = "􀛨"; color = "0xffd19a66"; } // YELLOW
+            if (percentage >= 90) { icon = "􀛨"; color = "0xffd19a66"; }      // YELLOW
             else if (percentage >= 60) { icon = "􀺸"; color = "0xffd19a66"; } // YELLOW
             else if (percentage >= 30) { icon = "􀺶"; color = "0xfff5a97f"; } // ORANGE
         }

@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
 
     char update_message[512];
     snprintf(update_message, sizeof(update_message), "--animate tanh 8 --set %s label=\"%s\"", name, buffer);
-    
+
     sketchybar(update_message);
     return 0;
 }

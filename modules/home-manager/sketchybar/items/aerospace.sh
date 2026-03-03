@@ -17,8 +17,9 @@ for sid in $ORDERED_WS; do
     fi
 done
 
-sketchybar --add item aerospace_listener left                                              \
-           --set aerospace_listener drawing="off"                                          \
-                                    updates="on"                                           \
-                                    script="$HOME/.config/sketchybar/plugins/aerospace.sh" \
+sketchybar --add item aerospace_listener left                                           \
+           --set aerospace_listener drawing="off"                                       \
+                                    updates="on"                                        \
+                                    script="aerospace_plugin"                           \
            --subscribe aerospace_listener aerospace_workspace_change front_app_switched
+                                    # script="$HOME/.config/sketchybar/plugins/aerospace.sh" \
