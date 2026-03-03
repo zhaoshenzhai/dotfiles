@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 source "$HOME/.config/sketchybar/colors.sh"
-
 ITEM_DIR="$HOME/.config/sketchybar/items"
 PLUGIN_DIR="$HOME/.config/sketchybar/plugins"
 
