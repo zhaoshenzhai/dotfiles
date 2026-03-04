@@ -22,21 +22,22 @@ int main(int argc, char** argv) {
     char focused_ws[32] = "";
     bool has_focused_env = (focused_env && strlen(focused_env) > 0);
 
-    if (has_focused_env) { strncpy(focused_ws, focused_env, 31); }
-
-    FILE *fp_focused = NULL;
-    if (!has_focused_env) { fp_focused = popen("aerospace list-workspaces --focused 2>/dev/null", "r"); }
-    FILE *fp_ws = popen("aerospace list-workspaces --all 2>/dev/null", "r");
-    FILE *fp_win = popen("aerospace list-windows --all --format \"%{workspace}|%{app-name}\" 2>/dev/null", "r");
-
-    if (fp_focused) {
-        if (fgets(focused_ws, sizeof(focused_ws), fp_focused)) { focused_ws[strcspn(focused_ws, "\r\n")] = 0; }
-        pclose(fp_focused);
+    if (has_focused_env) {
+        strncpy(focused_ws, focused_env, 31);
+    } else {
+        FILE *fp_focused = popen("aerospace list-workspaces --focused 2>/dev/null", "r");
+        if (fp_focused) {
+            if (fgets(focused_ws, sizeof(focused_ws), fp_focused)) {
+                focused_ws[strcspn(focused_ws, "\r\n")] = 0;
+            }
+            pclose(fp_focused);
+        }
     }
 
     struct workspace ws_list[MAX_WORKSPACES];
     int ws_count = 0;
 
+    FILE *fp_ws = popen("aerospace list-workspaces --all 2>/dev/null", "r");
     if (fp_ws) {
         char line[32];
         while (fgets(line, sizeof(line), fp_ws) && ws_count < MAX_WORKSPACES) {
@@ -51,6 +52,7 @@ int main(int argc, char** argv) {
         pclose(fp_ws);
     }
 
+    FILE *fp_win = popen("aerospace list-windows --all --format \"%{workspace}|%{app-name}\" 2>/dev/null", "r");
     if (fp_win) {
         char line[1024];
         while (fgets(line, sizeof(line), fp_win)) {
