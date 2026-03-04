@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-sketchybar --add item disk right            \
-           --set disk  icon=􀤂               \
-                       update_freq=60       \
-                       script="disk_plugin"
+killall disk_plugin 2>/dev/null
+sketchybar --add item disk right --set disk icon=􀤂
+disk_plugin disk &
