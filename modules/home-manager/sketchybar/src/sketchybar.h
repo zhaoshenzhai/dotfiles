@@ -205,7 +205,7 @@ static inline bool mach_server_begin(struct mach_server* mach_server, mach_handl
   struct mach_buffer buffer;
   while (mach_server->is_running) {
     mach_receive_message(mach_server->port, &buffer, true);
-    if (getppid() == 1) exit(0);
+    // if (getppid() == 1) exit(0);
     if (!buffer.message.descriptor.address) continue;
     if (*(char*)buffer.message.descriptor.address == 'k'
         && buffer.message.descriptor.size == 2) {
