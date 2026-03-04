@@ -20,21 +20,23 @@ struct workspace {
 int main(int argc, char** argv) {
     char* focused_env = getenv("FOCUSED_WORKSPACE");
     char focused_ws[32] = "";
-    if (focused_env && strlen(focused_env) > 0) {
-        strncpy(focused_ws, focused_env, 31);
-    } else {
-        FILE *fp = popen("aerospace list-workspaces --focused 2>/dev/null", "r");
-        if (fp) {
-            if (fgets(focused_ws, sizeof(focused_ws), fp)) {
-                focused_ws[strcspn(focused_ws, "\r\n")] = 0;
-            }
-            pclose(fp);
-        }
+    bool has_focused_env = (focused_env && strlen(focused_env) > 0);
+
+    if (has_focused_env) { strncpy(focused_ws, focused_env, 31); }
+
+    FILE *fp_focused = NULL;
+    if (!has_focused_env) { fp_focused = popen("aerospace list-workspaces --focused 2>/dev/null", "r"); }
+    FILE *fp_ws = popen("aerospace list-workspaces --all 2>/dev/null", "r");
+    FILE *fp_win = popen("aerospace list-windows --all --format \"%{workspace}|%{app-name}\" 2>/dev/null", "r");
+
+    if (fp_focused) {
+        if (fgets(focused_ws, sizeof(focused_ws), fp_focused)) { focused_ws[strcspn(focused_ws, "\r\n")] = 0; }
+        pclose(fp_focused);
     }
 
     struct workspace ws_list[MAX_WORKSPACES];
     int ws_count = 0;
-    FILE *fp_ws = popen("aerospace list-workspaces --all 2>/dev/null", "r");
+
     if (fp_ws) {
         char line[32];
         while (fgets(line, sizeof(line), fp_ws) && ws_count < MAX_WORKSPACES) {
@@ -49,7 +51,6 @@ int main(int argc, char** argv) {
         pclose(fp_ws);
     }
 
-    FILE *fp_win = popen("aerospace list-windows --all --format \"%{workspace}|%{app-name}\" 2>/dev/null", "r");
     if (fp_win) {
         char line[1024];
         while (fgets(line, sizeof(line), fp_win)) {
@@ -74,7 +75,9 @@ int main(int argc, char** argv) {
         pclose(fp_win);
     }
 
-    char full_cmd[16384] = ""; 
+    char full_cmd[16384] = "";
+    int offset = 0;
+
     for (int i = 0; i < ws_count; i++) {
         bool is_numeric = (strlen(ws_list[i].name) == 1 && isdigit(ws_list[i].name[0]));
         int i_pl = 0, i_pr = 0, l_pl = 0, l_pr = 0, bg_p = 0;
@@ -98,17 +101,15 @@ int main(int argc, char** argv) {
             }
         }
 
-        char item_args[1024];
-        snprintf(item_args, sizeof(item_args),
-                 "--animate tanh 8 --set space.%s background.color=%s background.border_color=%s "
+        int written = snprintf(full_cmd + offset, sizeof(full_cmd) - offset,
+                 "%s--animate tanh 8 --set space.%s background.color=%s background.border_color=%s "
                  "background.padding_left=%d background.padding_right=%d icon=\"%s\" icon.color=%s "
                  "icon.padding_left=%d icon.padding_right=%d label.color=%s label.padding_left=%d "
                  "label.padding_right=%d",
-                 ws_list[i].name, bg_c, br_c, bg_p, bg_p, ws_list[i].icons, ic_c, 
+                 (i > 0) ? " " : "", ws_list[i].name, bg_c, br_c, bg_p, bg_p, ws_list[i].icons, ic_c,
                  i_pl, i_pr, la_c, l_pl, l_pr);
-        
-        if (i > 0) strcat(full_cmd, " ");
-        strcat(full_cmd, item_args);
+
+        if (written > 0 && written < sizeof(full_cmd) - offset) { offset += written; }
     }
 
     if (strlen(full_cmd) > 0) { sketchybar(full_cmd); }
