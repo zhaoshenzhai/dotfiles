@@ -11,14 +11,14 @@ void get_cpu_ticks(unsigned long long* total, unsigned long long* used) {
     host_cpu_load_info_data_t cpu_load;
     mach_msg_type_number_t count = HOST_CPU_LOAD_INFO_COUNT;
     kern_return_t kr = host_statistics(mach_host_self(), HOST_CPU_LOAD_INFO, (host_info_t)&cpu_load, &count);
-    
+
     if (kr != KERN_SUCCESS) { *total = 0; *used = 0; return; }
 
     *used = cpu_load.cpu_ticks[CPU_STATE_USER] + cpu_load.cpu_ticks[CPU_STATE_SYSTEM] + cpu_load.cpu_ticks[CPU_STATE_NICE];
     *total = *used + cpu_load.cpu_ticks[CPU_STATE_IDLE];
 }
 
-void push_load(unsigned long long start_total, unsigned long long start_used, 
+void push_load(unsigned long long start_total, unsigned long long start_used,
                unsigned long long end_total, unsigned long long end_used) {
     float load = 0.0f;
     if (end_total > start_total) {
@@ -40,31 +40,34 @@ void push_load(unsigned long long start_total, unsigned long long start_used,
     }
 
     char command[512];
-    snprintf(command, sizeof(command), 
-             "--push cpu %f --set cpu graph.color=%s graph.fill_color=%s --set cpu.label icon.color=%s", 
+    snprintf(command, sizeof(command),
+             "--push cpu %f --set cpu graph.color=%s graph.fill_color=%s --set cpu.label icon.color=%s",
              load, color, color_fill, color);
-    
+
     sketchybar(command);
 }
 
 int main() {
-    unsigned long long t0_total, t0_used;
-    unsigned long long t05_total, t05_used;
-    unsigned long long t10_total, t10_used;
-    unsigned long long t15_total, t15_used;
+    unsigned long long t_minus_1_total, t_minus_1_used;
+    unsigned long long t_minus_05_total, t_minus_05_used;
 
-    get_cpu_ticks(&t0_total, &t0_used);
+    get_cpu_ticks(&t_minus_1_total, &t_minus_1_used);
     usleep(500000);
-    
-    get_cpu_ticks(&t05_total, &t05_used);
-    usleep(500000);
-    
-    get_cpu_ticks(&t10_total, &t10_used);
-    push_load(t0_total, t0_used, t10_total, t10_used);
-    
-    usleep(500000);
-    get_cpu_ticks(&t15_total, &t15_used);
-    push_load(t05_total, t05_used, t15_total, t15_used);
+    get_cpu_ticks(&t_minus_05_total, &t_minus_05_used);
+
+    while (1) {
+        usleep(500000);
+
+        unsigned long long curr_total, curr_used;
+        get_cpu_ticks(&curr_total, &curr_used);
+        push_load(t_minus_1_total, t_minus_1_used, curr_total, curr_used);
+
+        t_minus_1_total = t_minus_05_total;
+        t_minus_1_used  = t_minus_05_used;
+
+        t_minus_05_total = curr_total;
+        t_minus_05_used  = curr_used;
+    }
 
     return 0;
 }

@@ -2,9 +2,11 @@
 
 source "$HOME/.config/sketchybar/colors.sh"
 
+killall cpu_plugin 2>/dev/null
+cpu_plugin &
+
 sketchybar --add graph cpu right 50               \
-           --set cpu   update_freq=1              \
-                       y_offset=2                 \
+           --set cpu   y_offset=2                 \
                        graph.color=$WHITE         \
                        graph.fill_color=$WHITE_   \
                        graph.line_width=1         \
@@ -14,8 +16,7 @@ sketchybar --add graph cpu right 50               \
                        label.padding_right=7      \
                        background.y_offset=-2     \
                        background.padding_left=1  \
-                       background.padding_right=1 \
-                       script="cpu_plugin"
+                       background.padding_right=1
 
 sketchybar --add item cpu.label right                      \
            --set cpu.label icon=􀫥                          \
