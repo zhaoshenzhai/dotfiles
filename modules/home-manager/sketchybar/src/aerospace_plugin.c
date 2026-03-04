@@ -17,20 +17,22 @@ struct workspace {
     bool occupied;
 };
 
-int main(int argc, char** argv) {
-    char* focused_env = getenv("FOCUSED_WORKSPACE");
-    char focused_ws[32] = "";
-    bool has_focused_env = (focused_env && strlen(focused_env) > 0);
+void handler(env env) {
+    char* sender = env_get_value_for_key(env, "SENDER");
+    char* focused_env = env_get_value_for_key(env, "FOCUSED_WORKSPACE");
 
-    if (has_focused_env) {
+    if (sender[0] == '\0') return;
+
+    char focused_ws[32] = "";
+    if (focused_env && focused_env[0] != '\0') {
         strncpy(focused_ws, focused_env, 31);
     } else {
-        FILE *fp_focused = popen("aerospace list-workspaces --focused 2>/dev/null", "r");
-        if (fp_focused) {
-            if (fgets(focused_ws, sizeof(focused_ws), fp_focused)) {
+        FILE *fp = popen("aerospace list-workspaces --focused 2>/dev/null", "r");
+        if (fp) {
+            if (fgets(focused_ws, sizeof(focused_ws), fp)) {
                 focused_ws[strcspn(focused_ws, "\r\n")] = 0;
             }
-            pclose(fp_focused);
+            pclose(fp);
         }
     }
 
@@ -115,5 +117,9 @@ int main(int argc, char** argv) {
     }
 
     if (strlen(full_cmd) > 0) { sketchybar(full_cmd); }
+}
+
+int main(int argc, char** argv) {
+    event_server_begin(handler, "aerospace_plugin_mach");
     return 0;
 }

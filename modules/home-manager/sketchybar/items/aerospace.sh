@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+killall aerospace_plugin 2>/dev/null
+aerospace_plugin &
+sleep 0.2
+
 sketchybar --add event aerospace_workspace_change
 
 WS_LIST=$(aerospace list-workspaces --all)
@@ -20,5 +24,5 @@ done
 sketchybar --add item aerospace_listener left                                           \
            --set aerospace_listener drawing="off"                                       \
                                     updates="on"                                        \
-                                    script="aerospace_plugin"                           \
+                                    mach_helper="aerospace_plugin_mach"                 \
            --subscribe aerospace_listener aerospace_workspace_change front_app_switched
