@@ -23,42 +23,53 @@ void handler(env env) {
 
     if (sender[0] == '\0') return;
 
+    bool has_focused = (focused_env != NULL && focused_env[0] != '\0');
     char focused_ws[32] = "";
-    if (focused_env && focused_env[0] != '\0') {
+    if (has_focused) {
         strncpy(focused_ws, focused_env, 31);
-    } else {
-        FILE *fp = popen("aerospace list-workspaces --focused 2>/dev/null", "r");
-        if (fp) {
-            if (fgets(focused_ws, sizeof(focused_ws), fp)) {
-                focused_ws[strcspn(focused_ws, "\r\n")] = 0;
-            }
-            pclose(fp);
-        }
     }
+
+    char cmd[512];
+    if (has_focused) {
+        snprintf(cmd, sizeof(cmd),
+                 "aerospace list-workspaces --all 2>/dev/null && echo '===' && "
+                 "aerospace list-windows --all --format \"%%{workspace}|%%{app-name}\" 2>/dev/null");
+    } else {
+        snprintf(cmd, sizeof(cmd),
+                 "aerospace list-workspaces --focused 2>/dev/null && echo '===' && "
+                 "aerospace list-workspaces --all 2>/dev/null && echo '===' && "
+                 "aerospace list-windows --all --format \"%%{workspace}|%%{app-name}\" 2>/dev/null");
+    }
+
+    FILE *fp = popen(cmd, "r");
+    if (!fp) return;
+
+    char line[1024];
+    int stage = has_focused ? 1 : 0;
 
     struct workspace ws_list[MAX_WORKSPACES];
     int ws_count = 0;
 
-    FILE *fp_ws = popen("aerospace list-workspaces --all 2>/dev/null", "r");
-    if (fp_ws) {
-        char line[32];
-        while (fgets(line, sizeof(line), fp_ws) && ws_count < MAX_WORKSPACES) {
-            line[strcspn(line, "\r\n")] = 0;
-            if (strlen(line) == 0) continue;
+    while (fgets(line, sizeof(line), fp)) {
+        line[strcspn(line, "\r\n")] = 0;
+
+        if (strcmp(line, "===") == 0) {
+            stage++;
+            continue;
+        }
+
+        if (stage == 0) {
+            strncpy(focused_ws, line, 31);
+        }
+        else if (stage == 1) {
+            if (strlen(line) == 0 || ws_count >= MAX_WORKSPACES) continue;
             strncpy(ws_list[ws_count].name, line, 31);
             ws_list[ws_count].icons[0] = '\0';
             ws_list[ws_count].focused = (strcmp(line, focused_ws) == 0);
             ws_list[ws_count].occupied = false;
             ws_count++;
         }
-        pclose(fp_ws);
-    }
-
-    FILE *fp_win = popen("aerospace list-windows --all --format \"%{workspace}|%{app-name}\" 2>/dev/null", "r");
-    if (fp_win) {
-        char line[1024];
-        while (fgets(line, sizeof(line), fp_win)) {
-            line[strcspn(line, "\r\n")] = 0;
+        else if (stage == 2) {
             char *sep = strchr(line, '|');
             if (!sep) continue;
             *sep = '\0';
@@ -76,8 +87,8 @@ void handler(env env) {
                 }
             }
         }
-        pclose(fp_win);
     }
+    pclose(fp);
 
     char full_cmd[16384] = "";
     int offset = 0;
@@ -106,14 +117,16 @@ void handler(env env) {
         }
 
         int written = snprintf(full_cmd + offset, sizeof(full_cmd) - offset,
-                 "%s--animate tanh 8 --set space.%s background.color=%s background.border_color=%s "
+                 "%s--set space.%s background.color=%s background.border_color=%s "
                  "background.padding_left=%d background.padding_right=%d icon=\"%s\" icon.color=%s "
                  "icon.padding_left=%d icon.padding_right=%d label.color=%s label.padding_left=%d "
                  "label.padding_right=%d",
                  (i > 0) ? " " : "", ws_list[i].name, bg_c, br_c, bg_p, bg_p, ws_list[i].icons, ic_c,
                  i_pl, i_pr, la_c, l_pl, l_pr);
 
-        if (written > 0 && written < sizeof(full_cmd) - offset) { offset += written; }
+        if (written > 0 && written < sizeof(full_cmd) - offset) {
+            offset += written;
+        }
     }
 
     if (strlen(full_cmd) > 0) { sketchybar(full_cmd); }
