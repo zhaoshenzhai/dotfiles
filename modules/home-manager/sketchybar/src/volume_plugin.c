@@ -3,13 +3,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <CoreAudio/CoreAudio.h>
+#include <CoreFoundation/CoreFoundation.h>
 
 void handler(env env) {
     char* name = env_get_value_for_key(env, "NAME");
     char* sender = env_get_value_for_key(env, "SENDER");
     char* info = env_get_value_for_key(env, "INFO");
 
-    if (name[0] == '\0' || sender[0] == '\0' || strcmp(sender, "volume_change") != 0 || info[0] == '\0') return;
+    if (name[0] == '\0' || sender[0] == '\0' || info[0] == '\0') return;
+    if (strcmp(sender, "volume_change") != 0 && strcmp(sender, "routedsession_change") != 0) return;
 
     int volume = atoi(info);
     char* icon = "􀊣";
@@ -27,15 +29,21 @@ void handler(env env) {
     };
 
     if (AudioObjectGetPropertyData(kAudioObjectSystemObject, &propertyAddress, 0, NULL, &propertySize, &defaultDeviceID) == noErr) {
-        char deviceName[256] = {0};
+        CFStringRef deviceName = NULL;
         propertySize = sizeof(deviceName);
         propertyAddress.mSelector = kAudioObjectPropertyName;
 
-        if (AudioObjectGetPropertyData(defaultDeviceID, &propertyAddress, 0, NULL, &propertySize, deviceName) == noErr) {
-            if (strstr(deviceName, "Headphone") != NULL ||
-                strstr(deviceName, "headphone") != NULL ||
-                strstr(deviceName, "AirPods") != NULL) {
-                icon = "􀑈";
+        if (AudioObjectGetPropertyData(defaultDeviceID, &propertyAddress, 0, NULL, &propertySize, &deviceName) == noErr) {
+            char nameBuf[256];
+            if (CFStringGetCString(deviceName, nameBuf, sizeof(nameBuf), kCFStringEncodingUTF8)) {
+                if (strstr(nameBuf, "Headphone") != NULL ||
+                    strstr(nameBuf, "headphone") != NULL ||
+                    strstr(nameBuf, "AirPods") != NULL) {
+                    icon = "􀑈";
+                }
+            }
+            if (deviceName != NULL) {
+                CFRelease(deviceName);
             }
         }
     }

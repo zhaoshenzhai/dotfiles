@@ -49,7 +49,7 @@ let
             clang -std=c99 -O3 time_plugin.c -o time_plugin
             clang -std=c99 -O3 -framework CoreFoundation -framework IOKit battery_plugin.c -o battery_plugin
             clang -std=c99 -O3 disk_plugin.c -o disk_plugin
-            clang -std=c99 -O3 -framework CoreAudio volume_plugin.c -o volume_plugin
+            clang -std=c99 -O3 -framework CoreFoundation -framework CoreAudio volume_plugin.c -o volume_plugin
             clang -std=c99 -O3 cpu_plugin.c -o cpu_plugin
             clang -std=c99 -O3 openApp_plugin.c -o openApp_plugin
             clang -std=c99 -O3 aerospace_plugin.c -o aerospace_plugin
