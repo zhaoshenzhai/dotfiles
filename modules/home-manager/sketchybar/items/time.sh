@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-sketchybar --add item     calendar right       \
-           --set calendar icon=􀉉               \
-                          update_freq=1        \
-                          script="time_plugin"
+killall time_plugin 2>/dev/null
+
+sketchybar --add item calendar right --set calendar icon=􀉉
+time_plugin calendar &

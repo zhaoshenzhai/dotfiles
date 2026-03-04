@@ -2,22 +2,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
 
 int main(int argc, char** argv) {
-    char* name = getenv("NAME");
-    if (!name) name = "calendar";
+    char* name = (argc > 1) ? argv[1] : "calendar";
 
     time_t rawtime;
     struct tm * timeinfo;
     char buffer[80];
-
-    time(&rawtime);
-    timeinfo = localtime(&rawtime);
-    strftime(buffer, sizeof(buffer), "%a %d %b %H:%M:%S", timeinfo);
-
     char update_message[512];
-    snprintf(update_message, sizeof(update_message), "--animate tanh 8 --set %s label=\"%s\"", name, buffer);
 
-    sketchybar(update_message);
+    while (1) {
+        time(&rawtime);
+        timeinfo = localtime(&rawtime);
+        strftime(buffer, sizeof(buffer), "%a %d %b %H:%M:%S", timeinfo);
+
+        snprintf(update_message, sizeof(update_message), "--set %s label=\"%s\"", name, buffer);
+
+        sketchybar(update_message);
+        sleep(1);
+    }
+
     return 0;
 }
