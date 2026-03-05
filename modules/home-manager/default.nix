@@ -13,7 +13,6 @@
         # Ricing
         jankyborders
         sketchybar
-        neofetch
         btop
         jq
 
