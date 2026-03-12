@@ -188,6 +188,7 @@ in {
 
                 ";s" = "spawn open -a Safari {url}";
                 ";S" = "hint links spawn open -a Safari {hint-url}";
+                ";m" = "hint links spawn open -a IINA {hint-url}";
             };
             command = {
                 "<Ctrl+j>" = "completion-item-focus next";

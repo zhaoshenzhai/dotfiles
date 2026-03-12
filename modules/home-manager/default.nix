@@ -5,18 +5,18 @@
     home.sessionVariables = { EDITOR = "nvim"; };
 
     home.packages = with pkgs; [
-        # System
+        # system
         coreutils
         aerospace
         alacritty
 
-        # Ricing
+        # ricing
         jankyborders
         sketchybar
         btop
         jq
 
-        # Bluetooth
+        # bluetooth
         switchaudio-osx
         blueutil
 
@@ -27,6 +27,10 @@
         neovim-remote
         poppler-utils
 
+        # videos
+        iina
+        yt-dlp
+
         # COMP308
         dosbox-staging
     ];
@@ -36,6 +40,7 @@
         ./nvim.nix
         ./vifm.nix
         ./skim.nix
+        ./iina.nix
         ./borders.nix
         ./starship.nix
         ./launcher.nix
