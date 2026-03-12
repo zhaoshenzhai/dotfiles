@@ -10,6 +10,9 @@
     };
 
     xdg.configFile."iina/mpv.conf".text = ''
+        slang=en,eng,enUS,en-US
+        sub-visibility=yes
+        sub-auto=all
         sub-font="Courier Prime"
         sub-font-size=25
         sub-border-size=2
@@ -19,8 +22,7 @@
         osd-font="Courier Prime"
         osd-font-size=20
 
-        ytdl-format=bestvideo[height<=?1080]+bestaudio/best
-        ytdl-raw-options=cookies-from-browser="chromium:~/Library/Application Support/qutebrowser",force-ipv4=
+        ytdl-raw-options=write-auto-subs=
     '';
 
     xdg.configFile."iina/input.conf".text = ''

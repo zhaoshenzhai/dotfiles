@@ -30,6 +30,7 @@
         # videos
         iina
         yt-dlp
+        nodejs
 
         # COMP308
         dosbox-staging
