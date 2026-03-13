@@ -33,14 +33,17 @@
                     if [ "$FOCUSED_APP" != "$PREV_APP" ]; then
 
                         if [ "$ENABLED" -eq 1 ]; then
-                            if [ "$PREV_APP" == "net.sourceforge.skim-app.skim" ]; then
+                            if [ "$PREV_APP" == "Skim" ]; then
                                 ORIGINAL_COLOR=$(defaults read net.sourceforge.skim-app.skim SKInvertColorsInDarkMode 2>/dev/null || echo 0)
-                                if [ "$ORIGINAL_COLOR" != "1" ]; then
-                                    defaults write net.sourceforge.skim-app.skim SKInvertColorsInDarkMode -bool true
+
+                                if [ "$FOCUSED_APP" == "alacritty" ]; then
+                                    if [ "$ORIGINAL_COLOR" != "1" ]; then
+                                        defaults write net.sourceforge.skim-app.skim SKInvertColorsInDarkMode -bool true
+                                    fi
                                 fi
                             fi
 
-                            if [ "$FOCUSED_APP" == "net.sourceforge.skim-app.skim" ]; then
+                            if [ "$FOCUSED_APP" == "Skim" ]; then
                                 CURRENT=$(defaults read net.sourceforge.skim-app.skim SKInvertColorsInDarkMode 2>/dev/null || echo 0)
                                 if [ "$CURRENT" != "$ORIGINAL_COLOR" ]; then
                                     if [ "$ORIGINAL_COLOR" == "1" ]; then

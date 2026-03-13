@@ -7,7 +7,7 @@ after-startup-command = [
 
 on-focus-changed = [
     'move-mouse window-lazy-center',
-    'exec-and-forget /bin/bash -c "aerospace list-windows --focused --format %{app-bundle-id} 2>/dev/null > /tmp/skim_focus_pipe"'
+    'exec-and-forget /bin/bash -c "echo \"$(aerospace list-windows --focused --format %{app-name} 2>/dev/null)\" > /tmp/skim_focus_pipe"'
 ]
 
 exec-on-workspace-change = [ '/bin/bash', '-c',
