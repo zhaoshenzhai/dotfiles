@@ -1,9 +1,13 @@
 start-at-login = false
-after-startup-command = [ 'exec-and-forget borders', 'exec-and-forget sketchybar' ]
+after-startup-command = [
+    'exec-and-forget borders',
+    'exec-and-forget sketchybar',
+    'exec-and-forget /etc/profiles/per-user/zhao/bin/skim-focus-daemon'
+]
 
 on-focus-changed = [
     'move-mouse window-lazy-center',
-    'exec-and-forget /etc/profiles/per-user/zhao/bin/skim-focus-hook'
+    'exec-and-forget /bin/bash -c "aerospace list-windows --focused --format %{app-bundle-id} 2>/dev/null > /tmp/skim_focus_pipe"'
 ]
 
 exec-on-workspace-change = [ '/bin/bash', '-c',
@@ -120,10 +124,16 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
         'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
     ]
 
-    cmd-r       = 'flatten-workspace-tree'
-    cmd-f       = 'layout v_accordion v_tiles'
+    cmd-f       = 'layout v_accordion tiles'
     cmd-tab     = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next'
     cmd-shift-f = 'fullscreen --no-outer-gaps'
+    cmd-shift-r = 'exec-and-forget /bin/bash -c "echo TOGGLE_STATE > /tmp/skim_focus_pipe"'
+
+    cmd-r = [
+        'layout tiles',
+        'flatten-workspace-tree',
+        'exec-and-forget /bin/bash -c "echo DISABLE_STATE > /tmp/skim_focus_pipe"'
+    ]
 
     cmd-esc = 'close --quit-if-last-window'
     cmd-q = 'close --quit-if-last-window'

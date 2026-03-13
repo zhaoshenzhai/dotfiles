@@ -3,36 +3,59 @@
         ocamlPackages.cpdf
         pdftk
         poppler-utils
+        (writeShellScriptBin "skim-focus-daemon" ''
+            PIPE="/tmp/skim_focus_pipe"
+            rm -f "$PIPE"
+            mkfifo "$PIPE"
 
-        (writeShellScriptBin "skim-focus-hook" ''
-            FOCUSED_APP=$(aerospace list-windows --focused --format "%{app-bundle-id}" 2>/dev/null)
-            STATE_FILE="/tmp/skim_last_focused_app"
-            COLOR_STATE_FILE="/tmp/skim_original_color_state"
-            PREV_APP=$(cat "$STATE_FILE" 2>/dev/null || echo "")
+            ORIGINAL_COLOR="0"
+            PREV_APP=""
+            ENABLED=0
 
-            if [ "$FOCUSED_APP" != "$PREV_APP" ]; then
-                if [ "$PREV_APP" == "net.sourceforge.skim-app.skim" ]; then
-                    CURRENT=$(defaults read net.sourceforge.skim-app.skim SKInvertColorsInDarkMode 2>/dev/null || echo 0)
-                    echo "$CURRENT" > "$COLOR_STATE_FILE"
+            while true; do
+                if read -r PAYLOAD < "$PIPE"; then
+                    [ -z "$PAYLOAD" ] && continue
 
-                    if [ "$CURRENT" != "1" ]; then
-                        defaults write net.sourceforge.skim-app.skim SKInvertColorsInDarkMode -bool true
-                    fi
-                elif [ "$FOCUSED_APP" == "net.sourceforge.skim-app.skim" ]; then
-                    ORIGINAL=$(cat "$COLOR_STATE_FILE" 2>/dev/null || echo 0)
-                    CURRENT=$(defaults read net.sourceforge.skim-app.skim SKInvertColorsInDarkMode 2>/dev/null || echo 0)
-
-                    if [ "$CURRENT" != "$ORIGINAL" ]; then
-                        if [ "$ORIGINAL" == "1" ]; then
-                            defaults write net.sourceforge.skim-app.skim SKInvertColorsInDarkMode -bool true
+                    if [ "$PAYLOAD" == "TOGGLE_STATE" ]; then
+                        if [ "$ENABLED" -eq 1 ]; then
+                            ENABLED=0
                         else
-                            defaults write net.sourceforge.skim-app.skim SKInvertColorsInDarkMode -bool false
+                            ENABLED=1
                         fi
+                        continue
+                    elif [ "$PAYLOAD" == "DISABLE_STATE" ]; then
+                        ENABLED=0
+                        continue
+                    fi
+
+                    FOCUSED_APP="$PAYLOAD"
+
+                    if [ "$FOCUSED_APP" != "$PREV_APP" ]; then
+
+                        if [ "$ENABLED" -eq 1 ]; then
+                            if [ "$PREV_APP" == "net.sourceforge.skim-app.skim" ]; then
+                                ORIGINAL_COLOR=$(defaults read net.sourceforge.skim-app.skim SKInvertColorsInDarkMode 2>/dev/null || echo 0)
+                                if [ "$ORIGINAL_COLOR" != "1" ]; then
+                                    defaults write net.sourceforge.skim-app.skim SKInvertColorsInDarkMode -bool true
+                                fi
+                            fi
+
+                            if [ "$FOCUSED_APP" == "net.sourceforge.skim-app.skim" ]; then
+                                CURRENT=$(defaults read net.sourceforge.skim-app.skim SKInvertColorsInDarkMode 2>/dev/null || echo 0)
+                                if [ "$CURRENT" != "$ORIGINAL_COLOR" ]; then
+                                    if [ "$ORIGINAL_COLOR" == "1" ]; then
+                                        defaults write net.sourceforge.skim-app.skim SKInvertColorsInDarkMode -bool true
+                                    else
+                                        defaults write net.sourceforge.skim-app.skim SKInvertColorsInDarkMode -bool false
+                                    fi
+                                fi
+                            fi
+                        fi
+
+                        PREV_APP="$FOCUSED_APP"
                     fi
                 fi
-
-                echo "$FOCUSED_APP" > "$STATE_FILE"
-            fi
+            done
         '')
     ];
 
@@ -40,7 +63,6 @@
         SKUISetupPreferTabs = 1;
 
         SKWhitePoint = [0.99 0.995 1 0.95];
-
         SKTeXEditorPreset = "Custom";
         SKTeXEditorCommand = "${pkgs.neovim-remote}/bin/nvr";
         SKTeXEditorArguments = "--remote-silent +%line \"%file\"";
