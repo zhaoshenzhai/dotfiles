@@ -1,4 +1,5 @@
 { pkgs, ... }: {
+    home.packages = [ pkgs.jankyborders ];
     xdg.configFile."borders/bordersrc" = {
         executable = true;
         text = ''
