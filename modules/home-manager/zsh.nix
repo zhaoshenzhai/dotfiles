@@ -1,4 +1,9 @@
 { pkgs, ... }: {
+    home.packages = with pkgs; [
+        coreutils
+        btop
+    ];
+
     programs.zsh = {
         enable = true;
         enableCompletion = true;
@@ -7,7 +12,7 @@
 
         dotDir = "/Users/zhao/.config/zsh";
         history.path = "/Users/zhao/.config/zsh/.zsh_history";
-        
+
         shellAliases = {
             ls = "ls --color=auto -F";
             la = "ls -lhAr --color=auto -F";

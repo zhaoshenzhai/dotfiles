@@ -1,16 +1,16 @@
-{ pkgs, lib, ... }:
-    let
-        myPython = pkgs.python3.withPackages (ps: [ ps.pynvim ]);
-        snippetDir = ./nvim/UltiSnips;
-            snippetFiles = builtins.filter
-                (name: lib.hasSuffix ".snippets" name)
-                (builtins.attrNames (builtins.readDir snippetDir));
+{ pkgs, lib, ... }: let
+    myPython = pkgs.python3.withPackages (ps: [ ps.pynvim ]);
+    snippetDir = ./nvim/UltiSnips;
+        snippetFiles = builtins.filter
+            (name: lib.hasSuffix ".snippets" name)
+            (builtins.attrNames (builtins.readDir snippetDir));
 
-            snippetExtraFiles = lib.listToAttrs (map (name: {
-                name = "/UltiSnips/${name}";
-                value = { source = "${snippetDir}/${name}"; };
-            }) snippetFiles);
-    in {
+        snippetExtraFiles = lib.listToAttrs (map (name: {
+            name = "/UltiSnips/${name}";
+            value = { source = "${snippetDir}/${name}"; };
+        }) snippetFiles);
+in {
+    home.packages = [ pkgs.neovim-remote ];
     programs.nixvim = {
         enable = true;
         defaultEditor = true;

@@ -30,20 +30,7 @@ let
             "--choose-files" "$1" \
             "$lastdir"
     '';
-
-    iina-streamer = pkgs.writeShellScriptBin "iina-streamer" ''
-        URL="$1"
-
-        ${pkgs.yt-dlp}/bin/yt-dlp --cookies-from-browser safari \
-            --force-ipv4 \
-            --extractor-args "youtube:player_client=web_embedded,default" \
-            --mark-watched \
-            --get-url "$URL" > /dev/null 2>&1 &
-
-        /usr/bin/open -a IINA "$URL"
-    '';
 in {
-    home.packages = [ iina-streamer ];
     programs.qutebrowser = {
         enable = true;
         loadAutoconfig = false;
@@ -201,8 +188,7 @@ in {
 
                 ";s" = "spawn open -a Safari {url}";
                 ";S" = "hint links spawn open -a Safari {hint-url}";
-
-                ";m" = "hint links spawn ${iina-streamer}/bin/iina-streamer {hint-url}";
+                ";m" = "hint links spawn mpv {hint-url}";
             };
             command = {
                 "<Ctrl+j>" = "completion-item-focus next";

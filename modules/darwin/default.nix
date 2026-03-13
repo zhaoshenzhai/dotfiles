@@ -4,10 +4,8 @@
     nixpkgs.config.allowUnfree = true;
     nix.extraOptions = "experimental-features = nix-command flakes";
     nix.enable = false;
-    system.stateVersion = 6;
-
-    # --- User & Shell Configuration ---
     system.primaryUser = "zhao";
+    system.stateVersion = 6;
     users.users.zhao = {
         name = "zhao";
         home = "/Users/zhao";

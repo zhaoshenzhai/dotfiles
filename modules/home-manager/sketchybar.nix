@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-let
+{ pkgs, ... }: let
     colors = {
         BLACK        = "0xff1e2127";
         BLACK_       = "0xaa1e2127";
@@ -62,7 +60,11 @@ let
     };
 in
 {
-    home.packages = [ sketchybarCPlugins ];
+    home.packages = with pkgs; [
+        sketchybarCPlugins
+        sketchybar
+        jq
+    ];
 
     xdg.configFile."sketchybar" = {
         source = ./sketchybar;

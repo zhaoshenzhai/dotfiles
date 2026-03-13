@@ -1,4 +1,10 @@
 { pkgs, lib, ... }: {
+    home.packages = with pkgs; [
+        ocamlPackages.cpdf
+        pdftk
+        poppler-utils
+    ];
+
     targets.darwin.defaults."net.sourceforge.skim-app.skim" = {
         SKUISetupPreferTabs = 1;
 

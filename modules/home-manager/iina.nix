@@ -22,7 +22,8 @@
         osd-font="Courier Prime"
         osd-font-size=20
 
-        ytdl-raw-options=write-auto-subs=
+        ytdl-format=bestvideo[height<=?1080]+bestaudio/best
+        ytdl-raw-options=cookies-from-browser=safari,force-ipv4=,mark-watched=,write-auto-subs=,extractor-args="youtube:player_client=web_embedded,default"
     '';
 
     xdg.configFile."iina/input.conf".text = ''
