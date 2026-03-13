@@ -25,7 +25,7 @@
             sid = "1";
 
             ytdl-format = "bestvideo[height>=?1080]+bestaudio/best";
-            ytdl-raw-options = ''cookies-from-browser=safari,mark-watched=,extractor-args="youtube:player_client=default,-android_sdkless",write-sub=,write-auto-sub=,sub-langs=en.*'';
+            ytdl-raw-options = ''cookies-from-browser=safari,mark-watched=,write-sub=,write-auto-sub=,sub-langs=en.*'';
 
             sub-visibility = "yes";
             sub-font = "Courier Prime";
