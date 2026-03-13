@@ -1,7 +1,11 @@
-start-at-login = true
+start-at-login = false
 after-startup-command = [ 'exec-and-forget borders', 'exec-and-forget sketchybar' ]
 
-on-focus-changed = 'move-mouse window-lazy-center'
+on-focus-changed = [
+    'move-mouse window-lazy-center',
+    'exec-and-forget /etc/profiles/per-user/zhao/bin/skim-focus-hook'
+]
+
 exec-on-workspace-change = [ '/bin/bash', '-c',
     'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
 ]

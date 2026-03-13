@@ -154,10 +154,12 @@ in {
             };
         };
 
-        # Key Bindings
         keyBindings = {
             normal = {
                 "<Ctrl+Return>" = "cmd-set-text -s :open -t";
+
+                "<Ctrl+y>" = "hint links yank";
+                "<Ctrl+m>" = "hint links spawn mpv {hint-url}";
 
                 "<Ctrl+=>" = "zoom-in";
                 "<Ctrl+->" = "zoom-out";
@@ -170,9 +172,6 @@ in {
                 "<Ctrl+w>" = "tab-close";
                 "<Ctrl+u>" = "cmd-repeat 20 scroll up";
                 "<Ctrl+d>" = "cmd-repeat 20 scroll down";
-                
-                "<Ctrl+Shift+r>" = "restart";
-                "<Ctrl+`>" = "config-cycle statusbar.show always never;; config-cycle tabs.show multiple never";
 
                 "<Ctrl+1>" = "tab-select 1";
                 "<Ctrl+2>" = "tab-select 2";
@@ -184,11 +183,12 @@ in {
                 "<Ctrl+8>" = "tab-select 8";
                 "<Ctrl+9>" = "tab-select 9";
 
-                "<Ctrl+q>" = "nop";
+                "<Ctrl+s>" = "spawn open -a Safari {url}";
+                "<Ctrl+Shift+s>" = "hint links spawn open -a Safari {hint-url}";
 
-                ";s" = "spawn open -a Safari {url}";
-                ";S" = "hint links spawn open -a Safari {hint-url}";
-                ";m" = "hint links spawn mpv {hint-url}";
+                "<Ctrl+Shift+r>" = "restart";
+                "<Ctrl+q>" = "nop";
+                "<Ctrl+`>" = "config-cycle statusbar.show always never;; config-cycle tabs.show multiple never";
             };
             command = {
                 "<Ctrl+j>" = "completion-item-focus next";
