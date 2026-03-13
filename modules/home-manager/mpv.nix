@@ -33,9 +33,6 @@
             sub-border-size = 2;
             sub-back-color = "#801e2127";
             sub-file-paths = "subs";
-            sub-ass-override = "force";
-            sub-style-spec-force = "yes";
-            sub-use-margins = "yes";
 
             osd-font = "Courier Prime";
             osd-font-size = 20;
