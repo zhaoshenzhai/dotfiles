@@ -7,6 +7,7 @@ let
             --title vifm-float \
             --option "window.dimensions={columns=100,lines=35}" \
             --option "window.position={x=525,y=250}" \
+            --option "window.opacity=0.9" \
             -e "${pkgs.vifm}/bin/vifm" \
             -c ":only" \
             -c ":set nodotfiles | filter Applications|Desktop|Documents|Library|Movies|Music|Pictures | :only" \
@@ -23,6 +24,7 @@ let
             --title vifm-float \
             --option "window.dimensions={columns=100,lines=35}" \
             --option "window.position={x=525,y=250}" \
+            --option "window.opacity=0.9" \
             -e "${pkgs.vifm}/bin/vifm" \
             -c ":set nodotfiles | filter Applications|Desktop|Documents|Library|Movies|Music|Pictures | :only" \
             -c 'autocmd DirEnter * !echo "%d" > ~/.cache/vifm_picker_dir &' \
