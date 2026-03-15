@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 let
     ytMpv = pkgs.writeShellScriptBin "yt-mpv" ''
-        ${pkgs.yt-dlp}/bin/yt-dlp --cookies-from-browser safari --mark-watched --simulate "$1" > /dev/null 2>&1 &
+        ${pkgs.yt-dlp}/bin/yt-dlp --cookies "$HOME/.cache/mpv/cookies.txt" --mark-watched --simulate "$1" > /dev/null 2>&1 &
         ${pkgs.mpv}/bin/mpv "$1"
     '';
 in {
@@ -32,7 +32,7 @@ in {
             sid = "1";
 
             ytdl-format = "bestvideo+bestaudio/best";
-            ytdl-raw-options = ''write-sub=,write-auto-sub=,sub-langs=en.*,cookies-from-browser=safari'';
+            ytdl-raw-options = ''write-sub=,write-auto-sub=,sub-langs=en.*,cookies=~/.cache/mpv/cookies.txt'';
 
             sub-visibility = "yes";
             sub-font = "Courier Prime";
