@@ -159,7 +159,11 @@ in {
                 "<Ctrl+Return>" = "cmd-set-text -s :open -t";
 
                 "<Ctrl+y>" = "hint links yank";
-                "<Ctrl+m>" = "hint links spawn alacritty --title ytMpv -e yt-mpv {hint-url}";
+                "<Ctrl+m>" = ''hint links spawn open -n -a Alacritty --args \
+                                    --title ytMpv \
+                                    --option "window.dimensions={columns=100,lines=35}" \
+                                    --option "window.position={x=525,y=250}" \
+                                    -e yt-mpv {hint-url}'';
 
                 "<Ctrl+=>" = "zoom-in";
                 "<Ctrl+->" = "zoom-out";

@@ -1,38 +1,42 @@
 { config, pkgs, ... }:
 let
     ytMpv = pkgs.writeShellScriptBin "yt-mpv" ''
-        ID=$(date +%s)
-        TARGET="/tmp/yt_download_$ID"
+        VIDEO_ID=$(echo "$1" | ${pkgs.openssl}/bin/openssl md5 | awk '{print $2}')
+        TARGET="/tmp/yt_download_$VIDEO_ID"
+        TITLE=$(${pkgs.yt-dlp}/bin/yt-dlp --get-title "$1" 2>/dev/null || echo "YouTube Stream")
 
-        ${pkgs.yt-dlp}/bin/yt-dlp \
+        ${pkgs.util-linux}/bin/setsid ${pkgs.yt-dlp}/bin/yt-dlp \
             --cookies-from-browser safari \
             -f "best" \
-            --write-sub --write-auto-sub --sub-langs "en.*" \
+            --write-sub --write-auto-sub --sub-langs "en" \
             --mark-watched \
             -o "$TARGET" \
+            --no-part \
             "$1" &
+        
+        trap "pkill -f 'yt-dlp.*$VIDEO_ID' 2>/dev/null; rm -f $TARGET*; exit" INT TERM EXIT
 
-        YTPID=$!
-        trap "kill $YTPID 2>/dev/null; rm -f $TARGET*; exit" INT TERM EXIT
-
-        while [ ! -s "$TARGET.part" ]; do
-            sleep 0.1
+        while [ ! -s "$TARGET" ]; do
+            sleep 0.5
         done
 
-        ${pkgs.mpv}/bin/mpv "$TARGET.part" \
+        ${pkgs.mpv}/bin/mpv "$TARGET" \
+            --title="$TITLE" \
+            --force-media-title="$TITLE" \
             --fs \
             --sid=1 \
             --force-window=yes \
+            --hwdec=auto \
             --sub-file-paths="/tmp" \
             --cache=yes \
             --cache-pause=yes \
-            --demuxer-max-bytes=800M \
-            --demuxer-max-back-bytes=300M \
+            --demuxer-max-bytes=2G \
+            --demuxer-max-back-bytes=1G \
             --demuxer-readahead-secs=1200 \
             --demuxer-thread=yes
     '';
 in {
-    home.packages = [ pkgs.yt-dlp ytMpv ];
+    home.packages = [ pkgs.yt-dlp pkgs.openssl pkgs.util-linux ytMpv ];
 
     programs.mpv = {
         enable = true;
