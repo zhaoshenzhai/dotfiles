@@ -198,6 +198,10 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
     run = 'layout floating'
 
 [[on-window-detected]]
+    if.window-title-regex-substring = 'ytMpv'
+    run = 'layout floating'
+
+[[on-window-detected]]
     if.window-title-regex-substring = 'launcher'
     run = 'layout floating'
 

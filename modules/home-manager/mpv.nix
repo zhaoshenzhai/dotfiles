@@ -20,7 +20,6 @@ let
         done
 
         ${pkgs.mpv}/bin/mpv "$TARGET.part" \
-            --title="$TITLE" \
             --fs \
             --sid=1 \
             --force-window=yes \
