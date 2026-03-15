@@ -1,5 +1,12 @@
-{ config, pkgs, ... }: {
-    home.packages = [ pkgs.yt-dlp ];
+{ config, pkgs, ... }:
+let
+    ytMpv = pkgs.writeShellScriptBin "yt-mpv" ''
+        ${pkgs.yt-dlp}/bin/yt-dlp --cookies-from-browser safari --mark-watched --simulate "$1" > /dev/null 2>&1 &
+        ${pkgs.mpv}/bin/mpv "$1"
+    '';
+in {
+    home.packages = [ pkgs.yt-dlp ytMpv ];
+
     programs.mpv = {
         enable = true;
 
@@ -24,8 +31,8 @@
             fs = "yes";
             sid = "1";
 
-            ytdl-format = "bestvideo[height>=?1080]+bestaudio/best";
-            ytdl-raw-options = ''cookies-from-browser=safari,mark-watched=,write-sub=,write-auto-sub=,sub-langs=en.*'';
+            ytdl-format = "bestvideo+bestaudio/best";
+            ytdl-raw-options = ''write-sub=,write-auto-sub=,sub-langs=en.*'';
 
             sub-visibility = "yes";
             sub-font = "Courier Prime";
