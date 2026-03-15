@@ -86,7 +86,6 @@ in {
             Ctrl+8 add saturation 2
 
             Ctrl+q quit-watch-later
-            q quit-watch-later
 
             Ctrl+` script-message cycle-commands "script-message osc-visibility always" "set osd-level 1; script-message osc-visibility never"; script-message cycle-commands "set sub-pos 94" "set sub-pos 100"
             Ctrl+s set video-zoom 0; set video-pan-x 0; set video-pan-y 0; set contrast 0; set brightness 0; set gamma 0; set saturation 0
