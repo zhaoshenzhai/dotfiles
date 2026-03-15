@@ -32,7 +32,7 @@ in {
             sid = "1";
 
             ytdl-format = "bestvideo+bestaudio/best";
-            ytdl-raw-options = ''write-sub=,write-auto-sub=,sub-langs=en.*'';
+            ytdl-raw-options = ''write-sub=,write-auto-sub=,sub-langs=en.*,cookies-from-browser=safari'';
 
             sub-visibility = "yes";
             sub-font = "Courier Prime";
