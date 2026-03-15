@@ -55,12 +55,12 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
 
     cmd-shift-t = 'exec-and-forget open -a activity\ monitor'
 
-    cmd-w       = [ 'workspace w', 'exec-and-forget open -a qutebrowser', ]
-    cmd-shift-w = [ 'workspace w', 'exec-and-forget open -a safari', ]
+    cmd-w       = [ 'workspace w', 'exec-and-forget open -a qutebrowser' ]
+    cmd-shift-w = [ 'workspace w', 'exec-and-forget open -a safari' ]
 
-    cmd-m       = [ 'workspace m', 'exec-and-forget open -a messages', ]
-    cmd-s       = [ 'workspace m', 'exec-and-forget open -a music', ]
-    cmd-shift-m = [ 'workspace m', 'exec-and-forget open -a mail', ]
+    cmd-m       = [ 'workspace m', 'exec-and-forget open -a messages' ]
+    cmd-s       = [ 'workspace m', 'exec-and-forget open -a music' ]
+    cmd-shift-m = [ 'workspace m', 'exec-and-forget open -a mail' ]
 
     cmd-p = 'exec-and-forget screencapture ~/Downloads/Screenshot_$(date +%Y_%m_%d_%H%M%S).png'
 
@@ -124,12 +124,13 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
         'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
     ]
 
-    cmd-f       = 'layout v_accordion tiles'
-    cmd-tab     = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next'
-    cmd-shift-f = 'fullscreen --no-outer-gaps'
-    cmd-shift-r = 'exec-and-forget /bin/bash -c "echo TOGGLE_STATE > /tmp/skim_focus_pipe"'
+    cmd-f           = 'layout v_accordion tiles'
+    cmd-shift-space = 'layout floating tiling'
+    cmd-tab         = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next'
+    cmd-shift-f     = 'fullscreen --no-outer-gaps'
+    cmd-r           = 'exec-and-forget /bin/bash -c "echo TOGGLE_STATE > /tmp/skim_focus_pipe"'
 
-    cmd-r = [
+    cmd-shift-r = [
         'layout tiles',
         'flatten-workspace-tree',
         'exec-and-forget /bin/bash -c "echo DISABLE_STATE > /tmp/skim_focus_pipe"'

@@ -10,6 +10,7 @@
         blueutil
 
         dosbox-staging
+        logisim-evolution
     ];
 
     imports = [
