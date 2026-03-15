@@ -1,39 +1,43 @@
 { config, pkgs, ... }:
 let
     ytMpv = pkgs.writeShellScriptBin "yt-mpv" ''
-        ${pkgs.yt-dlp}/bin/yt-dlp --cookies "$HOME/.cache/mpv/cookies.txt" --mark-watched --simulate "$1" > /dev/null 2>&1 &
-        ${pkgs.mpv}/bin/mpv "$1"
+        ID=$(date +%s)
+        TARGET="/tmp/yt_download_$ID"
+
+        ${pkgs.yt-dlp}/bin/yt-dlp \
+            --cookies-from-browser safari \
+            -f "best" \
+            --write-sub --write-auto-sub --sub-langs "en.*" \
+            --mark-watched \
+            -o "$TARGET" \
+            "$1" &
+
+        YTPID=$!
+        trap "kill $YTPID 2>/dev/null; rm -f $TARGET*; exit" INT TERM EXIT
+
+        while [ ! -s "$TARGET.part" ]; do
+            sleep 0.1
+        done
+
+        ${pkgs.mpv}/bin/mpv "$TARGET.part" \
+            --title="$TITLE" \
+            --fs \
+            --sid=1 \
+            --force-window=yes \
+            --sub-file-paths="/tmp" \
+            --cache=yes \
+            --cache-pause=yes \
+            --demuxer-max-bytes=800M \
+            --demuxer-max-back-bytes=300M \
+            --demuxer-readahead-secs=1200 \
+            --demuxer-thread=yes
     '';
 in {
     home.packages = [ pkgs.yt-dlp ytMpv ];
 
     programs.mpv = {
         enable = true;
-
-        scripts = [
-            (pkgs.stdenv.mkDerivation {
-                pname = "cycle-commands";
-                scriptName = "cycle-commands.lua";
-                version = "master";
-                src = pkgs.fetchurl {
-                    url = "https://raw.githubusercontent.com/CogentRedTester/mpv-scripts/master/cycle-commands.lua";
-                    hash = "sha256-v1MvoYZvF6NBJ7vv8Y3csHE+T4wX4ub6f6CNLhKt/00=";
-                };
-                dontUnpack = true;
-                installPhase = ''
-                    mkdir -p $out/share/mpv/scripts
-                    cp $src $out/share/mpv/scripts/cycle-commands.lua
-                '';
-            })
-        ];
-
         config = {
-            fs = "yes";
-            sid = "1";
-
-            ytdl-format = "bestvideo+bestaudio/best";
-            ytdl-raw-options = ''write-sub=,write-auto-sub=,sub-langs=en.*,cookies=~/.cache/mpv/cookies.txt'';
-
             sub-visibility = "yes";
             sub-font = "Courier Prime";
             sub-font-size = 25;
@@ -63,6 +67,7 @@ in {
 
             Ctrl+z add sub-delay -0.1
             Ctrl+x add sub-delay 0.1
+
             Ctrl+c cycle sub
 
             Ctrl+[ add audio-delay -0.1
@@ -73,6 +78,7 @@ in {
 
             Ctrl+LEFT add video-pan-x 0.1
             Ctrl+RIGHT add video-pan-x -0.1
+
             Ctrl+UP add video-pan-y 0.1
             Ctrl+DOWN add video-pan-y -0.1
 
@@ -85,10 +91,9 @@ in {
             Ctrl+7 add saturation -2
             Ctrl+8 add saturation 2
 
-            Ctrl+q quit-watch-later
-
-            Ctrl+` script-message cycle-commands "script-message osc-visibility always" "set osd-level 1; script-message osc-visibility never"; script-message cycle-commands "set sub-pos 94" "set sub-pos 100"
             Ctrl+s set video-zoom 0; set video-pan-x 0; set video-pan-y 0; set contrast 0; set brightness 0; set gamma 0; set saturation 0
+
+            Ctrl+q quit-watch-later
         '';
     };
 }

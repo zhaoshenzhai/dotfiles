@@ -159,7 +159,7 @@ in {
                 "<Ctrl+Return>" = "cmd-set-text -s :open -t";
 
                 "<Ctrl+y>" = "hint links yank";
-                "<Ctrl+m>" = "hint links spawn yt-mpv {hint-url}";
+                "<Ctrl+m>" = "hint links spawn alacritty -e yt-mpv {hint-url}";
 
                 "<Ctrl+=>" = "zoom-in";
                 "<Ctrl+->" = "zoom-out";
