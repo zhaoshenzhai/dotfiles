@@ -1,26 +1,27 @@
 { config, pkgs, ... }:
 let
     ytMpv = pkgs.writeShellScriptBin "yt-mpv" ''
-        VIDEO_ID=$(echo "$1" | ${pkgs.openssl}/bin/openssl md5 | awk '{print $2}')
-        TARGET="/tmp/yt_download_$VIDEO_ID"
+        ID=$(uuidgen)
+        TARGET="/tmp/yt_download_$ID"
         TITLE=$(${pkgs.yt-dlp}/bin/yt-dlp --get-title "$1" 2>/dev/null || echo "YouTube Stream")
 
-        ${pkgs.util-linux}/bin/setsid ${pkgs.yt-dlp}/bin/yt-dlp \
+        ${pkgs.yt-dlp}/bin/yt-dlp \
             --cookies-from-browser safari \
-            -f "best" \
-            --write-sub --write-auto-sub --sub-langs "en" \
+            -f b \
+            --write-sub --write-auto-sub --sub-langs "en.*" \
             --mark-watched \
-            -o "$TARGET" \
+            -o "$TARGET.part" \
             --no-part \
-            "$1" &
-        
-        trap "pkill -f 'yt-dlp.*$VIDEO_ID' 2>/dev/null; rm -f $TARGET*; exit" INT TERM EXIT
+            "$1" > /dev/null 2>&1 &
 
-        while [ ! -s "$TARGET" ]; do
+        YTPID=$!
+        trap "kill $YTPID 2>/dev/null; rm -f $TARGET*; exit" INT TERM EXIT
+
+        while [ ! -s "$TARGET.part" ]; do
             sleep 0.5
         done
 
-        ${pkgs.mpv}/bin/mpv "$TARGET" \
+        ${pkgs.mpv}/bin/mpv "$TARGET.part" \
             --title="$TITLE" \
             --force-media-title="$TITLE" \
             --fs \
