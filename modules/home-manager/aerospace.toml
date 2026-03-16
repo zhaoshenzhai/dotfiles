@@ -28,10 +28,10 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
     cmd-shift-backslash = 'exec-and-forget open -a finder'
 
     cmd-e = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
-        --title vifm \
-        -e /etc/profiles/per-user/zhao/bin/vifm ~/ \
+        -e /bin/bash -c 'printf "\\033]0;vifm\\007"; \
+        exec /etc/profiles/per-user/zhao/bin/vifm ~/ \
         -c ":vsplit" \
-        -c "windo filter Applications|Desktop|Library|Movies|Music|Pictures | normal ggvGgA""""
+        -c "windo filter Applications|Desktop|Library|Movies|Music|Pictures | normal ggvGgA"'"""
 
     cmd-g = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
         --title git \
