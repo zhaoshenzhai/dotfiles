@@ -12,6 +12,8 @@ static inline const char* get_icon_for_app(const char* app) {
     if (strcmp(app, "alacritty")        == 0) return ":terminal:";
     if (strcmp(app, "zoom.us")          == 0) return ":zoom:";
     if (strcmp(app, "Skim")             == 0) return ":book:";
+    // if (strcmp(app, "vifm")             == 0) return ":book:";
+    if (strcmp(app, "git")              == 0) return ":git_hub:";
     if (strcmp(app, "mpv")              == 0) return ":mpv:";
 
     // macOS

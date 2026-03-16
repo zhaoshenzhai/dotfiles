@@ -9,10 +9,14 @@ void handler(env env) {
     char* name = env_get_value_for_key(env, "NAME");
     char* sender = env_get_value_for_key(env, "SENDER");
     char* info = env_get_value_for_key(env, "INFO");
+    char* title = env_get_value_for_key(env, "TITLE");
     char* workspace = env_get_value_for_key(env, "AEROSPACE_FOCUSED_WORKSPACE");
 
-    if (name[0] == '\0' || sender[0] == '\0' || strcmp(sender, "front_app_switched") != 0 || info[0] == '\0') {
-        return;
+    if (name[0] == '\0' || sender[0] == '\0' || strcmp(sender, "aerospace_custom_app_switched") != 0 || info[0] == '\0') { return; }
+
+    if (title[0] != '\0' && strcasecmp(info, "alacritty") == 0) {
+        if (strcmp(title, "vifm") == 0) { info = "vifm"; }
+        if (strcmp(title, "git") == 0) { info = "git"; }
     }
 
     const char* icon = get_icon_for_app(info);
