@@ -33,12 +33,12 @@ void handler(env env) {
     if (has_focused) {
         snprintf(cmd, sizeof(cmd),
                  "aerospace list-workspaces --all 2>/dev/null && echo '===' && "
-                 "aerospace list-windows --all --format \"%%{workspace}|%%{app-name}\" 2>/dev/null");
+                 "aerospace list-windows --all --format \"%%{workspace}|%%{app-name}|%%{window-title}\" 2>/dev/null");
     } else {
         snprintf(cmd, sizeof(cmd),
                  "aerospace list-workspaces --focused 2>/dev/null && echo '===' && "
                  "aerospace list-workspaces --all 2>/dev/null && echo '===' && "
-                 "aerospace list-windows --all --format \"%%{workspace}|%%{app-name}\" 2>/dev/null");
+                 "aerospace list-windows --all --format \"%%{workspace}|%%{app-name}|%%{window-title}\" 2>/dev/null");
     }
 
     FILE *fp = popen(cmd, "r");
@@ -70,11 +70,24 @@ void handler(env env) {
             ws_count++;
         }
         else if (stage == 2) {
-            char *sep = strchr(line, '|');
-            if (!sep) continue;
-            *sep = '\0';
+            char *sep1 = strchr(line, '|');
+            if (!sep1) continue;
+            *sep1 = '\0';
             char *ws_name = line;
-            char *app_name = sep + 1;
+
+            char *sep2 = strchr(sep1 + 1, '|');
+            if (!sep2) continue;
+            *sep2 = '\0';
+            char *app_name = sep1 + 1;
+            char *window_title = sep2 + 1;
+
+            if (strcasecmp(app_name, "alacritty") == 0) {
+                if (strcmp(window_title, "launcher") == 0) { app_name = "launcher"; }
+                else if (strcmp(window_title, "vifm") == 0) { app_name = "vifm"; }
+                else if (strcmp(window_title, "btop") == 0) { app_name = "btop"; }
+                else if (strcmp(window_title, "nvim") == 0) { app_name = "nvim"; }
+                else if (strcmp(window_title, "git") == 0) { app_name = "git"; }
+            }
 
             for (int i = 0; i < ws_count; i++) {
                 if (strcmp(ws_list[i].name, ws_name) == 0) {
