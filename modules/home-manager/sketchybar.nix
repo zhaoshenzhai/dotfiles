@@ -2,8 +2,8 @@
     colors = {
         BLACK        = "0xff1e2127";
         BLACK_       = "0xaa1e2127";
-        WHITE        = "0xffabb2bf";
-        WHITE_       = "0x55abb2bf";
+        WHITE        = "0xffdddddd";
+        WHITE_       = "0x55dddddd";
         RED          = "0xffe06c75";
         RED_         = "0x55e06c75";
         GREEN        = "0xff98c379";
@@ -19,9 +19,9 @@
         GRAY         = "0xff939ab7";
         TRANSPARENT  = "0x00000000";
         BAR_COLOR    = "0xaa1e2127"; # BLACK_
-        ICON_COLOR   = "0xffabb2bf"; # WHITE
-        LABEL_COLOR  = "0xffabb2bf"; # WHITE
-        BORDER_COLOR = "0xff444444";
+        ICON_COLOR   = "0xffdddddd"; # WHITE
+        LABEL_COLOR  = "0xffdddddd"; # WHITE
+        BORDER_COLOR = "0xff666666";
     };
 
     colorsSh = pkgs.writeText "colors.sh" ''
