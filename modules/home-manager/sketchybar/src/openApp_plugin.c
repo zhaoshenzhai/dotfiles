@@ -16,9 +16,10 @@ void handler(env env) {
 
     if (title[0] != '\0' && strcasecmp(info, "alacritty") == 0) {
         if (strcmp(title, "launcher") == 0) { info = "launcher"; }
-        if (strcmp(title, "vifm") == 0) { info = "vifm"; }
-        if (strcmp(title, "btop") == 0) { info = "btop"; }
-        if (strcmp(title, "git") == 0) { info = "git"; }
+        else if (strcmp(title, "vifm") == 0) { info = "vifm"; }
+        else if (strcmp(title, "btop") == 0) { info = "btop"; }
+        else if (strcmp(title, "nvim") == 0) { info = "nvim"; }
+        else if (strcmp(title, "git") == 0) { info = "git"; }
     }
 
     const char* icon = get_icon_for_app(info);

@@ -26,6 +26,7 @@ in {
 
             termguicolors = true;
             title = true;
+            titlestring = "nvim";
             incsearch = true;
             wrap = true;
             breakindent = true;
@@ -103,7 +104,7 @@ in {
                         component_separators = "";
                         section_separators = "";
                     };
-                    
+
                     sections = {
                         lualine_a = [ "mode" ];
                         lualine_b = [
@@ -113,7 +114,7 @@ in {
                             }
                         ];
                         lualine_c = { __raw = "{}"; };
-                        
+
                         lualine_x = { __raw = "{}"; };
                         lualine_y = [ "location" ];
                         lualine_z = [ "progress" ];
@@ -157,6 +158,21 @@ in {
                     cnoreabbrev <expr> wq getcmdtype() == ":" && getcmdline() == 'wq' ? 'w <bar> silent !aerospace close --quit-if-last-window' : 'wq'
                 ]])
             end
+
+            vim.api.nvim_create_autocmd({"VimEnter", "VimResume", "FocusGained"}, {
+                callback = function()
+                    vim.fn.jobstart({"bash", "-c", "sleep 0.05 && sketchybar --trigger aerospace_custom_app_switched INFO=\"$(aerospace list-windows --focused --format '%{app-name}' 2>/dev/null)\" TITLE=\"nvim\""})
+                end,
+            })
+
+            vim.api.nvim_create_autocmd({"VimLeave", "VimSuspend"}, {
+                callback = function()
+                    vim.fn.jobstart(
+                        {"bash", "-c", "sketchybar --trigger aerospace_custom_app_switched INFO=\"$(aerospace list-windows --focused --format '%{app-name}' 2>/dev/null)\" TITLE=\"$(aerospace list-windows --focused --format '%{window-title}' 2>/dev/null)\""},
+                        { detach = true }
+                    )
+                end,
+            })
         '';
 
         extraConfigVim = ''

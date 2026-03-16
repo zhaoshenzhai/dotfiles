@@ -23,6 +23,7 @@
                 padding = { x = 10; y = 25; };
                 decorations = "transparent";
                 dynamic_padding = false;
+                dynamic_title = true;
                 opacity = 0.4;
                 blur = true;
             };
