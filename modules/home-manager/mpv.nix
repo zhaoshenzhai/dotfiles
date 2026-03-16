@@ -7,21 +7,21 @@ let
 
         ${pkgs.yt-dlp}/bin/yt-dlp \
             --cookies-from-browser safari \
-            -f b \
-            --write-sub --write-auto-sub --sub-langs "en.*" \
+            -f "best" \
+            --write-sub --write-auto-sub --sub-langs "en" \
             --mark-watched \
-            -o "$TARGET.part" \
+            -o "$TARGET" \
             --no-part \
-            "$1" > /dev/null 2>&1 &
+            "$1" &
 
         YTPID=$!
         trap "kill $YTPID 2>/dev/null; rm -f $TARGET*; exit" INT TERM EXIT
 
-        while [ ! -s "$TARGET.part" ]; do
+        while [ ! -s "$TARGET" ]; do
             sleep 0.5
         done
 
-        ${pkgs.mpv}/bin/mpv "$TARGET.part" \
+        ${pkgs.mpv}/bin/mpv "$TARGET" \
             --title="$TITLE" \
             --force-media-title="$TITLE" \
             --fs \
