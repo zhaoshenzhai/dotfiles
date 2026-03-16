@@ -26,13 +26,6 @@ void handler(env env) {
              "--animate tanh 8 --set %s label=\"%s\" icon=\"%s\" icon.font=\"sketchybar-app-font:Regular:16.0\"",
              name, info, icon);
     sketchybar(command);
-
-    if (workspace[0] != '\0') {
-        usleep(100000);
-        char trigger[256];
-        snprintf(trigger, sizeof(trigger), "--trigger aerospace_workspace_change FOCUSED_WORKSPACE=%s", workspace);
-        sketchybar(trigger);
-    }
 }
 
 int main(int argc, char** argv) {

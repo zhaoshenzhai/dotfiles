@@ -21,8 +21,8 @@ for sid in $ORDERED_WS; do
     fi
 done
 
-sketchybar --add item aerospace_listener left                                           \
-           --set aerospace_listener drawing="off"                                       \
-                                    updates="on"                                        \
-                                    mach_helper="aerospace_plugin_mach"                 \
-           --subscribe aerospace_listener aerospace_workspace_change front_app_switched
+sketchybar --add item aerospace_listener left                                                      \
+           --set aerospace_listener drawing="off"                                                  \
+                                    updates="on"                                                   \
+                                    mach_helper="aerospace_plugin_mach"                            \
+           --subscribe aerospace_listener aerospace_workspace_change aerospace_custom_app_switched
