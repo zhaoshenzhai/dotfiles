@@ -14,8 +14,9 @@ void handler(env env) {
 
     if (name[0] == '\0' || sender[0] == '\0' || strcmp(sender, "aerospace_custom_app_switched") != 0 || info[0] == '\0') { return; }
 
+
     if (title[0] != '\0' && strcasecmp(info, "alacritty") == 0) {
-        if (strcmp(title, "launcher") == 0) { info = "launcher"; }
+        if (strcmp(title, "launcher") == 0) { return; }
         else if (strcmp(title, "vifm") == 0) { info = "vifm"; }
         else if (strcmp(title, "btop") == 0) { info = "btop"; }
         else if (strcmp(title, "nvim") == 0) { info = "nvim"; }

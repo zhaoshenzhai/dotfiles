@@ -11,7 +11,6 @@ static inline const char* get_icon_for_app(const char* app) {
     if (strcmp(app, "qutebrowser")      == 0) return ":qute_browser:";
     if (strstr(app, "Karabiner")     != NULL) return ":karabiner_elements:";
     if (strcmp(app, "alacritty")        == 0) return ":terminal:";
-    if (strcmp(app, "launcher")         == 0) return ":spotlight:";
     if (strcmp(app, "zoom.us")          == 0) return ":zoom:";
     if (strcmp(app, "Skim")             == 0) return ":book:";
     if (strcmp(app, "vifm")             == 0) return ":calibre:";

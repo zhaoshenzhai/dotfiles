@@ -82,7 +82,7 @@ void handler(env env) {
             char *window_title = sep2 + 1;
 
             if (strcasecmp(app_name, "alacritty") == 0) {
-                if (strcmp(window_title, "launcher") == 0) { app_name = "launcher"; }
+                if (strcmp(window_title, "launcher") == 0) { continue; }
                 else if (strcmp(window_title, "vifm") == 0) { app_name = "vifm"; }
                 else if (strcmp(window_title, "btop") == 0) { app_name = "btop"; }
                 else if (strcmp(window_title, "nvim") == 0) { app_name = "nvim"; }
