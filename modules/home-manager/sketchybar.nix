@@ -1,7 +1,7 @@
 { pkgs, ... }: let
     colors = {
-        BLACK        = "0xff1e2127";
-        BLACK_       = "0xaa1e2127";
+        BLACK        = "0xff111111";
+        BLACK_       = "0xaa111111";
         WHITE        = "0xffdddddd";
         WHITE_       = "0x55dddddd";
         RED          = "0xffe06c75";
@@ -18,7 +18,7 @@
         MAGENTA_     = "0x55c678dd";
         GRAY         = "0xff939ab7";
         TRANSPARENT  = "0x00000000";
-        BAR_COLOR    = "0xaa1e2127"; # BLACK_
+        BAR_COLOR    = "0xaa111111"; # BLACK_
         ICON_COLOR   = "0xffdddddd"; # WHITE
         LABEL_COLOR  = "0xffdddddd"; # WHITE
         BORDER_COLOR = "0xff666666";
