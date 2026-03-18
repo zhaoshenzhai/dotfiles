@@ -161,7 +161,7 @@ in {
                 "<Ctrl+Return>" = "cmd-set-text -s :open -t";
 
                 "<Ctrl+y>" = "hint links yank";
-                "<Ctrl+m>" = ''hint links spawn open -n -a Alacritty --args \
+                "<Ctrl+m>" = ''hint links spawn ${pkgs.alacritty}/bin/alacritty \
                                     --title ytMpv \
                                     --option "window.dimensions={columns=100,lines=35}" \
                                     --option "window.position={x=525,y=250}" \

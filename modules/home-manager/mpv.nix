@@ -3,7 +3,7 @@ let
     ytMpv = pkgs.writeShellScriptBin "yt-mpv" ''
         ID=$(uuidgen)
         TARGET="/tmp/yt_download_$ID"
-        TITLE=$(${pkgs.yt-dlp}/bin/yt-dlp --get-title "$1" 2>/dev/null || echo "YouTube Stream")
+        TITLE=$(${pkgs.yt-dlp}/bin/yt-dlp --get-title "$1" || echo "YouTube Stream")
 
         ${pkgs.yt-dlp}/bin/yt-dlp \
             --cookies-from-browser safari \
@@ -37,7 +37,7 @@ let
             --demuxer-thread=yes
     '';
 in {
-    home.packages = [ pkgs.yt-dlp pkgs.openssl pkgs.util-linux ytMpv ];
+    home.packages = [ pkgs.yt-dlp pkgs.openssl pkgs.deno pkgs.util-linux ytMpv ];
 
     programs.mpv = {
         enable = true;
