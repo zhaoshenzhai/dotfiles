@@ -66,6 +66,8 @@
         SKUISetupPreferTabs = 1;
 
         SKWhitePoint = [0.99 0.995 1 0.95];
+        SKDisableAnimations = true;
+
         SKTeXEditorPreset = "Custom";
         SKTeXEditorCommand = "${pkgs.neovim-remote}/bin/nvr";
         SKTeXEditorArguments = "--remote-silent +%line \"%file\"";
