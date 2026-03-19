@@ -218,6 +218,32 @@
                                             }
                                         ];
                                     }
+                                    { # ctrl+h -> jump back
+                                        type = "basic";
+                                        from = { key_code = "h"; modifiers = { mandatory = [ "control" ]; }; };
+                                        to = [ { key_code = "open_bracket"; modifiers = [ "command" ]; } ];
+                                        conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
+                                            { type = "variable_if"; name = "skim_search_mode"; value = 0; }
+                                            {
+                                                type = "frontmost_application_if";
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                            }
+                                        ];
+                                    }
+                                    { # ctrl+l -> jump forward
+                                        type = "basic";
+                                        from = { key_code = "l"; modifiers = { mandatory = [ "control" ]; }; };
+                                        to = [ { key_code = "close_bracket"; modifiers = [ "command" ]; } ];
+                                        conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
+                                            { type = "variable_if"; name = "skim_search_mode"; value = 0; }
+                                            {
+                                                type = "frontmost_application_if";
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                            }
+                                        ];
+                                    }
                                     { # / -> search
                                         type = "basic";
                                         from = { key_code = "slash"; };
