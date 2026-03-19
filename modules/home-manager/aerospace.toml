@@ -98,9 +98,9 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
     cmd-shift-9 = 'move-node-to-workspace 9'
 
     cmd-f           = 'layout v_accordion tiles'
+    cmd-shift-f     = 'macos-native-fullscreen'
     cmd-shift-space = 'layout floating tiling'
     cmd-tab         = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next'
-    cmd-shift-f     = 'fullscreen --no-outer-gaps'
     cmd-r           = 'exec-and-forget /bin/bash -c "echo TOGGLE_STATE > /tmp/skim_focus_pipe"'
 
     cmd-shift-r = [

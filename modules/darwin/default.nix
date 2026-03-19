@@ -66,7 +66,6 @@
 
             "com.apple.sound.beep.volume" = 0.0;
             "com.apple.sound.beep.feedback" = 0;
-
             "com.apple.swipescrolldirection" = true;
         };
 
@@ -79,7 +78,7 @@
         spaces.spans-displays = true;
 
         CustomUserPreferences = {
-            "net.sourceforge.skim-app.skim" = {
+             "net.sourceforge.skim-app.skim" = {
                 NSUserKeyEquivalents = {
                     "Find..." = "~@f";
                     "Find Next" = "~@g";
