@@ -21,6 +21,7 @@
             set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,phistory,fhistory,dirstack,registers,bookmarks,tabs
 
             mark h ~/ iCloud
+            mark D ~/Downloads
             mark n ~/iCloud/Dotfiles modules
             mark d ~/iCloud/Documents
             mark p ~/iCloud/Projects _cv
