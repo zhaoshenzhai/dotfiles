@@ -1,5 +1,8 @@
 \usepackage{thmtools, xstring, environ}
 
+\theoremstyle{definition}\newtheorem{exercise}[theorem]{Exercise}\newtheorem*{exercise*}{Exercise}
+\renewcommand{\theexercise}{\thetheorem}
+
 \newif\ifsolution\solutiontrue
 \IfSubStr{\jobname}{\detokenize{_Student}}{\solutionfalse}{}
 \declaretheoremstyle[headfont=\color{violet}\normalfont\itshape, bodyfont=\color{violet}\normalfont, numbered=no]{solution}
