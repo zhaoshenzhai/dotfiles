@@ -187,16 +187,16 @@ in {
             function! TexFold(lnum)
                 let l:line = getline(a:lnum)
 
-                if l:line =~# '^\s*\\begin{question}'
+                if l:line =~# '^\s*\\begin{\(question\|exercise\)}'
                     return '>1'
                 elseif l:line =~# '^\s*\\end{solution}'
                     return '<1'
-                elseif l:line =~# '^\s*\\end{question}'
+                elseif l:line =~# '^\s*\\end{\(question\|exercise\)}'
                     let l:next_lnum = nextnonblank(a:lnum + 1)
                     if l:next_lnum > 0 && getline(l:next_lnum) =~# '^\s*\\begin{solution}'
-                        return '1' " Continue the fold
+                        return '1'
                     else
-                        return '<1' " End the fold
+                        return '<1'
                     endif
                 endif
 
