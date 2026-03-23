@@ -3,11 +3,13 @@
     home.stateVersion = "22.11";
     home.file = { ".hushlogin".text = ""; };
     home.sessionVariables = { EDITOR = "nvim"; };
+    programs.swaylock.enable = false;
 
     home.packages = with pkgs; [
         aerospace
         switchaudio-osx
         blueutil
+        (texlive.combine { inherit (texlive) scheme-full latexmk; })
 
         dosbox-staging
         logisim-evolution
