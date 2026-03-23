@@ -19,7 +19,7 @@ HELP() {
     echo -e "    Optional: [-r specifiedRepo]"
 }
 GETSTATUS() {
-    if [[ -z $1 ]]; then
+    if [[ -z "${1:-}" ]]; then
         echo $(git -c color.status=always status 2>&1)
     else
         echo $(git -c color.status=always status | tee /dev/tty)
@@ -57,14 +57,14 @@ EXIT() {
 }
 
 # Input
-while [[ ! -z $1 ]]; do
-    case $1 in
+while [[ ! -z "${1:-}" ]]; do
+    case "${1:-}" in
         -h|--help)
             HELP
             exit 0
             ;;
         -r)
-            specifiedRepo=$2
+            specifiedRepo="${2:-}"
             ;;
     esac
     shift
@@ -76,6 +76,7 @@ if [[ ! -z $specifiedRepo ]]; then
     repoName=$specifiedRepo
 else
     # Print all repos
+    valid=""
     while [[ -z $valid ]]; do
         echo -e "${CYAN}Repositories:${NC}"
         repoIndex=1
@@ -113,6 +114,7 @@ else
         *)
             changedRepos=""
             changedReposNum=0
+            changedRepoNames=""
             repoIndex=1
             repoIndices=""
             while IFS= read -r repoInfo; do
@@ -138,6 +140,7 @@ else
                 repoName=$(echo "$changedRepoNames" | head -c 1 | tail -1)
             else
                 clear
+                changedValid=""
                 while [[ -z $changedValid ]]; do
                     changedRepoNames=$(echo -e "$changedRepos" | cut -f 1 -d ' ')
                     echo -e "${CYAN}Changed Repositories:${NC}"

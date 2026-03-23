@@ -37,7 +37,7 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
         """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
             --config-file ~/.config/alacritty/launcher.toml \
             --title launcher \
-            -e zsh -ic /etc/profiles/per-user/zhao/bin/launcher""",
+            -e /etc/profiles/per-user/zhao/bin/launcher""",
         'mode launcher'
     ]
 
@@ -46,19 +46,19 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
         --title btop \
         --option "window.dimensions={columns=100,lines=35}" \
         --option "window.position={x=525,y=250}" \
-        -e zsh -ic /etc/profiles/per-user/zhao/bin/btop"""
+        -e /etc/profiles/per-user/zhao/bin/btop"""
 
     cmd-g = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
         --title git \
         --option "window.dimensions={columns=100,lines=35}" \
         --option "window.position={x=525,y=250}" \
-        -e zsh -ic "~/iCloud/Dotfiles/modules/home-manager/git.sh" """
+        -e /run/current-system/sw/bin/gitMenu"""
 
     cmd-a = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
         --title attic \
         --option "window.dimensions={columns=100,lines=35}" \
         --option "window.position={x=525,y=250}" \
-        -e zsh -ic "~/iCloud/Dotfiles/modules/darwin/attic.sh" """
+        -e /run/current-system/sw/bin/attic"""
 
     cmd-shift-t = 'exec-and-forget open -a activity\ monitor'
 

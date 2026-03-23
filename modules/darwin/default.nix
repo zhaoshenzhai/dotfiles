@@ -14,7 +14,7 @@
     programs.zsh.enable = true;
 
     # --- Scripts & Terminal ---
-    imports = [ ./scripts.nix ];
+    imports = [ ../home-manager/scripts.nix ];
     environment = {
         shells = [ pkgs.zsh ];
         variables = {

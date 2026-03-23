@@ -14,7 +14,7 @@ let
         export PATH="${runtimePath}:/usr/bin:$PATH"
         export FZF_DEFAULT_OPTS="--color='bg+:-1,gutter:-1,pointer:#98c379'"
 
-        ${builtins.readFile ./launcher.sh}
+        ${builtins.readFile ../scripts/launcher.sh}
     '';
 in
 {
