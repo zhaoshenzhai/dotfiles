@@ -141,14 +141,14 @@ EXIT() {
 INTERACTIVE_MENU() {
     local valid=""
     while [[ -z $valid ]]; do
-        echo -e "${CYAN}Attic Operations:${NC}"
-        echo -e "    ${CYAN}(1): Create New Note${NC}"
-        echo -e "    ${CYAN}(2): Audit Notes & TODOs${NC}"
-        echo -e "    ${CYAN}(3): Clean LaTeX Files${NC}"
-        echo -e "    ${CYAN}(4): Manually Generate Metadata${NC}"
+        echo -e "${CYAN}Attic operations:${NC}"
+        echo -e "    ${CYAN}(1): Create new note${NC}"
+        echo -e "    ${CYAN}(2): Audit notes & TODOs${NC}"
+        echo -e "    ${CYAN}(3): Clean LaTeX files${NC}"
+        echo -e "    ${CYAN}(4): Manually generate metadata${NC}"
         echo ""
 
-        read -n 1 -ep "$(echo -e ${CYAN}"Select operation: [1-4, q to quit]${NC} ")" cmdNum
+        read -n 1 -ep "$(echo -e ${CYAN}"Select operation: [1-4]${NC} ")" cmdNum
 
         if [[ "$cmdNum" == "q" ]]; then
             aerospace close --quit-if-last-window 2>/dev/null || exit 0
@@ -160,18 +160,11 @@ INTERACTIVE_MENU() {
     done
 
     echo ""
-    echo ""
 
     case $cmdNum in
-        "1")
-            create_new
-        ;;
-        "2")
-            audit_notes
-        ;;
-        "3")
-            clean
-        ;;
+        "1") create_new ;;
+        "2") audit_notes ;;
+        "3") clean ;;
         "4")
             read -ep "$(echo -e ${PURPLE}"Enter Note ID: ${NC}")" targetID
             if [[ -n "$targetID" ]]; then
