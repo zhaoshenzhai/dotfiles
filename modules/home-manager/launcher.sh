@@ -22,11 +22,15 @@ touch "$RECENT_FILE"
     fd --type f --hidden --exclude .git --exclude '*.old' . \
         "Documents" "Dotfiles" "Projects" | while read -r line; do
 
+        if [[ "$line" =~ _attic/[0-9]{5}/metadata\.tex ]]; then
+            continue
+        fi
+
         if [[ "$line" =~ Projects/_attic/([0-9]{5})/([0-9]{5})\.tex ]]; then
             ID="${BASH_REMATCH[1]}"
             KW_PATH="/Users/zhao/iCloud/Projects/_attic/$ID/keywords"
             if [ -f "$KW_PATH" ]; then
-                KW=$(tr '\n' ',' < "$KW_PATH" | sed 's/,$//')
+                KW=$(cat "$KW_PATH" 2>/dev/null)
                 echo -e "Projects/_attic/[$KW]\t$line"
                 continue
             fi
@@ -45,7 +49,11 @@ touch "$RECENT_FILE"
     mv "$CACHE_FILE.tmp" "$CACHE_FILE"
 ) &
 
-SELECTED_LINE=$(cat "$RECENT_FILE" "$CACHE_FILE" 2>/dev/null | awk '!seen[$0]++' | fzf \
+SELECTED_LINE=$(cat "$RECENT_FILE" "$CACHE_FILE" 2>/dev/null | awk '!seen[$0]++' | while IFS=$'\t' read -r col1 col2; do
+    if [[ -n "$col2" && -e "/Users/zhao/iCloud/$col2" ]]; then
+        printf "%s\t%s\n" "$col1" "$col2"
+    fi
+done | fzf \
     --reverse \
     --info=hidden \
     --delimiter '\t' \

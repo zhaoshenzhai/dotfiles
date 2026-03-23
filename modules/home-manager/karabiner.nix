@@ -212,6 +212,44 @@
                                             }
                                         ];
                                     }
+                                    { # ctrl+r -> recolor
+                                        type = "basic";
+                                        from = {
+                                            key_code = "r";
+                                            modifiers = { mandatory = [ "control" ]; };
+                                        };
+                                        to = [
+                                            {
+                                                shell_command = ''
+                                                    CURRENT=$(defaults read net.sourceforge.skim-app.skim SKInvertColorsInDarkMode 2>/dev/null || echo 0); \
+                                                    if [ \"$CURRENT\" = \"1\" ]; then \
+                                                        defaults write net.sourceforge.skim-app.skim SKInvertColorsInDarkMode -bool false; \
+                                                    else \
+                                                        defaults write net.sourceforge.skim-app.skim SKInvertColorsInDarkMode -bool true; \
+                                                    fi
+                                                '';
+                                            }
+                                        ];
+                                        conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
+                                            { type = "variable_if"; name = "skim_search_mode"; value = 0; }
+                                            {
+                                                type = "frontmost_application_if";
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                            }
+                                        ];
+                                    }
+                                    { # ctrl+n -> open in nvim
+                                        type = "basic";
+                                        from = { key_code = "n"; modifiers = { mandatory = [ "control" ]; }; };
+                                        to = [{ shell_command = "zsh -ic 'skimToNvim'"; }];
+                                        conditions = [
+                                            {
+                                                type = "frontmost_application_if";
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                            }
+                                        ];
+                                    }
                                     { # / -> search
                                         type = "basic";
                                         from = { key_code = "slash"; };
@@ -398,33 +436,6 @@
                                             }
                                         ];
                                     }
-                                    { # ctrl+r -> recolor
-                                        type = "basic";
-                                        from = {
-                                            key_code = "r";
-                                            modifiers = { mandatory = [ "control" ]; };
-                                        };
-                                        to = [
-                                            {
-                                                shell_command = ''
-                                                    CURRENT=$(defaults read net.sourceforge.skim-app.skim SKInvertColorsInDarkMode 2>/dev/null || echo 0); \
-                                                    if [ \"$CURRENT\" = \"1\" ]; then \
-                                                        defaults write net.sourceforge.skim-app.skim SKInvertColorsInDarkMode -bool false; \
-                                                    else \
-                                                        defaults write net.sourceforge.skim-app.skim SKInvertColorsInDarkMode -bool true; \
-                                                    fi
-                                                '';
-                                            }
-                                        ];
-                                        conditions = [
-                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
-                                            { type = "variable_if"; name = "skim_search_mode"; value = 0; }
-                                            {
-                                                type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
-                                            }
-                                        ];
-                                    }
                                     { # s -> fit to width
                                         type = "basic";
                                         from = { key_code = "s"; };
@@ -541,17 +552,6 @@
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
-                                            {
-                                                type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
-                                            }
-                                        ];
-                                    }
-                                    { # ctrl+n -> open in nvim
-                                        type = "basic";
-                                        from = { key_code = "n"; modifiers = { mandatory = [ "control" ]; }; };
-                                        to = [{ shell_command = "zsh -ic 'skimToNvim'"; }];
-                                        conditions = [
                                             {
                                                 type = "frontmost_application_if";
                                                 bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];

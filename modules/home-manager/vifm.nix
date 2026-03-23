@@ -25,6 +25,7 @@
             mark n ~/iCloud/Dotfiles modules
             mark d ~/iCloud/Documents
             mark p ~/iCloud/Projects _cv
+            mark a ~/iCloud/Projects/_attic attic.sty
             mark w ~/iCloud/Projects/_web index.html
             mark u ~/iCloud/University/Courses MATH565_Functional_Analysis_AUDIT
 
