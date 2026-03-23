@@ -12,8 +12,9 @@
     };
 
     programs.zsh.enable = true;
-    imports = [ ./scripts.nix ];
 
+    # --- Scripts & Terminal ---
+    imports = [ ./scripts.nix ];
     environment = {
         shells = [ pkgs.zsh ];
         variables = {
@@ -76,19 +77,6 @@
         };
 
         spaces.spans-displays = true;
-
-        CustomUserPreferences = {
-            "net.sourceforge.skim-app.skim" = {
-                NSUserKeyEquivalents = {
-                    "Find..." = "~@f";
-                    "Find Next" = "~@g";
-                    "Find Previous" = "~@h";
-                    "Single Page Continuous" = "^~@1";
-                    "Two Pages Continuous" = "^~@2";
-                    "Horizontal Continuous" = "^~@3";
-                };
-            };
-        };
     };
 
     # --- Fonts ---

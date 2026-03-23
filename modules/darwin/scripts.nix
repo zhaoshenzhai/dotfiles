@@ -22,14 +22,13 @@
     };
 
     attic = pkgs.writeShellScriptBin "attic" (builtins.readFile ./attic.sh);
-
-    skimToNvim = pkgs.writeShellScriptBin "skimToNvim" (builtins.readFile ./skimToNvim.sh);
+    skimUtils = pkgs.writeShellScriptBin "skimUtils" (builtins.readFile ./skimUtils.sh);
 in
 {
     environment.systemPackages = [
         pdfcp
         newLatex
         attic
-        skimToNvim
+        skimUtils
     ];
 }

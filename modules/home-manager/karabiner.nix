@@ -242,7 +242,7 @@
                                     { # ctrl+n -> open in nvim
                                         type = "basic";
                                         from = { key_code = "n"; modifiers = { mandatory = [ "control" ]; }; };
-                                        to = [{ shell_command = "zsh -ic 'skimToNvim'"; }];
+                                        to = [{ shell_command = "zsh -ic 'skimUtils -o'"; }];
                                         conditions = [
                                             {
                                                 type = "frontmost_application_if";
