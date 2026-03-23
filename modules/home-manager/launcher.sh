@@ -18,35 +18,58 @@ mkdir -p "$CACHE_DIR"
 touch "$RECENT_FILE"
 
 (
-    fd --type f --hidden --exclude .git . \
-        "/Users/zhao/iCloud/Documents" \
-        "/Users/zhao/iCloud/Dotfiles" > "$CACHE_FILE.tmp" 2>/dev/null
+    cd "/Users/zhao/iCloud" || exit
+    fd --type f --hidden --exclude .git --exclude '*.old' . \
+        "Documents" "Dotfiles" "Projects" | while read -r line; do
+        
+        if [[ "$line" =~ Projects/_attic/([0-9]{5})/([0-9]{5})\.tex ]]; then
+            ID="${BASH_REMATCH[1]}"
+            KW_PATH="/Users/zhao/iCloud/Projects/_attic/$ID/keywords"
+            if [ -f "$KW_PATH" ]; then
+                KW=$(tr '\n' ',' < "$KW_PATH" | sed 's/,$//')
+                echo -e "Projects/_attic/[$KW]\t$line"
+                continue
+            fi
+        elif [[ "$line" =~ Projects/_attic/([0-9]{5})/keywords ]]; then
+            ID="${BASH_REMATCH[1]}"
+            KW_PATH="/Users/zhao/iCloud/Projects/_attic/$ID/keywords"
+            if [ -f "$KW_PATH" ]; then
+                KW=$(tr '\n' ',' < "$KW_PATH" | sed 's/,$//')
+                echo -e "Projects/_attic/[$KW]/keywords\t$line"
+                continue
+            fi
+        fi
+        
+        echo -e "$line\t$line"
+    done > "$CACHE_FILE.tmp" 2>/dev/null
     mv "$CACHE_FILE.tmp" "$CACHE_FILE"
 ) &
 
-SELECTED=$(cat "$RECENT_FILE" "$CACHE_FILE" 2>/dev/null | awk '!seen[$0]++' | fzf \
+SELECTED_LINE=$(cat "$RECENT_FILE" "$CACHE_FILE" 2>/dev/null | awk '!seen[$0]++' | fzf \
     --reverse \
     --info=hidden \
-    --delimiter / \
+    --delimiter '\t' \
+    --with-nth 1 \
     --tiebreak=index \
     --pointer='➜')
 
-if [ -z "$SELECTED" ]; then
-    exit 0
-fi
+if [ -z "$SELECTED_LINE" ]; then exit 0; fi
 
-grep -vF -x "$SELECTED" "$RECENT_FILE" > "$RECENT_FILE.tmp" 2>/dev/null || true
-echo "$SELECTED" | cat - "$RECENT_FILE.tmp" | head -n 100 > "$RECENT_FILE"
+grep -vF -x "$SELECTED_LINE" "$RECENT_FILE" > "$RECENT_FILE.tmp" 2>/dev/null || true
+echo "$SELECTED_LINE" | cat - "$RECENT_FILE.tmp" | head -n 100 > "$RECENT_FILE"
 rm -f "$RECENT_FILE.tmp"
 
-if [[ "$SELECTED" == /Users/zhao/iCloud/Dotfiles* ]]; then
+RELATIVE_PATH=$(echo "$SELECTED_LINE" | cut -f2)
+FULL_PATH="/Users/zhao/iCloud/$RELATIVE_PATH"
+
+if [[ "$FULL_PATH" == *.pdf ]]; then
+    open -n -a Skim "$FULL_PATH" >/dev/null 2>&1 &
+else
     NVIM_PATH="/etc/profiles/per-user/$USER/bin/nvim"
     HM_SESSION="$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
-    EXEC_CMD="[ -f $HM_SESSION ] && . $HM_SESSION; export FROM_LAUNCHER=1; exec $NVIM_PATH \"$SELECTED\""
+    EXEC_CMD="[ -f $HM_SESSION ] && . $HM_SESSION; export FROM_LAUNCHER=1; exec $NVIM_PATH \"$FULL_PATH\""
     
     nohup alacritty -e sh -c "$EXEC_CMD" >/dev/null 2>&1 &
-elif [[ "$SELECTED" == /Users/zhao/iCloud/Documents* ]]; then
-    open -n -a Skim "$SELECTED" >/dev/null 2>&1 &
 fi
 
 aerospace mode main
