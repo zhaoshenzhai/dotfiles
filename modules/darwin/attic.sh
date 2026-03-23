@@ -15,20 +15,25 @@ create_new() {
     mkdir -p "$ATTIC_DIR/$ID"
     cp "$TEMPLATE_FILE" "$ATTIC_DIR/$ID/$ID.tex"
 
-    echo -n "Enter keywords for Note $ID (comma separated): " && read -r KEYWORDS
+    read -ep "$(echo -e ${PURPLE}"Enter keywords for Note $ID (comma separated): ${NC}")" KEYWORDS
     echo "$KEYWORDS" | sed 's/,/, /g' | sed 's/  / /g' > "$ATTIC_DIR/$ID/keywords"
 
     generate_metadata "$ID"
-    cd "$ATTIC_DIR/$ID" && latexmk -pdf "$ID.tex" > /dev/null 2>&1
-}
 
+    echo -e "${BLUE}Compiling initial PDF...${NC}"
+    cd "$ATTIC_DIR/$ID" && latexmk -pdf "$ID.tex" > /dev/null 2>&1
+
+    if [[ "$INTERACTIVE" == 1 ]]; then
+        nvim "$ID.tex"
+    fi
+}
 generate_metadata() {
     local ID=$1
     local DIR="$ATTIC_DIR/$ID"
     local FILE="$DIR/$ID.tex"
 
     if [ ! -f "$FILE" ]; then
-        echo -e "\033[0;31mError: Note $ID does not exist.\033[0m"
+        echo -e "${RED}Error: Note $ID does not exist.${NC}"
         return
     fi
 
@@ -50,11 +55,10 @@ generate_metadata() {
     Referenced in: [$REF_IN]
 \end{flushleft}
 EOF
-    echo -e "\033[0;32mMetadata updated for $ID.\033[0m"
+    echo -e "${GREEN}Metadata updated for $ID.${NC}"
 }
-
 clean() {
-    echo -e "\033[0;34mCleaning up...\033[0m"
+    echo -e "${BLUE}Cleaning up LaTeX auxiliary files...${NC}"
     find "$ATTIC_DIR" -type f \( \
         -name "*.aux" -o \
         -name "*.bbl" -o \
@@ -68,11 +72,10 @@ clean() {
         -name "*.synctex.gz" -o \
         -name "*.synctex(busy)" \
     \) -delete
-    echo -e "\033[0;32mCleanup complete.\033[0m"
+    echo -e "${GREEN}Cleanup complete.${NC}"
 }
-
 audit_notes() {
-    echo -e "\033[0;34mVerifying internal links and scanning for TODOs...\033[0m"
+    echo -e "${BLUE}Verifying internal links and scanning for TODOs...${NC}"
     local BROKEN=0
     local TODOS=0
 
@@ -95,7 +98,7 @@ audit_notes() {
                 fi
 
                 if [[ -n "$ERR" ]]; then
-                    echo -e "\033[0;31m[MISSING $ERR]\033[0m ID $id in $(basename "$file"):$line_no"
+                    echo -e "${RED}[MISSING $ERR]${NC} ID $id in $(basename "$file"):$line_no"
                     ((BROKEN++))
                 fi
             fi
@@ -106,7 +109,7 @@ audit_notes() {
             local text="${todo_match#*:}"
 
             text="$(echo "$text" | sed 's/^[[:space:]]*//')"
-            echo -e "\033[0;33m[TODO]\033[0m $(basename "$file"):$line_no -> $text"
+            echo -e "${YELLOW}[TODO]${NC} $(basename "$file"):$line_no -> $text"
             ((TODOS++))
         done < <(grep -n "TODO" "$file" 2>/dev/null)
 
@@ -114,24 +117,84 @@ audit_notes() {
 
     echo "----------------------------------------"
     if [ $BROKEN -eq 0 ]; then
-        echo -e "\033[0;32mLinks: All internal links are valid.\033[0m"
+        echo -e "${GREEN}Links: All internal links are valid.${NC}"
     else
-        echo -e "\033[0;31mLinks: Found $BROKEN broken link(s).\033[0m"
+        echo -e "${RED}Links: Found $BROKEN broken link(s).${NC}"
     fi
 
     if [ $TODOS -eq 0 ]; then
-        echo -e "\033[0;32mTODOs: None found!\033[0m"
+        echo -e "${GREEN}TODOs: None found!${NC}"
     else
-        echo -e "\033[0;33mTODOs: You have $TODOS pending TODO(s).\033[0m"
+        echo -e "${YELLOW}TODOs: You have $TODOS pending TODO(s).${NC}"
     fi
 }
 
-while getopts "nm:ac" opt; do
-  case $opt in
-    n) create_new; exit 0 ;;
-    m) generate_metadata "$OPTARG"; exit 0 ;;
-    a) audit_notes; exit 0 ;;
-    c) clean; exit 0 ;;
-    *) echo "Usage: attic -n | -m ID | -a"; exit 1 ;;
-  esac
-done
+EXIT() {
+    echo ""
+    read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
+    if [[ "$repeat" == "Y" ]] || [[ "$repeat" == "y" ]] || [[ -z "$repeat" ]]; then
+        clear
+        exec "$0"
+    fi
+    aerospace close --quit-if-last-window 2>/dev/null || exit 0
+}
+INTERACTIVE_MENU() {
+    local valid=""
+    while [[ -z $valid ]]; do
+        echo -e "${CYAN}Attic Operations:${NC}"
+        echo -e "    ${CYAN}(1): Create New Note${NC}"
+        echo -e "    ${CYAN}(2): Audit Notes & TODOs${NC}"
+        echo -e "    ${CYAN}(3): Clean LaTeX Files${NC}"
+        echo -e "    ${CYAN}(4): Manually Generate Metadata${NC}"
+        echo ""
+
+        read -n 1 -ep "$(echo -e ${CYAN}"Select operation: [1-4, q to quit]${NC} ")" cmdNum
+
+        if [[ "$cmdNum" == "q" ]]; then
+            aerospace close --quit-if-last-window 2>/dev/null || exit 0
+        elif [[ "$cmdNum" =~ ^[1-4]$ ]]; then
+            valid=1
+        else
+            clear
+        fi
+    done
+
+    echo ""
+    echo ""
+
+    case $cmdNum in
+        "1")
+            create_new
+        ;;
+        "2")
+            audit_notes
+        ;;
+        "3")
+            clean
+        ;;
+        "4")
+            read -ep "$(echo -e ${PURPLE}"Enter Note ID: ${NC}")" targetID
+            if [[ -n "$targetID" ]]; then
+                generate_metadata "$targetID"
+            fi
+        ;;
+    esac
+
+    EXIT
+}
+
+if [[ $# -gt 0 ]]; then
+    INTERACTIVE=0
+    while getopts "nm:ac" opt; do
+      case $opt in
+        n) create_new; exit 0 ;;
+        m) generate_metadata "$OPTARG"; exit 0 ;;
+        a) audit_notes; exit 0 ;;
+        c) clean; exit 0 ;;
+        *) echo "Usage: attic [-n] [-m ID] [-a] [-c]"; exit 1 ;;
+      esac
+    done
+else
+    INTERACTIVE=1
+    INTERACTIVE_MENU
+fi

@@ -33,12 +33,6 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
         -c ":vsplit" \
         -c "windo normal ggvGgA"'"""
 
-    cmd-g = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
-        --title git \
-        --option "window.dimensions={columns=100,lines=35}" \
-        --option "window.position={x=525,y=250}" \
-        -e zsh -ic "~/iCloud/Dotfiles/modules/home-manager/git.sh" """
-
     cmd-enter = [
         """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
             --config-file ~/.config/alacritty/launcher.toml \
@@ -53,6 +47,18 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
         --option "window.dimensions={columns=100,lines=35}" \
         --option "window.position={x=525,y=250}" \
         -e zsh -ic /etc/profiles/per-user/zhao/bin/btop"""
+
+    cmd-g = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
+        --title git \
+        --option "window.dimensions={columns=100,lines=35}" \
+        --option "window.position={x=525,y=250}" \
+        -e zsh -ic "~/iCloud/Dotfiles/modules/home-manager/git.sh" """
+
+    cmd-a = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
+        --title attic \
+        --option "window.dimensions={columns=100,lines=35}" \
+        --option "window.position={x=525,y=250}" \
+        -e zsh -ic "~/iCloud/Dotfiles/modules/darwin/attic.sh" """
 
     cmd-shift-t = 'exec-and-forget open -a activity\ monitor'
 
@@ -170,6 +176,10 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
 
 [[on-window-detected]]
     if.window-title-regex-substring = 'git'
+    run = 'layout floating'
+
+[[on-window-detected]]
+    if.window-title-regex-substring = 'attic'
     run = 'layout floating'
 
 [[on-window-detected]]
