@@ -131,7 +131,7 @@ void handler(env env) {
         }
 
         int written = snprintf(full_cmd + offset, sizeof(full_cmd) - offset,
-                 "%s--set space.%s background.color=%s background.border_color=%s "
+                 "%s--animate tanh 4 --set space.%s background.color=%s background.border_color=%s "
                  "background.padding_left=%d background.padding_right=%d icon=\"%s\" icon.color=%s "
                  "icon.padding_left=%d icon.padding_right=%d label.color=%s label.padding_left=%d "
                  "label.padding_right=%d",

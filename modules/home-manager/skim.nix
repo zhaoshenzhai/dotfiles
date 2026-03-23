@@ -74,14 +74,5 @@
 
         SKAutoCheckFileUpdate = true;
         SKAutoReloadFileUpdate = true;
-
-        SKRememberLastPageView = true;
-        SKRememberDefaults = false;
-
-        SKInitialPDFViewSettings = {
-            displayMode = 1;
-            displaysAsBook = false;
-            displaysPageBreaks = false;
-        };
     };
 }
