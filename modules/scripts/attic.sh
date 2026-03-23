@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ATTIC_DIR="$HOME/iCloud/Projects/_attic"
-TEMPLATE_FILE="$HOME/iCloud/Dotfiles/modules/darwin/LaTeXTemplate/files/attic.tex"
+TEMPLATE_FILE="$HOME/iCloud/Dotfiles/modules/scripts/LaTeXTemplate/files/attic.tex"
 
 create_new() {
     mkdir -p "$ATTIC_DIR"
