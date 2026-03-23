@@ -1,6 +1,9 @@
 local cmp = require('cmp')
+
 local attic_cache = {}
 local attic_dir = vim.fn.expand('~/iCloud/Projects/_attic')
+local attic_group = vim.api.nvim_create_augroup("AtticSetup", { clear = true })
+local in_aref_mode = false
 
 local function load_attic_cache()
     local items = {}
@@ -21,7 +24,8 @@ local function load_attic_cache()
                     insertText = id,
                     documentation = {
                         kind = "markdown",
-                        value = "**Code:** `" .. id
+                        -- Fixed: Properly formatted the documentation popup
+                        value = "**Code:** `" .. id .. "`\n**Keywords:** " .. keywords
                     }
                 })
             end
@@ -29,76 +33,6 @@ local function load_attic_cache()
     end
     attic_cache = items
 end
-
-load_attic_cache()
-
-vim.api.nvim_create_user_command('ReloadAttic', function()
-    load_attic_cache()
-    print("Attic cmp cache reloaded!")
-end, {})
-
-local attic_source = {}
-function attic_source:is_available() return true end
-function attic_source:get_trigger_characters() return { '{' } end
-function attic_source:get_keyword_pattern() return [=[[^{}]\+]=] end
-
-function attic_source:complete(request, callback)
-    local line = request.context.cursor_before_line
-    if not string.match(line, "\\aref{[^}]*}{[^}]*$") then
-        callback({ items = {}, isIncomplete = false })
-        return
-    end
-    callback({ items = attic_cache, isIncomplete = false })
-end
-
-cmp.register_source('attic', attic_source)
-
-local in_aref_mode = false
-
-vim.api.nvim_create_autocmd({"CursorMovedI", "InsertEnter"}, {
-    group = vim.api.nvim_create_augroup("AtticCmpTrigger", { clear = true }),
-    pattern = "*.tex",
-    callback = function()
-        local col = vim.fn.col('.')
-        local line = vim.fn.getline('.')
-        local before_cursor = string.sub(line, 1, col - 1)
-        local is_code_block = string.match(before_cursor, "\\aref{[^}]*}{[^}]*$")
-
-        if is_code_block then
-            if not in_aref_mode then
-                cmp.setup.buffer({
-                    sources = { { name = 'attic' } }
-                })
-                in_aref_mode = true
-            end
-
-            if string.match(before_cursor, "\\aref{[^}]*}{$") then
-                cmp.complete()
-            end
-        else
-            if in_aref_mode then
-                cmp.setup.buffer({
-                    sources = {
-                        { name = 'attic' },
-                        { name = 'omni' },
-                        { name = 'buffer' },
-                        { name = 'path' }
-                    }
-                })
-                in_aref_mode = false
-            end
-        end
-    end
-})
-
-vim.api.nvim_create_autocmd("BufWritePost", {
-    pattern = "*/_attic/*/*",
-    callback = function()
-        local id = vim.fn.expand('%:p:h:t')
-        vim.fn.system({"/run/current-system/sw/bin/attic", "-m", id})
-        if vim.fn.expand('%:t') == "keywords" then load_attic_cache() end
-    end,
-})
 
 local function jump_to_attic_note()
     local line = vim.api.nvim_get_current_line()
@@ -121,12 +55,88 @@ local function jump_to_attic_note()
     end
 end
 
+-- Autocomplete Setup
+local attic_source = {}
+function attic_source:is_available() return true end
+function attic_source:get_trigger_characters() return { '{' } end
+function attic_source:get_keyword_pattern() return [=[[^{}]\+]=] end
+
+function attic_source:complete(request, callback)
+    local line = request.context.cursor_before_line
+    if not string.match(line, "\\aref{[^}]*}{[^}]*$") then
+        callback({ items = {}, isIncomplete = false })
+        return
+    end
+    callback({ items = attic_cache, isIncomplete = false })
+end
+
+cmp.register_source('attic', attic_source)
+
+-- Initialize Cache and Commands
+load_attic_cache()
+vim.api.nvim_create_user_command('ReloadAttic', function()
+    load_attic_cache()
+    print("Attic cmp cache reloaded!")
+end, {})
+
+-- Contextual Autocomplete Switching
+vim.api.nvim_create_autocmd({"CursorMovedI", "InsertEnter"}, {
+    group = attic_group,
+    pattern = "*.tex",
+    callback = function()
+        local col = vim.fn.col('.')
+        local line = vim.fn.getline('.')
+        local before_cursor = string.sub(line, 1, col - 1)
+        local is_code_block = string.match(before_cursor, "\\aref{[^}]*}{[^}]*$")
+
+        if is_code_block then
+            if not in_aref_mode then
+                cmp.setup.buffer({ sources = { { name = 'attic' } } })
+                in_aref_mode = true
+            end
+
+            if string.match(before_cursor, "\\aref{[^}]*}{$") then
+                cmp.complete()
+            end
+        else
+            if in_aref_mode then
+                cmp.setup.buffer({
+                    sources = {
+                        { name = 'attic' },
+                        { name = 'omni' },
+                        { name = 'buffer' },
+                        { name = 'path' }
+                    }
+                })
+                in_aref_mode = false
+            end
+        end
+    end
+})
+
+-- Automatic Metadata Syncing
+vim.api.nvim_create_autocmd("BufWritePost", {
+    group = attic_group,
+    pattern = "*/_attic/*/*",
+    callback = function()
+        local id = vim.fn.expand('%:p:h:t')
+        vim.fn.system({"/run/current-system/sw/bin/attic", "-m", id})
+        if vim.fn.expand('%:t') == "keywords" then 
+            load_attic_cache() 
+        end
+    end,
+})
+
+-- TeX Buffer Navigation
 vim.api.nvim_create_autocmd("FileType", {
+    group = attic_group,
     pattern = "tex",
     callback = function()
+        -- Forward Note Jumps
         vim.keymap.set('n', '<C-l>', jump_to_attic_note, { buffer = true, desc = "Jump to Attic Note Source" })
         vim.keymap.set('n', '<CR>', jump_to_attic_note, { buffer = true, desc = "Jump to Attic Note Source (Enter)" })
 
+        -- Backward Note Jumps
         vim.keymap.set('n', '<C-h>', '<C-o>', { buffer = true, desc = "Go Back to Previous Note" })
         vim.keymap.set('n', '<BS>', '<C-o>', { buffer = true, desc = "Go Back to Previous Note (Backspace)" })
     end
