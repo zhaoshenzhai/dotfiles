@@ -21,7 +21,7 @@ touch "$RECENT_FILE"
     cd "/Users/zhao/iCloud" || exit
     fd --type f --hidden --exclude .git --exclude '*.old' . \
         "Documents" "Dotfiles" "Projects" | while read -r line; do
-        
+
         if [[ "$line" =~ Projects/_attic/([0-9]{5})/([0-9]{5})\.tex ]]; then
             ID="${BASH_REMATCH[1]}"
             KW_PATH="/Users/zhao/iCloud/Projects/_attic/$ID/keywords"
@@ -39,7 +39,7 @@ touch "$RECENT_FILE"
                 continue
             fi
         fi
-        
+
         echo -e "$line\t$line"
     done > "$CACHE_FILE.tmp" 2>/dev/null
     mv "$CACHE_FILE.tmp" "$CACHE_FILE"
@@ -68,7 +68,7 @@ else
     NVIM_PATH="/etc/profiles/per-user/$USER/bin/nvim"
     HM_SESSION="$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
     EXEC_CMD="[ -f $HM_SESSION ] && . $HM_SESSION; export FROM_LAUNCHER=1; exec $NVIM_PATH \"$FULL_PATH\""
-    
+
     nohup alacritty -e sh -c "$EXEC_CMD" >/dev/null 2>&1 &
 fi
 
