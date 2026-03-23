@@ -5,7 +5,7 @@ TEMPLATE_FILE="$HOME/iCloud/Dotfiles/modules/darwin/LaTeXTemplate/files/attic.te
 
 mkdir -p "$ATTIC_DIR"
 
-local ID
+ID=
 while true; do
     ID=$(awk -v min=0 -v max=99999 'BEGIN{srand(); printf "%05d\n", int(min+rand()*(max-min+1))}')
     if [ ! -d "$ATTIC_DIR/$ID" ]; then

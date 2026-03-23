@@ -63,7 +63,7 @@
     ];
 
     targets.darwin.defaults."net.sourceforge.skim-app.skim" = {
-        SKUISetupPreferTabs = 1;
+        SKUISetupPreferTabs = 0;
 
         SKWhitePoint = [0.99 0.995 1 0.95];
         SKDisableAnimations = true;

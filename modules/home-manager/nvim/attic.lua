@@ -40,7 +40,7 @@ end, {})
 local attic_source = {}
 function attic_source:is_available() return true end
 function attic_source:get_trigger_characters() return { '{' } end
-function attic_source:get_keyword_pattern() return [[[^}]+]] end
+function attic_source:get_keyword_pattern() return [=[[^{}]\+]=] end
 
 function attic_source:complete(request, callback)
     local line = request.context.cursor_before_line
