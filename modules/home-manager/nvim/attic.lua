@@ -120,8 +120,8 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     callback = function()
         local id = vim.fn.expand('%:p:h:t')
         vim.fn.system({"/run/current-system/sw/bin/attic", "-m", id})
-        if vim.fn.expand('%:t') == "keywords" then 
-            load_attic_cache() 
+        if vim.fn.expand('%:t') == "keywords" then
+            load_attic_cache()
         end
     end,
 })
