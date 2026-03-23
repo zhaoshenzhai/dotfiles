@@ -21,7 +21,7 @@ local function load_attic_cache()
                     insertText = id,
                     documentation = {
                         kind = "markdown",
-                        value = "**Code:** `" .. id .. "`\n**Keywords:** " .. keywords
+                        value = "**Code:** `" .. id
                     }
                 })
             end
