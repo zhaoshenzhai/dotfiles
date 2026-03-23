@@ -13,7 +13,6 @@ REPOPATHS=$(echo "$REPOS" | awk '{$1=""; print $0}' | sed 's/^[ \t]*//')
 
 specifiedRepo=
 repoNum=
-repeat=
 
 HELP() {
     echo -e "Usage: ./git.sh"
@@ -51,7 +50,7 @@ EXIT() {
         read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
         if [[ "$repeat" == "Y" ]] || [[ -z "$repeat" ]]; then
             clear
-            "$0"
+            $(/run/current-system/sw/bin/gitMenu)
         fi
     fi
     aerospace close --quit-if-last-window
