@@ -52,13 +52,13 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
         --title git \
         --option "window.dimensions={columns=100,lines=35}" \
         --option "window.position={x=525,y=250}" \
-        -e /run/current-system/sw/bin/gitMenu"""
+        -e zsh -ic ~/iCloud/Dotfiles/modules/scripts/git.sh"""
 
     cmd-a = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
         --title attic \
         --option "window.dimensions={columns=100,lines=35}" \
         --option "window.position={x=525,y=250}" \
-        -e /run/current-system/sw/bin/attic"""
+        -e zsh -ic ~/iCloud/Dotfiles/modules/scripts/attic.sh"""
 
     cmd-shift-t = 'exec-and-forget open -a activity\ monitor'
 
