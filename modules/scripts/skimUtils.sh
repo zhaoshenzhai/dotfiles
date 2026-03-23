@@ -72,9 +72,9 @@ focus_daemon() {
 }
 
 while getopts "od" opt; do
-  case $opt in
-    o) open_nvim; exit 0 ;;
-    d) focus_daemon; exit 0 ;;
-    *) echo "Usage: $(basename "$0") -o (Open Neovim) | -d (Start Focus Daemon)"; exit 1 ;;
-  esac
+    case $opt in
+        o) open_nvim; exit 0 ;;
+        d) focus_daemon; exit 0 ;;
+        *) echo "Usage: $(basename "$0") -o (Open Neovim) | -d (Start Focus Daemon)"; exit 1 ;;
+    esac
 done
