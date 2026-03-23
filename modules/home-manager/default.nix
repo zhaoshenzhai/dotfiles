@@ -1,5 +1,8 @@
 { config, pkgs, lib, ... }: {
     manual.json.enable = false;
+    manual.manpages.enable = false;
+    manual.html.enable = false;
+
     home.stateVersion = "22.11";
     home.file = { ".hushlogin".text = ""; };
     home.sessionVariables = { EDITOR = "nvim"; };
