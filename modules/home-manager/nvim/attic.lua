@@ -24,8 +24,7 @@ local function load_attic_cache()
                     insertText = id,
                     documentation = {
                         kind = "markdown",
-                        -- Fixed: Properly formatted the documentation popup
-                        value = "**Code:** `" .. id .. "`\n**Keywords:** " .. keywords
+                        value = "**Code:** `" .. id
                     }
                 })
             end
@@ -132,11 +131,9 @@ vim.api.nvim_create_autocmd("FileType", {
     group = attic_group,
     pattern = "tex",
     callback = function()
-        -- Forward Note Jumps
         vim.keymap.set('n', '<C-l>', jump_to_attic_note, { buffer = true, desc = "Jump to Attic Note Source" })
         vim.keymap.set('n', '<CR>', jump_to_attic_note, { buffer = true, desc = "Jump to Attic Note Source (Enter)" })
 
-        -- Backward Note Jumps
         vim.keymap.set('n', '<C-h>', '<C-o>', { buffer = true, desc = "Go Back to Previous Note" })
         vim.keymap.set('n', '<BS>', '<C-o>', { buffer = true, desc = "Go Back to Previous Note (Backspace)" })
     end
