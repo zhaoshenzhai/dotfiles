@@ -35,3 +35,15 @@
 }
 
 \newcommand\freefootnote[1]{{\renewcommand\thefootnote{}\footnote{#1}\addtocounter{footnote}{-1}}}
+
+\AtEndDocument{
+    \setstretch{1}
+    \ifbool{hascitations}{\printbibliography}{}
+
+    {\footnotesize
+        \vspace{0.2in}
+        \textsc{Department of Mathematics and Statistics, McGill University, 805 Sherbrooke Street West, Montreal, QC, H3A 0B9, Canada}
+
+        \textit{Email address: \tt{zhaoshen.zhai@mail.mcgill.ca}}
+    }
+}
