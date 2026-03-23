@@ -93,7 +93,11 @@
         enable = true;
         caskArgs.no_quarantine = true;
         global.brewfile = true;
-        onActivation.cleanup = "zap";
+        onActivation = {
+            autoUpdate = true;
+            cleanup = "zap";
+            extraFlags = [ "--quiet" ];
+        };
 
         casks = [
             "zoom"
