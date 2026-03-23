@@ -30,7 +30,8 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
     cmd-e = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
         -e /bin/bash -c 'printf "\\033]0;vifm\\007"; \
         exec /etc/profiles/per-user/zhao/bin/vifm ~/ \
-        -c ":vsplit"'"""
+        -c ":vsplit" \
+        -c "windo normal ggvGgA"'"""
 
     cmd-g = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
         --title git \
