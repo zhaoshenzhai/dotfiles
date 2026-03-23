@@ -13,6 +13,7 @@ REPOPATHS=$(echo "$REPOS" | awk '{$1=""; print $0}' | sed 's/^[ \t]*//')
 
 specifiedRepo=
 repoNum=
+repeat=
 
 HELP() {
     echo -e "Usage: ./git.sh"
