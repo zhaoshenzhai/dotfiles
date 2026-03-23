@@ -72,14 +72,18 @@ clean() {
 }
 
 audit_notes() {
-    echo -e "\033[0;34mVerifying internal links...\033[0m"
+    echo -e "\033[0;34mVerifying internal links and scanning for TODOs...\033[0m"
     local BROKEN=0
+    local TODOS=0
 
-    fd -e tex . "$ATTIC_DIR" | while read -r file; do
-        grep -n "\\aref{" "$file" | while read -r line; do
-            local id=$(echo "$line" | sed -n 's/.*{\([0-9]\{5\}\)}/\1/p')
+    while read -r rel_file; do
+        local file="$ATTIC_DIR/$rel_file"
 
-            if [[ -n "$id" ]]; then
+        while read -r match; do
+            local line_no="${match%%:*}"
+
+            if [[ "$match" =~ \{([0-9]{5})\} ]]; then
+                local id="${BASH_REMATCH[1]}"
                 local T_FILE="$ATTIC_DIR/$id/$id.tex"
                 local P_FILE="$ATTIC_DIR/$id/$id.pdf"
                 local ERR=""
@@ -91,20 +95,35 @@ audit_notes() {
                 fi
 
                 if [[ -n "$ERR" ]]; then
-                    echo -e "\033[0;31m[MISSING $ERR]\033[0m ID $id in $file:$(echo "$line" | cut -d: -f1)"
+                    echo -e "\033[0;31m[MISSING $ERR]\033[0m ID $id in $(basename "$file"):$line_no"
                     ((BROKEN++))
                 fi
             fi
-        done
-    done
+        done < <(grep -E -n -o '\\aref\{[^}]*\}\{[0-9]{5}\}' "$file" 2>/dev/null)
 
+        while read -r todo_match; do
+            local line_no="${todo_match%%:*}"
+            local text="${todo_match#*:}"
+
+            text="$(echo "$text" | sed 's/^[[:space:]]*//')"
+            echo -e "\033[0;33m[TODO]\033[0m $(basename "$file"):$line_no -> $text"
+            ((TODOS++))
+        done < <(grep -n "TODO" "$file" 2>/dev/null)
+
+    done < <(cd "$ATTIC_DIR" && fd -e tex)
+
+    echo "----------------------------------------"
     if [ $BROKEN -eq 0 ]; then
-        echo -e "\033[0;32mAll internal links are valid.\033[0m"
+        echo -e "\033[0;32mLinks: All internal links are valid.\033[0m"
     else
-        echo -e "\033[0;33mFound $BROKEN broken link(s).\033[0m"
+        echo -e "\033[0;31mLinks: Found $BROKEN broken link(s).\033[0m"
     fi
 
-    clean
+    if [ $TODOS -eq 0 ]; then
+        echo -e "\033[0;32mTODOs: None found!\033[0m"
+    else
+        echo -e "\033[0;33mTODOs: You have $TODOS pending TODO(s).\033[0m"
+    fi
 }
 
 while getopts "nm:ac" opt; do

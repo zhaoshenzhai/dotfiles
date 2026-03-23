@@ -38,7 +38,7 @@ update_full_cache_bg() {
                 if [ -f "$kw_path" ]; then
                     local kw
                     kw=$(cat "$kw_path" 2>/dev/null)
-                    echo -e "Projects/_attic/[$kw]\t$line"
+                    echo -e "Projects/_attic/$id[$kw]\t$line"
                     continue
                 fi
             elif [[ "$line" =~ Projects/_attic/([0-9]{5})/keywords ]]; then
@@ -47,7 +47,7 @@ update_full_cache_bg() {
                 if [ -f "$kw_path" ]; then
                     local kw
                     kw=$(cat "$kw_path" 2>/dev/null)
-                    echo -e "Projects/_attic/[$kw]/keywords\t$line"
+                    echo -e "Projects/_attic/$id[$kw]/keywords\t$line"
                     continue
                 fi
             fi
@@ -62,14 +62,12 @@ purge_recent_cache_bg() {
         if [ ! -s "$RECENT_FILE" ]; then exit 0; fi
 
         while IFS=$'\t' read -r col1 col2; do
-            # 1. Check if file exists
             if [[ -z "$col2" || ! -e "$BASE_DIR/$col2" ]]; then
                 continue
             fi
 
             local valid=true
 
-            # 2. Check if keywords have changed
             if [[ "$col2" =~ Projects/_attic/([0-9]{5})/([0-9]{5})\.tex ]]; then
                 local id="${BASH_REMATCH[1]}"
                 local kw_path="$BASE_DIR/Projects/_attic/$id/keywords"
