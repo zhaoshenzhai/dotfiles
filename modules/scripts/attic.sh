@@ -48,7 +48,6 @@ generate_metadata() {
     cat <<EOF > "$DIR/metadata.tex"
 \begin{flushleft}
     \color{gray}\footnotesize\ttfamily
-    Created: $CREATED \\\\
     Last modified: $MODIFIED \\\\
     Keywords: [$KEYWORDS] \\\\
     References: [$REFS] \\\\
