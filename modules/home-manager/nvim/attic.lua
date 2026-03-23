@@ -102,7 +102,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 
 local function jump_to_attic_note()
     local line = vim.api.nvim_get_current_line()
-    local id = string.match(line, "\\aref{[^}]*}{([0-9]{5})}")
+    local id = string.match(line, "\\aref{[^}]*}{(%d%d%d%d%d)}")
 
     if id then
         local target = vim.fn.expand('~/iCloud/Projects/_attic/') .. id .. '/' .. id .. '.tex'
@@ -114,21 +114,20 @@ local function jump_to_attic_note()
             vim.api.nvim_echo({{"Attic: Note " .. id .. " not found", "ErrorMsg"}}, false, {})
         end
     else
-        vim.lsp.buf.definition()
+        local status_ok, _ = pcall(vim.lsp.buf.definition)
+        if not status_ok then
+            vim.api.nvim_echo({{"Attic: No link found under cursor.", "WarningMsg"}}, false, {})
+        end
     end
 end
 
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "tex",
     callback = function()
-        vim.keymap.set('n', '<C-l>', jump_to_attic_note, {
-            buffer = true,
-            desc = "Jump to Attic Note Source"
-        })
+        vim.keymap.set('n', '<C-l>', jump_to_attic_note, { buffer = true, desc = "Jump to Attic Note Source" })
+        vim.keymap.set('n', '<CR>', jump_to_attic_note, { buffer = true, desc = "Jump to Attic Note Source (Enter)" })
 
-        vim.keymap.set('n', '<C-h>', '<C-o>', {
-            buffer = true,
-            desc = "Go Back to Previous Note"
-        })
+        vim.keymap.set('n', '<C-h>', '<C-o>', { buffer = true, desc = "Go Back to Previous Note" })
+        vim.keymap.set('n', '<BS>', '<C-o>', { buffer = true, desc = "Go Back to Previous Note (Backspace)" })
     end
 })

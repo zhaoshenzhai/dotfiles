@@ -107,7 +107,7 @@ audit_notes() {
     clean
 }
 
-while getopts "nm:a" opt; do
+while getopts "nm:ac" opt; do
   case $opt in
     n) create_new; exit 0 ;;
     m) generate_metadata "$OPTARG"; exit 0 ;;
