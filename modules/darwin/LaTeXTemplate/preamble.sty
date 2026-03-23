@@ -12,8 +12,20 @@
 
 \usepackage[style=alphabetic, sorting=nyt, maxbibnames=10]{biblatex}
 \addbibresource{refs.bib}
+\newbool{hascitations}
+\AtEveryCitekey{\global\setbool{hascitations}{true}}
 
 \LinesNumbered
 \RestyleAlgo{ruled}
 
-\newmdenv[topline=false, bottomline=false, rightline=false, skipabove=4pt, skipbelow=4pt, linewidth=0.75pt]{leftbar}
+\AtEndDocument{
+    \setstretch{1}
+    \ifbool{hascitations}{\printbibliography}{}
+
+    {\footnotesize
+        \vspace{0.2in}
+        \textsc{Department of Mathematics and Statistics, McGill University, 805 Sherbrooke Street West, Montreal, QC, H3A 0B9, Canada}
+
+        \textit{Email address: \tt{zhaoshen.zhai@mail.mcgill.ca}}
+    }
+}

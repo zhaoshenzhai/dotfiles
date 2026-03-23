@@ -20,10 +20,13 @@
         checkPhase = "";
         text = builtins.readFile ./newLaTeX.sh;
     };
+
+    attic = pkgs.writeShellScriptBin "attic" (builtins.readFile ./attic.sh);
 in
 {
     environment.systemPackages = [
         pdfcp
         newLatex
+        attic
     ];
 }
