@@ -1,7 +1,7 @@
-nnoremap <buffer> <C-1> :w <CR>:VimtexCompile<CR>
-nnoremap <buffer> <C-2> :w <CR>:VimtexView<CR>
-nnoremap <buffer> <C-3> :w <CR>:!rm -f *.aux(N) *.bbl(N) *.bcf(N) *bcf-SAVE-ERROR(N) *.blg(N) *.fdb_latexmk(N) *.fls(N) *.log(N) *.run.xml(N) *.synctex.gz(N) *.synctex\(busy\)(N)<CR><CR>
-nnoremap <buffer> <C-4> :w <CR>:lua local f=vim.fn.expand('%:p:r')..'_Student.pdf'; if vim.fn.filereadable(f)==1 then vim.fn.jobstart({ "open", "-n", "-a", "Skim", f }, {detach=true}) end<CR><CR>
+nnoremap <buffer><silent> <C-1> <cmd>write<CR><cmd>VimtexCompile<CR>
+nnoremap <buffer><silent> <C-2> <cmd>write<CR><cmd>VimtexView<CR><cmd>VimtexView<CR>
+nnoremap <buffer><silent> <C-3> <cmd>write<CR><cmd>silent !rm -f *.aux(N) *.bbl(N) *.bcf(N) *bcf-SAVE-ERROR(N) *.blg(N) *.fdb_latexmk(N) *.fls(N) *.log(N) *.run.xml(N) *.synctex.gz(N) *.synctex\(busy\)(N)<CR>
+nnoremap <buffer><silent> <C-4> <cmd>write<CR><cmd>lua local f=vim.fn.expand('%:p:r')..'_Student.pdf'; if vim.fn.filereadable(f)==1 then vim.fn.jobstart({ "open", "-n", "-a", "Skim", f }, {detach=true}) end<CR>
 
 function! TexFold(lnum)
     let l:line = getline(a:lnum)
