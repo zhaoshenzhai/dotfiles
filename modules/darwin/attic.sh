@@ -48,7 +48,6 @@ generate_metadata() {
     cat <<EOF > "$DIR/metadata.tex"
 \begin{flushleft}
     \color{gray}\footnotesize\ttfamily
-    Created: $CREATED \\\\
     Last modified: $MODIFIED \\\\
     Keywords: [$KEYWORDS] \\\\
     References: [$REFS] \\\\
@@ -128,6 +127,23 @@ audit_notes() {
         echo -e "${YELLOW}TODOs: You have $TODOS pending TODO(s).${NC}"
     fi
 }
+rebuild_all() {
+    echo -e "${BLUE}Refreshing metadata and recompiling all notes. This may take a moment...${NC}"
+    local count=0
+
+    for dir in "$ATTIC_DIR"/[0-9][0-9][0-9][0-9][0-9]/; do
+        [ -d "$dir" ] || continue
+
+        local id=$(basename "$dir")
+        echo -ne "${CYAN}Processing Note $id...${NC}\r"
+
+        generate_metadata "$id" > /dev/null
+        (cd "$dir" && latexmk -pdf "$id.tex" > /dev/null 2>&1)
+        ((count++))
+    done
+
+    echo -e "\033[2K\r${GREEN}Successfully rebuilt $count note(s) and their metadata.${NC}"
+}
 
 EXIT() {
     echo ""
@@ -146,13 +162,14 @@ INTERACTIVE_MENU() {
         echo -e "    ${CYAN}(2): Audit notes & TODOs${NC}"
         echo -e "    ${CYAN}(3): Clean LaTeX files${NC}"
         echo -e "    ${CYAN}(4): Manually generate metadata${NC}"
+        echo -e "    ${CYAN}(5): Rebuild All (Metadata & PDFs)${NC}"
         echo ""
 
-        read -n 1 -ep "$(echo -e ${CYAN}"Select operation: [1-4]${NC} ")" cmdNum
+        read -n 1 -ep "$(echo -e ${CYAN}"Select operation: [1-5]${NC} ")" cmdNum
 
         if [[ "$cmdNum" == "q" ]]; then
             aerospace close --quit-if-last-window 2>/dev/null || exit 0
-        elif [[ "$cmdNum" =~ ^[1-4]$ ]]; then
+        elif [[ "$cmdNum" =~ ^[1-5]$ ]]; then
             valid=1
         else
             clear
@@ -171,6 +188,7 @@ INTERACTIVE_MENU() {
                 generate_metadata "$targetID"
             fi
         ;;
+        "5") rebuild_all ;;
     esac
 
     EXIT
@@ -184,7 +202,8 @@ if [[ $# -gt 0 ]]; then
         m) generate_metadata "$OPTARG"; exit 0 ;;
         a) audit_notes; exit 0 ;;
         c) clean; exit 0 ;;
-        *) echo "Usage: attic [-n] [-m ID] [-a] [-c]"; exit 1 ;;
+        r) rebuild_all; exit 0 ;;
+        *) echo "Usage: attic [-n] [-m ID] [-a] [-c] [-r]"; exit 1 ;;
       esac
     done
 else
