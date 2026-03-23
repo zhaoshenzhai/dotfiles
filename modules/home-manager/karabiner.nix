@@ -154,7 +154,7 @@
                                             }
                                         ];
                                     }
-                                    { # shift + j -> page down
+                                    { # shift+j -> page down
                                         type = "basic";
                                         from = { key_code = "j"; modifiers = { mandatory = [ "shift" ]; }; };
                                         to = [ { key_code = "down_arrow"; modifiers = [ "option" ]; } ];
