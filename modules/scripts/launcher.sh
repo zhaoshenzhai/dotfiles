@@ -24,11 +24,7 @@ init() {
 format() {
     local file_path="$1"
 
-    if [[ "$file_path" =~ _attic/[0-9]{5}/metadata\.tex ]]; then
-        return
-    fi
-
-    if [[ "$file_path" =~ Projects/_attic/([0-9]{5})/([0-9]{5})\.(tex|pdf) ]]; then
+    if [[ "$file_path" =~ Projects/_attic/([0-9]{5})/([0-9]{5})\.(tex|pdf|key) ]]; then
         local id="${BASH_REMATCH[1]}"
         local ext="${BASH_REMATCH[3]}"
 
@@ -37,16 +33,6 @@ format() {
             local keywords
             keywords=$(cat "$keywordsPath" 2>/dev/null)
             printf "Projects/attic_%s/[%s].%s\t%s\n" "$id" "$keywords" "$ext" "$file_path"
-            return
-        fi
-
-    elif [[ "$file_path" =~ Projects/_attic/([0-9]{5})/keywords ]]; then
-        local id="${BASH_REMATCH[1]}"
-        local keywordsPath="$BASE_DIR/Projects/_attic/$id/keywords"
-        if [ -f "$keywordsPath" ]; then
-            local keywords
-            keywords=$(cat "$keywordsPath" 2>/dev/null)
-            printf "Projects/attic_%s/[%s]/keywords\t%s\n" "$id" "$keywords" "$file_path"
             return
         fi
     fi

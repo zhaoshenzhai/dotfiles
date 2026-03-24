@@ -17,7 +17,7 @@ create_new() {
     cp "$TEMPLATE_FILE" "$ATTIC_DIR/$ID/$ID.tex"
 
     read -ep "$(echo -e ${PURPLE}"Enter keywords for Note $ID (comma separated): ${NC}")" KEYWORDS
-    echo "$KEYWORDS" | sed 's/,/, /g' | sed 's/  / /g' > "$ATTIC_DIR/$ID/keywords"
+    echo "$KEYWORDS" | sed 's/,/, /g' | sed 's/  / /g' > "$ATTIC_DIR/$ID/$ID.key"
 
     generate_metadata "$ID"
 
@@ -39,7 +39,7 @@ generate_metadata() {
     fi
 
     local MODIFIED=$(/usr/bin/stat -f "%Sm" -t "%Y/%m/%d" "$FILE")
-    local KEYWORDS=$(cat "$DIR/keywords" 2>/dev/null)
+    local KEYWORDS=$(cat "$DIR/$ID.key" 2>/dev/null)
     local REFS=$(grep -E -o '\\aref\{[^}]*\}\{[0-9]{5}\}' "$FILE" 2>/dev/null | sed -E 's/.*\{([0-9]{5})\}/\1/' | sort -u | paste -sd "," - | sed 's/,/, /g')
     local REF_IN=$(grep -E -rl '\\aref\{[^}]*\}\{'"$ID"'\}' "$ATTIC_DIR" --include="*.tex" 2>/dev/null | grep -v "$FILE" | xargs -I {} basename {} .tex | sort -u | paste -sd "," - | sed 's/,/, /g')
 
@@ -54,11 +54,11 @@ generate_metadata() {
 \end{flushleft}
 EOF
 
-    if cmp -s "$TEMP_META" "$DIR/metadata.tex" 2>/dev/null; then
+    if cmp -s "$TEMP_META" "$DIR/$ID.dat" 2>/dev/null; then
         rm "$TEMP_META"
         return 1
     else
-        mv "$TEMP_META" "$DIR/metadata.tex"
+        mv "$TEMP_META" "$DIR/$ID.dat"
         echo -e "${GREEN}Metadata updated for $ID.${NC}"
         return 0
     fi
@@ -66,7 +66,7 @@ EOF
 update_and_sync() {
     local ID=$1
     local FILE="$ATTIC_DIR/$ID/$ID.tex"
-    local META_FILE="$ATTIC_DIR/$ID/metadata.tex"
+    local META_FILE="$ATTIC_DIR/$ID/$ID.dat"
 
     if [ ! -f "$FILE" ]; then
         return
@@ -162,7 +162,7 @@ audit_notes() {
             ((TODOS++))
         done < <(grep -n "TODO" "$file" 2>/dev/null)
 
-        local meta="$ATTIC_DIR/$id/metadata.tex"
+        local meta="$ATTIC_DIR/$id/$ID.dat"
 
         local REFS=$(grep -E -o '\\aref\{[^}]*\}\{[0-9]{5}\}' "$file" 2>/dev/null | sed -E 's/.*\{([0-9]{5})\}/\1/' | sort -u | paste -sd "," - | sed 's/,/, /g')
         local REF_IN=$(grep -E -rl '\\aref\{[^}]*\}\{'"$id"'\}' "$ATTIC_DIR" --include="*.tex" 2>/dev/null | grep -v "$file" | xargs -I {} basename {} .tex | sort -u | paste -sd "," - | sed 's/,/, /g')

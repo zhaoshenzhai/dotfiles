@@ -11,7 +11,7 @@ local function load_attic_cache()
 
     for _, dir in ipairs(dirs) do
         local id = vim.fn.fnamemodify(dir, ':t')
-        local kw_file = dir .. '/keywords'
+        local kw_file = dir .. '/' .. id .. '.key'
 
         if vim.fn.filereadable(kw_file) == 1 then
             local lines = vim.fn.readfile(kw_file)
