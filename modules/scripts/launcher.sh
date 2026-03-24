@@ -6,25 +6,23 @@ CACHE_FILE="$CACHE_DIR/files.txt"
 RECENT_FILE="$CACHE_DIR/recent.txt"
 BASE_DIR="$HOME/iCloud"
 
-enforce_single_instance() {
+init() {
     if [ -f "$LOCKFILE" ]; then
-        local old_pid
-        old_pid=$(cat "$LOCKFILE")
-        if ps -p "$old_pid" > /dev/null; then
+        oldPID=$(cat "$LOCKFILE")
+        if ps -p "$oldPID" > /dev/null; then
             exit 0
         fi
     fi
     echo $$ > "$LOCKFILE"
     trap 'rm -f "$LOCKFILE"' EXIT
-}
-setup_environment() {
+
     mkdir -p "$CACHE_DIR"
     touch "$RECENT_FILE"
     touch "$CACHE_FILE"
 }
-update_full_cache_bg() {
+updateCache() {
     (
-        cd "$BASE_DIR" || exit
+        cd "$BASE_DIR"
         fd --type f --hidden --exclude .git --exclude '*.old' . \
             "Documents" "Dotfiles" "Projects" | while read -r line; do
 
@@ -33,21 +31,19 @@ update_full_cache_bg() {
             fi
 
             if [[ "$line" =~ Projects/_attic/([0-9]{5})/([0-9]{5})\.tex ]]; then
-                local id="${BASH_REMATCH[1]}"
-                local kw_path="$BASE_DIR/Projects/_attic/$id/keywords"
-                if [ -f "$kw_path" ]; then
-                    local kw
-                    kw=$(cat "$kw_path" 2>/dev/null)
-                    echo -e "Projects/attic_$id/[$kw]\t$line"
+                id="${BASH_REMATCH[1]}"
+                keywordsPath="$BASE_DIR/Projects/_attic/$id/keywords"
+                if [ -f "$keywordsPath" ]; then
+                    keywords=$(cat "$keywordsPath" 2>/dev/null)
+                    echo -e "Projects/attic_$id/[$keywords]\t$line"
                     continue
                 fi
             elif [[ "$line" =~ Projects/_attic/([0-9]{5})/keywords ]]; then
-                local id="${BASH_REMATCH[1]}"
-                local kw_path="$BASE_DIR/Projects/_attic/$id/keywords"
-                if [ -f "$kw_path" ]; then
-                    local kw
-                    kw=$(cat "$kw_path" 2>/dev/null)
-                    echo -e "Projects/attic_$id/[$kw]/keywords\t$line"
+                id="${BASH_REMATCH[1]}"
+                keywordsPath="$BASE_DIR/Projects/_attic/$id/keywords"
+                if [ -f "$keywordsPath" ]; then
+                    keywords=$(cat "$keywordsPath" 2>/dev/null)
+                    echo -e "Projects/attic_$id/[$keywords]/keywords\t$line"
                     continue
                 fi
             fi
@@ -55,37 +51,30 @@ update_full_cache_bg() {
             echo -e "$line\t$line"
         done > "$CACHE_FILE.tmp" 2>/dev/null
         mv "$CACHE_FILE.tmp" "$CACHE_FILE"
-    ) &
-}
-purge_recent_cache_bg() {
-    (
-        if [ ! -s "$RECENT_FILE" ]; then exit 0; fi
 
         while IFS=$'\t' read -r col1 col2; do
             if [[ -z "$col2" || ! -e "$BASE_DIR/$col2" ]]; then
                 continue
             fi
 
-            local valid=true
+            valid=true
 
             if [[ "$col2" =~ Projects/_attic/([0-9]{5})/([0-9]{5})\.tex ]]; then
-                local id="${BASH_REMATCH[1]}"
-                local kw_path="$BASE_DIR/Projects/_attic/$id/keywords"
-                if [ -f "$kw_path" ]; then
-                    local kw
-                    kw=$(cat "$kw_path" 2>/dev/null)
-                    local expected="Projects/_attic/[$kw]"
+                id="${BASH_REMATCH[1]}"
+                keywordsPath="$BASE_DIR/Projects/_attic/$id/keywords"
+                if [ -f "$keywordsPath" ]; then
+                    keywords=$(cat "$keywordsPath" 2>/dev/null)
+                    expected="Projects/_attic/[$keywords]"
                     if [[ "$col1" != "$expected" ]]; then
                         valid=false
                     fi
                 fi
             elif [[ "$col2" =~ Projects/_attic/([0-9]{5})/keywords ]]; then
-                local id="${BASH_REMATCH[1]}"
-                local kw_path="$BASE_DIR/Projects/_attic/$id/keywords"
-                if [ -f "$kw_path" ]; then
-                    local kw
-                    kw=$(cat "$kw_path" 2>/dev/null)
-                    local expected="Projects/_attic/[$kw]/keywords"
+                id="${BASH_REMATCH[1]}"
+                keywordsPath="$BASE_DIR/Projects/_attic/$id/keywords"
+                if [ -f "$keywordsPath" ]; then
+                    keywords=$(cat "$keywordsPath" 2>/dev/null)
+                    expected="Projects/_attic/[$keywords]/keywords"
                     if [[ "$col1" != "$expected" ]]; then
                         valid=false
                     fi
@@ -99,7 +88,7 @@ purge_recent_cache_bg() {
         mv "$RECENT_FILE.tmp" "$RECENT_FILE"
     ) &
 }
-show_fzf_ui() {
+selectFiles() {
     cat "$RECENT_FILE" "$CACHE_FILE" 2>/dev/null | awk '!seen[$0]++' | while IFS=$'\t' read -r col1 col2; do
         if [[ -n "$col2" && -e "$BASE_DIR/$col2" ]]; then
             printf "%s\t%s\n" "$col1" "$col2"
@@ -112,45 +101,37 @@ show_fzf_ui() {
         --tiebreak=index \
         --pointer='➜'
 }
-update_recent_post_selection() {
-    local selected="$1"
+updateRecentFiles() {
+    selected="$1"
     grep -vF -x "$selected" "$RECENT_FILE" > "$RECENT_FILE.tmp" 2>/dev/null || true
     echo "$selected" | cat - "$RECENT_FILE.tmp" | head -n 100 > "$RECENT_FILE"
     rm -f "$RECENT_FILE.tmp"
 }
-launch_target() {
-    local selected="$1"
-    local rel_path
+launch() {
+    selected="$1"
     rel_path=$(echo "$selected" | cut -f2)
-    local full_path="$BASE_DIR/$rel_path"
+    full_path="$BASE_DIR/$rel_path"
 
     if [[ "$full_path" == *.pdf ]]; then
         open -n -a Skim "$full_path" >/dev/null 2>&1 &
     else
-        local nvim_path="/etc/profiles/per-user/$USER/bin/nvim"
-        local hm_session="$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
-        local exec_cmd="[ -f $hm_session ] && . $hm_session; export FROM_LAUNCHER=1; exec $nvim_path \"$full_path\""
+        nvim_path="/etc/profiles/per-user/$USER/bin/nvim"
+        hm_session="$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+        exec_cmd="[ -f $hm_session ] && . $hm_session; export FROM_LAUNCHER=1; exec $nvim_path \"$full_path\""
 
         nohup alacritty -e sh -c "$exec_cmd" >/dev/null 2>&1 &
     fi
+}
+
+init
+updateCache
+
+selected_line=$(selectFiles)
+
+if [ -n "$selected_line" ]; then
+    updateRecentFiles "$selected_line"
+    launch "$selected_line"
 
     aerospace mode main
     sleep 0.5
-}
-
-main() {
-    enforce_single_instance
-    setup_environment
-
-    update_full_cache_bg
-    purge_recent_cache_bg
-
-    local selected_line=$(show_fzf_ui)
-
-    if [ -n "$selected_line" ]; then
-        update_recent_post_selection "$selected_line"
-        launch_target "$selected_line"
-    fi
-}
-
-main
+fi
