@@ -8,6 +8,15 @@ RL_PURPLE=$'\001\e[35m\002'
 RL_CYAN=$'\001\e[36m\002'
 RL_NC=$'\001\e[0m\002'
 
+EXTRACT_IDS='while (/\\aref\{.*?\}\{([0-9]{5})\}/g) { print $1 }'
+EXTRACT_LINES_AND_IDS='while (/\\aref\{.*?\}\{([0-9]{5})\}/g) { print "$.:$1" }'
+extract_links() {
+    perl -nle "$EXTRACT_IDS" "$1"
+}
+format_links() {
+    sort -u | sed -E 's/^([0-9]{5})$/\\aref{\1}{\1}/' | paste -sd "," - | sed 's/,/, /g'
+}
+
 createNew() {
     local IN_KEYWORDS="$1"
     mkdir -p "$ATTIC_DIR"
@@ -56,8 +65,8 @@ generateMetadata() {
 
     local MODIFIED=$(/usr/bin/stat -f "%Sm" -t "%Y/%m/%d" "$FILE")
     local KEYWORDS=$(cat "$DIR/$ID.key" 2>/dev/null)
-    local REFS=$(grep -E -o '\\aref\{[^}]*\}\{[0-9]{5}\}' "$FILE" 2>/dev/null | sed -E 's/.*\{([0-9]{5})\}/\\aref{\1}{\1}/' | sort -u | paste -sd "," - | sed 's/,/, /g')
-    local REF_IN=$(grep -E -rl '\\aref\{[^}]*\}\{'"$ID"'\}' "$ATTIC_DIR" --include="*.tex" 2>/dev/null | grep -v "$FILE" | xargs -I {} basename {} .tex | sort -u | sed -E 's/^([0-9]{5})$/\\aref{\1}{\1}/' | paste -sd "," - | sed 's/,/, /g')
+    local REFS=$(extract_links "$FILE" | format_links)
+    local REF_IN=$(for f in "$ATTIC_DIR"/*/*.tex; do [ "$f" != "$FILE" ] && extract_links "$f" | grep -q "^$ID$" && basename "$f" .tex; done | format_links)
 
     local TEMP_META="$DIR/metadata.tmp"
     cat <<EOF > "$TEMP_META"
@@ -103,7 +112,7 @@ updateMetadata() {
         fi
     fi
 
-    local NEW_REFS=$(grep -E -o '\\aref\{[^}]*\}\{[0-9]{5}\}' "$FILE" 2>/dev/null | sed -E 's/.*\{([0-9]{5})\}/\1/')
+    local NEW_REFS=$(extract_links "$FILE")
     local ALL_REFS=$(echo "$OLD_REFS $NEW_REFS" | grep -E -o '[0-9]{5}' | sort -u)
 
     for ref_id in $ALL_REFS; do
@@ -149,25 +158,19 @@ auditNotes() {
 
         while read -r match; do
             local line_no="${match%%:*}"
+            local target_id="${match#*:}"
 
-            if [[ "$match" =~ \{([0-9]{5})\} ]]; then
-                local target_id="${BASH_REMATCH[1]}"
-                local T_FILE="$ATTIC_DIR/$target_id/$target_id.tex"
-                local P_FILE="$ATTIC_DIR/$target_id/$target_id.pdf"
-                local ERR=""
+            local T_FILE="$ATTIC_DIR/$target_id/$target_id.tex"
+            local P_FILE="$ATTIC_DIR/$target_id/$target_id.pdf"
+            local ERR=""
+            [[ ! -f "$T_FILE" ]] && ERR="TEX"
+            if [[ ! -f "$P_FILE" ]]; then [[ -n "$ERR" ]] && ERR="$ERR & "; ERR="${ERR}PDF"; fi
 
-                [[ ! -f "$T_FILE" ]] && ERR="TEX"
-                if [[ ! -f "$P_FILE" ]]; then
-                    [[ -n "$ERR" ]] && ERR="$ERR & "
-                    ERR="${ERR}PDF"
-                fi
-
-                if [[ -n "$ERR" ]]; then
-                    echo -e "${RED}[MISSING $ERR]${NC} ID $target_id referenced in $id:$line_no"
-                    ((BROKEN++))
-                fi
+            if [[ -n "$ERR" ]]; then
+                echo -e "${RED}[MISSING $ERR]${NC} ID $target_id referenced in $id:$line_no"
+                ((BROKEN++))
             fi
-        done < <(grep -E -n -o '\\aref\{[^}]*\}\{[0-9]{5}\}' "$file" 2>/dev/null)
+        done < <(perl -nle "$EXTRACT_LINES_AND_IDS" "$file" 2>/dev/null)
 
         while read -r todo_match; do
             local line_no="${todo_match%%:*}"
@@ -180,8 +183,8 @@ auditNotes() {
 
         local meta="$ATTIC_DIR/$id/$id.dat"
 
-        local REFS=$(grep -E -o '\\aref\{[^}]*\}\{[0-9]{5}\}' "$file" 2>/dev/null | sed -E 's/.*\{([0-9]{5})\}/\\aref{\1}{\1}/' | sort -u | paste -sd "," - | sed 's/,/, /g')
-        local REF_IN=$(grep -E -rl '\\aref\{[^}]*\}\{'"$id"'\}' "$ATTIC_DIR" --include="*.tex" 2>/dev/null | grep -v "$file" | xargs -I {} basename {} .tex | sort -u | sed -E 's/^([0-9]{5})$/\\aref{\1}{\1}/' | paste -sd "," - | sed 's/,/, /g')
+        local REFS=$(extract_links "$file" | format_links)
+        local REF_IN=$(for f in "$ATTIC_DIR"/*/*.tex; do [ "$f" != "$file" ] && extract_links "$f" | grep -q "^$id$" && basename "$f" .tex; done | format_links)
 
         local EXPECTED_REFS="References: [$REFS]"
         local EXPECTED_REF_IN="Referenced in: [$REF_IN]"
@@ -279,23 +282,26 @@ INTERACTIVE_MENU() {
 
     EXIT
 }
+MAIN() {
+    if [[ $# -gt 0 ]]; then
+        INTERACTIVE=0
+        while getopts "ek:nu:m:acr" opt; do
+            case $opt in
+                e) createNew "EMPTY_KEYWORDS"; exit 0 ;;
+                k) createNew "$OPTARG"; exit 0 ;;
+                n) createNew; exit 0 ;;
+                m) generateMetadata "$OPTARG"; exit 0 ;;
+                u) updateMetadata "$OPTARG"; exit 0 ;;
+                a) auditNotes; exit 0 ;;
+                c) clean; exit 0 ;;
+                r) rebuildAll; exit 0 ;;
+                *) echo "Usage: attic [-n] [-e] [-k keywords] [-m ID] [-u ID] [-a] [-c] [-r]"; exit 1 ;;
+            esac
+        done
+    else
+        INTERACTIVE=1
+        INTERACTIVE_MENU
+    fi
+}
 
-if [[ $# -gt 0 ]]; then
-    INTERACTIVE=0
-    while getopts "ek:nu:m:acr" opt; do
-        case $opt in
-            e) createNew "EMPTY_KEYWORDS"; exit 0 ;;
-            k) createNew "$OPTARG"; exit 0 ;;
-            n) createNew; exit 0 ;;
-            m) generateMetadata "$OPTARG"; exit 0 ;;
-            u) updateMetadata "$OPTARG"; exit 0 ;;
-            a) auditNotes; exit 0 ;;
-            c) clean; exit 0 ;;
-            r) rebuildAll; exit 0 ;;
-            *) echo "Usage: attic [-n] [-e] [-k keywords] [-m ID] [-u ID] [-a] [-c] [-r]"; exit 1 ;;
-        esac
-    done
-else
-    INTERACTIVE=1
-    INTERACTIVE_MENU
-fi
+MAIN
