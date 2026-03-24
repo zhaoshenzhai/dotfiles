@@ -1,0 +1,25 @@
+\input{../preamble.sty}
+\input{../paper.sty}
+\input{../macros.sty}
+\input{../solutions.sty}
+
+\fancyhead[RO, LE]{\scriptsize\thepage}
+\fancyhead[C]{\scriptsize\MakeUppercase{Zhaoshen Zhai / The Attic}}
+
+\AtBeginDocument{
+    \IfFileExists{metadata.tex}{\input{metadata.tex}}{\footnotesize\color{gray}\ttfamily[Metadata Pending...]\vspace{1em}}
+}
+
+\usepackage[normalem]{ulem}
+\newsavebox{\mywavebox}
+\sbox{\mywavebox}{%
+    \begin{tikzpicture}[baseline, inner sep=0pt, outer sep=0pt]
+        \path[use as bounding box] (0,-3pt) rectangle (4pt,0);
+        \draw[gray, line cap=round, line width=0.4pt] 
+            (0,-2pt) sin (1pt, -1.6pt) cos (2pt, -2pt) sin (3pt, -2.4pt) cos (4pt, -2pt);
+    \end{tikzpicture}%
+}
+
+\newcommand{\mywave}{\bgroup\markoverwith{\usebox{\mywavebox}}\ULon}
+\newcommand{\squig}[2]{\begingroup\hypersetup{hidelinks}\href{#1}{\mywave{#2}}\endgroup}
+\newcommand{\aref}[2]{\squig{../#2/#2.pdf}{#1}}
