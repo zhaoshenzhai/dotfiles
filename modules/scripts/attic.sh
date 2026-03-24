@@ -108,7 +108,7 @@ updateMetadata() {
 
     if generateMetadata "$ID" > /dev/null 2>&1; then
         if ! is_compiling "$ID"; then
-            # (cd "$ATTIC_DIR/$ID" && latexmk -pdf "$ID.tex" > /dev/null 2>&1) &
+            (cd "$ATTIC_DIR/$ID" && latexmk -pdf "$ID.tex" > /dev/null 2>&1) &
         fi
     fi
 
@@ -119,7 +119,7 @@ updateMetadata() {
         if [ -n "$ref_id" ] && [ -d "$ATTIC_DIR/$ref_id" ]; then
             if generateMetadata "$ref_id" > /dev/null 2>&1; then
                 if ! is_compiling "$ref_id"; then
-                    # (cd "$ATTIC_DIR/$ref_id" && latexmk -pdf "$ref_id.tex" > /dev/null 2>&1) &
+                    (cd "$ATTIC_DIR/$ref_id" && latexmk -pdf "$ref_id.tex" > /dev/null 2>&1) &
                 fi
             fi
         fi
