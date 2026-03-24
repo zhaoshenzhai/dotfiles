@@ -19,16 +19,13 @@ create_new() {
 
     if [[ "$IN_KEYWORDS" == "EMPTY_KEYWORDS" ]]; then
         KEYWORDS=""
-        echo "Note $ID created automatically."
     elif [ -n "$IN_KEYWORDS" ]; then
         KEYWORDS="$IN_KEYWORDS"
-        echo "Note $ID created automatically."
     else
         read -ep "$(echo -e ${PURPLE}"Enter keywords for Note $ID (comma separated): ${NC}")" KEYWORDS
     fi
 
     echo "$KEYWORDS" | sed 's/,/, /g' | sed 's/  / /g' > "$ATTIC_DIR/$ID/$ID.key"
-
     generate_metadata "$ID"
 
     echo -e "${BLUE}Compiling initial PDF in the background...${NC}"
