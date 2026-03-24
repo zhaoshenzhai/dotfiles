@@ -199,7 +199,7 @@ auditNotes() {
     fi
 
     if [ $DESYNC -eq 0 ]; then
-        echo -e "${GREEN}Metadata: Valid!.${NC}"
+        echo -e "${GREEN}Metadata: Valid!${NC}"
     else
         echo -e "${PURPLE}Metadata: $DESYNC note(s) have desynchronized metadata. Run 'rebuild all' (r) to fix.${NC}"
     fi
