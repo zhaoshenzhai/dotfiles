@@ -28,15 +28,18 @@ format() {
         return
     fi
 
-    if [[ "$file_path" =~ Projects/_attic/([0-9]{5})/([0-9]{5})\.tex ]]; then
+    if [[ "$file_path" =~ Projects/_attic/([0-9]{5})/([0-9]{5})\.(tex|pdf) ]]; then
         local id="${BASH_REMATCH[1]}"
+        local ext="${BASH_REMATCH[3]}"
+
         local keywordsPath="$BASE_DIR/Projects/_attic/$id/keywords"
         if [ -f "$keywordsPath" ]; then
             local keywords
             keywords=$(cat "$keywordsPath" 2>/dev/null)
-            printf "Projects/attic_%s/[%s]\t%s\n" "$id" "$keywords" "$file_path"
+            printf "Projects/attic_%s/[%s].%s\t%s\n" "$id" "$keywords" "$ext" "$file_path"
             return
         fi
+
     elif [[ "$file_path" =~ Projects/_attic/([0-9]{5})/keywords ]]; then
         local id="${BASH_REMATCH[1]}"
         local keywordsPath="$BASE_DIR/Projects/_attic/$id/keywords"
@@ -52,7 +55,7 @@ format() {
 }
 updateCache() {
     cd "$BASE_DIR" || exit 1
-    
+
     fd --type f --hidden --exclude .git --exclude '*.old' . \
         "Documents" "Dotfiles" "Projects" | while read -r line; do
         format "$line"
@@ -65,7 +68,7 @@ updateCache() {
         fi
 
         expected=$(format "$col2")
-        
+
         if [[ -n "$expected" && "$expected" == "$col1"$'\t'"$col2" ]]; then
             echo "$expected"
         fi
