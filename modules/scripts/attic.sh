@@ -19,8 +19,10 @@ createNew() {
 
     if [[ "$IN_KEYWORDS" == "EMPTY_KEYWORDS" ]]; then
         KEYWORDS=""
+        echo "Note $ID created automatically."
     elif [ -n "$IN_KEYWORDS" ]; then
         KEYWORDS="$IN_KEYWORDS"
+        echo "Note $ID created automatically."
     else
         read -ep "$(echo -e ${PURPLE}"Enter keywords for Note $ID (comma separated): ${NC}")" KEYWORDS
     fi
@@ -199,7 +201,7 @@ auditNotes() {
         echo -e "${YELLOW}TODOs: You have $TODOS pending TODO(s).${NC}"
     fi
 }
-rebuild_all() {
+rebuildAll() {
     echo -e "${BLUE}Refreshing metadata and recompiling all notes. This may take a moment...${NC}"
     local dirs=("$ATTIC_DIR"/[0-9][0-9][0-9][0-9][0-9]/)
 
@@ -259,7 +261,7 @@ INTERACTIVE_MENU() {
         "n") createNew ;;
         "a") auditNotes ;;
         "c") clean ;;
-        "r") rebuild_all ;;
+        "r") rebuildAll ;;
     esac
 
     EXIT
@@ -276,7 +278,7 @@ if [[ $# -gt 0 ]]; then
             u) updateMetadata "$OPTARG"; exit 0 ;;
             a) auditNotes; exit 0 ;;
             c) clean; exit 0 ;;
-            r) rebuild_all; exit 0 ;;
+            r) rebuildAll; exit 0 ;;
             *) echo "Usage: attic [-n] [-e] [-k keywords] [-m ID] [-u ID] [-a] [-c] [-r]"; exit 1 ;;
         esac
     done
