@@ -162,7 +162,7 @@ audit_notes() {
             ((TODOS++))
         done < <(grep -n "TODO" "$file" 2>/dev/null)
 
-        local meta="$ATTIC_DIR/$id/$ID.dat"
+        local meta="$ATTIC_DIR/$id/$id.dat"
 
         local REFS=$(grep -E -o '\\aref\{[^}]*\}\{[0-9]{5}\}' "$file" 2>/dev/null | sed -E 's/.*\{([0-9]{5})\}/\1/' | sort -u | paste -sd "," - | sed 's/,/, /g')
         local REF_IN=$(grep -E -rl '\\aref\{[^}]*\}\{'"$id"'\}' "$ATTIC_DIR" --include="*.tex" 2>/dev/null | grep -v "$file" | xargs -I {} basename {} .tex | sort -u | paste -sd "," - | sed 's/,/, /g')
