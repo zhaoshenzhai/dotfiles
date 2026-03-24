@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+export PATH="/run/current-system/sw/bin:/etc/profiles/per-user/$USER/bin:$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
 ATTIC_DIR="$HOME/iCloud/Projects/_attic"
 TEMPLATE_FILE="$HOME/iCloud/Dotfiles/modules/scripts/LaTeXTemplate/files/attic.tex"
 
@@ -34,18 +35,16 @@ generate_metadata() {
 
     if [ ! -f "$FILE" ]; then
         echo -e "${RED}Error: Note $ID does not exist.${NC}"
-        return
+        return 1
     fi
 
-    local CREATED=$(/usr/bin/stat -f "%SB" -t "%Y/%m/%d" "$FILE")
     local MODIFIED=$(/usr/bin/stat -f "%Sm" -t "%Y/%m/%d" "$FILE")
-
     local KEYWORDS=$(cat "$DIR/keywords" 2>/dev/null)
+    local REFS=$(grep -E -o '\\aref\{[^}]*\}\{[0-9]{5}\}' "$FILE" 2>/dev/null | sed -E 's/.*\{([0-9]{5})\}/\1/' | sort -u | paste -sd "," - | sed 's/,/, /g')
+    local REF_IN=$(grep -E -rl '\\aref\{[^}]*\}\{'"$ID"'\}' "$ATTIC_DIR" --include="*.tex" 2>/dev/null | grep -v "$FILE" | xargs -I {} basename {} .tex | sort -u | paste -sd "," - | sed 's/,/, /g')
 
-    local REFS=$(grep -o "\\aref{[^}]*}{[0-9]\{5\}}" "$FILE" 2>/dev/null | sed 's/.*{\([0-9]\{5\}\)}/\1/' | sort -u | paste -sd "," - | sed 's/,/, /g')
-    local REF_IN=$(grep -rl "\\aref{[^}]*}{$ID}" "$ATTIC_DIR" --include="*.tex" 2>/dev/null | grep -v "$FILE" | xargs -I {} basename {} .tex | sort -u | paste -sd "," - | sed 's/,/, /g')
-
-    cat <<EOF > "$DIR/metadata.tex"
+    local TEMP_META="$DIR/metadata.tmp"
+    cat <<EOF > "$TEMP_META"
 \begin{flushleft}
     \color{gray}\footnotesize\ttfamily
     Last modified: $MODIFIED \\\\
@@ -54,7 +53,52 @@ generate_metadata() {
     Referenced in: [$REF_IN]
 \end{flushleft}
 EOF
-    echo -e "${GREEN}Metadata updated for $ID.${NC}"
+
+    if cmp -s "$TEMP_META" "$DIR/metadata.tex" 2>/dev/null; then
+        rm "$TEMP_META"
+        return 1
+    else
+        mv "$TEMP_META" "$DIR/metadata.tex"
+        echo -e "${GREEN}Metadata updated for $ID.${NC}"
+        return 0
+    fi
+}
+update_and_sync() {
+    local ID=$1
+    local FILE="$ATTIC_DIR/$ID/$ID.tex"
+    local META_FILE="$ATTIC_DIR/$ID/metadata.tex"
+
+    if [ ! -f "$FILE" ]; then
+        return
+    fi
+
+    is_compiling() {
+        pgrep -f "latexmk.*$1\.tex" > /dev/null
+    }
+
+    local OLD_REFS=""
+    if [ -f "$META_FILE" ]; then
+        OLD_REFS=$(grep "References:" "$META_FILE" 2>/dev/null | grep -E -o '[0-9]{5}')
+    fi
+
+    if generate_metadata "$ID" > /dev/null 2>&1; then
+        if ! is_compiling "$ID"; then
+            (cd "$ATTIC_DIR/$ID" && latexmk -pdf "$ID.tex" > /dev/null 2>&1) &
+        fi
+    fi
+
+    local NEW_REFS=$(grep -E -o '\\aref\{[^}]*\}\{[0-9]{5}\}' "$FILE" 2>/dev/null | sed -E 's/.*\{([0-9]{5})\}/\1/')
+    local ALL_REFS=$(echo "$OLD_REFS $NEW_REFS" | grep -E -o '[0-9]{5}' | sort -u)
+
+    for ref_id in $ALL_REFS; do
+        if [ -n "$ref_id" ] && [ -d "$ATTIC_DIR/$ref_id" ]; then
+            if generate_metadata "$ref_id" > /dev/null 2>&1; then
+                if ! is_compiling "$ref_id"; then
+                    (cd "$ATTIC_DIR/$ref_id" && latexmk -pdf "$ref_id.tex" > /dev/null 2>&1) &
+                fi
+            fi
+        fi
+    done
 }
 clean() {
     echo -e "${BLUE}Cleaning up LaTeX auxiliary files...${NC}"
@@ -74,20 +118,26 @@ clean() {
     echo -e "${GREEN}Cleanup complete.${NC}"
 }
 audit_notes() {
-    echo -e "${BLUE}Verifying internal links and scanning for TODOs...${NC}"
+    echo -e "${BLUE}Verifying links, metadata bijection, and scanning for TODOs...${NC}"
     local BROKEN=0
     local TODOS=0
+    local DESYNC=0
 
     while read -r rel_file; do
         local file="$ATTIC_DIR/$rel_file"
+        local id=$(basename "$file" .tex)
+
+        if [[ ! "$id" =~ ^[0-9]{5}$ ]]; then
+            continue
+        fi
 
         while read -r match; do
             local line_no="${match%%:*}"
 
             if [[ "$match" =~ \{([0-9]{5})\} ]]; then
-                local id="${BASH_REMATCH[1]}"
-                local T_FILE="$ATTIC_DIR/$id/$id.tex"
-                local P_FILE="$ATTIC_DIR/$id/$id.pdf"
+                local target_id="${BASH_REMATCH[1]}"
+                local T_FILE="$ATTIC_DIR/$target_id/$target_id.tex"
+                local P_FILE="$ATTIC_DIR/$target_id/$target_id.pdf"
                 local ERR=""
 
                 [[ ! -f "$T_FILE" ]] && ERR="TEX"
@@ -97,7 +147,7 @@ audit_notes() {
                 fi
 
                 if [[ -n "$ERR" ]]; then
-                    echo -e "${RED}[MISSING $ERR]${NC} ID $id in $(basename "$file"):$line_no"
+                    echo -e "${RED}[MISSING $ERR]${NC} ID $target_id referenced in $id:$line_no"
                     ((BROKEN++))
                 fi
             fi
@@ -108,9 +158,25 @@ audit_notes() {
             local text="${todo_match#*:}"
 
             text="$(echo "$text" | sed 's/^[[:space:]]*//')"
-            echo -e "${YELLOW}[TODO]${NC} $(basename "$file"):$line_no -> $text"
+            echo -e "${YELLOW}[TODO]${NC} $id:$line_no -> $text"
             ((TODOS++))
         done < <(grep -n "TODO" "$file" 2>/dev/null)
+
+        local meta="$ATTIC_DIR/$id/metadata.tex"
+
+        local REFS=$(grep -E -o '\\aref\{[^}]*\}\{[0-9]{5}\}' "$file" 2>/dev/null | sed -E 's/.*\{([0-9]{5})\}/\1/' | sort -u | paste -sd "," - | sed 's/,/, /g')
+        local REF_IN=$(grep -E -rl '\\aref\{[^}]*\}\{'"$id"'\}' "$ATTIC_DIR" --include="*.tex" 2>/dev/null | grep -v "$file" | xargs -I {} basename {} .tex | sort -u | paste -sd "," - | sed 's/,/, /g')
+
+        local EXPECTED_REFS="References: [$REFS]"
+        local EXPECTED_REF_IN="Referenced in: [$REF_IN]"
+
+        local ACTUAL_REFS=$(grep "References:" "$meta" 2>/dev/null | sed 's/^[[:space:]]*//' | sed 's/ \\\\$//')
+        local ACTUAL_REF_IN=$(grep "Referenced in:" "$meta" 2>/dev/null | sed 's/^[[:space:]]*//' | sed 's/ \\\\$//')
+
+        if [[ "$EXPECTED_REFS" != "$ACTUAL_REFS" ]] || [[ "$EXPECTED_REF_IN" != "$ACTUAL_REF_IN" ]]; then
+            echo -e "${PURPLE}[DESYNC]${NC} Metadata for $id breaks bijection (links out of sync)."
+            ((DESYNC++))
+        fi
 
     done < <(cd "$ATTIC_DIR" && fd -e tex)
 
@@ -119,6 +185,12 @@ audit_notes() {
         echo -e "${GREEN}Links: All internal links are valid.${NC}"
     else
         echo -e "${RED}Links: Found $BROKEN broken link(s).${NC}"
+    fi
+
+    if [ $DESYNC -eq 0 ]; then
+        echo -e "${GREEN}Metadata: Perfect bijection between outlinks and inlinks.${NC}"
+    else
+        echo -e "${PURPLE}Metadata: $DESYNC note(s) have desynchronized metadata. Run 'rebuild all' (r) to fix.${NC}"
     fi
 
     if [ $TODOS -eq 0 ]; then
@@ -169,14 +241,13 @@ INTERACTIVE_MENU() {
         echo -e "    ${CYAN}(n): New note${NC}"
         echo -e "    ${CYAN}(a): Audit notes & TODOs${NC}"
         echo -e "    ${CYAN}(c): Clean LaTeX files${NC}"
-        echo -e "    ${CYAN}(m): Manually generate metadata${NC}"
         echo -e "    ${CYAN}(r): Rebuild all metadata & PDFs${NC}"
 
-        read -n 1 -ep "$(echo -e "${CYAN}Select operation: [n, a, c, m, r]${NC} ")" cmdNum
+        read -n 1 -ep "$(echo -e "${CYAN}Select operation: [n, a, c, r]${NC} ")" cmdNum
 
         if [[ "$cmdNum" == "q" ]]; then
             aerospace close --quit-if-last-window 2>/dev/null || exit 0
-        elif [[ "$cmdNum" =~ ^[nacmr]$ ]]; then
+        elif [[ "$cmdNum" =~ ^[nacr]$ ]]; then
             valid=1
         else
             clear
@@ -189,12 +260,6 @@ INTERACTIVE_MENU() {
         "n") create_new ;;
         "a") audit_notes ;;
         "c") clean ;;
-        "m")
-            read -ep "$(echo -e ${PURPLE}"Enter Note ID: ${NC}")" targetID
-            if [[ -n "$targetID" ]]; then
-                generate_metadata "$targetID"
-            fi
-        ;;
         "r") rebuild_all ;;
     esac
 
@@ -203,14 +268,15 @@ INTERACTIVE_MENU() {
 
 if [[ $# -gt 0 ]]; then
     INTERACTIVE=0
-    while getopts "nm:acr" opt; do
+    while getopts "nu:m:acr" opt; do
         case $opt in
             n) create_new; exit 0 ;;
             m) generate_metadata "$OPTARG"; exit 0 ;;
+            u) update_and_sync "$OPTARG"; exit 0 ;;
             a) audit_notes; exit 0 ;;
             c) clean; exit 0 ;;
             r) rebuild_all; exit 0 ;;
-            *) echo "Usage: attic [-n] [-m ID] [-a] [-c] [-r]"; exit 1 ;;
+            *) echo "Usage: attic [-n] [-m ID] [-u ID] [-a] [-c] [-r]"; exit 1 ;;
         esac
     done
 else
