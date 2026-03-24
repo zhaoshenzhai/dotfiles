@@ -117,16 +117,42 @@ vim.keymap.set('n', '<C-l>', function()
     local col = vim.fn.col('.')
     local id = nil
 
-    local start_idx = 1
+    local search_pos = 1
     while true do
-        local s, e, match_id = string.find(line, "\\aref{[^}]*}{(%d%d%d%d%d)}", start_idx)
+        local s, e = line:find("\\aref{", search_pos, true)
         if not s then break end
 
-        if col >= s and col <= e then
-            id = match_id
-            break
+        local brace_level = 1
+        local first_arg_end = -1
+        for i = e + 1, #line do
+            local char = line:sub(i, i)
+            if char == "{" then brace_level = brace_level + 1
+            elseif char == "}" then brace_level = brace_level - 1 end
+
+            if brace_level == 0 then
+                first_arg_end = i
+                break
+            end
         end
-        start_idx = e + 1
+
+        if first_arg_end ~= -1 then
+            local id_start = first_arg_end + 1
+            local match_id = line:match("^{([0-9][0-9][0-9][0-9][0-9])}", id_start)
+
+            if match_id then
+                local total_end = first_arg_end + 7
+
+                if col >= s and col <= total_end then
+                    id = match_id
+                    break
+                end
+                search_pos = total_end + 1
+            else
+                search_pos = e + 1
+            end
+        else
+            search_pos = e + 1
+        end
     end
 
     if id then
