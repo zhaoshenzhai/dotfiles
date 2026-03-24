@@ -38,7 +38,7 @@ update_full_cache_bg() {
                 if [ -f "$kw_path" ]; then
                     local kw
                     kw=$(cat "$kw_path" 2>/dev/null)
-                    echo -e "Projects/_attic/$id[$kw]\t$line"
+                    echo -e "Projects/attic_$id/[$kw]\t$line"
                     continue
                 fi
             elif [[ "$line" =~ Projects/_attic/([0-9]{5})/keywords ]]; then
@@ -47,7 +47,7 @@ update_full_cache_bg() {
                 if [ -f "$kw_path" ]; then
                     local kw
                     kw=$(cat "$kw_path" 2>/dev/null)
-                    echo -e "Projects/_attic/$id[$kw]/keywords\t$line"
+                    echo -e "Projects/attic_$id/[$kw]/keywords\t$line"
                     continue
                 fi
             fi

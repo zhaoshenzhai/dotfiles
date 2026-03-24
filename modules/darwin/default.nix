@@ -94,7 +94,6 @@
         caskArgs.no_quarantine = true;
         global.brewfile = true;
         onActivation = {
-            autoUpdate = true;
             cleanup = "zap";
             extraFlags = [ "--quiet" ];
         };
