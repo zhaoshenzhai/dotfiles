@@ -11,7 +11,7 @@
 \definecolor{lightGray}{RGB}{128, 128, 128}
 
 \usepackage[style=alphabetic, sorting=nyt, maxbibnames=10]{biblatex}
-\addbibresource{refs.bib}
+\providecommand{\mybibpath}{refs.bib}\addbibresource{\mybibpath}
 \newbool{hascitations}
 \AtEveryCitekey{\global\setbool{hascitations}{true}}
 
