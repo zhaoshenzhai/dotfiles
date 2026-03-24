@@ -30,6 +30,14 @@ createNew() {
     echo "$KEYWORDS" | sed 's/,/, /g' | sed 's/  / /g' > "$ATTIC_DIR/$ID/$ID.key"
     generateMetadata "$ID"
     (cd "$ATTIC_DIR/$ID" && latexmk -pdf "$ID.tex" > /dev/null 2>&1) &
+
+    if [[ "$INTERACTIVE" == 1 ]]; then
+        nvim_path="/etc/profiles/per-user/$USER/bin/nvim"
+        hm_session="$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+        exec_cmd="[ -f $hm_session ] && . $hm_session; export FROM_LAUNCHER=1; exec $nvim_path \"$ATTIC_DIR/$ID/$ID.tex\""
+
+        nohup alacritty -e sh -c "$exec_cmd" >/dev/null 2>&1 &
+    fi
 }
 generateMetadata() {
     local ID=$1
