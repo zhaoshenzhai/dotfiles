@@ -238,7 +238,7 @@ INTERACTIVE_MENU() {
     while [[ -z $valid ]]; do
         echo -e "${CYAN}Attic operations:${NC}"
         echo -e "    ${CYAN}(n): New note${NC}"
-        echo -e "    ${CYAN}(a): Audit notes & TODOs${NC}"
+        echo -e "    ${CYAN}(a): Audit notes${NC}"
         echo -e "    ${CYAN}(c): Clean LaTeX files${NC}"
         echo -e "    ${CYAN}(r): Rebuild all metadata & PDFs${NC}"
 
