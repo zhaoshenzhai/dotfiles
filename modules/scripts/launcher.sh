@@ -100,6 +100,11 @@ launch() {
     fi
 }
 
+if [[ "${1:-}" == "--update" ]]; then
+    updateCache
+    exit 0
+fi
+
 init
 updateCache &
 

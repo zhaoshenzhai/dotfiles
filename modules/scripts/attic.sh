@@ -29,6 +29,7 @@ createNew() {
 
     echo "$KEYWORDS" | sed 's/,/, /g' | sed 's/  / /g' > "$ATTIC_DIR/$ID/$ID.key"
     generateMetadata "$ID"
+    /etc/profiles/per-user/zhao/bin/launcher --update &
     (cd "$ATTIC_DIR/$ID" && latexmk -pdf "$ID.tex" > /dev/null 2>&1) &
 
     if [[ "$INTERACTIVE" == 1 ]]; then
