@@ -85,6 +85,7 @@ void handler(env env) {
                 if (strcmp(window_title, "launcher") == 0) { continue; }
                 else if (strcmp(window_title, "vifm") == 0) { app_name = "vifm"; }
                 else if (strcmp(window_title, "vifm-float") == 0) { app_name = "vifm"; }
+                else if (strcmp(window_title, "attic") == 0) { app_name = "attic"; }
                 else if (strcmp(window_title, "btop") == 0) { app_name = "btop"; }
                 else if (strcmp(window_title, "nvim") == 0) { app_name = "nvim"; }
                 else if (strcmp(window_title, "git") == 0) { app_name = "git"; }

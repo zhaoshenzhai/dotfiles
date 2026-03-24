@@ -28,7 +28,7 @@ format() {
         local id="${BASH_REMATCH[1]}"
         local ext="${BASH_REMATCH[3]}"
 
-        local keywordsPath="$BASE_DIR/Projects/_attic/$id/keywords"
+        local keywordsPath="$BASE_DIR/Projects/_attic/$id/$id.key"
         if [ -f "$keywordsPath" ]; then
             local keywords
             keywords=$(cat "$keywordsPath" 2>/dev/null)
@@ -42,8 +42,12 @@ format() {
 updateCache() {
     cd "$BASE_DIR" || exit 1
 
-    fd --type f --hidden --exclude .git --exclude '*.old' . \
-        "Documents" "Dotfiles" "Projects" | while read -r line; do
+    {
+        fd --type f --hidden --exclude .git --exclude '*.old' . \
+            "Documents" "Dotfiles" "Projects"
+        fd --type f --hidden --no-ignore --extension pdf --exclude .git --exclude '*.old' . \
+            "Documents" "Dotfiles" "Projects"
+    } | awk '!seen[$0]++' | while read -r line; do
         format "$line"
     done > "$CACHE_FILE.tmp" 2>/dev/null
     mv "$CACHE_FILE.tmp" "$CACHE_FILE"
