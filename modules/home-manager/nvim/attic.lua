@@ -110,44 +110,45 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     end,
 })
 
--- TeX Buffer Navigation
+-- Navigation
+vim.keymap.set('n', '<C-h>', '<C-o>')
+vim.keymap.set('n', '<C-l>', function()
+    local line = vim.api.nvim_get_current_line()
+    local col = vim.fn.col('.')
+    local id = nil
+
+    local start_idx = 1
+    while true do
+        local s, e, match_id = string.find(line, "\\aref{[^}]*}{(%d%d%d%d%d)}", start_idx)
+        if not s then break end
+
+        if col >= s and col <= e then
+            id = match_id
+            break
+        end
+        start_idx = e + 1
+    end
+
+    if id then
+        local target = vim.fn.expand('~/iCloud/Projects/_attic/') .. id .. '/' .. id .. '.tex'
+        if vim.fn.filereadable(target) == 1 then
+            vim.cmd("normal! m'")
+            vim.cmd('edit ' .. target)
+            vim.api.nvim_echo({{"Attic: Jumped to note " .. id, "None"}}, false, {})
+        else
+            vim.api.nvim_echo({{"Attic: Note " .. id .. " not found", "ErrorMsg"}}, false, {})
+        end
+    else
+        local keys = vim.api.nvim_replace_termcodes("<C-i>", true, false, true)
+        vim.api.nvim_feedkeys(keys, "n", false)
+    end
+end)
+
+-- Surround with aref
 vim.api.nvim_create_autocmd("FileType", {
     group = attic_group,
     pattern = "tex",
     callback = function()
-        vim.keymap.set('n', '<C-h>', '<C-o>', { buffer = true })
-        vim.keymap.set('n', '<C-l>', function()
-            local line = vim.api.nvim_get_current_line()
-            local col = vim.fn.col('.')
-            local id = nil
-
-            local start_idx = 1
-            while true do
-                local s, e, match_id = string.find(line, "\\aref{[^}]*}{(%d%d%d%d%d)}", start_idx)
-                if not s then break end
-
-                if col >= s and col <= e then
-                    id = match_id
-                    break
-                end
-                start_idx = e + 1
-            end
-
-            if id then
-                local target = vim.fn.expand('~/iCloud/Projects/_attic/') .. id .. '/' .. id .. '.tex'
-                if vim.fn.filereadable(target) == 1 then
-                    vim.cmd("normal! m'")
-                    vim.cmd('edit ' .. target)
-                    vim.api.nvim_echo({{"Attic: Jumped to note " .. id, "None"}}, false, {})
-                else
-                    vim.api.nvim_echo({{"Attic: Note " .. id .. " not found", "ErrorMsg"}}, false, {})
-                end
-            else
-                local keys = vim.api.nvim_replace_termcodes("<C-i>", true, false, true)
-                vim.api.nvim_feedkeys(keys, "n", false)
-            end
-        end, { buffer = true })
-
         vim.keymap.set('v', '<C-l>', '"zc\\aref{<C-r>z}{}<Left>', { buffer = true })
         vim.keymap.set('v', '<C-S-l>', function()
             vim.cmd('normal! "zy')
@@ -164,7 +165,6 @@ vim.api.nvim_create_autocmd("FileType", {
                 local replacement = string.format("\\aref{%s}{%s}", clean_text, id)
                 vim.fn.setreg('z', replacement)
                 vim.cmd('normal! gv"zp')
-
                 vim.cmd('write')
 
                 local target_tex = vim.fn.expand('~/iCloud/Projects/_attic/') .. id .. '/' .. id .. '.tex'
