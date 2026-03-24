@@ -119,7 +119,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     pattern = "*/_attic/*/*",
     callback = function()
         local id = vim.fn.expand('%:p:h:t')
-        vim.fn.system({"/Users/zhao/iCloud/Dotfiles/scripts/attic.sh", "-m", id})
+        vim.fn.system({"/Users/zhao/iCloud/Dotfiles/modules/scripts/attic.sh", "-m", id})
         if vim.fn.expand('%:t') == "keywords" then
             load_attic_cache()
         end
