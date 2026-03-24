@@ -4,7 +4,7 @@ export PATH="/run/current-system/sw/bin:/etc/profiles/per-user/$USER/bin:$HOME/.
 ATTIC_DIR="$HOME/iCloud/Projects/_attic"
 TEMPLATE_FILE="$HOME/iCloud/Dotfiles/modules/scripts/LaTeXTemplate/files/attic.tex"
 
-create_new() {
+createNew() {
     local IN_KEYWORDS="$1"
     mkdir -p "$ATTIC_DIR"
 
@@ -26,16 +26,10 @@ create_new() {
     fi
 
     echo "$KEYWORDS" | sed 's/,/, /g' | sed 's/  / /g' > "$ATTIC_DIR/$ID/$ID.key"
-    generate_metadata "$ID"
-
-    echo -e "${BLUE}Compiling initial PDF in the background...${NC}"
+    generateMetadata "$ID"
     (cd "$ATTIC_DIR/$ID" && latexmk -pdf "$ID.tex" > /dev/null 2>&1) &
-
-    if [[ "$INTERACTIVE" == 1 ]]; then
-        nvim "$ID.tex"
-    fi
 }
-generate_metadata() {
+generateMetadata() {
     local ID=$1
     local DIR="$ATTIC_DIR/$ID"
     local FILE="$DIR/$ID.tex"
@@ -70,7 +64,7 @@ EOF
         return 0
     fi
 }
-update_and_sync() {
+updateMetadata() {
     local ID=$1
     local FILE="$ATTIC_DIR/$ID/$ID.tex"
     local META_FILE="$ATTIC_DIR/$ID/$ID.dat"
@@ -88,7 +82,7 @@ update_and_sync() {
         OLD_REFS=$(grep "References:" "$META_FILE" 2>/dev/null | grep -E -o '[0-9]{5}')
     fi
 
-    if generate_metadata "$ID" > /dev/null 2>&1; then
+    if generateMetadata "$ID" > /dev/null 2>&1; then
         if ! is_compiling "$ID"; then
             (cd "$ATTIC_DIR/$ID" && latexmk -pdf "$ID.tex" > /dev/null 2>&1) &
         fi
@@ -99,7 +93,7 @@ update_and_sync() {
 
     for ref_id in $ALL_REFS; do
         if [ -n "$ref_id" ] && [ -d "$ATTIC_DIR/$ref_id" ]; then
-            if generate_metadata "$ref_id" > /dev/null 2>&1; then
+            if generateMetadata "$ref_id" > /dev/null 2>&1; then
                 if ! is_compiling "$ref_id"; then
                     (cd "$ATTIC_DIR/$ref_id" && latexmk -pdf "$ref_id.tex" > /dev/null 2>&1) &
                 fi
@@ -124,7 +118,7 @@ clean() {
     \) -delete
     echo -e "${GREEN}Cleanup complete.${NC}"
 }
-audit_notes() {
+auditNotes() {
     echo -e "${BLUE}Verifying links, metadata bijection, and scanning for TODOs...${NC}"
     local BROKEN=0
     local TODOS=0
@@ -184,7 +178,6 @@ audit_notes() {
             echo -e "${PURPLE}[DESYNC]${NC} Metadata for $id breaks bijection (links out of sync)."
             ((DESYNC++))
         fi
-
     done < <(cd "$ATTIC_DIR" && fd -e tex)
 
     echo "----------------------------------------"
@@ -224,7 +217,7 @@ rebuild_all() {
 
         echo -ne "\033[2K\r${YELLOW}Processing note $id ($count/$total)...${NC}"
 
-        generate_metadata "$id" > /dev/null
+        generateMetadata "$id" > /dev/null
         (cd "$dir" && latexmk -pdf "$id.tex" > /dev/null 2>&1)
     done
 
@@ -240,7 +233,6 @@ EXIT() {
     fi
     aerospace close --quit-if-last-window 2>/dev/null || exit 0
 }
-
 INTERACTIVE_MENU() {
     local valid=""
     while [[ -z $valid ]]; do
@@ -264,8 +256,8 @@ INTERACTIVE_MENU() {
     echo ""
 
     case $cmdNum in
-        "n") create_new ;;
-        "a") audit_notes ;;
+        "n") createNew ;;
+        "a") auditNotes ;;
         "c") clean ;;
         "r") rebuild_all ;;
     esac
@@ -277,12 +269,12 @@ if [[ $# -gt 0 ]]; then
     INTERACTIVE=0
     while getopts "ek:nu:m:acr" opt; do
         case $opt in
-            e) create_new "EMPTY_KEYWORDS"; exit 0 ;;
-            k) create_new "$OPTARG"; exit 0 ;;
-            n) create_new; exit 0 ;;
-            m) generate_metadata "$OPTARG"; exit 0 ;;
-            u) update_and_sync "$OPTARG"; exit 0 ;;
-            a) audit_notes; exit 0 ;;
+            e) createNew "EMPTY_KEYWORDS"; exit 0 ;;
+            k) createNew "$OPTARG"; exit 0 ;;
+            n) createNew; exit 0 ;;
+            m) generateMetadata "$OPTARG"; exit 0 ;;
+            u) updateMetadata "$OPTARG"; exit 0 ;;
+            a) auditNotes; exit 0 ;;
             c) clean; exit 0 ;;
             r) rebuild_all; exit 0 ;;
             *) echo "Usage: attic [-n] [-e] [-k keywords] [-m ID] [-u ID] [-a] [-c] [-r]"; exit 1 ;;
