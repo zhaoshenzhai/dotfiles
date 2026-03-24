@@ -43,8 +43,8 @@ generateMetadata() {
 
     local MODIFIED=$(/usr/bin/stat -f "%Sm" -t "%Y/%m/%d" "$FILE")
     local KEYWORDS=$(cat "$DIR/$ID.key" 2>/dev/null)
-    local REFS=$(grep -E -o '\\aref\{[^}]*\}\{[0-9]{5}\}' "$FILE" 2>/dev/null | sed -E 's/.*\{([0-9]{5})\}/\1/' | sort -u | paste -sd "," - | sed 's/,/, /g')
-    local REF_IN=$(grep -E -rl '\\aref\{[^}]*\}\{'"$ID"'\}' "$ATTIC_DIR" --include="*.tex" 2>/dev/null | grep -v "$FILE" | xargs -I {} basename {} .tex | sort -u | paste -sd "," - | sed 's/,/, /g')
+    local REFS=$(grep -E -o '\\aref\{[^}]*\}\{[0-9]{5}\}' "$FILE" 2>/dev/null | sed -E 's/.*\{([0-9]{5})\}/\\aref{\1}{\1}/' | sort -u | paste -sd "," - | sed 's/,/, /g')
+    local REF_IN=$(grep -E -rl '\\aref\{[^}]*\}\{'"$ID"'\}' "$ATTIC_DIR" --include="*.tex" 2>/dev/null | grep -v "$FILE" | xargs -I {} basename {} .tex | sort -u | sed -E 's/^([0-9]{5})$/\\aref{\1}{\1}/' | paste -sd "," - | sed 's/,/, /g')
 
     local TEMP_META="$DIR/metadata.tmp"
     cat <<EOF > "$TEMP_META"
@@ -167,8 +167,8 @@ auditNotes() {
 
         local meta="$ATTIC_DIR/$id/$id.dat"
 
-        local REFS=$(grep -E -o '\\aref\{[^}]*\}\{[0-9]{5}\}' "$file" 2>/dev/null | sed -E 's/.*\{([0-9]{5})\}/\1/' | sort -u | paste -sd "," - | sed 's/,/, /g')
-        local REF_IN=$(grep -E -rl '\\aref\{[^}]*\}\{'"$id"'\}' "$ATTIC_DIR" --include="*.tex" 2>/dev/null | grep -v "$file" | xargs -I {} basename {} .tex | sort -u | paste -sd "," - | sed 's/,/, /g')
+        local REFS=$(grep -E -o '\\aref\{[^}]*\}\{[0-9]{5}\}' "$file" 2>/dev/null | sed -E 's/.*\{([0-9]{5})\}/\\aref{\1}{\1}/' | sort -u | paste -sd "," - | sed 's/,/, /g')
+        local REF_IN=$(grep -E -rl '\\aref\{[^}]*\}\{'"$id"'\}' "$ATTIC_DIR" --include="*.tex" 2>/dev/null | grep -v "$file" | xargs -I {} basename {} .tex | sort -u | sed -E 's/^([0-9]{5})$/\\aref{\1}{\1}/' | paste -sd "," - | sed 's/,/, /g')
 
         local EXPECTED_REFS="References: [$REFS]"
         local EXPECTED_REF_IN="Referenced in: [$REF_IN]"
