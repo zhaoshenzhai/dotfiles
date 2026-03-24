@@ -282,26 +282,24 @@ INTERACTIVE_MENU() {
 
     EXIT
 }
-MAIN() {
-    if [[ $# -gt 0 ]]; then
-        INTERACTIVE=0
-        while getopts "ek:nu:m:acr" opt; do
-            case $opt in
-                e) createNew "EMPTY_KEYWORDS"; exit 0 ;;
-                k) createNew "$OPTARG"; exit 0 ;;
-                n) createNew; exit 0 ;;
-                m) generateMetadata "$OPTARG"; exit 0 ;;
-                u) updateMetadata "$OPTARG"; exit 0 ;;
-                a) auditNotes; exit 0 ;;
-                c) clean; exit 0 ;;
-                r) rebuildAll; exit 0 ;;
-                *) echo "Usage: attic [-n] [-e] [-k keywords] [-m ID] [-u ID] [-a] [-c] [-r]"; exit 1 ;;
-            esac
-        done
-    else
-        INTERACTIVE=1
-        INTERACTIVE_MENU
-    fi
-}
 
-MAIN
+# Main
+if [[ $# -gt 0 ]]; then
+    INTERACTIVE=0
+    while getopts "ek:nu:m:acr" opt; do
+        case $opt in
+            e) createNew "EMPTY_KEYWORDS"; exit 0 ;;
+            k) createNew "$OPTARG"; exit 0 ;;
+            n) createNew; exit 0 ;;
+            m) generateMetadata "$OPTARG"; exit 0 ;;
+            u) updateMetadata "$OPTARG"; exit 0 ;;
+            a) auditNotes; exit 0 ;;
+            c) clean; exit 0 ;;
+            r) rebuildAll; exit 0 ;;
+            *) echo "Usage: attic [-n] [-e] [-k keywords] [-m ID] [-u ID] [-a] [-c] [-r]"; exit 1 ;;
+        esac
+    done
+else
+    INTERACTIVE=1
+    INTERACTIVE_MENU
+fi

@@ -99,7 +99,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     callback = function()
         local id = vim.fn.expand('%:p:h:t')
         local script_path = vim.fn.expand('~/iCloud/Dotfiles/modules/scripts/attic.sh')
-        -- vim.fn.jobstart({script_path, "-u", id}, { detach = true })
+        vim.fn.jobstart({script_path, "-u", id}, { detach = true })
 
         if vim.fn.expand('%:e') == "key" then
             load_attic_cache()
