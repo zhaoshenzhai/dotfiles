@@ -2,7 +2,7 @@ start-at-login = false
 after-startup-command = [
     'exec-and-forget borders',
     'exec-and-forget sketchybar',
-    'exec-and-forget /etc/profiles/per-user/zhao/bin/skim-focus-daemon'
+    'exec-and-forget skimUtils -d'
 ]
 
 on-focus-changed = [
