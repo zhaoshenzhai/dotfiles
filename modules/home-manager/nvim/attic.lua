@@ -33,27 +33,6 @@ local function load_attic_cache()
     attic_cache = items
 end
 
-local function jump_to_attic_note()
-    local line = vim.api.nvim_get_current_line()
-    local id = string.match(line, "\\aref{[^}]*}{(%d%d%d%d%d)}")
-
-    if id then
-        local target = vim.fn.expand('~/iCloud/Projects/_attic/') .. id .. '/' .. id .. '.tex'
-        if vim.fn.filereadable(target) == 1 then
-            vim.cmd("normal! m'")
-            vim.cmd('edit ' .. target)
-            vim.api.nvim_echo({{"Attic: Jumped to note " .. id, "None"}}, false, {})
-        else
-            vim.api.nvim_echo({{"Attic: Note " .. id .. " not found", "ErrorMsg"}}, false, {})
-        end
-    else
-        local status_ok, _ = pcall(vim.lsp.buf.definition)
-        if not status_ok then
-            vim.api.nvim_echo({{"Attic: No link found under cursor.", "WarningMsg"}}, false, {})
-        end
-    end
-end
-
 -- Autocomplete Setup
 local attic_source = {}
 function attic_source:is_available() return true end
@@ -122,8 +101,11 @@ vim.api.nvim_create_autocmd("BufWritePost", {
         local script_path = vim.fn.expand('~/iCloud/Dotfiles/modules/scripts/attic.sh')
         vim.fn.jobstart({script_path, "-u", id}, { detach = true })
 
-        if vim.fn.expand('%:t') == "keywords" then
+        if vim.fn.expand('%:e') == "key" then
             load_attic_cache()
+            vim.schedule(function()
+                vim.api.nvim_echo({{"Attic: cmp cache reloaded from " .. id .. ".key", "None"}}, false, {})
+            end)
         end
     end,
 })
@@ -133,10 +115,70 @@ vim.api.nvim_create_autocmd("FileType", {
     group = attic_group,
     pattern = "tex",
     callback = function()
-        vim.keymap.set('n', '<C-l>', jump_to_attic_note, { buffer = true, desc = "Jump to Attic Note Source" })
-        vim.keymap.set('n', '<CR>', jump_to_attic_note, { buffer = true, desc = "Jump to Attic Note Source (Enter)" })
+        vim.keymap.set('n', '<C-h>', '<C-o>', { buffer = true })
+        vim.keymap.set('n', '<C-l>', function()
+            local line = vim.api.nvim_get_current_line()
+            local col = vim.fn.col('.')
+            local id = nil
 
-        vim.keymap.set('n', '<C-h>', '<C-o>', { buffer = true, desc = "Go Back to Previous Note" })
-        vim.keymap.set('n', '<BS>', '<C-o>', { buffer = true, desc = "Go Back to Previous Note (Backspace)" })
+            local start_idx = 1
+            while true do
+                local s, e, match_id = string.find(line, "\\aref{[^}]*}{(%d%d%d%d%d)}", start_idx)
+                if not s then break end
+
+                if col >= s and col <= e then
+                    id = match_id
+                    break
+                end
+                start_idx = e + 1
+            end
+
+            if id then
+                local target = vim.fn.expand('~/iCloud/Projects/_attic/') .. id .. '/' .. id .. '.tex'
+                if vim.fn.filereadable(target) == 1 then
+                    vim.cmd("normal! m'")
+                    vim.cmd('edit ' .. target)
+                    vim.api.nvim_echo({{"Attic: Jumped to note " .. id, "None"}}, false, {})
+                else
+                    vim.api.nvim_echo({{"Attic: Note " .. id .. " not found", "ErrorMsg"}}, false, {})
+                end
+            else
+                local keys = vim.api.nvim_replace_termcodes("<C-i>", true, false, true)
+                vim.api.nvim_feedkeys(keys, "n", false)
+            end
+        end, { buffer = true })
+
+        vim.keymap.set('v', '<C-l>', '"zc\\aref{<C-r>z}{}<Left>', { buffer = true })
+        vim.keymap.set('v', '<C-S-l>', function()
+            vim.cmd('normal! "zy')
+            local text = vim.fn.getreg('z')
+            local clean_text = text:gsub("\n", " "):gsub("\r", "")
+
+            local script_path = vim.fn.expand('~/iCloud/Dotfiles/modules/scripts/attic.sh')
+            local cmd = string.format("'%s' -e", script_path)
+            local output = vim.fn.system(cmd)
+
+            local id = string.match(output, "Note (%d%d%d%d%d)")
+
+            if id then
+                local replacement = string.format("\\aref{%s}{%s}", clean_text, id)
+                vim.fn.setreg('z', replacement)
+                vim.cmd('normal! gv"zp')
+
+                vim.cmd('write')
+
+                local target_tex = vim.fn.expand('~/iCloud/Projects/_attic/') .. id .. '/' .. id .. '.tex'
+                local target_key = vim.fn.expand('~/iCloud/Projects/_attic/') .. id .. '/' .. id .. '.key'
+
+                vim.cmd("normal! m'")
+                vim.cmd('edit ' .. target_tex)
+                vim.cmd('split ' .. target_key)
+
+                vim.cmd('startinsert')
+                vim.api.nvim_echo({{"Attic: Note " .. id .. " created. Enter keywords and :wq to proceed to the note.", "None"}}, false, {})
+            else
+                vim.api.nvim_echo({{"Attic: Failed to create note. Output: " .. output, "ErrorMsg"}}, false, {})
+            end
+        end, { buffer = true })
     end
 })

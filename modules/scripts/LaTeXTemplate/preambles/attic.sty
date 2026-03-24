@@ -7,7 +7,7 @@
 \fancyhead[C]{\scriptsize\MakeUppercase{Zhaoshen Zhai / The Attic}}
 
 \AtBeginDocument{
-    \IfFileExists{metadata.tex}{\input{metadata.tex}}{\footnotesize\color{gray}\ttfamily[Metadata Pending...]\vspace{1em}}
+    \IfFileExists{\jobname.dat}{\input{\jobname.dat}}{\footnotesize\color{gray}\ttfamily[Metadata pending...]\vspace{1em}}
 }
 
 \usepackage[normalem]{ulem}

@@ -5,6 +5,7 @@ ATTIC_DIR="$HOME/iCloud/Projects/_attic"
 TEMPLATE_FILE="$HOME/iCloud/Dotfiles/modules/scripts/LaTeXTemplate/files/attic.tex"
 
 create_new() {
+    local IN_KEYWORDS="$1"
     mkdir -p "$ATTIC_DIR"
 
     local ID
@@ -16,13 +17,22 @@ create_new() {
     mkdir -p "$ATTIC_DIR/$ID"
     cp "$TEMPLATE_FILE" "$ATTIC_DIR/$ID/$ID.tex"
 
-    read -ep "$(echo -e ${PURPLE}"Enter keywords for Note $ID (comma separated): ${NC}")" KEYWORDS
+    if [[ "$IN_KEYWORDS" == "EMPTY_KEYWORDS" ]]; then
+        KEYWORDS=""
+        echo "Note $ID created automatically."
+    elif [ -n "$IN_KEYWORDS" ]; then
+        KEYWORDS="$IN_KEYWORDS"
+        echo "Note $ID created automatically."
+    else
+        read -ep "$(echo -e ${PURPLE}"Enter keywords for Note $ID (comma separated): ${NC}")" KEYWORDS
+    fi
+
     echo "$KEYWORDS" | sed 's/,/, /g' | sed 's/  / /g' > "$ATTIC_DIR/$ID/$ID.key"
 
     generate_metadata "$ID"
 
-    echo -e "${BLUE}Compiling initial PDF...${NC}"
-    cd "$ATTIC_DIR/$ID" && latexmk -pdf "$ID.tex" > /dev/null 2>&1
+    echo -e "${BLUE}Compiling initial PDF in the background...${NC}"
+    (cd "$ATTIC_DIR/$ID" && latexmk -pdf "$ID.tex" > /dev/null 2>&1) &
 
     if [[ "$INTERACTIVE" == 1 ]]; then
         nvim "$ID.tex"
@@ -268,15 +278,17 @@ INTERACTIVE_MENU() {
 
 if [[ $# -gt 0 ]]; then
     INTERACTIVE=0
-    while getopts "nu:m:acr" opt; do
+    while getopts "ek:nu:m:acr" opt; do
         case $opt in
+            e) create_new "EMPTY_KEYWORDS"; exit 0 ;;
+            k) create_new "$OPTARG"; exit 0 ;;
             n) create_new; exit 0 ;;
             m) generate_metadata "$OPTARG"; exit 0 ;;
             u) update_and_sync "$OPTARG"; exit 0 ;;
             a) audit_notes; exit 0 ;;
             c) clean; exit 0 ;;
             r) rebuild_all; exit 0 ;;
-            *) echo "Usage: attic [-n] [-m ID] [-u ID] [-a] [-c] [-r]"; exit 1 ;;
+            *) echo "Usage: attic [-n] [-e] [-k keywords] [-m ID] [-u ID] [-a] [-c] [-r]"; exit 1 ;;
         esac
     done
 else
