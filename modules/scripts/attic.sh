@@ -184,13 +184,13 @@ auditNotes() {
 
     echo "----------------------------------------"
     if [ $BROKEN -eq 0 ]; then
-        echo -e "${GREEN}Links: All internal links are valid.${NC}"
+        echo -e "${GREEN}Links: Valid!${NC}"
     else
         echo -e "${RED}Links: Found $BROKEN broken link(s).${NC}"
     fi
 
     if [ $DESYNC -eq 0 ]; then
-        echo -e "${GREEN}Metadata: Perfect bijection between outlinks and inlinks.${NC}"
+        echo -e "${GREEN}Metadata: Valid!.${NC}"
     else
         echo -e "${PURPLE}Metadata: $DESYNC note(s) have desynchronized metadata. Run 'rebuild all' (r) to fix.${NC}"
     fi
