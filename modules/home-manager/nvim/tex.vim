@@ -1,6 +1,6 @@
 nnoremap <buffer><silent> <C-1> <cmd>write<CR><cmd>VimtexCompile<CR>
 nnoremap <buffer><silent> <C-2> <cmd>write<CR><cmd>VimtexView<CR><cmd>VimtexView<CR>
-nnoremap <buffer><silent> <C-3> <cmd>write<CR><cmd>lua vim.fn.jobstart({"/Users/zhao/iCloud/Dotfiles/modules/scripts/attic.sh", "-c"})<CR>
+nnoremap <buffer><silent> <C-3> <cmd>write<CR><cmd>!rm -f *.aux(N) *.bbl(N) *.bcf(N) *bcf-SAVE-ERROR(N) *.blg(N) *.fdb_latexmk(N) *.fls(N) *.log(N) *.run.xml(N) *.synctex.gz(N) *.synctex\(busy\)(N)<CR><CR>
 nnoremap <buffer><silent> <C-4> <cmd>write<CR><cmd>lua local f=vim.fn.expand('%:p:r')..'_Student.pdf'; if vim.fn.filereadable(f)==1 then vim.fn.jobstart({ "open", "-n", "-a", "Skim", f }, {detach=true}) end<CR>
 
 function! TexFold(lnum)

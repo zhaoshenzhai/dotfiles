@@ -108,18 +108,18 @@ updateMetadata() {
 
     if generateMetadata "$ID" > /dev/null 2>&1; then
         if ! is_compiling "$ID"; then
-            (cd "$ATTIC_DIR/$ID" && latexmk -pdf "$ID.tex" > /dev/null 2>&1) &
+            # (cd "$ATTIC_DIR/$ID" && latexmk -pdf "$ID.tex" > /dev/null 2>&1) &
         fi
     fi
 
-    local NEW_REFS=$(extract_links "$FILE")
+    local NEW_REFS=$(grep -E -o '\\aref\{[^}]*\}\{[0-9]{5}\}' "$FILE" 2>/dev/null | sed -E 's/.*\{([0-9]{5})\}/\1/')
     local ALL_REFS=$(echo "$OLD_REFS $NEW_REFS" | grep -E -o '[0-9]{5}' | sort -u)
 
     for ref_id in $ALL_REFS; do
         if [ -n "$ref_id" ] && [ -d "$ATTIC_DIR/$ref_id" ]; then
             if generateMetadata "$ref_id" > /dev/null 2>&1; then
                 if ! is_compiling "$ref_id"; then
-                    (cd "$ATTIC_DIR/$ref_id" && latexmk -pdf "$ref_id.tex" > /dev/null 2>&1) &
+                    # (cd "$ATTIC_DIR/$ref_id" && latexmk -pdf "$ref_id.tex" > /dev/null 2>&1) &
                 fi
             fi
         fi
