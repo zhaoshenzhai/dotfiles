@@ -4,6 +4,10 @@ export PATH="/run/current-system/sw/bin:/etc/profiles/per-user/$USER/bin:$HOME/.
 ATTIC_DIR="$HOME/iCloud/Projects/_attic"
 TEMPLATE_FILE="$HOME/iCloud/Dotfiles/modules/scripts/LaTeXTemplate/files/attic.tex"
 
+RL_PURPLE=$'\001\e[35m\002'
+RL_CYAN=$'\001\e[36m\002'
+RL_NC=$'\001\e[0m\002'
+
 createNew() {
     local IN_KEYWORDS="$1"
     mkdir -p "$ATTIC_DIR"
@@ -24,7 +28,7 @@ createNew() {
         KEYWORDS="$IN_KEYWORDS"
         echo "Note $ID created automatically."
     else
-        read -ep "$(echo -e ${PURPLE}"Enter keywords for Note $ID (comma separated): ${NC}")" KEYWORDS
+        read -rep "${RL_PURPLE}Enter keywords for Note $ID (comma separated): ${RL_NC}" KEYWORDS
     fi
 
     echo "$KEYWORDS" | sed 's/,/, /g' | sed 's/  / /g' > "$ATTIC_DIR/$ID/$ID.key"
@@ -237,7 +241,7 @@ rebuildAll() {
 
 EXIT() {
     echo ""
-    read -n 1 -ep "$(echo -e ${CYAN}"Press [Y] to return, exiting otherwise...${NC} ")" repeat
+    read -n 1 -ep "${RL_CYAN}Press [Y] to return, exiting otherwise... ${RL_NC}" repeat
     if [[ "$repeat" == "Y" ]] || [[ "$repeat" == "y" ]] || [[ -z "$repeat" ]]; then
         clear
         exec "$0"
@@ -253,7 +257,7 @@ INTERACTIVE_MENU() {
         echo -e "    ${CYAN}(c): Clean LaTeX files${NC}"
         echo -e "    ${CYAN}(r): Rebuild all metadata & PDFs${NC}"
 
-        read -n 1 -ep "$(echo -e "${CYAN}Select operation: [n, a, c, r]${NC} ")" cmdNum
+        read -n 1 -ep "${RL_CYAN}Select operation: [n, a, c, r] ${RL_NC}" cmdNum
 
         if [[ "$cmdNum" == "q" ]]; then
             aerospace close --quit-if-last-window 2>/dev/null || exit 0
