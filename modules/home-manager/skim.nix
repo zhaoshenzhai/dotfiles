@@ -18,8 +18,7 @@
         # --- System & Window Behaviors ---
         NSQuitAlwaysKeepsWindows = true;
         SKDisableAnimations = true;
-        SKInitialWindowSizeOption = 2;
-        SKUISetupPreferTabs = 0;
+        SKInitialWindowSizeOption = 0;
         AppleWindowTabbingMode = "always";
 
         # --- Document Memory & Defaults ---
