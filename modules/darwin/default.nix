@@ -53,7 +53,6 @@
             AppleShowAllExtensions = true;
             AppleShowScrollBars = "WhenScrolling";
             AppleSpacesSwitchOnActivate = false;
-            AppleWindowTabbingMode = "manual";
 
             InitialKeyRepeat = 15;
             KeyRepeat = 1;

@@ -20,10 +20,11 @@
         SKDisableAnimations = true;
         SKInitialWindowSizeOption = 2;
         SKUISetupPreferTabs = 0;
+        AppleWindowTabbingMode = "always";
 
         # --- Document Memory & Defaults ---
         SKRememberDefaults = false;
-        SKRememberLastPageView = true;
+        SKRememberLastPageView = false;
         SKRememberLastPageViewed = true;
         SKUseSettingsFromPDF = false;
 
@@ -51,8 +52,7 @@
 
         # --- Colors & Margins ---
         SKWhitePoint = [ 0.99 0.995 1.0 0.95 ];
-        SKBackgroundColor = [ 0.0 0.0 0.0 0.5 ];
-        SKPageBackgroundColor = [ 0.0 0.0 0.0 0.5 ];
+        SKBackgroundColor = [ 0.95 0.95 0.95 1.0 ];
         SKPageMargins = [ 0.0 0.0 ];
 
         # --- Default Display Settings ---
