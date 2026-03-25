@@ -5,6 +5,27 @@ local attic_dir = vim.fn.expand('~/iCloud/Projects/_attic')
 local attic_group = vim.api.nvim_create_augroup("AtticSetup", { clear = true })
 local in_aref_mode = false
 
+local function strip_accents(str)
+    local map = {
+        ["á"] = "a", ["à"] = "a", ["â"] = "a", ["ä"] = "a", ["ã"] = "a", ["å"] = "a",
+        ["é"] = "e", ["è"] = "e", ["ê"] = "e", ["ë"] = "e",
+        ["í"] = "i", ["ì"] = "i", ["î"] = "i", ["ï"] = "i",
+        ["ó"] = "o", ["ò"] = "o", ["ô"] = "o", ["ö"] = "o", ["õ"] = "o",
+        ["ú"] = "u", ["ù"] = "u", ["û"] = "u", ["ü"] = "u",
+        ["ç"] = "c", ["ñ"] = "n", ["ß"] = "ss",
+        ["Á"] = "A", ["À"] = "A", ["Â"] = "A", ["Ä"] = "A", ["Ã"] = "A", ["Å"] = "A",
+        ["É"] = "E", ["È"] = "E", ["Ê"] = "E", ["Ë"] = "E",
+        ["Í"] = "I", ["Ì"] = "I", ["Î"] = "I", ["Ï"] = "I",
+        ["Ó"] = "O", ["Ò"] = "O", ["Ô"] = "O", ["Ö"] = "O", ["Õ"] = "O",
+        ["Ú"] = "U", ["Ù"] = "U", ["Û"] = "U", ["Ü"] = "U",
+        ["Ç"] = "C", ["Ñ"] = "N"
+    }
+    for k, v in pairs(map) do
+        str = str:gsub(k, v)
+    end
+    return str
+end
+
 local function load_attic_cache()
     local items = {}
     local dirs = vim.fn.globpath(attic_dir, '[0-9][0-9][0-9][0-9][0-9]', 0, 1)
@@ -18,9 +39,10 @@ local function load_attic_cache()
             local keywords = lines[1] or ""
 
             if keywords ~= "" then
+                local unaccented = strip_accents(keywords)
                 table.insert(items, {
                     label = keywords,
-                    filterText = keywords,
+                    filterText = keywords .. " " .. unaccented,
                     insertText = id,
                     documentation = {
                         kind = "markdown",
