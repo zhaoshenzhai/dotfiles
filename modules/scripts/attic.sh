@@ -37,7 +37,7 @@ createNew() {
         KEYWORDS="$IN_KEYWORDS"
         echo "Note $ID created automatically."
     else
-        read -rep "${RL_PURPLE}Enter keywords for Note $ID (comma separated): ${RL_NC}" KEYWORDS
+        read -rep "${RL_PURPLE}Enter keywords for note $ID: ${RL_NC}" KEYWORDS
     fi
 
     echo "$KEYWORDS" | sed 's/,/, /g' | sed 's/  / /g' > "$ATTIC_DIR/$ID/$ID.key"
