@@ -60,3 +60,20 @@ vim.keymap.set('n', '<C-w>', function()
         vim.cmd('q')
     end
 end, { silent = true, nowait = true })
+
+-- Tab navigation
+for i = 1, 9 do
+    vim.keymap.set('n', '<C-' .. i .. '>', i .. 'gt', { silent = true })
+    vim.keymap.set('n', '<C-S-' .. i .. '>', function()
+        local current = vim.fn.tabpagenr()
+        local target = i
+        local total = vim.fn.tabpagenr('$')
+        if target > total then target = total end
+
+        if target < current then
+            vim.cmd('tabmove ' .. (target - 1))
+        elseif target > current then
+            vim.cmd('tabmove ' .. target)
+        end
+    end, { silent = true })
+end
