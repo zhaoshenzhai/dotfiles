@@ -186,6 +186,45 @@
                                             }
                                         ];
                                     }
+                                    { # ctrl+j -> previous tab
+                                        type = "basic";
+                                        from = { key_code = "j"; modifiers = { mandatory = [ "control" ]; }; };
+                                        to = [ { key_code = "open_bracket"; modifiers = [ "command" "shift" ]; } ];
+                                        conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
+                                            { type = "variable_if"; name = "skim_search_mode"; value = 0; }
+                                            {
+                                                type = "frontmost_application_if";
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                            }
+                                        ];
+                                    }
+                                    { # ctrl+k -> next tab
+                                        type = "basic";
+                                        from = { key_code = "k"; modifiers = { mandatory = [ "control" ]; }; };
+                                        to = [ { key_code = "close_bracket"; modifiers = [ "command" "shift" ]; } ];
+                                        conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
+                                            { type = "variable_if"; name = "skim_search_mode"; value = 0; }
+                                            {
+                                                type = "frontmost_application_if";
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                            }
+                                        ];
+                                    }
+                                    { # ctrl+w -> close tab
+                                        type = "basic";
+                                        from = { key_code = "w"; modifiers = { mandatory = [ "control" ]; }; };
+                                        to = [ { key_code = "w"; modifiers = [ "command" "option" ]; } ];
+                                        conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
+                                            { type = "variable_if"; name = "skim_search_mode"; value = 0; }
+                                            {
+                                                type = "frontmost_application_if";
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                            }
+                                        ];
+                                    }
                                     { # ctrl+h -> jump back
                                         type = "basic";
                                         from = { key_code = "h"; modifiers = { mandatory = [ "control" ]; }; };
@@ -373,9 +412,7 @@
                                     {
                                         type = "basic";
                                         from = { key_code = "n"; modifiers = { mandatory = [ ]; }; };
-                                        to = [
-                                            { key_code = "g"; modifiers = [ "command" "option" ]; }
-                                        ];
+                                        to = [ { key_code = "g"; modifiers = [ "command" "option" ]; } ];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
@@ -423,9 +460,7 @@
                                     {
                                         type = "basic";
                                         from = { key_code = "n"; modifiers = { mandatory = [ "shift" ]; }; };
-                                        to = [
-                                            { key_code = "h"; modifiers = [ "command" "option" ]; }
-                                        ];
+                                        to = [ { key_code = "h"; modifiers = [ "command" "option" ]; } ];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
@@ -495,7 +530,7 @@
                                     { # d -> toggle double page
                                         type = "basic";
                                         from = { key_code = "d"; modifiers = { mandatory = [ ]; }; };
-                                        to = [ 
+                                        to = [
                                             { key_code = "2"; modifiers = [ "control" "option" "command" ]; }
                                             { set_variable = { name = "skim_double_page_mode"; value = 1; }; }
                                         ];
@@ -512,7 +547,7 @@
                                     {
                                         type = "basic";
                                         from = { key_code = "d"; modifiers = { mandatory = [ ]; }; };
-                                        to = [ 
+                                        to = [
                                             { key_code = "1"; modifiers = [ "control" "option" "command" ]; }
                                             { set_variable = { name = "skim_double_page_mode"; value = 0; }; }
                                         ];

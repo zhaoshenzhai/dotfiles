@@ -1,4 +1,5 @@
 start-at-login = false
+accordion-padding = 0
 after-startup-command = [
     'exec-and-forget borders',
     'exec-and-forget sketchybar',
@@ -16,12 +17,12 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
 ]
 
 [gaps]
-    inner.horizontal = 10
-    inner.vertical   = 10
-    outer.left       = 10
-    outer.bottom     = 10
-    outer.top        = 10
-    outer.right      = 10
+    inner.horizontal  = 10
+    inner.vertical    = 10
+    outer.left        = 10
+    outer.bottom      = 10
+    outer.top         = 10
+    outer.right       = 10
 
 [mode.main.binding]
     cmd-backslash = 'exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty'
@@ -105,14 +106,14 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
     cmd-shift-8 = 'move-node-to-workspace 8'
     cmd-shift-9 = 'move-node-to-workspace 9'
 
-    cmd-f           = 'layout v_accordion tiles'
+    cmd-f           = 'layout v_accordion v_tiles'
     cmd-shift-f     = 'macos-native-fullscreen'
     cmd-shift-space = 'layout floating tiling'
     cmd-tab         = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next'
     cmd-r           = 'exec-and-forget /bin/bash -c "echo TOGGLE_STATE > /tmp/skim_focus_pipe"'
 
     cmd-shift-r = [
-        'layout tiles',
+        'layout v_tiles',
         'flatten-workspace-tree',
         'exec-and-forget /bin/bash -c "echo DISABLE_STATE > /tmp/skim_focus_pipe"'
     ]
