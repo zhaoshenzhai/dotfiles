@@ -1,6 +1,4 @@
-vim.opt.shortmess:append("c")
-
--- Aerospace and sketchybar
+-- Sketchybar
 vim.api.nvim_create_autocmd({"VimEnter", "VimResume", "FocusGained"}, {
     callback = function()
         vim.fn.jobstart({"bash", "-c", "sleep 0.05 && sketchybar --trigger aerospace_custom_app_switched INFO=\"$(aerospace list-windows --focused --format '%{app-name}' 2>/dev/null)\" TITLE=\"nvim\""})
@@ -16,48 +14,7 @@ vim.api.nvim_create_autocmd({"VimLeave", "VimSuspend"}, {
     end,
 })
 
--- Clean trailing spaces
-vim.api.nvim_create_autocmd("BufWritePre", {
-    pattern = "*",
-    callback = function()
-        local save_cursor = vim.fn.getpos(".")
-        vim.cmd([[%s/\s\+$//e]])
-        vim.fn.setpos(".", save_cursor)
-    end,
-})
-
--- Screen movement
-_G.ScreenMovement = function(movement)
-    if vim.wo.wrap then
-        return "g" .. movement
-    else
-        return movement
-    end
-end
-
--- Tabs
-_G.closed_tabs = {}
-
-vim.api.nvim_create_autocmd("QuitPre", {
-    callback = function()
-        local current_buf = vim.api.nvim_get_current_buf()
-        local file = vim.api.nvim_buf_get_name(current_buf)
-
-        if file ~= "" and vim.fn.filereadable(file) == 1 then
-            table.insert(_G.closed_tabs, file)
-        end
-    end,
-})
-
-_G.ReopenLastClosedTab = function()
-    if #_G.closed_tabs > 0 then
-        local last_file = table.remove(_G.closed_tabs)
-        vim.cmd("tabedit " .. vim.fn.fnameescape(last_file))
-    else
-        print("No recently closed tabs to reopen")
-    end
-end
-
+-- Dynamically start a server socket based on the Aerospace window ID
 vim.api.nvim_create_autocmd("VimEnter", {
     callback = function()
         if vim.env.FROM_LAUNCHER == "1" then
@@ -73,7 +30,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
     end,
 })
 
--- Quit
+-- Quit overrides for launcher
 if vim.env.FROM_LAUNCHER == "1" then
     vim.cmd([[
         cnoreabbrev <expr> q getcmdtype() == ":" && getcmdline() == 'q' ? (tabpagenr('$') > 1 ? 'q' : 'silent !aerospace close --quit-if-last-window') : 'q'

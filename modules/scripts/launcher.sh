@@ -1,4 +1,3 @@
-
 LOCKFILE="/tmp/launcher.lock"
 CACHE_DIR="$HOME/.cache/launcher"
 CACHE_FILE="$CACHE_DIR/files.txt"

@@ -14,37 +14,17 @@ in {
         defaultEditor = true;
         colorschemes.onedark.enable = true;
 
-        opts = {
-            number = true;
-            relativenumber = true;
-            tabstop = 4;
-            softtabstop = 4;
-            expandtab = true;
-            shiftwidth = 4;
+        withPython3 = true;
+        extraPython3Packages = ps: [ ps.pynvim ];
 
-            termguicolors = true;
-            title = true;
-            titlestring = "nvim";
-            incsearch = true;
-            wrap = true;
-            breakindent = true;
-            linebreak = true;
-
-            clipboard = "unnamedplus";
-            autoindent = true;
-            spell = true;
-            spelllang = "en";
-            ignorecase = true;
-            foldmethod = "manual";
-            completeopt = ["menu" "menuone" "noselect"];
-
-            hlsearch = false;
-            swapfile = false;
-            showmode = false;
-            laststatus = 3;
-
-            spellfile = "/Users/zhao/iCloud/Dotfiles/modules/home-manager/nvim/spell/en.utf-8.add";
+        globals = {
+            vimtex_compiler_latexmk = {
+                executable = "${pkgs.texlive.combined.scheme-full}/bin/latexmk";
+                options = [ "-synctex=1" "-interaction=nonstopmode" ];
+            };
+            python3_host_prog = "${myPython}/bin/python3";
         };
+
         plugins = {
             vimtex = {
                 enable = true;
@@ -73,7 +53,6 @@ in {
             cmp = {
                 enable = true;
                 autoEnableSources = true;
-
                 settings = {
                     mapping = {
                         "<C-j>" = "cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert })";
@@ -81,9 +60,8 @@ in {
                         "<C-l>" = "cmp.mapping.confirm({ select = true })";
                         "<C-Space>" = "cmp.mapping.complete()";
                     };
-
                     sources = [
-                        # { name = "ultisnips"; }
+                        { name = "ultisnips"; }
                         { name = "attic"; }
                         { name = "omni"; }
                         { name = "buffer"; }
@@ -95,22 +73,32 @@ in {
                 enable = true;
                 settings = {
                     options = {
-                        theme = "onedark";
+                        theme = {
+                            __raw = ''
+                                (function()
+                                    local theme = require('lualine.themes.onedark')
+                                    for _, mode in pairs(theme) do
+                                        if type(mode) == 'table' then
+                                            mode.b = mode.b or {}
+                                            mode.b.bg = 'NONE'
+                                            mode.c = mode.c or {}
+                                            mode.c.bg = 'NONE'
+                                            mode.y = mode.y or {}
+                                            mode.y.bg = 'NONE'
+                                        end
+                                    end
+                                    return theme
+                                end)()
+                            '';
+                        };
                         icons_enabled = true;
                         component_separators = "";
                         section_separators = "";
                     };
-
                     sections = {
                         lualine_a = [ "mode" ];
-                        lualine_b = [
-                            {
-                                __unkeyed-1 = "filename";
-                                path = 3;
-                            }
-                        ];
+                        lualine_b = [ { __unkeyed-1 = "filename"; path = 3; } ];
                         lualine_c = { __raw = "{}"; };
-
                         lualine_x = { __raw = "{}"; };
                         lualine_y = [ "location" ];
                         lualine_z = [ "progress" ];
@@ -120,83 +108,24 @@ in {
         };
 
         extraPlugins = with pkgs.vimPlugins; [ ultisnips ];
-        keymaps = [
-            { mode = "n";       key = "<C-f>"; action = ":%s//gc<Left><Left><Left>"; }
-            { mode = "v";       key = "<C-f>"; action = ":s//gc<Left><Left><Left>"; }
-            { mode = "n";       key = "<C-s>"; action = ":set spell!<CR>";                options = { silent = true; }; }
-            { mode = "i";       key = "<C-c>"; action = "<c-g>u<Esc>[s1z=`]a<c-g>u";      options = { silent = true; }; }
-            { mode = "n";       key = "<C-c>"; action = "mz[s1z=`z";                      options = { silent = true; }; }
-            { mode = "n";       key = "<C-j>"; action = ":tabprevious<CR>";               options = { silent = true; }; }
-            { mode = "n";       key = "<C-k>"; action = ":tabnext<CR>";                   options = { silent = true; }; }
-            { mode = "n";       key = "<C-n>"; action = ":tabnew<CR>";                    options = { silent = true; }; }
-            { mode = "n";       key = "<C-u>"; action = ":lua ReopenLastClosedTab()<CR>"; options = { silent = true; }; }
-            { mode = "x";       key = "im";    action = "T$ot$";                          options = { silent = true; }; }
-            { mode = "o";       key = "im";    action = ":normal vim<CR>";                options = { silent = true; }; }
-            { mode = "x";       key = "am";    action = "F$of$";                          options = { silent = true; }; }
-            { mode = "o";       key = "am";    action = ":normal vam<CR>";                options = { silent = true; }; }
-            { mode = ["n" "o"]; key = "j";     action = "v:lua.ScreenMovement('j')";      options = { silent = true; expr = true; }; }
-            { mode = ["n" "o"]; key = "k";     action = "v:lua.ScreenMovement('k')";      options = { silent = true; expr = true; }; }
-            { mode = ["n" "o"]; key = "0";     action = "v:lua.ScreenMovement('0')";      options = { silent = true; expr = true; }; }
-            { mode = ["n" "o"]; key = "^";     action = "v:lua.ScreenMovement('^')";      options = { silent = true; expr = true; }; }
-            { mode = ["n" "o"]; key = "$";     action = "v:lua.ScreenMovement('$')";      options = { silent = true; expr = true; }; }
-        ];
-        highlight = {
-            Normal      = { ctermbg = "none"; bg = "none"; };
-            NonText     = { ctermbg = "none"; bg = "none"; };
-            LineNr      = { ctermbg = "none"; bg = "none"; };
-            SignColumn  = { ctermbg = "none"; bg = "none"; };
-            EndOfBuffer = { ctermbg = "none"; bg = "none"; };
-            Folded      = { ctermbg = "none"; bg = "none"; fg = "#abb2bf"; };
-        };
-        autoCmd = [
-            {
-                event = [ "BufWinLeave" ];
-                pattern = [ "*" ];
-                command = "if expand('%') != '' && &buftype == '' | mkview | endif";
-                group = "remember_folds";
-            }
-            {
-                event = [ "BufWinEnter" ];
-                pattern = [ "*" ];
-                command = "if expand('%') != '' && &buftype == '' | silent! loadview | endif";
-                group = "remember_folds";
-            }
-            {
-                event = [ "FileType" "BufWinEnter" ];
-                pattern = [ "*.tex" ];
-                command = "setlocal foldmethod=expr foldexpr=TexFold(v:lnum) foldlevel=0";
-            }
-            {
-                event = [ "InsertLeave" "TextChanged" ];
-                pattern = [ "*.tex" ];
-                command = "let &l:foldexpr = &l:foldexpr";
-            }
-        ];
-
-        autoGroups = { remember_folds = { clear = true; }; };
-
-        globals = {
-            UltiSnipsExpandTrigger = "<S-tab>";
-            UltiSnipsJumpForwardTrigger = "<tab>";
-            UltiSnipsSnippetDirectories = [ "UltiSnips" ];
-            vimtex_compiler_latexmk = {
-                executable = "${pkgs.texlive.combined.scheme-full}/bin/latexmk";
-                options = [
-                    "-synctex=1"
-                    "-interaction=nonstopmode"
-                ];
-            };
-        };
-
         extraFiles = {
-            "lua/core.lua".source = ./nvim/core.lua;
-            "lua/attic.lua".source = ./nvim/attic.lua;
-            "ftplugin/tex.lua".source = ./nvim/tex.lua;
+            "lua/options.lua".source   = ./nvim/options.lua;
+            "lua/ui.lua".source        = ./nvim/ui.lua;
+            "lua/keymaps.lua".source   = ./nvim/keymaps.lua;
+            "lua/autocmds.lua".source  = ./nvim/autocmds.lua;
+            "lua/tabs.lua".source      = ./nvim/tabs.lua;
+            "lua/aerospace.lua".source = ./nvim/aerospace.lua;
+            "lua/attic.lua".source     = ./nvim/attic.lua;
+            "ftplugin/tex.lua".source  = ./nvim/tex.lua;
         } // snippetExtraFiles;
-        extraConfigLua = "require('core')\nrequire('attic')";
-
-        withPython3 = true;
-        extraPython3Packages = ps: [ ps.pynvim ];
-        globals.python3_host_prog = "${myPython}/bin/python3";
+        extraConfigLua = ''
+            require('options')
+            require('ui')
+            require('keymaps')
+            require('autocmds')
+            require('tabs')
+            require('aerospace')
+            require('attic')
+        '';
     };
 }
