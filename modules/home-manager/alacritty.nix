@@ -26,6 +26,7 @@
                 dynamic_title = true;
                 opacity = 0.4;
                 blur = true;
+                option_as_alt = "Both";
             };
 
             selection.save_to_clipboard = true;

@@ -311,9 +311,9 @@
                                             }
                                         ];
                                     }
-                                    { # ctrl+2 -> open in nvim
+                                    { # ctrl+n -> open in nvim
                                         type = "basic";
-                                        from = { key_code = "2"; modifiers = { mandatory = [ "control" ]; }; };
+                                        from = { key_code = "n"; modifiers = { mandatory = [ "control" ]; }; };
                                         to = [{ shell_command = "zsh -ic 'skimUtils -o'"; }];
                                         conditions = [
                                             {
