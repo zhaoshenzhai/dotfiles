@@ -223,8 +223,6 @@
                                                         set docCount to count of documents
                                                         if docCount > 1 then
                                                             close front document
-                                                        else
-                                                            do shell script "zsh -ic 'aerospace close --quit-if-last-window'"
                                                         end if
                                                     end tell
                                                     EOF

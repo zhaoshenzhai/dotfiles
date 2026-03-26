@@ -91,7 +91,19 @@ launch() {
 
     if [[ "$full_path" == *.pdf ]]; then
         if [[ "$full_path" == */Projects/_attic/* ]]; then
-            nohup sh -c "sleep 0.2; open -a Skim \"$full_path\"" >/dev/null 2>&1 &
+            ATTIC_WIN_ID=$(aerospace list-windows --all --format "%{window-id}|%{app-name}|%{window-title}" \
+                | awk -F'|' '$2 == "Skim" && $3 ~ /[0-9][0-9][0-9][0-9][0-9]/ {print $1; exit}')
+
+            if [ -n "$ATTIC_WIN_ID" ]; then
+                nohup sh -c "
+                    sleep 0.25
+                    aerospace focus --window-id \"$ATTIC_WIN_ID\"
+                    sleep 0.1
+                    open -a Skim \"$full_path\"
+                " >/dev/null 2>&1 &
+            else
+                open -n -a Skim "$full_path" >/dev/null 2>&1 &
+            fi
         else
             open -n -a Skim "$full_path" >/dev/null 2>&1 &
         fi
