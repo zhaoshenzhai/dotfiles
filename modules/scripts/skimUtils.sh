@@ -1,8 +1,16 @@
 #!/usr/bin/env bash
 
 open_nvim() {
+    local FRONT_APP
+    FRONT_APP=$(osascript -e 'tell application "System Events" to get name of first application process whose frontmost is true' 2>/dev/null)
+
+    local TARGET_APP="Skim"
+    if [ "$FRONT_APP" == "SkimAttic" ]; then
+        TARGET_APP="SkimAttic"
+    fi
+
     local PDF_PATH
-    PDF_PATH="$(osascript -e 'tell application "Skim" to get path of document of window 1' 2>/dev/null)"
+    PDF_PATH="$(osascript -e "tell application \"$TARGET_APP\" to get path of document of window 1" 2>/dev/null)"
     if [ -z "$PDF_PATH" ]; then
         exit 0
     fi
@@ -44,21 +52,27 @@ focus_daemon() {
 
             if [ "$FOCUSED_APP" != "$PREV_APP" ]; then
                 if [ "$ENABLED" -eq 1 ]; then
-                    if [ "$PREV_APP" == "Skim" ]; then
-                        ORIGINAL_COLOR=$(defaults read net.sourceforge.skim-app.skim SKInvertColorsInDarkMode 2>/dev/null || echo 0)
+                    if [ "$PREV_APP" == "Skim" ] || [ "$PREV_APP" == "SkimAttic" ]; then
+                        local PREV_BUNDLE="net.sourceforge.skim-app.skim"
+                        [ "$PREV_APP" == "SkimAttic" ] && PREV_BUNDLE="net.sourceforge.skim-app.skimattic"
+
+                        ORIGINAL_COLOR=$(defaults read "$PREV_BUNDLE" SKInvertColorsInDarkMode 2>/dev/null || echo 0)
 
                         if [ "$ORIGINAL_COLOR" != "1" ]; then
-                            defaults write net.sourceforge.skim-app.skim SKInvertColorsInDarkMode -bool true
+                            defaults write "$PREV_BUNDLE" SKInvertColorsInDarkMode -bool true
                         fi
                     fi
 
-                    if [ "$FOCUSED_APP" == "Skim" ]; then
-                        local CURRENT=$(defaults read net.sourceforge.skim-app.skim SKInvertColorsInDarkMode 2>/dev/null || echo 0)
+                    if [ "$FOCUSED_APP" == "Skim" ] || [ "$FOCUSED_APP" == "SkimAttic" ]; then
+                        local CURR_BUNDLE="net.sourceforge.skim-app.skim"
+                        [ "$FOCUSED_APP" == "SkimAttic" ] && CURR_BUNDLE="net.sourceforge.skim-app.skimattic"
+
+                        local CURRENT=$(defaults read "$CURR_BUNDLE" SKInvertColorsInDarkMode 2>/dev/null || echo 0)
                         if [ "$CURRENT" != "$ORIGINAL_COLOR" ]; then
                             if [ "$ORIGINAL_COLOR" == "1" ]; then
-                                defaults write net.sourceforge.skim-app.skim SKInvertColorsInDarkMode -bool true
+                                defaults write "$CURR_BUNDLE" SKInvertColorsInDarkMode -bool true
                             else
-                                defaults write net.sourceforge.skim-app.skim SKInvertColorsInDarkMode -bool false
+                                defaults write "$CURR_BUNDLE" SKInvertColorsInDarkMode -bool false
                             fi
                         fi
                     fi
@@ -70,10 +84,23 @@ focus_daemon() {
     done
 }
 
-while getopts "od" opt; do
+clone_skim() {
+    echo "Syncing SkimAttic clone and preferences..."
+
+    rm -rf ~/Applications/SkimAttic.app
+    cp -a /Applications/Skim.app ~/Applications/SkimAttic.app
+    /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier net.sourceforge.skim-app.skimattic" ~/Applications/SkimAttic.app/Contents/Info.plist
+    codesign --force --deep --sign - ~/Applications/SkimAttic.app
+    defaults export net.sourceforge.skim-app.skim - | defaults import net.sourceforge.skim-app.skimattic -
+
+    echo "SkimAttic sync complete."
+}
+
+while getopts "odc" opt; do
     case $opt in
         o) open_nvim; exit 0 ;;
         d) focus_daemon; exit 0 ;;
-        *) echo "Usage: $(basename "$0") -o (Open Neovim) | -d (Start Focus Daemon)"; exit 1 ;;
+        c) clone_skim; exit 0 ;;
+        *) echo "Usage: $(basename "$0") -o (Open Neovim) | -d (Start Focus Daemon) | -c (Clone Skim to SkimAttic)"; exit 1 ;;
     esac
 done

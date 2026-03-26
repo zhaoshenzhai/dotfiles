@@ -91,19 +91,7 @@ launch() {
 
     if [[ "$full_path" == *.pdf ]]; then
         if [[ "$full_path" == */Projects/_attic/* ]]; then
-            ATTIC_WIN_ID=$(aerospace list-windows --all --format "%{window-id}|%{app-name}|%{window-title}" \
-                | awk -F'|' '$2 == "Skim" && $3 ~ /[0-9][0-9][0-9][0-9][0-9]/ {print $1; exit}')
-
-            if [ -n "$ATTIC_WIN_ID" ]; then
-                nohup sh -c "
-                    sleep 0.25
-                    aerospace focus --window-id \"$ATTIC_WIN_ID\"
-                    sleep 0.1
-                    open -a Skim \"$full_path\"
-                " >/dev/null 2>&1 &
-            else
-                open -n -a Skim "$full_path" >/dev/null 2>&1 &
-            fi
+            open -a SkimAttic "$full_path" >/dev/null 2>&1 &
         else
             open -n -a Skim "$full_path" >/dev/null 2>&1 &
         fi
@@ -127,6 +115,12 @@ launch() {
         exec_cmd="[ -f $hm_session ] && . $hm_session; export FROM_LAUNCHER=1; exec $nvim_path \"$full_path\""
         nohup alacritty -e sh -c "$exec_cmd" >/dev/null 2>&1 &
     fi
+}
+quit() {
+    aerospace mode main
+    launcherID=$(aerospace list-windows --all --format "%{window-id}|%{window-title}" | awk -F'|' '$2 == "launcher" {print $1; exit}')
+    sleep 1
+    aerospace close --window-id $launcherID
 }
 
 # Main
@@ -158,6 +152,8 @@ elif [[ -n "${1:-}" && -f "$1" ]]; then
         updateRecentFiles "$formatted"
         launch "$formatted"
     fi
+
+    quit
 else
     init
     updateCache &
@@ -168,7 +164,6 @@ else
         updateRecentFiles "$selected"
         launch "$selected"
     fi
-fi
 
-sleep 0.2
-aerospace mode main
+    quit
+fi

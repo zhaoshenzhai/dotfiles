@@ -80,7 +80,7 @@
                                             { type = "variable_if"; name = "skim_g_pressed"; value = 1; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                         to = [
@@ -97,7 +97,7 @@
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                         to = [ { set_variable = { name = "skim_g_pressed"; value = 1; }; } ];
@@ -118,7 +118,7 @@
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -134,7 +134,7 @@
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -150,7 +150,7 @@
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -166,7 +166,7 @@
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -182,7 +182,7 @@
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -195,7 +195,7 @@
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -208,7 +208,7 @@
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -227,7 +227,7 @@
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -254,7 +254,7 @@
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -267,7 +267,7 @@
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -280,7 +280,7 @@
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -296,8 +296,10 @@
                                                     CURRENT=$(defaults read net.sourceforge.skim-app.skim SKInvertColorsInDarkMode 2>/dev/null || echo 0); \
                                                     if [ \"$CURRENT\" = \"1\" ]; then \
                                                         defaults write net.sourceforge.skim-app.skim SKInvertColorsInDarkMode -bool false; \
+                                                        defaults write net.sourceforge.skim-app.skimattic SKInvertColorsInDarkMode -bool false; \
                                                     else \
                                                         defaults write net.sourceforge.skim-app.skim SKInvertColorsInDarkMode -bool true; \
+                                                        defaults write net.sourceforge.skim-app.skimattic SKInvertColorsInDarkMode -bool true; \
                                                     fi
                                                 '';
                                             }
@@ -307,7 +309,7 @@
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -318,7 +320,7 @@
                                         conditions = [
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -352,7 +354,7 @@
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -370,7 +372,7 @@
                                             { type = "variable_if"; name = "skim_search_mode"; value = 1; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -387,7 +389,7 @@
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -404,7 +406,7 @@
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -438,7 +440,7 @@
                                             { type = "variable_unless"; name = "skim_search_sequence"; value = 1; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -452,7 +454,7 @@
                                             { type = "variable_if"; name = "skim_search_sequence"; value = 1; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -486,7 +488,7 @@
                                             { type = "variable_unless"; name = "skim_search_sequence"; value = 1; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -500,7 +502,7 @@
                                             { type = "variable_if"; name = "skim_search_sequence"; value = 1; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -516,7 +518,7 @@
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -536,7 +538,7 @@
                                             { type = "variable_if"; name = "skim_double_page_mode"; value = 1; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -556,7 +558,7 @@
                                             { type = "variable_if"; name = "skim_double_page_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -573,7 +575,7 @@
                                             { type = "variable_unless"; name = "skim_double_page_mode"; value = 1; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -590,7 +592,7 @@
                                             { type = "variable_if"; name = "skim_double_page_mode"; value = 1; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -606,7 +608,7 @@
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }
@@ -622,7 +624,7 @@
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim(attic)?$" ];
                                             }
                                         ];
                                     }

@@ -177,6 +177,10 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
     run = 'exec-and-forget /bin/bash -c "echo $AEROSPACE_WINDOW_ID > /tmp/aerospace_last_skim_id"'
 
 [[on-window-detected]]
+    if.app-id = 'net.sourceforge.skim-app.skimattic'
+    run = 'exec-and-forget /bin/bash -c "echo $AEROSPACE_WINDOW_ID > /tmp/aerospace_last_skim_id"'
+
+[[on-window-detected]]
     if.window-title-regex-substring = 'vifm-float'
     run = 'layout floating'
 
