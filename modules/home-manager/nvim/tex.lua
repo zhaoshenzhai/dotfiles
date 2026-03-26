@@ -51,7 +51,7 @@ local tex_group = vim.api.nvim_create_augroup("tex_folds", { clear = true })
 vim.api.nvim_create_autocmd({"FileType", "BufWinEnter"}, {
     group = tex_group,
     pattern = "*.tex",
-    command = "setlocal foldmethod=expr foldexpr=TexFold(v:lnum) foldlevel=0"
+    command = "setlocal foldmethod=expr foldexpr=v:lua.TexFold() foldlevel=0"
 })
 
 vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {
@@ -59,6 +59,3 @@ vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {
     pattern = "*.tex",
     command = "let &l:foldexpr = &l:foldexpr"
 })
-
-vim.opt_local.foldmethod = 'expr'
-vim.opt_local.foldexpr = 'v:lua.TexFold()'
