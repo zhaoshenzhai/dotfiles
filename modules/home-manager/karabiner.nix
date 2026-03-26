@@ -212,20 +212,13 @@
                                             }
                                         ];
                                     }
-                                    { # ctrl+w -> close tab, quit if last
+                                    { # ctrl+w -> close tab, do nothing if last
                                         type = "basic";
                                         from = { key_code = "w"; modifiers = { mandatory = [ "control" ]; }; };
                                         to = [
                                             {
                                                 shell_command = ''
-                                                    osascript <<'EOF'
-                                                    tell application "Skim"
-                                                        set docCount to count of documents
-                                                        if docCount > 1 then
-                                                            close front document
-                                                        end if
-                                                    end tell
-                                                    EOF
+                                                    osascript -e 'tell application "Skim"' -e 'if (count of documents) > 1 then close front document' -e 'end tell'
                                                 '';
                                             }
                                         ];

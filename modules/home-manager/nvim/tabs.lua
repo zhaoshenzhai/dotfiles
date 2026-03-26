@@ -54,3 +54,9 @@ vim.keymap.set('n', '<C-j>', ':tabprevious<CR>', opts)
 vim.keymap.set('n', '<C-k>', ':tabnext<CR>', opts)
 vim.keymap.set('n', '<C-n>', ':tabnew<CR>', opts)
 vim.keymap.set('n', '<C-u>', ':lua ReopenLastClosedTab()<CR>', opts)
+
+vim.keymap.set('n', '<C-w>', function()
+    if vim.fn.tabpagenr('$') > 1 then
+        vim.cmd('q')
+    end
+end, { silent = true, nowait = true })
