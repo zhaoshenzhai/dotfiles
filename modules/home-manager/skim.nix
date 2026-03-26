@@ -35,7 +35,6 @@
             "Horizontal Continuous" = "^~@3";
             "Single Page Continuous" = "^~@1";
             "Two Pages Continuous" = "^~@2";
-            "Close Tab" = "~@w";
         };
 
         # --- Visual & Display Preferences ---
