@@ -152,14 +152,17 @@ elif [[ -n "${1:-}" && -f "$1" ]]; then
         abs_path="$PWD/$abs_path"
     fi
 
+    dir_name=$(dirname "$abs_path")
+    base_name=$(basename "$abs_path")
+    if norm_dir=$(cd "$dir_name" 2>/dev/null && pwd); then
+        abs_path="$norm_dir/$base_name"
+    fi
+
     rel_path="${abs_path#$BASE_DIR}"
     rel_path="${rel_path#/}"
 
     if [ -f "$BASE_DIR/$rel_path" ]; then
-        formatted=$(format "$rel_path")
-        launch "$formatted"
-    else
-        echo "Error: File not found -> $BASE_DIR/$rel_path"
+        openFile "$(format "$rel_path")"
     fi
 else
     init
@@ -168,6 +171,10 @@ else
     selected=$(selectFiles)
 
     if [ -n "$selected" ]; then
-        launch "$selected"
+        updateRecentFiles "$selected"
+        openFile "$selected"
     fi
 fi
+
+sleep 0.2
+aerospace mode main
