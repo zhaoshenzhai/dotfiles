@@ -173,10 +173,6 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
     run = 'layout floating'
 
 [[on-window-detected]]
-    if.app-id = 'net.sourceforge.skim-app.skim'
-    run = 'exec-and-forget /bin/bash -c "echo $AEROSPACE_WINDOW_ID > /tmp/aerospace_last_skim_id"'
-
-[[on-window-detected]]
     if.app-id = 'net.sourceforge.skim-app.skimattic'
     run = 'exec-and-forget /bin/bash -c "echo $AEROSPACE_WINDOW_ID > /tmp/aerospace_last_skim_id"'
 

@@ -1,23 +1,17 @@
 #!/usr/bin/env bash
 
 open_nvim() {
-    local FRONT_APP
-    FRONT_APP=$(osascript -e 'tell application "System Events" to get name of first application process whose frontmost is true' 2>/dev/null)
-
-    local TARGET_APP="Skim"
-    if [ "$FRONT_APP" == "SkimAttic" ]; then
-        TARGET_APP="SkimAttic"
-    fi
+    local FRONT_BUNDLE
+    FRONT_BUNDLE=$(osascript -e 'id of application (path to frontmost application as text)' 2>/dev/null)
 
     local PDF_PATH
-    PDF_PATH="$(osascript -e "tell application \"$TARGET_APP\" to get path of document of window 1" 2>/dev/null)"
-    if [ -z "$PDF_PATH" ]; then
+    PDF_PATH=$(osascript -e "tell application id \"$FRONT_BUNDLE\" to get path of document of window 1" 2>/dev/null)
+
+    if [ -z "$PDF_PATH" ] || [ "$PDF_PATH" == "missing value" ]; then
         exit 0
     fi
 
     local TEX_PATH="${PDF_PATH%.pdf}.tex"
-
-    echo -e "${YELLOW}$TEX_PATH${NC}"
     if [ -f "$TEX_PATH" ]; then
         nohup /etc/profiles/per-user/zhao/bin/launcher "$TEX_PATH" >/dev/null 2>&1 &
     fi
