@@ -137,7 +137,7 @@ in {
 
         extraFiles = {
             "lua/attic.lua".source = ./nvim/attic.lua;
-            "ftplugin/tex.vim".source = ./nvim/tex.vim;
+            "ftplugin/tex.lua".source = ./nvim/tex.lua;
         } // snippetExtraFiles;
 
         extraConfigLua = ''

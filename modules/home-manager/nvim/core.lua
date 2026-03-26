@@ -1,5 +1,6 @@
 vim.opt.shortmess:append("c")
 
+-- Quit
 if vim.env.FROM_LAUNCHER == "1" then
     vim.cmd([[
         cnoreabbrev <expr> q getcmdtype() == ":" && getcmdline() == 'q' ? 'silent !aerospace close --quit-if-last-window' : 'q'
@@ -7,6 +8,7 @@ if vim.env.FROM_LAUNCHER == "1" then
     ]])
 end
 
+-- Aerospace and sketchybar
 vim.api.nvim_create_autocmd({"VimEnter", "VimResume", "FocusGained"}, {
     callback = function()
         vim.fn.jobstart({"bash", "-c", "sleep 0.05 && sketchybar --trigger aerospace_custom_app_switched INFO=\"$(aerospace list-windows --focused --format '%{app-name}' 2>/dev/null)\" TITLE=\"nvim\""})
@@ -22,6 +24,7 @@ vim.api.nvim_create_autocmd({"VimLeave", "VimSuspend"}, {
     end,
 })
 
+-- Clean trailing spaces
 vim.api.nvim_create_autocmd("BufWritePre", {
     pattern = "*",
     callback = function()
