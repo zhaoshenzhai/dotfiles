@@ -2,12 +2,14 @@
 
 open_nvim() {
     local PDF_PATH
-    PDF_PATH=$(osascript -e 'tell application "Skim" to get path of document 1' 2>/dev/null)
+    PDF_PATH="$(osascript -e 'tell application "Skim" to get path of document of window 1' 2>/dev/null)"
+
     if [ -z "$PDF_PATH" ]; then
         exit 0
     fi
 
     local TEX_PATH="${PDF_PATH%.pdf}.tex"
+
     if [ -f "$TEX_PATH" ]; then
         local NVIM_PATH="/etc/profiles/per-user/$USER/bin/nvim"
         local HM_SESSION="$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
