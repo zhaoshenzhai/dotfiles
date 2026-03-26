@@ -91,7 +91,7 @@ launch() {
 
     if [[ "$full_path" == *.pdf ]]; then
         if [[ "$full_path" == */Projects/_attic/* ]]; then
-            open -a Skim "$full_path" >/dev/null 2>&1 &
+            nohup sh -c "sleep 0.2; open -a Skim \"$full_path\"" >/dev/null 2>&1 &
         else
             open -n -a Skim "$full_path" >/dev/null 2>&1 &
         fi
@@ -101,6 +101,7 @@ launch() {
         exec_cmd="[ -f $hm_session ] && . $hm_session; export FROM_LAUNCHER=1; exec $nvim_path \"$full_path\""
 
         nohup alacritty -e sh -c "$exec_cmd" >/dev/null 2>&1 &
+        sleep 0.5
     fi
 }
 
@@ -119,5 +120,4 @@ if [ -n "$selected" ]; then
     launch "$selected"
 
     aerospace mode main
-    sleep 0.5
 fi
