@@ -84,7 +84,7 @@ updateRecentFiles() {
     echo "$selected" | cat - "$RECENT_FILE.tmp" | head -n 100 > "$RECENT_FILE"
     rm -f "$RECENT_FILE.tmp"
 }
-openFile() {
+launch() {
     selected="$1"
     rel_path=$(echo "$selected" | cut -f2)
     full_path="$BASE_DIR/$rel_path"
@@ -128,14 +128,6 @@ openFile() {
         nohup alacritty -e sh -c "$exec_cmd" >/dev/null 2>&1 &
     fi
 }
-launch() {
-    updateRecentFiles "$1"
-    openFile "$1"
-
-    sleep 0.2
-    aerospace mode main
-    exit 0
-}
 
 # Main
 if [[ "${1:-}" == "--update" ]]; then
@@ -162,7 +154,7 @@ elif [[ -n "${1:-}" && -f "$1" ]]; then
     rel_path="${rel_path#/}"
 
     if [ -f "$BASE_DIR/$rel_path" ]; then
-        openFile "$(format "$rel_path")"
+        launch "$(format "$rel_path")"
     fi
 else
     init
@@ -172,7 +164,7 @@ else
 
     if [ -n "$selected" ]; then
         updateRecentFiles "$selected"
-        openFile "$selected"
+        launch "$selected"
     fi
 fi
 
