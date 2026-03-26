@@ -154,7 +154,7 @@ clean() {
     echo -e "${GREEN}Cleanup complete.${NC}"
 }
 auditNotes() {
-    echo -e "${BLUE}Verifying links, metadata bijection, and scanning for TODOs...${NC}"
+    echo -e "${BLUE}Verifying links and scanning for TODOs...${NC}"
     local BROKEN=0
     local TODOS=0
     local DESYNC=0
@@ -205,7 +205,7 @@ auditNotes() {
         local ACTUAL_REF_IN=$(grep "Referenced in:" "$meta" 2>/dev/null | sed 's/^[[:space:]]*//' | sed 's/ \\\\$//')
 
         if [[ "$EXPECTED_REFS" != "$ACTUAL_REFS" ]] || [[ "$EXPECTED_REF_IN" != "$ACTUAL_REF_IN" ]]; then
-            echo -e "${PURPLE}[DESYNC]${NC} Metadata for $id breaks bijection (links out of sync)."
+            echo -e "${PURPLE}[DESYNC]${NC} Metadata for $id out of sync."
             ((DESYNC++))
         fi
     done < <(cd "$ATTIC_DIR" && fd -e tex)

@@ -223,11 +223,18 @@ vim.api.nvim_create_autocmd("FileType", {
                 local target_tex = vim.fn.expand('~/iCloud/Projects/_attic/') .. id .. '/' .. id .. '.tex'
                 local target_key = vim.fn.expand('~/iCloud/Projects/_attic/') .. id .. '/' .. id .. '.key'
 
-                vim.fn.jobstart({ "launcher", target_tex })
-                vim.fn.jobstart({ "launcher", target_key })
+                vim.api.nvim_create_autocmd("BufWinLeave", {
+                    pattern = "*/" .. id .. ".key",
+                    once = true,
+                    callback = function()
+                        vim.defer_fn(function()
+                            vim.fn.jobstart({ "launcher", target_tex })
+                        end, 50)
+                    end
+                })
 
-                vim.cmd('startinsert')
-                vim.api.nvim_echo({{"Attic: Note " .. id .. " created.", "Normal"}}, false, {})
+                vim.fn.jobstart({ "launcher", target_key })
+                vim.api.nvim_echo({{"Attic: Edit key file, then close it to open " .. id .. ".tex", "Normal"}}, false, {})
             else
                 vim.api.nvim_echo({{"Attic: Failed to create note. Output: " .. output, "ErrorMsg"}}, false, {})
             end
