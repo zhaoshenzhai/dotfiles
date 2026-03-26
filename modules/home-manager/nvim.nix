@@ -45,7 +45,6 @@ in {
 
             spellfile = "/Users/zhao/iCloud/Dotfiles/modules/home-manager/nvim/spell/en.utf-8.add";
         };
-
         plugins = {
             vimtex = {
                 enable = true;
@@ -121,44 +120,26 @@ in {
         };
 
         extraPlugins = with pkgs.vimPlugins; [ ultisnips ];
-
-        globals = {
-            UltiSnipsExpandTrigger = "<S-tab>";
-            UltiSnipsJumpForwardTrigger = "<tab>";
-            UltiSnipsSnippetDirectories = [ "UltiSnips" ];
-            vimtex_compiler_latexmk = {
-                executable = "${pkgs.texlive.combined.scheme-full}/bin/latexmk";
-                options = [
-                    "-synctex=1"
-                    "-interaction=nonstopmode"
-                ];
-            };
-        };
-
-        extraFiles = {
-            "lua/core.lua".source = ./nvim/core.lua;
-            "lua/attic.lua".source = ./nvim/attic.lua;
-            "ftplugin/tex.lua".source = ./nvim/tex.lua;
-        } // snippetExtraFiles;
-        extraConfigLua = "require('core')\nrequire('attic')";
-
         keymaps = [
             { mode = "n";       key = "<C-f>"; action = ":%s//gc<Left><Left><Left>"; }
             { mode = "v";       key = "<C-f>"; action = ":s//gc<Left><Left><Left>"; }
-            { mode = "n";       key = "<C-s>"; action = ":set spell!<CR>";           options = { silent = true; }; }
-            { mode = "i";       key = "<C-c>"; action = "<c-g>u<Esc>[s1z=`]a<c-g>u"; options = { silent = true; }; }
-            { mode = "n";       key = "<C-c>"; action = "mz[s1z=`z";                 options = { silent = true; }; }
-            { mode = "x";       key = "im";    action = "T$ot$";                     options = { silent = true; }; }
-            { mode = "o";       key = "im";    action = ":normal vim<CR>";           options = { silent = true; }; }
-            { mode = "x";       key = "am";    action = "F$of$";                     options = { silent = true; }; }
-            { mode = "o";       key = "am";    action = ":normal vam<CR>";           options = { silent = true; }; }
-            { mode = ["n" "o"]; key = "j";     action = "v:lua.ScreenMovement('j')"; options = { silent = true; expr = true; }; }
-            { mode = ["n" "o"]; key = "k";     action = "v:lua.ScreenMovement('k')"; options = { silent = true; expr = true; }; }
-            { mode = ["n" "o"]; key = "0";     action = "v:lua.ScreenMovement('0')"; options = { silent = true; expr = true; }; }
-            { mode = ["n" "o"]; key = "^";     action = "v:lua.ScreenMovement('^')"; options = { silent = true; expr = true; }; }
-            { mode = ["n" "o"]; key = "$";     action = "v:lua.ScreenMovement('$')"; options = { silent = true; expr = true; }; }
+            { mode = "n";       key = "<C-s>"; action = ":set spell!<CR>";                options = { silent = true; }; }
+            { mode = "i";       key = "<C-c>"; action = "<c-g>u<Esc>[s1z=`]a<c-g>u";      options = { silent = true; }; }
+            { mode = "n";       key = "<C-c>"; action = "mz[s1z=`z";                      options = { silent = true; }; }
+            { mode = "n";       key = "<C-j>"; action = ":tabprevious<CR>";               options = { silent = true; }; }
+            { mode = "n";       key = "<C-k>"; action = ":tabnext<CR>";                   options = { silent = true; }; }
+            { mode = "n";       key = "<C-n>"; action = ":tabnew<CR>";                    options = { silent = true; }; }
+            { mode = "n";       key = "<C-u>"; action = ":lua ReopenLastClosedTab()<CR>"; options = { silent = true; }; }
+            { mode = "x";       key = "im";    action = "T$ot$";                          options = { silent = true; }; }
+            { mode = "o";       key = "im";    action = ":normal vim<CR>";                options = { silent = true; }; }
+            { mode = "x";       key = "am";    action = "F$of$";                          options = { silent = true; }; }
+            { mode = "o";       key = "am";    action = ":normal vam<CR>";                options = { silent = true; }; }
+            { mode = ["n" "o"]; key = "j";     action = "v:lua.ScreenMovement('j')";      options = { silent = true; expr = true; }; }
+            { mode = ["n" "o"]; key = "k";     action = "v:lua.ScreenMovement('k')";      options = { silent = true; expr = true; }; }
+            { mode = ["n" "o"]; key = "0";     action = "v:lua.ScreenMovement('0')";      options = { silent = true; expr = true; }; }
+            { mode = ["n" "o"]; key = "^";     action = "v:lua.ScreenMovement('^')";      options = { silent = true; expr = true; }; }
+            { mode = ["n" "o"]; key = "$";     action = "v:lua.ScreenMovement('$')";      options = { silent = true; expr = true; }; }
         ];
-
         highlight = {
             Normal      = { ctermbg = "none"; bg = "none"; };
             NonText     = { ctermbg = "none"; bg = "none"; };
@@ -167,9 +148,6 @@ in {
             EndOfBuffer = { ctermbg = "none"; bg = "none"; };
             Folded      = { ctermbg = "none"; bg = "none"; fg = "#abb2bf"; };
         };
-
-        autoGroups = { remember_folds = { clear = true; }; };
-
         autoCmd = [
             {
                 event = [ "BufWinLeave" ];
@@ -194,6 +172,28 @@ in {
                 command = "let &l:foldexpr = &l:foldexpr";
             }
         ];
+
+        autoGroups = { remember_folds = { clear = true; }; };
+
+        globals = {
+            UltiSnipsExpandTrigger = "<S-tab>";
+            UltiSnipsJumpForwardTrigger = "<tab>";
+            UltiSnipsSnippetDirectories = [ "UltiSnips" ];
+            vimtex_compiler_latexmk = {
+                executable = "${pkgs.texlive.combined.scheme-full}/bin/latexmk";
+                options = [
+                    "-synctex=1"
+                    "-interaction=nonstopmode"
+                ];
+            };
+        };
+
+        extraFiles = {
+            "lua/core.lua".source = ./nvim/core.lua;
+            "lua/attic.lua".source = ./nvim/attic.lua;
+            "ftplugin/tex.lua".source = ./nvim/tex.lua;
+        } // snippetExtraFiles;
+        extraConfigLua = "require('core')\nrequire('attic')";
 
         withPython3 = true;
         extraPython3Packages = ps: [ ps.pynvim ];

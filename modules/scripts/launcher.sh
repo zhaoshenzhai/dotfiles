@@ -108,11 +108,29 @@ launch() {
             open -n -a Skim "$full_path" >/dev/null 2>&1 &
         fi
     else
+        # Determine the current active workspace
+        WORKSPACE=$(aerospace list-workspaces --focused)
+        SOCKET="/tmp/nvim-workspace-${WORKSPACE}.sock"
+
+        # Check for an existing Alacritty window with title "nvim" on the CURRENT workspace
+        NVIM_WIN_ID=$(aerospace list-windows --workspace "$WORKSPACE" --format "%{window-id}|%{app-name}|%{window-title}" \
+            | awk -F'|' '$2 == "Alacritty" && $3 == "nvim" {print $1; exit}')
+
         nvim_path="/etc/profiles/per-user/$USER/bin/nvim"
         hm_session="$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
-        exec_cmd="[ -f $hm_session ] && . $hm_session; export FROM_LAUNCHER=1; exec $nvim_path \"$full_path\""
 
-        nohup alacritty -e sh -c "$exec_cmd" >/dev/null 2>&1 &
+        if [ -n "$NVIM_WIN_ID" ] && [ -e "$SOCKET" ]; then
+            # An instance exists on this workspace. Focus it and open the file in a new tab.
+            aerospace focus --window-id "$NVIM_WIN_ID"
+            $nvim_path --server "$SOCKET" --remote-tab "$full_path" >/dev/null 2>&1
+        else
+            # No instance exists. Clean up any stale socket from a previous closed session.
+            rm -f "$SOCKET"
+
+            # Start a new Neovim instance listening on this workspace's unique socket.
+            exec_cmd="[ -f $hm_session ] && . $hm_session; export FROM_LAUNCHER=1; exec $nvim_path --listen \"$SOCKET\" \"$full_path\""
+            nohup alacritty -e sh -c "$exec_cmd" >/dev/null 2>&1 &
+        fi
     fi
 }
 

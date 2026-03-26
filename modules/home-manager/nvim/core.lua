@@ -1,13 +1,5 @@
 vim.opt.shortmess:append("c")
 
--- Quit
-if vim.env.FROM_LAUNCHER == "1" then
-    vim.cmd([[
-        cnoreabbrev <expr> q getcmdtype() == ":" && getcmdline() == 'q' ? 'silent !aerospace close --quit-if-last-window' : 'q'
-        cnoreabbrev <expr> wq getcmdtype() == ":" && getcmdline() == 'wq' ? 'w <bar> silent !aerospace close --quit-if-last-window' : 'wq'
-    ]])
-end
-
 -- Aerospace and sketchybar
 vim.api.nvim_create_autocmd({"VimEnter", "VimResume", "FocusGained"}, {
     callback = function()
@@ -41,4 +33,35 @@ _G.ScreenMovement = function(movement)
     else
         return movement
     end
+end
+
+-- Tabs
+_G.closed_tabs = {}
+
+vim.api.nvim_create_autocmd("QuitPre", {
+    callback = function()
+        local current_buf = vim.api.nvim_get_current_buf()
+        local file = vim.api.nvim_buf_get_name(current_buf)
+
+        if file ~= "" and vim.fn.filereadable(file) == 1 then
+            table.insert(_G.closed_tabs, file)
+        end
+    end,
+})
+
+_G.ReopenLastClosedTab = function()
+    if #_G.closed_tabs > 0 then
+        local last_file = table.remove(_G.closed_tabs)
+        vim.cmd("tabedit " .. vim.fn.fnameescape(last_file))
+    else
+        print("No recently closed tabs to reopen")
+    end
+end
+
+-- Quit
+if vim.env.FROM_LAUNCHER == "1" then
+    vim.cmd([[
+        cnoreabbrev <expr> q getcmdtype() == ":" && getcmdline() == 'q' ? (tabpagenr('$') > 1 ? 'q' : 'silent !aerospace close --quit-if-last-window') : 'q'
+        cnoreabbrev <expr> wq getcmdtype() == ":" && getcmdline() == 'wq' ? (tabpagenr('$') > 1 ? 'wq' : 'w <bar> silent !aerospace close --quit-if-last-window') : 'wq'
+    ]])
 end
