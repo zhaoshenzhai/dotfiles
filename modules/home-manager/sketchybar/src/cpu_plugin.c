@@ -28,10 +28,10 @@ void push_load(unsigned long long start_total, unsigned long long start_used,
     char* color;
     char* color_fill;
 
-    if (load > 0.4f) {
+    if (load > 0.5f) {
         color = RED;
         color_fill = RED_;
-    } else if (load > 0.1f) {
+    } else if (load > 0.3f) {
         color = ORANGE;
         color_fill = ORANGE_;
     } else {
