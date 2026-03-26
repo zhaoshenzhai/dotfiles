@@ -90,40 +90,13 @@ launch() {
     full_path="$BASE_DIR/$rel_path"
 
     if [[ "$full_path" == *.pdf ]]; then
-        if [[ "$full_path" == */Projects/_attic/* ]]; then
-            local id
-            local key_file
-            local keyword=""
-
-            id=$(basename "$(dirname "$full_path")")
-            key_file="$(dirname "$full_path")/$id.key"
-
-            if [ -f "$key_file" ]; then
-                keyword=$(head -n 1 "$key_file" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' | tr '/' '-')
-            fi
-
-            if [ -n "$keyword" ]; then
-                local link_dir="/tmp/skim_tabs/$id"
-                mkdir -p "$link_dir"
-
-                local link_path="$link_dir/${keyword}.pdf"
-                ln -f "$full_path" "$link_path"
-
-                nohup sh -c "sleep 0.2; open -a Skim \"$link_path\"" >/dev/null 2>&1 &
-            else
-                nohup sh -c "sleep 0.2; open -a Skim \"$full_path\"" >/dev/null 2>&1 &
-            fi
-        else
             open -n -a Skim "$full_path" >/dev/null 2>&1 &
-            sleep 0.2
-        fi
     else
         nvim_path="/etc/profiles/per-user/$USER/bin/nvim"
         hm_session="$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
         exec_cmd="[ -f $hm_session ] && . $hm_session; export FROM_LAUNCHER=1; exec $nvim_path \"$full_path\""
 
         nohup alacritty -e sh -c "$exec_cmd" >/dev/null 2>&1 &
-        sleep 0.2
     fi
 }
 
@@ -147,5 +120,6 @@ if [ -n "$selected" ]; then
     updateRecentFiles "$selected"
     launch "$selected"
 
+    sleep 0.2
     aerospace mode main
 fi

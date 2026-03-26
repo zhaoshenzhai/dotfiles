@@ -33,36 +33,7 @@ vim.keymap.set('n', '<C-1>', '<cmd>write<CR><cmd>VimtexCompile<CR>', opts)
 vim.keymap.set('n', '<C-2>', function()
     vim.cmd('write')
     vim.cmd('VimtexView')
-
-    local pdfpath = vim.fn.expand('%:p:r') .. '.pdf'
-
-    if pdfpath:find("Projects/_attic/") then
-        local id = vim.fn.fnamemodify(pdfpath, ':h:t')
-        local dir = vim.fn.fnamemodify(pdfpath, ':h')
-        local key_file = dir .. '/' .. id .. '.key'
-
-        local keyword = ""
-        if vim.fn.filereadable(key_file) == 1 then
-            local lines = vim.fn.readfile(key_file, '', 1)
-            if #lines > 0 then
-                keyword = lines[1]:match("^%s*(.-)%s*$"):gsub("/", "-")
-            end
-        end
-
-        if keyword ~= "" then
-            local cache_dir = vim.fn.expand('/tmp/skim_tabs/') .. id
-            vim.fn.mkdir(cache_dir, 'p')
-            local link_path = cache_dir .. '/' .. keyword .. '.pdf'
-
-            os.execute(string.format('rm -f "%s"', link_path))
-            os.execute(string.format('ln "%s" "%s"', pdfpath, link_path))
-
-            vim.fn.jobstart({'bash', '-c', 'sleep 0.2; open -a Skim "' .. link_path .. '"'}, {detach=true})
-            return
-        end
-    end
-
-    vim.fn.jobstart({'open', '-a', 'Skim', pdfpath}, {detach=true})
+    vim.fn.jobstart({ "open", "-n", "-a", "Skim" }, { detach = true })
 end, opts)
 
 -- <C-3>: Clean
