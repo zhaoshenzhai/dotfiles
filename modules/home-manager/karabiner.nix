@@ -217,9 +217,7 @@
                                         from = { key_code = "w"; modifiers = { mandatory = [ "control" ]; }; };
                                         to = [
                                             {
-                                                shell_command = ''
-                                                    osascript -e 'tell application "Skim"' -e 'if (count of documents) > 1 then close front document' -e 'end tell'
-                                                '';
+                                                shell_command = "osascript -e 'set frontBundle to id of application (path to frontmost application as text)' -e 'tell application id frontBundle to if (count of documents) > 1 then close front document'";
                                             }
                                         ];
                                         conditions = [
@@ -236,17 +234,7 @@
                                         from = { key_code = "u"; modifiers = { mandatory = [ "control" ]; }; };
                                         to = [
                                             {
-                                                shell_command = ''
-                                                    osascript <<'EOF'
-                                                    tell application "System Events"
-                                                        tell process "Skim"
-                                                            try
-                                                                click menu item 1 of menu 1 of menu item "Open Recent" of menu 1 of menu bar item "File" of menu bar 1
-                                                            end try
-                                                        end tell
-                                                    end tell
-                                                    EOF
-                                                '';
+                                                shell_command = "osascript -e 'tell application \"System Events\" to tell (first application process whose frontmost is true) to click menu item 1 of menu 1 of menu item \"Open Recent\" of menu 1 of menu bar item \"File\" of menu bar 1'";
                                             }
                                         ];
                                         conditions = [
