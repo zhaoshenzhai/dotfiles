@@ -4,18 +4,18 @@ SKIM_MEMORY_FILE="/tmp/aerospace_last_skim_id"
 
 enforceWorkspace() {
     local alacritty_count
+    local alacritty_nvim_count
     local skim_count
     local alacritty_id
 
-    aerospace list-windows --workspace focused --format "%{window-id}|%{app-name}"
-
     alacritty_count=$(aerospace list-windows --workspace focused --format "%{app-name}" \
         | awk 'tolower($0) ~ /^alacritty/ {c++} END {print c+0}')
+    alacritty_nvim_count=$(aerospace list-windows --workspace focused --format "%{app-name}|%{window-title}" \
+        | awk -F'|' 'tolower($1) ~ /^alacritty/ && tolower($2) ~ /nvim/ {c++} END {print c+0}')
     skim_count=$(aerospace list-windows --workspace focused --format "%{app-name}" | awk 'tolower($0) ~ /^skim/ {c++} END {print c+0}')
 
-    if [ "$alacritty_count" -eq 1 ] && [ "$skim_count" -ge 1 ]; then
-        alacritty_id=$(aerospace list-windows --workspace focused --format "%{window-id}|%{app-name}" \
-            | grep -i "|Alacritty" | cut -d'|' -f1 || true)
+    if [ "$alacritty_count" -eq 1 ] && [ "$alacritty_nvim_count" -eq 1 ] && [ "$skim_count" -ge 1 ]; then
+        alacritty_id=$(aerospace list-windows --workspace focused --format "%{window-id}|%{app-name}" | grep -i "|Alacritty" | cut -d'|' -f1 || true)
 
         aerospace focus --window-id "$alacritty_id"
         aerospace layout v_accordion
@@ -23,18 +23,20 @@ enforceWorkspace() {
         aerospace focus --window-id "$alacritty_id"
     fi
 }
+
 switchFocus() {
     local direction="$1"
     local alacritty_count
+    local alacritty_nvim_count
     local skim_count
-
-    aerospace list-windows --workspace focused --format "%{window-id}|%{app-name}"
 
     alacritty_count=$(aerospace list-windows --workspace focused --format "%{app-name}" \
         | awk 'tolower($0) ~ /^alacritty/ {c++} END {print c+0}')
+    alacritty_nvim_count=$(aerospace list-windows --workspace focused --format "%{app-name}|%{window-title}" \
+        | awk -F'|' 'tolower($1) ~ /^alacritty/ && tolower($2) ~ /nvim/ {c++} END {print c+0}')
     skim_count=$(aerospace list-windows --workspace focused --format "%{app-name}" | awk 'tolower($0) ~ /^skim/ {c++} END {print c+0}')
 
-    if [ "$alacritty_count" -ne 1 ] || [ "$skim_count" -lt 1 ]; then
+    if [ "$alacritty_count" -ne 1 ] || [ "$alacritty_nvim_count" -ne 1 ] || [ "$skim_count" -lt 1 ]; then
         aerospace focus "$direction"
         exit 0
     fi
@@ -71,6 +73,7 @@ switchFocus() {
             fi
             exit 0
         fi
+
     elif [ "$current_app" == "skim" ]; then
         echo "$current_id" > "$SKIM_MEMORY_FILE"
 
@@ -85,6 +88,7 @@ switchFocus() {
             fi
             exit 0
         fi
+
     else
         aerospace focus "$direction"
     fi
