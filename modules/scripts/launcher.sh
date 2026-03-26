@@ -154,7 +154,9 @@ elif [[ -n "${1:-}" && -f "$1" ]]; then
     rel_path="${rel_path#/}"
 
     if [ -f "$BASE_DIR/$rel_path" ]; then
-        launch "$(format "$rel_path")"
+        formatted="$(format "$rel_path")"
+        updateRecentFiles "$formatted"
+        launch "$formatted"
     fi
 else
     init

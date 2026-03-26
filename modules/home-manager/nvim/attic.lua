@@ -132,14 +132,13 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     end,
 })
 
--- Navigation
-vim.keymap.set('n', '<C-h>', '<C-o>')
-vim.keymap.set('n', '<C-l>', function()
+-- Get ID under cursor
+local function get_id_under_cursor()
     local line = vim.api.nvim_get_current_line()
     local col = vim.fn.col('.')
     local id = nil
-
     local search_pos = 1
+
     while true do
         local s, e = line:find("\\aref{", search_pos, true)
         if not s then break end
@@ -163,7 +162,6 @@ vim.keymap.set('n', '<C-l>', function()
 
             if match_id then
                 local total_end = first_arg_end + 7
-
                 if col >= s and col <= total_end then
                     id = match_id
                     break
@@ -176,13 +174,20 @@ vim.keymap.set('n', '<C-l>', function()
             search_pos = e + 1
         end
     end
+    return id
+end
+
+-- Navigation
+vim.keymap.set('n', '<C-h>', '<C-o>')
+vim.keymap.set('n', '<C-l>', function()
+    local id = get_id_under_cursor()
 
     if id then
-        local target = vim.fn.expand('~/iCloud/Projects/_attic/') .. id .. '/' .. id .. '.tex'
-        if vim.fn.filereadable(target) == 1 then
+        local target_tex = vim.fn.expand('~/iCloud/Projects/_attic/') .. id .. '/' .. id .. '.tex'
+        if vim.fn.filereadable(target_tex) == 1 then
             vim.cmd("normal! m'")
-            vim.cmd('edit ' .. target)
-            vim.api.nvim_echo({{"Attic: Jumped to note " .. id, "None"}}, false, {})
+            vim.fn.jobstart({ "launcher", target_tex })
+            vim.api.nvim_echo({{"Attic: Opening note " .. id .. " in launcher", "None"}}, false, {})
         else
             vim.api.nvim_echo({{"Attic: Note " .. id .. " not found", "ErrorMsg"}}, false, {})
         end
@@ -218,12 +223,11 @@ vim.api.nvim_create_autocmd("FileType", {
                 local target_tex = vim.fn.expand('~/iCloud/Projects/_attic/') .. id .. '/' .. id .. '.tex'
                 local target_key = vim.fn.expand('~/iCloud/Projects/_attic/') .. id .. '/' .. id .. '.key'
 
-                vim.cmd("normal! m'")
-                vim.cmd('edit ' .. target_tex)
-                vim.cmd('split ' .. target_key)
+                vim.fn.jobstart({ "launcher", target_tex })
+                vim.fn.jobstart({ "launcher", target_key })
 
                 vim.cmd('startinsert')
-                vim.api.nvim_echo({{"Attic: Note " .. id .. " created. Enter keywords and :wq to proceed to the note.", "None"}}, false, {})
+                vim.api.nvim_echo({{"Attic: Note " .. id .. " created.", "Normal"}}, false, {})
             else
                 vim.api.nvim_echo({{"Attic: Failed to create note. Output: " .. output, "ErrorMsg"}}, false, {})
             end
