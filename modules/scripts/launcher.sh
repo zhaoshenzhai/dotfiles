@@ -90,7 +90,11 @@ launch() {
     full_path="$BASE_DIR/$rel_path"
 
     if [[ "$full_path" == *.pdf ]]; then
+        if [[ "$full_path" == */Projects/_attic/* ]]; then
+            nohup sh -c "sleep 0.2; open -a Skim \"$full_path\"" >/dev/null 2>&1 &
+        else
             open -n -a Skim "$full_path" >/dev/null 2>&1 &
+        fi
     else
         nvim_path="/etc/profiles/per-user/$USER/bin/nvim"
         hm_session="$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"

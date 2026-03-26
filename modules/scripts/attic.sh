@@ -256,7 +256,7 @@ rebuildAll() {
 
 EXIT() {
     echo ""
-    read -n 1 -ep "${RL_CYAN}Press [Y] to return, exiting otherwise... ${RL_NC}" repeat
+    read -n 1 -ep "${RL_CYAN}Press [Y] to return, exiting otherwise...${RL_NC} " repeat
     if [[ "$repeat" == "Y" ]] || [[ "$repeat" == "y" ]] || [[ -z "$repeat" ]]; then
         clear
         exec "$0"
