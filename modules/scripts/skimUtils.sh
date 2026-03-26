@@ -3,18 +3,15 @@
 open_nvim() {
     local PDF_PATH
     PDF_PATH="$(osascript -e 'tell application "Skim" to get path of document of window 1' 2>/dev/null)"
-
     if [ -z "$PDF_PATH" ]; then
         exit 0
     fi
 
     local TEX_PATH="${PDF_PATH%.pdf}.tex"
 
+    echo -e "${YELLOW}$TEX_PATH${NC}"
     if [ -f "$TEX_PATH" ]; then
-        local NVIM_PATH="/etc/profiles/per-user/$USER/bin/nvim"
-        local HM_SESSION="$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
-        local EXEC_CMD="[ -f $HM_SESSION ] && . $HM_SESSION; exec $NVIM_PATH \"$TEX_PATH\""
-        nohup alacritty -e sh -c "$EXEC_CMD" >/dev/null 2>&1 &
+        nohup /etc/profiles/per-user/zhao/bin/launcher "$TEX_PATH" >/dev/null 2>&1 &
     fi
 }
 

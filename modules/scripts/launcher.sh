@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 LOCKFILE="/tmp/launcher.lock"
 CACHE_DIR="$HOME/.cache/launcher"
 CACHE_FILE="$CACHE_DIR/files.txt"
@@ -82,7 +84,7 @@ updateRecentFiles() {
     echo "$selected" | cat - "$RECENT_FILE.tmp" | head -n 100 > "$RECENT_FILE"
     rm -f "$RECENT_FILE.tmp"
 }
-launch() {
+openFile() {
     selected="$1"
     rel_path=$(echo "$selected" | cut -f2)
     full_path="$BASE_DIR/$rel_path"
@@ -126,21 +128,46 @@ launch() {
         nohup alacritty -e sh -c "$exec_cmd" >/dev/null 2>&1 &
     fi
 }
-
-if [[ "${1:-}" == "--update" ]]; then
-    updateCache
-    exit 0
-fi
-
-init
-updateCache &
-
-selected=$(selectFiles)
-
-if [ -n "$selected" ]; then
-    updateRecentFiles "$selected"
-    launch "$selected"
+launch() {
+    updateRecentFiles "$1"
+    openFile "$1"
 
     sleep 0.2
     aerospace mode main
+    exit 0
+}
+
+# Main
+if [[ "${1:-}" == "--update" ]]; then
+    updateCache
+elif [[ -n "${1:-}" && -f "$1" ]]; then
+    init
+    updateCache &
+
+    abs_path="${1/#\~/$HOME}"
+    REAL_ICLOUD="$HOME/Library/Mobile Documents/com~apple~CloudDocs"
+    abs_path="${abs_path/$REAL_ICLOUD/$BASE_DIR}"
+
+    if [[ "$abs_path" != /* ]]; then
+        abs_path="$PWD/$abs_path"
+    fi
+
+    rel_path="${abs_path#$BASE_DIR}"
+    rel_path="${rel_path#/}"
+
+    if [ -f "$BASE_DIR/$rel_path" ]; then
+        formatted=$(format "$rel_path")
+        launch "$formatted"
+    else
+        echo "Error: File not found -> $BASE_DIR/$rel_path"
+    fi
+else
+    init
+    updateCache &
+
+    selected=$(selectFiles)
+
+    if [ -n "$selected" ]; then
+        launch "$selected"
+    fi
 fi
