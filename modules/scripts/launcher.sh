@@ -105,12 +105,6 @@ if [[ "${1:-}" == "--update" ]]; then
     exit 0
 fi
 
-if [[ "${1:-}" == "--launch" && -n "${2:-}" ]]; then
-    rel_path="${2#$BASE_DIR/}"
-    launch "dummy\t$rel_path"
-    exit 0
-fi
-
 init
 updateCache &
 
