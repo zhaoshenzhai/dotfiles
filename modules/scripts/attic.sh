@@ -41,7 +41,7 @@ createNew() {
     fi
 
     echo "$KEYWORDS" | sed 's/,/, /g' | sed 's/  / /g' > "$ATTIC_DIR/$ID/$ID.key"
-    generateMetadata "$ID"
+    generateMetadata "$ID" "true"
     /etc/profiles/per-user/zhao/bin/launcher --update &
     (cd "$ATTIC_DIR/$ID" && latexmk -pdf "$ID.tex" > /dev/null 2>&1) &
 
@@ -55,15 +55,26 @@ createNew() {
 }
 generateMetadata() {
     local ID=$1
+    local UPDATE_MODIFIED=${2:-false}
     local DIR="$ATTIC_DIR/$ID"
     local FILE="$DIR/$ID.tex"
+    local META_FILE="$DIR/$ID.dat"
 
     if [ ! -f "$FILE" ]; then
         echo -e "${RED}Error: Note $ID does not exist.${NC}"
         return 1
     fi
 
-    local MODIFIED=$(/usr/bin/stat -f "%Sm" -t "%Y/%m/%d" "$FILE")
+    local MODIFIED=""
+    if [[ "$UPDATE_MODIFIED" == "true" ]] || [[ ! -f "$META_FILE" ]]; then
+        MODIFIED=$(/usr/bin/stat -f "%Sm" -t "%Y/%m/%d" "$FILE")
+    else
+        MODIFIED=$(grep "Last modified:" "$META_FILE" 2>/dev/null | awk '{print $3}')
+        if [[ -z "$MODIFIED" ]]; then
+            MODIFIED=$(/usr/bin/stat -f "%Sm" -t "%Y/%m/%d" "$FILE")
+        fi
+    fi
+
     local KEYWORDS=$(cat "$DIR/$ID.key" 2>/dev/null)
     local REFS=$(extract_links "$FILE" | format_links)
     local REF_IN=$(for f in "$ATTIC_DIR"/*/*.tex; do [ "$f" != "$FILE" ] && extract_links "$f" | grep -q "^$ID$" && basename "$f" .tex; done | format_links)
@@ -79,11 +90,11 @@ generateMetadata() {
 \end{flushleft}
 EOF
 
-    if cmp -s "$TEMP_META" "$DIR/$ID.dat" 2>/dev/null; then
+    if cmp -s "$TEMP_META" "$META_FILE" 2>/dev/null; then
         rm "$TEMP_META"
         return 1
     else
-        mv "$TEMP_META" "$DIR/$ID.dat"
+        mv "$TEMP_META" "$META_FILE"
         echo -e "${GREEN}Metadata updated for $ID.${NC}"
         return 0
     fi
@@ -106,7 +117,7 @@ updateMetadata() {
         OLD_REFS=$(grep "References:" "$META_FILE" 2>/dev/null | grep -E -o '[0-9]{5}')
     fi
 
-    if generateMetadata "$ID" > /dev/null 2>&1; then
+    if generateMetadata "$ID" "true" > /dev/null 2>&1; then
         if ! is_compiling "$ID"; then
             (cd "$ATTIC_DIR/$ID" && latexmk -pdf "$ID.tex" > /dev/null 2>&1) &
         fi
@@ -117,7 +128,7 @@ updateMetadata() {
 
     for ref_id in $ALL_REFS; do
         if [ -n "$ref_id" ] && [ -d "$ATTIC_DIR/$ref_id" ]; then
-            if generateMetadata "$ref_id" > /dev/null 2>&1; then
+            if generateMetadata "$ref_id" "false" > /dev/null 2>&1; then
                 if ! is_compiling "$ref_id"; then
                     (cd "$ATTIC_DIR/$ref_id" && latexmk -pdf "$ref_id.tex" > /dev/null 2>&1) &
                 fi
@@ -184,7 +195,8 @@ auditNotes() {
         local meta="$ATTIC_DIR/$id/$id.dat"
 
         local REFS=$(extract_links "$file" | format_links)
-        local REF_IN=$(for f in "$ATTIC_DIR"/*/*.tex; do [ "$f" != "$file" ] && extract_links "$f" | grep -q "^$id$" && basename "$f" .tex; done | format_links)
+        local REF_IN=$(for f in "$ATTIC_DIR"/*/*.tex; do [ "$f" != "$file" ] && extract_links "$f" \
+            | grep -q "^$id$" && basename "$f" .tex; done | format_links)
 
         local EXPECTED_REFS="References: [$REFS]"
         local EXPECTED_REF_IN="Referenced in: [$REF_IN]"
@@ -235,7 +247,7 @@ rebuildAll() {
 
         echo -ne "\033[2K\r${YELLOW}Processing note $id ($count/$total)...${NC}"
 
-        generateMetadata "$id" > /dev/null
+        generateMetadata "$id" "false" > /dev/null
         (cd "$dir" && latexmk -pdf "$id.tex" > /dev/null 2>&1)
     done
 
@@ -291,7 +303,7 @@ if [[ $# -gt 0 ]]; then
             e) createNew "EMPTY_KEYWORDS"; exit 0 ;;
             k) createNew "$OPTARG"; exit 0 ;;
             n) createNew; exit 0 ;;
-            m) generateMetadata "$OPTARG"; exit 0 ;;
+            m) generateMetadata "$OPTARG" "false"; exit 0 ;;
             u) updateMetadata "$OPTARG"; exit 0 ;;
             a) auditNotes; exit 0 ;;
             c) clean; exit 0 ;;

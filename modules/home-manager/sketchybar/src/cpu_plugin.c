@@ -31,7 +31,7 @@ void push_load(unsigned long long start_total, unsigned long long start_used,
     if (load > 0.5f) {
         color = RED;
         color_fill = RED_;
-    } else if (load > 0.3f) {
+    } else if (load > 0.25f) {
         color = ORANGE;
         color_fill = ORANGE_;
     } else {
