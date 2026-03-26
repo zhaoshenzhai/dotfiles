@@ -136,16 +136,11 @@ in {
         };
 
         extraFiles = {
+            "lua/core.lua".source = ./nvim/core.lua;
             "lua/attic.lua".source = ./nvim/attic.lua;
             "ftplugin/tex.lua".source = ./nvim/tex.lua;
         } // snippetExtraFiles;
-
-        extraConfigLua = ''
-            require('attic')
-            ${builtins.readFile ./nvim/core.lua}
-        '';
-
-        extraConfigVim = builtins.readFile ./nvim/move.vim;
+        extraConfigLua = "require('core')\nrequire('attic')";
 
         keymaps = [
             { mode = "n";       key = "<C-f>"; action = ":%s//gc<Left><Left><Left>"; }
@@ -157,11 +152,11 @@ in {
             { mode = "o";       key = "im";    action = ":normal vim<CR>";           options = { silent = true; }; }
             { mode = "x";       key = "am";    action = "F$of$";                     options = { silent = true; }; }
             { mode = "o";       key = "am";    action = ":normal vam<CR>";           options = { silent = true; }; }
-            { mode = ["n" "o"]; key = "j";     action = "ScreenMovement('j')";       options = { silent = true; expr = true; }; }
-            { mode = ["n" "o"]; key = "k";     action = "ScreenMovement('k')";       options = { silent = true; expr = true; }; }
-            { mode = ["n" "o"]; key = "0";     action = "ScreenMovement('0')";       options = { silent = true; expr = true; }; }
-            { mode = ["n" "o"]; key = "^";     action = "ScreenMovement('^')";       options = { silent = true; expr = true; }; }
-            { mode = ["n" "o"]; key = "$";     action = "ScreenMovement('$')";       options = { silent = true; expr = true; }; }
+            { mode = ["n" "o"]; key = "j";     action = "v:lua.ScreenMovement('j')"; options = { silent = true; expr = true; }; }
+            { mode = ["n" "o"]; key = "k";     action = "v:lua.ScreenMovement('k')"; options = { silent = true; expr = true; }; }
+            { mode = ["n" "o"]; key = "0";     action = "v:lua.ScreenMovement('0')"; options = { silent = true; expr = true; }; }
+            { mode = ["n" "o"]; key = "^";     action = "v:lua.ScreenMovement('^')"; options = { silent = true; expr = true; }; }
+            { mode = ["n" "o"]; key = "$";     action = "v:lua.ScreenMovement('$')"; options = { silent = true; expr = true; }; }
         ];
 
         highlight = {

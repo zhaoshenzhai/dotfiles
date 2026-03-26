@@ -33,3 +33,12 @@ vim.api.nvim_create_autocmd("BufWritePre", {
         vim.fn.setpos(".", save_cursor)
     end,
 })
+
+-- Screen movement
+_G.ScreenMovement = function(movement)
+    if vim.wo.wrap then
+        return "g" .. movement
+    else
+        return movement
+    end
+end
