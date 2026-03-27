@@ -24,15 +24,18 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
     outer.right       = 10
 
 [mode.main.binding]
+    # Terminal and finder
     cmd-backslash = 'exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty'
     cmd-shift-backslash = 'exec-and-forget open -a finder'
 
+    # Vifm
     cmd-e = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
         -e /bin/bash -c 'printf "\\033]0;vifm\\007"; \
         exec /etc/profiles/per-user/zhao/bin/vifm ~/ \
         -c ":vsplit" \
         -c "windo normal ggvGgA"'"""
 
+    # Launcher
     cmd-enter = [
         """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
             --config-file ~/.config/alacritty/launcher.toml \
@@ -41,6 +44,7 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
         'mode launcher'
     ]
 
+    # Btop
     cmd-t = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
         --config-file ~/.config/alacritty/btop.toml \
         --title btop \
@@ -48,43 +52,46 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
         --option "window.position={x=525,y=250}" \
         -e /etc/profiles/per-user/zhao/bin/btop"""
 
+    # Git
     cmd-g = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
         --title git \
         --option "window.dimensions={columns=100,lines=35}" \
         --option "window.position={x=525,y=250}" \
         -e zsh -ic ~/iCloud/Dotfiles/modules/scripts/git.sh"""
 
+    # Attic
     cmd-a = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
         --title attic \
         --option "window.dimensions={columns=100,lines=35}" \
         --option "window.position={x=525,y=250}" \
         -e zsh -ic ~/iCloud/Dotfiles/modules/scripts/attic.sh"""
 
-    cmd-shift-t = 'exec-and-forget open -a activity\ monitor'
-
-    cmd-w       = [ 'workspace w', 'exec-and-forget open -a qutebrowser' ]
-    cmd-shift-w = [ 'workspace w', 'exec-and-forget open -a safari' ]
-
+    # MacOS apps
     cmd-m       = [ 'workspace m', 'exec-and-forget open -a messages' ]
     cmd-s       = [ 'workspace m', 'exec-and-forget open -a music' ]
     cmd-shift-m = [ 'workspace m', 'exec-and-forget open -a mail' ]
+    cmd-shift-t = 'exec-and-forget open -a activity\ monitor'
 
+    # Web-browser
+    cmd-w       = [ 'workspace w', 'exec-and-forget open -a qutebrowser' ]
+    cmd-shift-w = [ 'workspace w', 'exec-and-forget open -a safari' ]
+
+    # Screenshot
     cmd-p = 'exec-and-forget screencapture ~/Downloads/Screenshot_$(date +%Y_%m_%d_%H%M%S).png'
 
+    # Bluetooth
     cmd-b       = "exec-and-forget blueutil --connect \"Zhaoshen's headphones\""
     cmd-shift-b = "exec-and-forget sh -c \"osascript -e 'tell application \\\"Music\\\" to pause'; blueutil --disconnect \\\"Zhaoshen's headphones\\\"\""
 
+    # Skim
+    cmd-r       = 'exec-and-forget /bin/bash -c "echo TOGGLE_STATE > /tmp/skim_focus_pipe"'
+    cmd-shift-e = 'exec-and-forget skimUtils --enforceSkim'
+
+    # Workspace/window focus
     cmd-j = 'exec-and-forget skimUtils --switchFocus down'
     cmd-k = 'exec-and-forget skimUtils --switchFocus up'
     cmd-h = 'focus left'
     cmd-l = 'focus right'
-
-    cmd-shift-j = 'move down'
-    cmd-shift-k = 'move up'
-    cmd-shift-h = 'move left'
-    cmd-shift-l = 'move right'
-    cmd-shift-e = 'exec-and-forget skimUtils --enforceSkim'
-
     cmd-1 = 'workspace 1'
     cmd-2 = 'workspace 2'
     cmd-3 = 'workspace 3'
@@ -95,6 +102,11 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
     cmd-8 = 'workspace 8'
     cmd-9 = 'workspace 9'
 
+    # Workspace/window movement
+    cmd-shift-j = 'move down'
+    cmd-shift-k = 'move up'
+    cmd-shift-h = 'move left'
+    cmd-shift-l = 'move right'
     cmd-shift-1 = 'move-node-to-workspace 1'
     cmd-shift-2 = 'move-node-to-workspace 2'
     cmd-shift-3 = 'move-node-to-workspace 3'
@@ -105,18 +117,20 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
     cmd-shift-8 = 'move-node-to-workspace 8'
     cmd-shift-9 = 'move-node-to-workspace 9'
 
+    # Workspace/window management
     cmd-f           = 'layout v_accordion v_tiles'
     cmd-shift-f     = 'macos-native-fullscreen'
     cmd-shift-space = 'layout floating tiling'
     cmd-tab         = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next'
-    cmd-r           = 'exec-and-forget /bin/bash -c "echo TOGGLE_STATE > /tmp/skim_focus_pipe"'
 
+    # Refresh workspace
     cmd-shift-r = [
         'layout v_tiles',
         'flatten-workspace-tree',
         'exec-and-forget /bin/bash -c "echo DISABLE_STATE > /tmp/skim_focus_pipe"'
     ]
 
+    # Close windows
     cmd-esc = 'exec-and-forget skimUtils --closeWindow'
     cmd-q = 'exec-and-forget skimUtils --closeWindow'
 

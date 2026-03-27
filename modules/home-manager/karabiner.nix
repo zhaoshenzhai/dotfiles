@@ -295,7 +295,7 @@
                                     { # ctrl+d -> duplicate tab
                                         type = "basic";
                                         from = { key_code = "d"; modifiers = { mandatory = [ "control" ]; }; };
-                                        to = [{ shell_command = "zsh -ic 'skimUtils --duplicateSkim'"; }];
+                                        to = [{ shell_command = "zsh -ic 'skimUtils --duplicateTab'"; }];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }

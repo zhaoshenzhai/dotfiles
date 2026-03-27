@@ -66,6 +66,63 @@ switchFocus() {
     fi
 }
 
+focusDaemon() {
+    local PIPE="/tmp/skim_focus_pipe"
+    rm -f "$PIPE"
+    mkfifo "$PIPE"
+
+    local ORIGINAL_COLOR="0"
+    local PREV_APP=""
+    local ENABLED=0
+
+    local BUNDLE_SKIM="net.sourceforge.skim-app.skim"
+
+    while true; do
+        if read -r PAYLOAD < "$PIPE"; then
+            [ -z "$PAYLOAD" ] && continue
+
+            if [ "$PAYLOAD" == "TOGGLE_STATE" ]; then
+                if [ "$ENABLED" -eq 1 ]; then
+                    ENABLED=0
+                else
+                    ENABLED=1
+                fi
+                continue
+            elif [ "$PAYLOAD" == "DISABLE_STATE" ]; then
+                ENABLED=0
+                continue
+            fi
+
+            local FOCUSED_APP="$PAYLOAD"
+
+            if [ "$FOCUSED_APP" != "$PREV_APP" ]; then
+                if [ "$ENABLED" -eq 1 ]; then
+                    if [[ "$PREV_APP" == "Skim" ]] && [[ "$FOCUSED_APP" != "Skim" ]]; then
+                        ORIGINAL_COLOR=$(defaults read "$BUNDLE_SKIM" SKInvertColorsInDarkMode 2>/dev/null || echo 0)
+
+                        if [ "$ORIGINAL_COLOR" != "1" ]; then
+                            defaults write "$BUNDLE_SKIM" SKInvertColorsInDarkMode -bool true
+                        fi
+                    fi
+
+                    if [[ "$FOCUSED_APP" == "Skim" ]] && [[ "$PREV_APP" != "Skim" ]]; then
+                        local CURRENT=$(defaults read "$BUNDLE_SKIM" SKInvertColorsInDarkMode 2>/dev/null || echo 0)
+                        if [ "$CURRENT" != "$ORIGINAL_COLOR" ]; then
+                            if [ "$ORIGINAL_COLOR" == "1" ]; then
+                                defaults write "$BUNDLE_SKIM" SKInvertColorsInDarkMode -bool true
+                            else
+                                defaults write "$BUNDLE_SKIM" SKInvertColorsInDarkMode -bool false
+                            fi
+                        fi
+                    fi
+                fi
+
+                PREV_APP="$FOCUSED_APP"
+            fi
+        fi
+    done
+}
+
 closeAndCleanSkim() {
     local doc_path=$(osascript -e 'tell application "Skim" to get path of document 1' 2>/dev/null)
     osascript -e 'tell application "Skim"' -e 'close front document' -e 'end tell'
@@ -127,59 +184,31 @@ closeSkimTab() {
     fi
 }
 
-focusDaemon() {
-    local PIPE="/tmp/skim_focus_pipe"
-    rm -f "$PIPE"
-    mkfifo "$PIPE"
+duplicateTab() {
+    local doc_path
+    local doc_path=$(osascript -e 'tell application "Skim" to get path of document 1' 2>/dev/null)
+    if [ -z "$doc_path" ] || [ "$doc_path" == "missing value" ]; then
+        exit 0
+    fi
 
-    local ORIGINAL_COLOR="0"
-    local PREV_APP=""
-    local ENABLED=0
+    local curr_page=$(osascript -e 'tell application "Skim" to get index of current page of document 1' 2>/dev/null)
+    local launch_path="$doc_path"
+    if [[ "$doc_path" == */tmp/skim_pdfs/* ]] && [ -f "${doc_path}.orig" ]; then
+        launch_path=$(cat "${doc_path}.orig")
+    fi
 
-    local BUNDLE_SKIM="net.sourceforge.skim-app.skim"
+    nohup /etc/profiles/per-user/zhao/bin/launcher "$launch_path" >/dev/null 2>&1 &
 
-    while true; do
-        if read -r PAYLOAD < "$PIPE"; then
-            [ -z "$PAYLOAD" ] && continue
+    for i in {1..25}; do
+        sleep 0.05
+        local new_path
+        new_path=$(osascript -e 'tell application "Skim" to get path of document 1' 2>/dev/null)
 
-            if [ "$PAYLOAD" == "TOGGLE_STATE" ]; then
-                if [ "$ENABLED" -eq 1 ]; then
-                    ENABLED=0
-                else
-                    ENABLED=1
-                fi
-                continue
-            elif [ "$PAYLOAD" == "DISABLE_STATE" ]; then
-                ENABLED=0
-                continue
+        if [[ -n "$new_path" && "$new_path" != "missing value" && "$new_path" != "$doc_path" ]]; then
+            if [[ -n "$curr_page" && "$curr_page" =~ ^[0-9]+$ ]]; then
+                osascript -e "tell application \"Skim\" to set current page of document 1 to page $curr_page of document 1" 2>/dev/null
             fi
-
-            local FOCUSED_APP="$PAYLOAD"
-
-            if [ "$FOCUSED_APP" != "$PREV_APP" ]; then
-                if [ "$ENABLED" -eq 1 ]; then
-                    if [[ "$PREV_APP" == "Skim" ]] && [[ "$FOCUSED_APP" != "Skim" ]]; then
-                        ORIGINAL_COLOR=$(defaults read "$BUNDLE_SKIM" SKInvertColorsInDarkMode 2>/dev/null || echo 0)
-
-                        if [ "$ORIGINAL_COLOR" != "1" ]; then
-                            defaults write "$BUNDLE_SKIM" SKInvertColorsInDarkMode -bool true
-                        fi
-                    fi
-
-                    if [[ "$FOCUSED_APP" == "Skim" ]] && [[ "$PREV_APP" != "Skim" ]]; then
-                        local CURRENT=$(defaults read "$BUNDLE_SKIM" SKInvertColorsInDarkMode 2>/dev/null || echo 0)
-                        if [ "$CURRENT" != "$ORIGINAL_COLOR" ]; then
-                            if [ "$ORIGINAL_COLOR" == "1" ]; then
-                                defaults write "$BUNDLE_SKIM" SKInvertColorsInDarkMode -bool true
-                            else
-                                defaults write "$BUNDLE_SKIM" SKInvertColorsInDarkMode -bool false
-                            fi
-                        fi
-                    fi
-                fi
-
-                PREV_APP="$FOCUSED_APP"
-            fi
+            break
         fi
     done
 }
@@ -242,12 +271,20 @@ case "${1:-}" in
         switchFocus "$2"
         exit 0
         ;;
+    --focusDaemon)
+        focusDaemon
+        exit 0
+        ;;
     --closeWindow)
         closeWindow
         exit 0
         ;;
-    --focusDaemon)
-        focusDaemon
+    --closeSkimTab)
+        closeSkimTab
+        exit 0
+        ;;
+    --duplicateTab)
+        duplicateTab
         exit 0
         ;;
     --openNvim)
@@ -258,16 +295,12 @@ case "${1:-}" in
         recordSkim "$2"
         exit 0
         ;;
-    --closeSkimTab)
-        closeSkimTab
-        exit 0
-        ;;
     --enforceSkim)
         enforceSkim
         exit 0
         ;;
     *)
-        echo "Usage: $(basename "$0") [--switchFocus <dir> | --closeWindow | --focusDaemon | --openNvim | --recordSkim <id> | --closeSkimTab | --enforceSkim]"
+        echo "Usage: $(basename "$0") [--switchFocus <dir> | --focusDaemon | --closeWindow | --closeSkimTab | --duplicateTab | --openNvim | --recordSkim <id> | --enforceSkim]"
         exit 1
         ;;
 esac

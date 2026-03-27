@@ -107,6 +107,7 @@ launch() {
             local copy_path="$unique_dir/$filename"
             cp "$full_path" "$copy_path"
 
+            echo "$full_path" > "${copy_path}.orig"
             open -a Skim "$copy_path" >/dev/null 2>&1 &
         else
             open -a Skim "$full_path" >/dev/null 2>&1 &
