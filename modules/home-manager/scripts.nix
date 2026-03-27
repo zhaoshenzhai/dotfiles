@@ -29,11 +29,11 @@
         text = builtins.readFile "${scriptsDir}/skimUtils.sh";
     };
 
-    switch = pkgs.writeShellApplication {
-        name = "switch";
+    navigation = pkgs.writeShellApplication {
+        name = "navigation";
         runtimeInputs = with pkgs; [ coreutils ];
         checkPhase = "";
-        text = builtins.readFile "${scriptsDir}/switch.sh";
+        text = builtins.readFile "${scriptsDir}/navigation.sh";
     };
 in
 {
@@ -42,6 +42,6 @@ in
         newLatex
         skimUtils
         launcher
-        switch
+        navigation
     ];
 }

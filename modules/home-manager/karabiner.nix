@@ -219,7 +219,7 @@
                                             {
                                                 shell_command = ''
                                                     PATH="/run/current-system/sw/bin:/etc/profiles/per-user/zhao/bin:/opt/homebrew/bin:$PATH"
-                                                    /run/current-system/sw/bin/switch --close-skim-tab
+                                                    /run/current-system/sw/bin/navigation --close-skim-tab
                                                 '';
                                             }
                                         ];
