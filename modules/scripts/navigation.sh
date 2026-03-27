@@ -85,6 +85,25 @@ switchFocus() {
     fi
 }
 
+closeAndCleanSkim() {
+    local doc_path=$(osascript -e 'tell application "Skim" to get path of document 1' 2>/dev/null)
+    osascript -e 'tell application "Skim"' -e 'close front document' -e 'end tell'
+
+    if [[ -n "$doc_path" && "$doc_path" == */tmp/skim_pdfs/* ]]; then
+        local dir_to_delete=$(dirname "$doc_path")
+        local dir_timestamp=$(basename "$dir_to_delete")
+
+        if [[ "$dir_timestamp" =~ ^[0-9]+$ ]]; then
+            local current_time=$(date +%s)
+            local age_in_seconds=$((current_time - dir_timestamp))
+
+            if (( age_in_seconds > 86400 )); then
+                rm -rf "$dir_to_delete"
+            fi
+        fi
+    fi
+}
+
 closeWindow() {
     local current_workspace=$(aerospace list-workspaces --focused)
     local current_bundle=$(aerospace list-windows --focused --format "%{app-bundle-id}" | tr -d '[:space:]')
@@ -99,7 +118,7 @@ closeWindow() {
         for id in $skim_ids; do
             if [ -n "$id" ]; then
                 aerospace focus --window-id "$id"
-                osascript -e 'tell application "Skim"' -e 'close front document' -e 'end tell'
+                closeAndCleanSkim
             fi
         done
     else
@@ -123,7 +142,7 @@ closeSkimTab() {
             fi
         fi
 
-        osascript -e 'tell application "Skim"' -e 'close front document' -e 'end tell'
+        closeAndCleanSkim
     fi
 }
 

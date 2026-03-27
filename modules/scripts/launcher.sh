@@ -90,7 +90,27 @@ launch() {
     full_path="$BASE_DIR/$rel_path"
 
     if [[ "$full_path" == *.pdf ]]; then
-        open -a Skim "$full_path" >/dev/null 2>&1 &
+        local filename=$(basename "$full_path")
+        local pdf_tmp_base="/tmp/skim_pdfs"
+
+        local exists=$(aerospace list-windows --all --format "%{app-name}|%{window-title}" \
+            | awk -F'|' -v fname="$filename" '
+                $1 == "Skim" && substr($2, 1, length(fname)) == fname {
+                    print $1
+                    exit
+                }
+            ')
+
+        if [ -n "$exists" ]; then
+            local unique_dir="$pdf_tmp_base/$(date +%s)"
+            mkdir -p "$unique_dir"
+            local copy_path="$unique_dir/$filename"
+            cp "$full_path" "$copy_path"
+
+            open -a Skim "$copy_path" >/dev/null 2>&1 &
+        else
+            open -a Skim "$full_path" >/dev/null 2>&1 &
+        fi
     else
         WORKSPACE=$(aerospace list-workspaces --focused)
         NVIM_WIN_ID=$(aerospace list-windows --workspace "$WORKSPACE" --format "%{window-id}|%{app-name}|%{window-title}" \
