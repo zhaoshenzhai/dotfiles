@@ -47,6 +47,8 @@ createNew() {
 
     if [[ "$INTERACTIVE" == 1 ]]; then
         nohup /etc/profiles/per-user/zhao/bin/launcher "$ATTIC_DIR/$ID/$ID.tex" >/dev/null 2>&1 &
+        sleep 0.1
+        exit 0
     fi
 }
 generateMetadata() {
