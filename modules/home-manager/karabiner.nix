@@ -215,53 +215,6 @@
                                             }
                                         ];
                                     }
-                                    { # ctrl+w -> close tab, do nothing if last in workspace
-                                        type = "basic";
-                                        from = { key_code = "w"; modifiers = { mandatory = [ "control" ]; }; };
-                                        to = [
-                                            {
-                                                shell_command = ''
-                                                    PATH="/run/current-system/sw/bin:/etc/profiles/per-user/zhao/bin:/opt/homebrew/bin:$PATH"
-                                                    /run/current-system/sw/bin/navigation --close-skim-tab
-                                                '';
-                                            }
-                                        ];
-                                        conditions = [
-                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
-                                            { type = "variable_if"; name = "skim_search_mode"; value = 0; }
-                                            {
-                                                type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
-                                            }
-                                        ];
-                                    }
-                                    { # ctrl+u -> reopen most recently closed tab
-                                        type = "basic";
-                                        from = { key_code = "u"; modifiers = { mandatory = [ "control" ]; }; };
-                                        to = [
-                                            {
-                                                shell_command = ''
-                                                    osascript <<'EOF'
-                                                    tell application "System Events"
-                                                        tell process "Skim"
-                                                            try
-                                                                click menu item 1 of menu 1 of menu item "Open Recent" of menu 1 of menu bar item "File" of menu bar 1
-                                                            end try
-                                                        end tell
-                                                    end tell
-                                                    EOF
-                                                '';
-                                            }
-                                        ];
-                                        conditions = [
-                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
-                                            { type = "variable_if"; name = "skim_search_mode"; value = 0; }
-                                            {
-                                                type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
-                                            }
-                                        ];
-                                    }
                                     { # ctrl+h -> jump back
                                         type = "basic";
                                         from = { key_code = "h"; modifiers = { mandatory = [ "control" ]; }; };
@@ -315,10 +268,23 @@
                                             }
                                         ];
                                     }
-                                    { # ctrl+n -> open in nvim
+                                    { # ctrl+w -> close tab, do nothing if last in workspace
                                         type = "basic";
-                                        from = { key_code = "n"; modifiers = { mandatory = [ "control" ]; }; };
-                                        to = [{ shell_command = "zsh -ic 'skimUtils -o'"; }];
+                                        from = { key_code = "w"; modifiers = { mandatory = [ "control" ]; }; };
+                                        to = [{ shell_command = "zsh -ic 'skimUtils --closeSkimTab'"; }];
+                                        conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
+                                            { type = "variable_if"; name = "skim_search_mode"; value = 0; }
+                                            {
+                                                type = "frontmost_application_if";
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                            }
+                                        ];
+                                    }
+                                    { # ctrl+2 -> open in nvim
+                                        type = "basic";
+                                        from = { key_code = "2"; modifiers = { mandatory = [ "control" ]; }; };
+                                        to = [{ shell_command = "zsh -ic 'skimUtils --openNvim'"; }];
                                         conditions = [
                                             {
                                                 type = "frontmost_application_if";
@@ -326,9 +292,49 @@
                                             }
                                         ];
                                     }
-                                    { # ctrl+shift+n -> move tab to new window
+                                    { # ctrl+d -> duplicate tab
                                         type = "basic";
-                                        from = { key_code = "n"; modifiers = { mandatory = [ "control" "shift" ]; }; };
+                                        from = { key_code = "d"; modifiers = { mandatory = [ "control" ]; }; };
+                                        to = [{ shell_command = "zsh -ic 'skimUtils --duplicateSkim'"; }];
+                                        conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
+                                            { type = "variable_if"; name = "skim_search_mode"; value = 0; }
+                                            {
+                                                type = "frontmost_application_if";
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                            }
+                                        ];
+                                    }
+                                    { # ctrl+u -> reopen most recently closed tab
+                                        type = "basic";
+                                        from = { key_code = "u"; modifiers = { mandatory = [ "control" ]; }; };
+                                        to = [
+                                            {
+                                                shell_command = ''
+                                                    osascript <<'EOF'
+                                                    tell application "System Events"
+                                                        tell process "Skim"
+                                                            try
+                                                                click menu item 1 of menu 1 of menu item "Open Recent" of menu 1 of menu bar item "File" of menu bar 1
+                                                            end try
+                                                        end tell
+                                                    end tell
+                                                    EOF
+                                                '';
+                                            }
+                                        ];
+                                        conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
+                                            { type = "variable_if"; name = "skim_search_mode"; value = 0; }
+                                            {
+                                                type = "frontmost_application_if";
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                            }
+                                        ];
+                                    }
+                                    { # ctrl+n -> move tab to new window
+                                        type = "basic";
+                                        from = { key_code = "n"; modifiers = { mandatory = [ "control" ]; }; };
                                         to = [ { key_code = "n"; modifiers = [ "command" "option" "control" ]; } ];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }

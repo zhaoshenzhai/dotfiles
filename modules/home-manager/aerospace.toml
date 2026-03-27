@@ -3,7 +3,7 @@ accordion-padding = 0
 after-startup-command = [
     'exec-and-forget borders',
     'exec-and-forget sketchybar',
-    'exec-and-forget skimUtils -d'
+    'exec-and-forget skimUtils --focusDaemon'
 ]
 
 on-focus-changed = [
@@ -74,16 +74,16 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
     cmd-b       = "exec-and-forget blueutil --connect \"Zhaoshen's headphones\""
     cmd-shift-b = "exec-and-forget sh -c \"osascript -e 'tell application \\\"Music\\\" to pause'; blueutil --disconnect \\\"Zhaoshen's headphones\\\"\""
 
+    cmd-j = 'exec-and-forget skimUtils --switchFocus down'
+    cmd-k = 'exec-and-forget skimUtils --switchFocus up'
     cmd-h = 'focus left'
-    cmd-j = 'exec-and-forget navigation down'
-    cmd-k = 'exec-and-forget navigation up'
     cmd-l = 'focus right'
 
-    cmd-shift-h = 'move left'
     cmd-shift-j = 'move down'
     cmd-shift-k = 'move up'
+    cmd-shift-h = 'move left'
     cmd-shift-l = 'move right'
-    cmd-shift-e = 'exec-and-forget navigation --enforce'
+    cmd-shift-e = 'exec-and-forget skimUtils --enforceSkim'
 
     cmd-1 = 'workspace 1'
     cmd-2 = 'workspace 2'
@@ -117,8 +117,8 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
         'exec-and-forget /bin/bash -c "echo DISABLE_STATE > /tmp/skim_focus_pipe"'
     ]
 
-    cmd-esc = 'exec-and-forget navigation --close'
-    cmd-q = 'exec-and-forget navigation --close'
+    cmd-esc = 'exec-and-forget skimUtils --closeWindow'
+    cmd-q = 'exec-and-forget skimUtils --closeWindow'
 
 [mode.launcher.binding]
     cmd-esc = [ 'close --quit-if-last-window', 'mode main' ]
@@ -173,7 +173,7 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
 
 [[on-window-detected]]
     if.app-id = 'net.sourceforge.skim-app.skim'
-    run = ['exec-and-forget navigation --record $AEROSPACE_WINDOW_ID']
+    run = ['exec-and-forget skimUtils --recordSkim $AEROSPACE_WINDOW_ID']
 
 [[on-window-detected]]
     if.window-title-regex-substring = 'vifm-float'

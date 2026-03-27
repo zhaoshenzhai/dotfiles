@@ -28,13 +28,6 @@
         checkPhase = "";
         text = builtins.readFile "${scriptsDir}/skimUtils.sh";
     };
-
-    navigation = pkgs.writeShellApplication {
-        name = "navigation";
-        runtimeInputs = with pkgs; [ coreutils ];
-        checkPhase = "";
-        text = builtins.readFile "${scriptsDir}/navigation.sh";
-    };
 in
 {
     environment.systemPackages = [
@@ -42,6 +35,5 @@ in
         newLatex
         skimUtils
         launcher
-        navigation
     ];
 }
