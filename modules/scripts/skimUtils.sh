@@ -26,6 +26,9 @@ focus_daemon() {
     local PREV_APP=""
     local ENABLED=0
 
+    local BUNDLE_SKIM="net.sourceforge.skim-app.skim"
+    local BUNDLE_ATTIC="net.sourceforge.skim-app.skimattic"
+
     while true; do
         if read -r PAYLOAD < "$PIPE"; then
             [ -z "$PAYLOAD" ] && continue
@@ -46,27 +49,24 @@ focus_daemon() {
 
             if [ "$FOCUSED_APP" != "$PREV_APP" ]; then
                 if [ "$ENABLED" -eq 1 ]; then
-                    if [ "$PREV_APP" == "Skim" ] || [ "$PREV_APP" == "SkimAttic" ]; then
-                        local PREV_BUNDLE="net.sourceforge.skim-app.skim"
-                        [ "$PREV_APP" == "SkimAttic" ] && PREV_BUNDLE="net.sourceforge.skim-app.skimattic"
-
-                        ORIGINAL_COLOR=$(defaults read "$PREV_BUNDLE" SKInvertColorsInDarkMode 2>/dev/null || echo 0)
+                    if [[ "$PREV_APP" == "Skim" || "$PREV_APP" == "SkimAttic" ]] && [[ "$FOCUSED_APP" != "Skim" && "$FOCUSED_APP" != "SkimAttic" ]]; then
+                        ORIGINAL_COLOR=$(defaults read "$BUNDLE_SKIM" SKInvertColorsInDarkMode 2>/dev/null || echo 0)
 
                         if [ "$ORIGINAL_COLOR" != "1" ]; then
-                            defaults write "$PREV_BUNDLE" SKInvertColorsInDarkMode -bool true
+                            defaults write "$BUNDLE_SKIM" SKInvertColorsInDarkMode -bool true
+                            defaults write "$BUNDLE_ATTIC" SKInvertColorsInDarkMode -bool true
                         fi
                     fi
 
-                    if [ "$FOCUSED_APP" == "Skim" ] || [ "$FOCUSED_APP" == "SkimAttic" ]; then
-                        local CURR_BUNDLE="net.sourceforge.skim-app.skim"
-                        [ "$FOCUSED_APP" == "SkimAttic" ] && CURR_BUNDLE="net.sourceforge.skim-app.skimattic"
-
-                        local CURRENT=$(defaults read "$CURR_BUNDLE" SKInvertColorsInDarkMode 2>/dev/null || echo 0)
+                    if [[ "$FOCUSED_APP" == "Skim" || "$FOCUSED_APP" == "SkimAttic" ]] && [[ "$PREV_APP" != "Skim" && "$PREV_APP" != "SkimAttic" ]]; then
+                        local CURRENT=$(defaults read "$BUNDLE_SKIM" SKInvertColorsInDarkMode 2>/dev/null || echo 0)
                         if [ "$CURRENT" != "$ORIGINAL_COLOR" ]; then
                             if [ "$ORIGINAL_COLOR" == "1" ]; then
-                                defaults write "$CURR_BUNDLE" SKInvertColorsInDarkMode -bool true
+                                defaults write "$BUNDLE_SKIM" SKInvertColorsInDarkMode -bool true
+                                defaults write "$BUNDLE_ATTIC" SKInvertColorsInDarkMode -bool true
                             else
-                                defaults write "$CURR_BUNDLE" SKInvertColorsInDarkMode -bool false
+                                defaults write "$BUNDLE_SKIM" SKInvertColorsInDarkMode -bool false
+                                defaults write "$BUNDLE_ATTIC" SKInvertColorsInDarkMode -bool false
                             fi
                         fi
                     fi
