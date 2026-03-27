@@ -1,5 +1,5 @@
 start-at-login = false
-accordion-padding = 20
+accordion-padding = 0
 after-startup-command = [
     'exec-and-forget borders',
     'exec-and-forget sketchybar',
@@ -76,14 +76,15 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
     cmd-shift-b = "exec-and-forget sh -c \"osascript -e 'tell application \\\"Music\\\" to pause'; blueutil --disconnect \\\"Zhaoshen's headphones\\\"\""
 
     cmd-h = 'focus left'
-    cmd-j = 'focus down'
-    cmd-k = 'focus up'
+    cmd-j = 'exec-and-forget switch down'
+    cmd-k = 'exec-and-forget switch up'
     cmd-l = 'focus right'
 
     cmd-shift-h = 'move left'
     cmd-shift-j = 'move down'
     cmd-shift-k = 'move up'
     cmd-shift-l = 'move right'
+    cmd-shift-e = 'exec-and-forget switch --enforce'
 
     cmd-1 = 'workspace 1'
     cmd-2 = 'workspace 2'
@@ -117,8 +118,8 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
         'exec-and-forget /bin/bash -c "echo DISABLE_STATE > /tmp/skim_focus_pipe"'
     ]
 
-    cmd-esc = 'close --quit-if-last-window'
-    cmd-q = 'close --quit-if-last-window'
+    cmd-esc = 'exec-and-forget switch --close'
+    cmd-q = 'exec-and-forget switch --close'
 
 [mode.launcher.binding]
     cmd-esc = [ 'close --quit-if-last-window', 'mode main' ]
@@ -170,6 +171,10 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
 [[on-window-detected]]
     if.app-id = 'org.pqrs.Karabiner-EventViewer'
     run = 'layout floating'
+
+[[on-window-detected]]
+    if.app-id = 'net.sourceforge.skim-app.skim'
+    run = ['exec-and-forget switch --record $AEROSPACE_WINDOW_ID']
 
 [[on-window-detected]]
     if.window-title-regex-substring = 'vifm-float'

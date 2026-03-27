@@ -90,7 +90,7 @@ launch() {
     full_path="$BASE_DIR/$rel_path"
 
     if [[ "$full_path" == *.pdf ]]; then
-        open -n -a Skim "$full_path" >/dev/null 2>&1 &
+        open -a Skim "$full_path" >/dev/null 2>&1 &
     else
         WORKSPACE=$(aerospace list-workspaces --focused)
         NVIM_WIN_ID=$(aerospace list-windows --workspace "$WORKSPACE" --format "%{window-id}|%{app-name}|%{window-title}" \

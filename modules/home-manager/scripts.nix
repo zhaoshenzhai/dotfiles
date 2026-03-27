@@ -28,6 +28,13 @@
         checkPhase = "";
         text = builtins.readFile "${scriptsDir}/skimUtils.sh";
     };
+
+    switch = pkgs.writeShellApplication {
+        name = "switch";
+        runtimeInputs = with pkgs; [ coreutils ];
+        checkPhase = "";
+        text = builtins.readFile "${scriptsDir}/switch.sh";
+    };
 in
 {
     environment.systemPackages = [
@@ -35,5 +42,6 @@ in
         newLatex
         skimUtils
         launcher
+        switch
     ];
 }

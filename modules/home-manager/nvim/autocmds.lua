@@ -10,13 +10,23 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 
 -- Remember Folds
 local fold_group = vim.api.nvim_create_augroup("remember_folds", { clear = true })
-vim.api.nvim_create_autocmd("BufWinLeave", {
+
+vim.api.nvim_create_autocmd({ "BufWinLeave", "BufWritePost", "WinLeave" }, {
     group = fold_group,
     pattern = "*",
-    command = "if expand('%') != '' && &buftype == '' | mkview | endif",
+    callback = function()
+        if vim.bo.buftype == "" and vim.fn.expand("%") ~= "" then
+            vim.cmd("silent! mkview")
+        end
+    end,
 })
+
 vim.api.nvim_create_autocmd("BufWinEnter", {
     group = fold_group,
     pattern = "*",
-    command = "if expand('%') != '' && &buftype == '' | silent! loadview | endif",
+    callback = function()
+        if vim.bo.buftype == "" and vim.fn.expand("%") ~= "" then
+            vim.cmd("silent! loadview")
+        end
+    end,
 })
