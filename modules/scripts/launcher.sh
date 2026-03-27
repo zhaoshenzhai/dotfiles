@@ -112,6 +112,12 @@ launch() {
         nohup alacritty -e sh -c "$exec_cmd" >/dev/null 2>&1 &
     fi
 }
+quit() {
+    aerospace mode main
+    launcherID=$(aerospace list-windows --all --format "%{window-id}|%{window-title}" | awk -F'|' '$2 == "launcher" {print $1; exit}')
+    sleep 1
+    aerospace close --window-id $launcherID
+}
 
 # Main
 if [[ "${1:-}" == "--update" ]]; then
