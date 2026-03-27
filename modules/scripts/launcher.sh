@@ -90,11 +90,7 @@ launch() {
     full_path="$BASE_DIR/$rel_path"
 
     if [[ "$full_path" == *.pdf ]]; then
-        if [[ "$full_path" == */Projects/_attic/* ]]; then
-            open -a SkimAttic "$full_path" >/dev/null 2>&1 &
-        else
-            open -n -a Skim "$full_path" >/dev/null 2>&1 &
-        fi
+        open -n -a Skim "$full_path" >/dev/null 2>&1 &
     else
         WORKSPACE=$(aerospace list-workspaces --focused)
         NVIM_WIN_ID=$(aerospace list-windows --workspace "$WORKSPACE" --format "%{window-id}|%{app-name}|%{window-title}" \
@@ -115,12 +111,6 @@ launch() {
         exec_cmd="[ -f $hm_session ] && . $hm_session; export FROM_LAUNCHER=1; exec $nvim_path \"$full_path\""
         nohup alacritty -e sh -c "$exec_cmd" >/dev/null 2>&1 &
     fi
-}
-quit() {
-    aerospace mode main
-    launcherID=$(aerospace list-windows --all --format "%{window-id}|%{window-title}" | awk -F'|' '$2 == "launcher" {print $1; exit}')
-    sleep 1
-    aerospace close --window-id $launcherID
 }
 
 # Main

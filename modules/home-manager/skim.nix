@@ -19,7 +19,7 @@
         NSQuitAlwaysKeepsWindows = true;
         SKDisableAnimations = true;
         SKInitialWindowSizeOption = 0;
-        AppleWindowTabbingMode = "always";
+        AppleWindowTabbingMode = "manual";
 
         # --- Document Memory & Defaults ---
         SKRememberDefaults = false;

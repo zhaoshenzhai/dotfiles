@@ -27,7 +27,6 @@ focus_daemon() {
     local ENABLED=0
 
     local BUNDLE_SKIM="net.sourceforge.skim-app.skim"
-    local BUNDLE_ATTIC="net.sourceforge.skim-app.skimattic"
 
     while true; do
         if read -r PAYLOAD < "$PIPE"; then
@@ -49,24 +48,21 @@ focus_daemon() {
 
             if [ "$FOCUSED_APP" != "$PREV_APP" ]; then
                 if [ "$ENABLED" -eq 1 ]; then
-                    if [[ "$PREV_APP" == "Skim" || "$PREV_APP" == "SkimAttic" ]] && [[ "$FOCUSED_APP" != "Skim" && "$FOCUSED_APP" != "SkimAttic" ]]; then
+                    if [[ "$PREV_APP" == "Skim" ]] && [[ "$FOCUSED_APP" != "Skim" ]]; then
                         ORIGINAL_COLOR=$(defaults read "$BUNDLE_SKIM" SKInvertColorsInDarkMode 2>/dev/null || echo 0)
 
                         if [ "$ORIGINAL_COLOR" != "1" ]; then
                             defaults write "$BUNDLE_SKIM" SKInvertColorsInDarkMode -bool true
-                            defaults write "$BUNDLE_ATTIC" SKInvertColorsInDarkMode -bool true
                         fi
                     fi
 
-                    if [[ "$FOCUSED_APP" == "Skim" || "$FOCUSED_APP" == "SkimAttic" ]] && [[ "$PREV_APP" != "Skim" && "$PREV_APP" != "SkimAttic" ]]; then
+                    if [[ "$FOCUSED_APP" == "Skim" ]] && [[ "$PREV_APP" != "Skim" ]]; then
                         local CURRENT=$(defaults read "$BUNDLE_SKIM" SKInvertColorsInDarkMode 2>/dev/null || echo 0)
                         if [ "$CURRENT" != "$ORIGINAL_COLOR" ]; then
                             if [ "$ORIGINAL_COLOR" == "1" ]; then
                                 defaults write "$BUNDLE_SKIM" SKInvertColorsInDarkMode -bool true
-                                defaults write "$BUNDLE_ATTIC" SKInvertColorsInDarkMode -bool true
                             else
                                 defaults write "$BUNDLE_SKIM" SKInvertColorsInDarkMode -bool false
-                                defaults write "$BUNDLE_ATTIC" SKInvertColorsInDarkMode -bool false
                             fi
                         fi
                     fi
@@ -78,23 +74,10 @@ focus_daemon() {
     done
 }
 
-clone_skim() {
-    echo "Syncing SkimAttic clone and preferences..."
-
-    rm -rf ~/Applications/SkimAttic.app
-    cp -a /Applications/Skim.app ~/Applications/SkimAttic.app
-    /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier net.sourceforge.skim-app.skimattic" ~/Applications/SkimAttic.app/Contents/Info.plist
-    codesign --force --deep --sign - ~/Applications/SkimAttic.app
-    defaults export net.sourceforge.skim-app.skim - | defaults import net.sourceforge.skim-app.skimattic -
-
-    echo "SkimAttic sync complete."
-}
-
 while getopts "odc" opt; do
     case $opt in
         o) open_nvim; exit 0 ;;
         d) focus_daemon; exit 0 ;;
-        c) clone_skim; exit 0 ;;
-        *) echo "Usage: $(basename "$0") -o (Open Neovim) | -d (Start Focus Daemon) | -c (Clone Skim to SkimAttic)"; exit 1 ;;
+        *) echo "Usage: $(basename "$0") -o (Open Neovim) | -d (Start Focus Daemon)"; exit 1 ;;
     esac
 done
