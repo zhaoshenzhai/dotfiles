@@ -103,7 +103,7 @@ launch() {
             SOCKET="/tmp/nvim-window-${NVIM_WIN_ID}.sock"
             if [ -e "$SOCKET" ]; then
                 aerospace focus --window-id "$NVIM_WIN_ID"
-                $nvim_path --server "$SOCKET" --remote-tab "$full_path" >/dev/null 2>&1
+                $nvim_path --server "$SOCKET" --remote-tab "$full_path" >/dev/null 2>&1 &
                 return
             fi
         fi
@@ -113,10 +113,29 @@ launch() {
     fi
 }
 quit() {
-    aerospace mode main
-    launcherID=$(aerospace list-windows --all --format "%{window-id}|%{window-title}" | awk -F'|' '$2 == "launcher" {print $1; exit}')
-    sleep 1
-    aerospace close --window-id $launcherID
+    local did_launch="${1:-false}"
+    local current_ws=$(aerospace list-workspaces --focused)
+    local launcherID=$(aerospace list-windows --all --format "%{window-id}|%{window-title}" | awk -F'|' '$2 == "launcher" {print $1; exit}')
+    if [ -z "$launcherID" ]; then
+        exit 0
+    fi
+
+    if [ "$did_launch" == "true" ]; then
+        local window_count=$(aerospace list-windows --workspace "$current_ws" | awk 'NF' | wc -l | tr -d ' ')
+        if [ "$window_count" -le 1 ]; then
+            local i=0
+            while [ $i -lt 15 ]; do
+                sleep 0.1
+                local current_count=$(aerospace list-windows --workspace "$current_ws" | awk 'NF' | wc -l | tr -d ' ')
+                if [ "$current_count" -gt 1 ]; then
+                    break
+                fi
+                i=$((i+1))
+            done
+        fi
+    fi
+
+    aerospace close --window-id "$launcherID"
 }
 
 # Main
@@ -147,19 +166,22 @@ elif [[ -n "${1:-}" && -f "$1" ]]; then
         formatted="$(format "$rel_path")"
         updateRecentFiles "$formatted"
         launch "$formatted"
+        quit "true"
+    else
+        quit "false"
     fi
-
-    quit
 else
     init
     updateCache &
 
     selected=$(selectFiles)
+    aerospace mode main
 
     if [ -n "$selected" ]; then
         updateRecentFiles "$selected"
         launch "$selected"
+        quit "true"
+    else
+        quit "false"
     fi
-
-    quit
 fi
