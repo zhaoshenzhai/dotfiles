@@ -1,20 +1,16 @@
 #!/usr/bin/env bash
 
 enforceWorkspace() {
-    local alacritty_count
-    local alacritty_nvim_count
-    local skim_count
-    local alacritty_id
-
-    alacritty_count=$(aerospace list-windows --workspace focused --format "%{app-name}" \
+    local alacritty_count=$(aerospace list-windows --workspace focused --format "%{app-name}" \
         | awk 'tolower($0) ~ /^alacritty/ {c++} END {print c+0}')
-    alacritty_nvim_count=$(aerospace list-windows --workspace focused --format "%{app-name}|%{window-title}" \
+    local alacritty_nvim_count=$(aerospace list-windows --workspace focused --format "%{app-name}|%{window-title}" \
         | awk -F'|' 'tolower($1) ~ /^alacritty/ && tolower($2) ~ /nvim/ {c++} END {print c+0}')
-    skim_count=$(aerospace list-windows --workspace focused --format "%{app-bundle-id}" \
+    local skim_count=$(aerospace list-windows --workspace focused --format "%{app-bundle-id}" \
         | awk '/net\.sourceforge\.skim-app\.skim/ {c++} END {print c+0}')
 
     if [ "$alacritty_count" -eq 1 ] && [ "$alacritty_nvim_count" -eq 1 ] && [ "$skim_count" -ge 1 ]; then
-        alacritty_id=$(aerospace list-windows --workspace focused --format "%{window-id}|%{app-name}" | grep -i "|Alacritty" | cut -d'|' -f1 || true)
+        local alacritty_id=$(aerospace list-windows --workspace focused --format "%{window-id}|%{app-name}" \
+            | grep -i "|Alacritty" | cut -d'|' -f1 || true)
 
         aerospace focus --window-id "$alacritty_id"
         aerospace layout v_accordion
@@ -25,26 +21,16 @@ enforceWorkspace() {
 
 switchFocus() {
     local direction="$1"
-    local alacritty_count
-    local alacritty_nvim_count
-    local skim_count
-    local current_workspace
-
-    current_workspace=$(aerospace list-workspaces --focused)
-    if [ -z "$current_workspace" ]; then
-        aerospace focus "$direction"
-        exit 0
-    fi
-
+    local current_workspace=$(aerospace list-workspaces --focused)
     local memory_dir="/tmp/aerospace_skim_tabs"
-    mkdir -p "$memory_dir"
     local skim_memory_file="${memory_dir}/workspace_${current_workspace}.txt"
+    mkdir -p "$memory_dir"
 
-    alacritty_count=$(aerospace list-windows --workspace focused --format "%{app-name}" \
+    local alacritty_count=$(aerospace list-windows --workspace focused --format "%{app-name}" \
         | awk 'tolower($0) ~ /^alacritty/ {c++} END {print c+0}')
-    alacritty_nvim_count=$(aerospace list-windows --workspace focused --format "%{app-name}|%{window-title}" \
+    local alacritty_nvim_count=$(aerospace list-windows --workspace focused --format "%{app-name}|%{window-title}" \
         | awk -F'|' 'tolower($1) ~ /^alacritty/ && tolower($2) ~ /nvim/ {c++} END {print c+0}')
-    skim_count=$(aerospace list-windows --workspace focused --format "%{app-bundle-id}" \
+    local skim_count=$(aerospace list-windows --workspace focused --format "%{app-bundle-id}" \
         | awk '/net\.sourceforge\.skim-app\.skim/ {c++} END {print c+0}')
 
     if [ "$alacritty_count" -ne 1 ] || [ "$alacritty_nvim_count" -ne 1 ] || [ "$skim_count" -le 1 ]; then
@@ -52,25 +38,18 @@ switchFocus() {
         exit 0
     fi
 
-    local current_id
-    local current_app
-    local current_bundle
-    local target_skim
-    local saved_id
-    local alacritty_id
-
-    current_id=$(aerospace list-windows --focused --format "%{window-id}" | tr -d '[:space:]')
-    current_app=$(aerospace list-windows --focused --format "%{app-name}" | xargs | tr '[:upper:]' '[:lower:]')
-    current_bundle=$(aerospace list-windows --focused --format "%{app-bundle-id}" | tr -d '[:space:]')
+    local current_id=$(aerospace list-windows --focused --format "%{window-id}" | tr -d '[:space:]')
+    local current_app=$(aerospace list-windows --focused --format "%{app-name}" | xargs | tr '[:upper:]' '[:lower:]')
+    local current_bundle=$(aerospace list-windows --focused --format "%{app-bundle-id}" | tr -d '[:space:]')
 
     if [ "$current_app" == "alacritty" ]; then
         if [ "$direction" == "up" ]; then
             exit 0
         elif [ "$direction" == "down" ]; then
-            target_skim=""
+            local target_skim=""
 
             if [ -f "$skim_memory_file" ]; then
-                saved_id=$(cat "$skim_memory_file")
+                local saved_id=$(cat "$skim_memory_file")
                 if aerospace list-windows --workspace focused --format "%{window-id}" | grep -q "^${saved_id}$" || true; then
                     target_skim="$saved_id"
                 fi
@@ -92,7 +71,7 @@ switchFocus() {
         if [ "$direction" == "down" ]; then
             exit 0
         elif [ "$direction" == "up" ]; then
-            alacritty_id=$(aerospace list-windows --workspace focused --format "%{window-id}|%{app-name}" \
+            local alacritty_id=$(aerospace list-windows --workspace focused --format "%{window-id}|%{app-name}" \
                 | grep -i "|Alacritty" | head -n 1 | cut -d'|' -f1 || true)
 
             if [ -n "$alacritty_id" ]; then
@@ -107,18 +86,14 @@ switchFocus() {
 }
 
 closeWindow() {
-    local current_workspace
-    current_workspace=$(aerospace list-workspaces --focused)
-
-    local current_bundle
-    current_bundle=$(aerospace list-windows --focused --format "%{app-bundle-id}" | tr -d '[:space:]')
+    local current_workspace=$(aerospace list-workspaces --focused)
+    local current_bundle=$(aerospace list-windows --focused --format "%{app-bundle-id}" | tr -d '[:space:]')
 
     if [[ "$current_bundle" == "net.sourceforge.skim-app.skim" ]]; then
         local skim_memory_file="/tmp/aerospace_skim_tabs/workspace_${current_workspace}.txt"
         rm -f "$skim_memory_file"
 
-        local skim_ids
-        skim_ids=$(aerospace list-windows --workspace focused --format "%{window-id}|%{app-bundle-id}" \
+        local skim_ids=$(aerospace list-windows --workspace focused --format "%{window-id}|%{app-bundle-id}" \
             | awk -F'|' '/net\.sourceforge\.skim-app\.skim/ {print $1}')
 
         for id in $skim_ids; do
@@ -133,22 +108,16 @@ closeWindow() {
 }
 
 closeSkimTab() {
-    local skim_count
-    skim_count=$(aerospace list-windows --workspace focused --format "%{app-bundle-id}" \
+    local skim_count=$(aerospace list-windows --workspace focused --format "%{app-bundle-id}" \
         | awk '/net\.sourceforge\.skim-app\.skim/ {c++} END {print c+0}')
 
     if [ "$skim_count" -gt 1 ]; then
-        local current_workspace
-        current_workspace=$(aerospace list-workspaces --focused)
-
-        local current_id
-        current_id=$(aerospace list-windows --focused --format "%{window-id}" | tr -d '[:space:]')
-
+        local current_workspace=$(aerospace list-workspaces --focused)
+        local current_id=$(aerospace list-windows --focused --format "%{window-id}" | tr -d '[:space:]')
         local skim_memory_file="/tmp/aerospace_skim_tabs/workspace_${current_workspace}.txt"
 
         if [ -f "$skim_memory_file" ]; then
-            local saved_id
-            saved_id=$(cat "$skim_memory_file")
+            local saved_id=$(cat "$skim_memory_file")
             if [ "$saved_id" == "$current_id" ]; then
                 rm -f "$skim_memory_file"
             fi

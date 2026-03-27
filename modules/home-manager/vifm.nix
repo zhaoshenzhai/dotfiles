@@ -35,7 +35,7 @@
             nnoremap <C-t> :!alacritty --working-directory %d &<cr>
             nnoremap <C-s> :!alacritty --title vifm-float --option "window.dimensions={columns=100,lines=35}" --option "window.position={x=525,y=250}" --working-directory %d &<cr>
 
-            filetype *.pdf open -n -a Skim %c &
+            filetype *.pdf open -a Skim %c &
             filetype *.jpg,*.jpeg,*.png,*.gif open %c &
 
             cabbrev q !aerospace close --quit-if-last-window
