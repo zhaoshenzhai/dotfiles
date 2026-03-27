@@ -1,5 +1,5 @@
 start-at-login = false
-accordion-padding = 0
+accordion-padding = 20
 after-startup-command = [
     'exec-and-forget borders',
     'exec-and-forget sketchybar',
