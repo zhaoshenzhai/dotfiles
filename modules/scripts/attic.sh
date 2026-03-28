@@ -17,7 +17,7 @@ format_links() {
     sort -u | sed -E 's/^([0-9]{5})$/\\aref{\1}{\1}/' | paste -sd "," - | sed 's/,/, /g'
 }
 
-createNew() {
+createNote() {
     local IN_KEYWORDS="$1"
     mkdir -p "$ATTIC_DIR"
 
@@ -134,23 +134,6 @@ updateMetadata() {
         fi
     done
 }
-clean() {
-    echo -e "${BLUE}Cleaning up LaTeX auxiliary files...${NC}"
-    find "$ATTIC_DIR" -type f \( \
-        -name "*.aux" -o \
-        -name "*.bbl" -o \
-        -name "*.bcf" -o \
-        -name "*bcf-SAVE-ERROR" -o \
-        -name "*.blg" -o \
-        -name "*.fdb_latexmk" -o \
-        -name "*.fls" -o \
-        -name "*.log" -o \
-        -name "*.run.xml" -o \
-        -name "*.synctex.gz" -o \
-        -name "*.synctex(busy)" \
-    \) -delete
-    echo -e "${GREEN}Cleanup complete.${NC}"
-}
 auditNotes() {
     echo -e "${BLUE}Verifying links and scanning for TODOs...${NC}"
     local BROKEN=0
@@ -227,7 +210,7 @@ auditNotes() {
         echo -e "${YELLOW}TODOs: You have $TODOS pending TODO(s).${NC}"
     fi
 }
-rebuildAll() {
+rebuildNotes() {
     echo -e "${BLUE}Refreshing metadata and recompiling all notes. This may take a moment...${NC}"
     local dirs=("$ATTIC_DIR"/[0-9][0-9][0-9][0-9][0-9]/)
 
@@ -267,14 +250,13 @@ INTERACTIVE_MENU() {
         echo -e "${CYAN}Attic operations:${NC}"
         echo -e "    ${CYAN}(n): New note${NC}"
         echo -e "    ${CYAN}(a): Audit notes${NC}"
-        echo -e "    ${CYAN}(c): Clean LaTeX files${NC}"
-        echo -e "    ${CYAN}(r): Rebuild all metadata & PDFs${NC}"
+        echo -e "    ${CYAN}(r): Rebuild notes${NC}"
 
-        read -n 1 -ep "${RL_CYAN}Select operation: [n, a, c, r] ${RL_NC}" cmdNum
+        read -n 1 -ep "${RL_CYAN}Select operation: [n, a, r] ${RL_NC}" cmdNum
 
         if [[ "$cmdNum" == "q" ]]; then
             aerospace close --quit-if-last-window 2>/dev/null || exit 0
-        elif [[ "$cmdNum" =~ ^[nacr]$ ]]; then
+        elif [[ "$cmdNum" =~ ^[nar]$ ]]; then
             valid=1
         else
             clear
@@ -284,10 +266,9 @@ INTERACTIVE_MENU() {
     echo ""
 
     case $cmdNum in
-        "n") createNew ;;
+        "n") createNote ;;
         "a") auditNotes ;;
-        "c") clean ;;
-        "r") rebuildAll ;;
+        "r") rebuildNotes ;;
     esac
 
     EXIT
@@ -296,16 +277,15 @@ INTERACTIVE_MENU() {
 # Main
 if [[ $# -gt 0 ]]; then
     INTERACTIVE=0
-    while getopts "ek:nu:m:acr" opt; do
+    while getopts "ek:nu:m:ar" opt; do
         case $opt in
-            e) createNew "EMPTY_KEYWORDS"; exit 0 ;;
-            k) createNew "$OPTARG"; exit 0 ;;
-            n) createNew; exit 0 ;;
+            e) createNote "EMPTY_KEYWORDS"; exit 0 ;;
+            k) createNote "$OPTARG"; exit 0 ;;
+            n) createNote; exit 0 ;;
             m) generateMetadata "$OPTARG" "false"; exit 0 ;;
             u) updateMetadata "$OPTARG"; exit 0 ;;
             a) auditNotes; exit 0 ;;
-            c) clean; exit 0 ;;
-            r) rebuildAll; exit 0 ;;
+            r) rebuildNotes; exit 0 ;;
             *) echo "Usage: attic [-n] [-e] [-k keywords] [-m ID] [-u ID] [-a] [-c] [-r]"; exit 1 ;;
         esac
     done
