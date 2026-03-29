@@ -148,6 +148,8 @@ auditNotes() {
             continue
         fi
 
+        local keys=$(cat "$ATTIC_DIR/$id/$id.key" 2>/dev/null)
+
         while read -r match; do
             local line_no="${match%%:*}"
             local target_id="${match#*:}"
@@ -159,7 +161,7 @@ auditNotes() {
             if [[ ! -f "$P_FILE" ]]; then [[ -n "$ERR" ]] && ERR="$ERR & "; ERR="${ERR}PDF"; fi
 
             if [[ -n "$ERR" ]]; then
-                echo -e "${RED}[MISSING $ERR]${NC} ID $target_id referenced in $id:$line_no"
+                echo -e "${RED}[MISSING $ERR]${NC} ID $target_id referenced in ${id}[${keys}]:$line_no"
                 ((BROKEN++))
             fi
         done < <(perl -nle "$EXTRACT_LINES_AND_IDS" "$file" 2>/dev/null)
@@ -169,7 +171,7 @@ auditNotes() {
             local text="${todo_match#*:}"
 
             text="$(echo "$text" | sed 's/^[[:space:]]*//')"
-            echo -e "${YELLOW}[TODO]${NC} $id:$line_no -> $text"
+            echo -e "${YELLOW}[TODO]${NC} ${id}[${keys}]:$line_no -> $text"
             ((TODOS++))
         done < <(grep -n "TODO" "$file" 2>/dev/null)
 
@@ -186,7 +188,7 @@ auditNotes() {
         local ACTUAL_REF_IN=$(grep "Referenced in:" "$meta" 2>/dev/null | sed 's/^[[:space:]]*//' | sed 's/ \\\\$//')
 
         if [[ "$EXPECTED_REFS" != "$ACTUAL_REFS" ]] || [[ "$EXPECTED_REF_IN" != "$ACTUAL_REF_IN" ]]; then
-            echo -e "${PURPLE}[DESYNC]${NC} Metadata for $id out of sync."
+            echo -e "${PURPLE}[DESYNC]${NC} Metadata for ${id}[${keys}] out of sync."
             ((DESYNC++))
         fi
     done < <(cd "$ATTIC_DIR" && fd -e tex)
