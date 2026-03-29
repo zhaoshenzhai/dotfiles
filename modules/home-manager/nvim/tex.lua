@@ -1,15 +1,27 @@
 local opts = { buffer = true, silent = true }
 
-vim.keymap.set('n', '<M-1>', '<cmd>write<CR><cmd>VimtexCompile<CR>', opts)
-vim.keymap.set('n', '<M-2>', '<cmd>write<CR><cmd>VimtexView<CR>', opts)
-vim.keymap.set('n', '<M-3>', '<cmd>write<CR><cmd>!rm -f *.aux(N) *.bbl(N) *.bcf(N) *bcf-SAVE-ERROR(N) *.blg(N) *.fdb_latexmk(N) *.fls(N) *.log(N) *.run.xml(N) *.synctex.gz(N) *.synctex\\(busy\\)(N)<CR><CR>', opts)
+vim.keymap.set('n', '<C-S-c>', '<cmd>write<CR><cmd>VimtexCompile<CR>', opts)
+vim.keymap.set('n', '<C-S-v>', '<cmd>write<CR><cmd>VimtexView<CR>', opts)
+vim.keymap.set('n', '<C-S-d>', '<cmd>write<CR><cmd>!rm -f *.aux(N) *.bbl(N) *.bcf(N) *bcf-SAVE-ERROR(N) *.blg(N) *.fdb_latexmk(N) *.fls(N) *.log(N) *.run.xml(N) *.synctex.gz(N) *.synctex\\(busy\\)(N)<CR><CR>', opts)
 
 -- Open student pdf
-vim.keymap.set('n', '<M-4>', function()
+vim.keymap.set('n', '<C-S-s>', function()
     vim.cmd('write')
     local f = vim.fn.expand('%:p:r') .. '_Student.pdf'
     if vim.fn.filereadable(f) == 1 then
         vim.fn.jobstart({ "open", "-a", "Skim", f }, {detach=true})
+    end
+end, opts)
+
+-- Open corresponding .key
+vim.keymap.set('n', '<C-S-k>', function()
+    local current_file = vim.fn.expand('%:p')
+    if current_file:match('Projects/_attic') and current_file:match('%.tex$') then
+        local key_file = current_file:gsub('%.tex$', '.key')
+
+        if vim.fn.filereadable(key_file) == 1 then
+            vim.cmd('tabedit ' .. vim.fn.fnameescape(key_file))
+        end
     end
 end, opts)
 

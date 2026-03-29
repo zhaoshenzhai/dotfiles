@@ -24,15 +24,14 @@ init() {
 format() {
     local file_path="$1"
 
-    if [[ "$file_path" =~ Projects/_attic/([0-9]{5})/([0-9]{5})\.(tex|pdf|key) ]]; then
+    if [[ "$file_path" =~ Projects/_attic/([0-9]{5})/([0-9]{5}).pdf ]]; then
         local id="${BASH_REMATCH[1]}"
-        local ext="${BASH_REMATCH[3]}"
 
         local keywordsPath="$BASE_DIR/Projects/_attic/$id/$id.key"
         if [ -f "$keywordsPath" ]; then
             local keywords
             keywords=$(cat "$keywordsPath" 2>/dev/null)
-            printf "Projects/attic_%s/[%s].%s\t%s\n" "$id" "$keywords" "$ext" "$file_path"
+            printf "Projects/attic_%s/[%s].pdf\t%s\n" "$id" "$keywords" "$file_path"
             return
         fi
     fi
@@ -43,11 +42,12 @@ updateCache() {
     cd "$BASE_DIR" || exit 1
 
     {
-        fd --type f --hidden --exclude .git --exclude '*.old' . \
+        fd --type f --hidden --exclude .git --exclude '*.old' \
+            --exclude '*.png' --exclude '*.jpg' --exclude '*.tar.gz' --exclude '*.zip' . \
             "Documents" "Dotfiles" "Projects"
         fd --type f --hidden --no-ignore --extension pdf --exclude .git --exclude '*.old' . \
             "Documents" "Dotfiles" "Projects"
-    } | awk '!seen[$0]++' | while read -r line; do
+    } | grep -vE '^Projects/_attic/.*\.(tex|key|dat)$' | awk '!seen[$0]++' | while read -r line; do
         format "$line"
     done > "$CACHE_FILE.tmp" 2>/dev/null
     mv "$CACHE_FILE.tmp" "$CACHE_FILE"
@@ -80,6 +80,11 @@ selectFiles() {
 }
 updateRecentFiles() {
     selected="$1"
+
+    if echo "$selected" | grep -qE '^Projects/_attic/.*\.(tex|key|dat)'; then
+        return
+    fi
+
     grep -vF -x "$selected" "$RECENT_FILE" > "$RECENT_FILE.tmp" 2>/dev/null || true
     echo "$selected" | cat - "$RECENT_FILE.tmp" | head -n 100 > "$RECENT_FILE"
     rm -f "$RECENT_FILE.tmp"
@@ -163,9 +168,6 @@ quit() {
 if [[ "${1:-}" == "--update" ]]; then
     updateCache
 elif [[ -n "${1:-}" && -f "$1" ]]; then
-    init
-    updateCache &
-
     abs_path="${1/#\~/$HOME}"
     REAL_ICLOUD="$HOME/Library/Mobile Documents/com~apple~CloudDocs"
     abs_path="${abs_path/$REAL_ICLOUD/$BASE_DIR}"
@@ -185,7 +187,6 @@ elif [[ -n "${1:-}" && -f "$1" ]]; then
 
     if [ -f "$BASE_DIR/$rel_path" ]; then
         formatted="$(format "$rel_path")"
-        updateRecentFiles "$formatted"
         launch "$formatted"
         quit "true"
     else

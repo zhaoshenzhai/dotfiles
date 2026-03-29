@@ -213,20 +213,22 @@ duplicateTab() {
     done
 }
 
-openNvim() {
-    local FRONT_BUNDLE
-    FRONT_BUNDLE=$(osascript -e 'id of application (path to frontmost application as text)' 2>/dev/null)
-
-    local PDF_PATH
-    PDF_PATH=$(osascript -e "tell application id \"$FRONT_BUNDLE\" to get path of document of window 1" 2>/dev/null)
+openRelated() {
+    local ext="$1"
+    local FRONT_BUNDLE=$(osascript -e 'id of application (path to frontmost application as text)' 2>/dev/null)
+    local PDF_PATH=$(osascript -e "tell application id \"$FRONT_BUNDLE\" to get path of document of window 1" 2>/dev/null)
 
     if [ -z "$PDF_PATH" ] || [ "$PDF_PATH" == "missing value" ]; then
         exit 0
     fi
 
-    local TEX_PATH="${PDF_PATH%.pdf}.tex"
-    if [ -f "$TEX_PATH" ]; then
-        nohup /etc/profiles/per-user/zhao/bin/launcher "$TEX_PATH" >/dev/null 2>&1 &
+    if [[ "$PDF_PATH" == */tmp/skim_pdfs/* ]] && [ -f "${PDF_PATH}.orig" ]; then
+        PDF_PATH=$(cat "${PDF_PATH}.orig")
+    fi
+
+    local TARGET_PATH="${PDF_PATH%.pdf}.$ext"
+    if [ -f "$TARGET_PATH" ]; then
+        nohup /etc/profiles/per-user/$USER/bin/launcher "$TARGET_PATH" >/dev/null 2>&1 &
     fi
 }
 
@@ -287,8 +289,12 @@ case "${1:-}" in
         duplicateTab
         exit 0
         ;;
-    --openNvim)
-        openNvim
+    --openNvim|--openTex)
+        openRelated "tex"
+        exit 0
+        ;;
+    --openKey)
+        openRelated "key"
         exit 0
         ;;
     --recordSkim)
@@ -300,7 +306,7 @@ case "${1:-}" in
         exit 0
         ;;
     *)
-        echo "Usage: $(basename "$0") [--switchFocus <dir> | --focusDaemon | --closeWindow | --closeSkimTab | --duplicateTab | --openNvim | --recordSkim <id> | --enforceSkim]"
+        echo "Usage: $(basename "$0") [--switchFocus <dir> | --focusDaemon | --closeWindow | --closeSkimTab | --duplicateTab | --openNvim | --openTex | --openKey | --recordSkim <id> | --enforceSkim]"
         exit 1
         ;;
 esac

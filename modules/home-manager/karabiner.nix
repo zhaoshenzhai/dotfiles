@@ -281,10 +281,21 @@
                                             }
                                         ];
                                     }
-                                    { # ctrl+2 -> open in nvim
+                                    { # ctrl+shift+v -> open .tex in nvim
                                         type = "basic";
-                                        from = { key_code = "2"; modifiers = { mandatory = [ "control" ]; }; };
+                                        from = { key_code = "v"; modifiers = { mandatory = [ "control" "shift" ]; }; };
                                         to = [{ shell_command = "zsh -ic 'skimUtils --openNvim'"; }];
+                                        conditions = [
+                                            {
+                                                type = "frontmost_application_if";
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                            }
+                                        ];
+                                    }
+                                    { # ctrl+shift+k -> open .key in nvim
+                                        type = "basic";
+                                        from = { key_code = "k"; modifiers = { mandatory = [ "control" "shift" ]; }; };
+                                        to = [{ shell_command = "zsh -ic 'skimUtils --openKey'"; }];
                                         conditions = [
                                             {
                                                 type = "frontmost_application_if";
