@@ -300,9 +300,16 @@ snippet que* "begin question*" b
 endsnippet
 
 snippet cla "begin claim" b
-\begin{claim*}
-	$0
-\end{claim*}
+\begin{center}
+	\begin{minipage}{0.95\textwidth}
+		\begin{claim*}
+			$0
+		\end{claim*}
+		\begin{proof}
+			\TODO
+		\end{proof}
+	\end{minipage}
+\end{center}
 endsnippet
 
 snippet obs "begin observation" b
