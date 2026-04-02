@@ -6,7 +6,7 @@
 // https://github.com/kvndrsslr/sketchybar-app-font/tree/main/svgs
 static inline const char* get_icon_for_app(const char* app) {
     if (!app) return ":default:";
-    
+
     // Custom
     if (strcmp(app, "qutebrowser")      == 0) return ":qute_browser:";
     if (strstr(app, "Karabiner")     != NULL) return ":karabiner_elements:";
@@ -29,6 +29,7 @@ static inline const char* get_icon_for_app(const char* app) {
     if (strcmp(app, "SF Symbols")       == 0) return ":sf_symbols:";
     if (strcmp(app, "Reminders")        == 0) return ":reminders:";
     if (strcmp(app, "Spotlight")        == 0) return ":spotlight:";
+    if (strcmp(app, "Goodnotes")        == 0) return ":goodnotes:";
     if (strcmp(app, "Passwords")        == 0) return ":passwords:";
     if (strcmp(app, "Calendar")         == 0) return ":calendar:";
     if (strcmp(app, "Messages")         == 0) return ":messages:";
