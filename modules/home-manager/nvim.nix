@@ -117,6 +117,7 @@ in {
             "lua/aerospace.lua".source = ./nvim/aerospace.lua;
             "lua/attic.lua".source     = ./nvim/attic.lua;
             "ftplugin/tex.lua".source  = ./nvim/tex.lua;
+            "ftplugin/c.lua".source    = ./nvim/c.lua;
         } // snippetExtraFiles;
         extraConfigLua = ''
             require('options')

@@ -17,18 +17,20 @@ void interactive_menu() {
         printf("    %s(a): Audit notes%s\n", CYAN, NC);
         printf("    %s(r): Rebuild notes%s\n", CYAN, NC);
         printf("    %s(c): Clean attic%s\n", CYAN, NC);
+        printf("    %s(g): Export graph to JSON%s\n", CYAN, NC);
 
-        printf("%sSelect operation: [n, a, r, c] %s", CYAN, NC);
+        printf("%sSelect operation: [n, a, r, c, g] %s", CYAN, NC);
         fflush(stdout);
         int cmdNum = getch();
 
-        if (cmdNum == 'n' || cmdNum == 'a' || cmdNum == 'r' || cmdNum == 'c') {
+        if (cmdNum == 'n' || cmdNum == 'a' || cmdNum == 'r' || cmdNum == 'c' || cmdNum == 'g') {
             printf("%c\n\n", cmdNum);
             switch (cmdNum) {
                 case 'n': create_note(""); break;
                 case 'a': audit_notes(); break;
                 case 'r': rebuild_notes(); break;
                 case 'c': clean_attic(); break;
+                case 'g': export_graph_json(0); break;
             }
             prompt_exit();
         } else if (cmdNum == 'q') {
@@ -61,7 +63,7 @@ int main(int argc, char **argv) {
 
     if (argc > 1) {
         int opt;
-        while ((opt = getopt(argc, argv, "ek:nu:m:arc")) != -1) {
+        while ((opt = getopt(argc, argv, "ek:nu:m:arcg")) != -1) {
             switch (opt) {
                 case 'e': create_note("EMPTY_KEYWORDS"); return 0;
                 case 'k': create_note(optarg); return 0;
@@ -71,8 +73,9 @@ int main(int argc, char **argv) {
                 case 'a': audit_notes(); return 0;
                 case 'r': rebuild_notes(); return 0;
                 case 'c': clean_attic(); return 0;
+                case 'g': export_graph_json(0); return 0;
                 default:
-                    fprintf(stderr, "Usage: %s [-n] [-e] [-k keywords] [-m ID] [-u ID] [-a] [-r] [-c]\n", argv[0]);
+                    fprintf(stderr, "Usage: %s [-n] [-e] [-k keywords] [-m ID] [-u ID] [-a] [-r] [-c] [-g]\n", argv[0]);
                     return 1;
             }
         }

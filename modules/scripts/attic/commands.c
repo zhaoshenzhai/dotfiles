@@ -100,6 +100,7 @@ void create_note(const char *in_keywords) {
 
     load_memory();
     generate_metadata(id, 1);
+    export_graph_json(1);
 
     snprintf(cmd, sizeof(cmd), "%s --update &", launcher_path);
     system(cmd);
@@ -142,6 +143,8 @@ void update_metadata(int id) {
     compile_note_async(id);
 
     if (links_changed) {
+        printf("%sLinks changed. Propagating metadata to neighbors...%s\n", YELLOW, NC);
+
         int combined_refs[2000];
         int combined_count = 0;
         for (int i = 0; i < old_count; i++) combined_refs[combined_count++] = old_ids[i];
@@ -156,7 +159,12 @@ void update_metadata(int id) {
                 compile_note_async(ref_id);
             }
         }
+    } else {
+        printf("%sNo link changes detected. Skipping neighbor updates.%s\n", GREEN, NC);
     }
+
+    load_memory();
+    export_graph_json(1);
 }
 
 void audit_notes(void) {
@@ -235,7 +243,7 @@ void rebuild_notes(void) {
         return;
     }
 
-    printf("%sRebuilding notes...%s\n", BLUE, NC);
+    printf("%sChecking modification times and refreshing metadata...%s\n", BLUE, NC);
 
     int running_jobs = 0, total_processed = 0, total_rebuilt = 0, total_failed = 0;
     int failed_ids[MAX_NOTES];
@@ -386,6 +394,7 @@ void rebuild_notes(void) {
     }
 
     load_memory();
+    export_graph_json(1);
 }
 
 void clean_attic(void) {
@@ -451,4 +460,56 @@ void clean_attic(void) {
 
     printf("%sCleaned files in %d note directories.%s\n", GREEN, cleaned_count, NC);
     load_memory();
+    export_graph_json(1);
+}
+
+void export_graph_json(int silent) {
+    load_memory();
+    char path[PATH_MAX];
+    snprintf(path, sizeof(path), "%s/graph.json", attic_dir);
+
+    FILE *f = fopen(path, "w");
+    if (!f) {
+        if (!silent) fprintf(stderr, "%sError opening %s for writing: %s%s\n", RED, path, strerror(errno), NC);
+        return;
+    }
+
+    if (!silent) printf("%sExporting memory graph to JSON...%s\n", BLUE, NC);
+
+    fprintf(f, "{\n  \"nodes\": [\n");
+    int first_node = 1;
+    for (int i = 0; i < MAX_NOTES; i++) {
+        if (!notes[i].active) continue;
+        if (!first_node) fprintf(f, ",\n");
+
+        char safe_keys[1024] = "";
+        int k = 0;
+        for (int j = 0; notes[i].keys[j] != '\0' && k < 1000; j++) {
+            if (notes[i].keys[j] == '"' || notes[i].keys[j] == '\\') {
+                safe_keys[k++] = '\\';
+            }
+            safe_keys[k++] = notes[i].keys[j];
+        }
+
+        fprintf(f, "    { \"id\": \"%05d\", \"label\": \"%s\", \"has_pdf\": %s, \"mod_date\": \"%s\", \"todo_count\": %d }",
+            i, safe_keys, notes[i].has_pdf ? "true" : "false", notes[i].mod_date, notes[i].todo_count);
+        first_node = 0;
+    }
+
+    fprintf(f, "\n  ],\n  \"edges\": [\n");
+    int first_edge = 1;
+    for (int i = 0; i < MAX_NOTES; i++) {
+        if (!notes[i].active) continue;
+        for (int j = 0; j < notes[i].out_count; j++) {
+            if (!first_edge) fprintf(f, ",\n");
+            fprintf(f, "    { \"source\": \"%05d\", \"target\": \"%05d\", \"line_no\": %d }",
+                i, notes[i].out_links[j].target_id, notes[i].out_links[j].line_no);
+            first_edge = 0;
+        }
+    }
+
+    fprintf(f, "\n  ]\n}\n");
+    fclose(f);
+
+    if (!silent) printf("%sGraph data successfully exported to %s%s\n", GREEN, path, NC);
 }

@@ -80,3 +80,4 @@ void update_metadata(int id);
 void audit_notes(void);
 void rebuild_notes(void);
 void clean_attic(void);
+void export_graph_json(int silent);
