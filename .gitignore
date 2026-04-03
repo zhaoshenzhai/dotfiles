@@ -1,1 +1,4 @@
 .DS_Store
+
+./modules/scripts/attic/cJSON.c
+./modules/scripts/attic/cJSON.h

@@ -513,3 +513,13 @@ void export_graph_json(int silent) {
 
     if (!silent) printf("%sGraph data successfully exported to %s%s\n", GREEN, path, NC);
 }
+
+void launch_graph_view(void) {
+    printf("%sPreparing graph view...%s\n", BLUE, NC);
+    export_graph_json(1);
+
+    char cmd[PATH_MAX + 128];
+    snprintf(cmd, sizeof(cmd), "cd '%s/..' && attic-graph &", attic_dir);
+
+    system(cmd);
+}

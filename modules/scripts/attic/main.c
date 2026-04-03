@@ -17,7 +17,7 @@ void interactive_menu() {
         printf("    %s(a): Audit notes%s\n", CYAN, NC);
         printf("    %s(r): Rebuild notes%s\n", CYAN, NC);
         printf("    %s(c): Clean attic%s\n", CYAN, NC);
-        printf("    %s(g): Export graph to JSON%s\n", CYAN, NC);
+        printf("    %s(g): Open graph view%s\n", CYAN, NC);
 
         printf("%sSelect operation: [n, a, r, c, g] %s", CYAN, NC);
         fflush(stdout);
@@ -30,9 +30,9 @@ void interactive_menu() {
                 case 'a': audit_notes(); break;
                 case 'r': rebuild_notes(); break;
                 case 'c': clean_attic(); break;
-                case 'g': export_graph_json(0); break;
+                case 'g': launch_graph_view(); break;
             }
-            prompt_exit();
+            if (cmdNum != 'g') prompt_exit();
         } else if (cmdNum == 'q') {
             system("aerospace close --quit-if-last-window 2>/dev/null");
             exit(0);
@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
                 case 'a': audit_notes(); return 0;
                 case 'r': rebuild_notes(); return 0;
                 case 'c': clean_attic(); return 0;
-                case 'g': export_graph_json(0); return 0;
+                case 'g': launch_graph_view(); return 0;
                 default:
                     fprintf(stderr, "Usage: %s [-n] [-e] [-k keywords] [-m ID] [-u ID] [-a] [-r] [-c] [-g]\n", argv[0]);
                     return 1;
