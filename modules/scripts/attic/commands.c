@@ -1,284 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-#include <dirent.h>
-#include <unistd.h>
-#include <termios.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
-#include <time.h>
-#include <getopt.h>
-#include <limits.h>
-#include <libproc.h>
-#include <errno.h>
+#include "attic.h"
 
-#define MAX_NOTES 100000
-#define MAX_JOBS 5
-
-#define RED "\x1b[31m"
-#define GREEN "\x1b[32m"
-#define YELLOW "\x1b[33m"
-#define BLUE "\x1b[34m"
-#define PURPLE "\x1b[35m"
-#define CYAN "\x1b[36m"
-#define NC "\x1b[0m"
-
-char attic_dir[PATH_MAX];
-char template_file[PATH_MAX];
-char launcher_path[PATH_MAX];
-int is_interactive = 0;
-
-typedef struct { int target_id; int line_no; } OutLink;
-typedef struct { char *text; int line_no; } Todo;
-
-typedef struct {
-    int active;
-    int has_pdf;
-    char keys[256];
-    char mod_date[64];
-
-    OutLink *out_links;
-    int out_count;
-    int out_capacity;
-
-    int *in_links;
-    int in_count;
-    int in_capacity;
-
-    Todo *todos;
-    int todo_count;
-    int todo_capacity;
-
-    char meta_refs_raw[2048];
-    char meta_ref_in_raw[2048];
-} Note;
-
-Note notes[MAX_NOTES];
-
-// Utility functions
-void* safe_malloc(size_t size) {
-    void* p = malloc(size);
-    if (!p && size > 0) {
-        fprintf(stderr, "%sError: Out of memory (malloc failed)%s\n", RED, NC);
-        exit(1);
-    }
-    return p;
-}
-void* safe_realloc(void* p, size_t size) {
-    void* new_p = realloc(p, size);
-    if (!new_p && size > 0) {
-        fprintf(stderr, "%sError: Out of memory (realloc failed)%s\n", RED, NC);
-        exit(1);
-    }
-    return new_p;
-}
-int getch(void) {
-    struct termios oldattr, newattr;
-    int ch;
-
-    tcgetattr(STDIN_FILENO, &oldattr);
-    newattr = oldattr;
-    newattr.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
-    ch = getchar();
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
-
-    return ch;
-}
-void trim_end(char *str) {
-    int len = strlen(str);
-    while (len > 0 && (isspace(str[len - 1]) || str[len - 1] == '\\')) {
-        str[len - 1] = '\0';
-        len--;
-    }
-}
-int cmp_int(const void *a, const void *b) {
-    return (*(int *)a - *(int *)b);
-}
-int dedupe(int *arr, int count) {
-    if (count == 0) return 0;
-    qsort(arr, count, sizeof(int), cmp_int);
-    int j = 0;
-    for (int i = 1; i < count; i++) {
-        if (arr[i] != arr[j]) {
-            j++;
-            arr[j] = arr[i];
-        }
-    }
-    return j + 1;
-}
-void format_links(int *ids, int count, char *out_buf) {
-    out_buf[0] = '\0';
-    int unique_count = dedupe(ids, count);
-    for (int i = 0; i < unique_count; i++) {
-        if (i > 0) strcat(out_buf, ", ");
-        char temp[32];
-        snprintf(temp, sizeof(temp), "\\aref{%05d}{%05d}", ids[i], ids[i]);
-        strcat(out_buf, temp);
-    }
-}
-int is_compiling(int id) {
-    int n_procs = proc_listpids(PROC_ALL_PIDS, 0, NULL, 0);
-    if (n_procs <= 0) return 0;
-
-    pid_t *pids = (pid_t*)safe_malloc(n_procs * sizeof(pid_t));
-    n_procs = proc_listpids(PROC_ALL_PIDS, 0, pids, n_procs * sizeof(pid_t));
-
-    for (int i = 0; i < n_procs; i++) {
-        if (pids[i] <= 0) continue;
-        char path_buf[PROC_PIDPATHINFO_MAXSIZE];
-        if (proc_pidpath(pids[i], path_buf, sizeof(path_buf)) > 0) {
-            if (strstr(path_buf, "latexmk") || strstr(path_buf, "pdflatex")) {
-                free(pids);
-                return 1;
-            }
-        }
-    }
-    free(pids);
-    return 0;
-}
-void compile_note_async(int id) {
-    if (is_compiling(id)) return;
-
-    char cmd[2048];
-    snprintf(cmd, sizeof(cmd),
-        "cd '%s/%05d' && nohup latexmk -pdf -pvc- -interaction=nonstopmode %05d.tex > /dev/null 2>&1 &",
-        attic_dir, id, id);
-
-    system(cmd);
-}
-void extract_ids_from_string(const char *str, int *arr, int *count) {
-    const char *ptr = str;
-    while (*ptr) {
-        if (isdigit(*ptr)) {
-            int valid = 1;
-            for (int i = 0; i < 5; i++) if (!isdigit(ptr[i])) valid = 0;
-            if (valid) {
-                arr[(*count)++] = atoi(ptr);
-                ptr += 4;
-            }
-        }
-        ptr++;
-    }
-}
-void free_graph() {
-    for (int i = 0; i < MAX_NOTES; i++) {
-        if (notes[i].out_links) { free(notes[i].out_links); notes[i].out_links = NULL; }
-        if (notes[i].in_links) { free(notes[i].in_links); notes[i].in_links = NULL; }
-        for (int j = 0; j < notes[i].todo_count; j++) {
-            if (notes[i].todos[j].text) free(notes[i].todos[j].text);
-        }
-        if (notes[i].todos) { free(notes[i].todos); notes[i].todos = NULL; }
-        notes[i].out_count = notes[i].out_capacity = 0;
-        notes[i].in_count = notes[i].in_capacity = 0;
-        notes[i].todo_count = notes[i].todo_capacity = 0;
-    }
-}
-
-// Load graph of links
-void add_out_link(int src, int target, int line_no) {
-    if (notes[src].out_count >= notes[src].out_capacity) {
-        notes[src].out_capacity = notes[src].out_capacity == 0 ? 8 : notes[src].out_capacity * 2;
-        notes[src].out_links = (OutLink*)safe_realloc(notes[src].out_links, notes[src].out_capacity * sizeof(OutLink));
-    }
-    notes[src].out_links[notes[src].out_count++] = (OutLink){target, line_no};
-}
-void add_in_link(int target, int src) {
-    if (notes[target].in_count >= notes[target].in_capacity) {
-        notes[target].in_capacity = notes[target].in_capacity == 0 ? 8 : notes[target].in_capacity * 2;
-        notes[target].in_links = realloc(notes[target].in_links, notes[target].in_capacity * sizeof(int));
-    }
-    notes[target].in_links[notes[target].in_count++] = src;
-}
-void add_todo(int id, int line_no, const char *text) {
-    if (notes[id].todo_count >= notes[id].todo_capacity) {
-        notes[id].todo_capacity = notes[id].todo_capacity == 0 ? 4 : notes[id].todo_capacity * 2;
-        notes[id].todos = realloc(notes[id].todos, notes[id].todo_capacity * sizeof(Todo));
-    }
-    while (isspace(*text)) text++;
-    char *text_copy = strdup(text);
-    trim_end(text_copy);
-    notes[id].todos[notes[id].todo_count++] = (Todo){text_copy, line_no};
-}
-void load_graph() {
-    free_graph();
-    memset(notes, 0, sizeof(notes));
-    DIR *dir = opendir(attic_dir);
-    if (!dir) return;
-
-    struct dirent *entry;
-    while ((entry = readdir(dir)) != NULL) {
-        if (strlen(entry->d_name) == 5 && isdigit(entry->d_name[0])) {
-            int id = atoi(entry->d_name);
-            notes[id].active = 1;
-
-            char path[PATH_MAX];
-            snprintf(path, sizeof(path), "%s/%05d/%05d.pdf", attic_dir, id, id);
-            notes[id].has_pdf = (access(path, F_OK) == 0);
-
-            snprintf(path, sizeof(path), "%s/%05d/%05d.key", attic_dir, id, id);
-            FILE *fkey = fopen(path, "r");
-            if (fkey) {
-                if (fgets(notes[id].keys, sizeof(notes[id].keys), fkey)) trim_end(notes[id].keys);
-                fclose(fkey);
-            }
-
-            snprintf(path, sizeof(path), "%s/%05d/%05d.dat", attic_dir, id, id);
-            FILE *fdat = fopen(path, "r");
-            if (fdat) {
-                char line[2048];
-                while (fgets(line, sizeof(line), fdat)) {
-                    char *start = line;
-                    while (isspace(*start)) start++;
-                    if (strncmp(start, "Last modified:", 14) == 0) {
-                        sscanf(start + 14, " %63s", notes[id].mod_date);
-                    } else if (strncmp(start, "References:", 11) == 0) {
-                        trim_end(start); strcpy(notes[id].meta_refs_raw, start);
-                    } else if (strncmp(start, "Referenced in:", 14) == 0) {
-                        trim_end(start); strcpy(notes[id].meta_ref_in_raw, start);
-                    }
-                }
-                fclose(fdat);
-            }
-        }
-    }
-    closedir(dir);
-
-    for (int i = 0; i < MAX_NOTES; i++) {
-        if (!notes[i].active) continue;
-
-        char path[PATH_MAX];
-        snprintf(path, sizeof(path), "%s/%05d/%05d.tex", attic_dir, i, i);
-        FILE *ftex = fopen(path, "r");
-        if (!ftex) continue;
-
-        char *line = NULL; size_t len = 0; int line_no = 0;
-        while (getline(&line, &len, ftex) != -1) {
-            line_no++;
-            if (strstr(line, "TODO")) add_todo(i, line_no, line);
-
-            char *ptr = line;
-            while ((ptr = strstr(ptr, "\\aref{")) != NULL) {
-                char *scan = ptr + 6;
-                while (*scan) {
-                    if (strncmp(scan, "}{", 2) == 0 && isdigit(scan[2]) && scan[7] == '}') {
-                        int target_id = 0;
-                        for (int k = 0; k < 5; k++) target_id = target_id * 10 + (scan[2 + k] - '0');
-                        add_out_link(i, target_id, line_no);
-                        add_in_link(target_id, i);
-                        break;
-                    }
-                    scan++;
-                }
-                ptr += 6;
-            }
-        }
-        free(line); fclose(ftex);
-    }
-}
-
-// Commands
 int generate_metadata(int id, int update_modified) {
     if (!notes[id].active) {
         printf("%sError: Note %05d does not exist.%s\n", RED, id, NC);
@@ -328,6 +49,7 @@ int generate_metadata(int id, int update_modified) {
     fclose(fmeta);
     return 0;
 }
+
 void create_note(const char *in_keywords) {
     char cmd[2048];
     snprintf(cmd, sizeof(cmd), "mkdir -p \"%s\"", attic_dir);
@@ -376,7 +98,7 @@ void create_note(const char *in_keywords) {
     FILE *fkey = fopen(path, "w");
     if (fkey) { fputs(final_keys, fkey); fputs("\n", fkey); fclose(fkey); }
 
-    load_graph();
+    load_memory();
     generate_metadata(id, 1);
 
     snprintf(cmd, sizeof(cmd), "%s --update &", launcher_path);
@@ -390,6 +112,7 @@ void create_note(const char *in_keywords) {
         exit(0);
     }
 }
+
 void update_metadata(int id) {
     if (!notes[id].active) return;
 
@@ -439,8 +162,9 @@ void update_metadata(int id) {
         printf("%sNo link changes detected. Skipping neighbor updates.%s\n", GREEN, NC);
     }
 }
-void audit_notes() {
-    load_graph();
+
+void audit_notes(void) {
+    load_memory();
     printf("%sVerifying links, missing PDFs, and scanning for TODOs...%s\n", BLUE, NC);
     int broken = 0, todos = 0, desync = 0, missing_pdfs = 0;
 
@@ -505,7 +229,8 @@ void audit_notes() {
     if (todos == 0) printf("%sTODOs: None found!%s\n", GREEN, NC);
     else printf("%sTODOs: You have %d pending TODO(s).%s\n", YELLOW, todos, NC);
 }
-void rebuild_notes() {
+
+void rebuild_notes(void) {
     int total_notes = 0;
     for (int i = 0; i < MAX_NOTES; i++) { if (notes[i].active) total_notes++; }
 
@@ -577,9 +302,10 @@ void rebuild_notes() {
     }
 
     printf("\r\033[2K%sRebuild complete. Processed %d notes, %d were recompiled.%s\n", GREEN, total_processed, total_rebuilt, NC);
-    load_graph();
+    load_memory();
 }
-void clean_attic() {
+
+void clean_attic(void) {
     printf("%sCleaning auxiliary and files...%s\n", BLUE, NC);
     int cleaned_count = 0;
 
@@ -641,91 +367,5 @@ void clean_attic() {
     }
 
     printf("%sCleaned files in %d note directories.%s\n", GREEN, cleaned_count, NC);
-    load_graph();
-}
-
-// Menus
-void prompt_exit() {
-    printf("\n%sPress [Y] to return, exiting otherwise...%s ", CYAN, NC);
-    fflush(stdout);
-    int c = getch();
-
-    if (c == 'Y' || c == 'y' || c == '\n') { system("clear"); return; }
-    system("aerospace close --quit-if-last-window 2>/dev/null");
-    exit(0);
-}
-void interactive_menu() {
-    while (1) {
-        printf("%sAttic operations:%s\n", CYAN, NC);
-        printf("    %s(n): New note%s\n", CYAN, NC);
-        printf("    %s(a): Audit notes%s\n", CYAN, NC);
-        printf("    %s(r): Rebuild notes%s\n", CYAN, NC);
-        printf("    %s(c): Clean attic%s\n", CYAN, NC);
-
-        printf("%sSelect operation: [n, a, r, c] %s", CYAN, NC);
-        fflush(stdout);
-        int cmdNum = getch();
-
-        if (cmdNum == 'n' || cmdNum == 'a' || cmdNum == 'r' || cmdNum == 'c') {
-            printf("%c\n\n", cmdNum);
-            switch (cmdNum) {
-                case 'n': create_note(""); break;
-                case 'a': audit_notes(); break;
-                case 'r': rebuild_notes(); break;
-                case 'c': clean_attic(); break;
-            }
-            prompt_exit();
-        } else if (cmdNum == 'q') {
-            system("aerospace close --quit-if-last-window 2>/dev/null");
-            exit(0);
-        } else {
-            system("clear");
-        }
-    }
-}
-int main(int argc, char **argv) {
-    const char *home = getenv("HOME");
-    const char *user = getenv("USER");
-    if (!home) home = "";
-    if (!user) user = "";
-
-    const char *current_path = getenv("PATH");
-    char new_path[8192];
-    snprintf(new_path, sizeof(new_path),
-        "/run/current-system/sw/bin:/etc/profiles/per-user/%s/bin:%s/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/opt/homebrew/bin:/usr/local/bin:%s",
-        user, home, current_path ? current_path : "");
-    setenv("PATH", new_path, 1);
-
-    snprintf(attic_dir, sizeof(attic_dir), "%s/iCloud/Projects/_attic/notes", home);
-    snprintf(template_file, sizeof(template_file), "%s/iCloud/Dotfiles/modules/scripts/LaTeXTemplate/files/attic.tex", home);
-    snprintf(launcher_path, sizeof(launcher_path), "/etc/profiles/per-user/%s/bin/launcher", user);
-
-    load_graph();
-
-    if (argc > 1) {
-        int opt;
-        char *keywords = NULL;
-        int target_id = -1;
-
-        while ((opt = getopt(argc, argv, "ek:nu:m:arc")) != -1) {
-            switch (opt) {
-                case 'e': create_note("EMPTY_KEYWORDS"); return 0;
-                case 'k': create_note(optarg); return 0;
-                case 'n': create_note(""); return 0;
-                case 'm': generate_metadata(atoi(optarg), 0); return 0;
-                case 'u': update_metadata(atoi(optarg)); return 0;
-                case 'a': audit_notes(); return 0;
-                case 'r': rebuild_notes(); return 0;
-                case 'c': clean_attic(); return 0;
-                default:
-                    fprintf(stderr, "Usage: %s [-n] [-e] [-k keywords] [-m ID] [-u ID] [-a] [-r] [-c]\n", argv[0]);
-                    return 1;
-            }
-        }
-    } else {
-        is_interactive = 1;
-        interactive_menu();
-    }
-
-    return 0;
+    load_memory();
 }

@@ -31,7 +31,7 @@
 
     attic = pkgs.runCommandCC "attic" {} ''
         mkdir -p $out/bin
-        $CC -O3 ${scriptsDir}/attic.c -o $out/bin/attic
+        $CC -O3 ${scriptsDir}/attic/*.c -o $out/bin/attic
     '';
 in
 {
