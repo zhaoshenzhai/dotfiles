@@ -696,7 +696,7 @@ int main(int argc, char **argv) {
         user, home, current_path ? current_path : "");
     setenv("PATH", new_path, 1);
 
-    snprintf(attic_dir, sizeof(attic_dir), "%s/iCloud/Projects/_attic", home);
+    snprintf(attic_dir, sizeof(attic_dir), "%s/iCloud/Projects/_attic/notes", home);
     snprintf(template_file, sizeof(template_file), "%s/iCloud/Dotfiles/modules/scripts/LaTeXTemplate/files/attic.tex", home);
     snprintf(launcher_path, sizeof(launcher_path), "/etc/profiles/per-user/%s/bin/launcher", user);
 

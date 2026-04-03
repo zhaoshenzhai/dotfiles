@@ -1,7 +1,7 @@
 local cmp = require('cmp')
 
 local attic_cache = {}
-local attic_dir = vim.fn.expand('~/iCloud/Projects/_attic')
+local attic_dir = vim.fn.expand('~/iCloud/Projects/_attic/notes')
 local attic_group = vim.api.nvim_create_augroup("AtticSetup", { clear = true })
 local in_aref_mode = false
 
@@ -183,7 +183,7 @@ vim.keymap.set('n', '<C-l>', function()
     local id = get_id_under_cursor()
 
     if id then
-        local target_tex = vim.fn.expand('~/iCloud/Projects/_attic/') .. id .. '/' .. id .. '.tex'
+        local target_tex = vim.fn.expand('~/iCloud/Projects/_attic/notes/') .. id .. '/' .. id .. '.tex'
         if vim.fn.filereadable(target_tex) == 1 then
             vim.cmd("normal! m'")
             vim.fn.jobstart({ "launcher", target_tex })
@@ -220,8 +220,8 @@ vim.api.nvim_create_autocmd("FileType", {
                 vim.cmd('normal! gv"zp')
                 vim.cmd('write')
 
-                local target_tex = vim.fn.expand('~/iCloud/Projects/_attic/') .. id .. '/' .. id .. '.tex'
-                local target_key = vim.fn.expand('~/iCloud/Projects/_attic/') .. id .. '/' .. id .. '.key'
+                local target_tex = vim.fn.expand('~/iCloud/Projects/_attic/notes/') .. id .. '/' .. id .. '.tex'
+                local target_key = vim.fn.expand('~/iCloud/Projects/_attic/notes/') .. id .. '/' .. id .. '.key'
 
                 vim.api.nvim_create_autocmd("BufWinLeave", {
                     pattern = "*/" .. id .. ".key",

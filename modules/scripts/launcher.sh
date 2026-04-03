@@ -24,10 +24,10 @@ init() {
 format() {
     local file_path="$1"
 
-    if [[ "$file_path" =~ Projects/_attic/([0-9]{5})/([0-9]{5}).pdf ]]; then
+    if [[ "$file_path" =~ Projects/_attic/notes/([0-9]{5})/([0-9]{5}).pdf ]]; then
         local id="${BASH_REMATCH[1]}"
 
-        local keywordsPath="$BASE_DIR/Projects/_attic/$id/$id.key"
+        local keywordsPath="$BASE_DIR/Projects/_attic/notes/$id/$id.key"
         if [ -f "$keywordsPath" ]; then
             local keywords
             keywords=$(cat "$keywordsPath" 2>/dev/null)
@@ -47,7 +47,7 @@ updateCache() {
             "Documents" "Dotfiles" "Projects"
         fd --type f --hidden --no-ignore --extension pdf --exclude .git --exclude '*.old' . \
             "Documents" "Dotfiles" "Projects"
-    } | grep -vE '^Projects/_attic/.*\.(tex|key|dat)$' | awk '!seen[$0]++' | while read -r line; do
+    } | grep -vE '^Projects/_attic/notes/.*\.(tex|key|dat)$' | awk '!seen[$0]++' | while read -r line; do
         format "$line"
     done > "$CACHE_FILE.tmp" 2>/dev/null
     mv "$CACHE_FILE.tmp" "$CACHE_FILE"
@@ -81,7 +81,7 @@ selectFiles() {
 updateRecentFiles() {
     selected="$1"
 
-    if echo "$selected" | grep -qE '^Projects/_attic/.*\.(tex|key|dat)'; then
+    if echo "$selected" | grep -qE '^Projects/_attic/notes/.*\.(tex|key|dat)'; then
         return
     fi
 
