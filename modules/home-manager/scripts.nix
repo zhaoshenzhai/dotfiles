@@ -33,9 +33,11 @@
     buildInputs = with pkgs; [
         raylib
         cjson
+        raygui
     ];
     } ''
         mkdir -p $out/bin
+
         $CC -O3 ${scriptsDir}/attic/main.c ${scriptsDir}/attic/commands.c \
             ${scriptsDir}/attic/memory.c ${scriptsDir}/attic/utils.c \
             -o $out/bin/attic
