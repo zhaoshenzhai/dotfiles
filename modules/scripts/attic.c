@@ -119,25 +119,23 @@ void format_links(int *ids, int count, char *out_buf) {
     }
 }
 int is_compiling(int id) {
-    char target[32];
-    snprintf(target, sizeof(target), "%05d.tex", id);
-
     int n_procs = proc_listpids(PROC_ALL_PIDS, 0, NULL, 0);
     if (n_procs <= 0) return 0;
 
-    pid_t pids[n_procs];
-    n_procs = proc_listpids(PROC_ALL_PIDS, 0, pids, sizeof(pids));
+    pid_t *pids = (pid_t*)safe_malloc(n_procs * sizeof(pid_t));
+    n_procs = proc_listpids(PROC_ALL_PIDS, 0, pids, n_procs * sizeof(pid_t));
 
     for (int i = 0; i < n_procs; i++) {
         if (pids[i] <= 0) continue;
         char path_buf[PROC_PIDPATHINFO_MAXSIZE];
-
         if (proc_pidpath(pids[i], path_buf, sizeof(path_buf)) > 0) {
             if (strstr(path_buf, "latexmk") || strstr(path_buf, "pdflatex")) {
+                free(pids);
                 return 1;
             }
         }
     }
+    free(pids);
     return 0;
 }
 void compile_note_async(int id) {
@@ -323,8 +321,7 @@ int generate_metadata(int id, int update_modified) {
 
     FILE *fmeta = fopen(dat_path, "w");
     if (!fmeta) {
-        fprintf(stderr, "%sError: Could not open %s for writing: %s%s\n",
-                RED, dat_path, strerror(errno), NC);
+        fprintf(stderr, "%sError: Could not open %s for writing: %s%s\n", RED, dat_path, strerror(errno), NC);
         return 1;
     }
     fputs(generated, fmeta);
@@ -451,8 +448,7 @@ void audit_notes() {
         if (!notes[i].active) continue;
 
         if (!notes[i].has_pdf) {
-            printf("%s[MISSING PDF]%s Note %05d[%s] has no compiled PDF.\n",
-                   RED, NC, i, notes[i].keys);
+            printf("%s[MISSING PDF]%s Note %05d[%s] has no compiled PDF.\n", RED, NC, i, notes[i].keys);
             missing_pdfs++;
         }
 
@@ -468,15 +464,13 @@ void audit_notes() {
             }
 
             if (err[0] != '\0') {
-                printf("%s[BROKEN LINK]%s ID %05d (Missing %s) referenced in %05d[%s]:%d\n",
-                       RED, NC, target, err, i, notes[i].keys, lno);
+                printf("%s[BROKEN LINK]%s ID %05d (Missing %s) referenced in %05d[%s]:%d\n", RED, NC, target, err, i, notes[i].keys, lno);
                 broken++;
             }
         }
 
         for (int j = 0; j < notes[i].todo_count; j++) {
-            printf("%s[TODO]%s %05d[%s]:%d -> %s\n",
-                   YELLOW, NC, i, notes[i].keys, notes[i].todos[j].line_no, notes[i].todos[j].text);
+            printf("%s[TODO]%s %05d[%s]:%d -> %s\n", YELLOW, NC, i, notes[i].keys, notes[i].todos[j].line_no, notes[i].todos[j].text);
             todos++;
         }
 
@@ -672,23 +666,14 @@ void interactive_menu() {
         fflush(stdout);
         int cmdNum = getch();
 
-        if (cmdNum == 'n' || cmdNum == 'a' || cmdNum == 'r') {
+        if (cmdNum == 'n' || cmdNum == 'a' || cmdNum == 'r' || cmdNum == 'c') {
             printf("%c\n\n", cmdNum);
             switch (cmdNum) {
                 case 'n': create_note(""); break;
                 case 'a': audit_notes(); break;
                 case 'r': rebuild_notes(); break;
+                case 'c': clean_attic(); break;
             }
-            prompt_exit();
-        } else if (cmdNum == 'c') {
-            printf("%c\n\n", cmdNum);
-            printf("%sAre you sure you want to delete all auxiliary files? [y/N] %s", RED, NC);
-            fflush(stdout);
-
-            int confirm = getch();
-            printf("%c\n", confirm);
-
-            if (confirm == 'y' || confirm == 'Y') { clean_attic(); } else { printf("%sClean aborted.%s\n", YELLOW, NC); }
             prompt_exit();
         } else if (cmdNum == 'q') {
             system("aerospace close --quit-if-last-window 2>/dev/null");
