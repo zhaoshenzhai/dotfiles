@@ -42,8 +42,7 @@
             ${scriptsDir}/attic/memory.c ${scriptsDir}/attic/utils.c \
             -o $out/bin/attic
 
-        $CC -O3 ${scriptsDir}/attic/graph.c \
-            -lraylib -lcjson \
+        $CC -O3 ${scriptsDir}/attic/graph.c -lraylib -lcjson \
             -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL \
             -o $out/bin/attic-graph
     '';

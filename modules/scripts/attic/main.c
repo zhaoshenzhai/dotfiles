@@ -32,7 +32,7 @@ void interactive_menu() {
                 case 'c': clean_attic(); break;
                 case 'g': launch_graph_view(); break;
             }
-            if (cmdNum != 'g') prompt_exit();
+            prompt_exit();
         } else if (cmdNum == 'q') {
             system("aerospace close --quit-if-last-window 2>/dev/null");
             exit(0);

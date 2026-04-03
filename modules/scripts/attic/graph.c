@@ -24,19 +24,16 @@ Edge graphEdges[MAX_EDGES];
 int nodeCount = 0;
 int edgeCount = 0;
 
-float k = 20.0f;
-float repulsion = 3000.0f;
-float damping = 0.9f;
-float centerGravity = 0.002f;
-int framesCounter = 0;
+float k = 10.0f;
+float repulsion = 1000.0f;
+float damping = 0.8f;
+float centerGravity = 0.004f;
 
-// Proximity Radii for Labels
-const float innerRadius = 60.0f;  // Show full keywords
-const float outerRadius = 150.0f; // Show ID only
-
-// UI State
 bool showGui = false;
+int framesCounter = 0;
 const int guiWidth = 300;
+const float innerRadius = 80.0f;
+const float outerRadius = 250.0f;
 
 void OpenNote(const char* id) {
     char command[1024];
@@ -45,9 +42,8 @@ void OpenNote(const char* id) {
 }
 
 int FindNodeIndex(const char* id) {
-    for (int i = 0; i < nodeCount; i++) {
-        if (strcmp(graphNodes[i].id, id) == 0) return i;
-    }
+    if (!id) return -1;
+    for (int i = 0; i < nodeCount; i++) if (strcmp(graphNodes[i].id, id) == 0) return i;
     return -1;
 }
 
@@ -60,25 +56,25 @@ void LoadGraphData(const char* filename, int screenWidth, int screenHeight) {
     cJSON* nodesArray = cJSON_GetObjectItemCaseSensitive(json, "nodes");
     cJSON* nodeItem = NULL;
     nodeCount = 0;
-
     cJSON_ArrayForEach(nodeItem, nodesArray) {
         if (nodeCount >= MAX_NODES) break;
-        cJSON* id = cJSON_GetObjectItemCaseSensitive(nodeItem, "id");
-        cJSON* label = cJSON_GetObjectItemCaseSensitive(nodeItem, "label");
-        cJSON* has_pdf = cJSON_GetObjectItemCaseSensitive(nodeItem, "has_pdf");
 
-        strncpy(graphNodes[nodeCount].id, id->valuestring, 31);
-        strncpy(graphNodes[nodeCount].label, label->valuestring, 255);
-        graphNodes[nodeCount].has_pdf = cJSON_IsTrue(has_pdf);
+        // --- SAFE PARSING ---
+        cJSON* idObj = cJSON_GetObjectItemCaseSensitive(nodeItem, "id");
+        cJSON* labelObj = cJSON_GetObjectItemCaseSensitive(nodeItem, "label");
+        cJSON* hasPdfObj = cJSON_GetObjectItemCaseSensitive(nodeItem, "has_pdf");
 
-        float angle = (float)nodeCount * (2.0f * PI / 50.0f);
-        graphNodes[nodeCount].position = (Vector2){
-            screenWidth / 2.0f + cosf(angle) * 50.0f,
-            screenHeight / 2.0f + sinf(angle) * 50.0f
-        };
-        graphNodes[nodeCount].velocity = (Vector2){ 0, 0 };
-        graphNodes[nodeCount].radius = 8.0f;
-        nodeCount++;
+        if (cJSON_IsString(idObj) && cJSON_IsString(labelObj)) {
+            strncpy(graphNodes[nodeCount].id, idObj->valuestring, 31);
+            strncpy(graphNodes[nodeCount].label, labelObj->valuestring, 255);
+            graphNodes[nodeCount].has_pdf = cJSON_IsTrue(hasPdfObj);
+
+            float angle = (float)nodeCount * (2.0f * PI / 50.0f);
+            graphNodes[nodeCount].position = (Vector2){ screenWidth/2.0f + cosf(angle)*50.0f, screenHeight/2.0f + sinf(angle)*50.0f };
+            graphNodes[nodeCount].velocity = (Vector2){ 0, 0 };
+            graphNodes[nodeCount].radius = 8.0f;
+            nodeCount++;
+        }
     }
 
     cJSON* edgesArray = cJSON_GetObjectItemCaseSensitive(json, "edges");
@@ -86,16 +82,20 @@ void LoadGraphData(const char* filename, int screenWidth, int screenHeight) {
     edgeCount = 0;
     cJSON_ArrayForEach(edgeItem, edgesArray) {
         if (edgeCount >= MAX_EDGES) break;
-        int s_idx = FindNodeIndex(cJSON_GetObjectItemCaseSensitive(edgeItem, "source")->valuestring);
-        int t_idx = FindNodeIndex(cJSON_GetObjectItemCaseSensitive(edgeItem, "target")->valuestring);
-        if (s_idx != -1 && t_idx != -1) {
-            graphEdges[edgeCount].source_idx = s_idx;
-            graphEdges[edgeCount].target_idx = t_idx;
-            edgeCount++;
+        cJSON* srcObj = cJSON_GetObjectItemCaseSensitive(edgeItem, "source");
+        cJSON* tgtObj = cJSON_GetObjectItemCaseSensitive(edgeItem, "target");
+
+        if (cJSON_IsString(srcObj) && cJSON_IsString(tgtObj)) {
+            int s_idx = FindNodeIndex(srcObj->valuestring);
+            int t_idx = FindNodeIndex(tgtObj->valuestring);
+            if (s_idx != -1 && t_idx != -1) {
+                graphEdges[edgeCount].source_idx = s_idx;
+                graphEdges[edgeCount].target_idx = t_idx;
+                edgeCount++;
+            }
         }
     }
-    cJSON_Delete(json);
-    UnloadFileText(jsonString);
+    cJSON_Delete(json); UnloadFileText(jsonString);
 }
 
 void UpdatePhysics(int screenWidth, int screenHeight, int draggedIdx) {
@@ -103,33 +103,24 @@ void UpdatePhysics(int screenWidth, int screenHeight, int draggedIdx) {
     for (int i = 0; i < nodeCount; i++) {
         for (int j = i + 1; j < nodeCount; j++) {
             Vector2 d = Vector2Subtract(graphNodes[i].position, graphNodes[j].position);
-            float distSq = Vector2LengthSqr(d);
-            if (distSq < 1.0f) distSq = 1.0f;
-            float force = repulsion / distSq;
+            float force = repulsion / fmaxf(1.0f, Vector2LengthSqr(d));
             Vector2 dir = Vector2Scale(Vector2Normalize(d), force);
             graphNodes[i].velocity = Vector2Add(graphNodes[i].velocity, dir);
             graphNodes[j].velocity = Vector2Subtract(graphNodes[j].velocity, dir);
         }
     }
     for (int i = 0; i < edgeCount; i++) {
-        Node *s = &graphNodes[graphEdges[i].source_idx];
-        Node *t = &graphNodes[graphEdges[i].target_idx];
+        Node *s = &graphNodes[graphEdges[i].source_idx]; Node *t = &graphNodes[graphEdges[i].target_idx];
         Vector2 d = Vector2Subtract(t->position, s->position);
-        float dist = Vector2Length(d);
-        if (dist < 1.0f) dist = 1.0f;
-        float force = (dist - k) * 0.05f;
-        Vector2 dir = Vector2Scale(Vector2Normalize(d), force);
-        s->velocity = Vector2Add(s->velocity, dir);
-        t->velocity = Vector2Subtract(t->velocity, dir);
+        Vector2 dir = Vector2Scale(Vector2Normalize(d), (Vector2Length(d) - k) * 0.05f);
+        s->velocity = Vector2Add(s->velocity, dir); t->velocity = Vector2Subtract(t->velocity, dir);
     }
     float centerX = showGui ? (screenWidth + guiWidth) / 2.0f : screenWidth / 2.0f;
     Vector2 center = { centerX, screenHeight / 2.0f };
     for (int i = 0; i < nodeCount; i++) {
-        // Skip integration for dragged node to follow cursor perfectly
         if (i == draggedIdx) continue;
-
-        Vector2 gravityForce = Vector2Scale(Vector2Subtract(center, graphNodes[i].position), centerGravity);
-        graphNodes[i].velocity = Vector2Add(graphNodes[i].velocity, gravityForce);
+        Vector2 grav = Vector2Scale(Vector2Subtract(center, graphNodes[i].position), centerGravity);
+        graphNodes[i].velocity = Vector2Add(graphNodes[i].velocity, grav);
         graphNodes[i].position = Vector2Add(graphNodes[i].position, graphNodes[i].velocity);
         graphNodes[i].velocity = Vector2Scale(graphNodes[i].velocity, curDamping);
     }
@@ -137,79 +128,48 @@ void UpdatePhysics(int screenWidth, int screenHeight, int draggedIdx) {
 
 int main(void) {
     const int screenWidth = 1200;
-    const int screenHeight = 800;
+    const int screenHeight = 840;
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_TRANSPARENT);
-    InitWindow(screenWidth, screenHeight, "The Attic - Knowledge Graph");
+    InitWindow(screenWidth, screenHeight, "attic");
+    SetWindowPosition(525, 250);
     SetTargetFPS(60);
 
-    Camera2D camera = { 0 };
-    camera.target = (Vector2){ screenWidth / 2.0f, screenHeight / 2.0f };
-    camera.offset = (Vector2){ screenWidth / 2.0f, screenHeight / 2.0f };
-    camera.zoom = 1.0f;
-
+    Camera2D camera = { .target = {screenWidth/2.0f, screenHeight/2.0f}, .offset = {screenWidth/2.0f, screenHeight/2.0f}, .zoom = 1.0f };
     char fontPath[512];
     snprintf(fontPath, sizeof(fontPath), "%s/Library/Fonts/Courier Prime.ttf", getenv("HOME"));
     Font font = LoadFontEx(fontPath, 32, 0, 250);
 
     LoadGraphData("graph.json", screenWidth, screenHeight);
-
-    int draggedNodeIndex = -1;
-    bool isPanning = false;
+    int draggedNodeIndex = -1; bool isPanning = false;
 
     while (!WindowShouldClose()) {
         framesCounter++;
         Vector2 mousePos = GetMousePosition();
         Vector2 worldMouse = GetScreenToWorld2D(mousePos, camera);
 
+        if (IsKeyPressed(KEY_Q)) break;
+
         if (IsKeyPressed(KEY_TAB)) showGui = !showGui;
-
-        // Vim Panning
         float moveStep = 15.0f / camera.zoom;
-        if (IsKeyDown(KEY_H)) camera.target.x -= moveStep;
-        if (IsKeyDown(KEY_L)) camera.target.x += moveStep;
-        if (IsKeyDown(KEY_K)) camera.target.y -= moveStep;
-        if (IsKeyDown(KEY_J)) camera.target.y += moveStep;
+        if (IsKeyDown(KEY_H)) camera.target.x -= moveStep; if (IsKeyDown(KEY_L)) camera.target.x += moveStep;
+        if (IsKeyDown(KEY_K)) camera.target.y -= moveStep; if (IsKeyDown(KEY_J)) camera.target.y += moveStep;
 
-        // Zooming
         float wheel = GetMouseWheelMove();
-        if (wheel != 0) {
-            camera.target = worldMouse;
-            camera.offset = mousePos;
-            camera.zoom += wheel * 0.1f;
-            if (camera.zoom < 0.1f) camera.zoom = 0.1f;
-        }
+        if (wheel != 0) { camera.target = worldMouse; camera.offset = mousePos; camera.zoom = fmaxf(0.1f, camera.zoom + wheel * 0.1f); }
 
-        bool mouseInGui = showGui && (mousePos.x < guiWidth);
-
-        if (!mouseInGui) {
+        if (!(showGui && mousePos.x < guiWidth)) {
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                int hitIndex = -1;
-                for (int i = 0; i < nodeCount; i++) {
-                    if (CheckCollisionPointCircle(worldMouse, graphNodes[i].position, graphNodes[i].radius)) {
-                        hitIndex = i; break;
-                    }
-                }
-                if (hitIndex != -1) {
-                    if (graphNodes[hitIndex].has_pdf) OpenNote(graphNodes[hitIndex].id);
-                    draggedNodeIndex = hitIndex;
-                } else isPanning = true;
+                int hit = -1;
+                for (int i = 0; i < nodeCount; i++) if (CheckCollisionPointCircle(worldMouse, graphNodes[i].position, graphNodes[i].radius)) { hit = i; break; }
+                if (hit != -1) { if (graphNodes[hit].has_pdf) OpenNote(graphNodes[hit].id); draggedNodeIndex = hit; }
+                else isPanning = true;
             }
-
-            if (isPanning || IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
-                Vector2 delta = GetMouseDelta();
-                camera.target = Vector2Subtract(camera.target, Vector2Scale(delta, 1.0f / camera.zoom));
-            }
+            if (isPanning || IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) camera.target = Vector2Subtract(camera.target, Vector2Scale(GetMouseDelta(), 1.0f / camera.zoom));
         }
-
-        if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
-            draggedNodeIndex = -1;
-            isPanning = false;
-        }
-
+        if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) { draggedNodeIndex = -1; isPanning = false; }
         if (draggedNodeIndex != -1) {
             graphNodes[draggedNodeIndex].position = worldMouse;
-            // Capture velocity for momentum on release
             graphNodes[draggedNodeIndex].velocity = Vector2Scale(GetMouseDelta(), 1.0f / camera.zoom);
         }
 
@@ -217,56 +177,32 @@ int main(void) {
 
         BeginDrawing();
             ClearBackground(COL_BG);
-
             BeginMode2D(camera);
-                for (int i = 0; i < edgeCount; i++) {
-                    DrawLineV(graphNodes[graphEdges[i].source_idx].position, graphNodes[graphEdges[i].target_idx].position, COL_GRAY);
-                }
+                for (int i = 0; i < edgeCount; i++) DrawLineV(graphNodes[graphEdges[i].source_idx].position, graphNodes[graphEdges[i].target_idx].position, COL_GRAY);
                 for (int i = 0; i < nodeCount; i++) {
-                    Color nodeColor = graphNodes[i].has_pdf ? COL_BLUE : COL_GRAY;
-                    DrawCircleV(graphNodes[i].position, graphNodes[i].radius, nodeColor);
-
-                    // --- RADIUS-BASED LABEL RENDERING ---
-                    float dist = Vector2Distance(worldMouse, graphNodes[i].position);
-                    char* textToDraw = NULL;
-
-                    if (dist < innerRadius) {
-                        textToDraw = graphNodes[i].label; // Show full keywords
-                    } else if (dist < outerRadius) {
-                        textToDraw = graphNodes[i].id;    // Show ID only
-                    }
-
-                    if (textToDraw) {
-                        Vector2 textSize = MeasureTextEx(font, textToDraw, 12, 1);
-                        DrawTextEx(font, textToDraw,
-                                   (Vector2){graphNodes[i].position.x - textSize.x/2,
-                                             graphNodes[i].position.y - graphNodes[i].radius - 15},
-                                   12, 1, COL_FG);
+                    DrawCircleV(graphNodes[i].position, graphNodes[i].radius, graphNodes[i].has_pdf ? COL_BLUE : COL_GRAY);
+                    float d = Vector2Distance(worldMouse, graphNodes[i].position);
+                    char* txt = (d < innerRadius) ? graphNodes[i].label : (d < outerRadius ? graphNodes[i].id : NULL);
+                    if (txt) {
+                        Vector2 sz = MeasureTextEx(font, txt, 12, 1);
+                        DrawTextEx(font, txt, (Vector2){graphNodes[i].position.x - sz.x/2, graphNodes[i].position.y - 23}, 12, 1, COL_FG);
                     }
                 }
             EndMode2D();
-
             if (GuiButton((Rectangle){ 10, 10, 30, 30 }, "#141#")) showGui = !showGui;
-
             if (showGui) {
                 DrawRectangle(0, 0, guiWidth, GetScreenHeight(), Fade(COL_BG, 0.95f));
                 DrawLine(guiWidth, 0, guiWidth, GetScreenHeight(), COL_GRAY);
                 GuiGroupBox((Rectangle){ 10, 50, guiWidth - 20, 220 }, "PHYSICS ENGINE");
-                GuiSlider((Rectangle){ 120, 80, 160, 20 }, "Edge Length", TextFormat("%2.0f", k), &k, 2, 50);
-                GuiSlider((Rectangle){ 120, 120, 160, 20 }, "Repulsion", TextFormat("%2.0f", repulsion), &repulsion, 500, 10000);
-                GuiSlider((Rectangle){ 120, 160, 160, 20 }, "Damping", TextFormat("%2.2f", damping), &damping, 0.1f, 0.95f);
+                GuiSlider((Rectangle){ 120, 80, 160, 20 }, "Edge Length", TextFormat("%2.0f", k), &k, 2, 20);
+                GuiSlider((Rectangle){ 120, 120, 160, 20 }, "Repulsion", TextFormat("%2.0f", repulsion), &repulsion, 500, 3000);
                 GuiSlider((Rectangle){ 120, 200, 160, 20 }, "Gravity", TextFormat("%2.4f", centerGravity), &centerGravity, 0.0001f, 0.01f);
-
                 if (GuiButton((Rectangle){ 20, 235, guiWidth - 40, 25 }, "Recenter")) {
-                    for(int i = 0; i < nodeCount; i++) {
-                        graphNodes[i].position = (Vector2){ (GetScreenWidth() + guiWidth) / 2.0f, GetScreenHeight() / 2.0f };
-                    }
+                    for(int i=0; i<nodeCount; i++) graphNodes[i].position = (Vector2){(GetScreenWidth()+guiWidth)/2.0f, GetScreenHeight()/2.0f};
                     framesCounter = 0;
                 }
             }
         EndDrawing();
     }
-    UnloadFont(font);
-    CloseWindow();
-    return 0;
+    UnloadFont(font); CloseWindow(); return 0;
 }
