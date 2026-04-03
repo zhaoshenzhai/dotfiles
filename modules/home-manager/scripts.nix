@@ -28,6 +28,11 @@
         checkPhase = "";
         text = builtins.readFile "${scriptsDir}/skimUtils.sh";
     };
+
+    attic = pkgs.runCommandCC "attic" {} ''
+        mkdir -p $out/bin
+        $CC -O3 ${scriptsDir}/attic.c -o $out/bin/attic
+    '';
 in
 {
     environment.systemPackages = [
@@ -35,5 +40,6 @@ in
         newLatex
         skimUtils
         launcher
+        attic
     ];
 }

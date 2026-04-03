@@ -120,7 +120,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     pattern = "*/_attic/*/*",
     callback = function()
         local id = vim.fn.expand('%:p:h:t')
-        local script_path = vim.fn.expand('~/iCloud/Dotfiles/modules/scripts/attic')
+        local script_path = 'attic'
         vim.fn.jobstart({script_path, "-u", id}, { detach = true })
 
         if vim.fn.expand('%:e') == "key" then
@@ -208,7 +208,7 @@ vim.api.nvim_create_autocmd("FileType", {
             local text = vim.fn.getreg('z')
             local clean_text = text:gsub("\n", " "):gsub("\r", "")
 
-            local script_path = vim.fn.expand('~/iCloud/Dotfiles/modules/scripts/attic')
+            local script_path = 'attic'
             local cmd = string.format("'%s' -e", script_path)
             local output = vim.fn.system(cmd)
 
