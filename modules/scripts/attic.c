@@ -95,14 +95,19 @@ void compile_note_async(int id) {
     if (is_compiling(id)) return;
     pid_t pid = fork();
     if (pid == 0) {
+        setsid();
+
         char dir_path[1024];
         snprintf(dir_path, sizeof(dir_path), "%s/%05d", attic_dir, id);
         if (chdir(dir_path) != 0) exit(1);
         char tex_file[32];
         snprintf(tex_file, sizeof(tex_file), "%05d.tex", id);
+
+        freopen("/dev/null", "r", stdin);
         freopen("/dev/null", "w", stdout);
         freopen("/dev/null", "w", stderr);
-        execlp("latexmk", "latexmk", "-pdf", tex_file, NULL);
+
+        execlp("latexmk", "latexmk", "-pdf", "-pvc-", "-interaction=nonstopmode", tex_file, NULL);
         exit(1);
     }
 }
@@ -249,7 +254,6 @@ int generate_metadata(int id, int update_modified) {
     char dat_path[1024];
     snprintf(dat_path, sizeof(dat_path), "%s/%05d/%05d.dat", attic_dir, id, id);
 
-    // Compare existing to avoid touching
     FILE *fexist = fopen(dat_path, "r");
     if (fexist) {
         fseek(fexist, 0, SEEK_END);
@@ -307,14 +311,12 @@ void create_note(const char *in_keywords) {
         }
     }
 
-    // Process keywords format (replace commas, strip double spaces)
     char clean_keys[512] = "";
     int j = 0;
     for(int i = 0; keywords[i] != '\0'; i++) {
         if(keywords[i] == ',') { clean_keys[j++] = ','; clean_keys[j++] = ' '; }
         else { clean_keys[j++] = keywords[i]; }
     }
-    // Lazy squeeze spaces
     char final_keys[512] = "";
     int k = 0;
     for(int i = 0; clean_keys[i] != '\0'; i++) {
@@ -336,7 +338,7 @@ void create_note(const char *in_keywords) {
     if (is_interactive) {
         snprintf(cmd, sizeof(cmd), "nohup %s \"%s/%05d/%05d.tex\" >/dev/null 2>&1 &", launcher_path, attic_dir, id, id);
         system(cmd);
-        usleep(100000); // sleep 0.1
+        usleep(100000);
         exit(0);
     }
 }
@@ -363,8 +365,6 @@ void update_metadata(int id) {
 
     generate_metadata(id, 1);
     compile_note_async(id);
-
-    // Refresh graph to get NEW outbound links from the edited .tex file
     load_graph();
 
     int combined_refs[2000];
@@ -383,23 +383,19 @@ void update_metadata(int id) {
     }
 }
 void audit_notes() {
-    // Refresh the graph to catch any live file deletions or edits
     load_graph();
-
     printf("%sVerifying links, missing PDFs, and scanning for TODOs...%s\n", BLUE, NC);
     int broken = 0, todos = 0, desync = 0, missing_pdfs = 0;
 
     for (int i = 0; i < MAX_NOTES; i++) {
         if (!notes[i].active) continue;
 
-        // NEW: Check if the note ITSELF is missing a PDF
         if (!notes[i].has_pdf) {
             printf("%s[MISSING PDF]%s Note %05d[%s] has no compiled PDF.\n",
                    RED, NC, i, notes[i].keys);
             missing_pdfs++;
         }
 
-        // Check Outbound Links (Existing)
         for (int j = 0; j < notes[i].out_count; j++) {
             int target = notes[i].out_links[j].target_id;
             int lno = notes[i].out_links[j].line_no;
@@ -418,14 +414,12 @@ void audit_notes() {
             }
         }
 
-        // Print TODOs (Existing)
         for (int j = 0; j < notes[i].todo_count; j++) {
             printf("%s[TODO]%s %05d[%s]:%d -> %s\n",
                    YELLOW, NC, i, notes[i].keys, notes[i].todos[j].line_no, notes[i].todos[j].text);
             todos++;
         }
 
-        // Check Metadata Sync (Existing)
         int temp_out[notes[i].out_count > 0 ? notes[i].out_count : 1];
         for (int j = 0; j < notes[i].out_count; j++) temp_out[j] = notes[i].out_links[j].target_id;
 
@@ -501,7 +495,6 @@ void clean_attic() {
     printf("%sCleaning auxiliary and PDF files from all notes...%s\n", BLUE, NC);
     int cleaned_count = 0;
 
-    // The list of suffixes to look for
     const char *extensions[] = {
         ".aux", ".bbl", ".bcf", ".bcf-SAVE-ERROR", ".bbl-SAVE-ERROR",
         ".blg", ".fdb_latexmk", ".fls", ".log", ".run.xml",
@@ -521,14 +514,12 @@ void clean_attic() {
         int note_cleaned = 0;
         struct dirent *dir;
 
-        // Scan every file in the note's directory
         while ((dir = readdir(d)) != NULL) {
             if (strcmp(dir->d_name, ".") == 0 || strcmp(dir->d_name, "..") == 0) continue;
 
             int len = strlen(dir->d_name);
             int should_delete = 0;
 
-            // Check if the filename ends with any of our target extensions
             for (int j = 0; j < num_exts; j++) {
                 int ext_len = strlen(extensions[j]);
                 if (len >= ext_len && strcmp(dir->d_name + len - ext_len, extensions[j]) == 0) {
@@ -537,7 +528,6 @@ void clean_attic() {
                 }
             }
 
-            // Delete the file if it matches
             if (should_delete) {
                 char filepath[2048];
                 snprintf(filepath, sizeof(filepath), "%s/%s", dir_path, dir->d_name);
@@ -562,25 +552,20 @@ int getch(void) {
     struct termios oldattr, newattr;
     int ch;
 
-    // Get current terminal settings
     tcgetattr(STDIN_FILENO, &oldattr);
     newattr = oldattr;
 
-    // Disable canonical mode (line buffering) and echo
     newattr.c_lflag &= ~(ICANON | ECHO);
     tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
 
-    // Read a single character immediately
     ch = getchar();
-
-    // Restore original terminal settings
     tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
 
     return ch;
 }
 void prompt_exit() {
     printf("\n%sPress [Y] to return, exiting otherwise...%s ", CYAN, NC);
-    fflush(stdout); // Force prompt to display before getch blocks
+    fflush(stdout);
 
     int c = getch();
 
@@ -667,7 +652,7 @@ int main(int argc, char **argv) {
                 case 'u': update_metadata(atoi(optarg)); return 0;
                 case 'a': audit_notes(); return 0;
                 case 'r': rebuild_notes(); return 0;
-                case 'c': clean_attic(); return 0; // Add this line!
+                case 'c': clean_attic(); return 0;
                 default:
                     fprintf(stderr, "Usage: %s [-n] [-e] [-k keywords] [-m ID] [-u ID] [-a] [-r] [-c]\n", argv[0]);
                     return 1;
