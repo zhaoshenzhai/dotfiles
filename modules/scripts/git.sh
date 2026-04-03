@@ -4,7 +4,6 @@ REPOS="
 Courses         /Users/zhao/iCloud/University/Courses
 Dotfiles        /Users/zhao/iCloud/Dotfiles
 Projects        /Users/zhao/iCloud/Projects
-Attic           /Users/zhao/iCloud/Projects/_attic
 Website         /Users/zhao/iCloud/Projects/_web"
 
 REPOS=$(echo "$REPOS" | sed 1d)
@@ -110,9 +109,6 @@ else
             cd /Users/zhao/iCloud/Projects
         ;;
         "4")
-            cd /Users/zhao/iCloud/Projects/_web
-        ;;
-        "5")
             cd /Users/zhao/iCloud/Projects/_web
         ;;
         *)
