@@ -2,7 +2,7 @@ local opts = { buffer = true, silent = true }
 
 vim.keymap.set('n', '<C-S-c>', '<cmd>write<CR><cmd>VimtexCompile<CR>', opts)
 vim.keymap.set('n', '<C-S-v>', '<cmd>write<CR><cmd>VimtexView<CR>', opts)
-vim.keymap.set('n', '<C-S-d>', '<cmd>!rm -f *.aux(N) *.bbl(N) *.bcf(N) *.bcf-SAVE-ERROR(N) *.bbl-SAVE-ERROR(N) *.blg(N) *.fdb_latexmk(N) *.fls(N) *.log(N) *.run.xml(N) *.synctex.gz(N) *.synctex\\(busy\\)(N)<CR><CR>', opts)
+vim.keymap.set('n', '<C-S-d>', '<cmd>!rm -f *.aux(N) *.bbl(N) *.bcf(N) *.bcf-SAVE-ERROR(N) *.bbl-SAVE-ERROR(N) *.blg(N) *.fdb_latexmk(N) *.fls(N) *.log(N) *.xml(N) *.run.xml(N) *.synctex.gz(N) *.synctex\\(busy\\)(N)<CR><CR>', opts)
 
 -- Open student pdf
 vim.keymap.set('n', '<C-S-s>', function()

@@ -142,8 +142,6 @@ void update_metadata(int id) {
     compile_note_async(id);
 
     if (links_changed) {
-        printf("%sLinks changed. Propagating metadata to neighbors...%s\n", YELLOW, NC);
-
         int combined_refs[2000];
         int combined_count = 0;
         for (int i = 0; i < old_count; i++) combined_refs[combined_count++] = old_ids[i];
@@ -158,8 +156,6 @@ void update_metadata(int id) {
                 compile_note_async(ref_id);
             }
         }
-    } else {
-        printf("%sNo link changes detected. Skipping neighbor updates.%s\n", GREEN, NC);
     }
 }
 
@@ -239,9 +235,55 @@ void rebuild_notes(void) {
         return;
     }
 
-    printf("%sChecking modification times and refreshing metadata...%s\n", BLUE, NC);
+    printf("%sRebuilding notes...%s\n", BLUE, NC);
 
-    int running_jobs = 0, total_processed = 0, total_rebuilt = 0;
+    int running_jobs = 0, total_processed = 0, total_rebuilt = 0, total_failed = 0;
+    int failed_ids[MAX_NOTES];
+
+    // We reserve Row 0 for "Skipping" logs so they don't overwrite active workers.
+    int total_lines = 1;
+
+    typedef struct { pid_t pid; int id; int row; } RebuildJob;
+    RebuildJob jobs[MAX_JOBS];
+    for (int i = 0; i < MAX_JOBS; i++) {
+        jobs[i].pid = 0;
+        jobs[i].id = 0;
+        jobs[i].row = -1;
+    }
+
+    #define PROCESS_FINISHED_JOB(p, s) do { \
+        for (int j = 0; j < MAX_JOBS; j++) { \
+            if (jobs[j].pid == (p)) { \
+                char dp[PATH_MAX], bp[PATH_MAX]; \
+                snprintf(dp, sizeof(dp), "%s/%05d/%05d.dat", attic_dir, jobs[j].id, jobs[j].id); \
+                snprintf(bp, sizeof(bp), "%s/%05d/%05d.dat.bak", attic_dir, jobs[j].id, jobs[j].id); \
+                \
+                int diff = (total_lines - 1) - jobs[j].row; \
+                if (diff > 0) printf("\033[%dA", diff); \
+                printf("\r\033[2K"); \
+                \
+                if (WIFEXITED((s)) && WEXITSTATUS((s)) == 0) { \
+                    unlink(bp); \
+                    total_rebuilt++; \
+                    /* On success, the line is cleared but jobs[j].row is NOT reset. */ \
+                    /* The next job assigned to this worker will reuse this exact line. */ \
+                } else { \
+                    printf("%sNote %05d failed to compile!%s", RED, jobs[j].id, NC); \
+                    if (access(bp, F_OK) == 0) rename(bp, dp); else unlink(dp); \
+                    failed_ids[total_failed++] = jobs[j].id; \
+                    jobs[j].row = -1; /* Abandon row so the error stays visible permanently */ \
+                } \
+                \
+                if (diff > 0) printf("\033[%dB", diff); \
+                printf("\r"); \
+                fflush(stdout); \
+                \
+                jobs[j].pid = 0; \
+                running_jobs--; \
+                break; \
+            } \
+        } \
+    } while(0)
 
     for (int i = 0; i < MAX_NOTES; i++) {
         if (!notes[i].active) continue;
@@ -260,22 +302,40 @@ void rebuild_notes(void) {
             }
         }
 
+        if (needs_rebuild) {
+            char dp[PATH_MAX], bp[PATH_MAX];
+            snprintf(dp, sizeof(dp), "%s/%05d/%05d.dat", attic_dir, i, i);
+            snprintf(bp, sizeof(bp), "%s/%05d/%05d.dat.bak", attic_dir, i, i);
+            rename(dp, bp);
+        }
+
         generate_metadata(i, 0);
 
+        int status;
+        pid_t pid;
+        while ((pid = waitpid(-1, &status, WNOHANG)) > 0) {
+            PROCESS_FINISHED_JOB(pid, status);
+        }
+
         if (!needs_rebuild) {
+            // "Skipping" always targets Row 0 to keep the bottom neat
+            int diff = (total_lines - 1) - 0;
+            if (diff > 0) printf("\033[%dA", diff);
             printf("\r\033[2K%sSkipping %05d (up to date) [%d/%d]%s", GREEN, i, total_processed, total_notes, NC);
+            if (diff > 0) printf("\033[%dB", diff);
+            printf("\r");
             fflush(stdout);
             continue;
         }
 
         while (running_jobs >= MAX_JOBS) {
-            int status;
-            if (waitpid(-1, &status, 0) > 0) {
-                running_jobs--;
+            pid = waitpid(-1, &status, 0);
+            if (pid > 0) {
+                PROCESS_FINISHED_JOB(pid, status);
             }
         }
 
-        pid_t pid = fork();
+        pid = fork();
         if (pid == 0) {
             char dir_path[PATH_MAX]; snprintf(dir_path, sizeof(dir_path), "%s/%05d", attic_dir, i);
             if (chdir(dir_path) != 0) exit(1);
@@ -287,21 +347,53 @@ void rebuild_notes(void) {
             execlp("latexmk", "latexmk", "-pdf", "-pvc-", "-interaction=nonstopmode", tex_file, NULL);
             exit(1);
         } else if (pid > 0) {
+            for (int j = 0; j < MAX_JOBS; j++) {
+                if (jobs[j].pid == 0) {
+                    jobs[j].pid = pid;
+                    jobs[j].id = i;
+
+                    if (jobs[j].row == -1) {
+                        if (total_lines > 0) printf("\n");
+                        jobs[j].row = total_lines;
+                        total_lines++;
+                    }
+
+                    int diff = (total_lines - 1) - jobs[j].row;
+                    if (diff > 0) printf("\033[%dA", diff);
+                    printf("\r\033[2K%sRebuilding %05d (%d/%d)...%s", YELLOW, i, total_processed, total_notes, NC);
+                    if (diff > 0) printf("\033[%dB", diff);
+                    printf("\r");
+                    fflush(stdout);
+
+                    break;
+                }
+            }
             running_jobs++;
-            total_rebuilt++;
-            printf("\r\033[2K%sRebuilding %05d (%d/%d)...%s", YELLOW, i, total_processed, total_notes, NC);
-            fflush(stdout);
         }
     }
 
     while (running_jobs > 0) {
         int status;
-        if (waitpid(-1, &status, 0) > 0) {
-            running_jobs--;
+        pid_t pid = waitpid(-1, &status, 0);
+        if (pid > 0) {
+            PROCESS_FINISHED_JOB(pid, status);
         }
     }
 
-    printf("\r\033[2K%sRebuild complete. Processed %d notes, %d were recompiled.%s\n", GREEN, total_processed, total_rebuilt, NC);
+    #undef PROCESS_FINISHED_JOB
+
+    printf("\n\r%sRebuild complete. Processed %d notes, %d were recompiled.%s\n",
+        GREEN, total_processed, total_rebuilt, NC);
+
+    if (total_failed > 0) {
+        printf("%sWarning: %d note(s) failed to compile.%s\n", RED, total_failed, NC);
+        printf("%sFailed IDs: ", RED);
+        for (int i = 0; i < total_failed; i++) {
+            printf("%05d%s", failed_ids[i], (i == total_failed - 1) ? "" : ", ");
+        }
+        printf("%s\n", NC);
+    }
+
     load_memory();
 }
 
