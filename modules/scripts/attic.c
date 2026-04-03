@@ -215,7 +215,7 @@ void load_graph() {
             int id = atoi(entry->d_name);
             notes[id].active = 1;
 
-            char path[1024];
+            char path[PATH_MAX];
             snprintf(path, sizeof(path), "%s/%05d/%05d.pdf", attic_dir, id, id);
             notes[id].has_pdf = (access(path, F_OK) == 0);
 
@@ -250,7 +250,7 @@ void load_graph() {
     for (int i = 0; i < MAX_NOTES; i++) {
         if (!notes[i].active) continue;
 
-        char path[1024];
+        char path[PATH_MAX];
         snprintf(path, sizeof(path), "%s/%05d/%05d.tex", attic_dir, i, i);
         FILE *ftex = fopen(path, "r");
         if (!ftex) continue;
@@ -290,7 +290,7 @@ int generate_metadata(int id, int update_modified) {
     char mod_date[64] = "";
     if (update_modified || strlen(notes[id].mod_date) == 0) {
         struct stat st;
-        char tex_path[1024];
+        char tex_path[PATH_MAX];
         snprintf(tex_path, sizeof(tex_path), "%s/%05d/%05d.tex", attic_dir, id, id);
         if (stat(tex_path, &st) == 0) {
             struct tm *tm_info = localtime(&st.st_mtime);
@@ -337,7 +337,7 @@ void create_note(const char *in_keywords) {
     system(cmd);
 
     int id;
-    char path[1024];
+    char path[PATH_MAX];
     srand(time(NULL));
     while (1) {
         id = rand() % 100000;
@@ -529,14 +529,14 @@ void rebuild_notes() {
 
         total_processed++;
 
-        char tex_path[1024], pdf_path[1024];
-        struct stat st_tex, st_pdf;
+        char tex_path[PATH_MAX], log_path[PATH_MAX];
+        struct stat st_tex, st_log;
         snprintf(tex_path, sizeof(tex_path), "%s/%05d/%05d.tex", attic_dir, i, i);
-        snprintf(pdf_path, sizeof(pdf_path), "%s/%05d/%05d.pdf", attic_dir, i, i);
+        snprintf(log_path, sizeof(log_path), "%s/%05d/%05d.log", attic_dir, i, i);
 
         int needs_rebuild = 0;
         if (stat(tex_path, &st_tex) == 0) {
-            if (stat(pdf_path, &st_pdf) != 0 || st_tex.st_mtime > st_pdf.st_mtime) {
+            if (stat(log_path, &st_log) != 0 || st_tex.st_mtime > st_log.st_mtime) {
                 needs_rebuild = 1;
             }
         }
@@ -558,7 +558,7 @@ void rebuild_notes() {
 
         pid_t pid = fork();
         if (pid == 0) {
-            char dir_path[1024]; snprintf(dir_path, sizeof(dir_path), "%s/%05d", attic_dir, i);
+            char dir_path[PATH_MAX]; snprintf(dir_path, sizeof(dir_path), "%s/%05d", attic_dir, i);
             if (chdir(dir_path) != 0) exit(1);
             char tex_file[32]; snprintf(tex_file, sizeof(tex_file), "%05d.tex", i);
 
@@ -586,20 +586,20 @@ void rebuild_notes() {
     load_graph();
 }
 void clean_attic() {
-    printf("%sCleaning auxiliary and PDF files from all notes...%s\n", BLUE, NC);
+    printf("%sCleaning auxiliary and files...%s\n", BLUE, NC);
     int cleaned_count = 0;
 
     const char *extensions[] = {
         ".aux", ".bbl", ".bcf", ".bcf-SAVE-ERROR", ".bbl-SAVE-ERROR",
         ".blg", ".fdb_latexmk", ".fls", ".log", ".run.xml",
-        ".synctex.gz", ".synctex(busy)", ".pdf"
+        ".synctex.gz", ".synctex(busy)"
     };
     int num_exts = sizeof(extensions) / sizeof(extensions[0]);
 
     for (int i = 0; i < MAX_NOTES; i++) {
         if (!notes[i].active) continue;
 
-        char dir_path[1024];
+        char dir_path[PATH_MAX];
         snprintf(dir_path, sizeof(dir_path), "%s/%05d", attic_dir, i);
 
         DIR *d = opendir(dir_path);
@@ -614,16 +614,25 @@ void clean_attic() {
             int len = strlen(dir->d_name);
             int should_delete = 0;
 
-            for (int j = 0; j < num_exts; j++) {
-                int ext_len = strlen(extensions[j]);
-                if (len >= ext_len && strcmp(dir->d_name + len - ext_len, extensions[j]) == 0) {
+            char *space_ptr = strchr(dir->d_name, ' ');
+            if (space_ptr != NULL) {
+                if (isdigit(space_ptr[1]) && space_ptr[2] == '.') {
                     should_delete = 1;
-                    break;
+                }
+            }
+
+            if (!should_delete) {
+                for (int j = 0; j < num_exts; j++) {
+                    int ext_len = strlen(extensions[j]);
+                    if (len >= ext_len && strcmp(dir->d_name + len - ext_len, extensions[j]) == 0) {
+                        should_delete = 1;
+                        break;
+                    }
                 }
             }
 
             if (should_delete) {
-                char filepath[2048];
+                char filepath[PATH_MAX * 2];
                 snprintf(filepath, sizeof(filepath), "%s/%s", dir_path, dir->d_name);
                 if (unlink(filepath) == 0) {
                     note_cleaned = 1;
