@@ -54,6 +54,19 @@ typedef struct {
 Note notes[MAX_NOTES];
 
 // Utility functions
+int getch(void) {
+    struct termios oldattr, newattr;
+    int ch;
+
+    tcgetattr(STDIN_FILENO, &oldattr);
+    newattr = oldattr;
+    newattr.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
+    ch = getchar();
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
+
+    return ch;
+}
 void trim_end(char *str) {
     int len = strlen(str);
     while (len > 0 && (isspace(str[len - 1]) || str[len - 1] == '\\')) {
@@ -100,6 +113,20 @@ void compile_note_async(int id) {
         attic_dir, id, id);
 
     system(cmd);
+}
+void extract_ids_from_string(const char *str, int *arr, int *count) {
+    const char *ptr = str;
+    while (*ptr) {
+        if (isdigit(*ptr)) {
+            int valid = 1;
+            for (int i = 0; i < 5; i++) if (!isdigit(ptr[i])) valid = 0;
+            if (valid) {
+                arr[(*count)++] = atoi(ptr);
+                ptr += 4;
+            }
+        }
+        ptr++;
+    }
 }
 
 // Load graph of links
@@ -332,44 +359,53 @@ void create_note(const char *in_keywords) {
         exit(0);
     }
 }
-void extract_ids_from_string(const char *str, int *arr, int *count) {
-    const char *ptr = str;
-    while (*ptr) {
-        if (isdigit(*ptr)) {
-            int valid = 1;
-            for (int i = 0; i < 5; i++) if (!isdigit(ptr[i])) valid = 0;
-            if (valid) {
-                arr[(*count)++] = atoi(ptr);
-                ptr += 4;
-            }
-        }
-        ptr++;
-    }
-}
 void update_metadata(int id) {
     if (!notes[id].active) return;
 
-    int old_refs[1000];
+    int old_ids[1000];
     int old_count = 0;
-    extract_ids_from_string(notes[id].meta_refs_raw, old_refs, &old_count);
+    extract_ids_from_string(notes[id].meta_refs_raw, old_ids, &old_count);
+    old_count = dedupe(old_ids, old_count); //
+
+    int new_ids[1000];
+    int new_count = notes[id].out_count;
+    for (int i = 0; i < new_count; i++) new_ids[i] = notes[id].out_links[i].target_id;
+    new_count = dedupe(new_ids, new_count); //
+
+    int links_changed = 0;
+    if (old_count != new_count) {
+        links_changed = 1;
+    } else {
+        for (int i = 0; i < old_count; i++) {
+            if (old_ids[i] != new_ids[i]) {
+                links_changed = 1;
+                break;
+            }
+        }
+    }
 
     generate_metadata(id, 1);
     compile_note_async(id);
-    load_graph();
 
-    int combined_refs[2000];
-    int combined_count = 0;
-    for (int i = 0; i < old_count; i++) combined_refs[combined_count++] = old_refs[i];
-    for (int i = 0; i < notes[id].out_count; i++) combined_refs[combined_count++] = notes[id].out_links[i].target_id;
+    if (links_changed) {
+        printf("%sLinks changed. Propagating metadata to neighbors...%s\n", YELLOW, NC);
 
-    int unique_count = dedupe(combined_refs, combined_count);
+        int combined_refs[2000];
+        int combined_count = 0;
+        for (int i = 0; i < old_count; i++) combined_refs[combined_count++] = old_ids[i];
+        for (int i = 0; i < new_count; i++) combined_refs[combined_count++] = new_ids[i];
 
-    for (int i = 0; i < unique_count; i++) {
-        int ref_id = combined_refs[i];
-        if (notes[ref_id].active) {
-            generate_metadata(ref_id, 0);
-            compile_note_async(ref_id);
+        int unique_count = dedupe(combined_refs, combined_count);
+
+        for (int i = 0; i < unique_count; i++) {
+            int ref_id = combined_refs[i];
+            if (ref_id != id && notes[ref_id].active) {
+                generate_metadata(ref_id, 0);
+                compile_note_async(ref_id);
+            }
         }
+    } else {
+        printf("%sNo link changes detected. Skipping neighbor updates.%s\n", GREEN, NC);
     }
 }
 void audit_notes() {
@@ -538,31 +574,12 @@ void clean_attic() {
 }
 
 // Menus
-int getch(void) {
-    struct termios oldattr, newattr;
-    int ch;
-
-    tcgetattr(STDIN_FILENO, &oldattr);
-    newattr = oldattr;
-
-    newattr.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
-
-    ch = getchar();
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
-
-    return ch;
-}
 void prompt_exit() {
     printf("\n%sPress [Y] to return, exiting otherwise...%s ", CYAN, NC);
     fflush(stdout);
-
     int c = getch();
 
-    if (c == 'Y' || c == 'y' || c == '\n') {
-        system("clear");
-        return;
-    }
+    if (c == 'Y' || c == 'y' || c == '\n') { system("clear"); return; }
     system("aerospace close --quit-if-last-window 2>/dev/null");
     exit(0);
 }
@@ -574,15 +591,11 @@ void interactive_menu() {
         printf("    %s(r): Rebuild notes%s\n", CYAN, NC);
         printf("    %s(c): Clean attic%s\n", CYAN, NC);
 
-        printf("%sSelect operation: [n, a, r, c, q] %s", CYAN, NC);
+        printf("%sSelect operation: [n, a, r, c] %s", CYAN, NC);
         fflush(stdout);
-
         int cmdNum = getch();
 
-        if (cmdNum == 'q') {
-            system("aerospace close --quit-if-last-window 2>/dev/null");
-            exit(0);
-        } else if (cmdNum == 'n' || cmdNum == 'a' || cmdNum == 'r') {
+        if (cmdNum == 'n' || cmdNum == 'a' || cmdNum == 'r') {
             printf("%c\n\n", cmdNum);
             switch (cmdNum) {
                 case 'n': create_note(""); break;
@@ -598,12 +611,11 @@ void interactive_menu() {
             int confirm = getch();
             printf("%c\n", confirm);
 
-            if (confirm == 'y' || confirm == 'Y') {
-                clean_attic();
-            } else {
-                printf("%sClean aborted.%s\n", YELLOW, NC);
-            }
+            if (confirm == 'y' || confirm == 'Y') { clean_attic(); } else { printf("%sClean aborted.%s\n", YELLOW, NC); }
             prompt_exit();
+        } else if (cmdNum == 'q') {
+            system("aerospace close --quit-if-last-window 2>/dev/null");
+            exit(0);
         } else {
             system("clear");
         }
