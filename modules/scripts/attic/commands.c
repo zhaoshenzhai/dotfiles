@@ -466,7 +466,7 @@ void clean_attic(void) {
 void export_graph_json(int silent) {
     load_memory();
     char path[PATH_MAX];
-    snprintf(path, sizeof(path), "%s/graph.json", attic_dir);
+    snprintf(path, sizeof(path), "%s/../graph.json", attic_dir);
 
     FILE *f = fopen(path, "w");
     if (!f) {
