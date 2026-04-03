@@ -93,23 +93,13 @@ int is_compiling(int id) {
 }
 void compile_note_async(int id) {
     if (is_compiling(id)) return;
-    pid_t pid = fork();
-    if (pid == 0) {
-        setsid();
 
-        char dir_path[1024];
-        snprintf(dir_path, sizeof(dir_path), "%s/%05d", attic_dir, id);
-        if (chdir(dir_path) != 0) exit(1);
-        char tex_file[32];
-        snprintf(tex_file, sizeof(tex_file), "%05d.tex", id);
+    char cmd[2048];
+    snprintf(cmd, sizeof(cmd),
+        "cd '%s/%05d' && nohup latexmk -pdf -pvc- -interaction=nonstopmode %05d.tex > /dev/null 2>&1 &",
+        attic_dir, id, id);
 
-        freopen("/dev/null", "r", stdin);
-        freopen("/dev/null", "w", stdout);
-        freopen("/dev/null", "w", stderr);
-
-        execlp("latexmk", "latexmk", "-pdf", "-pvc-", "-interaction=nonstopmode", tex_file, NULL);
-        exit(1);
-    }
+    system(cmd);
 }
 
 // Load graph of links
