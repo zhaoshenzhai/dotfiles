@@ -515,11 +515,9 @@ void export_graph_json(int silent) {
 }
 
 void launch_graph_view(void) {
-    printf("%sPreparing graph view...%s\n", BLUE, NC);
     export_graph_json(1);
-
     char cmd[PATH_MAX + 128];
-    snprintf(cmd, sizeof(cmd), "cd '%s/..' && attic-graph &", attic_dir);
+    snprintf(cmd, sizeof(cmd), "cd '%s/..' && attic-graph > /dev/null 2>&1 &", attic_dir);
 
     system(cmd);
 }

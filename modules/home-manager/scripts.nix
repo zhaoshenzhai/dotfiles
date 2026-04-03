@@ -30,13 +30,20 @@
     };
 
     attic = pkgs.runCommandCC "attic" {
-        buildInputs = with pkgs; [ raylib ];
+    buildInputs = with pkgs; [
+        raylib
+        cjson
+    ];
     } ''
         mkdir -p $out/bin
+        $CC -O3 ${scriptsDir}/attic/main.c ${scriptsDir}/attic/commands.c \
+            ${scriptsDir}/attic/memory.c ${scriptsDir}/attic/utils.c \
+            -o $out/bin/attic
 
-        $CC -O3 ${scriptsDir}/attic/main.c ${scriptsDir}/attic/commands.c ${scriptsDir}/attic/memory.c ${scriptsDir}/attic/utils.c -o $out/bin/attic
-
-        $CC -O3 ${scriptsDir}/attic/graph.c ${scriptsDir}/attic/cJSON.c -lraylib -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL -o $out/bin/attic-graph
+        $CC -O3 ${scriptsDir}/attic/graph.c \
+            -lraylib -lcjson \
+            -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL \
+            -o $out/bin/attic-graph
     '';
 in
 {
