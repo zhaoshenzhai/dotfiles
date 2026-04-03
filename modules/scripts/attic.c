@@ -9,6 +9,9 @@
 #include <sys/wait.h>
 #include <time.h>
 #include <getopt.h>
+#include <limits.h>
+#include <libproc.h>
+#include <errno.h>
 
 #define MAX_NOTES 100000
 #define MAX_JOBS 5
@@ -21,9 +24,9 @@
 #define CYAN "\x1b[36m"
 #define NC "\x1b[0m"
 
-char attic_dir[1024];
-char template_file[1024];
-char launcher_path[1024];
+char attic_dir[PATH_MAX];
+char template_file[PATH_MAX];
+char launcher_path[PATH_MAX];
 int is_interactive = 0;
 
 typedef struct { int target_id; int line_no; } OutLink;
@@ -54,6 +57,22 @@ typedef struct {
 Note notes[MAX_NOTES];
 
 // Utility functions
+void* safe_malloc(size_t size) {
+    void* p = malloc(size);
+    if (!p && size > 0) {
+        fprintf(stderr, "%sError: Out of memory (malloc failed)%s\n", RED, NC);
+        exit(1);
+    }
+    return p;
+}
+void* safe_realloc(void* p, size_t size) {
+    void* new_p = realloc(p, size);
+    if (!new_p && size > 0) {
+        fprintf(stderr, "%sError: Out of memory (realloc failed)%s\n", RED, NC);
+        exit(1);
+    }
+    return new_p;
+}
 int getch(void) {
     struct termios oldattr, newattr;
     int ch;
@@ -100,9 +119,26 @@ void format_links(int *ids, int count, char *out_buf) {
     }
 }
 int is_compiling(int id) {
-    char cmd[256];
-    snprintf(cmd, sizeof(cmd), "pgrep -f 'latexmk.*%05d\\.tex' > /dev/null 2>&1", id);
-    return (system(cmd) == 0);
+    char target[32];
+    snprintf(target, sizeof(target), "%05d.tex", id);
+
+    int n_procs = proc_listpids(PROC_ALL_PIDS, 0, NULL, 0);
+    if (n_procs <= 0) return 0;
+
+    pid_t pids[n_procs];
+    n_procs = proc_listpids(PROC_ALL_PIDS, 0, pids, sizeof(pids));
+
+    for (int i = 0; i < n_procs; i++) {
+        if (pids[i] <= 0) continue;
+        char path_buf[PROC_PIDPATHINFO_MAXSIZE];
+
+        if (proc_pidpath(pids[i], path_buf, sizeof(path_buf)) > 0) {
+            if (strstr(path_buf, "latexmk") || strstr(path_buf, "pdflatex")) {
+                return 1;
+            }
+        }
+    }
+    return 0;
 }
 void compile_note_async(int id) {
     if (is_compiling(id)) return;
@@ -128,12 +164,25 @@ void extract_ids_from_string(const char *str, int *arr, int *count) {
         ptr++;
     }
 }
+void free_graph() {
+    for (int i = 0; i < MAX_NOTES; i++) {
+        if (notes[i].out_links) { free(notes[i].out_links); notes[i].out_links = NULL; }
+        if (notes[i].in_links) { free(notes[i].in_links); notes[i].in_links = NULL; }
+        for (int j = 0; j < notes[i].todo_count; j++) {
+            if (notes[i].todos[j].text) free(notes[i].todos[j].text);
+        }
+        if (notes[i].todos) { free(notes[i].todos); notes[i].todos = NULL; }
+        notes[i].out_count = notes[i].out_capacity = 0;
+        notes[i].in_count = notes[i].in_capacity = 0;
+        notes[i].todo_count = notes[i].todo_capacity = 0;
+    }
+}
 
 // Load graph of links
 void add_out_link(int src, int target, int line_no) {
     if (notes[src].out_count >= notes[src].out_capacity) {
         notes[src].out_capacity = notes[src].out_capacity == 0 ? 8 : notes[src].out_capacity * 2;
-        notes[src].out_links = realloc(notes[src].out_links, notes[src].out_capacity * sizeof(OutLink));
+        notes[src].out_links = (OutLink*)safe_realloc(notes[src].out_links, notes[src].out_capacity * sizeof(OutLink));
     }
     notes[src].out_links[notes[src].out_count++] = (OutLink){target, line_no};
 }
@@ -155,6 +204,7 @@ void add_todo(int id, int line_no, const char *text) {
     notes[id].todos[notes[id].todo_count++] = (Todo){text_copy, line_no};
 }
 void load_graph() {
+    free_graph();
     memset(notes, 0, sizeof(notes));
     DIR *dir = opendir(attic_dir);
     if (!dir) return;
@@ -268,34 +318,18 @@ int generate_metadata(int id, int update_modified) {
         "\\end{flushleft}\n",
         mod_date, notes[id].keys, refs, ref_in);
 
-    char dat_path[1024];
+    char dat_path[PATH_MAX];
     snprintf(dat_path, sizeof(dat_path), "%s/%05d/%05d.dat", attic_dir, id, id);
 
-    FILE *fexist = fopen(dat_path, "r");
-    if (fexist) {
-        fseek(fexist, 0, SEEK_END);
-        long fsize = ftell(fexist);
-        fseek(fexist, 0, SEEK_SET);
-        char *existing = malloc(fsize + 1);
-        fread(existing, 1, fsize, fexist);
-        existing[fsize] = '\0';
-        fclose(fexist);
-
-        if (strcmp(existing, generated) == 0) {
-            free(existing);
-            return 1;
-        }
-        free(existing);
-    }
-
     FILE *fmeta = fopen(dat_path, "w");
-    if (fmeta) {
-        fputs(generated, fmeta);
-        fclose(fmeta);
-        printf("%sMetadata updated for %05d.%s\n", GREEN, id, NC);
-        return 0;
+    if (!fmeta) {
+        fprintf(stderr, "%sError: Could not open %s for writing: %s%s\n",
+                RED, dat_path, strerror(errno), NC);
+        return 1;
     }
-    return 1;
+    fputs(generated, fmeta);
+    fclose(fmeta);
+    return 0;
 }
 void create_note(const char *in_keywords) {
     char cmd[2048];
@@ -365,12 +399,12 @@ void update_metadata(int id) {
     int old_ids[1000];
     int old_count = 0;
     extract_ids_from_string(notes[id].meta_refs_raw, old_ids, &old_count);
-    old_count = dedupe(old_ids, old_count); //
+    old_count = dedupe(old_ids, old_count);
 
     int new_ids[1000];
     int new_count = notes[id].out_count;
     for (int i = 0; i < new_count; i++) new_ids[i] = notes[id].out_links[i].target_id;
-    new_count = dedupe(new_ids, new_count); //
+    new_count = dedupe(new_ids, new_count);
 
     int links_changed = 0;
     if (old_count != new_count) {
@@ -486,35 +520,69 @@ void rebuild_notes() {
         return;
     }
 
-    printf("%sRefreshing metadata and recompiling %d notes...%s\n", BLUE, total_notes, NC);
+    printf("%sChecking modification times and refreshing metadata...%s\n", BLUE, NC);
 
-    int running_jobs = 0, total_rebuilt = 0;
+    int running_jobs = 0, total_processed = 0, total_rebuilt = 0;
 
     for (int i = 0; i < MAX_NOTES; i++) {
         if (!notes[i].active) continue;
 
+        total_processed++;
+
+        char tex_path[1024], pdf_path[1024];
+        struct stat st_tex, st_pdf;
+        snprintf(tex_path, sizeof(tex_path), "%s/%05d/%05d.tex", attic_dir, i, i);
+        snprintf(pdf_path, sizeof(pdf_path), "%s/%05d/%05d.pdf", attic_dir, i, i);
+
+        int needs_rebuild = 0;
+        if (stat(tex_path, &st_tex) == 0) {
+            if (stat(pdf_path, &st_pdf) != 0 || st_tex.st_mtime > st_pdf.st_mtime) {
+                needs_rebuild = 1;
+            }
+        }
+
         generate_metadata(i, 0);
 
-        if (running_jobs >= MAX_JOBS) { wait(NULL); running_jobs--; }
+        if (!needs_rebuild) {
+            printf("\r\033[2K%sSkipping %05d (up to date) [%d/%d]%s", GREEN, i, total_processed, total_notes, NC);
+            fflush(stdout);
+            continue;
+        }
+
+        while (running_jobs >= MAX_JOBS) {
+            int status;
+            if (waitpid(-1, &status, 0) > 0) {
+                running_jobs--;
+            }
+        }
 
         pid_t pid = fork();
         if (pid == 0) {
             char dir_path[1024]; snprintf(dir_path, sizeof(dir_path), "%s/%05d", attic_dir, i);
             if (chdir(dir_path) != 0) exit(1);
             char tex_file[32]; snprintf(tex_file, sizeof(tex_file), "%05d.tex", i);
-            freopen("/dev/null", "w", stdout); freopen("/dev/null", "w", stderr);
-            execlp("latexmk", "latexmk", "-pdf", tex_file, NULL);
+
+            freopen("/dev/null", "w", stdout);
+            freopen("/dev/null", "w", stderr);
+
+            execlp("latexmk", "latexmk", "-pdf", "-pvc-", "-interaction=nonstopmode", tex_file, NULL);
             exit(1);
         } else if (pid > 0) {
             running_jobs++;
             total_rebuilt++;
-            printf("\r\033[2K%sProcessing note %05d (%d/%d)...%s", YELLOW, i, total_rebuilt, total_notes, NC);
+            printf("\r\033[2K%sRebuilding %05d (%d/%d)...%s", YELLOW, i, total_processed, total_notes, NC);
             fflush(stdout);
         }
     }
 
-    while (running_jobs > 0) { wait(NULL); running_jobs--; }
-    printf("\r\033[2K%sSuccessfully rebuilt %d note(s) and their metadata.%s\n", GREEN, total_rebuilt, NC);
+    while (running_jobs > 0) {
+        int status;
+        if (waitpid(-1, &status, 0) > 0) {
+            running_jobs--;
+        }
+    }
+
+    printf("\r\033[2K%sRebuild complete. Processed %d notes, %d were recompiled.%s\n", GREEN, total_processed, total_rebuilt, NC);
     load_graph();
 }
 void clean_attic() {
@@ -524,7 +592,7 @@ void clean_attic() {
     const char *extensions[] = {
         ".aux", ".bbl", ".bcf", ".bcf-SAVE-ERROR", ".bbl-SAVE-ERROR",
         ".blg", ".fdb_latexmk", ".fls", ".log", ".run.xml",
-        ".synctex.gz", ".synctex(busy)"
+        ".synctex.gz", ".synctex(busy)", ".pdf"
     };
     int num_exts = sizeof(extensions) / sizeof(extensions[0]);
 
