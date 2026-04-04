@@ -34,6 +34,7 @@
             raylib
             cjson
             courier-prime
+            cm_unicode
         ];
     } ''
         mkdir -p $out/bin
@@ -42,13 +43,12 @@
             ${scriptsDir}/attic/memory.c ${scriptsDir}/attic/utils.c \
             -o $out/bin/attic
 
-        ACTUAL_FONT_PATH=$(find ${pkgs.courier-prime} -type f -iname "*Regular.ttf" | head -n 1)
-        if [ -z "$ACTUAL_FONT_PATH" ]; then
-            ACTUAL_FONT_PATH=$(find ${pkgs.courier-prime} -type f -iname "*.ttf" | head -n 1)
-        fi
+        MAIN_FONT=$(find ${pkgs.cm_unicode} -type f \( -iname "cmunrm.ttf" -o -iname "cmunrm.otf" \) | head -n 1)
+        ID_FONT=$(find ${pkgs.courier-prime} -type f \( -iname "*Regular.ttf" -o -iname "*Regular.otf" \) | head -n 1)
 
         $CC -O3 ${scriptsDir}/attic/graph/*.c -lraylib -lcjson \
-            -DFONT_PATH="\"$ACTUAL_FONT_PATH\"" \
+            -DFONT_PATH_MAIN="\"$MAIN_FONT\"" \
+            -DFONT_PATH_ID="\"$ID_FONT\"" \
             -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL \
             -o $out/bin/attic-graph
     '';

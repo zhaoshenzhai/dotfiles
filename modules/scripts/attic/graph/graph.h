@@ -7,9 +7,16 @@
 #include <string.h>
 #include <math.h>
 
-#ifndef FONT_PATH
-#define FONT_PATH "CourierPrime-Regular.ttf"
+#ifndef FONT_PATH_MAIN
+#define FONT_PATH_MAIN "default_fallback.ttf"
 #endif
+
+#ifndef FONT_PATH_ID
+#define FONT_PATH_ID "default_fallback.ttf"
+#endif
+
+extern Font fontMain;
+extern Font fontID;
 
 #define MAX_NODES 10000
 #define MAX_EDGES 20000
@@ -28,6 +35,7 @@ typedef struct Node {
     float radius;
     float hue;
     Color color;
+    Texture2D labelTexture;
 } Node;
 typedef struct Edge { int source_idx; int target_idx; } Edge;
 
