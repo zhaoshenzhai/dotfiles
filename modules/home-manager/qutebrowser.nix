@@ -6,7 +6,7 @@ let
         ${pkgs.alacritty}/bin/alacritty \
             --title vifm-float \
             --option "window.dimensions={columns=110,lines=38}" \
-            --option "window.position={x=430,y=238}" \
+            --option "window.position={x=425,y=246}" \
             --option "window.opacity=0.9" \
             -e "${pkgs.vifm}/bin/vifm" \
             -c ":only" \
@@ -23,7 +23,7 @@ let
         ${pkgs.alacritty}/bin/alacritty \
             --title vifm-float \
             --option "window.dimensions={columns=110,lines=38}" \
-            --option "window.position={x=430,y=238}" \
+            --option "window.position={x=425,y=246}" \
             --option "window.opacity=0.9" \
             -e "${pkgs.vifm}/bin/vifm" \
             -c ":set nodotfiles | filter Applications|Desktop|Documents|Library|Movies|Music|Pictures | :only" \
