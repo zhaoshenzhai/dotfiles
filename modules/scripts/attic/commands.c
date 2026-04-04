@@ -526,5 +526,7 @@ void launchGraph(void) {
     snprintf(cmd, sizeof(cmd), "cd '%s/..' && nohup bash -c 'exec -a attic attic-graph' > /dev/null 2>&1 &", atticDir);
     system(cmd);
 
+    system("osascript -e 'tell application \"System Events\" to set visible of front process to false'");
+    usleep(50000);
     exit(0);
 }
