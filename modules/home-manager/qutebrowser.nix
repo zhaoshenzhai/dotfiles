@@ -5,8 +5,8 @@ let
         lastdir=$(cat ~/.cache/vifm_picker_dir 2>/dev/null || echo "$HOME")
         ${pkgs.alacritty}/bin/alacritty \
             --title vifm-float \
-            --option "window.dimensions={columns=100,lines=35}" \
-            --option "window.position={x=525,y=250}" \
+            --option "window.dimensions={columns=110,lines=38}" \
+            --option "window.position={x=430,y=238}" \
             --option "window.opacity=0.9" \
             -e "${pkgs.vifm}/bin/vifm" \
             -c ":only" \
@@ -22,8 +22,8 @@ let
         lastdir=$(cat ~/.cache/vifm_picker_dir 2>/dev/null || echo "$HOME")
         ${pkgs.alacritty}/bin/alacritty \
             --title vifm-float \
-            --option "window.dimensions={columns=100,lines=35}" \
-            --option "window.position={x=525,y=250}" \
+            --option "window.dimensions={columns=110,lines=38}" \
+            --option "window.position={x=430,y=238}" \
             --option "window.opacity=0.9" \
             -e "${pkgs.vifm}/bin/vifm" \
             -c ":set nodotfiles | filter Applications|Desktop|Documents|Library|Movies|Music|Pictures | :only" \
@@ -47,7 +47,7 @@ in {
             url.start_pages = [ "https://google.com" ];
             url.default_page = "https://google.com";
             "auto_save.session" = false;
-            "qt.args" = [ 
+            "qt.args" = [
                 "disable-gpu-driver-bug-workarounds"
                 "enable-native-gpu-memory-buffers"
                 "num-raster-threads=4"
@@ -170,7 +170,7 @@ in {
                 "<Ctrl+=>" = "zoom-in";
                 "<Ctrl+->" = "zoom-out";
                 "<Ctrl+0>" = "zoom 100";
-                
+
                 "<Ctrl+h>" = "back";
                 "<Ctrl+l>" = "forward";
                 "<Ctrl+j>" = "tab-prev";

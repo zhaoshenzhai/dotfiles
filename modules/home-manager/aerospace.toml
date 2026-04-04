@@ -48,22 +48,22 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
     cmd-t = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
         --config-file ~/.config/alacritty/btop.toml \
         --title btop \
-        --option "window.dimensions={columns=100,lines=35}" \
-        --option "window.position={x=525,y=250}" \
+        --option "window.dimensions={columns=110,lines=38}" \
+        --option "window.position={x=430,y=238}" \
         -e /etc/profiles/per-user/zhao/bin/btop"""
 
     # Git
     cmd-g = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
         --title git \
-        --option "window.dimensions={columns=100,lines=35}" \
-        --option "window.position={x=525,y=250}" \
+        --option "window.dimensions={columns=110,lines=38}" \
+        --option "window.position={x=430,y=238}" \
         -e zsh -ic ~/iCloud/Dotfiles/modules/scripts/git.sh"""
 
     # Attic
     cmd-a = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
         --title attic \
-        --option "window.dimensions={columns=100,lines=35}" \
-        --option "window.position={x=525,y=250}" \
+        --option "window.dimensions={columns=110,lines=38}" \
+        --option "window.position={x=430,y=238}" \
         -e zsh -ic attic"""
 
     # MacOS apps
@@ -190,24 +190,33 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
     run = ['exec-and-forget skimUtils --recordSkim $AEROSPACE_WINDOW_ID']
 
 [[on-window-detected]]
-    if.window-title-regex-substring = 'vifm-float'
-    run = 'layout floating'
-
-[[on-window-detected]]
-    if.window-title-regex-substring = 'git'
-    run = 'layout floating'
-
-[[on-window-detected]]
-    if.window-title-regex-substring = 'attic'
-    run = 'layout floating'
-
-[[on-window-detected]]
     if.window-title-regex-substring = 'ytMpv'
     run = 'layout floating'
 
 [[on-window-detected]]
     if.window-title-regex-substring = 'launcher'
     run = 'layout floating'
+
+[[on-window-detected]]
+    if.window-title-regex-substring = 'vifm-float'
+    run = [
+        'layout floating',
+        'exec-and-forget /bin/bash -c "/run/current-system/sw/bin/centerWindow"'
+    ]
+
+[[on-window-detected]]
+    if.window-title-regex-substring = 'git'
+    run = [
+        'layout floating',
+        'exec-and-forget /bin/bash -c "/run/current-system/sw/bin/centerWindow"'
+    ]
+
+[[on-window-detected]]
+    if.window-title-regex-substring = 'attic'
+    run = [
+        'layout floating',
+        'exec-and-forget /bin/bash -c "/run/current-system/sw/bin/centerWindow"'
+    ]
 
 [[on-window-detected]]
     if.window-title-regex-substring = 'btop'

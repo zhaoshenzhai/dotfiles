@@ -3,6 +3,7 @@
 #include <objc/objc.h>
 #include <objc/message.h>
 #include <objc/runtime.h>
+#include <CoreGraphics/CoreGraphics.h>
 
 Font font;
 Camera2D camera;
@@ -11,10 +12,8 @@ Vector2 worldMouse;
 
 int framesCounter = 0;
 
-const int screenWidth = 1171;
-const int screenHeight = 839;
-const int xPos = 262;
-const int yPos = 125;
+int screenWidth;
+int screenHeight;
 const int fps = 120;
 
 const float innerRadius = 10.0f;
@@ -24,10 +23,14 @@ const float maxNodeRadius = 6.0f;
 float labelScale = 1.6f;
 
 void initializeWindow() {
+    CGRect displayBounds = CGDisplayBounds(CGMainDisplayID());
+    float visibleWidth = displayBounds.size.width;
+    float visibleHeight = displayBounds.size.height - 32.0f;
+    screenWidth = (int)(visibleWidth * 0.75f);
+    screenHeight = (int)(visibleHeight * 0.85f);
+
     SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_TRANSPARENT);
     InitWindow(screenWidth, screenHeight, "attic-graph");
-
-    SetWindowPosition(xPos, yPos);
     SetTargetFPS(fps);
 
     font = LoadFontEx(FONT_PATH, 128, NULL, 255);

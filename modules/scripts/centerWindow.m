@@ -23,7 +23,7 @@ int main(int argc, const char * argv[]) {
         AXUIElementRef axWindow = (AXUIElementRef)focusedWindow;
 
         CGFloat targetWidth = screenFrame.size.width * 0.75;
-        CGFloat targetHeight = screenFrame.size.height * 0.80;
+        CGFloat targetHeight = screenFrame.size.height * 0.85;
         CGSize targetSize = CGSizeMake(targetWidth, targetHeight);
 
         AXValueRef targetSizeValue = AXValueCreate(kAXValueCGSizeType, &targetSize);
