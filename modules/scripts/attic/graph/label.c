@@ -78,12 +78,17 @@ void* latexWorkerThread(void* arg) {
                        "\\begin{document}\\color{white}%s\\end{document}", currentLatex);
             fclose(f);
 
+            char tempPngPath[1024];
+            snprintf(tempPngPath, sizeof(tempPngPath), "%s/%u_tmp.png", cacheDir, h);
+
             snprintf(cmd, sizeof(cmd),
                 "zsh -l -c \"cd \\\"%s\\\" && latex -interaction=nonstopmode %u.tex && "
                 "dvipng -bg Transparent -D 300 -o \\\"%s\\\" %u.dvi\" > /dev/null 2>&1",
-                cacheDir, h, pngPath, h);
+                cacheDir, h, tempPngPath, h);
 
             int status = system(cmd);
+            rename(tempPngPath, pngPath);
+
             char cleanupCmd[1024];
             snprintf(cleanupCmd, sizeof(cleanupCmd), "rm -f \"%s/%u.tex\" \"%s/%u.dvi\" \"%s/%u.aux\" \"%s/%u.log\"",
                      cacheDir, h, cacheDir, h, cacheDir, h, cacheDir, h);

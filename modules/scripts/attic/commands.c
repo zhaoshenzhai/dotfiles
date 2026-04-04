@@ -472,7 +472,6 @@ void cleanAttic(void) {
 }
 
 void exportGraph(int silent) {
-    loadMemory();
     char path[PATH_MAX];
     snprintf(path, sizeof(path), "%s/../graph.json", atticDir);
 
