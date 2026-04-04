@@ -82,6 +82,13 @@ void getInput(int *draggedNodeIndex, bool *isPanning, double *lastClickTime, int
         if (pid == 0) {
             freopen("/dev/null", "w", stdout);
             freopen("/dev/null", "w", stderr);
+
+            system("alacritty --title attic \
+                    --option \"window.dimensions={columns=110,lines=38}\" \
+                    --option \"window.position={x=425,y=246}\" \
+                    -e zsh -ic attic &");
+
+            usleep(100000);
             execlp("aerospace", "aerospace", "close", "--quit-if-last-window", NULL);
             exit(1);
         }
