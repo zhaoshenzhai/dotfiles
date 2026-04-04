@@ -9,10 +9,8 @@ void updatePhysics(int screenWidth, int screenHeight, int draggedIdx) {
     const float maxDist = 300.0f;
     const float maxDistSqr = maxDist * maxDist;
 
-    // 1. Node Repulsion (O(N^2) optimized)
     for (int i = 0; i < nodeCount; i++) {
         for (int j = i + 1; j < nodeCount; j++) {
-            // AABB Quick Reject (Avoids expensive multiplication if too far)
             float dx = graphNodes[i].position.x - graphNodes[j].position.x;
             if (fabsf(dx) > maxDist) continue;
 
@@ -25,7 +23,6 @@ void updatePhysics(int screenWidth, int screenHeight, int draggedIdx) {
             float force = repulsion / distSqr;
             force = fminf(force, 50.0f);
 
-            // Manual normalization and scaling (faster than Vector2Normalize)
             float dist = sqrtf(distSqr);
             float forceOverDist = force / dist;
 
@@ -39,7 +36,6 @@ void updatePhysics(int screenWidth, int screenHeight, int draggedIdx) {
         }
     }
 
-    // 2. Edge Attraction (Springs)
     for (int i = 0; i < edgeCount; i++) {
         Node *s = &graphNodes[graphEdges[i].source_idx];
         Node *t = &graphNodes[graphEdges[i].target_idx];
@@ -62,7 +58,6 @@ void updatePhysics(int screenWidth, int screenHeight, int draggedIdx) {
         t->velocity.y -= dirY;
     }
 
-    // 3. Center Gravity & Integration
     float centerX = screenWidth / 2.0f;
     float centerY = screenHeight / 2.0f;
 
