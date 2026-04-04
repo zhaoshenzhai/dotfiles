@@ -35,7 +35,7 @@ int generate_metadata(int id, int update_modified) {
         "    References: [%s] \\\\\n"
         "    Referenced in: [%s]\n"
         "\\end{flushleft}\n",
-        mod_date, notes[id].keys, refs, ref_in);
+        mod_date, SAFE_STR(notes[id].keys), refs, ref_in);
 
     char dat_path[PATH_MAX];
     snprintf(dat_path, sizeof(dat_path), "%s/%05d/%05d.dat", attic_dir, id, id);
@@ -120,14 +120,14 @@ void update_metadata(int id) {
     char cache_path[PATH_MAX];
     const char* home = getenv("HOME");
     if (home) {
-        unsigned int h = HashString(notes[id].keys);
+        unsigned int h = HashString(SAFE_STR(notes[id].keys));
         snprintf(cache_path, sizeof(cache_path), "%s/.cache/attic/math/%u.png", home, h);
         unlink(cache_path);
     }
 
     int old_ids[1000];
     int old_count = 0;
-    extract_ids_from_string(notes[id].meta_refs_raw, old_ids, &old_count);
+    extract_ids_from_string(SAFE_STR(notes[id].meta_refs_raw), old_ids, &old_count);
     old_count = dedupe(old_ids, old_count);
 
     int new_ids[1000];
@@ -184,7 +184,7 @@ void audit_notes(void) {
         if (!notes[i].active) continue;
 
         if (!notes[i].has_pdf) {
-            printf("%s[MISSING PDF]%s Note %05d[%s] has no compiled PDF.\n", RED, NC, i, notes[i].keys);
+            printf("%s[MISSING PDF]%s Note %05d[%s] has no compiled PDF.\n", RED, NC, i, SAFE_STR(notes[i].keys));
             missing_pdfs++;
         }
 
@@ -221,8 +221,9 @@ void audit_notes(void) {
         format_links(notes[i].in_links, notes[i].in_count, formatted_ref_in);
         snprintf(expected_ref_in, sizeof(expected_ref_in), "Referenced in: [%s]", formatted_ref_in);
 
-        if (strcmp(expected_refs, notes[i].meta_refs_raw) != 0 || strcmp(expected_ref_in, notes[i].meta_ref_in_raw) != 0) {
-            printf("%s[DESYNC]%s Metadata for %05d[%s] out of sync.\n", PURPLE, NC, i, notes[i].keys);
+        if (strcmp(expected_refs, SAFE_STR(notes[i].meta_refs_raw)) != 0 ||
+            strcmp(expected_ref_in, SAFE_STR(notes[i].meta_ref_in_raw)) != 0) {
+            printf("%s[DESYNC]%s Metadata for %05d[%s] out of sync.\n", PURPLE, NC, i, SAFE_STR(notes[i].keys));
             desync++;
         }
     }
@@ -492,11 +493,10 @@ void export_graph_json(int silent) {
 
         char safe_keys[1024] = "";
         int k = 0;
-        for (int j = 0; notes[i].keys[j] != '\0' && k < 1000; j++) {
-            if (notes[i].keys[j] == '"' || notes[i].keys[j] == '\\') {
-                safe_keys[k++] = '\\';
-            }
-            safe_keys[k++] = notes[i].keys[j];
+        const char *k_str = SAFE_STR(notes[i].keys);
+        for (int j = 0; k_str[j] != '\0' && k < 1000; j++) {
+            if (k_str[j] == '"' || k_str[j] == '\\') safe_keys[k++] = '\\';
+            safe_keys[k++] = k_str[j];
         }
 
         fprintf(f, "    { \"id\": \"%05d\", \"label\": \"%s\", \"has_pdf\": %s, \"mod_date\": \"%s\", \"todo_count\": %d }",

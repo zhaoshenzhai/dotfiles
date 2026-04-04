@@ -15,6 +15,7 @@
 #include <libproc.h>
 #include <errno.h>
 
+#define SAFE_STR(s) ((s) ? (s) : "")
 #define MAX_NOTES 100000
 #define MAX_JOBS 5
 
@@ -29,11 +30,15 @@
 typedef struct { int target_id; int line_no; } OutLink;
 typedef struct { char *text; int line_no; } Todo;
 
+
 typedef struct {
     int active;
     int has_pdf;
-    char keys[256];
     char mod_date[64];
+
+    char *keys;             // Dynamically allocated
+    char *meta_refs_raw;    // Dynamically allocated
+    char *meta_ref_in_raw;  // Dynamically allocated
 
     OutLink *out_links;
     int out_count;
@@ -46,9 +51,6 @@ typedef struct {
     Todo *todos;
     int todo_count;
     int todo_capacity;
-
-    char meta_refs_raw[2048];
-    char meta_ref_in_raw[2048];
 } Note;
 
 extern char attic_dir[PATH_MAX];

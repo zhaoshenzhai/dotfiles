@@ -8,6 +8,12 @@ void free_memory(void) {
             if (notes[i].todos[j].text) free(notes[i].todos[j].text);
         }
         if (notes[i].todos) { free(notes[i].todos); notes[i].todos = NULL; }
+
+        // Free the new dynamically allocated strings
+        if (notes[i].keys) { free(notes[i].keys); notes[i].keys = NULL; }
+        if (notes[i].meta_refs_raw) { free(notes[i].meta_refs_raw); notes[i].meta_refs_raw = NULL; }
+        if (notes[i].meta_ref_in_raw) { free(notes[i].meta_ref_in_raw); notes[i].meta_ref_in_raw = NULL; }
+
         notes[i].out_count = notes[i].out_capacity = 0;
         notes[i].in_count = notes[i].in_capacity = 0;
         notes[i].todo_count = notes[i].todo_capacity = 0;
@@ -60,23 +66,27 @@ void load_memory(void) {
             snprintf(path, sizeof(path), "%s/%05d/%05d.key", attic_dir, id, id);
             FILE *fkey = fopen(path, "r");
             if (fkey) {
-                if (fgets(notes[id].keys, sizeof(notes[id].keys), fkey)) trim_end(notes[id].keys);
+                char temp_keys[1024] = "";
+                if (fgets(temp_keys, sizeof(temp_keys), fkey)) {
+                    trim_end(temp_keys);
+                    notes[id].keys = strdup(temp_keys);
+                }
                 fclose(fkey);
             }
 
             snprintf(path, sizeof(path), "%s/%05d/%05d.dat", attic_dir, id, id);
             FILE *fdat = fopen(path, "r");
             if (fdat) {
-                char line[2048];
+                char line[4096];
                 while (fgets(line, sizeof(line), fdat)) {
                     char *start = line;
                     while (isspace(*start)) start++;
                     if (strncmp(start, "Last modified:", 14) == 0) {
                         sscanf(start + 14, " %63s", notes[id].mod_date);
                     } else if (strncmp(start, "References:", 11) == 0) {
-                        trim_end(start); strcpy(notes[id].meta_refs_raw, start);
+                        trim_end(start); notes[id].meta_refs_raw = strdup(start);
                     } else if (strncmp(start, "Referenced in:", 14) == 0) {
-                        trim_end(start); strcpy(notes[id].meta_ref_in_raw, start);
+                        trim_end(start); notes[id].meta_ref_in_raw = strdup(start);
                     }
                 }
                 fclose(fdat);
