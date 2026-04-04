@@ -36,9 +36,9 @@ typedef struct {
     int has_pdf;
     char mod_date[64];
 
-    char *keys;             // Dynamically allocated
-    char *meta_refs_raw;    // Dynamically allocated
-    char *meta_ref_in_raw;  // Dynamically allocated
+    char *keys;
+    char *meta_refs_raw;
+    char *meta_ref_in_raw;
 
     OutLink *out_links;
     int out_count;

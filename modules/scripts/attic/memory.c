@@ -9,7 +9,6 @@ void free_memory(void) {
         }
         if (notes[i].todos) { free(notes[i].todos); notes[i].todos = NULL; }
 
-        // Free the new dynamically allocated strings
         if (notes[i].keys) { free(notes[i].keys); notes[i].keys = NULL; }
         if (notes[i].meta_refs_raw) { free(notes[i].meta_refs_raw); notes[i].meta_refs_raw = NULL; }
         if (notes[i].meta_ref_in_raw) { free(notes[i].meta_ref_in_raw); notes[i].meta_ref_in_raw = NULL; }

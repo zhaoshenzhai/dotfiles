@@ -17,6 +17,7 @@ int sessionCacheCount = 0;
 typedef struct { char latex[256]; int state; } RenderJob;
 RenderJob renderQueue[CACHE_SIZE];
 pthread_mutex_t queueMutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t queueCond = PTHREAD_COND_INITIALIZER;
 
 void OpenNote(const char* id) {
     char command[2048];
@@ -47,17 +48,24 @@ void* LatexWorkerThread(void* arg) {
         int jobIndex = -1;
 
         pthread_mutex_lock(&queueMutex);
-        for (int i = 0; i < CACHE_SIZE; i++) {
-            if (renderQueue[i].state == 1) { // 1 = Queued
-                strncpy(currentLatex, renderQueue[i].latex, 255);
-                renderQueue[i].state = 2;    // 2 = Processing
-                jobIndex = i;
+
+        while (true) {
+            for (int i = 0; i < CACHE_SIZE; i++) {
+                if (renderQueue[i].state == 1) {
+                    jobIndex = i;
+                    break;
+                }
+            }
+
+            if (jobIndex != -1) {
+                strncpy(currentLatex, renderQueue[jobIndex].latex, 255);
+                renderQueue[jobIndex].state = 2;
                 break;
             }
+
+            pthread_cond_wait(&queueCond, &queueMutex);
         }
         pthread_mutex_unlock(&queueMutex);
-
-        if (jobIndex == -1) { usleep(100000); continue; }
 
         unsigned int h = HashString(currentLatex);
         char cacheDir[512], pngPath[1024];
@@ -79,7 +87,6 @@ void* LatexWorkerThread(void* arg) {
                        "\\begin{document}\\color{atticfg}%s\\end{document}", currentLatex);
             fclose(f);
 
-            // Replaced /dev/null with attic_error.log so you can debug broken text labels
             snprintf(cmd, sizeof(cmd),
                 "zsh -l -c \"latex -interaction=nonstopmode -output-directory=/tmp %s && "
                 "dvipng -bg Transparent -D 600 -o %s /tmp/attic_%u.dvi\" > /tmp/attic_error.log 2>&1",
@@ -89,7 +96,7 @@ void* LatexWorkerThread(void* arg) {
         }
 
         pthread_mutex_lock(&queueMutex);
-        renderQueue[jobIndex].state = 3; // 3 = Done/Failed (Prevents re-queueing broken labels)
+        renderQueue[jobIndex].state = 3;
         pthread_mutex_unlock(&queueMutex);
     }
     return NULL;
@@ -121,7 +128,6 @@ Texture2D RenderLatex(const char* latex) {
     pthread_mutex_lock(&queueMutex);
     bool found = false;
     for (int i = 0; i < CACHE_SIZE; i++) {
-        // If it exists in the queue at ALL (queued, processing, or failed), don't add it again
         if (renderQueue[i].state != 0 && strcmp(renderQueue[i].latex, latex) == 0) {
             found = true;
             break;
@@ -132,7 +138,8 @@ Texture2D RenderLatex(const char* latex) {
         for (int i = 0; i < CACHE_SIZE; i++) {
             if (renderQueue[i].state == 0) {
                 strncpy(renderQueue[i].latex, latex, 255);
-                renderQueue[i].state = 1; // 1 = Queued
+                renderQueue[i].state = 1;
+                pthread_cond_signal(&queueCond);
                 break;
             }
         }
