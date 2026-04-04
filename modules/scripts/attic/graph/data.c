@@ -72,5 +72,6 @@ void initializeGraph(const char* filename, int screenWidth, int screenHeight) {
     }
 
     assignNodeColors();
-    cJSON_Delete(json); UnloadFileText(jsonString);
+    cJSON_Delete(json);
+    UnloadFileText(jsonString);
 }

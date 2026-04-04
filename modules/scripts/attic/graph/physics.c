@@ -3,7 +3,7 @@
 float k = 10.0f;
 float repulsion = 1000.0f;
 float centerGravity = 0.004f;
-float damping = 0.8f;
+float damping = 0.6f;
 
 void updatePhysics(int screenWidth, int screenHeight, int draggedIdx) {
     const float maxDistSqr = 300.0f * 300.0f;
