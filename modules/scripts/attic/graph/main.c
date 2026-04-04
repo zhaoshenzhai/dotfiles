@@ -50,6 +50,14 @@ int main(void) {
     while (!WindowShouldClose()) {
         framesCounter++;
 
+        if (framesCounter % 30 == 0) {
+        for (int i = 0; i < nodeCount; i++) {
+            if (graphNodes[i].labelTexture.id == 0) {
+                graphNodes[i].labelTexture = RenderLatex(graphNodes[i].label);
+            }
+        }
+    }
+
         Vector2 mousePos = GetMousePosition();
         Vector2 worldMouse = GetScreenToWorld2D(mousePos, camera);
 
@@ -117,17 +125,14 @@ int main(void) {
         BeginDrawing();
         ClearBackground(COL_BG);
         BeginMode2D(camera);
-            // PASS 1: Draw all Edges (Bottom Layer)
             for (int i = 0; i < edgeCount; i++) {
                 DrawLineV(graphNodes[graphEdges[i].source_idx].position, graphNodes[graphEdges[i].target_idx].position, COL_GRAY);
             }
 
-            // PASS 2: Draw all Node Circles (Middle Layer)
             for (int i = 0; i < nodeCount; i++) {
                 DrawCircleV(graphNodes[i].position, graphNodes[i].radius, graphNodes[i].color);
             }
 
-            // PASS 3: Draw all Labels (Top Layer)
             for (int i = 0; i < nodeCount; i++) {
                 float d = Vector2Distance(worldMouse, graphNodes[i].position);
                 float fadeWidth = 15.0f;
@@ -144,14 +149,11 @@ int main(void) {
                 float padX = 6.0f;
                 float padY = 3.0f;
 
-                // --- ID LABELS (Smaller & More Transparent) ---
                 if (idAlpha > 0.0f) {
                     Color fg = COL_FG;
-                    // Added 0.6f multiplier for transparency
                     fg.a = (unsigned char)(idAlpha * 255.0f * 0.6f);
                     Color bg = { 0x11, 0x11, 0x11, (unsigned char)(idAlpha * 204.0f * 0.6f) };
 
-                    // Reduced font size from 12 to 10
                     Vector2 sz = MeasureTextEx(fontID, graphNodes[i].id, 10, 1);
                     float txtX = graphNodes[i].position.x - sz.x/2;
                     float txtY = graphNodes[i].position.y - 22;
@@ -160,14 +162,13 @@ int main(void) {
                     DrawTextEx(fontID, graphNodes[i].id, (Vector2){txtX, txtY}, 10, 1, fg);
                 }
 
-                // --- NOTE LABELS (Title/LaTeX) ---
                 if (labelAlpha > 0.0f) {
                     Color fg = COL_FG;
                     fg.a = (unsigned char)(labelAlpha * 255.0f);
                     Color bg = { 0x11, 0x11, 0x11, (unsigned char)(labelAlpha * 204.0f) };
 
                     Vector2 sz;
-                    float mathScale = 0.125f; // Preserved your requested size
+                    float mathScale = 0.125f;
 
                     if (graphNodes[i].labelTexture.id != 0) {
                         sz = (Vector2){

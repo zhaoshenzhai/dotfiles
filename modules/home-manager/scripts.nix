@@ -46,7 +46,7 @@
         MAIN_FONT=$(find ${pkgs.cm_unicode} -type f \( -iname "cmunrm.ttf" -o -iname "cmunrm.otf" \) | head -n 1)
         ID_FONT=$(find ${pkgs.courier-prime} -type f \( -iname "*Regular.ttf" -o -iname "*Regular.otf" \) | head -n 1)
 
-        $CC -O3 ${scriptsDir}/attic/graph/*.c -lraylib -lcjson \
+        $CC -O3 ${scriptsDir}/attic/graph/*.c -lraylib -lcjson -lpthread \
             -DFONT_PATH_MAIN="\"$MAIN_FONT\"" \
             -DFONT_PATH_ID="\"$ID_FONT\"" \
             -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL \

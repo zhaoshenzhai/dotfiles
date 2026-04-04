@@ -1,15 +1,22 @@
 #include "graph.h"
 #include <sys/stat.h>
 #include <unistd.h>
+#include <stdbool.h>
+#include <pthread.h>
 
 Node graphNodes[MAX_NODES];
 Edge graphEdges[MAX_EDGES];
 int nodeCount = 0;
 int edgeCount = 0;
 
+#define CACHE_SIZE 2000
 typedef struct { char latex[256]; Texture2D tex; } LatexCacheEntry;
-LatexCacheEntry sessionCache[200];
+LatexCacheEntry sessionCache[CACHE_SIZE];
 int sessionCacheCount = 0;
+
+typedef struct { char latex[256]; bool active; } RenderJob;
+RenderJob renderQueue[CACHE_SIZE];
+pthread_mutex_t queueMutex = PTHREAD_MUTEX_INITIALIZER;
 
 void OpenNote(const char* id) {
     char command[2048];
@@ -34,63 +41,87 @@ unsigned int HashString(const char *str) {
     return hash;
 }
 
+void* LatexWorkerThread(void* arg) {
+    while (true) {
+        char currentLatex[256] = "";
+        pthread_mutex_lock(&queueMutex);
+        for (int i = 0; i < CACHE_SIZE; i++) {
+            if (renderQueue[i].active) {
+                strncpy(currentLatex, renderQueue[i].latex, 255);
+                renderQueue[i].active = false;
+                break;
+            }
+        }
+        pthread_mutex_unlock(&queueMutex);
+
+        if (currentLatex[0] == '\0') { usleep(100000); continue; }
+
+        unsigned int h = HashString(currentLatex);
+        char pngPath[1024];
+        const char* home = getenv("HOME");
+        snprintf(pngPath, sizeof(pngPath), "%s/.cache/attic/math/%u.png", home ? home : "/tmp", h);
+
+        if (access(pngPath, F_OK) != 0) {
+            char texPath[1024], cmd[2048];
+            snprintf(texPath, sizeof(texPath), "/tmp/attic_%u.tex", h);
+            FILE *f = fopen(texPath, "w");
+            fprintf(f, "\\documentclass[preview,border=2pt]{standalone}\n"
+                       "\\usepackage{amsmath,amssymb,amsfonts,xcolor}\n"
+                       "\\definecolor{atticfg}{HTML}{ABB2BF}\n"
+                       "\\begin{document}\\color{atticfg}%s\\end{document}", currentLatex);
+            fclose(f);
+
+            snprintf(cmd, sizeof(cmd),
+                "zsh -l -c \"latex -interaction=nonstopmode -output-directory=/tmp %s && "
+                "dvipng -bg Transparent -D 600 -o %s /tmp/attic_%u.dvi\" > /dev/null 2>&1",
+                texPath, pngPath, h);
+            system(cmd);
+            remove(texPath);
+        }
+    }
+    return NULL;
+}
+
 Texture2D RenderLatex(const char* latex) {
     for (int i = 0; i < sessionCacheCount; i++) {
         if (strcmp(sessionCache[i].latex, latex) == 0) return sessionCache[i].tex;
     }
 
-    char cacheDir[512], pngPath[1024], cmd[2048];
-    const char* home = getenv("HOME");
-    if (!home) home = "/tmp";
-    snprintf(cacheDir, sizeof(cacheDir), "%s/.cache/attic/math", home);
-    system(TextFormat("mkdir -p %s", cacheDir));
-
     unsigned int h = HashString(latex);
-    snprintf(pngPath, sizeof(pngPath), "%s/%u.png", cacheDir, h);
-
-    if (access(pngPath, F_OK) != 0) {
-        char texPath[1024], dviPath[1024];
-        snprintf(texPath, sizeof(texPath), "/tmp/attic_%u.tex", h);
-        snprintf(dviPath, sizeof(dviPath), "/tmp/attic_%u.dvi", h);
-
-        FILE *f = fopen(texPath, "w");
-        // Added xcolor and forced the text to match your COL_FG (#ABB2BF)
-        fprintf(f, "\\documentclass[preview,border=2pt]{standalone}\n"
-                   "\\usepackage{amsmath,amssymb,amsfonts,xcolor}\n"
-                   "\\definecolor{atticfg}{HTML}{FFFFFF}\n"
-                   "\\begin{document}\n"
-                   "\\color{atticfg}\n"
-                   "%s\n\\end{document}", latex);
-        fclose(f);
-
-        // Using dvipng is much faster than the PDF + Magick route
-        // Increased -D (density) to 600 for sharper, larger renders
-        snprintf(cmd, sizeof(cmd),
-            "zsh -l -c \"latex -interaction=nonstopmode -output-directory=/tmp %s && "
-            "dvipng -bg Transparent -D 600 -o %s /tmp/attic_%u.dvi\" > /dev/null 2>&1",
-            texPath, pngPath, h);
-
-        system(cmd);
-        remove(texPath);
-        remove(dviPath);
-        remove(TextFormat("/tmp/attic_%u.log", h));
-        remove(TextFormat("/tmp/attic_%u.aux", h));
-    }
+    char pngPath[1024];
+    const char* home = getenv("HOME");
+    snprintf(pngPath, sizeof(pngPath), "%s/.cache/attic/math/%u.png", home ? home : "/tmp", h);
 
     if (access(pngPath, F_OK) == 0) {
         Image img = LoadImage(pngPath);
         Texture2D tex = LoadTextureFromImage(img);
         UnloadImage(img);
 
-        // Save to session cache so we don't process this string again
-        if (sessionCacheCount < 200) {
+        if (sessionCacheCount < CACHE_SIZE) {
             strncpy(sessionCache[sessionCacheCount].latex, latex, 255);
             sessionCache[sessionCacheCount].tex = tex;
             sessionCacheCount++;
         }
         return tex;
     }
-    return (Texture2D){0};
+
+    pthread_mutex_lock(&queueMutex);
+    for (int i = 0; i < CACHE_SIZE; i++) {
+        if (!renderQueue[i].active) {
+            strncpy(renderQueue[i].latex, latex, 255);
+            renderQueue[i].active = true;
+            break;
+        }
+    }
+    pthread_mutex_unlock(&queueMutex);
+
+    return (Texture2D){ 0 };
+}
+
+void InitAsyncRenderer(void) {
+    pthread_t threadId;
+    pthread_create(&threadId, NULL, LatexWorkerThread, NULL);
+    pthread_detach(threadId);
 }
 
 void LoadGraphData(const char* filename, int screenWidth, int screenHeight) {

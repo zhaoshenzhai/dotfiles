@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 #include <math.h>
 
 #ifndef FONT_PATH_MAIN
@@ -61,3 +62,4 @@ int FindNodeIndex(const char* id);
 void LoadGraphData(const char* filename, int screenWidth, int screenHeight);
 void UpdatePhysics(int screenWidth, int screenHeight, int draggedIdx);
 void AssignNodeColors(void);
+Texture2D RenderLatex(const char* latex);
