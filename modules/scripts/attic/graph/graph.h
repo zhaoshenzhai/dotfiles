@@ -46,6 +46,7 @@ void updatePhysics(int screenWidth, int screenHeight, int draggedIdx);
 void openNote(const char* id);
 int findNodeIndex(const char* id);
 void initializeGraph(const char* filename, int screenWidth, int screenHeight);
+void processPendingTextures(void);
 void freeGraphMemory(void);
 
 void initializeLabels(void);

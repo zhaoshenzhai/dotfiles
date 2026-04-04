@@ -8,6 +8,10 @@ int nodeCapacity = 0;
 int edgeCount = 0;
 int edgeCapacity = 0;
 
+int *pendingNodes = NULL;
+int pendingCount = 0;
+int pendingCapacity = 0;
+
 int findNodeIndex(const char* id) {
     if (!id) return -1;
     for (int i = 0; i < nodeCount; i++) if (strcmp(graphNodes[i].id, id) == 0) return i;
@@ -42,6 +46,14 @@ void initializeGraph(const char* filename, int screenWidth, int screenHeight) {
             graphNodes[nodeCount].hasLatexError = false;
             graphNodes[nodeCount].hasPdf = cJSON_IsTrue(hasPdfObj);
             graphNodes[nodeCount].labelTexture = renderLatex(graphNodes[nodeCount].label, &graphNodes[nodeCount].hasLatexError);
+
+            if (graphNodes[nodeCount].labelTexture.id == 0 && !graphNodes[nodeCount].hasLatexError) {
+                if (pendingCount >= pendingCapacity) {
+                    pendingCapacity = pendingCapacity == 0 ? 128 : pendingCapacity * 2;
+                    pendingNodes = realloc(pendingNodes, pendingCapacity * sizeof(int));
+                }
+                pendingNodes[pendingCount++] = nodeCount;
+            }
 
             float angle = (float)nodeCount * (2.0f * PI / 50.0f);
             graphNodes[nodeCount].position = (Vector2){ screenWidth/2.0f + cosf(angle)*50.0f, screenHeight/2.0f + sinf(angle)*50.0f };
@@ -95,11 +107,33 @@ void initializeGraph(const char* filename, int screenWidth, int screenHeight) {
     UnloadFileText(jsonString);
 }
 
+void processPendingTextures(void) {
+    if (pendingCount == 0) return;
+
+    for (int i = 0; i < pendingCount; ) {
+        int idx = pendingNodes[i];
+
+        graphNodes[idx].labelTexture = renderLatex(graphNodes[idx].label, &graphNodes[idx].hasLatexError);
+
+        if (graphNodes[idx].labelTexture.id != 0 || graphNodes[idx].hasLatexError) {
+            pendingNodes[i] = pendingNodes[pendingCount - 1];
+            pendingCount--;
+        } else {
+            i++;
+        }
+    }
+}
+
 void freeGraphMemory(void) {
     if (graphNodes) free(graphNodes);
     if (graphEdges) free(graphEdges);
+    if (pendingNodes) free(pendingNodes);
+
     graphNodes = NULL;
     graphEdges = NULL;
+    pendingNodes = NULL;
+
     nodeCount = nodeCapacity = 0;
     edgeCount = edgeCapacity = 0;
+    pendingCount = pendingCapacity = 0;
 }

@@ -145,6 +145,11 @@ void draw() {
                 Vector2 exPos = { graphNodes[i].position.x + graphNodes[i].radius + 2.0f, graphNodes[i].position.y - 6.0f };
                 DrawTextEx(fontMain, "!", exPos, 14, 1, RED);
             }
+            else if (graphNodes[i].labelTexture.id == 0) {
+                DrawRing(graphNodes[i].position, graphNodes[i].radius, graphNodes[i].radius + 2.0f, 0, 360, 36, ORANGE);
+                Vector2 exPos = { graphNodes[i].position.x + graphNodes[i].radius + 2.0f, graphNodes[i].position.y - 6.0f };
+                DrawTextEx(fontMain, "?", exPos, 14, 1, ORANGE);
+            }
         }
     EndMode2D();
 
@@ -237,14 +242,7 @@ int main(void) {
 
     while (!WindowShouldClose()) {
         framesCounter++;
-
-        if (framesCounter % 30 == 0) {
-            for (int i = 0; i < nodeCount; i++) {
-                if (graphNodes[i].labelTexture.id == 0 && !graphNodes[i].hasLatexError) {
-                    graphNodes[i].labelTexture = renderLatex(graphNodes[i].label, &graphNodes[i].hasLatexError);
-                }
-            }
-        }
+        if (framesCounter % 10 == 0) { processPendingTextures(); }
 
         if (!getInput(&draggedNodeIndex, &isPanning, &lastClickTime, &lastClickedNode)) { break; }
         updatePhysics(GetScreenWidth(), GetScreenHeight(), draggedNodeIndex);
