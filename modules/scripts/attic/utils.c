@@ -4,7 +4,9 @@ char attic_dir[PATH_MAX];
 char template_file[PATH_MAX];
 char launcher_path[PATH_MAX];
 int is_interactive = 0;
-Note notes[MAX_NOTES];
+
+Note *notes = NULL;
+int noteCapacity = 0;
 
 void* safe_malloc(size_t size) {
     void* p = malloc(size);
@@ -22,6 +24,18 @@ void* safe_realloc(void* p, size_t size) {
         exit(1);
     }
     return new_p;
+}
+
+void ensureNoteCapacity(int max_id) {
+    if (max_id >= noteCapacity) {
+        int old_cap = noteCapacity;
+        noteCapacity = max_id + 1;
+        if (noteCapacity < old_cap * 2) noteCapacity = old_cap * 2;
+        if (noteCapacity < 128) noteCapacity = 128;
+
+        notes = (Note*)safe_realloc(notes, noteCapacity * sizeof(Note));
+        memset(notes + old_cap, 0, (noteCapacity - old_cap) * sizeof(Note));
+    }
 }
 
 int getch(void) {

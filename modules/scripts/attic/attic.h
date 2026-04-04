@@ -16,7 +16,6 @@
 #include <errno.h>
 
 #define SAFE_STR(s) ((s) ? (s) : "")
-#define MAX_NOTES 100000
 #define MAX_JOBS 5
 
 #define RED "\x1b[31m"
@@ -42,7 +41,9 @@ extern char attic_dir[PATH_MAX];
 extern char template_file[PATH_MAX];
 extern char launcher_path[PATH_MAX];
 extern int is_interactive;
-extern Note notes[MAX_NOTES];
+
+extern Note *notes;
+extern int noteCapacity;
 
 void* safe_malloc(size_t size);
 void* safe_realloc(void* p, size_t size);
@@ -55,6 +56,7 @@ int is_compiling(int id);
 void compile_note_async(int id);
 void extract_ids_from_string(const char *str, int *arr, int *count);
 unsigned int HashString(const char *str);
+void ensureNoteCapacity(int max_id);
 
 void free_memory(void);
 void add_out_link(int src, int target, int line_no);

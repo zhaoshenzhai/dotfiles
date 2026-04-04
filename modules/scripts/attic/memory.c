@@ -1,7 +1,7 @@
 #include "attic.h"
 
 void free_memory(void) {
-    for (int i = 0; i < MAX_NOTES; i++) {
+    for (int i = 0; i < noteCapacity; i++) {
         if (notes[i].out_links) { free(notes[i].out_links); notes[i].out_links = NULL; }
         if (notes[i].in_links) { free(notes[i].in_links); notes[i].in_links = NULL; }
         for (int j = 0; j < notes[i].todo_count; j++) { if (notes[i].todos[j].text) free(notes[i].todos[j].text); }
@@ -45,7 +45,8 @@ void add_todo(int id, int line_no, const char *text) {
 
 void load_memory(void) {
     free_memory();
-    memset(notes, 0, sizeof(notes));
+    if (notes) { memset(notes, 0, noteCapacity * sizeof(Note)); }
+
     DIR *dir = opendir(attic_dir);
     if (!dir) return;
 
@@ -53,6 +54,7 @@ void load_memory(void) {
     while ((entry = readdir(dir)) != NULL) {
         if (strlen(entry->d_name) == 5 && isdigit(entry->d_name[0])) {
             int id = atoi(entry->d_name);
+            ensureNoteCapacity(id);
             notes[id].active = 1;
 
             char path[PATH_MAX];
@@ -91,7 +93,7 @@ void load_memory(void) {
     }
     closedir(dir);
 
-    for (int i = 0; i < MAX_NOTES; i++) {
+    for (int i = 0; i < noteCapacity; i++) {
         if (!notes[i].active) continue;
 
         char path[PATH_MAX];

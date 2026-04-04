@@ -1,7 +1,7 @@
 #include "attic.h"
 
 int generate_metadata(int id, int update_modified) {
-    if (!notes[id].active) {
+    if (id >= noteCapacity || !notes[id].active) {
         printf("%sError: Note %05d does not exist.%s\n", RED, id, NC);
         return 1;
     }
@@ -115,7 +115,7 @@ void create_note(const char *in_keywords) {
 }
 
 void update_metadata(int id) {
-    if (!notes[id].active) return;
+    if (id >= noteCapacity || !notes[id].active) return;
 
     char cache_path[PATH_MAX];
     const char* home = getenv("HOME");
@@ -180,7 +180,7 @@ void audit_notes(void) {
     printf("%sVerifying links, missing PDFs, and scanning for TODOs...%s\n", BLUE, NC);
     int broken = 0, todos = 0, desync = 0, missing_pdfs = 0;
 
-    for (int i = 0; i < MAX_NOTES; i++) {
+    for (int i = 0; i < noteCapacity; i++) {
         if (!notes[i].active) continue;
 
         if (!notes[i].has_pdf) {
@@ -245,17 +245,17 @@ void audit_notes(void) {
 
 void rebuild_notes(void) {
     int total_notes = 0;
-    for (int i = 0; i < MAX_NOTES; i++) { if (notes[i].active) total_notes++; }
+    for (int i = 0; i < noteCapacity; i++) { if (notes[i].active) total_notes++; }
 
     if (total_notes == 0) {
         printf("%sNo notes found to rebuild.%s\n", GREEN, NC);
         return;
     }
 
-    printf("%sChecking modification times and refreshing metadata...%s\n", BLUE, NC);
+    printf("%sRebuilding notes...%s\n", BLUE, NC);
 
     int running_jobs = 0, total_processed = 0, total_rebuilt = 0, total_failed = 0;
-    int failed_ids[MAX_NOTES];
+    int *failed_ids = NULL;
 
     int total_lines = 0;
 
@@ -299,7 +299,7 @@ void rebuild_notes(void) {
         } \
     } while(0)
 
-    for (int i = 0; i < MAX_NOTES; i++) {
+    for (int i = 0; i < noteCapacity; i++) {
         if (!notes[i].active) continue;
 
         total_processed++;
@@ -402,6 +402,7 @@ void rebuild_notes(void) {
         printf("%s\n", NC);
     }
 
+    if (failed_ids) free(failed_ids);
     load_memory();
     export_graph_json(1);
 }
@@ -417,7 +418,7 @@ void clean_attic(void) {
     };
     int num_exts = sizeof(extensions) / sizeof(extensions[0]);
 
-    for (int i = 0; i < MAX_NOTES; i++) {
+    for (int i = 0; i < noteCapacity; i++) {
         if (!notes[i].active) continue;
 
         char dir_path[PATH_MAX];
@@ -487,7 +488,7 @@ void export_graph_json(int silent) {
 
     fprintf(f, "{\n  \"nodes\": [\n");
     int first_node = 1;
-    for (int i = 0; i < MAX_NOTES; i++) {
+    for (int i = 0; i < noteCapacity; i++) {
         if (!notes[i].active) continue;
         if (!first_node) fprintf(f, ",\n");
 
@@ -506,7 +507,7 @@ void export_graph_json(int silent) {
 
     fprintf(f, "\n  ],\n  \"edges\": [\n");
     int first_edge = 1;
-    for (int i = 0; i < MAX_NOTES; i++) {
+    for (int i = 0; i < noteCapacity; i++) {
         if (!notes[i].active) continue;
         for (int j = 0; j < notes[i].out_count; j++) {
             if (!first_edge) fprintf(f, ",\n");
