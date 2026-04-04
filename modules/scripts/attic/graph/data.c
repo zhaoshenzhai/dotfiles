@@ -30,7 +30,7 @@ void initializeGraph(const char* filename, int screenWidth, int screenHeight) {
             strncpy(graphNodes[nodeCount].id, idObj->valuestring, 31);
             strncpy(graphNodes[nodeCount].label, labelObj->valuestring, 255);
 
-            graphNodes[nodeCount].labelTexture = renderLaTeX(graphNodes[nodeCount].label);
+            graphNodes[nodeCount].labelTexture = renderLatex(graphNodes[nodeCount].label);
             graphNodes[nodeCount].has_pdf = cJSON_IsTrue(hasPdfObj);
 
             float angle = (float)nodeCount * (2.0f * PI / 50.0f);

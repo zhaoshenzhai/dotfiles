@@ -49,6 +49,6 @@ int findNodeIndex(const char* id);
 void initializeGraph(const char* filename, int screenWidth, int screenHeight);
 
 void initializeLabels(void);
-Texture2D renderLaTeX(const char* latex);
+Texture2D renderLatex(const char* latex);
 
 void assignNodeColors(void);

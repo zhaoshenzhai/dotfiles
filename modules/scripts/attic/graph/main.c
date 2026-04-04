@@ -225,7 +225,7 @@ int main(void) {
         if (framesCounter % 30 == 0) {
             for (int i = 0; i < nodeCount; i++) {
                 if (graphNodes[i].labelTexture.id == 0) {
-                    graphNodes[i].labelTexture = renderLaTeX(graphNodes[i].label);
+                    graphNodes[i].labelTexture = renderLatex(graphNodes[i].label);
                 }
             }
         }

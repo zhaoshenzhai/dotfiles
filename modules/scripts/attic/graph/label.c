@@ -13,12 +13,6 @@ RenderJob renderQueue[CACHE_SIZE];
 pthread_mutex_t queueMutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t queueCond = PTHREAD_COND_INITIALIZER;
 
-void initializeLabels(void) {
-    pthread_t threadId;
-    pthread_create(&threadId, NULL, LatexWorkerThread, NULL);
-    pthread_detach(threadId);
-}
-
 unsigned int HashString(const char *str) {
     unsigned int hash = 5381;
     int c;
@@ -26,7 +20,7 @@ unsigned int HashString(const char *str) {
     return hash;
 }
 
-void* LatexWorkerThread(void* arg) {
+void* latexWorkerThread(void* arg) {
     while (true) {
         char currentLatex[256] = "";
         int jobIndex = -1;
@@ -86,7 +80,7 @@ void* LatexWorkerThread(void* arg) {
     return NULL;
 }
 
-Texture2D renderLaTeX(const char* latex) {
+Texture2D renderLatex(const char* latex) {
     for (int i = 0; i < sessionCacheCount; i++) {
         if (strcmp(sessionCache[i].latex, latex) == 0) return sessionCache[i].tex;
     }
@@ -131,4 +125,10 @@ Texture2D renderLaTeX(const char* latex) {
     pthread_mutex_unlock(&queueMutex);
 
     return (Texture2D){0};
+}
+
+void initializeLabels(void) {
+    pthread_t threadId;
+    pthread_create(&threadId, NULL, latexWorkerThread, NULL);
+    pthread_detach(threadId);
 }
