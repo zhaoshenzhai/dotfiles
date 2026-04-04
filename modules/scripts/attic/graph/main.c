@@ -140,7 +140,7 @@ void draw() {
         DrawCircleV(graphNodes[i].position, graphNodes[i].radius, graphNodes[i].color);
 
         if (graphNodes[i].hasLatexError || !graphNodes[i].hasPdf) {
-            DrawCircleLinesV(graphNodes[i].position, graphNodes[i].radius, RED);
+            DrawRing(graphNodes[i].position, graphNodes[i].radius, graphNodes[i].radius + 1.0f, 0, 360, 36, RED);
 
             Vector2 exPos = { graphNodes[i].position.x + graphNodes[i].radius + 2.0f, graphNodes[i].position.y - 6.0f };
             DrawTextEx(fontMain, "!", exPos, 14, 1, RED);
