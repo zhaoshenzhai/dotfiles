@@ -120,7 +120,7 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
     # Workspace/window management
     cmd-f           = 'layout v_accordion v_tiles'
     cmd-shift-f     = 'macos-native-fullscreen'
-    cmd-shift-space = [ 'layout floating tiling', 'exec-and-forget skimUtils --toggleFloatingCenter' ]
+    cmd-shift-space = [ 'layout floating tiling', 'exec-and-forget /run/current-system/sw/bin/centerWindow' ]
     cmd-tab         = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next'
 
     # Refresh workspace

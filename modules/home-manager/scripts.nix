@@ -7,28 +7,24 @@
         checkPhase = "";
         text = builtins.readFile "${scriptsDir}/launcher.sh";
     };
-
     pdfcp = pkgs.writeShellApplication {
         name = "pdfcp";
         runtimeInputs = with pkgs; [ ghostscript coreutils gnused gawk ];
         checkPhase = "";
         text = builtins.readFile "${scriptsDir}/pdfcp.sh";
     };
-
     newLatex = pkgs.writeShellApplication {
         name = "newLatex";
         runtimeInputs = with pkgs; [ coreutils gnused ];
         checkPhase = "";
         text = builtins.readFile "${scriptsDir}/newLaTeX.sh";
     };
-
     skimUtils = pkgs.writeShellApplication {
         name = "skimUtils";
         runtimeInputs = with pkgs; [ coreutils ];
         checkPhase = "";
         text = builtins.readFile "${scriptsDir}/skimUtils.sh";
     };
-
     attic = pkgs.runCommandCC "attic" {
         buildInputs = with pkgs; [
             raylib
@@ -48,6 +44,10 @@
             -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL \
             -o $out/bin/attic-graph
     '';
+    centerWindow = pkgs.runCommandCC "centerWindow" {} ''
+        mkdir -p $out/bin
+        $CC -O3 ${scriptsDir}/centerWindow.m -framework Cocoa -o $out/bin/centerWindow
+    '';
 in
 {
     environment.systemPackages = [
@@ -56,5 +56,6 @@ in
         skimUtils
         launcher
         attic
+        centerWindow
     ];
 }
