@@ -117,6 +117,14 @@ void create_note(const char *in_keywords) {
 void update_metadata(int id) {
     if (!notes[id].active) return;
 
+    char cache_path[PATH_MAX];
+    const char* home = getenv("HOME");
+    if (home) {
+        unsigned int h = HashString(notes[id].keys);
+        snprintf(cache_path, sizeof(cache_path), "%s/.cache/attic/math/%u.png", home, h);
+        unlink(cache_path);
+    }
+
     int old_ids[1000];
     int old_count = 0;
     extract_ids_from_string(notes[id].meta_refs_raw, old_ids, &old_count);

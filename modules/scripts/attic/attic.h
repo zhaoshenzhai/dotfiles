@@ -67,6 +67,7 @@ void format_links(int *ids, int count, char *out_buf);
 int is_compiling(int id);
 void compile_note_async(int id);
 void extract_ids_from_string(const char *str, int *arr, int *count);
+unsigned int HashString(const char *str);
 
 void free_memory(void);
 void add_out_link(int src, int target, int line_no);

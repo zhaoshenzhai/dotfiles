@@ -35,7 +35,6 @@ unsigned int HashString(const char *str) {
 }
 
 Texture2D RenderLatex(const char* latex) {
-    // 1. Check session cache first to stop the lag
     for (int i = 0; i < sessionCacheCount; i++) {
         if (strcmp(sessionCache[i].latex, latex) == 0) return sessionCache[i].tex;
     }
@@ -113,12 +112,7 @@ void LoadGraphData(const char* filename, int screenWidth, int screenHeight) {
             strncpy(graphNodes[nodeCount].id, idObj->valuestring, 31);
             strncpy(graphNodes[nodeCount].label, labelObj->valuestring, 255);
 
-            if (strchr(graphNodes[nodeCount].label, '$')) {
-                graphNodes[nodeCount].labelTexture = RenderLatex(graphNodes[nodeCount].label);
-            } else {
-                graphNodes[nodeCount].labelTexture = (Texture2D){0};
-            }
-
+            graphNodes[nodeCount].labelTexture = RenderLatex(graphNodes[nodeCount].label);
             graphNodes[nodeCount].has_pdf = cJSON_IsTrue(hasPdfObj);
 
             float angle = (float)nodeCount * (2.0f * PI / 50.0f);

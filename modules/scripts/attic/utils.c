@@ -116,3 +116,10 @@ void extract_ids_from_string(const char *str, int *arr, int *count) {
         ptr++;
     }
 }
+
+unsigned int HashString(const char *str) {
+    unsigned int hash = 5381;
+    int c;
+    while ((c = *str++)) hash = ((hash << 5) + hash) + c;
+    return hash;
+}
