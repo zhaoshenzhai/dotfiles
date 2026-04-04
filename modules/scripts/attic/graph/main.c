@@ -1,4 +1,5 @@
 #include "graph.h"
+#include <unistd.h>
 #include <objc/objc.h>
 #include <objc/message.h>
 #include <objc/runtime.h>
@@ -24,7 +25,7 @@ float labelScale = 1.6f;
 
 void initializeWindow() {
     SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_TRANSPARENT);
-    InitWindow(screenWidth, screenHeight, "attic");
+    InitWindow(screenWidth, screenHeight, "attic-graph");
 
     id window = (id)GetWindowHandle();
     if (window) {
@@ -71,8 +72,19 @@ void openNote(const char* id) {
     system(command);
 }
 
-bool getInput(int *draggedNodeIndex, bool *isPanning, double *lastClickTime, int *lastClickedNode) {
-    if (IsKeyPressed(KEY_Q)) return false;
+void getInput(int *draggedNodeIndex, bool *isPanning, double *lastClickTime, int *lastClickedNode) {
+    static bool isQuitting = false;
+    if (IsKeyPressed(KEY_Q) && !isQuitting) {
+        isQuitting = true;
+
+        pid_t pid = fork();
+        if (pid == 0) {
+            freopen("/dev/null", "w", stdout);
+            freopen("/dev/null", "w", stderr);
+            execlp("aerospace", "aerospace", "close", "--quit-if-last-window", NULL);
+            exit(1);
+        }
+    }
 
     // Camera movement
     float moveStep = 15.0f / camera.zoom;
@@ -138,8 +150,6 @@ bool getInput(int *draggedNodeIndex, bool *isPanning, double *lastClickTime, int
         graphNodes[*draggedNodeIndex].position = worldMouse;
         graphNodes[*draggedNodeIndex].velocity = Vector2Scale(GetMouseDelta(), 1.0f / camera.zoom);
     }
-
-    return true;
 }
 
 void draw() {
@@ -240,7 +250,7 @@ int main(void) {
         framesCounter++;
         if (framesCounter % 10 == 0) { processPendingTextures(); }
 
-        if (!getInput(&draggedNodeIndex, &isPanning, &lastClickTime, &lastClickedNode)) { break; }
+        getInput(&draggedNodeIndex, &isPanning, &lastClickTime, &lastClickedNode);
         updatePhysics(GetScreenWidth(), GetScreenHeight(), draggedNodeIndex);
         draw();
     }
