@@ -79,5 +79,6 @@ void LoadGraphData(const char* filename, int screenWidth, int screenHeight) {
         graphNodes[i].radius = minNodeRadius + (maxNodeRadius - minNodeRadius) * (d / (d + 4.0f));
     }
 
+    AssignNodeColors();
     cJSON_Delete(json); UnloadFileText(jsonString);
 }

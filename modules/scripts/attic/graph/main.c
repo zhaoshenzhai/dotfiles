@@ -5,8 +5,8 @@
 
 const float innerRadius = 20.0f;
 const float outerRadius = 40.0f;
-float minNodeRadius = 2.0f;
-float maxNodeRadius = 6.0f;
+float minNodeRadius = 4.0f;
+float maxNodeRadius = 8.0f;
 
 int main(void) {
     const int screenWidth = 1171;
@@ -23,7 +23,7 @@ int main(void) {
         ((void (*)(id, SEL, long))objc_msgSend)(window, sel_registerName("setStyleMask:"), style | (1 << 15));
     }
 
-    SetWindowPosition(262, 124.5);
+    SetWindowPosition(262, 125);
     SetTargetFPS(60);
 
     Camera2D camera = { .target = {screenWidth/2.0f, screenHeight/2.0f}, .offset = {screenWidth/2.0f, screenHeight/2.0f}, .zoom = 1.0f };
@@ -102,7 +102,6 @@ int main(void) {
         }
 
         UpdatePhysics(GetScreenWidth(), GetScreenHeight(), draggedNodeIndex);
-        AssignNodeColors(GetScreenWidth(), GetScreenHeight());
 
         BeginDrawing();
         ClearBackground(COL_BG);

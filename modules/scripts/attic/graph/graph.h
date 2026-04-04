@@ -52,4 +52,4 @@ void OpenNote(const char* id);
 int FindNodeIndex(const char* id);
 void LoadGraphData(const char* filename, int screenWidth, int screenHeight);
 void UpdatePhysics(int screenWidth, int screenHeight, int draggedIdx);
-void AssignNodeColors(int screenWidth, int screenHeight);
+void AssignNodeColors(void);

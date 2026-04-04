@@ -1,23 +1,38 @@
 #include "graph.h"
 
-void AssignNodeColors(int screenWidth, int screenHeight) {
-    Vector2 center = { screenWidth / 2.0f, screenHeight / 2.0f };
-    float maxDist = sqrtf(powf(screenWidth / 2.0f, 2) + powf(screenHeight / 2.0f, 2));
+void AssignNodeColors(void) {
+    bool visited[MAX_NODES] = { false };
+    int queue[MAX_NODES];
 
     for (int i = 0; i < nodeCount; i++) {
-        Vector2 dir = Vector2Subtract(graphNodes[i].position, center);
-        float dist = Vector2Length(dir);
+        if (visited[i]) continue;
 
-        // 1. Hue is determined by the angle (0 to 360 degrees)
-        float hue = atan2f(dir.y, dir.x) * (180.0f / PI);
-        if (hue < 0) hue += 360.0f;
+        float baseHue = (float)(rand() % 360);
+        int head = 0, tail = 0;
 
-        // 2. Saturation increases as nodes move away from the center
-        float saturation = Clamp(dist / (maxDist * 0.5f), 0.4f, 0.8f);
+        queue[tail++] = i;
+        visited[i] = true;
+        graphNodes[i].hue = baseHue;
 
-        // 3. Brightness indicates PDF status
-        float value = graphNodes[i].has_pdf ? 0.95f : 0.50f;
+        while (head < tail) {
+            int u = queue[head++];
 
-        graphNodes[i].color = ColorFromHSV(hue, saturation, value);
+            for (int e = 0; e < edgeCount; e++) {
+                int v = -1;
+                if (graphEdges[e].source_idx == u) v = graphEdges[e].target_idx;
+                else if (graphEdges[e].target_idx == u) v = graphEdges[e].source_idx;
+
+                if (v != -1 && !visited[v]) {
+                    visited[v] = true;
+                    graphNodes[v].hue = fmodf(graphNodes[u].hue + 10.0f, 360.0f);
+                    queue[tail++] = v;
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < nodeCount; i++) {
+        float val = graphNodes[i].has_pdf ? 0.95f : 0.50f;
+        graphNodes[i].color = ColorFromHSV(graphNodes[i].hue, 0.7f, val);
     }
 }
