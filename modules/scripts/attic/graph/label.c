@@ -26,7 +26,6 @@ void* latexWorkerThread(void* arg) {
         int jobIndex = -1;
 
         pthread_mutex_lock(&queueMutex);
-
         while (true) {
             for (int i = 0; i < CACHE_SIZE; i++) {
                 if (renderQueue[i].state == 1) {
