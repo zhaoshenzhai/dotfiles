@@ -4,11 +4,8 @@ float k = 10.0f;
 float repulsion = 1000.0f;
 float centerGravity = 0.004f;
 float damping = 0.8f;
-int framesCounter = 0;
 
-void UpdatePhysics(int screenWidth, int screenHeight, int draggedIdx) {
-    float curDamping = (framesCounter < 120) ? 0.50f : damping;
-
+void updatePhysics(int screenWidth, int screenHeight, int draggedIdx) {
     const float maxDistSqr = 300.0f * 300.0f;
 
     for (int i = 0; i < nodeCount; i++) {
@@ -47,6 +44,6 @@ void UpdatePhysics(int screenWidth, int screenHeight, int draggedIdx) {
         Vector2 grav = Vector2Scale(Vector2Subtract(center, graphNodes[i].position), centerGravity);
         graphNodes[i].velocity = Vector2Add(graphNodes[i].velocity, grav);
         graphNodes[i].position = Vector2Add(graphNodes[i].position, graphNodes[i].velocity);
-        graphNodes[i].velocity = Vector2Scale(graphNodes[i].velocity, curDamping);
+        graphNodes[i].velocity = Vector2Scale(graphNodes[i].velocity, damping);
     }
 }

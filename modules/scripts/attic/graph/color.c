@@ -1,6 +1,6 @@
 #include "graph.h"
 
-void AssignNodeColors(void) {
+void assignNodeColors(void) {
     bool visited[MAX_NODES] = { false };
     int queue[MAX_NODES];
 

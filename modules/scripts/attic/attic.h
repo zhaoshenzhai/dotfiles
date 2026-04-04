@@ -16,7 +16,7 @@
 #include <errno.h>
 
 #define SAFE_STR(s) ((s) ? (s) : "")
-#define MAX_NOTES 10000
+#define MAX_NOTES 100000
 #define MAX_JOBS 5
 
 #define RED "\x1b[31m"
@@ -29,27 +29,13 @@
 
 typedef struct { int target_id; int line_no; } OutLink;
 typedef struct { char *text; int line_no; } Todo;
-
 typedef struct {
-    int active;
-    int has_pdf;
-    char mod_date[64];
+    int active; int has_pdf; char mod_date[64];
+    char *keys; char *meta_refs_raw; char *meta_ref_in_raw;
 
-    char *keys;
-    char *meta_refs_raw;
-    char *meta_ref_in_raw;
-
-    OutLink *out_links;
-    int out_count;
-    int out_capacity;
-
-    int *in_links;
-    int in_count;
-    int in_capacity;
-
-    Todo *todos;
-    int todo_count;
-    int todo_capacity;
+    OutLink *out_links; int out_count;  int out_capacity;
+    int *in_links;      int in_count;   int in_capacity;
+    Todo *todos;        int todo_count; int todo_capacity;
 } Note;
 
 extern char attic_dir[PATH_MAX];

@@ -1,161 +1,17 @@
 #include "graph.h"
-#include <sys/stat.h>
-#include <unistd.h>
-#include <stdbool.h>
-#include <pthread.h>
 
 Node graphNodes[MAX_NODES];
 Edge graphEdges[MAX_EDGES];
 int nodeCount = 0;
 int edgeCount = 0;
 
-#define CACHE_SIZE 2000
-typedef struct { char latex[256]; Texture2D tex; } LatexCacheEntry;
-LatexCacheEntry sessionCache[CACHE_SIZE];
-int sessionCacheCount = 0;
-
-typedef struct { char latex[256]; int state; } RenderJob;
-RenderJob renderQueue[CACHE_SIZE];
-pthread_mutex_t queueMutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t queueCond = PTHREAD_COND_INITIALIZER;
-
-void OpenNote(const char* id) {
-    char command[2048];
-    const char* home = getenv("HOME");
-    if (!home) home = "";
-
-    snprintf(command, sizeof(command),
-        "/etc/profiles/per-user/zhao/bin/launcher \"%s/iCloud/Projects/_attic/notes/%s/%s.pdf\" &", home, id, id);
-    system(command);
-}
-
-int FindNodeIndex(const char* id) {
+int findNodeIndex(const char* id) {
     if (!id) return -1;
     for (int i = 0; i < nodeCount; i++) if (strcmp(graphNodes[i].id, id) == 0) return i;
     return -1;
 }
 
-unsigned int HashString(const char *str) {
-    unsigned int hash = 5381;
-    int c;
-    while ((c = *str++)) hash = ((hash << 5) + hash) + c;
-    return hash;
-}
-
-void* LatexWorkerThread(void* arg) {
-    while (true) {
-        char currentLatex[256] = "";
-        int jobIndex = -1;
-
-        pthread_mutex_lock(&queueMutex);
-
-        while (true) {
-            for (int i = 0; i < CACHE_SIZE; i++) {
-                if (renderQueue[i].state == 1) {
-                    jobIndex = i;
-                    break;
-                }
-            }
-
-            if (jobIndex != -1) {
-                strncpy(currentLatex, renderQueue[jobIndex].latex, 255);
-                renderQueue[jobIndex].state = 2;
-                break;
-            }
-
-            pthread_cond_wait(&queueCond, &queueMutex);
-        }
-        pthread_mutex_unlock(&queueMutex);
-
-        unsigned int h = HashString(currentLatex);
-        char cacheDir[512], pngPath[1024];
-        const char* home = getenv("HOME");
-        snprintf(cacheDir, sizeof(cacheDir), "%s/.cache/attic/math", home ? home : "/tmp");
-        snprintf(pngPath, sizeof(pngPath), "%s/%u.png", cacheDir, h);
-
-        if (access(pngPath, F_OK) != 0) {
-            char mkdirCmd[1024];
-            snprintf(mkdirCmd, sizeof(mkdirCmd), "mkdir -p \"%s\"", cacheDir);
-            system(mkdirCmd);
-
-            char texPath[1024], cmd[2048];
-            snprintf(texPath, sizeof(texPath), "/tmp/attic_%u.tex", h);
-            FILE *f = fopen(texPath, "w");
-            fprintf(f, "\\documentclass[preview,border=2pt]{standalone}\n"
-                       "\\usepackage{amsmath,amssymb,amsfonts,xcolor,mlmodern}\n"
-                       "\\definecolor{atticfg}{HTML}{FFFFFF}\n"
-                       "\\begin{document}\\color{atticfg}%s\\end{document}", currentLatex);
-            fclose(f);
-
-            snprintf(cmd, sizeof(cmd),
-                "zsh -l -c \"latex -interaction=nonstopmode -output-directory=/tmp %s && "
-                "dvipng -bg Transparent -D 600 -o %s /tmp/attic_%u.dvi\" > /tmp/attic_error.log 2>&1",
-                texPath, pngPath, h);
-            system(cmd);
-            remove(texPath);
-        }
-
-        pthread_mutex_lock(&queueMutex);
-        renderQueue[jobIndex].state = 3;
-        pthread_mutex_unlock(&queueMutex);
-    }
-    return NULL;
-}
-
-Texture2D RenderLatex(const char* latex) {
-    for (int i = 0; i < sessionCacheCount; i++) {
-        if (strcmp(sessionCache[i].latex, latex) == 0) return sessionCache[i].tex;
-    }
-
-    unsigned int h = HashString(latex);
-    char pngPath[1024];
-    const char* home = getenv("HOME");
-    snprintf(pngPath, sizeof(pngPath), "%s/.cache/attic/math/%u.png", home ? home : "/tmp", h);
-
-    if (access(pngPath, F_OK) == 0) {
-        Image img = LoadImage(pngPath);
-        Texture2D tex = LoadTextureFromImage(img);
-        UnloadImage(img);
-
-        if (sessionCacheCount < CACHE_SIZE) {
-            strncpy(sessionCache[sessionCacheCount].latex, latex, 255);
-            sessionCache[sessionCacheCount].tex = tex;
-            sessionCacheCount++;
-        }
-        return tex;
-    }
-
-    pthread_mutex_lock(&queueMutex);
-    bool found = false;
-    for (int i = 0; i < CACHE_SIZE; i++) {
-        if (renderQueue[i].state != 0 && strcmp(renderQueue[i].latex, latex) == 0) {
-            found = true;
-            break;
-        }
-    }
-
-    if (!found) {
-        for (int i = 0; i < CACHE_SIZE; i++) {
-            if (renderQueue[i].state == 0) {
-                strncpy(renderQueue[i].latex, latex, 255);
-                renderQueue[i].state = 1;
-                pthread_cond_signal(&queueCond);
-                break;
-            }
-        }
-    }
-    pthread_mutex_unlock(&queueMutex);
-
-    return (Texture2D){0};
-}
-
-void InitAsyncRenderer(void) {
-    pthread_t threadId;
-    pthread_create(&threadId, NULL, LatexWorkerThread, NULL);
-    pthread_detach(threadId);
-}
-
-void LoadGraphData(const char* filename, int screenWidth, int screenHeight) {
+void initializeGraph(const char* filename, int screenWidth, int screenHeight) {
     char* jsonString = LoadFileText(filename);
     if (!jsonString) return;
     cJSON* json = cJSON_Parse(jsonString);
@@ -174,7 +30,7 @@ void LoadGraphData(const char* filename, int screenWidth, int screenHeight) {
             strncpy(graphNodes[nodeCount].id, idObj->valuestring, 31);
             strncpy(graphNodes[nodeCount].label, labelObj->valuestring, 255);
 
-            graphNodes[nodeCount].labelTexture = RenderLatex(graphNodes[nodeCount].label);
+            graphNodes[nodeCount].labelTexture = renderLaTeX(graphNodes[nodeCount].label);
             graphNodes[nodeCount].has_pdf = cJSON_IsTrue(hasPdfObj);
 
             float angle = (float)nodeCount * (2.0f * PI / 50.0f);
@@ -194,8 +50,8 @@ void LoadGraphData(const char* filename, int screenWidth, int screenHeight) {
         cJSON* tgtObj = cJSON_GetObjectItemCaseSensitive(edgeItem, "target");
 
         if (cJSON_IsString(srcObj) && cJSON_IsString(tgtObj)) {
-            int s_idx = FindNodeIndex(srcObj->valuestring);
-            int t_idx = FindNodeIndex(tgtObj->valuestring);
+            int s_idx = findNodeIndex(srcObj->valuestring);
+            int t_idx = findNodeIndex(tgtObj->valuestring);
             if (s_idx != -1 && t_idx != -1) {
                 graphEdges[edgeCount].source_idx = s_idx;
                 graphEdges[edgeCount].target_idx = t_idx;
@@ -215,6 +71,6 @@ void LoadGraphData(const char* filename, int screenWidth, int screenHeight) {
         graphNodes[i].radius = minNodeRadius + (maxNodeRadius - minNodeRadius) * (d / (d + 4.0f));
     }
 
-    AssignNodeColors();
+    assignNodeColors();
     cJSON_Delete(json); UnloadFileText(jsonString);
 }
