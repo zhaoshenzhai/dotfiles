@@ -22,20 +22,26 @@ int main(int argc, const char * argv[]) {
         }
         AXUIElementRef axWindow = (AXUIElementRef)focusedWindow;
 
-        CFTypeRef sizeRef = NULL;
-        result = AXUIElementCopyAttributeValue(axWindow, kAXSizeAttribute, &sizeRef);
-        if (result != kAXErrorSuccess || !sizeRef) {
-            CFRelease(axWindow);
-            CFRelease(appElement);
-            return 1;
+        CGFloat targetWidth = screenFrame.size.width * 0.75;
+        CGFloat targetHeight = screenFrame.size.height * 0.80;
+        CGSize targetSize = CGSizeMake(targetWidth, targetHeight);
+
+        AXValueRef targetSizeValue = AXValueCreate(kAXValueCGSizeType, &targetSize);
+        if (targetSizeValue) {
+            AXUIElementSetAttributeValue(axWindow, kAXSizeAttribute, targetSizeValue);
+            CFRelease(targetSizeValue);
         }
-        CGSize size = CGSizeZero;
-        AXValueGetValue((AXValueRef)sizeRef, kAXValueCGSizeType, &size);
-        CFRelease(sizeRef);
+
+        CFTypeRef actualSizeRef = NULL;
+        CGSize actualSize = targetSize;
+        if (AXUIElementCopyAttributeValue(axWindow, kAXSizeAttribute, &actualSizeRef) == kAXErrorSuccess && actualSizeRef) {
+            AXValueGetValue((AXValueRef)actualSizeRef, kAXValueCGSizeType, &actualSize);
+            CFRelease(actualSizeRef);
+        }
 
         CGFloat primaryScreenHeight = [[[NSScreen screens] objectAtIndex:0] frame].size.height;
-        CGFloat axX = screenFrame.origin.x + (screenFrame.size.width - size.width) / 2.0;
-        CGFloat axY = primaryScreenHeight - (screenFrame.origin.y + (screenFrame.size.height + size.height) / 2.0);
+        CGFloat axX = screenFrame.origin.x + (screenFrame.size.width - actualSize.width) / 2.0;
+        CGFloat axY = primaryScreenHeight - (screenFrame.origin.y + (screenFrame.size.height + actualSize.height) / 2.0);
         CGPoint newPoint = CGPointMake(axX, axY);
 
         AXValueRef positionValue = AXValueCreate(kAXValueCGPointType, &newPoint);

@@ -211,4 +211,7 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
 
 [[on-window-detected]]
     if.window-title-regex-substring = 'btop'
-    run = 'layout floating'
+    run = [
+        'layout floating',
+        'exec-and-forget /bin/bash -c "/run/current-system/sw/bin/centerWindow"'
+    ]
