@@ -3,8 +3,7 @@
 #include <objc/message.h>
 #include <objc/runtime.h>
 
-Font fontMain;
-Font fontID;
+Font font;
 Camera2D camera;
 Vector2 mousePos;
 Vector2 worldMouse;
@@ -17,8 +16,8 @@ const int xPos = 262;
 const int yPos = 125;
 const int fps = 120;
 
-const float innerRadius = 20.0f;
-const float outerRadius = 40.0f;
+const float innerRadius = 10.0f;
+const float outerRadius = 30.0f;
 const float minNodeRadius = 4.0f;
 const float maxNodeRadius = 8.0f;
 float labelScale = 1.6f;
@@ -38,11 +37,8 @@ void initializeWindow() {
     SetWindowPosition(xPos, yPos);
     SetTargetFPS(fps);
 
-    fontMain = LoadFontEx(FONT_PATH_MAIN, 128, NULL, 255);
-    fontID = LoadFontEx(FONT_PATH_ID, 128, NULL, 255);
-
-    SetTextureFilter(fontMain.texture, TEXTURE_FILTER_BILINEAR);
-    SetTextureFilter(fontID.texture, TEXTURE_FILTER_BILINEAR);
+    font = LoadFontEx(FONT_PATH_MAIN, 128, NULL, 255);
+    SetTextureFilter(font.texture, TEXTURE_FILTER_BILINEAR);
 
     camera = (Camera2D){ .target = {screenWidth/2.0f, screenHeight/2.0f}, .offset = {screenWidth/2.0f, screenHeight/2.0f}, .zoom = 1.0f };
 }
@@ -143,79 +139,62 @@ void draw() {
             if (graphNodes[i].hasLatexError || !graphNodes[i].hasPdf) {
                 DrawRing(graphNodes[i].position, graphNodes[i].radius, graphNodes[i].radius + 2.0f, 0, 360, 36, RED);
                 Vector2 exPos = { graphNodes[i].position.x + graphNodes[i].radius + 2.0f, graphNodes[i].position.y - 6.0f };
-                DrawTextEx(fontMain, "!", exPos, 14, 1, RED);
+                DrawTextEx(font, "!", exPos, 14, 1, RED);
             }
             else if (graphNodes[i].labelTexture.id == 0) {
                 DrawRing(graphNodes[i].position, graphNodes[i].radius, graphNodes[i].radius + 2.0f, 0, 360, 36, ORANGE);
                 Vector2 exPos = { graphNodes[i].position.x + graphNodes[i].radius + 2.0f, graphNodes[i].position.y - 6.0f };
-                DrawTextEx(fontMain, "?", exPos, 14, 1, ORANGE);
+                DrawTextEx(font, "?", exPos, 14, 1, ORANGE);
             }
         }
     EndMode2D();
 
     for (int i = 0; i < nodeCount; i++) {
         float d = Vector2Distance(worldMouse, graphNodes[i].position);
-        float fadeWidth = 15.0f;
-        float idAlpha = 0.0f;
-        float labelAlpha = 0.0f;
 
-        if (d < outerRadius && d > innerRadius) {
-            idAlpha = Clamp((outerRadius - d) / fadeWidth, 0.0f, 1.0f);
-        } else if (d <= innerRadius) {
-            labelAlpha = Clamp((innerRadius - d) / fadeWidth, 0.0f, 1.0f);
-            idAlpha = 1.0f - labelAlpha;
-        }
+        if (d >= outerRadius) continue;
 
-        if (idAlpha <= 0.0f && labelAlpha <= 0.0f) continue;
+        float t = Clamp((outerRadius - d) / (outerRadius - innerRadius), 0.0f, 1.0f);
+
+        float alpha = t;
+        if (alpha <= 0.0f) continue;
+
+        float minScale = 0.5f;
+        float sizeFactor = minScale + ((1.0f - minScale) * t);
 
         Vector2 screenPos = GetWorldToScreen2D(graphNodes[i].position, camera);
 
-        float padX = 6.0f * labelScale;
-        float padY = 3.0f * labelScale;
+        float padX = 6.0f * labelScale * sizeFactor;
+        float padY = 3.0f * labelScale * sizeFactor;
 
-        if (idAlpha > 0.0f) {
-            Color fg = COL_FG;
-            fg.a = (unsigned char)(idAlpha * 255.0f * 0.6f);
-            Color bg = { 0x11, 0x11, 0x11, (unsigned char)(idAlpha * 204.0f * 0.6f) };
+        Color fg = COL_FG;
+        fg.a = (unsigned char)(alpha * 255.0f);
+        Color bg = { 0x11, 0x11, 0x11, (unsigned char)(alpha * 204.0f) };
 
-            float idFontSize = 12.0f * labelScale;
-            Vector2 sz = MeasureTextEx(fontID, graphNodes[i].id, idFontSize, 1);
+        Vector2 sz;
+        float mathScale = 0.35f * labelScale * sizeFactor;
+        float mainFontSize = 12.0f * labelScale * sizeFactor;
 
-            float txtX = screenPos.x - sz.x/2;
-            float txtY = screenPos.y - (22.0f * labelScale);
-
-            DrawRectangleRounded((Rectangle){ txtX - padX, txtY - padY, sz.x + 2*padX, sz.y + 2*padY }, 0.5f, 8, bg);
-            DrawTextEx(fontID, graphNodes[i].id, (Vector2){txtX, txtY}, idFontSize, 1, fg);
+        if (graphNodes[i].labelTexture.id != 0) {
+            sz = (Vector2){
+                graphNodes[i].labelTexture.width * mathScale,
+                graphNodes[i].labelTexture.height * mathScale
+            };
+        } else {
+            sz = MeasureTextEx(font, graphNodes[i].label, mainFontSize, 1);
         }
 
-        if (labelAlpha > 0.0f) {
-            Color fg = COL_FG;
-            fg.a = (unsigned char)(labelAlpha * 255.0f);
-            Color bg = { 0x11, 0x11, 0x11, (unsigned char)(labelAlpha * 204.0f) };
+        float txtX = screenPos.x - sz.x/2;
 
-            Vector2 sz;
-            float mathScale = 0.35f * labelScale;
-            float mainFontSize = 12.0f * labelScale;
+        float yOffset = 25.0f * labelScale * sizeFactor;
+        float txtY = screenPos.y - yOffset;
 
-            if (graphNodes[i].labelTexture.id != 0) {
-                sz = (Vector2){
-                    graphNodes[i].labelTexture.width * mathScale,
-                    graphNodes[i].labelTexture.height * mathScale
-                };
-            } else {
-                sz = MeasureTextEx(fontMain, graphNodes[i].label, mainFontSize, 1);
-            }
+        DrawRectangleRounded((Rectangle){ txtX - padX, txtY - padY, sz.x + 2*padX, sz.y + 2*padY }, 0.5f, 8, bg);
 
-            float txtX = screenPos.x - sz.x/2;
-            float txtY = screenPos.y - (25.0f * labelScale);
-
-            DrawRectangleRounded((Rectangle){ txtX - padX, txtY - padY, sz.x + 2*padX, sz.y + 2*padY }, 0.5f, 8, bg);
-
-            if (graphNodes[i].labelTexture.id > 0) {
-                DrawTextureEx(graphNodes[i].labelTexture, (Vector2){txtX, txtY}, 0, mathScale, fg);
-            } else {
-                DrawTextEx(fontMain, graphNodes[i].label, (Vector2){txtX, txtY}, mainFontSize, 1, fg);
-            }
+        if (graphNodes[i].labelTexture.id > 0) {
+            DrawTextureEx(graphNodes[i].labelTexture, (Vector2){txtX, txtY}, 0, mathScale, fg);
+        } else {
+            DrawTextEx(font, graphNodes[i].label, (Vector2){txtX, txtY}, mainFontSize, 1, fg);
         }
     }
 
@@ -225,8 +204,7 @@ void draw() {
 void closeWindow() {
     freeGraphMemory();
     freeLabelsMemory();
-    UnloadFont(fontMain);
-    UnloadFont(fontID);
+    UnloadFont(font);
     CloseWindow();
 }
 
