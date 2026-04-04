@@ -29,6 +29,7 @@ extern int edgeCapacity;
 extern Camera2D camera;
 extern Font fontMain;
 extern Font fontID;
+extern float labelScale;
 
 extern float k;
 extern float repulsion;

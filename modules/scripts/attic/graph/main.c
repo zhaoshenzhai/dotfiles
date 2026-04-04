@@ -21,6 +21,7 @@ const float innerRadius = 20.0f;
 const float outerRadius = 40.0f;
 const float minNodeRadius = 4.0f;
 const float maxNodeRadius = 8.0f;
+float labelScale = 1.75f;
 
 void initializeWindow() {
     SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_TRANSPARENT);
@@ -130,22 +131,22 @@ bool getInput(int *draggedNodeIndex, bool *isPanning, double *lastClickTime, int
 void draw() {
     BeginDrawing();
     ClearBackground(COL_BG);
+
     BeginMode2D(camera);
-
-    for (int i = 0; i < edgeCount; i++) {
-        DrawLineV(graphNodes[graphEdges[i].source_idx].position, graphNodes[graphEdges[i].target_idx].position, COL_GRAY);
-    }
-
-    for (int i = 0; i < nodeCount; i++) {
-        DrawCircleV(graphNodes[i].position, graphNodes[i].radius, graphNodes[i].color);
-
-        if (graphNodes[i].hasLatexError || !graphNodes[i].hasPdf) {
-            DrawRing(graphNodes[i].position, graphNodes[i].radius, graphNodes[i].radius + 1.0f, 0, 360, 36, RED);
-
-            Vector2 exPos = { graphNodes[i].position.x + graphNodes[i].radius + 2.0f, graphNodes[i].position.y - 6.0f };
-            DrawTextEx(fontMain, "!", exPos, 14, 1, RED);
+        for (int i = 0; i < edgeCount; i++) {
+            DrawLineV(graphNodes[graphEdges[i].source_idx].position, graphNodes[graphEdges[i].target_idx].position, COL_GRAY);
         }
-    }
+
+        for (int i = 0; i < nodeCount; i++) {
+            DrawCircleV(graphNodes[i].position, graphNodes[i].radius, graphNodes[i].color);
+
+            if (graphNodes[i].hasLatexError || !graphNodes[i].hasPdf) {
+                DrawRing(graphNodes[i].position, graphNodes[i].radius, graphNodes[i].radius + 2.0f, 0, 360, 36, RED);
+                Vector2 exPos = { graphNodes[i].position.x + graphNodes[i].radius + 2.0f, graphNodes[i].position.y - 6.0f };
+                DrawTextEx(fontMain, "!", exPos, 14, 1, RED);
+            }
+        }
+    EndMode2D();
 
     for (int i = 0; i < nodeCount; i++) {
         float d = Vector2Distance(worldMouse, graphNodes[i].position);
@@ -160,20 +161,26 @@ void draw() {
             idAlpha = 1.0f - labelAlpha;
         }
 
-        float padX = 6.0f;
-        float padY = 3.0f;
+        if (idAlpha <= 0.0f && labelAlpha <= 0.0f) continue;
+
+        Vector2 screenPos = GetWorldToScreen2D(graphNodes[i].position, camera);
+
+        float padX = 6.0f * labelScale;
+        float padY = 3.0f * labelScale;
 
         if (idAlpha > 0.0f) {
             Color fg = COL_FG;
             fg.a = (unsigned char)(idAlpha * 255.0f * 0.6f);
             Color bg = { 0x11, 0x11, 0x11, (unsigned char)(idAlpha * 204.0f * 0.6f) };
 
-            Vector2 sz = MeasureTextEx(fontID, graphNodes[i].id, 10, 1);
-            float txtX = graphNodes[i].position.x - sz.x/2;
-            float txtY = graphNodes[i].position.y - 22;
+            float idFontSize = 10.0f * labelScale;
+            Vector2 sz = MeasureTextEx(fontID, graphNodes[i].id, idFontSize, 1);
+
+            float txtX = screenPos.x - sz.x/2;
+            float txtY = screenPos.y - (22.0f * labelScale);
 
             DrawRectangleRounded((Rectangle){ txtX - padX, txtY - padY, sz.x + 2*padX, sz.y + 2*padY }, 0.5f, 8, bg);
-            DrawTextEx(fontID, graphNodes[i].id, (Vector2){txtX, txtY}, 10, 1, fg);
+            DrawTextEx(fontID, graphNodes[i].id, (Vector2){txtX, txtY}, idFontSize, 1, fg);
         }
 
         if (labelAlpha > 0.0f) {
@@ -182,7 +189,8 @@ void draw() {
             Color bg = { 0x11, 0x11, 0x11, (unsigned char)(labelAlpha * 204.0f) };
 
             Vector2 sz;
-            float mathScale = 0.2f;
+            float mathScale = 0.2f * labelScale;
+            float mainFontSize = 12.0f * labelScale;
 
             if (graphNodes[i].labelTexture.id != 0) {
                 sz = (Vector2){
@@ -190,23 +198,22 @@ void draw() {
                     graphNodes[i].labelTexture.height * mathScale
                 };
             } else {
-                sz = MeasureTextEx(fontMain, graphNodes[i].label, 12, 1);
+                sz = MeasureTextEx(fontMain, graphNodes[i].label, mainFontSize, 1);
             }
 
-            float txtX = graphNodes[i].position.x - sz.x/2;
-            float txtY = graphNodes[i].position.y - 25;
+            float txtX = screenPos.x - sz.x/2;
+            float txtY = screenPos.y - (25.0f * labelScale);
 
             DrawRectangleRounded((Rectangle){ txtX - padX, txtY - padY, sz.x + 2*padX, sz.y + 2*padY }, 0.5f, 8, bg);
 
             if (graphNodes[i].labelTexture.id > 0) {
                 DrawTextureEx(graphNodes[i].labelTexture, (Vector2){txtX, txtY}, 0, mathScale, fg);
             } else {
-                DrawTextEx(fontMain, graphNodes[i].label, (Vector2){txtX, txtY}, 12, 1, fg);
+                DrawTextEx(fontMain, graphNodes[i].label, (Vector2){txtX, txtY}, mainFontSize, 1, fg);
             }
         }
     }
 
-    EndMode2D();
     EndDrawing();
 }
 
