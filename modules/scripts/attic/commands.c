@@ -1,30 +1,30 @@
 #include "attic.h"
 
-int generate_metadata(int id, int update_modified) {
+int generateMetadata(int id, int updateModified) {
     if (id >= noteCapacity || !notes[id].active) {
         printf("%sError: Note %05d does not exist.%s\n", RED, id, NC);
         return 1;
     }
 
-    char mod_date[64] = "";
-    if (update_modified || strlen(notes[id].mod_date) == 0) {
+    char modDate[64] = "";
+    if (updateModified || strlen(notes[id].modDate) == 0) {
         struct stat st;
-        char tex_path[PATH_MAX];
-        snprintf(tex_path, sizeof(tex_path), "%s/%05d/%05d.tex", attic_dir, id, id);
-        if (stat(tex_path, &st) == 0) {
-            struct tm *tm_info = localtime(&st.st_mtime);
-            strftime(mod_date, sizeof(mod_date), "%Y/%m/%d", tm_info);
+        char texPath[PATH_MAX];
+        snprintf(texPath, sizeof(texPath), "%s/%05d/%05d.tex", atticDir, id, id);
+        if (stat(texPath, &st) == 0) {
+            struct tm *tmInfo = localtime(&st.st_mtime);
+            strftime(modDate, sizeof(modDate), "%Y/%m/%d", tmInfo);
         }
     } else {
-        strcpy(mod_date, notes[id].mod_date);
+        strcpy(modDate, notes[id].modDate);
     }
 
-    int temp_out[notes[id].out_count > 0 ? notes[id].out_count : 1];
-    for (int j = 0; j < notes[id].out_count; j++) temp_out[j] = notes[id].out_links[j].target_id;
+    int tempOut[notes[id].outCount > 0 ? notes[id].outCount : 1];
+    for (int j = 0; j < notes[id].outCount; j++) tempOut[j] = notes[id].outLinks[j].targetID;
 
-    char refs[2048], ref_in[2048];
-    format_links(temp_out, notes[id].out_count, refs);
-    format_links(notes[id].in_links, notes[id].in_count, ref_in);
+    char refs[2048], refIn[2048];
+    formatLinks(tempOut, notes[id].outCount, refs);
+    formatLinks(notes[id].inLinks, notes[id].inCount, refIn);
 
     char generated[8192];
     snprintf(generated, sizeof(generated),
@@ -35,14 +35,14 @@ int generate_metadata(int id, int update_modified) {
         "    References: [%s] \\\\\n"
         "    Referenced in: [%s]\n"
         "\\end{flushleft}\n",
-        mod_date, SAFE_STR(notes[id].keys), refs, ref_in);
+        modDate, SAFE_STR(notes[id].keys), refs, refIn);
 
-    char dat_path[PATH_MAX];
-    snprintf(dat_path, sizeof(dat_path), "%s/%05d/%05d.dat", attic_dir, id, id);
+    char datPath[PATH_MAX];
+    snprintf(datPath, sizeof(datPath), "%s/%05d/%05d.dat", atticDir, id, id);
 
-    FILE *fmeta = fopen(dat_path, "w");
+    FILE *fmeta = fopen(datPath, "w");
     if (!fmeta) {
-        fprintf(stderr, "%sError: Could not open %s for writing: %s%s\n", RED, dat_path, strerror(errno), NC);
+        fprintf(stderr, "%sError: Could not open %s for writing: %s%s\n", RED, datPath, strerror(errno), NC);
         return 1;
     }
     fputs(generated, fmeta);
@@ -50,9 +50,9 @@ int generate_metadata(int id, int update_modified) {
     return 0;
 }
 
-void create_note(const char *in_keywords) {
+void createNote(const char *inKeywords) {
     char cmd[2048];
-    snprintf(cmd, sizeof(cmd), "mkdir -p \"%s\"", attic_dir);
+    snprintf(cmd, sizeof(cmd), "mkdir -p \"%s\"", atticDir);
     system(cmd);
 
     int id;
@@ -60,141 +60,139 @@ void create_note(const char *in_keywords) {
     srand(time(NULL));
     while (1) {
         id = rand() % 100000;
-        snprintf(path, sizeof(path), "%s/%05d", attic_dir, id);
+        snprintf(path, sizeof(path), "%s/%05d", atticDir, id);
         if (access(path, F_OK) != 0) break;
     }
 
     mkdir(path, 0755);
-    snprintf(cmd, sizeof(cmd), "cp \"%s\" \"%s/%05d.tex\"", template_file, path, id);
+    snprintf(cmd, sizeof(cmd), "cp \"%s\" \"%s/%05d.tex\"", templateFile, path, id);
     system(cmd);
 
     char keywords[256] = "";
-    if (strcmp(in_keywords, "EMPTY_KEYWORDS") == 0) {
+    if (strcmp(inKeywords, "EMPTY_KEYWORDS") == 0) {
         printf("Note %05d created automatically.\n", id);
-    } else if (strlen(in_keywords) > 0) {
-        strncpy(keywords, in_keywords, sizeof(keywords)-1);
+    } else if (strlen(inKeywords) > 0) {
+        strncpy(keywords, inKeywords, sizeof(keywords)-1);
         printf("Note %05d created automatically.\n", id);
     } else {
         printf("%sEnter keywords for note %05d: %s", PURPLE, id, NC);
-        if (fgets(keywords, sizeof(keywords), stdin)) {
-            trim_end(keywords);
-        }
+        if (fgets(keywords, sizeof(keywords), stdin)) { trimEnd(keywords); }
     }
 
-    char clean_keys[512] = "";
+    char cleanKeys[512] = "";
     int j = 0;
     for(int i = 0; keywords[i] != '\0'; i++) {
-        if(keywords[i] == ',') { clean_keys[j++] = ','; clean_keys[j++] = ' '; }
-        else { clean_keys[j++] = keywords[i]; }
+        if(keywords[i] == ',') { cleanKeys[j++] = ','; cleanKeys[j++] = ' '; }
+        else { cleanKeys[j++] = keywords[i]; }
     }
-    char final_keys[512] = "";
+    char finalKeys[512] = "";
     int k = 0;
-    for(int i = 0; clean_keys[i] != '\0'; i++) {
-        if(clean_keys[i] == ' ' && clean_keys[i+1] == ' ') continue;
-        final_keys[k++] = clean_keys[i];
+    for(int i = 0; cleanKeys[i] != '\0'; i++) {
+        if(cleanKeys[i] == ' ' && cleanKeys[i+1] == ' ') continue;
+        finalKeys[k++] = cleanKeys[i];
     }
 
-    snprintf(path, sizeof(path), "%s/%05d/%05d.key", attic_dir, id, id);
+    snprintf(path, sizeof(path), "%s/%05d/%05d.key", atticDir, id, id);
     FILE *fkey = fopen(path, "w");
-    if (fkey) { fputs(final_keys, fkey); fputs("\n", fkey); fclose(fkey); }
+    if (fkey) { fputs(finalKeys, fkey); fputs("\n", fkey); fclose(fkey); }
 
-    load_memory();
-    generate_metadata(id, 1);
-    export_graph_json(1);
+    loadMemory();
+    generateMetadata(id, 1);
+    exportGraph(1);
 
-    snprintf(cmd, sizeof(cmd), "%s --update &", launcher_path);
+    snprintf(cmd, sizeof(cmd), "%s --update &", launcherPath);
     system(cmd);
-    compile_note_async(id);
+    compileNote(id);
 
-    if (is_interactive) {
-        snprintf(cmd, sizeof(cmd), "nohup %s \"%s/%05d/%05d.tex\" >/dev/null 2>&1 &", launcher_path, attic_dir, id, id);
+    if (isInteractive) {
+        snprintf(cmd, sizeof(cmd), "nohup %s \"%s/%05d/%05d.tex\" >/dev/null 2>&1 &", launcherPath, atticDir, id, id);
         system(cmd);
         usleep(100000);
         exit(0);
     }
 }
 
-void update_metadata(int id) {
+void updateMetadata(int id) {
     if (id >= noteCapacity || !notes[id].active) return;
 
-    char cache_path[PATH_MAX];
+    char cachePath[PATH_MAX];
     const char* home = getenv("HOME");
     if (home) {
-        unsigned int h = HashString(SAFE_STR(notes[id].keys));
-        snprintf(cache_path, sizeof(cache_path), "%s/.cache/attic/math/%u.png", home, h);
-        unlink(cache_path);
+        unsigned int h = hashString(SAFE_STR(notes[id].keys));
+        snprintf(cachePath, sizeof(cachePath), "%s/.cache/attic/labels/%u.png", home, h);
+        unlink(cachePath);
     }
 
-    int old_ids[1000];
-    int old_count = 0;
-    extract_ids_from_string(SAFE_STR(notes[id].meta_refs_raw), old_ids, &old_count);
-    old_count = dedupe(old_ids, old_count);
+    int oldIds[1000];
+    int oldCount = 0;
+    extracIDs(SAFE_STR(notes[id].metaRefsRaw), oldIds, &oldCount);
+    oldCount = dedupe(oldIds, oldCount);
 
-    int new_ids[1000];
-    int new_count = notes[id].out_count;
-    for (int i = 0; i < new_count; i++) new_ids[i] = notes[id].out_links[i].target_id;
-    new_count = dedupe(new_ids, new_count);
+    int newIds[1000];
+    int newCount = notes[id].outCount;
+    for (int i = 0; i < newCount; i++) newIds[i] = notes[id].outLinks[i].targetID;
+    newCount = dedupe(newIds, newCount);
 
-    int links_changed = 0;
-    if (old_count != new_count) {
-        links_changed = 1;
+    int linksChanged = 0;
+    if (oldCount != newCount) {
+        linksChanged = 1;
     } else {
-        for (int i = 0; i < old_count; i++) {
-            if (old_ids[i] != new_ids[i]) {
-                links_changed = 1;
+        for (int i = 0; i < oldCount; i++) {
+            if (oldIds[i] != newIds[i]) {
+                linksChanged = 1;
                 break;
             }
         }
     }
 
-    generate_metadata(id, 1);
-    compile_note_async(id);
+    generateMetadata(id, 1);
+    compileNote(id);
 
-    if (links_changed) {
+    if (linksChanged) {
         printf("%sLinks changed. Propagating metadata to neighbors...%s\n", YELLOW, NC);
 
-        int combined_refs[2000];
-        int combined_count = 0;
-        for (int i = 0; i < old_count; i++) combined_refs[combined_count++] = old_ids[i];
-        for (int i = 0; i < new_count; i++) combined_refs[combined_count++] = new_ids[i];
+        int combinedRefs[2000];
+        int combinedCount = 0;
+        for (int i = 0; i < oldCount; i++) combinedRefs[combinedCount++] = oldIds[i];
+        for (int i = 0; i < newCount; i++) combinedRefs[combinedCount++] = newIds[i];
 
-        int unique_count = dedupe(combined_refs, combined_count);
+        int uniqueCount = dedupe(combinedRefs, combinedCount);
 
-        for (int i = 0; i < unique_count; i++) {
-            int ref_id = combined_refs[i];
-            if (ref_id != id && notes[ref_id].active) {
-                generate_metadata(ref_id, 0);
-                compile_note_async(ref_id);
+        for (int i = 0; i < uniqueCount; i++) {
+            int refId = combinedRefs[i];
+            if (refId != id && notes[refId].active) {
+                generateMetadata(refId, 0);
+                compileNote(refId);
             }
         }
     } else {
         printf("%sNo link changes detected. Skipping neighbor updates.%s\n", GREEN, NC);
     }
 
-    load_memory();
-    export_graph_json(1);
+    loadMemory();
+    exportGraph(1);
 }
 
-void audit_notes(void) {
-    load_memory();
+void auditNotes(void) {
+    loadMemory();
     printf("%sVerifying links, missing PDFs, and scanning for TODOs...%s\n", BLUE, NC);
-    int broken = 0, todos = 0, desync = 0, missing_pdfs = 0;
+    int broken = 0, todos = 0, desync = 0, missingPdfs = 0;
 
     for (int i = 0; i < noteCapacity; i++) {
         if (!notes[i].active) continue;
 
-        if (!notes[i].has_pdf) {
+        if (!notes[i].hasPdf) {
             printf("%s[MISSING PDF]%s Note %05d[%s] has no compiled PDF.\n", RED, NC, i, SAFE_STR(notes[i].keys));
-            missing_pdfs++;
+            missingPdfs++;
         }
 
-        for (int j = 0; j < notes[i].out_count; j++) {
-            int target = notes[i].out_links[j].target_id;
-            int lno = notes[i].out_links[j].line_no;
+        for (int j = 0; j < notes[i].outCount; j++) {
+            int target = notes[i].outLinks[j].targetID;
+            int lno = notes[i].outLinks[j].lineNumber;
 
             char err[32] = "";
             if (!notes[target].active) strcat(err, "TEX");
-            if (!notes[target].has_pdf) {
+            if (!notes[target].hasPdf) {
                 if (err[0] != '\0') strcat(err, " & ");
                 strcat(err, "PDF");
             }
@@ -205,35 +203,35 @@ void audit_notes(void) {
             }
         }
 
-        for (int j = 0; j < notes[i].todo_count; j++) {
-            printf("%s[TODO]%s %05d[%s]:%d -> %s\n", YELLOW, NC, i, notes[i].keys, notes[i].todos[j].line_no, notes[i].todos[j].text);
+        for (int j = 0; j < notes[i].todoCount; j++) {
+            printf("%s[TODO]%s %05d[%s]:%d -> %s\n", YELLOW, NC, i, notes[i].keys, notes[i].todos[j].lineNumber, notes[i].todos[j].text);
             todos++;
         }
 
-        int temp_out[notes[i].out_count > 0 ? notes[i].out_count : 1];
-        for (int j = 0; j < notes[i].out_count; j++) temp_out[j] = notes[i].out_links[j].target_id;
+        int tempOut[notes[i].outCount > 0 ? notes[i].outCount : 1];
+        for (int j = 0; j < notes[i].outCount; j++) tempOut[j] = notes[i].outLinks[j].targetID;
 
-        char expected_refs[4096], formatted_refs[2048];
-        format_links(temp_out, notes[i].out_count, formatted_refs);
-        snprintf(expected_refs, sizeof(expected_refs), "References: [%s]", formatted_refs);
+        char expectedRefs[4096], formattedRefs[2048];
+        formatLinks(tempOut, notes[i].outCount, formattedRefs);
+        snprintf(expectedRefs, sizeof(expectedRefs), "References: [%s]", formattedRefs);
 
-        char expected_ref_in[4096], formatted_ref_in[2048];
-        format_links(notes[i].in_links, notes[i].in_count, formatted_ref_in);
-        snprintf(expected_ref_in, sizeof(expected_ref_in), "Referenced in: [%s]", formatted_ref_in);
+        char expectedRefIn[4096], formattedRefIn[2048];
+        formatLinks(notes[i].inLinks, notes[i].inCount, formattedRefIn);
+        snprintf(expectedRefIn, sizeof(expectedRefIn), "Referenced in: [%s]", formattedRefIn);
 
-        if (strcmp(expected_refs, SAFE_STR(notes[i].meta_refs_raw)) != 0 ||
-            strcmp(expected_ref_in, SAFE_STR(notes[i].meta_ref_in_raw)) != 0) {
+        if (strcmp(expectedRefs, SAFE_STR(notes[i].metaRefsRaw)) != 0 ||
+            strcmp(expectedRefIn, SAFE_STR(notes[i].metaRefInRaw)) != 0) {
             printf("%s[DESYNC]%s Metadata for %05d[%s] out of sync.\n", PURPLE, NC, i, SAFE_STR(notes[i].keys));
             desync++;
         }
     }
 
     printf("----------------------------------------\n");
-    if (broken == 0 && missing_pdfs == 0) {
+    if (broken == 0 && missingPdfs == 0) {
         printf("%sLinks & PDFs: Valid!%s\n", GREEN, NC);
     } else {
         if (broken > 0) printf("%sLinks: Found %d broken link(s).%s\n", RED, broken, NC);
-        if (missing_pdfs > 0) printf("%sPDFs: Found %d missing PDF(s).%s\n", RED, missing_pdfs, NC);
+        if (missingPdfs > 0) printf("%sPDFs: Found %d missing PDF(s).%s\n", RED, missingPdfs, NC);
     }
 
     if (desync == 0) printf("%sMetadata: Valid!%s\n", GREEN, NC);
@@ -243,21 +241,21 @@ void audit_notes(void) {
     else printf("%sTODOs: You have %d pending TODO(s).%s\n", YELLOW, todos, NC);
 }
 
-void rebuild_notes(void) {
-    int total_notes = 0;
-    for (int i = 0; i < noteCapacity; i++) { if (notes[i].active) total_notes++; }
+void rebuildNotes(void) {
+    int totalNotes = 0;
+    for (int i = 0; i < noteCapacity; i++) { if (notes[i].active) totalNotes++; }
 
-    if (total_notes == 0) {
+    if (totalNotes == 0) {
         printf("%sNo notes found to rebuild.%s\n", GREEN, NC);
         return;
     }
 
     printf("%sRebuilding notes...%s\n", BLUE, NC);
 
-    int running_jobs = 0, total_processed = 0, total_rebuilt = 0, total_failed = 0;
-    int *failed_ids = NULL;
+    int runningJobs = 0, totalProcessed = 0, totalRebuilt = 0, totalFailed = 0;
+    int *failedIds = NULL;
 
-    int total_lines = 0;
+    int totalLines = 0;
 
     typedef struct { pid_t pid; int id; int row; } RebuildJob;
     RebuildJob jobs[MAX_JOBS];
@@ -271,20 +269,20 @@ void rebuild_notes(void) {
         for (int j = 0; j < MAX_JOBS; j++) { \
             if (jobs[j].pid == (p)) { \
                 char dp[PATH_MAX], bp[PATH_MAX]; \
-                snprintf(dp, sizeof(dp), "%s/%05d/%05d.dat", attic_dir, jobs[j].id, jobs[j].id); \
-                snprintf(bp, sizeof(bp), "%s/%05d/%05d.dat.bak", attic_dir, jobs[j].id, jobs[j].id); \
+                snprintf(dp, sizeof(dp), "%s/%05d/%05d.dat", atticDir, jobs[j].id, jobs[j].id); \
+                snprintf(bp, sizeof(bp), "%s/%05d/%05d.dat.bak", atticDir, jobs[j].id, jobs[j].id); \
                 \
-                int diff = (total_lines > 0 ? total_lines - 1 : 0) - jobs[j].row; \
+                int diff = (totalLines > 0 ? totalLines - 1 : 0) - jobs[j].row; \
                 if (diff > 0) printf("\033[%dA", diff); \
                 printf("\r\033[2K"); \
                 \
                 if (WIFEXITED((s)) && WEXITSTATUS((s)) == 0) { \
                     unlink(bp); \
-                    total_rebuilt++; \
+                    totalRebuilt++; \
                 } else { \
                     printf("%sNote %05d failed to compile!%s", RED, jobs[j].id, NC); \
                     if (access(bp, F_OK) == 0) rename(bp, dp); else unlink(dp); \
-                    failed_ids[total_failed++] = jobs[j].id; \
+                    failedIds[totalFailed++] = jobs[j].id; \
                     jobs[j].row = -1; \
                 } \
                 \
@@ -293,7 +291,7 @@ void rebuild_notes(void) {
                 fflush(stdout); \
                 \
                 jobs[j].pid = 0; \
-                running_jobs--; \
+                runningJobs--; \
                 break; \
             } \
         } \
@@ -302,28 +300,28 @@ void rebuild_notes(void) {
     for (int i = 0; i < noteCapacity; i++) {
         if (!notes[i].active) continue;
 
-        total_processed++;
+        totalProcessed++;
 
-        char tex_path[PATH_MAX], log_path[PATH_MAX];
+        char texPath[PATH_MAX], logPath[PATH_MAX];
         struct stat st_tex, st_log;
-        snprintf(tex_path, sizeof(tex_path), "%s/%05d/%05d.tex", attic_dir, i, i);
-        snprintf(log_path, sizeof(log_path), "%s/%05d/%05d.log", attic_dir, i, i);
+        snprintf(texPath, sizeof(texPath), "%s/%05d/%05d.tex", atticDir, i, i);
+        snprintf(logPath, sizeof(logPath), "%s/%05d/%05d.log", atticDir, i, i);
 
-        int needs_rebuild = 0;
-        if (stat(tex_path, &st_tex) == 0) {
-            if (stat(log_path, &st_log) != 0 || st_tex.st_mtime > st_log.st_mtime) {
-                needs_rebuild = 1;
+        int needsRebuild = 0;
+        if (stat(texPath, &st_tex) == 0) {
+            if (stat(logPath, &st_log) != 0 || st_tex.st_mtime > st_log.st_mtime) {
+                needsRebuild = 1;
             }
         }
 
-        if (needs_rebuild) {
+        if (needsRebuild) {
             char dp[PATH_MAX], bp[PATH_MAX];
-            snprintf(dp, sizeof(dp), "%s/%05d/%05d.dat", attic_dir, i, i);
-            snprintf(bp, sizeof(bp), "%s/%05d/%05d.dat.bak", attic_dir, i, i);
+            snprintf(dp, sizeof(dp), "%s/%05d/%05d.dat", atticDir, i, i);
+            snprintf(bp, sizeof(bp), "%s/%05d/%05d.dat.bak", atticDir, i, i);
             rename(dp, bp);
         }
 
-        generate_metadata(i, 0);
+        generateMetadata(i, 0);
 
         int status;
         pid_t pid;
@@ -331,11 +329,11 @@ void rebuild_notes(void) {
             PROCESS_FINISHED_JOB(pid, status);
         }
 
-        if (!needs_rebuild) {
+        if (!needsRebuild) {
             continue;
         }
 
-        while (running_jobs >= MAX_JOBS) {
+        while (runningJobs >= MAX_JOBS) {
             pid = waitpid(-1, &status, 0);
             if (pid > 0) {
                 PROCESS_FINISHED_JOB(pid, status);
@@ -344,14 +342,14 @@ void rebuild_notes(void) {
 
         pid = fork();
         if (pid == 0) {
-            char dir_path[PATH_MAX]; snprintf(dir_path, sizeof(dir_path), "%s/%05d", attic_dir, i);
-            if (chdir(dir_path) != 0) exit(1);
-            char tex_file[32]; snprintf(tex_file, sizeof(tex_file), "%05d.tex", i);
+            char dirPath[PATH_MAX]; snprintf(dirPath, sizeof(dirPath), "%s/%05d", atticDir, i);
+            if (chdir(dirPath) != 0) exit(1);
+            char texFile[32]; snprintf(texFile, sizeof(texFile), "%05d.tex", i);
 
             freopen("/dev/null", "w", stdout);
             freopen("/dev/null", "w", stderr);
 
-            execlp("latexmk", "latexmk", "-pdf", "-pvc-", "-interaction=nonstopmode", tex_file, NULL);
+            execlp("latexmk", "latexmk", "-pdf", "-pvc-", "-interaction=nonstopmode", texFile, NULL);
             exit(1);
         } else if (pid > 0) {
             for (int j = 0; j < MAX_JOBS; j++) {
@@ -360,14 +358,14 @@ void rebuild_notes(void) {
                     jobs[j].id = i;
 
                     if (jobs[j].row == -1) {
-                        if (total_lines > 0) printf("\n");
-                        jobs[j].row = total_lines;
-                        total_lines++;
+                        if (totalLines > 0) printf("\n");
+                        jobs[j].row = totalLines;
+                        totalLines++;
                     }
 
-                    int diff = (total_lines > 0 ? total_lines - 1 : 0) - jobs[j].row;
+                    int diff = (totalLines > 0 ? totalLines - 1 : 0) - jobs[j].row;
                     if (diff > 0) printf("\033[%dA", diff);
-                    printf("\r\033[2K%sRebuilding %05d (%d/%d)...%s", YELLOW, i, total_processed, total_notes, NC);
+                    printf("\r\033[2K%sRebuilding %05d (%d/%d)...%s", YELLOW, i, totalProcessed, totalNotes, NC);
                     if (diff > 0) printf("\033[%dB", diff);
                     printf("\r");
                     fflush(stdout);
@@ -375,11 +373,11 @@ void rebuild_notes(void) {
                     break;
                 }
             }
-            running_jobs++;
+            runningJobs++;
         }
     }
 
-    while (running_jobs > 0) {
+    while (runningJobs > 0) {
         int status;
         pid_t pid = waitpid(-1, &status, 0);
         if (pid > 0) {
@@ -389,94 +387,94 @@ void rebuild_notes(void) {
 
     #undef PROCESS_FINISHED_JOB
 
-    if (total_lines > 0) printf("\n");
+    if (totalLines > 0) printf("\n");
     printf("\r%sRebuild complete. Processed %d notes, %d were recompiled.%s\n",
-        GREEN, total_processed, total_rebuilt, NC);
+        GREEN, totalProcessed, totalRebuilt, NC);
 
-    if (total_failed > 0) {
-        printf("%sWarning: %d note(s) failed to compile.%s\n", RED, total_failed, NC);
+    if (totalFailed > 0) {
+        printf("%sWarning: %d note(s) failed to compile.%s\n", RED, totalFailed, NC);
         printf("%sFailed IDs: ", RED);
-        for (int i = 0; i < total_failed; i++) {
-            printf("%05d%s", failed_ids[i], (i == total_failed - 1) ? "" : ", ");
+        for (int i = 0; i < totalFailed; i++) {
+            printf("%05d%s", failedIds[i], (i == totalFailed - 1) ? "" : ", ");
         }
         printf("%s\n", NC);
     }
 
-    if (failed_ids) free(failed_ids);
-    load_memory();
-    export_graph_json(1);
+    if (failedIds) free(failedIds);
+    loadMemory();
+    exportGraph(1);
 }
 
-void clean_attic(void) {
+void cleanAttic(void) {
     printf("%sCleaning auxiliary and files...%s\n", BLUE, NC);
-    int cleaned_count = 0;
+    int cleanedCount = 0;
 
     const char *extensions[] = {
         ".aux", ".bbl", ".bcf", ".bcf-SAVE-ERROR", ".bbl-SAVE-ERROR",
         ".blg", ".fdb_latexmk", ".fls", ".log", ".run.xml",
         ".synctex.gz", ".synctex(busy)"
     };
-    int num_exts = sizeof(extensions) / sizeof(extensions[0]);
+    int numexts = sizeof(extensions) / sizeof(extensions[0]);
 
     for (int i = 0; i < noteCapacity; i++) {
         if (!notes[i].active) continue;
 
-        char dir_path[PATH_MAX];
-        snprintf(dir_path, sizeof(dir_path), "%s/%05d", attic_dir, i);
+        char dirPath[PATH_MAX];
+        snprintf(dirPath, sizeof(dirPath), "%s/%05d", atticDir, i);
 
-        DIR *d = opendir(dir_path);
+        DIR *d = opendir(dirPath);
         if (!d) continue;
 
-        int note_cleaned = 0;
+        int noteCleaned = 0;
         struct dirent *dir;
 
         while ((dir = readdir(d)) != NULL) {
             if (strcmp(dir->d_name, ".") == 0 || strcmp(dir->d_name, "..") == 0) continue;
 
             int len = strlen(dir->d_name);
-            int should_delete = 0;
+            int shouldDelete = 0;
 
-            char *space_ptr = strchr(dir->d_name, ' ');
-            if (space_ptr != NULL) {
-                if (isdigit(space_ptr[1]) && space_ptr[2] == '.') {
-                    should_delete = 1;
+            char *spacePtr = strchr(dir->d_name, ' ');
+            if (spacePtr != NULL) {
+                if (isdigit(spacePtr[1]) && spacePtr[2] == '.') {
+                    shouldDelete = 1;
                 }
             }
 
-            if (!should_delete) {
-                for (int j = 0; j < num_exts; j++) {
-                    int ext_len = strlen(extensions[j]);
-                    if (len >= ext_len && strcmp(dir->d_name + len - ext_len, extensions[j]) == 0) {
-                        should_delete = 1;
+            if (!shouldDelete) {
+                for (int j = 0; j < numexts; j++) {
+                    int extLen = strlen(extensions[j]);
+                    if (len >= extLen && strcmp(dir->d_name + len - extLen, extensions[j]) == 0) {
+                        shouldDelete = 1;
                         break;
                     }
                 }
             }
 
-            if (should_delete) {
+            if (shouldDelete) {
                 char filepath[PATH_MAX * 2];
-                snprintf(filepath, sizeof(filepath), "%s/%s", dir_path, dir->d_name);
+                snprintf(filepath, sizeof(filepath), "%s/%s", dirPath, dir->d_name);
                 if (unlink(filepath) == 0) {
-                    note_cleaned = 1;
+                    noteCleaned = 1;
                 }
             }
         }
         closedir(d);
 
-        if (note_cleaned) {
-            cleaned_count++;
+        if (noteCleaned) {
+            cleanedCount++;
         }
     }
 
-    printf("%sCleaned files in %d note directories.%s\n", GREEN, cleaned_count, NC);
-    load_memory();
-    export_graph_json(1);
+    printf("%sCleaned files in %d note directories.%s\n", GREEN, cleanedCount, NC);
+    loadMemory();
+    exportGraph(1);
 }
 
-void export_graph_json(int silent) {
-    load_memory();
+void exportGraph(int silent) {
+    loadMemory();
     char path[PATH_MAX];
-    snprintf(path, sizeof(path), "%s/../graph.json", attic_dir);
+    snprintf(path, sizeof(path), "%s/../graph.json", atticDir);
 
     FILE *f = fopen(path, "w");
     if (!f) {
@@ -487,33 +485,33 @@ void export_graph_json(int silent) {
     if (!silent) printf("%sExporting memory graph to JSON...%s\n", BLUE, NC);
 
     fprintf(f, "{\n  \"nodes\": [\n");
-    int first_node = 1;
+    int firstNode = 1;
     for (int i = 0; i < noteCapacity; i++) {
         if (!notes[i].active) continue;
-        if (!first_node) fprintf(f, ",\n");
+        if (!firstNode) fprintf(f, ",\n");
 
-        char safe_keys[1024] = "";
+        char safeKeys[1024] = "";
         int k = 0;
-        const char *k_str = SAFE_STR(notes[i].keys);
-        for (int j = 0; k_str[j] != '\0' && k < 1000; j++) {
-            if (k_str[j] == '"' || k_str[j] == '\\') safe_keys[k++] = '\\';
-            safe_keys[k++] = k_str[j];
+        const char *kStr = SAFE_STR(notes[i].keys);
+        for (int j = 0; kStr[j] != '\0' && k < 1000; j++) {
+            if (kStr[j] == '"' || kStr[j] == '\\') safeKeys[k++] = '\\';
+            safeKeys[k++] = kStr[j];
         }
 
-        fprintf(f, "    { \"id\": \"%05d\", \"label\": \"%s\", \"has_pdf\": %s, \"mod_date\": \"%s\", \"todo_count\": %d }",
-            i, safe_keys, notes[i].has_pdf ? "true" : "false", notes[i].mod_date, notes[i].todo_count);
-        first_node = 0;
+        fprintf(f, "    { \"id\": \"%05d\", \"label\": \"%s\", \"hasPdf\": %s, \"modDate\": \"%s\", \"todoCount\": %d }",
+            i, safeKeys, notes[i].hasPdf ? "true" : "false", notes[i].modDate, notes[i].todoCount);
+        firstNode = 0;
     }
 
     fprintf(f, "\n  ],\n  \"edges\": [\n");
-    int first_edge = 1;
+    int firstedge = 1;
     for (int i = 0; i < noteCapacity; i++) {
         if (!notes[i].active) continue;
-        for (int j = 0; j < notes[i].out_count; j++) {
-            if (!first_edge) fprintf(f, ",\n");
-            fprintf(f, "    { \"source\": \"%05d\", \"target\": \"%05d\", \"line_no\": %d }",
-                i, notes[i].out_links[j].target_id, notes[i].out_links[j].line_no);
-            first_edge = 0;
+        for (int j = 0; j < notes[i].outCount; j++) {
+            if (!firstedge) fprintf(f, ",\n");
+            fprintf(f, "    { \"source\": \"%05d\", \"target\": \"%05d\", \"lineNumber\": %d }",
+                i, notes[i].outLinks[j].targetID, notes[i].outLinks[j].lineNumber);
+            firstedge = 0;
         }
     }
 
@@ -523,9 +521,9 @@ void export_graph_json(int silent) {
     if (!silent) printf("%sGraph data successfully exported to %s%s\n", GREEN, path, NC);
 }
 
-void launch_graph_view(void) {
-    export_graph_json(1);
+void launchGraph(void) {
+    exportGraph(1);
     char cmd[PATH_MAX + 128];
-    snprintf(cmd, sizeof(cmd), "cd '%s/..' && bash -c 'exec -a attic attic-graph' > /dev/null 2>&1 &", attic_dir);
+    snprintf(cmd, sizeof(cmd), "cd '%s/..' && bash -c 'exec -a attic attic-graph' > /dev/null 2>&1 &", atticDir);
     system(cmd);
 }

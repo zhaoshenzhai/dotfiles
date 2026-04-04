@@ -1,6 +1,6 @@
 #include "attic.h"
 
-void prompt_exit() {
+void promptExit() {
     printf("\n%sPress [Y] to return, exiting otherwise...%s ", CYAN, NC);
     fflush(stdout);
     int c = getch();
@@ -10,7 +10,7 @@ void prompt_exit() {
     exit(0);
 }
 
-void interactive_menu() {
+void interactiveMenu() {
     while (1) {
         printf("%sAttic operations:%s\n", CYAN, NC);
         printf("    %s(n): New note%s\n", CYAN, NC);
@@ -26,12 +26,12 @@ void interactive_menu() {
         if (cmdNum == 'n' || cmdNum == 'a' || cmdNum == 'r' || cmdNum == 'c' || cmdNum == 'g') {
             printf("%c\n\n", cmdNum);
             switch (cmdNum) {
-                case 'n': create_note(""); break;
-                case 'a': audit_notes(); break;
-                case 'r': rebuild_notes(); break;
-                case 'c': clean_attic(); break;
+                case 'n': createNote(""); break;
+                case 'a': auditNotes(); break;
+                case 'r': rebuildNotes(); break;
+                case 'c': cleanAttic(); break;
                 case 'g':
-                    launch_graph_view();
+                    launchGraph();
                     system("clear");
                     printf("\033[?1004h\033[?25l");
                     fflush(stdout);
@@ -46,7 +46,7 @@ void interactive_menu() {
                     system("clear");
                     break;
             }
-            if (cmdNum != 'g') { prompt_exit(); }
+            if (cmdNum != 'g') { promptExit(); }
         } else if (cmdNum == 'q') {
             system("aerospace close --quit-if-last-window 2>/dev/null");
             exit(0);
@@ -62,40 +62,40 @@ int main(int argc, char **argv) {
     if (!home) home = "";
     if (!user) user = "";
 
-    const char *current_path = getenv("PATH");
-    char new_path[8192];
-    snprintf(new_path, sizeof(new_path),
+    const char *currentPath = getenv("PATH");
+    char newPath[8192];
+    snprintf(newPath, sizeof(newPath),
         "/run/current-system/sw/bin:/etc/profiles/per-user/%s/bin:%s/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/opt/homebrew/bin:/usr/local/bin:%s",
-        user, home, current_path ? current_path : "");
-    setenv("PATH", new_path, 1);
+        user, home, currentPath ? currentPath : "");
+    setenv("PATH", newPath, 1);
 
-    snprintf(attic_dir, sizeof(attic_dir), "%s/iCloud/Projects/_attic/notes", home);
-    snprintf(template_file, sizeof(template_file), "%s/iCloud/Dotfiles/modules/scripts/LaTeXTemplate/files/attic.tex", home);
-    snprintf(launcher_path, sizeof(launcher_path), "/etc/profiles/per-user/%s/bin/launcher", user);
+    snprintf(atticDir, sizeof(atticDir), "%s/iCloud/Projects/_attic/notes", home);
+    snprintf(templateFile, sizeof(templateFile), "%s/iCloud/Dotfiles/modules/scripts/LaTeXTemplate/files/attic.tex", home);
+    snprintf(launcherPath, sizeof(launcherPath), "/etc/profiles/per-user/%s/bin/launcher", user);
 
-    load_memory();
+    loadMemory();
 
     if (argc > 1) {
         int opt;
         while ((opt = getopt(argc, argv, "ek:nu:m:arcg")) != -1) {
             switch (opt) {
-                case 'e': create_note("EMPTY_KEYWORDS"); return 0;
-                case 'k': create_note(optarg); return 0;
-                case 'n': create_note(""); return 0;
-                case 'm': generate_metadata(atoi(optarg), 0); return 0;
-                case 'u': update_metadata(atoi(optarg)); return 0;
-                case 'a': audit_notes(); return 0;
-                case 'r': rebuild_notes(); return 0;
-                case 'c': clean_attic(); return 0;
-                case 'g': launch_graph_view(); return 0;
+                case 'e': createNote("EMPTY_KEYWORDS"); return 0;
+                case 'k': createNote(optarg); return 0;
+                case 'n': createNote(""); return 0;
+                case 'm': generateMetadata(atoi(optarg), 0); return 0;
+                case 'u': updateMetadata(atoi(optarg)); return 0;
+                case 'a': auditNotes(); return 0;
+                case 'r': rebuildNotes(); return 0;
+                case 'c': cleanAttic(); return 0;
+                case 'g': launchGraph(); return 0;
                 default:
                     fprintf(stderr, "Usage: %s [-n] [-e] [-k keywords] [-m ID] [-u ID] [-a] [-r] [-c] [-g]\n", argv[0]);
                     return 1;
             }
         }
     } else {
-        is_interactive = 1;
-        interactive_menu();
+        isInteractive = 1;
+        interactiveMenu();
     }
 
     return 0;

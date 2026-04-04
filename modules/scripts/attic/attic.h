@@ -26,49 +26,49 @@
 #define CYAN "\x1b[36m"
 #define NC "\x1b[0m"
 
-typedef struct { int target_id; int line_no; } OutLink;
-typedef struct { char *text; int line_no; } Todo;
+typedef struct { int targetID; int lineNumber; } OutLink;
+typedef struct { char *text; int lineNumber; } Todo;
 typedef struct {
-    int active; int has_pdf; char mod_date[64];
-    char *keys; char *meta_refs_raw; char *meta_ref_in_raw;
+    int active; int hasPdf; char modDate[64];
+    char *keys; char *metaRefsRaw; char *metaRefInRaw;
 
-    OutLink *out_links; int out_count;  int out_capacity;
-    int *in_links;      int in_count;   int in_capacity;
-    Todo *todos;        int todo_count; int todo_capacity;
+    OutLink *outLinks; int outCount;  int outCapacity;
+    int *inLinks;      int inCount;   int inCapacity;
+    Todo *todos;        int todoCount; int todoCapacity;
 } Note;
 
-extern char attic_dir[PATH_MAX];
-extern char template_file[PATH_MAX];
-extern char launcher_path[PATH_MAX];
-extern int is_interactive;
+extern char atticDir[PATH_MAX];
+extern char templateFile[PATH_MAX];
+extern char launcherPath[PATH_MAX];
+extern int isInteractive;
 
 extern Note *notes;
 extern int noteCapacity;
 
-void* safe_malloc(size_t size);
-void* safe_realloc(void* p, size_t size);
+void* safeMalloc(size_t size);
+void* safeRealloc(void* p, size_t size);
 int getch(void);
-void trim_end(char *str);
+void trimEnd(char *str);
 int cmp_int(const void *a, const void *b);
 int dedupe(int *arr, int count);
-void format_links(int *ids, int count, char *out_buf);
-int is_compiling(int id);
-void compile_note_async(int id);
-void extract_ids_from_string(const char *str, int *arr, int *count);
-unsigned int HashString(const char *str);
-void ensureNoteCapacity(int max_id);
+void formatLinks(int *ids, int count, char *outBuf);
+int isCompiling(int id);
+void compileNote(int id);
+void extracIDs(const char *str, int *arr, int *count);
+unsigned int hashString(const char *str);
+void ensureNoteCapacity(int maxID);
 
-void free_memory(void);
-void add_out_link(int src, int target, int line_no);
-void add_in_link(int target, int src);
-void add_todo(int id, int line_no, const char *text);
-void load_memory(void);
+void freeMemory(void);
+void addOutLink(int src, int target, int lineNumber);
+void addInLink(int target, int src);
+void addTodo(int id, int lineNumber, const char *text);
+void loadMemory(void);
 
-int generate_metadata(int id, int update_modified);
-void create_note(const char *in_keywords);
-void update_metadata(int id);
-void audit_notes(void);
-void rebuild_notes(void);
-void clean_attic(void);
-void export_graph_json(int silent);
-void launch_graph_view(void);
+int generateMetadata(int id, int updateModified);
+void createNote(const char *inKeywords);
+void updateMetadata(int id);
+void auditNotes(void);
+void rebuildNotes(void);
+void cleanAttic(void);
+void exportGraph(int silent);
+void launchGraph(void);

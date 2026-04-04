@@ -1,53 +1,53 @@
 #include "attic.h"
 
-void free_memory(void) {
+void freeMemory(void) {
     for (int i = 0; i < noteCapacity; i++) {
-        if (notes[i].out_links) { free(notes[i].out_links); notes[i].out_links = NULL; }
-        if (notes[i].in_links) { free(notes[i].in_links); notes[i].in_links = NULL; }
-        for (int j = 0; j < notes[i].todo_count; j++) { if (notes[i].todos[j].text) free(notes[i].todos[j].text); }
+        if (notes[i].outLinks) { free(notes[i].outLinks); notes[i].outLinks = NULL; }
+        if (notes[i].inLinks) { free(notes[i].inLinks); notes[i].inLinks = NULL; }
+        for (int j = 0; j < notes[i].todoCount; j++) { if (notes[i].todos[j].text) free(notes[i].todos[j].text); }
         if (notes[i].todos) { free(notes[i].todos); notes[i].todos = NULL; }
         if (notes[i].keys) { free(notes[i].keys); notes[i].keys = NULL; }
-        if (notes[i].meta_refs_raw) { free(notes[i].meta_refs_raw); notes[i].meta_refs_raw = NULL; }
-        if (notes[i].meta_ref_in_raw) { free(notes[i].meta_ref_in_raw); notes[i].meta_ref_in_raw = NULL; }
+        if (notes[i].metaRefsRaw) { free(notes[i].metaRefsRaw); notes[i].metaRefsRaw = NULL; }
+        if (notes[i].metaRefInRaw) { free(notes[i].metaRefInRaw); notes[i].metaRefInRaw = NULL; }
 
-        notes[i].out_count = notes[i].out_capacity = 0;
-        notes[i].in_count = notes[i].in_capacity = 0;
-        notes[i].todo_count = notes[i].todo_capacity = 0;
+        notes[i].outCount = notes[i].outCapacity = 0;
+        notes[i].inCount = notes[i].inCapacity = 0;
+        notes[i].todoCount = notes[i].todoCapacity = 0;
     }
 }
 
-void add_out_link(int src, int target, int line_no) {
-    if (notes[src].out_count >= notes[src].out_capacity) {
-        notes[src].out_capacity = notes[src].out_capacity == 0 ? 8 : notes[src].out_capacity * 2;
-        notes[src].out_links = (OutLink*)safe_realloc(notes[src].out_links, notes[src].out_capacity * sizeof(OutLink));
+void addOutLink(int src, int target, int lineNumber) {
+    if (notes[src].outCount >= notes[src].outCapacity) {
+        notes[src].outCapacity = notes[src].outCapacity == 0 ? 8 : notes[src].outCapacity * 2;
+        notes[src].outLinks = (OutLink*)safeRealloc(notes[src].outLinks, notes[src].outCapacity * sizeof(OutLink));
     }
-    notes[src].out_links[notes[src].out_count++] = (OutLink){target, line_no};
+    notes[src].outLinks[notes[src].outCount++] = (OutLink){target, lineNumber};
 }
 
-void add_in_link(int target, int src) {
-    if (notes[target].in_count >= notes[target].in_capacity) {
-        notes[target].in_capacity = notes[target].in_capacity == 0 ? 8 : notes[target].in_capacity * 2;
-        notes[target].in_links = safe_realloc(notes[target].in_links, notes[target].in_capacity * sizeof(int));
+void addInLink(int target, int src) {
+    if (notes[target].inCount >= notes[target].inCapacity) {
+        notes[target].inCapacity = notes[target].inCapacity == 0 ? 8 : notes[target].inCapacity * 2;
+        notes[target].inLinks = safeRealloc(notes[target].inLinks, notes[target].inCapacity * sizeof(int));
     }
-    notes[target].in_links[notes[target].in_count++] = src;
+    notes[target].inLinks[notes[target].inCount++] = src;
 }
 
-void add_todo(int id, int line_no, const char *text) {
-    if (notes[id].todo_count >= notes[id].todo_capacity) {
-        notes[id].todo_capacity = notes[id].todo_capacity == 0 ? 4 : notes[id].todo_capacity * 2;
-        notes[id].todos = safe_realloc(notes[id].todos, notes[id].todo_capacity * sizeof(Todo));
+void addTodo(int id, int lineNumber, const char *text) {
+    if (notes[id].todoCount >= notes[id].todoCapacity) {
+        notes[id].todoCapacity = notes[id].todoCapacity == 0 ? 4 : notes[id].todoCapacity * 2;
+        notes[id].todos = safeRealloc(notes[id].todos, notes[id].todoCapacity * sizeof(Todo));
     }
     while (isspace(*text)) text++;
-    char *text_copy = strdup(text);
-    trim_end(text_copy);
-    notes[id].todos[notes[id].todo_count++] = (Todo){text_copy, line_no};
+    char *textCopy = strdup(text);
+    trimEnd(textCopy);
+    notes[id].todos[notes[id].todoCount++] = (Todo){textCopy, lineNumber};
 }
 
-void load_memory(void) {
-    free_memory();
+void loadMemory(void) {
+    freeMemory();
     if (notes) { memset(notes, 0, noteCapacity * sizeof(Note)); }
 
-    DIR *dir = opendir(attic_dir);
+    DIR *dir = opendir(atticDir);
     if (!dir) return;
 
     struct dirent *entry;
@@ -58,21 +58,21 @@ void load_memory(void) {
             notes[id].active = 1;
 
             char path[PATH_MAX];
-            snprintf(path, sizeof(path), "%s/%05d/%05d.pdf", attic_dir, id, id);
-            notes[id].has_pdf = (access(path, F_OK) == 0);
+            snprintf(path, sizeof(path), "%s/%05d/%05d.pdf", atticDir, id, id);
+            notes[id].hasPdf = (access(path, F_OK) == 0);
 
-            snprintf(path, sizeof(path), "%s/%05d/%05d.key", attic_dir, id, id);
+            snprintf(path, sizeof(path), "%s/%05d/%05d.key", atticDir, id, id);
             FILE *fkey = fopen(path, "r");
             if (fkey) {
-                char temp_keys[1024] = "";
-                if (fgets(temp_keys, sizeof(temp_keys), fkey)) {
-                    trim_end(temp_keys);
-                    notes[id].keys = strdup(temp_keys);
+                char tempKeys[1024] = "";
+                if (fgets(tempKeys, sizeof(tempKeys), fkey)) {
+                    trimEnd(tempKeys);
+                    notes[id].keys = strdup(tempKeys);
                 }
                 fclose(fkey);
             }
 
-            snprintf(path, sizeof(path), "%s/%05d/%05d.dat", attic_dir, id, id);
+            snprintf(path, sizeof(path), "%s/%05d/%05d.dat", atticDir, id, id);
             FILE *fdat = fopen(path, "r");
             if (fdat) {
                 char line[4096];
@@ -80,11 +80,11 @@ void load_memory(void) {
                     char *start = line;
                     while (isspace(*start)) start++;
                     if (strncmp(start, "Last modified:", 14) == 0) {
-                        sscanf(start + 14, " %63s", notes[id].mod_date);
+                        sscanf(start + 14, " %63s", notes[id].modDate);
                     } else if (strncmp(start, "References:", 11) == 0) {
-                        trim_end(start); notes[id].meta_refs_raw = strdup(start);
+                        trimEnd(start); notes[id].metaRefsRaw = strdup(start);
                     } else if (strncmp(start, "Referenced in:", 14) == 0) {
-                        trim_end(start); notes[id].meta_ref_in_raw = strdup(start);
+                        trimEnd(start); notes[id].metaRefInRaw = strdup(start);
                     }
                 }
                 fclose(fdat);
@@ -97,24 +97,24 @@ void load_memory(void) {
         if (!notes[i].active) continue;
 
         char path[PATH_MAX];
-        snprintf(path, sizeof(path), "%s/%05d/%05d.tex", attic_dir, i, i);
+        snprintf(path, sizeof(path), "%s/%05d/%05d.tex", atticDir, i, i);
         FILE *ftex = fopen(path, "r");
         if (!ftex) continue;
 
-        char *line = NULL; size_t len = 0; int line_no = 0;
+        char *line = NULL; size_t len = 0; int lineNumber = 0;
         while (getline(&line, &len, ftex) != -1) {
-            line_no++;
-            if (strstr(line, "TODO")) add_todo(i, line_no, line);
+            lineNumber++;
+            if (strstr(line, "TODO")) addTodo(i, lineNumber, line);
 
             char *ptr = line;
             while ((ptr = strstr(ptr, "\\aref{")) != NULL) {
                 char *scan = ptr + 6;
                 while (*scan) {
                     if (strncmp(scan, "}{", 2) == 0 && isdigit(scan[2]) && scan[7] == '}') {
-                        int target_id = 0;
-                        for (int k = 0; k < 5; k++) target_id = target_id * 10 + (scan[2 + k] - '0');
-                        add_out_link(i, target_id, line_no);
-                        add_in_link(target_id, i);
+                        int targetID = 0;
+                        for (int k = 0; k < 5; k++) targetID = targetID * 10 + (scan[2 + k] - '0');
+                        addOutLink(i, targetID, lineNumber);
+                        addInLink(targetID, i);
                         break;
                     }
                     scan++;

@@ -1,14 +1,14 @@
 #include "attic.h"
 
-char attic_dir[PATH_MAX];
-char template_file[PATH_MAX];
-char launcher_path[PATH_MAX];
-int is_interactive = 0;
+char atticDir[PATH_MAX];
+char templateFile[PATH_MAX];
+char launcherPath[PATH_MAX];
+int isInteractive = 0;
 
 Note *notes = NULL;
 int noteCapacity = 0;
 
-void* safe_malloc(size_t size) {
+void* safeMalloc(size_t size) {
     void* p = malloc(size);
     if (!p && size > 0) {
         fprintf(stderr, "%sError: Out of memory (malloc failed)%s\n", RED, NC);
@@ -17,24 +17,24 @@ void* safe_malloc(size_t size) {
     return p;
 }
 
-void* safe_realloc(void* p, size_t size) {
-    void* new_p = realloc(p, size);
-    if (!new_p && size > 0) {
+void* safeRealloc(void* p, size_t size) {
+    void* newP = realloc(p, size);
+    if (!newP && size > 0) {
         fprintf(stderr, "%sError: Out of memory (realloc failed)%s\n", RED, NC);
         exit(1);
     }
-    return new_p;
+    return newP;
 }
 
-void ensureNoteCapacity(int max_id) {
-    if (max_id >= noteCapacity) {
-        int old_cap = noteCapacity;
-        noteCapacity = max_id + 1;
-        if (noteCapacity < old_cap * 2) noteCapacity = old_cap * 2;
+void ensureNoteCapacity(int maxID) {
+    if (maxID >= noteCapacity) {
+        int oldCap = noteCapacity;
+        noteCapacity = maxID + 1;
+        if (noteCapacity < oldCap * 2) noteCapacity = oldCap * 2;
         if (noteCapacity < 128) noteCapacity = 128;
 
-        notes = (Note*)safe_realloc(notes, noteCapacity * sizeof(Note));
-        memset(notes + old_cap, 0, (noteCapacity - old_cap) * sizeof(Note));
+        notes = (Note*)safeRealloc(notes, noteCapacity * sizeof(Note));
+        memset(notes + oldCap, 0, (noteCapacity - oldCap) * sizeof(Note));
     }
 }
 
@@ -50,7 +50,7 @@ int getch(void) {
     return ch;
 }
 
-void trim_end(char *str) {
+void trimEnd(char *str) {
     int len = strlen(str);
     while (len > 0 && (isspace(str[len - 1]) || str[len - 1] == '\\')) {
         str[len - 1] = '\0';
@@ -75,29 +75,29 @@ int dedupe(int *arr, int count) {
     return j + 1;
 }
 
-void format_links(int *ids, int count, char *out_buf) {
-    out_buf[0] = '\0';
-    int unique_count = dedupe(ids, count);
-    for (int i = 0; i < unique_count; i++) {
-        if (i > 0) strcat(out_buf, ", ");
+void formatLinks(int *ids, int count, char *outBuf) {
+    outBuf[0] = '\0';
+    int uniqueCount = dedupe(ids, count);
+    for (int i = 0; i < uniqueCount; i++) {
+        if (i > 0) strcat(outBuf, ", ");
         char temp[32];
         snprintf(temp, sizeof(temp), "\\aref{%05d}{%05d}", ids[i], ids[i]);
-        strcat(out_buf, temp);
+        strcat(outBuf, temp);
     }
 }
 
-int is_compiling(int id) {
-    int n_procs = proc_listpids(PROC_ALL_PIDS, 0, NULL, 0);
-    if (n_procs <= 0) return 0;
+int isCompiling(int id) {
+    int nProcs = proc_listpids(PROC_ALL_PIDS, 0, NULL, 0);
+    if (nProcs <= 0) return 0;
 
-    pid_t *pids = (pid_t*)safe_malloc(n_procs * sizeof(pid_t));
-    n_procs = proc_listpids(PROC_ALL_PIDS, 0, pids, n_procs * sizeof(pid_t));
+    pid_t *pids = (pid_t*)safeMalloc(nProcs * sizeof(pid_t));
+    nProcs = proc_listpids(PROC_ALL_PIDS, 0, pids, nProcs * sizeof(pid_t));
 
-    for (int i = 0; i < n_procs; i++) {
+    for (int i = 0; i < nProcs; i++) {
         if (pids[i] <= 0) continue;
-        char path_buf[PROC_PIDPATHINFO_MAXSIZE];
-        if (proc_pidpath(pids[i], path_buf, sizeof(path_buf)) > 0) {
-            if (strstr(path_buf, "latexmk") || strstr(path_buf, "pdflatex")) {
+        char pathBuf[PROC_PIDPATHINFO_MAXSIZE];
+        if (proc_pidpath(pids[i], pathBuf, sizeof(pathBuf)) > 0) {
+            if (strstr(pathBuf, "latexmk") || strstr(pathBuf, "pdflatex")) {
                 free(pids);
                 return 1;
             }
@@ -107,16 +107,15 @@ int is_compiling(int id) {
     return 0;
 }
 
-void compile_note_async(int id) {
-    if (is_compiling(id)) return;
+void compileNote(int id) {
+    if (isCompiling(id)) return;
     char cmd[2048];
     snprintf(cmd, sizeof(cmd),
-        "cd '%s/%05d' && nohup latexmk -pdf -pvc- -interaction=nonstopmode %05d.tex > /dev/null 2>&1 &",
-        attic_dir, id, id);
+        "cd '%s/%05d' && nohup latexmk -pdf -pvc- -interaction=nonstopmode %05d.tex > /dev/null 2>&1 &", atticDir, id, id);
     system(cmd);
 }
 
-void extract_ids_from_string(const char *str, int *arr, int *count) {
+void extracIDs(const char *str, int *arr, int *count) {
     const char *ptr = str;
     while (*ptr) {
         if (isdigit(*ptr)) {
@@ -131,7 +130,7 @@ void extract_ids_from_string(const char *str, int *arr, int *count) {
     }
 }
 
-unsigned int HashString(const char *str) {
+unsigned int hashString(const char *str) {
     unsigned int hash = 5381;
     int c;
     while ((c = *str++)) hash = ((hash << 5) + hash) + c;
