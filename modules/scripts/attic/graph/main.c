@@ -27,7 +27,12 @@ int main(void) {
     SetTargetFPS(60);
 
     Camera2D camera = { .target = {screenWidth/2.0f, screenHeight/2.0f}, .offset = {screenWidth/2.0f, screenHeight/2.0f}, .zoom = 1.0f };
-    Font font = LoadFontEx(FONT_PATH, 128, 0, 0);
+
+    int codepoints[256];
+    for (int i = 0; i < 95; i++) codepoints[i] = 32 + i;
+    for (int i = 0; i < 160; i++) codepoints[95 + i] = 0xA0 + i;
+
+    Font font = LoadFontEx(FONT_PATH, 128, codepoints, 255);
     SetTextureFilter(font.texture, TEXTURE_FILTER_BILINEAR);
 
     LoadGraphData("graph.json", screenWidth, screenHeight);
