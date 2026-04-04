@@ -4,11 +4,8 @@ void free_memory(void) {
     for (int i = 0; i < MAX_NOTES; i++) {
         if (notes[i].out_links) { free(notes[i].out_links); notes[i].out_links = NULL; }
         if (notes[i].in_links) { free(notes[i].in_links); notes[i].in_links = NULL; }
-        for (int j = 0; j < notes[i].todo_count; j++) {
-            if (notes[i].todos[j].text) free(notes[i].todos[j].text);
-        }
+        for (int j = 0; j < notes[i].todo_count; j++) { if (notes[i].todos[j].text) free(notes[i].todos[j].text); }
         if (notes[i].todos) { free(notes[i].todos); notes[i].todos = NULL; }
-
         if (notes[i].keys) { free(notes[i].keys); notes[i].keys = NULL; }
         if (notes[i].meta_refs_raw) { free(notes[i].meta_refs_raw); notes[i].meta_refs_raw = NULL; }
         if (notes[i].meta_ref_in_raw) { free(notes[i].meta_ref_in_raw); notes[i].meta_ref_in_raw = NULL; }

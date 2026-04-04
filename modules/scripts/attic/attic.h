@@ -16,7 +16,7 @@
 #include <errno.h>
 
 #define SAFE_STR(s) ((s) ? (s) : "")
-#define MAX_NOTES 100000
+#define MAX_NOTES 10000
 #define MAX_JOBS 5
 
 #define RED "\x1b[31m"
@@ -29,7 +29,6 @@
 
 typedef struct { int target_id; int line_no; } OutLink;
 typedef struct { char *text; int line_no; } Todo;
-
 
 typedef struct {
     int active;
