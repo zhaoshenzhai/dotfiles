@@ -21,7 +21,7 @@ const float innerRadius = 20.0f;
 const float outerRadius = 40.0f;
 const float minNodeRadius = 4.0f;
 const float maxNodeRadius = 8.0f;
-float labelScale = 1.75f;
+float labelScale = 1.6f;
 
 void initializeWindow() {
     SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_TRANSPARENT);
@@ -173,7 +173,7 @@ void draw() {
             fg.a = (unsigned char)(idAlpha * 255.0f * 0.6f);
             Color bg = { 0x11, 0x11, 0x11, (unsigned char)(idAlpha * 204.0f * 0.6f) };
 
-            float idFontSize = 10.0f * labelScale;
+            float idFontSize = 12.0f * labelScale;
             Vector2 sz = MeasureTextEx(fontID, graphNodes[i].id, idFontSize, 1);
 
             float txtX = screenPos.x - sz.x/2;
@@ -189,7 +189,7 @@ void draw() {
             Color bg = { 0x11, 0x11, 0x11, (unsigned char)(labelAlpha * 204.0f) };
 
             Vector2 sz;
-            float mathScale = 0.2f * labelScale;
+            float mathScale = 0.1f * labelScale;
             float mainFontSize = 12.0f * labelScale;
 
             if (graphNodes[i].labelTexture.id != 0) {
