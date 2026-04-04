@@ -204,6 +204,7 @@ void draw() {
 }
 
 void closeWindow() {
+    freeGraphMemory();
     UnloadFont(fontMain);
     UnloadFont(fontID);
     CloseWindow();

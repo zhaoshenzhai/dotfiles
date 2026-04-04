@@ -1,9 +1,12 @@
 #include "graph.h"
 
-Node graphNodes[MAX_NODES];
-Edge graphEdges[MAX_EDGES];
+Node *graphNodes = NULL;
+Edge *graphEdges = NULL;
+
 int nodeCount = 0;
+int nodeCapacity = 0;
 int edgeCount = 0;
+int edgeCapacity = 0;
 
 int findNodeIndex(const char* id) {
     if (!id) return -1;
@@ -20,8 +23,14 @@ void initializeGraph(const char* filename, int screenWidth, int screenHeight) {
     cJSON* nodesArray = cJSON_GetObjectItemCaseSensitive(json, "nodes");
     cJSON* nodeItem = NULL;
     nodeCount = 0;
+
     cJSON_ArrayForEach(nodeItem, nodesArray) {
-        if (nodeCount >= MAX_NODES) break;
+        if (nodeCount >= nodeCapacity) {
+            nodeCapacity = nodeCapacity == 0 ? 128 : nodeCapacity * 2;
+            graphNodes = realloc(graphNodes, nodeCapacity * sizeof(Node));
+            if (!graphNodes) { fprintf(stderr, "Out of memory\n"); exit(1); }
+        }
+
         cJSON* idObj = cJSON_GetObjectItemCaseSensitive(nodeItem, "id");
         cJSON* labelObj = cJSON_GetObjectItemCaseSensitive(nodeItem, "label");
         cJSON* hasPdfObj = cJSON_GetObjectItemCaseSensitive(nodeItem, "has_pdf");
@@ -44,8 +53,14 @@ void initializeGraph(const char* filename, int screenWidth, int screenHeight) {
     cJSON* edgesArray = cJSON_GetObjectItemCaseSensitive(json, "edges");
     cJSON* edgeItem = NULL;
     edgeCount = 0;
+
     cJSON_ArrayForEach(edgeItem, edgesArray) {
-        if (edgeCount >= MAX_EDGES) break;
+        if (edgeCount >= edgeCapacity) {
+            edgeCapacity = edgeCapacity == 0 ? 256 : edgeCapacity * 2;
+            graphEdges = realloc(graphEdges, edgeCapacity * sizeof(Edge));
+            if (!graphEdges) { fprintf(stderr, "Out of memory\n"); exit(1); }
+        }
+
         cJSON* srcObj = cJSON_GetObjectItemCaseSensitive(edgeItem, "source");
         cJSON* tgtObj = cJSON_GetObjectItemCaseSensitive(edgeItem, "target");
 
@@ -60,7 +75,9 @@ void initializeGraph(const char* filename, int screenWidth, int screenHeight) {
         }
     }
 
-    int degrees[MAX_NODES] = {0};
+    int *degrees = calloc(nodeCount, sizeof(int));
+    if (!degrees) { fprintf(stderr, "Out of memory\n"); exit(1); }
+
     for (int i = 0; i < edgeCount; i++) {
         degrees[graphEdges[i].source_idx]++;
         degrees[graphEdges[i].target_idx]++;
@@ -71,7 +88,17 @@ void initializeGraph(const char* filename, int screenWidth, int screenHeight) {
         graphNodes[i].radius = minNodeRadius + (maxNodeRadius - minNodeRadius) * (d / (d + 4.0f));
     }
 
+    free(degrees);
     assignNodeColors();
     cJSON_Delete(json);
     UnloadFileText(jsonString);
+}
+
+void freeGraphMemory(void) {
+    if (graphNodes) free(graphNodes);
+    if (graphEdges) free(graphEdges);
+    graphNodes = NULL;
+    graphEdges = NULL;
+    nodeCount = nodeCapacity = 0;
+    edgeCount = edgeCapacity = 0;
 }

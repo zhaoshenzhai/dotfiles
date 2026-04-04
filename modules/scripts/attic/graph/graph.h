@@ -8,12 +8,8 @@
 #include <raymath.h>
 #include <cjson/cJSON.h>
 
-#define MAX_NODES 100000
-#define MAX_EDGES 200000
-
 #define COL_BG   (Color){ 0x00, 0x00, 0x00,   0 }
 #define COL_FG   (Color){ 0xff, 0xff, 0xff, 255 }
-#define COL_BLUE (Color){ 0x61, 0xaf, 0xef, 255 }
 #define COL_GRAY (Color){ 0x5c, 0x63, 0x70, 255 }
 
 typedef struct Node {
@@ -23,10 +19,12 @@ typedef struct Node {
 } Node;
 typedef struct Edge { int source_idx; int target_idx; } Edge;
 
-extern Node graphNodes[MAX_NODES];
-extern Edge graphEdges[MAX_EDGES];
+extern Node *graphNodes;
+extern Edge *graphEdges;
 extern int nodeCount;
+extern int nodeCapacity;
 extern int edgeCount;
+extern int edgeCapacity;
 
 extern Camera2D camera;
 extern Font fontMain;
@@ -47,6 +45,7 @@ void updatePhysics(int screenWidth, int screenHeight, int draggedIdx);
 void openNote(const char* id);
 int findNodeIndex(const char* id);
 void initializeGraph(const char* filename, int screenWidth, int screenHeight);
+void freeGraphMemory(void);
 
 void initializeLabels(void);
 Texture2D renderLatex(const char* latex);

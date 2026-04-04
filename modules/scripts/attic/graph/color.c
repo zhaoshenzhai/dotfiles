@@ -1,8 +1,10 @@
 #include "graph.h"
 
 void assignNodeColors(void) {
-    bool visited[MAX_NODES] = { false };
-    int queue[MAX_NODES];
+    bool *visited = calloc(nodeCount, sizeof(bool));
+    int *queue = malloc(nodeCount * sizeof(int));
+
+    if (!visited || !queue) { fprintf(stderr, "Out of memory\n"); exit(1); }
 
     for (int i = 0; i < nodeCount; i++) {
         if (visited[i]) continue;
@@ -35,4 +37,7 @@ void assignNodeColors(void) {
         float val = graphNodes[i].has_pdf ? 0.95f : 0.50f;
         graphNodes[i].color = ColorFromHSV(graphNodes[i].hue, 0.7f, val);
     }
+
+    free(visited);
+    free(queue);
 }
