@@ -27,6 +27,14 @@ void initializeWindow() {
     SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_TRANSPARENT);
     InitWindow(screenWidth, screenHeight, "attic-graph");
 
+    SetWindowPosition(xPos, yPos);
+    SetTargetFPS(fps);
+
+    font = LoadFontEx(FONT_PATH, 128, NULL, 255);
+    SetTextureFilter(font.texture, TEXTURE_FILTER_BILINEAR);
+
+    camera = (Camera2D){ .target = {screenWidth/2.0f, screenHeight/2.0f}, .offset = {screenWidth/2.0f, screenHeight/2.0f}, .zoom = 1.0f };
+
     id window = (id)GetWindowHandle();
     if (window) {
         ((void (*)(id, SEL, bool))objc_msgSend)(window, sel_registerName("setTitlebarAppearsTransparent:"), true);
@@ -52,14 +60,6 @@ void initializeWindow() {
 
         ((void (*)(id, SEL, id, long, id))objc_msgSend)(superview, sel_registerName("addSubview:positioned:relativeTo:"), visualEffectView, -1, contentView);
     }
-
-    SetWindowPosition(xPos, yPos);
-    SetTargetFPS(fps);
-
-    font = LoadFontEx(FONT_PATH, 128, NULL, 255);
-    SetTextureFilter(font.texture, TEXTURE_FILTER_BILINEAR);
-
-    camera = (Camera2D){ .target = {screenWidth/2.0f, screenHeight/2.0f}, .offset = {screenWidth/2.0f, screenHeight/2.0f}, .zoom = 1.0f };
 }
 
 void openNote(const char* id) {
