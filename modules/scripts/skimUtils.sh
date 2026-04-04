@@ -267,6 +267,44 @@ enforceSkim() {
     fi
 }
 
+toggleFloatingCenter() {
+    swift - <<'EOF'
+import AppKit
+
+func centerFrontmostWindow() {
+    guard let screen = NSScreen.main else { return }
+    let screenFrame = screen.visibleFrame
+
+    let workspace = NSWorkspace.shared
+    guard let frontApp = workspace.frontmostApplication else { return }
+    let pid = frontApp.processIdentifier
+    let appElement = AXUIElementCreateApplication(pid)
+
+    var focusedWindow: CFTypeRef?
+    let result = AXUIElementCopyAttributeValue(appElement, kAXFocusedWindowAttribute as CFString, &focusedWindow)
+    guard result == .success, let window = focusedWindow else { return }
+    let axWindow = window as! AXUIElement
+
+    var sizeRef: CFTypeRef?
+    AXUIElementCopyAttributeValue(axWindow, kAXSizeAttribute as CFString, &sizeRef)
+    guard let sizeValue = sizeRef else { return }
+    var size = CGSize.zero
+    AXValueGetValue(sizeValue as! AXValue, AXValueType.cgSize, &size)
+
+    let primaryScreenHeight = NSScreen.screens[0].frame.height
+    let axX = screenFrame.origin.x + (screenFrame.width - size.width) / 2
+    let axY = primaryScreenHeight - (screenFrame.origin.y + (screenFrame.height + size.height) / 2)
+
+    var newPoint = CGPoint(x: axX, y: axY)
+    if let positionValue = AXValueCreate(AXValueType.cgPoint, &newPoint) {
+        AXUIElementSetAttributeValue(axWindow, kAXPositionAttribute as CFString, positionValue)
+    }
+}
+
+centerFrontmostWindow()
+EOF
+}
+
 # Main
 case "${1:-}" in
     --switchFocus)
@@ -305,8 +343,12 @@ case "${1:-}" in
         enforceSkim
         exit 0
         ;;
+    --toggleFloatingCenter)
+        toggleFloatingCenter
+        exit 0
+        ;;
     *)
-        echo "Usage: $(basename "$0") [--switchFocus <dir> | --focusDaemon | --closeWindow | --closeSkimTab | --duplicateTab | --openNvim | --openTex | --openKey | --recordSkim <id> | --enforceSkim]"
+        echo "Usage: $(basename "$0") [--switchFocus <dir> | --focusDaemon | --closeWindow | --closeSkimTab | --duplicateTab | --openNvim | --openTex | --openKey | --recordSkim <id> | --enforceSkim | --toggleFloatingCenter]"
         exit 1
         ;;
 esac
