@@ -30,11 +30,11 @@
     };
 
     attic = pkgs.runCommandCC "attic" {
-    buildInputs = with pkgs; [
-        raylib
-        cjson
-        raygui
-    ];
+        buildInputs = with pkgs; [
+            raylib
+            cjson
+            courier-prime
+        ];
     } ''
         mkdir -p $out/bin
 
@@ -42,7 +42,13 @@
             ${scriptsDir}/attic/memory.c ${scriptsDir}/attic/utils.c \
             -o $out/bin/attic
 
-        $CC -O3 ${scriptsDir}/attic/graph.c -lraylib -lcjson \
+        ACTUAL_FONT_PATH=$(find ${pkgs.courier-prime} -type f -iname "*Regular.ttf" | head -n 1)
+        if [ -z "$ACTUAL_FONT_PATH" ]; then
+            ACTUAL_FONT_PATH=$(find ${pkgs.courier-prime} -type f -iname "*.ttf" | head -n 1)
+        fi
+
+        $CC -O3 ${scriptsDir}/attic/graph/*.c -lraylib -lcjson \
+            -DFONT_PATH="\"$ACTUAL_FONT_PATH\"" \
             -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL \
             -o $out/bin/attic-graph
     '';

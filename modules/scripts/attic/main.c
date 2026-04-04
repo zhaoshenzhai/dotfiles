@@ -30,9 +30,23 @@ void interactive_menu() {
                 case 'a': audit_notes(); break;
                 case 'r': rebuild_notes(); break;
                 case 'c': clean_attic(); break;
-                case 'g': launch_graph_view(); break;
+                case 'g':
+                    launch_graph_view();
+                    system("clear");
+                    printf("\033[?1004h\033[?25l");
+                    fflush(stdout);
+
+                    while (1) {
+                        int c = getch();
+                        if (c == '\033') { if (getch() == '[') { if (getch() == 'I') break; } } else if (c == '\n' || c == ' ') { break; }
+                    }
+
+                    printf("\033[?1004l\033[?25h");
+                    fflush(stdout);
+                    system("clear");
+                    break;
             }
-            prompt_exit();
+            if (cmdNum != 'g') { prompt_exit(); }
         } else if (cmdNum == 'q') {
             system("aerospace close --quit-if-last-window 2>/dev/null");
             exit(0);

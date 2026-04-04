@@ -14,7 +14,6 @@ void handler(env env) {
 
     if (name[0] == '\0' || sender[0] == '\0' || strcmp(sender, "aerospace_custom_app_switched") != 0 || info[0] == '\0') { return; }
 
-
     if (title[0] != '\0' && strcasecmp(info, "alacritty") == 0) {
         if (strcmp(title, "launcher") == 0) { return; }
         else if (strcmp(title, "vifm") == 0) { info = "vifm"; }
@@ -24,6 +23,8 @@ void handler(env env) {
         else if (strcmp(title, "nvim") == 0) { info = "nvim"; }
         else if (strcmp(title, "git") == 0) { info = "git"; }
     }
+
+    if (title[0] != '\0' && strcasecmp(info, "attic-graph") == 0) { info = "attic"; }
 
     const char* icon = get_icon_for_app(info);
 

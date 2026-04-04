@@ -91,6 +91,8 @@ void handler(env env) {
                 else if (strcmp(window_title, "git") == 0) { app_name = "git"; }
             }
 
+            if (strcasecmp(app_name, "attic-graph") == 0) { app_name = "attic"; }
+
             for (int i = 0; i < ws_count; i++) {
                 if (strcmp(ws_list[i].name, ws_name) == 0) {
                     const char* icon = get_icon_for_app(app_name);
