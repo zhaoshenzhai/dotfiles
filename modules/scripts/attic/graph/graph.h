@@ -63,3 +63,4 @@ void LoadGraphData(const char* filename, int screenWidth, int screenHeight);
 void UpdatePhysics(int screenWidth, int screenHeight, int draggedIdx);
 void AssignNodeColors(void);
 Texture2D RenderLatex(const char* latex);
+void InitAsyncRenderer(void);

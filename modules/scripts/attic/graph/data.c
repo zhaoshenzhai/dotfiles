@@ -14,7 +14,7 @@ typedef struct { char latex[256]; Texture2D tex; } LatexCacheEntry;
 LatexCacheEntry sessionCache[CACHE_SIZE];
 int sessionCacheCount = 0;
 
-typedef struct { char latex[256]; bool active; } RenderJob;
+typedef struct { char latex[256]; int state; } RenderJob;
 RenderJob renderQueue[CACHE_SIZE];
 pthread_mutex_t queueMutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -44,40 +44,53 @@ unsigned int HashString(const char *str) {
 void* LatexWorkerThread(void* arg) {
     while (true) {
         char currentLatex[256] = "";
+        int jobIndex = -1;
+
         pthread_mutex_lock(&queueMutex);
         for (int i = 0; i < CACHE_SIZE; i++) {
-            if (renderQueue[i].active) {
+            if (renderQueue[i].state == 1) { // 1 = Queued
                 strncpy(currentLatex, renderQueue[i].latex, 255);
-                renderQueue[i].active = false;
+                renderQueue[i].state = 2;    // 2 = Processing
+                jobIndex = i;
                 break;
             }
         }
         pthread_mutex_unlock(&queueMutex);
 
-        if (currentLatex[0] == '\0') { usleep(100000); continue; }
+        if (jobIndex == -1) { usleep(100000); continue; }
 
         unsigned int h = HashString(currentLatex);
-        char pngPath[1024];
+        char cacheDir[512], pngPath[1024];
         const char* home = getenv("HOME");
-        snprintf(pngPath, sizeof(pngPath), "%s/.cache/attic/math/%u.png", home ? home : "/tmp", h);
+        snprintf(cacheDir, sizeof(cacheDir), "%s/.cache/attic/math", home ? home : "/tmp");
+        snprintf(pngPath, sizeof(pngPath), "%s/%u.png", cacheDir, h);
 
         if (access(pngPath, F_OK) != 0) {
+            char mkdirCmd[1024];
+            snprintf(mkdirCmd, sizeof(mkdirCmd), "mkdir -p \"%s\"", cacheDir);
+            system(mkdirCmd);
+
             char texPath[1024], cmd[2048];
             snprintf(texPath, sizeof(texPath), "/tmp/attic_%u.tex", h);
             FILE *f = fopen(texPath, "w");
             fprintf(f, "\\documentclass[preview,border=2pt]{standalone}\n"
-                       "\\usepackage{amsmath,amssymb,amsfonts,xcolor}\n"
-                       "\\definecolor{atticfg}{HTML}{ABB2BF}\n"
+                       "\\usepackage{amsmath,amssymb,amsfonts,xcolor,mlmodern}\n"
+                       "\\definecolor{atticfg}{HTML}{FFFFFF}\n"
                        "\\begin{document}\\color{atticfg}%s\\end{document}", currentLatex);
             fclose(f);
 
+            // Replaced /dev/null with attic_error.log so you can debug broken text labels
             snprintf(cmd, sizeof(cmd),
                 "zsh -l -c \"latex -interaction=nonstopmode -output-directory=/tmp %s && "
-                "dvipng -bg Transparent -D 600 -o %s /tmp/attic_%u.dvi\" > /dev/null 2>&1",
+                "dvipng -bg Transparent -D 600 -o %s /tmp/attic_%u.dvi\" > /tmp/attic_error.log 2>&1",
                 texPath, pngPath, h);
             system(cmd);
             remove(texPath);
         }
+
+        pthread_mutex_lock(&queueMutex);
+        renderQueue[jobIndex].state = 3; // 3 = Done/Failed (Prevents re-queueing broken labels)
+        pthread_mutex_unlock(&queueMutex);
     }
     return NULL;
 }
@@ -106,16 +119,27 @@ Texture2D RenderLatex(const char* latex) {
     }
 
     pthread_mutex_lock(&queueMutex);
+    bool found = false;
     for (int i = 0; i < CACHE_SIZE; i++) {
-        if (!renderQueue[i].active) {
-            strncpy(renderQueue[i].latex, latex, 255);
-            renderQueue[i].active = true;
+        // If it exists in the queue at ALL (queued, processing, or failed), don't add it again
+        if (renderQueue[i].state != 0 && strcmp(renderQueue[i].latex, latex) == 0) {
+            found = true;
             break;
+        }
+    }
+
+    if (!found) {
+        for (int i = 0; i < CACHE_SIZE; i++) {
+            if (renderQueue[i].state == 0) {
+                strncpy(renderQueue[i].latex, latex, 255);
+                renderQueue[i].state = 1; // 1 = Queued
+                break;
+            }
         }
     }
     pthread_mutex_unlock(&queueMutex);
 
-    return (Texture2D){ 0 };
+    return (Texture2D){0};
 }
 
 void InitAsyncRenderer(void) {

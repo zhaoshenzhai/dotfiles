@@ -12,9 +12,12 @@ void UpdatePhysics(int screenWidth, int screenHeight, int draggedIdx) {
         for (int j = i + 1; j < nodeCount; j++) {
             Vector2 d = Vector2Subtract(graphNodes[i].position, graphNodes[j].position);
             float force = repulsion / fmaxf(1.0f, Vector2LengthSqr(d));
-            Vector2 dir = Vector2Scale(Vector2Normalize(d), force);
-            graphNodes[i].velocity = Vector2Add(graphNodes[i].velocity, dir);
-            graphNodes[j].velocity = Vector2Subtract(graphNodes[j].velocity, dir);
+            force = fminf(force, 50.0f);
+            if (d.x != 0.0f || d.y != 0.0f) {
+                Vector2 dir = Vector2Scale(Vector2Normalize(d), force);
+                graphNodes[i].velocity = Vector2Add(graphNodes[i].velocity, dir);
+                graphNodes[j].velocity = Vector2Subtract(graphNodes[j].velocity, dir);
+            }
         }
     }
     for (int i = 0; i < edgeCount; i++) {

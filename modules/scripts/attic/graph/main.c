@@ -41,6 +41,8 @@ int main(void) {
     SetTextureFilter(fontMain.texture, TEXTURE_FILTER_BILINEAR);
     SetTextureFilter(fontID.texture, TEXTURE_FILTER_BILINEAR);
 
+    InitAsyncRenderer();
+
     LoadGraphData("graph.json", screenWidth, screenHeight);
     int draggedNodeIndex = -1; bool isPanning = false;
 
@@ -51,12 +53,12 @@ int main(void) {
         framesCounter++;
 
         if (framesCounter % 30 == 0) {
-        for (int i = 0; i < nodeCount; i++) {
-            if (graphNodes[i].labelTexture.id == 0) {
-                graphNodes[i].labelTexture = RenderLatex(graphNodes[i].label);
+            for (int i = 0; i < nodeCount; i++) {
+                if (graphNodes[i].labelTexture.id == 0) {
+                    graphNodes[i].labelTexture = RenderLatex(graphNodes[i].label);
+                }
             }
         }
-    }
 
         Vector2 mousePos = GetMousePosition();
         Vector2 worldMouse = GetScreenToWorld2D(mousePos, camera);
@@ -168,7 +170,7 @@ int main(void) {
                     Color bg = { 0x11, 0x11, 0x11, (unsigned char)(labelAlpha * 204.0f) };
 
                     Vector2 sz;
-                    float mathScale = 0.125f;
+                    float mathScale = 0.2f;
 
                     if (graphNodes[i].labelTexture.id != 0) {
                         sz = (Vector2){
