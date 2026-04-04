@@ -50,5 +50,6 @@ void freeGraphMemory(void);
 
 void initializeLabels(void);
 Texture2D renderLatex(const char* latex, bool* has_error);
+void freeLabelsMemory(void);
 
 void assignNodeColors(void);

@@ -87,7 +87,7 @@ void* latexWorkerThread(void* arg) {
                 cacheDir, h, tempPngPath, h);
 
             int status = system(cmd);
-            rename(tempPngPath, pngPath);
+            if (status == 0) { rename(tempPngPath, pngPath); }
 
             char cleanupCmd[1024];
             snprintf(cleanupCmd, sizeof(cleanupCmd), "rm -f \"%s/%u.tex\" \"%s/%u.dvi\" \"%s/%u.aux\" \"%s/%u.log\"",
@@ -160,4 +160,13 @@ void initializeLabels(void) {
     pthread_t threadId;
     pthread_create(&threadId, NULL, latexWorkerThread, NULL);
     pthread_detach(threadId);
+}
+
+void freeLabelsMemory(void) {
+    for (int i = 0; i < sessionCacheCount; i++) {
+        if (sessionCache[i].tex.id != 0) {
+            UnloadTexture(sessionCache[i].tex);
+        }
+    }
+    sessionCacheCount = 0;
 }
