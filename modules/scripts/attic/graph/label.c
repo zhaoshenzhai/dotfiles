@@ -20,6 +20,15 @@ unsigned int HashString(const char *str) {
     return hash;
 }
 
+void getCachePaths(const char* latex, unsigned int* hashOut, char* cacheDirOut, char* pngPathOut) {
+    unsigned int h = HashString(latex);
+    if (hashOut) *hashOut = h;
+
+    const char* home = getenv("HOME");
+    if (cacheDirOut) snprintf(cacheDirOut, 512, "%s/.cache/attic/labels", home ? home : "/tmp");
+    if (pngPathOut) snprintf(pngPathOut, 1024, "%s/.cache/attic/labels/%u.png", home ? home : "/tmp", h);
+}
+
 void* latexWorkerThread(void* arg) {
     while (true) {
         char currentLatex[256] = "";
@@ -39,16 +48,13 @@ void* latexWorkerThread(void* arg) {
                 renderQueue[jobIndex].state = 2;
                 break;
             }
-
             pthread_cond_wait(&queueCond, &queueMutex);
         }
         pthread_mutex_unlock(&queueMutex);
 
-        unsigned int h = HashString(currentLatex);
+        unsigned int h;
         char cacheDir[512], pngPath[1024];
-        const char* home = getenv("HOME");
-        snprintf(cacheDir, sizeof(cacheDir), "%s/.cache/attic/math", home ? home : "/tmp");
-        snprintf(pngPath, sizeof(pngPath), "%s/%u.png", cacheDir, h);
+        getCachePaths(currentLatex, &h, cacheDir, pngPath);
 
         if (access(pngPath, F_OK) != 0) {
             char mkdirCmd[1024];
@@ -56,38 +62,45 @@ void* latexWorkerThread(void* arg) {
             system(mkdirCmd);
 
             char texPath[1024], cmd[2048];
-            snprintf(texPath, sizeof(texPath), "/tmp/attic_%u.tex", h);
+            snprintf(texPath, sizeof(texPath), "%s/%u.tex", cacheDir, h);
             FILE *f = fopen(texPath, "w");
             fprintf(f, "\\documentclass[preview,border=2pt]{standalone}\n"
                        "\\usepackage{amsmath,amssymb,amsfonts,xcolor,mlmodern}\n"
-                       "\\definecolor{atticfg}{HTML}{FFFFFF}\n"
-                       "\\begin{document}\\color{atticfg}%s\\end{document}", currentLatex);
+                       "\\begin{document}\\color{white}%s\\end{document}", currentLatex);
             fclose(f);
 
             snprintf(cmd, sizeof(cmd),
-                "zsh -l -c \"latex -interaction=nonstopmode -output-directory=/tmp %s && "
-                "dvipng -bg Transparent -D 600 -o %s /tmp/attic_%u.dvi\" > /tmp/attic_error.log 2>&1",
-                texPath, pngPath, h);
-            system(cmd);
-            remove(texPath);
-        }
+                "zsh -l -c \"latex -interaction=nonstopmode -output-directory=%s %s && "
+                "dvipng -bg Transparent -D 600 -o %s %s/%u.dvi\" > /dev/null 2>&1",
+                cacheDir, texPath, pngPath, cacheDir, h);
 
-        pthread_mutex_lock(&queueMutex);
-        renderQueue[jobIndex].state = 3;
-        pthread_mutex_unlock(&queueMutex);
+            int status = system(cmd);
+            char cleanupCmd[1024];
+            snprintf(cleanupCmd, sizeof(cleanupCmd), "rm -f %s/%u.tex %s/%u.dvi %s/%u.aux %s/%u.log",
+                     cacheDir, h, cacheDir, h, cacheDir, h, cacheDir, h);
+            system(cleanupCmd);
+
+            pthread_mutex_lock(&queueMutex);
+            renderQueue[jobIndex].state = (status == 0) ? 3 : 4;
+            pthread_mutex_unlock(&queueMutex);
+        } else {
+            pthread_mutex_lock(&queueMutex);
+            renderQueue[jobIndex].state = 3;
+            pthread_mutex_unlock(&queueMutex);
+        }
     }
     return NULL;
 }
 
-Texture2D renderLatex(const char* latex) {
+Texture2D renderLatex(const char* latex, bool* hasError) {
+    if (hasError) *hasError = false;
+
     for (int i = 0; i < sessionCacheCount; i++) {
         if (strcmp(sessionCache[i].latex, latex) == 0) return sessionCache[i].tex;
     }
 
-    unsigned int h = HashString(latex);
     char pngPath[1024];
-    const char* home = getenv("HOME");
-    snprintf(pngPath, sizeof(pngPath), "%s/.cache/attic/math/%u.png", home ? home : "/tmp", h);
+    getCachePaths(latex, NULL, NULL, pngPath);
 
     if (access(pngPath, F_OK) == 0) {
         Image img = LoadImage(pngPath);
@@ -107,6 +120,7 @@ Texture2D renderLatex(const char* latex) {
     for (int i = 0; i < CACHE_SIZE; i++) {
         if (renderQueue[i].state != 0 && strcmp(renderQueue[i].latex, latex) == 0) {
             found = true;
+            if (renderQueue[i].state == 4 && hasError) { *hasError = true; }
             break;
         }
     }

@@ -13,7 +13,7 @@
 #define COL_GRAY (Color){ 0x5c, 0x63, 0x70, 255 }
 
 typedef struct Node {
-    char id[32]; char label[256]; bool has_pdf;
+    char id[32]; char label[256]; bool hasPdf; bool hasLatexError;
     Vector2 position; Vector2 velocity; float radius;
     float hue; Color color; Texture2D labelTexture;
 } Node;
@@ -48,6 +48,6 @@ void initializeGraph(const char* filename, int screenWidth, int screenHeight);
 void freeGraphMemory(void);
 
 void initializeLabels(void);
-Texture2D renderLatex(const char* latex);
+Texture2D renderLatex(const char* latex, bool* has_error);
 
 void assignNodeColors(void);

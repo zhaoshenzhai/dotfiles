@@ -98,7 +98,7 @@ bool getInput(int *draggedNodeIndex, bool *isPanning, double *lastClickTime, int
 
         if (hit != -1) {
             if (hit == *lastClickedNode && (GetTime() - *lastClickTime) < 0.3) {
-                if (graphNodes[hit].has_pdf) openNote(graphNodes[hit].id);
+                if (graphNodes[hit].hasPdf) openNote(graphNodes[hit].id);
                 *lastClickTime = 0.0;
             } else {
                 *lastClickedNode = hit;
@@ -138,6 +138,13 @@ void draw() {
 
     for (int i = 0; i < nodeCount; i++) {
         DrawCircleV(graphNodes[i].position, graphNodes[i].radius, graphNodes[i].color);
+
+        if (graphNodes[i].hasLatexError || !graphNodes[i].hasPdf) {
+            DrawCircleLinesV(graphNodes[i].position, graphNodes[i].radius, RED);
+
+            Vector2 exPos = { graphNodes[i].position.x + graphNodes[i].radius + 2.0f, graphNodes[i].position.y - 6.0f };
+            DrawTextEx(fontMain, "!", exPos, 14, 1, RED);
+        }
     }
 
     for (int i = 0; i < nodeCount; i++) {
@@ -225,8 +232,8 @@ int main(void) {
 
         if (framesCounter % 30 == 0) {
             for (int i = 0; i < nodeCount; i++) {
-                if (graphNodes[i].labelTexture.id == 0) {
-                    graphNodes[i].labelTexture = renderLatex(graphNodes[i].label);
+                if (graphNodes[i].labelTexture.id == 0 && !graphNodes[i].hasLatexError) {
+                    graphNodes[i].labelTexture = renderLatex(graphNodes[i].label, &graphNodes[i].hasLatexError);
                 }
             }
         }

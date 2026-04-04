@@ -33,10 +33,7 @@ void assignNodeColors(void) {
         }
     }
 
-    for (int i = 0; i < nodeCount; i++) {
-        float val = graphNodes[i].has_pdf ? 0.95f : 0.50f;
-        graphNodes[i].color = ColorFromHSV(graphNodes[i].hue, 0.7f, val);
-    }
+    for (int i = 0; i < nodeCount; i++) { graphNodes[i].color = ColorFromHSV(graphNodes[i].hue, 0.7f, 1.0f); }
 
     free(visited);
     free(queue);

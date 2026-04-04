@@ -33,14 +33,15 @@ void initializeGraph(const char* filename, int screenWidth, int screenHeight) {
 
         cJSON* idObj = cJSON_GetObjectItemCaseSensitive(nodeItem, "id");
         cJSON* labelObj = cJSON_GetObjectItemCaseSensitive(nodeItem, "label");
-        cJSON* hasPdfObj = cJSON_GetObjectItemCaseSensitive(nodeItem, "has_pdf");
+        cJSON* hasPdfObj = cJSON_GetObjectItemCaseSensitive(nodeItem, "hasPdf");
 
         if (cJSON_IsString(idObj) && cJSON_IsString(labelObj)) {
             strncpy(graphNodes[nodeCount].id, idObj->valuestring, 31);
             strncpy(graphNodes[nodeCount].label, labelObj->valuestring, 255);
 
-            graphNodes[nodeCount].labelTexture = renderLatex(graphNodes[nodeCount].label);
-            graphNodes[nodeCount].has_pdf = cJSON_IsTrue(hasPdfObj);
+            graphNodes[nodeCount].hasLatexError = false;
+            graphNodes[nodeCount].hasPdf = cJSON_IsTrue(hasPdfObj);
+            graphNodes[nodeCount].labelTexture = renderLatex(graphNodes[nodeCount].label, &graphNodes[nodeCount].hasLatexError);
 
             float angle = (float)nodeCount * (2.0f * PI / 50.0f);
             graphNodes[nodeCount].position = (Vector2){ screenWidth/2.0f + cosf(angle)*50.0f, screenHeight/2.0f + sinf(angle)*50.0f };
