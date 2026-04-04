@@ -523,6 +523,8 @@ void exportGraph(int silent) {
 void launchGraph(void) {
     exportGraph(1);
     char cmd[PATH_MAX + 128];
-    snprintf(cmd, sizeof(cmd), "cd '%s/..' && bash -c 'exec -a attic attic-graph' > /dev/null 2>&1 &", atticDir);
+    snprintf(cmd, sizeof(cmd), "cd '%s/..' && nohup bash -c 'exec -a attic attic-graph' > /dev/null 2>&1 &", atticDir);
     system(cmd);
+
+    exit(0);
 }
