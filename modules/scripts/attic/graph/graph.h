@@ -28,7 +28,6 @@ extern int edgeCapacity;
 
 extern Camera2D camera;
 extern Font font;
-extern float labelScale;
 
 extern float k;
 extern float repulsion;
@@ -39,6 +38,7 @@ extern const float innerRadius;
 extern const float outerRadius;
 extern const float minNodeRadius;
 extern const float maxNodeRadius;
+extern const float labelScale;
 
 void updatePhysics(int screenWidth, int screenHeight, int draggedIdx);
 

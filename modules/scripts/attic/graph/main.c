@@ -13,16 +13,16 @@ Vector2 worldMouse;
 const int fps = 120;
 int framesCounter = 0;
 
-const int screenWidth = 1171;
-const int screenHeight = 839;
-const int xPos = 262;
-const int yPos = 125;
+const int screenWidth = 1285;
+const int screenHeight = 905;
+const int xPos = 212;
+const int yPos = 123;
 
 const float innerRadius = 10.0f;
 const float outerRadius = 30.0f;
 const float minNodeRadius = 3.0f;
 const float maxNodeRadius = 6.0f;
-float labelScale = 1.6f;
+const float labelScale = 1.6f;
 
 void initializeWindow() {
     SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_TRANSPARENT);
