@@ -18,6 +18,7 @@ const int screenHeight = 905;
 const int xPos = 212;
 const int yPos = 123;
 
+const float clickRadius = 05.0f;
 const float innerRadius = 10.0f;
 const float outerRadius = 30.0f;
 const float minNodeRadius = 3.0f;
@@ -118,7 +119,7 @@ void getInput(int *draggedNodeIndex, bool *isPanning, double *lastClickTime, int
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         int hit = -1;
         for (int i = 0; i < nodeCount; i++) {
-            if (CheckCollisionPointCircle(worldMouse, graphNodes[i].position, graphNodes[i].radius)) {
+            if (CheckCollisionPointCircle(worldMouse, graphNodes[i].position, graphNodes[i].radius + clickRadius)) {
                 hit = i; break;
             }
         }
