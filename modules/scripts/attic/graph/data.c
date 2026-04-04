@@ -58,7 +58,6 @@ void initializeGraph(const char* filename, int screenWidth, int screenHeight) {
             float angle = (float)nodeCount * (2.0f * PI / 50.0f);
             graphNodes[nodeCount].position = (Vector2){ screenWidth/2.0f + cosf(angle)*50.0f, screenHeight/2.0f + sinf(angle)*50.0f };
             graphNodes[nodeCount].velocity = (Vector2){ 0, 0 };
-            graphNodes[nodeCount].radius = 4.0f;
             nodeCount++;
         }
     }
@@ -98,7 +97,7 @@ void initializeGraph(const char* filename, int screenWidth, int screenHeight) {
 
     for (int i = 0; i < nodeCount; i++) {
         float d = (float)degrees[i];
-        graphNodes[i].radius = minNodeRadius + (maxNodeRadius - minNodeRadius) * (d / (d + 4.0f));
+        graphNodes[i].radius = minNodeRadius + (maxNodeRadius - minNodeRadius) * (d / (d + ((minNodeRadius + maxNodeRadius) / 2)));
     }
 
     free(degrees);

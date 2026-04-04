@@ -18,8 +18,8 @@ const int fps = 120;
 
 const float innerRadius = 10.0f;
 const float outerRadius = 30.0f;
-const float minNodeRadius = 4.0f;
-const float maxNodeRadius = 8.0f;
+const float minNodeRadius = 3.0f;
+const float maxNodeRadius = 6.0f;
 float labelScale = 1.6f;
 
 void initializeWindow() {
@@ -37,7 +37,7 @@ void initializeWindow() {
     SetWindowPosition(xPos, yPos);
     SetTargetFPS(fps);
 
-    font = LoadFontEx(FONT_PATH_MAIN, 128, NULL, 255);
+    font = LoadFontEx(FONT_PATH, 128, NULL, 255);
     SetTextureFilter(font.texture, TEXTURE_FILTER_BILINEAR);
 
     camera = (Camera2D){ .target = {screenWidth/2.0f, screenHeight/2.0f}, .offset = {screenWidth/2.0f, screenHeight/2.0f}, .zoom = 1.0f };
@@ -173,7 +173,7 @@ void draw() {
 
         Vector2 sz;
         float mathScale = 0.35f * labelScale * sizeFactor;
-        float mainFontSize = 12.0f * labelScale * sizeFactor;
+        float fontSize = 12.0f * labelScale * sizeFactor;
 
         if (graphNodes[i].labelTexture.id != 0) {
             sz = (Vector2){
@@ -181,7 +181,7 @@ void draw() {
                 graphNodes[i].labelTexture.height * mathScale
             };
         } else {
-            sz = MeasureTextEx(font, graphNodes[i].label, mainFontSize, 1);
+            sz = MeasureTextEx(font, graphNodes[i].label, fontSize, 1);
         }
 
         float txtX = screenPos.x - sz.x/2;
@@ -194,7 +194,7 @@ void draw() {
         if (graphNodes[i].labelTexture.id > 0) {
             DrawTextureEx(graphNodes[i].labelTexture, (Vector2){txtX, txtY}, 0, mathScale, fg);
         } else {
-            DrawTextEx(font, graphNodes[i].label, (Vector2){txtX, txtY}, mainFontSize, 1, fg);
+            DrawTextEx(font, graphNodes[i].label, (Vector2){txtX, txtY}, fontSize, 1, fg);
         }
     }
 
