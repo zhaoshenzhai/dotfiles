@@ -189,7 +189,7 @@ void draw() {
             Color bg = { 0x11, 0x11, 0x11, (unsigned char)(labelAlpha * 204.0f) };
 
             Vector2 sz;
-            float mathScale = 0.1f * labelScale;
+            float mathScale = 0.4f * labelScale;
             float mainFontSize = 12.0f * labelScale;
 
             if (graphNodes[i].labelTexture.id != 0) {

@@ -70,28 +70,24 @@ void* latexWorkerThread(void* arg) {
             char texPath[1024], cmd[2048];
             snprintf(texPath, sizeof(texPath), "%s/%u.tex", cacheDir, h);
             FILE *f = fopen(texPath, "w");
-            fprintf(f, "\\documentclass[preview,border=2pt]{standalone}\n"
+            fprintf(f, "\\documentclass[border=2pt]{standalone}\n"
                        "\\usepackage{amsfonts, amsmath, amssymb, amsthm}\n"
                        "\\usepackage{mathtools, mathrsfs, dsfont}\n"
                        "\\usepackage{graphicx, xcolor, mlmodern}\n"
-                       "\\begin{document}\\include{./macros.sty}\\color{white}%s\\end{document}", currentLatex);
+                       "\\input{./macros.sty}\n"
+                       "\\begin{document}\\color{white}%s\\end{document}", currentLatex);
             fclose(f);
 
             snprintf(cmd, sizeof(cmd),
                 "zsh -l -c \"cd \\\"%s\\\" && latex -interaction=nonstopmode %u.tex && "
-                "dvipng -bg Transparent -D 1200 -o \\\"%s\\\" %u.dvi\" > /dev/null 2>&1",
+                "dvipng -bg Transparent -D 300 -o \\\"%s\\\" %u.dvi\" > /dev/null 2>&1",
                 cacheDir, h, pngPath, h);
 
             int status = system(cmd);
-            if (status == 0) {
-                char cleanupCmd[1024];
-                snprintf(cleanupCmd, sizeof(cleanupCmd), "rm -f \"%s/%u.tex\" \"%s/%u.dvi\" \"%s/%u.aux\" \"%s/%u.log\"",
-                         cacheDir, h, cacheDir, h, cacheDir, h, cacheDir, h);
-                system(cleanupCmd);
-            } else {
-                fprintf(stderr, "\n[attic] LaTeX rendering failed for label: %s\n", currentLatex);
-                fprintf(stderr, "[attic] Check the log file for the exact error: %s/%u.log\n\n", cacheDir, h);
-            }
+            char cleanupCmd[1024];
+            snprintf(cleanupCmd, sizeof(cleanupCmd), "rm -f \"%s/%u.tex\" \"%s/%u.dvi\" \"%s/%u.aux\" \"%s/%u.log\"",
+                     cacheDir, h, cacheDir, h, cacheDir, h, cacheDir, h);
+            system(cleanupCmd);
 
             pthread_mutex_lock(&queueMutex);
             renderQueue[jobIndex].state = (status == 0) ? 3 : 4;
@@ -119,6 +115,7 @@ Texture2D renderLatex(const char* latex, bool* hasError) {
         Image img = LoadImage(pngPath);
         Texture2D tex = LoadTextureFromImage(img);
         UnloadImage(img);
+
         SetTextureFilter(tex, TEXTURE_FILTER_BILINEAR);
 
         if (sessionCacheCount < CACHE_SIZE) {
