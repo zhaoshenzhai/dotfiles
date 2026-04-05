@@ -527,6 +527,5 @@ void launchGraph(void) {
     system(cmd);
 
     system("osascript -e 'tell application \"System Events\" to set visible of front process to false'");
-    usleep(100000);
     exit(0);
 }
