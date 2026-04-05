@@ -37,7 +37,7 @@ let
             --demuxer-thread=yes
     '';
 in {
-    home.packages = [ pkgs.yt-dlp pkgs.openssl pkgs.deno pkgs.util-linux ytMpv ];
+    home.packages = [ pkgs.yt-dlp ytMpv ];
 
     programs.mpv = {
         enable = true;
