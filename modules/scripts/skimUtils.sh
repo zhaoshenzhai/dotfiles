@@ -142,46 +142,19 @@ closeAndCleanSkim() {
     fi
 }
 
-closeWindow() {
-    local current_workspace=$(aerospace list-workspaces --focused)
-    local current_bundle=$(aerospace list-windows --focused --format "%{app-bundle-id}" | tr -d '[:space:]')
-
-    if [[ "$current_bundle" == "net.sourceforge.skim-app.skim" ]]; then
-        local skim_memory_file="/tmp/aerospace_skim_tabs/workspace_${current_workspace}.txt"
-        rm -f "$skim_memory_file"
-
-        local skim_ids=$(aerospace list-windows --workspace focused --format "%{window-id}|%{app-bundle-id}" \
-            | awk -F'|' '/net\.sourceforge\.skim-app\.skim/ {print $1}')
-
-        for id in $skim_ids; do
-            if [ -n "$id" ]; then
-                aerospace focus --window-id "$id"
-                closeAndCleanSkim
-            fi
-        done
-    else
-        aerospace close --quit-if-last-window
-    fi
-}
-
 closeSkimTab() {
-    local skim_count=$(aerospace list-windows --workspace focused --format "%{app-bundle-id}" \
-        | awk '/net\.sourceforge\.skim-app\.skim/ {c++} END {print c+0}')
+    local current_workspace=$(aerospace list-workspaces --focused)
+    local current_id=$(aerospace list-windows --focused --format "%{window-id}" | tr -d '[:space:]')
+    local skim_memory_file="/tmp/aerospace_skim_tabs/workspace_${current_workspace}.txt"
 
-    if [ "$skim_count" -gt 1 ]; then
-        local current_workspace=$(aerospace list-workspaces --focused)
-        local current_id=$(aerospace list-windows --focused --format "%{window-id}" | tr -d '[:space:]')
-        local skim_memory_file="/tmp/aerospace_skim_tabs/workspace_${current_workspace}.txt"
-
-        if [ -f "$skim_memory_file" ]; then
-            local saved_id=$(cat "$skim_memory_file")
-            if [ "$saved_id" == "$current_id" ]; then
-                rm -f "$skim_memory_file"
-            fi
+    if [ -f "$skim_memory_file" ]; then
+        local saved_id=$(cat "$skim_memory_file")
+        if [ "$saved_id" == "$current_id" ]; then
+            rm -f "$skim_memory_file"
         fi
-
-        closeAndCleanSkim
     fi
+
+    closeAndCleanSkim
 }
 
 duplicateTab() {
@@ -277,10 +250,6 @@ case "${1:-}" in
         focusDaemon
         exit 0
         ;;
-    --closeWindow)
-        closeWindow
-        exit 0
-        ;;
     --closeSkimTab)
         closeSkimTab
         exit 0
@@ -306,7 +275,7 @@ case "${1:-}" in
         exit 0
         ;;
     *)
-        echo "Usage: $(basename "$0") [--switchFocus <dir> | --focusDaemon | --closeWindow | --closeSkimTab | --duplicateTab | --openNvim | --openTex | --openKey | --recordSkim <id> | --enforceSkim]"
+        echo "Usage: $(basename "$0") [--switchFocus <dir> | --focusDaemon | --closeSkimTab | --duplicateTab | --openNvim | --openTex | --openKey | --recordSkim <id> | --enforceSkim]"
         exit 1
         ;;
 esac

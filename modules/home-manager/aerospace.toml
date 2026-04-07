@@ -1,5 +1,4 @@
 start-at-login = false
-accordion-padding = 0
 after-startup-command = [
     'exec-and-forget borders',
     'exec-and-forget sketchybar',
@@ -15,6 +14,8 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
     'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
 ]
 
+accordion-padding = 0
+
 [gaps]
     inner.horizontal  = 10
     inner.vertical    = 10
@@ -25,42 +26,39 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
 
 [mode.main.binding]
     # Terminal and finder
-    cmd-backslash = 'exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty'
+    cmd-backslash = 'exec-and-forget alacritty'
     cmd-shift-backslash = 'exec-and-forget open -a finder'
 
     # Vifm
-    cmd-e = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
+    cmd-e = """exec-and-forget alacritty \
         -e /bin/bash -c 'printf "\\033]0;vifm\\007"; \
-        exec /etc/profiles/per-user/zhao/bin/vifm ~/ \
+        exec vifm ~/ \
         -c ":vsplit" \
         -c "windo normal ggvGgA"'"""
 
     # Launcher
     cmd-enter = [
-        """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
-            --config-file ~/.config/alacritty/launcher.toml \
-            --title launcher \
-            -e /etc/profiles/per-user/zhao/bin/launcher""",
+        'exec-and-forget alacritty --title launcher --config-file ~/.config/alacritty/launcher.toml -e launcher',
         'mode launcher'
     ]
 
     # Btop
-    cmd-t = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
+    cmd-t = """exec-and-forget alacritty \
         --config-file ~/.config/alacritty/btop.toml \
         --title btop \
         --option "window.dimensions={columns=110,lines=38}" \
         --option "window.position={x=425,y=246}" \
-        -e /etc/profiles/per-user/zhao/bin/btop"""
+        -e btop"""
 
     # Git
-    cmd-g = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
+    cmd-g = """exec-and-forget alacritty \
         --title git \
         --option "window.dimensions={columns=110,lines=38}" \
         --option "window.position={x=425,y=246}" \
         -e zsh -ic ~/iCloud/Dotfiles/modules/scripts/git.sh"""
 
     # Attic
-    cmd-a = """exec-and-forget /etc/profiles/per-user/zhao/bin/alacritty \
+    cmd-a = """exec-and-forget alacritty \
         --title attic \
         --option "window.dimensions={columns=110,lines=38}" \
         --option "window.position={x=425,y=246}" \
@@ -78,10 +76,6 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
 
     # Screenshot
     cmd-p = 'exec-and-forget screencapture ~/Downloads/Screenshot_$(date +%Y_%m_%d_%H%M%S).png'
-
-    # Bluetooth
-    cmd-b       = "exec-and-forget blueutil --connect \"Zhaoshen's headphones\""
-    cmd-shift-b = "exec-and-forget sh -c \"osascript -e 'tell application \\\"Music\\\" to pause'; blueutil --disconnect \\\"Zhaoshen's headphones\\\"\""
 
     # Skim
     cmd-r       = 'exec-and-forget /bin/bash -c "echo TOGGLE_STATE > /tmp/skim_focus_pipe"'
@@ -131,8 +125,8 @@ exec-on-workspace-change = [ '/bin/bash', '-c',
     ]
 
     # Close windows
-    cmd-esc = 'exec-and-forget skimUtils --closeWindow'
-    cmd-q = 'exec-and-forget skimUtils --closeWindow'
+    cmd-esc = 'close --quit-if-last-window'
+    cmd-q = 'close --quit-if-last-window'
 
 [mode.launcher.binding]
     cmd-esc = [ 'close --quit-if-last-window', 'mode main' ]

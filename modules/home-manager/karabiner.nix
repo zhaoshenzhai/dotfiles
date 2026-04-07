@@ -268,7 +268,7 @@
                                             }
                                         ];
                                     }
-                                    { # ctrl+w -> close tab, do nothing if last in workspace
+                                    { # ctrl+w -> close tab
                                         type = "basic";
                                         from = { key_code = "w"; modifiers = { mandatory = [ "control" ]; }; };
                                         to = [{ shell_command = "zsh -ic 'skimUtils --closeSkimTab'"; }];
