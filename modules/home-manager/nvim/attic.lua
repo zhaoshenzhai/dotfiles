@@ -55,6 +55,63 @@ local function load_attic_cache()
     attic_cache = items
 end
 
+local function check_aref_context(before_cursor)
+    local search_pos = 1
+    local is_code_block = false
+    local just_entered = false
+
+    while true do
+        local s, e = before_cursor:find("\\aref{", search_pos, true)
+        if not s then break end
+
+        local brace_level = 1
+        local first_arg_end = -1
+        for i = e + 1, #before_cursor do
+            local char = before_cursor:sub(i, i)
+            if char == "{" then brace_level = brace_level + 1
+            elseif char == "}" then brace_level = brace_level - 1 end
+
+            if brace_level == 0 then
+                first_arg_end = i
+                break
+            end
+        end
+
+        if first_arg_end ~= -1 and first_arg_end < #before_cursor then
+            -- Check if the character immediately after the first arg closes is the start of the second arg
+            if before_cursor:sub(first_arg_end + 1, first_arg_end + 1) == "{" then
+                local second_arg_start = first_arg_end + 1
+                local b_level2 = 1
+                local closed = false
+
+                -- Check if the second argument closes before the cursor position
+                for i = second_arg_start + 1, #before_cursor do
+                    local char = before_cursor:sub(i, i)
+                    if char == "{" then b_level2 = b_level2 + 1
+                    elseif char == "}" then b_level2 = b_level2 - 1 end
+
+                    if b_level2 == 0 then
+                        closed = true
+                        break
+                    end
+                end
+
+                if not closed then
+                    is_code_block = true
+                    just_entered = (second_arg_start == #before_cursor)
+                    break
+                end
+                search_pos = second_arg_start + 1
+            else
+                search_pos = first_arg_end + 1
+            end
+        else
+            search_pos = e + 1
+        end
+    end
+    return is_code_block, just_entered
+end
+
 -- Autocomplete Setup
 local attic_source = {}
 function attic_source:is_available() return true end
@@ -63,7 +120,8 @@ function attic_source:get_keyword_pattern() return [=[[^{}]\+]=] end
 
 function attic_source:complete(request, callback)
     local line = request.context.cursor_before_line
-    if not string.match(line, "\\aref{[^}]*}{[^}]*$") then
+    local is_code_block, _ = check_aref_context(line)
+    if not is_code_block then
         callback({ items = {}, isIncomplete = false })
         return
     end
@@ -87,7 +145,7 @@ vim.api.nvim_create_autocmd({"CursorMovedI", "InsertEnter"}, {
         local col = vim.fn.col('.')
         local line = vim.fn.getline('.')
         local before_cursor = string.sub(line, 1, col - 1)
-        local is_code_block = string.match(before_cursor, "\\aref{[^}]*}{[^}]*$")
+        local is_code_block, just_entered = check_aref_context(before_cursor)
 
         if is_code_block then
             if not in_aref_mode then
@@ -95,7 +153,7 @@ vim.api.nvim_create_autocmd({"CursorMovedI", "InsertEnter"}, {
                 in_aref_mode = true
             end
 
-            if string.match(before_cursor, "\\aref{[^}]*}{$") then
+            if just_entered then
                 cmp.complete()
             end
         else
