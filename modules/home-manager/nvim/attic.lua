@@ -175,8 +175,10 @@ vim.api.nvim_create_autocmd({"CursorMovedI", "InsertEnter"}, {
 -- Automatic Metadata Syncing
 vim.api.nvim_create_autocmd("BufWritePost", {
     group = attic_group,
-    pattern = "*/_attic/*/*",
-    callback = function()
+    pattern = { "*.tex", "*.key" },
+    callback = function(ev)
+        if not ev.file:match('/_attic/notes/') then return end
+
         local id = vim.fn.expand('%:p:h:t')
         local script_path = 'attic'
         vim.fn.jobstart({script_path, "-u", id}, { detach = true })

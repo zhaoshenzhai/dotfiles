@@ -87,24 +87,11 @@ void formatLinks(int *ids, int count, char *outBuf) {
 }
 
 int isCompiling(int id) {
-    int nProcs = proc_listpids(PROC_ALL_PIDS, 0, NULL, 0);
-    if (nProcs <= 0) return 0;
+    char cmd[256];
+    snprintf(cmd, sizeof(cmd), "pgrep -f '[l]atexmk.*%05d\\.tex' > /dev/null 2>&1", id);
+    int status = system(cmd);
 
-    pid_t *pids = (pid_t*)safeMalloc(nProcs * sizeof(pid_t));
-    nProcs = proc_listpids(PROC_ALL_PIDS, 0, pids, nProcs * sizeof(pid_t));
-
-    for (int i = 0; i < nProcs; i++) {
-        if (pids[i] <= 0) continue;
-        char pathBuf[PROC_PIDPATHINFO_MAXSIZE];
-        if (proc_pidpath(pids[i], pathBuf, sizeof(pathBuf)) > 0) {
-            if (strstr(pathBuf, "latexmk") || strstr(pathBuf, "pdflatex")) {
-                free(pids);
-                return 1;
-            }
-        }
-    }
-    free(pids);
-    return 0;
+    return (WIFEXITED(status) && WEXITSTATUS(status) == 0);
 }
 
 void compileNote(int id) {

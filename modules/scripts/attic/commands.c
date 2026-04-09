@@ -40,13 +40,27 @@ int generateMetadata(int id, int updateModified) {
     char datPath[PATH_MAX];
     snprintf(datPath, sizeof(datPath), "%s/%05d/%05d.dat", atticDir, id, id);
 
-    FILE *fmeta = fopen(datPath, "w");
-    if (!fmeta) {
-        fprintf(stderr, "%sError: Could not open %s for writing: %s%s\n", RED, datPath, strerror(errno), NC);
-        return 1;
+    int needsWrite = 1;
+    FILE *fcheck = fopen(datPath, "r");
+    if (fcheck) {
+        char existing[8192] = {0};
+        size_t bytes = fread(existing, 1, sizeof(existing) - 1, fcheck);
+        existing[bytes] = '\0';
+        fclose(fcheck);
+
+        if (strcmp(existing, generated) == 0) { needsWrite = 0; }
     }
-    fputs(generated, fmeta);
-    fclose(fmeta);
+
+    if (needsWrite) {
+        FILE *fmeta = fopen(datPath, "w");
+        if (!fmeta) {
+            fprintf(stderr, "%sError: Could not open %s for writing: %s%s\n", RED, datPath, strerror(errno), NC);
+            return 1;
+        }
+        fputs(generated, fmeta);
+        fclose(fmeta);
+    }
+
     return 0;
 }
 
@@ -315,6 +329,8 @@ void rebuildNotes(void) {
         }
 
         if (needsRebuild) {
+            if (isCompiling(i)) { continue; }
+
             char dp[PATH_MAX], bp[PATH_MAX];
             snprintf(dp, sizeof(dp), "%s/%05d/%05d.dat", atticDir, i, i);
             snprintf(bp, sizeof(bp), "%s/%05d/%05d.dat.bak", atticDir, i, i);
