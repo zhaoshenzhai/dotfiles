@@ -57,6 +57,7 @@ void compileNote(int id);
 void extracIDs(const char *str, int *arr, int *count);
 unsigned int hashString(const char *str);
 void ensureNoteCapacity(int maxID);
+int compareModDateDesc(const void *a, const void *b);
 
 void freeMemory(void);
 void addOutLink(int src, int target, int lineNumber);

@@ -6,15 +6,11 @@ int generateMetadata(int id, int updateModified) {
         return 1;
     }
 
-    char modDate[64] = "";
-    if (updateModified || strlen(notes[id].modDate) == 0) {
-        struct stat st;
-        char texPath[PATH_MAX];
-        snprintf(texPath, sizeof(texPath), "%s/%05d/%05d.tex", atticDir, id, id);
-        if (stat(texPath, &st) == 0) {
-            struct tm *tmInfo = localtime(&st.st_mtime);
-            strftime(modDate, sizeof(modDate), "%Y/%m/%d", tmInfo);
-        }
+    if (strlen(notes[id].modDate) == 0) {
+        time_t now = time(NULL);
+        struct tm *tmInfo = localtime(&now);
+        strftime(modDate, sizeof(modDate), "%Y/%m/%d %H:%M:%S", tmInfo);
+        strcpy(notes[id].modDate, modDate); // Update memory cache
     } else {
         strcpy(modDate, notes[id].modDate);
     }
@@ -192,8 +188,21 @@ void auditNotes(void) {
     printf("%sVerifying links, missing PDFs, and scanning for TODOs...%s\n", BLUE, NC);
     int broken = 0, todos = 0, desync = 0, missingPdfs = 0;
 
+    int *sortedIds = malloc(noteCapacity * sizeof(int));
+    if (!sortedIds) {
+        fprintf(stderr, "%sError: Failed to allocate memory for sorting notes.%s\n", RED, NC);
+        return;
+    }
+
+    int activeCount = 0;
     for (int i = 0; i < noteCapacity; i++) {
-        if (!notes[i].active) continue;
+        if (notes[i].active) sortedIds[activeCount++] = i;
+    }
+
+    qsort(sortedIds, activeCount, sizeof(int), compareModDateDesc);
+
+    for (int k = 0; k < activeCount; k++) {
+        int i = sortedIds[k];
 
         if (!notes[i].hasPdf) {
             printf("%s[MISSING PDF]%s Note %05d[%s] has no compiled PDF.\n", RED, NC, i, SAFE_STR(notes[i].keys));
@@ -239,6 +248,8 @@ void auditNotes(void) {
             desync++;
         }
     }
+
+    free(sortedIds);
 
     printf("----------------------------------------\n");
     if (broken == 0 && missingPdfs == 0) {

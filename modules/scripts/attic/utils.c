@@ -123,3 +123,12 @@ unsigned int hashString(const char *str) {
     while ((c = *str++)) hash = ((hash << 5) + hash) + c;
     return hash;
 }
+
+int compareModDateDesc(const void *a, const void *b) {
+    int idA = *(const int*)a;
+    int idB = *(const int*)b;
+
+    int cmp = strcmp(notes[idB].modDate, notes[idA].modDate);
+    if (cmp != 0) { return cmp; }
+    return idB - idA;
+}

@@ -71,6 +71,7 @@ void* latexWorkerThread(void* arg) {
             snprintf(texPath, sizeof(texPath), "%s/%u.tex", cacheDir, h);
             FILE *f = fopen(texPath, "w");
             fprintf(f, "\\documentclass[border=2pt]{standalone}\n"
+                       "\\usepackage[T1]{fontenc}\n"
                        "\\usepackage{amsfonts, amsmath, amssymb, amsthm}\n"
                        "\\usepackage{mathtools, mathrsfs, dsfont}\n"
                        "\\usepackage{graphicx, xcolor, mlmodern}\n"

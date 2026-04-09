@@ -80,7 +80,8 @@ void loadMemory(void) {
                     char *start = line;
                     while (isspace(*start)) start++;
                     if (strncmp(start, "Last modified:", 14) == 0) {
-                        sscanf(start + 14, " %63s", notes[id].modDate);
+                        sscanf(start + 14, " %63[^\n]", notes[id].modDate);
+                        trimEnd(notes[id].modDate);
                     } else if (strncmp(start, "References:", 11) == 0) {
                         trimEnd(start); notes[id].metaRefsRaw = strdup(start);
                     } else if (strncmp(start, "Referenced in:", 14) == 0) {

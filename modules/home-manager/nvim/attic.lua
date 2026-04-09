@@ -180,10 +180,25 @@ vim.api.nvim_create_autocmd("BufWritePost", {
         if not ev.file:match('/_attic/notes/') then return end
 
         local id = vim.fn.expand('%:p:h:t')
+        local ext = vim.fn.expand('%:e')
+        local dat_path = vim.fn.expand('%:p:h') .. '/' .. id .. '.dat'
+
+        local current_time = os.date("%Y/%m/%d %H:%M:%S")
+        if vim.fn.filereadable(dat_path) == 1 then
+            local lines = vim.fn.readfile(dat_path)
+            for i, line in ipairs(lines) do
+                if string.match(line, "Last modified:") then
+                    lines[i] = "    Last modified: " .. current_time .. " \\\\"
+                    break
+                end
+            end
+            vim.fn.writefile(lines, dat_path)
+        end
+
         local script_path = 'attic'
         vim.fn.jobstart({script_path, "-u", id}, { detach = true })
 
-        if vim.fn.expand('%:e') == "key" then
+        if ext == "key" then
             load_attic_cache()
             vim.schedule(function()
                 vim.api.nvim_echo({{"Attic: cmp cache reloaded from " .. id .. ".key", "None"}}, false, {})
