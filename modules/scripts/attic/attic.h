@@ -65,7 +65,7 @@ void addInLink(int target, int src);
 void addTodo(int id, int lineNumber, const char *text);
 void loadMemory(void);
 
-int generateMetadata(int id, int updateModified);
+int generateMetadata(int id);
 void createNote(const char *inKeywords);
 void updateMetadata(int id);
 void auditNotes(void);

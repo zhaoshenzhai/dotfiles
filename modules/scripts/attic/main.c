@@ -82,7 +82,7 @@ int main(int argc, char **argv) {
                 case 'e': createNote("EMPTY_KEYWORDS"); return 0;
                 case 'k': createNote(optarg); return 0;
                 case 'n': createNote(""); return 0;
-                case 'm': generateMetadata(atoi(optarg), 0); return 0;
+                case 'm': generateMetadata(atoi(optarg)); return 0;
                 case 'u': updateMetadata(atoi(optarg)); return 0;
                 case 'a': auditNotes(); return 0;
                 case 'r': rebuildNotes(); return 0;

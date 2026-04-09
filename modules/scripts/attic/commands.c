@@ -1,16 +1,17 @@
 #include "attic.h"
 
-int generateMetadata(int id, int updateModified) {
+int generateMetadata(int id) {
     if (id >= noteCapacity || !notes[id].active) {
         printf("%sError: Note %05d does not exist.%s\n", RED, id, NC);
         return 1;
     }
 
+    char modDate[64] = "";
     if (strlen(notes[id].modDate) == 0) {
         time_t now = time(NULL);
         struct tm *tmInfo = localtime(&now);
         strftime(modDate, sizeof(modDate), "%Y/%m/%d %H:%M:%S", tmInfo);
-        strcpy(notes[id].modDate, modDate); // Update memory cache
+        strcpy(notes[id].modDate, modDate);
     } else {
         strcpy(modDate, notes[id].modDate);
     }
@@ -107,7 +108,7 @@ void createNote(const char *inKeywords) {
     if (fkey) { fputs(finalKeys, fkey); fputs("\n", fkey); fclose(fkey); }
 
     loadMemory();
-    generateMetadata(id, 1);
+    generateMetadata(id);
     exportGraph(1);
 
     snprintf(cmd, sizeof(cmd), "%s --update &", launcherPath);
@@ -155,7 +156,7 @@ void updateMetadata(int id) {
         }
     }
 
-    generateMetadata(id, 1);
+    generateMetadata(id);
     compileNote(id);
 
     if (linksChanged) {
@@ -171,7 +172,7 @@ void updateMetadata(int id) {
         for (int i = 0; i < uniqueCount; i++) {
             int refId = combinedRefs[i];
             if (refId != id && notes[refId].active) {
-                generateMetadata(refId, 0);
+                generateMetadata(refId);
                 compileNote(refId);
             }
         }
@@ -348,7 +349,7 @@ void rebuildNotes(void) {
             rename(dp, bp);
         }
 
-        generateMetadata(i, 0);
+        generateMetadata(i);
 
         int status;
         pid_t pid;
