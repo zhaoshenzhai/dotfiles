@@ -5,8 +5,13 @@
 
     home.stateVersion = "22.11";
     home.file = { ".hushlogin".text = ""; };
-    home.sessionVariables = { EDITOR = "nvim"; };
     programs.swaylock.enable = false;
+
+    home.sessionVariables = {
+        EDITOR = "nvim";
+        VISUAL = "nvim";
+        TERMINAL = "alacritty";
+    };
 
     home.packages = with pkgs; [
         aerospace

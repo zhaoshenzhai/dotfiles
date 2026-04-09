@@ -14,15 +14,8 @@
     programs.zsh.enable = true;
 
     # --- Scripts & Terminal ---
-    imports = [ ../home-manager/scripts.nix ];
-    environment = {
-        shells = [ pkgs.zsh ];
-        variables = {
-            EDITOR = "nvim";
-            VISUAL = "nvim";
-            TERMINAL = "alacritty";
-        };
-    };
+    imports = [ ./scripts.nix ];
+    environment = { shells = [ pkgs.zsh ]; };
 
     # --- Security & Input ---
     security.pam.services.sudo_local.touchIdAuth = true;
