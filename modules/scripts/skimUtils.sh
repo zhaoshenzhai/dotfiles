@@ -123,67 +123,82 @@ focusDaemon() {
     done
 }
 
-closeAndCleanSkim() {
-    local doc_path=$(osascript -e 'tell application "Skim" to get path of document 1' 2>/dev/null)
-    osascript -e 'tell application "Skim"' -e 'close front document' -e 'end tell'
-
-    if [[ -n "$doc_path" && "$doc_path" == */tmp/skim_pdfs/* ]]; then
-        local dir_to_delete=$(dirname "$doc_path")
-        local dir_timestamp=$(basename "$dir_to_delete")
-
-        if [[ "$dir_timestamp" =~ ^[0-9]+$ ]]; then
-            local current_time=$(date +%s)
-            local age_in_seconds=$((current_time - dir_timestamp))
-
-            if (( age_in_seconds > 86400 )); then
-                rm -rf "$dir_to_delete"
-            fi
-        fi
-    fi
-}
-
-closeSkimTab() {
+cleanSkimState() {
     local current_workspace=$(aerospace list-workspaces --focused)
-    local current_id=$(aerospace list-windows --focused --format "%{window-id}" | tr -d '[:space:]')
     local skim_memory_file="/tmp/aerospace_skim_tabs/workspace_${current_workspace}.txt"
 
     if [ -f "$skim_memory_file" ]; then
         local saved_id=$(cat "$skim_memory_file")
-        if [ "$saved_id" == "$current_id" ]; then
+        if ! aerospace list-windows --all --format "%{window-id}" | grep -q "^${saved_id}$"; then
             rm -f "$skim_memory_file"
         fi
     fi
 
-    closeAndCleanSkim
+    if [ -d "/tmp/skim_pdfs" ]; then
+        local current_time=$(date +%s)
+        for dir in /tmp/skim_pdfs/*/; do
+            if [ -d "$dir" ]; then
+                local dir_timestamp=$(basename "$dir")
+                if [[ "$dir_timestamp" =~ ^[0-9]+$ ]]; then
+                    local age_in_seconds=$((current_time - dir_timestamp))
+                    if (( age_in_seconds > 86400 )); then
+                        rm -rf "$dir"
+                    fi
+                fi
+            fi
+        done
+    fi
 }
 
 duplicateTab() {
-    local doc_path
-    local doc_path=$(osascript -e 'tell application "Skim" to get path of document 1' 2>/dev/null)
+    local result=$(osascript -e '
+        tell application "Skim"
+            if (count of documents) > 0 then
+                try
+                    set docPath to path of document 1
+                    set currPage to index of current page of document 1
+                    return docPath & "|" & currPage
+                on error
+                    return "|"
+                end try
+            else
+                return "|"
+            end if
+        end tell
+    ' 2>/dev/null)
+
+    local doc_path="${result%|*}"
+    local curr_page="${result#*|}"
+
     if [ -z "$doc_path" ] || [ "$doc_path" == "missing value" ]; then
         exit 0
     fi
 
-    local curr_page=$(osascript -e 'tell application "Skim" to get index of current page of document 1' 2>/dev/null)
     local launch_path="$doc_path"
     if [[ "$doc_path" == */tmp/skim_pdfs/* ]] && [ -f "${doc_path}.orig" ]; then
         launch_path=$(cat "${doc_path}.orig")
     fi
 
-    nohup /etc/profiles/per-user/zhao/bin/launcher "$launch_path" >/dev/null 2>&1 &
+    nohup /etc/profiles/per-user/$USER/bin/launcher "$launch_path" >/dev/null 2>&1 &
 
-    for i in {1..25}; do
-        sleep 0.05
-        local new_path
-        new_path=$(osascript -e 'tell application "Skim" to get path of document 1' 2>/dev/null)
-
-        if [[ -n "$new_path" && "$new_path" != "missing value" && "$new_path" != "$doc_path" ]]; then
-            if [[ -n "$curr_page" && "$curr_page" =~ ^[0-9]+$ ]]; then
-                osascript -e "tell application \"Skim\" to set current page of document 1 to page $curr_page of document 1" 2>/dev/null
-            fi
-            break
-        fi
-    done
+    if [[ -n "$curr_page" && "$curr_page" =~ ^[0-9]+$ ]]; then
+        osascript -e "
+            tell application \"Skim\"
+                set retries to 25
+                repeat while retries > 0
+                    delay 0.05
+                    try
+                        set frontDoc to document 1
+                        if (path of frontDoc) is not \"$doc_path\" then
+                            set current page of frontDoc to page $curr_page of frontDoc
+                            exit repeat
+                        end if
+                    end try
+                    set retries to retries - 1
+                end repeat
+            end tell
+        " & disown
+    fi
 }
 
 openRelated() {
@@ -250,8 +265,8 @@ case "${1:-}" in
         focusDaemon
         exit 0
         ;;
-    --closeSkimTab)
-        closeSkimTab
+    --cleanSkimState)
+        cleanSkimState
         exit 0
         ;;
     --duplicateTab)
@@ -275,7 +290,7 @@ case "${1:-}" in
         exit 0
         ;;
     *)
-        echo "Usage: $(basename "$0") [--switchFocus <dir> | --focusDaemon | --closeSkimTab | --duplicateTab | --openNvim | --openTex | --openKey | --recordSkim <id> | --enforceSkim]"
+        echo "Usage: $(basename "$0") [--switchFocus <dir> | --focusDaemon | --cleanSkimState | --duplicateTab | --openNvim | --openTex | --openKey | --recordSkim <id> | --enforceSkim]"
         exit 1
         ;;
 esac

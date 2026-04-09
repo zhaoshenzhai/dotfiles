@@ -271,42 +271,10 @@
                                     { # ctrl+w -> close tab
                                         type = "basic";
                                         from = { key_code = "w"; modifiers = { mandatory = [ "control" ]; }; };
-                                        to = [{ shell_command = "zsh -ic 'skimUtils --closeSkimTab'"; }];
-                                        conditions = [
-                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
-                                            { type = "variable_if"; name = "skim_search_mode"; value = 0; }
-                                            {
-                                                type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
-                                            }
+                                        to = [
+                                            { key_code = "w"; modifiers = [ "control" "option" "command" ]; }
+                                            { shell_command = "zsh -c 'skimUtils --cleanSkimState &'"; }
                                         ];
-                                    }
-                                    { # ctrl+shift+v -> open .tex in nvim
-                                        type = "basic";
-                                        from = { key_code = "v"; modifiers = { mandatory = [ "control" "shift" ]; }; };
-                                        to = [{ shell_command = "zsh -ic 'skimUtils --openNvim'"; }];
-                                        conditions = [
-                                            {
-                                                type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
-                                            }
-                                        ];
-                                    }
-                                    { # ctrl+shift+k -> open .key in nvim
-                                        type = "basic";
-                                        from = { key_code = "k"; modifiers = { mandatory = [ "control" "shift" ]; }; };
-                                        to = [{ shell_command = "zsh -ic 'skimUtils --openKey'"; }];
-                                        conditions = [
-                                            {
-                                                type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
-                                            }
-                                        ];
-                                    }
-                                    { # ctrl+d -> duplicate tab
-                                        type = "basic";
-                                        from = { key_code = "d"; modifiers = { mandatory = [ "control" ]; }; };
-                                        to = [{ shell_command = "zsh -ic 'skimUtils --duplicateTab'"; }];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
@@ -334,6 +302,41 @@
                                                 '';
                                             }
                                         ];
+                                        conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
+                                            { type = "variable_if"; name = "skim_search_mode"; value = 0; }
+                                            {
+                                                type = "frontmost_application_if";
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                            }
+                                        ];
+                                    }
+                                    { # ctrl+shift+v -> open .tex in nvim
+                                        type = "basic";
+                                        from = { key_code = "v"; modifiers = { mandatory = [ "control" "shift" ]; }; };
+                                        to = [{ shell_command = "zsh -c 'skimUtils --openNvim'"; }];
+                                        conditions = [
+                                            {
+                                                type = "frontmost_application_if";
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                            }
+                                        ];
+                                    }
+                                    { # ctrl+shift+k -> open .key in nvim
+                                        type = "basic";
+                                        from = { key_code = "k"; modifiers = { mandatory = [ "control" "shift" ]; }; };
+                                        to = [{ shell_command = "zsh -c 'skimUtils --openKey'"; }];
+                                        conditions = [
+                                            {
+                                                type = "frontmost_application_if";
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                            }
+                                        ];
+                                    }
+                                    { # ctrl+d -> duplicate tab
+                                        type = "basic";
+                                        from = { key_code = "d"; modifiers = { mandatory = [ "control" ]; }; };
+                                        to = [{ shell_command = "zsh -c 'skimUtils --duplicateTab'"; }];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }

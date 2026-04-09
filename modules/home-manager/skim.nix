@@ -36,6 +36,7 @@
             "Single Page Continuous" = "^~@1";
             "Two Pages Continuous" = "^~@2";
             "Move Tab to New Window" = "^~@n";
+            "Close Tab" = "^~@w";
         };
 
         # --- Visual & Display Preferences ---

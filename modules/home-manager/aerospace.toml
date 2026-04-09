@@ -55,14 +55,14 @@ accordion-padding = 0
         --title git \
         --option "window.dimensions={columns=110,lines=38}" \
         --option "window.position={x=425,y=246}" \
-        -e zsh -ic ~/iCloud/Dotfiles/modules/scripts/git.sh"""
+        -e zsh -c ~/iCloud/Dotfiles/modules/scripts/git.sh"""
 
     # Attic
     cmd-a = """exec-and-forget alacritty \
         --title attic \
         --option "window.dimensions={columns=110,lines=38}" \
         --option "window.position={x=425,y=246}" \
-        -e zsh -ic attic"""
+        -e zsh -c attic"""
 
     # MacOS apps
     cmd-m       = [ 'workspace m', 'exec-and-forget open -a messages' ]
