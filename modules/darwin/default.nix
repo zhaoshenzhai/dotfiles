@@ -15,7 +15,7 @@
 
     # --- Scripts & Terminal ---
     imports = [ ./scripts.nix ];
-    environment = { shells = [ pkgs.zsh ]; };
+    environment.shells = [ pkgs.zsh ];
 
     # --- Security & Input ---
     security.pam.services.sudo_local.touchIdAuth = true;
@@ -90,11 +90,11 @@
         };
 
         casks = [
-            "zoom"
-            "sf-symbols"
-            "skim"
             "karabiner-elements"
             "qutebrowser"
+            "sf-symbols"
+            "skim"
+            "zoom"
         ];
     };
 }

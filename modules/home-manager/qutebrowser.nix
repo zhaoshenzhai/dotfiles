@@ -205,7 +205,10 @@ in {
     };
 
     home.file = {
-        ".qutebrowser/quickmarks".source = ./qutebrowser/quickmarks;
+       ".qutebrowser/quickmarks" = {
+           source = ./qutebrowser/quickmarks;
+           force = true;
+       };
     };
 
     home.activation.installQutebrowserBookmarks = lib.hm.dag.entryAfter ["writeBoundary"] ''
