@@ -73,6 +73,10 @@ int main(int argc, char **argv) {
     snprintf(templateFile, sizeof(templateFile), "%s/iCloud/Dotfiles/modules/scripts/LaTeXTemplate/files/attic.tex", home);
     snprintf(launcherPath, sizeof(launcherPath), "/etc/profiles/per-user/%s/bin/launcher", user);
 
+    char cleanCmd[1024];
+    snprintf(cleanCmd, sizeof(cleanCmd), "find \"%s\" -type f -name \"* [0-9].*\" -delete", atticDir);
+    system(cleanCmd);
+
     loadMemory();
 
     if (argc > 1) {
