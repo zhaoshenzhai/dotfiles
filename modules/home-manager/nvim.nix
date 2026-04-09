@@ -47,6 +47,7 @@ in {
                         "LaTeX Warning: Marginpar on page * moved."
                         "LaTeX Warning: There were undefined references."
                         "Package biblatex Warning: Please rerun LaTeX."
+                        "Package biblatex Warning: Please (re)run Biber on the file: *"
                     ];
                 };
             };
