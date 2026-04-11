@@ -20,7 +20,6 @@
         (texlive.combine { inherit (texlive) scheme-full latexmk; })
 
         dosbox-staging
-        logisim-evolution
     ];
 
     imports = [
