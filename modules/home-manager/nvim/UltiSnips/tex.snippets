@@ -530,6 +530,26 @@ def create_alpha_enum(letter, base_indent=""):
             res += vspace_indent + "\\vspace{-0.05in}\n"
     return res.rstrip()
 
+def create_cycle(count, base_indent=""):
+    res = ""
+    placeholder = 1
+    item_indent = base_indent + "    "
+    vspace_indent = item_indent + "    "
+
+    count_int = int(count)
+    for i in range(count_int):
+        curr_num = i + 1
+        next_num = curr_num + 1 if curr_num < count_int else 1
+        item_text = f"\\item ({curr_num}) $\\Rightarrow$ ({next_num})."
+        if i == 0:
+            res += f"    {item_text} ${placeholder}\n"
+        else:
+            res += item_indent + f"{item_text} ${placeholder}\n"
+        placeholder += 1
+        if i != count_int - 1:
+            res += vspace_indent + "\\vspace{-0.05in}\n"
+    return res.rstrip()
+
 def create_matrix(cols, rows, sep, start, end, indent=""):
     res = ""
     placeholder = 1
@@ -584,6 +604,17 @@ else:
     snip.rv = create_alpha_enum(val, indent)
 `$0
 \end{enumerate}
+endsnippet
+
+priority 1000
+post_jump "create_placeholders(snip)"
+snippet '(\d+)cycle' "begin implication cycle" br
+\begin{itemize}
+`!p
+indent = re.match(r'\s*', snip.buffer[snip.snippet_start[0]]).group(0)
+snip.rv = create_cycle(match.group(1), indent)
+`$0
+\end{itemize}
 endsnippet
 
 # Brackets
