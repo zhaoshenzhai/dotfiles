@@ -4,10 +4,12 @@
         executable = true;
         text = ''
             #!/bin/bash
+            killall borders 2>/dev/null
             options=(
                 style=round
                 width=1
-                hidpi=off
+                hidpi=on
+                ax_focus=on
                 order=above
                 active_color=0xff777777
                 inactive_color=0xff444444

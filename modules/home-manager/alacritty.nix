@@ -3,6 +3,8 @@
         enable = true;
 
         settings = {
+            general = { ipc_socket = false; };
+
             font = {
                 size = 20.0;
                 normal = {
