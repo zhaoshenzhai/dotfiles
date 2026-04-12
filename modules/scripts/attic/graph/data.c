@@ -1,5 +1,14 @@
 #include "graph.h"
 
+#define ENSURE_CAPACITY(ptr, count, cap, type, default_cap) \
+do { \
+    if ((count) >= (cap)) { \
+        (cap) = (cap) == 0 ? (default_cap) : (cap) * 2; \
+        (ptr) = realloc((ptr), (cap) * sizeof(type)); \
+        if (!(ptr)) { fprintf(stderr, "Out of memory\n"); exit(1); } \
+    } \
+} while(0)
+
 Node *graphNodes = NULL;
 Edge *graphEdges = NULL;
 
@@ -29,11 +38,7 @@ void initializeGraph(const char* filename, int screenWidth, int screenHeight) {
     nodeCount = 0;
 
     cJSON_ArrayForEach(nodeItem, nodesArray) {
-        if (nodeCount >= nodeCapacity) {
-            nodeCapacity = nodeCapacity == 0 ? 128 : nodeCapacity * 2;
-            graphNodes = realloc(graphNodes, nodeCapacity * sizeof(Node));
-            if (!graphNodes) { fprintf(stderr, "Out of memory\n"); exit(1); }
-        }
+        ENSURE_CAPACITY(graphNodes, nodeCount, nodeCapacity, Node, 128);
 
         cJSON* idObj = cJSON_GetObjectItemCaseSensitive(nodeItem, "id");
         cJSON* labelObj = cJSON_GetObjectItemCaseSensitive(nodeItem, "label");
@@ -46,12 +51,10 @@ void initializeGraph(const char* filename, int screenWidth, int screenHeight) {
             graphNodes[nodeCount].hasLatexError = false;
             graphNodes[nodeCount].hasPdf = cJSON_IsTrue(hasPdfObj);
             graphNodes[nodeCount].labelTexture = renderLatex(graphNodes[nodeCount].label, &graphNodes[nodeCount].hasLatexError);
+            graphNodes[nodeCount].degree = 0;
 
             if (graphNodes[nodeCount].labelTexture.id == 0 && !graphNodes[nodeCount].hasLatexError) {
-                if (pendingCount >= pendingCapacity) {
-                    pendingCapacity = pendingCapacity == 0 ? 128 : pendingCapacity * 2;
-                    pendingNodes = realloc(pendingNodes, pendingCapacity * sizeof(int));
-                }
+                ENSURE_CAPACITY(pendingNodes, pendingCount, pendingCapacity, int, 128);
                 pendingNodes[pendingCount++] = nodeCount;
             }
 
@@ -67,11 +70,7 @@ void initializeGraph(const char* filename, int screenWidth, int screenHeight) {
     edgeCount = 0;
 
     cJSON_ArrayForEach(edgeItem, edgesArray) {
-        if (edgeCount >= edgeCapacity) {
-            edgeCapacity = edgeCapacity == 0 ? 256 : edgeCapacity * 2;
-            graphEdges = realloc(graphEdges, edgeCapacity * sizeof(Edge));
-            if (!graphEdges) { fprintf(stderr, "Out of memory\n"); exit(1); }
-        }
+        ENSURE_CAPACITY(graphEdges, edgeCount, edgeCapacity, Edge, 256);
 
         cJSON* srcObj = cJSON_GetObjectItemCaseSensitive(edgeItem, "source");
         cJSON* tgtObj = cJSON_GetObjectItemCaseSensitive(edgeItem, "target");
@@ -82,25 +81,18 @@ void initializeGraph(const char* filename, int screenWidth, int screenHeight) {
             if (s_idx != -1 && t_idx != -1) {
                 graphEdges[edgeCount].source_idx = s_idx;
                 graphEdges[edgeCount].target_idx = t_idx;
+                graphNodes[s_idx].degree++;
+                graphNodes[t_idx].degree++;
                 edgeCount++;
             }
         }
     }
 
-    int *degrees = calloc(nodeCount, sizeof(int));
-    if (!degrees) { fprintf(stderr, "Out of memory\n"); exit(1); }
-
-    for (int i = 0; i < edgeCount; i++) {
-        degrees[graphEdges[i].source_idx]++;
-        degrees[graphEdges[i].target_idx]++;
-    }
-
     for (int i = 0; i < nodeCount; i++) {
-        float d = (float)degrees[i];
+        float d = (float)graphNodes[i].degree;
         graphNodes[i].radius = minNodeRadius + ((maxNodeRadius - minNodeRadius) / (1 + exp(-(d - midNodeRadius))));
     }
 
-    free(degrees);
     assignNodeColors();
     cJSON_Delete(json);
     UnloadFileText(jsonString);

@@ -14,7 +14,7 @@
 
 typedef struct Node {
     char id[32]; char label[256]; bool hasPdf; bool hasLatexError;
-    Vector2 position; Vector2 velocity; float radius;
+    Vector2 position; Vector2 velocity; float radius; int degree;
     float hue; Color color; Texture2D labelTexture;
 } Node;
 typedef struct Edge { int source_idx; int target_idx; } Edge;

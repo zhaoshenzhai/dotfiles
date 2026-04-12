@@ -46,7 +46,7 @@ void updatePhysics(int screenWidth, int screenHeight, int draggedIdx) {
 
         if (dist == 0.0f) continue;
 
-        float force = (dist - k) * 0.05f;
+        float force = (dist - k) * 0.03f;
         float forceOverDist = force / dist;
 
         float dirX = dx * forceOverDist;
