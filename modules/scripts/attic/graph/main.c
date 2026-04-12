@@ -21,8 +21,11 @@ const int yPos = 123;
 const float clickRadius = 05.0f;
 const float innerRadius = 10.0f;
 const float outerRadius = 30.0f;
+
 const float minNodeRadius = 3.0f;
 const float maxNodeRadius = 6.0f;
+const float midNodeRadius = 5.0f;
+
 const float labelScale = 1.6f;
 
 void initializeWindow() {

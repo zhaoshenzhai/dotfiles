@@ -37,6 +37,7 @@ extern float damping;
 extern const float innerRadius;
 extern const float outerRadius;
 extern const float minNodeRadius;
+extern const float midNodeRadius;
 extern const float maxNodeRadius;
 extern const float labelScale;
 

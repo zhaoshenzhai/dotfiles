@@ -97,7 +97,7 @@ void initializeGraph(const char* filename, int screenWidth, int screenHeight) {
 
     for (int i = 0; i < nodeCount; i++) {
         float d = (float)degrees[i];
-        graphNodes[i].radius = minNodeRadius + (maxNodeRadius - minNodeRadius) * (d / (d + ((minNodeRadius + maxNodeRadius) / 2)));
+        graphNodes[i].radius = minNodeRadius + ((maxNodeRadius - minNodeRadius) / (1 + exp(-(d - midNodeRadius))));
     }
 
     free(degrees);
