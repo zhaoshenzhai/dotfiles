@@ -253,8 +253,13 @@ local function get_id_under_cursor()
 end
 
 -- Navigation
-vim.keymap.set('n', '<C-h>', '<C-o>')
-vim.keymap.set('n', '<C-l>', function()
+vim.keymap.set({'n', 'i'}, '<C-h>', function()
+    local is_insert = vim.fn.mode():match('^i')
+    local keys = is_insert and '<C-o><C-o>' or '<C-o>'
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(keys, true, false, true), 'n', false)
+end, { silent = true })
+
+vim.keymap.set({'n', 'i'}, '<C-l>', function()
     local id = get_id_under_cursor()
 
     if id then
@@ -267,10 +272,11 @@ vim.keymap.set('n', '<C-l>', function()
             vim.api.nvim_echo({{"Attic: Note " .. id .. " not found", "ErrorMsg"}}, false, {})
         end
     else
-        local keys = vim.api.nvim_replace_termcodes("<C-i>", true, false, true)
-        vim.api.nvim_feedkeys(keys, "n", false)
+        local is_insert = vim.fn.mode():match('^i')
+        local keys = is_insert and '<C-o><C-i>' or '<C-i>'
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(keys, true, false, true), 'n', false)
     end
-end)
+end, { silent = true })
 
 -- Surround with aref
 vim.api.nvim_create_autocmd("FileType", {

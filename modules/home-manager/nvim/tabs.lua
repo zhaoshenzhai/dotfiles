@@ -50,12 +50,12 @@ end
 
 -- Tab keymaps
 local opts = { silent = true }
-vim.keymap.set('n', '<C-j>', ':tabprevious<CR>', opts)
-vim.keymap.set('n', '<C-k>', ':tabnext<CR>', opts)
-vim.keymap.set('n', '<C-n>', ':tabnew<CR>', opts)
-vim.keymap.set('n', '<C-u>', ':lua ReopenLastClosedTab()<CR>', opts)
+vim.keymap.set({'n', 'i'}, '<C-j>', '<Cmd>tabprevious<CR>', opts)
+vim.keymap.set({'n', 'i'}, '<C-k>', '<Cmd>tabnext<CR>', opts)
+vim.keymap.set({'n', 'i'}, '<C-n>', '<Cmd>tabnew<CR>', opts)
+vim.keymap.set({'n', 'i'}, '<C-u>', '<Cmd>lua ReopenLastClosedTab()<CR>', opts)
 
-vim.keymap.set('n', '<C-w>', function()
+vim.keymap.set({'n', 'i'}, '<C-w>', function()
     if vim.fn.tabpagenr('$') > 1 then
         vim.cmd('q')
     end
@@ -63,8 +63,8 @@ end, { silent = true, nowait = true })
 
 -- Tab navigation
 for i = 1, 9 do
-    vim.keymap.set('n', '<C-' .. i .. '>', i .. 'gt', { silent = true })
-    vim.keymap.set('n', '<C-S-' .. i .. '>', function()
+    vim.keymap.set({'n', 'i'}, '<C-' .. i .. '>', '<Cmd>' .. i .. 'gt<CR>', { silent = true })
+    vim.keymap.set({'n', 'i'}, '<C-S-' .. i .. '>', function()
         local current = vim.fn.tabpagenr()
         local target = i
         local total = vim.fn.tabpagenr('$')
