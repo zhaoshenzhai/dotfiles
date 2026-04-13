@@ -12,6 +12,7 @@ Vector2 worldMouse;
 
 const int fps = 120;
 int framesCounter = 0;
+bool isQuitting = false;
 
 const int screenWidth = 1285;
 const int screenHeight = 905;
@@ -66,21 +67,8 @@ void initializeWindow() {
     }
 }
 
-void openNote(const char* id) {
-    char command[2048];
-    const char* home = getenv("HOME");
-    if (!home) home = "";
-
-    snprintf(command, sizeof(command),
-        "/etc/profiles/per-user/zhao/bin/launcher \"%s/iCloud/Projects/_attic/notes/%s/%s.pdf\" &", home, id, id);
-    system(command);
-}
-
-void getInput(int *draggedNodeIndex, bool *isPanning, double *lastClickTime, int *lastClickedNode) {
-    static bool isQuitting = false;
-    if (IsKeyPressed(KEY_Q) && !isQuitting) {
-        isQuitting = true;
-
+void quit() {
+    if (!isQuitting) {
         pid_t pid = fork();
         if (pid == 0) {
             freopen("/dev/null", "w", stdout);
@@ -90,6 +78,22 @@ void getInput(int *draggedNodeIndex, bool *isPanning, double *lastClickTime, int
             exit(1);
         }
     }
+}
+
+void openNote(const char* id) {
+    char command[2048];
+    const char* home = getenv("HOME");
+    if (!home) home = "";
+
+    snprintf(command, sizeof(command),
+        "/etc/profiles/per-user/zhao/bin/launcher \"%s/iCloud/Projects/_attic/notes/%s/%s.pdf\" &", home, id, id);
+
+    system(command);
+    quit();
+}
+
+void getInput(int *draggedNodeIndex, bool *isPanning, double *lastClickTime, int *lastClickedNode) {
+    if (IsKeyPressed(KEY_Q) && !isQuitting) { quit(); }
 
     // Camera movement
     float moveStep = 15.0f / camera.zoom;
