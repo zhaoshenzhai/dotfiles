@@ -19,6 +19,12 @@
         checkPhase = "";
         text = builtins.readFile "${scriptsDir}/newLaTeX.sh";
     };
+    latexUtils = pkgs.writeShellApplication {
+        name = "latexUtils";
+        runtimeInputs = with pkgs; [ coreutils ];
+        checkPhase = "";
+        text = builtins.readFile "${scriptsDir}/latexUtils.sh";
+    };
     skimUtils = pkgs.writeShellApplication {
         name = "skimUtils";
         runtimeInputs = with pkgs; [ coreutils ];
@@ -53,6 +59,7 @@ in
     environment.systemPackages = [
         pdfcp
         newLatex
+        latexUtils
         skimUtils
         launcher
         attic

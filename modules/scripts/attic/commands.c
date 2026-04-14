@@ -434,67 +434,11 @@ void rebuildNotes(void) {
 }
 
 void cleanAttic(void) {
-    printf("%sCleaning auxiliary and files...%s\n", BLUE, NC);
-    int cleanedCount = 0;
+    char cmd[PATH_MAX + 128];
+    snprintf(cmd, sizeof(cmd), "latexUtils --cleanFiles \"%s\" > /dev/null 2>&1", atticDir);
 
-    const char *extensions[] = {
-        ".aux", ".bbl", ".bcf", ".bcf-SAVE-ERROR", ".bbl-SAVE-ERROR",
-        ".blg", ".fdb_latexmk", ".fls", ".log", ".run.xml",
-        ".synctex.gz", ".synctex(busy)"
-    };
-    int numexts = sizeof(extensions) / sizeof(extensions[0]);
+    if (system(cmd) == 0) { printf("%sCleaned all note directories.%s\n", GREEN, NC); }
 
-    for (int i = 0; i < noteCapacity; i++) {
-        if (!notes[i].active) continue;
-
-        char dirPath[PATH_MAX];
-        snprintf(dirPath, sizeof(dirPath), "%s/%05d", atticDir, i);
-
-        DIR *d = opendir(dirPath);
-        if (!d) continue;
-
-        int noteCleaned = 0;
-        struct dirent *dir;
-
-        while ((dir = readdir(d)) != NULL) {
-            if (strcmp(dir->d_name, ".") == 0 || strcmp(dir->d_name, "..") == 0) continue;
-
-            int len = strlen(dir->d_name);
-            int shouldDelete = 0;
-
-            char *spacePtr = strchr(dir->d_name, ' ');
-            if (spacePtr != NULL) {
-                if (isdigit(spacePtr[1]) && spacePtr[2] == '.') {
-                    shouldDelete = 1;
-                }
-            }
-
-            if (!shouldDelete) {
-                for (int j = 0; j < numexts; j++) {
-                    int extLen = strlen(extensions[j]);
-                    if (len >= extLen && strcmp(dir->d_name + len - extLen, extensions[j]) == 0) {
-                        shouldDelete = 1;
-                        break;
-                    }
-                }
-            }
-
-            if (shouldDelete) {
-                char filepath[PATH_MAX * 2];
-                snprintf(filepath, sizeof(filepath), "%s/%s", dirPath, dir->d_name);
-                if (unlink(filepath) == 0) {
-                    noteCleaned = 1;
-                }
-            }
-        }
-        closedir(d);
-
-        if (noteCleaned) {
-            cleanedCount++;
-        }
-    }
-
-    printf("%sCleaned files in %d note directories.%s\n", GREEN, cleanedCount, NC);
     loadMemory();
     exportGraph(1);
 }

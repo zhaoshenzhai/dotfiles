@@ -33,22 +33,6 @@ in {
                     view_general_options = "--synctex-forward @line:@col:@tex @pdf";
                     view_forward_search_on_start = true;
                     mappings_enabled = false;
-                    quickfix_ignore_filters = [
-                        "Underfull \\\\hbox (badness [0-9]*) in paragraph at lines"
-                        "Overfull \\\\hbox ([0-9]*.[0-9]*pt too wide) in paragraph at lines"
-                        "Underfull \\\\hbox (badness [0-9]*) in "
-                        "Underfull \\\\vbox (badness [0-9]*) detected at line "
-                        "Overfull \\\\hbox ([0-9]*.[0-9]*pt too wide) in "
-                        "Package hyperref Warning: Token not allowed in a PDF string"
-                        "Package typearea Warning: Bad type area settings!"
-                        "LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right."
-                        "Dimension too large."
-                        "I found no \\\\bibdata command"
-                        "LaTeX Warning: Marginpar on page * moved."
-                        "LaTeX Warning: There were undefined references."
-                        "Package biblatex Warning: Please rerun LaTeX."
-                        "Package biblatex Warning: Please (re)run Biber on the file: *"
-                    ];
                 };
             };
             cmp = {
@@ -109,6 +93,7 @@ in {
         };
 
         extraPlugins = with pkgs.vimPlugins; [ ultisnips ];
+
         extraFiles = {
             "lua/options.lua".source   = ./nvim/options.lua;
             "lua/ui.lua".source        = ./nvim/ui.lua;
@@ -120,6 +105,7 @@ in {
             "ftplugin/tex.lua".source  = ./nvim/tex.lua;
             "ftplugin/c.lua".source    = ./nvim/c.lua;
         } // snippetExtraFiles;
+
         extraConfigLua = ''
             require('options')
             require('ui')
