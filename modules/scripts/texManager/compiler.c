@@ -82,9 +82,6 @@ int texCompileToSvg(const char *dirPath, const char *fileName, const char *outpu
     snprintf(cmd, sizeof(cmd), "mkdir -p '%s'", outputDir);
     system(cmd);
 
-    snprintf(cmd, sizeof(cmd), "rm -f '%s/%s.svg'", outputDir, baseName);
-    system(cmd);
-
     snprintf(cmd, sizeof(cmd),
         "cd '%s' && "
         "{ cp '%s.aux' '%s_web.aux' 2>/dev/null || true; } && "
