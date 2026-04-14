@@ -1,4 +1,5 @@
 #include "attic.h"
+#include "texManager.h"
 
 void promptExit() {
     printf("\n%sPress [Y] to return, exiting otherwise...%s ", CYAN, NC);
@@ -57,21 +58,11 @@ void interactiveMenu() {
 }
 
 int main(int argc, char **argv) {
-    const char *home = getenv("HOME");
-    const char *user = getenv("USER");
-    if (!home) home = "";
-    if (!user) user = "";
+    ensureTexPath();
 
-    const char *currentPath = getenv("PATH");
-    char newPath[8192];
-    snprintf(newPath, sizeof(newPath),
-        "/run/current-system/sw/bin:/etc/profiles/per-user/%s/bin:%s/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/opt/homebrew/bin:/usr/local/bin:%s",
-        user, home, currentPath ? currentPath : "");
-    setenv("PATH", newPath, 1);
-
-    snprintf(atticDir, sizeof(atticDir), "%s/iCloud/Projects/_attic/notes", home);
-    snprintf(templateFile, sizeof(templateFile), "%s/iCloud/Dotfiles/modules/scripts/LaTeXTemplate/files/attic.tex", home);
-    snprintf(launcherPath, sizeof(launcherPath), "/etc/profiles/per-user/%s/bin/launcher", user);
+    snprintf(atticDir, sizeof(atticDir), "%s/iCloud/Projects/_attic/notes", getenv("HOME"));
+    snprintf(templateFile, sizeof(templateFile), "%s/iCloud/Dotfiles/modules/scripts/LaTeXTemplate/files/attic.tex", getenv("HOME"));
+    snprintf(launcherPath, sizeof(launcherPath), "/etc/profiles/per-user/%s/bin/launcher", getenv("USER"));
 
     char cleanCmd[1024];
     snprintf(cleanCmd, sizeof(cleanCmd), "find \"%s\" -type f -name \"* [0-9].*\" -delete", atticDir);

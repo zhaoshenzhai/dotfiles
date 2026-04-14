@@ -1,4 +1,5 @@
 #include "attic.h"
+#include "texManager.h"
 
 int generateMetadata(int id) {
     if (id >= noteCapacity || !notes[id].active) {
@@ -328,26 +329,12 @@ void rebuildNotes(void) {
 
         totalProcessed++;
 
-        char texPath[PATH_MAX], logPath[PATH_MAX];
-        struct stat st_tex, st_log;
-        snprintf(texPath, sizeof(texPath), "%s/%05d/%05d.tex", atticDir, i, i);
-        snprintf(logPath, sizeof(logPath), "%s/%05d/%05d.log", atticDir, i, i);
+        if (isCompiling(i)) { continue; }
 
-        int needsRebuild = 0;
-        if (stat(texPath, &st_tex) == 0) {
-            if (stat(logPath, &st_log) != 0 || st_tex.st_mtime > st_log.st_mtime) {
-                needsRebuild = 1;
-            }
-        }
-
-        if (needsRebuild) {
-            if (isCompiling(i)) { continue; }
-
-            char dp[PATH_MAX], bp[PATH_MAX];
-            snprintf(dp, sizeof(dp), "%s/%05d/%05d.dat", atticDir, i, i);
-            snprintf(bp, sizeof(bp), "%s/%05d/%05d.dat.bak", atticDir, i, i);
-            rename(dp, bp);
-        }
+        char dp[PATH_MAX], bp[PATH_MAX];
+        snprintf(dp, sizeof(dp), "%s/%05d/%05d.dat", atticDir, i, i);
+        snprintf(bp, sizeof(bp), "%s/%05d/%05d.dat.bak", atticDir, i, i);
+        rename(dp, bp);
 
         generateMetadata(i);
 
@@ -355,10 +342,6 @@ void rebuildNotes(void) {
         pid_t pid;
         while ((pid = waitpid(-1, &status, WNOHANG)) > 0) {
             PROCESS_FINISHED_JOB(pid, status);
-        }
-
-        if (!needsRebuild) {
-            continue;
         }
 
         while (runningJobs >= MAX_JOBS) {
@@ -370,15 +353,17 @@ void rebuildNotes(void) {
 
         pid = fork();
         if (pid == 0) {
-            char dirPath[PATH_MAX]; snprintf(dirPath, sizeof(dirPath), "%s/%05d", atticDir, i);
-            if (chdir(dirPath) != 0) exit(1);
-            char texFile[32]; snprintf(texFile, sizeof(texFile), "%05d.tex", i);
+            char texPath[PATH_MAX];
+            snprintf(texPath, sizeof(texPath), "%s/%05d/%05d.tex", atticDir, i, i);
 
-            freopen("/dev/null", "w", stdout);
-            freopen("/dev/null", "w", stderr);
+            TexConfig config;
+            texInitConfig(&config);
+            config.background = false;
+            config.continuous = false;
+            config.nonstop = true;
 
-            execlp("latexmk", "latexmk", "-pdf", "-pvc-", "-interaction=nonstopmode", texFile, NULL);
-            exit(1);
+            int status = texCompile(texPath, &config);
+            exit(WIFEXITED(status) ? WEXITSTATUS(status) : 1);
         } else if (pid > 0) {
             for (int j = 0; j < MAX_JOBS; j++) {
                 if (jobs[j].pid == 0) {
@@ -434,11 +419,7 @@ void rebuildNotes(void) {
 }
 
 void cleanAttic(void) {
-    char cmd[PATH_MAX + 128];
-    snprintf(cmd, sizeof(cmd), "latexUtils --cleanFiles \"%s\" > /dev/null 2>&1", atticDir);
-
-    if (system(cmd) == 0) { printf("%sCleaned all note directories.%s\n", GREEN, NC); }
-
+    if (texCleanAux(atticDir) == 0) { printf("%sCleaned all note directories.%s\n", GREEN, NC); }
     loadMemory();
     exportGraph(1);
 }

@@ -1,4 +1,5 @@
 #include "attic.h"
+#include "texManager.h"
 
 char atticDir[PATH_MAX];
 char templateFile[PATH_MAX];
@@ -87,19 +88,20 @@ void formatLinks(int *ids, int count, char *outBuf) {
 }
 
 int isCompiling(int id) {
-    char cmd[256];
-    snprintf(cmd, sizeof(cmd), "pgrep -f '[l]atexmk.*%05d\\.tex' > /dev/null 2>&1", id);
-    int status = system(cmd);
-
-    return (WIFEXITED(status) && WEXITSTATUS(status) == 0);
+    char texPath[PATH_MAX];
+    snprintf(texPath, sizeof(texPath), "%s/%05d/%05d.tex", atticDir, id, id);
+    return texIsCompiling(texPath) ? 1 : 0;
 }
 
 void compileNote(int id) {
-    if (isCompiling(id)) return;
-    char cmd[2048];
-    snprintf(cmd, sizeof(cmd),
-        "cd '%s/%05d' && nohup latexmk -pdf -pvc- -interaction=nonstopmode %05d.tex > /dev/null 2>&1 &", atticDir, id, id);
-    system(cmd);
+    char texPath[PATH_MAX];
+    snprintf(texPath, sizeof(texPath), "%s/%05d/%05d.tex", atticDir, id, id);
+
+    TexConfig config;
+    texInitConfig(&config);
+    config.background = true;
+
+    texCompile(texPath, &config);
 }
 
 void extracIDs(const char *str, int *arr, int *count) {

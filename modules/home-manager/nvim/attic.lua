@@ -322,3 +322,15 @@ vim.api.nvim_create_autocmd("FileType", {
         end, { buffer = true })
     end
 })
+
+-- Open corresponding .key
+vim.keymap.set('n', '<C-S-k>', function()
+    local current_file = vim.fn.expand('%:p')
+    if current_file:match('Projects/_attic/notes') and current_file:match('%.tex$') then
+        local key_file = current_file:gsub('%.tex$', '.key')
+
+        if vim.fn.filereadable(key_file) == 1 then
+            vim.cmd('tabedit ' .. vim.fn.fnameescape(key_file))
+        end
+    end
+end, opts)

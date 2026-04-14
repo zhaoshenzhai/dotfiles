@@ -35,7 +35,7 @@
             nnoremap <C-s> :!alacritty --title vifm-float --option "window.dimensions={columns=100,lines=35}" --option "window.position={x=525,y=250}" --working-directory %d &<cr>
 
             nnoremap <C-c> :!pdfcp *.pdf >/dev/null 2>&1 &
-            nnoremap <C-d> :!latexUtils --cleanFiles %d &<cr>
+            nnoremap <C-d> :!texManager -C %d &<cr>
 
             filetype *.pdf open -a Skim %c &
             filetype *.jpg,*.jpeg,*.png,*.gif open %c &
