@@ -93,6 +93,7 @@
             "karabiner-elements"
             "qutebrowser"
             "sf-symbols"
+            "discord"
             "skim"
             "zoom"
         ];
