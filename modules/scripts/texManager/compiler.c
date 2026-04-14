@@ -89,34 +89,28 @@ int texCompileToSvg(const char *filePath, const char *outputDir) {
 
     char cmd[2048];
 
-    // Ensure the target directory exists before running dvisvgm
     snprintf(cmd, sizeof(cmd), "mkdir -p '%s'", outputDir);
     system(cmd);
 
-    // 1. Share Common Files & Compile
-    // Added '{ ... || true; }' to ensure a failed copy doesn't halt the chain.
-    // Redirecting all output to a local .log file instead of /dev/null to capture hidden errors.
     snprintf(cmd, sizeof(cmd),
         "cd '%s' && "
         "{ cp '%s.aux' '%s_web.aux' 2>/dev/null || true; } && "
-        "latex -interaction=nonstopmode -jobname='%s_web' '\\def\\isweb{}\\input{%s}' > '%s_web_compile.log' 2>&1",
+        "latex -interaction=nonstopmode -jobname='%s_web' '\\def\\isweb{}\\input{%s}' >> /dev/null 2>&1",
         dirPath, baseName, baseName, baseName, fileName, baseName);
 
     int status = system(cmd);
     if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
-        fprintf(stderr, "Error: latex DVI compilation failed for %s. Check %s_web_compile.log\n", fileName, baseName);
+        fprintf(stderr, "Error: latex DVI compilation failed for %s.\n", fileName, baseName);
         return 1;
     }
 
-    // 2. Convert DVI to SVG
-    // Outputting dvisvgm errors to the same log
     snprintf(cmd, sizeof(cmd),
-        "cd '%s' && dvisvgm --font-format=woff2 --exact '%s_web.dvi' -o '%s/%s.svg' >> '%s_web_compile.log' 2>&1",
+        "cd '%s' && dvisvgm --font-format=woff2 --exact '%s_web.dvi' -o '%s/%s.svg' >> /dev/null 2>&1",
         dirPath, baseName, outputDir, baseName, baseName);
 
     status = system(cmd);
     if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
-        fprintf(stderr, "Error: dvisvgm conversion failed for %s. Check %s_web_compile.log\n", baseName, baseName);
+        fprintf(stderr, "Error: dvisvgm conversion failed for %s.\n", baseName, baseName);
         return 1;
     }
 
