@@ -92,10 +92,15 @@ int texCompileToSvg(const char *dirPath, const char *fileName, const char *outpu
     if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) return 1;
 
     snprintf(cmd, sizeof(cmd),
-        "cd '%s' && dvisvgm --font-format=woff2 --exact '%s_web.dvi' -o '%s/%s.svg' >> /dev/null 2>&1",
-        dirPath, baseName, outputDir, baseName);
+        "cd '%s' && dvisvgm --font-format=woff2 --exact '%s_web.dvi' -o '/tmp/%s.svg' >> /dev/null 2>&1",
+        dirPath, baseName, baseName);
 
     status = system(cmd);
+    if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) return 1;
+
+    snprintf(cmd, sizeof(cmd), "mv -f '/tmp/%s.svg' '%s/%s.svg'", baseName, outputDir, baseName);
+    system(cmd);
+
     return (!WIFEXITED(status) || WEXITSTATUS(status) != 0) ? 1 : 0;
 }
 
