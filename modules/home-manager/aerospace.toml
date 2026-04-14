@@ -64,15 +64,14 @@ accordion-padding = 0
         --option "window.position={x=425,y=246}" \
         -e zsh -c attic"""
 
-    # MacOS apps
-    cmd-m       = [ 'workspace m', 'exec-and-forget open -a messages' ]
-    cmd-s       = [ 'workspace m', 'exec-and-forget open -a music' ]
-    cmd-shift-m = [ 'workspace m', 'exec-and-forget open -a mail' ]
+    # Applications
+    cmd-m       = [ 'exec-and-forget open -a messages',    'workspace m' ]
+    cmd-s       = [ 'exec-and-forget open -a music',       'workspace m' ]
+    cmd-shift-m = [ 'exec-and-forget open -a mail',        'workspace m' ]
+    cmd-w       = [ 'exec-and-forget open -a qutebrowser', 'workspace w' ]
+    cmd-shift-w = [ 'exec-and-forget open -a safari',      'workspace w' ]
+    cmd-d       = [ 'exec-and-forget open -a Discord',     'workspace w' ]
     cmd-shift-t = 'exec-and-forget open -a activity\ monitor'
-
-    # Web-browser
-    cmd-w       = [ 'workspace w', 'exec-and-forget open -a qutebrowser' ]
-    cmd-shift-w = [ 'workspace w', 'exec-and-forget open -a safari' ]
 
     # Screenshot
     cmd-p = 'exec-and-forget screencapture ~/Downloads/Screenshot_$(date +%Y_%m_%d_%H%M%S).png'
@@ -137,6 +136,10 @@ accordion-padding = 0
 
 [[on-window-detected]]
     if.app-id = 'org.qutebrowser.qutebrowser'
+    run = 'move-node-to-workspace w'
+
+[[on-window-detected]]
+    if.app-id = 'com.hnc.Discord'
     run = 'move-node-to-workspace w'
 
 [[on-window-detected]]
