@@ -5,7 +5,6 @@
 #include <sys/types.h>
 
 typedef struct {
-    bool background;
     bool continuous;
     bool nonstop;
     char engine[32];
@@ -14,7 +13,7 @@ typedef struct {
 
 void ensureTexPath();
 void texInitConfig(TexConfig *config);
-int texCompile(const char *filePath, const TexConfig *config);
-int texCompileToSvg(const char *filePath, const char *outputDir);
-bool texIsCompiling(const char *filePath);
+int texCompile(const char *dirPath, const char *fileName, const TexConfig *config);
+int texCompileToSvg(const char *dirPath, const char *fileName, const char *outputDir);
+bool texIsCompiling(const char *fileName);
 int texCleanAux(const char *dirPath);

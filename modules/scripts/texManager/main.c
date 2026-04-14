@@ -13,9 +13,8 @@ int main(int argc, char **argv) {
     bool svgMode = false;
     char outputDir[PATH_MAX] = ".";
 
-    while ((opt = getopt(argc, argv, "bcCe:so:")) != -1) {
+    while ((opt = getopt(argc, argv, "cCe:so:")) != -1) {
         switch (opt) {
-            case 'b': config.background = true; break;
             case 'c': config.continuous = true; break;
             case 'e':
                 strncpy(config.engine, optarg, sizeof(config.engine) - 1);
@@ -28,7 +27,7 @@ int main(int argc, char **argv) {
                 outputDir[sizeof(outputDir) - 1] = '\0';
                 break;
             default:
-                fprintf(stderr, "Usage: %s [-b background] [-c continuous] [-e engine] [-C clean] [-s svg] [-o outputDir] <fileOrDir>\n", argv[0]);
+                fprintf(stderr, "Usage: %s [-c continuous] [-e engine] [-C clean] [-s svg] [-o outputDir] <fileOrDir>\n", argv[0]);
                 return 1;
         }
     }
@@ -38,13 +37,23 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    const char *targetPath = argv[optind];
+    char dirPath[PATH_MAX];
+    strncpy(dirPath, argv[optind], sizeof(dirPath));
+    char *slash = strrchr(dirPath, '/');
+    const char *fileName = argv[optind];
+
+    if (slash) {
+        *slash = '\0';
+        fileName = argv[optind] + (slash - dirPath + 1);
+    } else {
+        strcpy(dirPath, ".");
+    }
 
     if (cleanMode) {
-        return texCleanAux(targetPath);
+        return texCleanAux(argv[optind]);
     } else if (svgMode) {
-        return texCompileToSvg(targetPath, outputDir);
+        return texCompileToSvg(dirPath, fileName, outputDir);
     } else {
-        return texCompile(targetPath, &config);
+        return texCompile(dirPath, fileName, &config);
     }
 }

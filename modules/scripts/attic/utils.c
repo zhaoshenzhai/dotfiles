@@ -65,15 +65,19 @@ int cmp_int(const void *a, const void *b) {
 
 int dedupe(int *arr, int count) {
     if (count == 0) return 0;
-    qsort(arr, count, sizeof(int), cmp_int);
+    static bool seen[100000];
+    memset(seen, 0, sizeof(seen));
+
     int j = 0;
-    for (int i = 1; i < count; i++) {
-        if (arr[i] != arr[j]) {
-            j++;
-            arr[j] = arr[i];
+    for (int i = 0; i < count; i++) {
+        if (arr[i] >= 0 && arr[i] < 100000) {
+            if (!seen[arr[i]]) {
+                seen[arr[i]] = true;
+                arr[j++] = arr[i];
+            }
         }
     }
-    return j + 1;
+    return j;
 }
 
 void formatLinks(int *ids, int count, char *outBuf) {
@@ -88,22 +92,30 @@ void formatLinks(int *ids, int count, char *outBuf) {
 }
 
 int isCompiling(int id) {
-    char texPath[PATH_MAX];
-    snprintf(texPath, sizeof(texPath), "%s/%05d/%05d.tex", atticDir, id, id);
-    return texIsCompiling(texPath) ? 1 : 0;
+    char fileName[64];
+    snprintf(fileName, sizeof(fileName), "%05d.tex", id);
+    return texIsCompiling(fileName) ? 1 : 0;
 }
 
 void compileNote(int id) {
-    const char *webOutDir = "/Users/zhao/iCloud/Projects/_web/notes";
-    char texPath[PATH_MAX];
-    snprintf(texPath, sizeof(texPath), "%s/%05d/%05d.tex", atticDir, id, id);
+    pid_t pid = fork();
 
-    TexConfig config;
-    texInitConfig(&config);
-    config.background = true;
+    if (pid == 0) {
+        const char *webOutDir = "/Users/zhao/iCloud/Projects/_web/notes";
+        char dirPath[PATH_MAX];
+        char fileName[64];
 
-    texCompile(texPath, &config);
-    texCompileToSvg(texPath, webOutDir);
+        snprintf(dirPath, sizeof(dirPath), "%s/%05d", atticDir, id);
+        snprintf(fileName, sizeof(fileName), "%05d.tex", id);
+
+        TexConfig config;
+        texInitConfig(&config);
+        config.nonstop = true;
+
+        texCompile(dirPath, fileName, &config);
+        texCompileToSvg(dirPath, fileName, webOutDir);
+        exit(0);
+    }
 }
 
 void extracIDs(const char *str, int *arr, int *count) {

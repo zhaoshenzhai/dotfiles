@@ -7,6 +7,7 @@
 #include <sys/wait.h>
 #include <ftw.h>
 #include <fnmatch.h>
+#include <fcntl.h>
 
 static const char *cleanExtensions[] = {
     ".aux", ".fls", ".log", ".blg", ".fdb_latexmk",
@@ -17,114 +18,97 @@ static const char *cleanExtensions[] = {
 
 void texInitConfig(TexConfig *config) {
     memset(config, 0, sizeof(TexConfig));
-    config->background = false;
     config->continuous = false;
     config->nonstop = true;
     strcpy(config->engine, "pdf");
 }
 
-bool texIsCompiling(const char *filePath) {
-    const char *fileName = strrchr(filePath, '/');
-    fileName = fileName ? fileName + 1 : filePath;
-
+bool texIsCompiling(const char *fileName) {
     char cmd[512];
     snprintf(cmd, sizeof(cmd), "pgrep -f '[l]atexmk.*%s' > /dev/null 2>&1", fileName);
     int status = system(cmd);
-
     return (WIFEXITED(status) && WEXITSTATUS(status) == 0);
 }
 
-int texCompile(const char *filePath, const TexConfig *config) {
-    if (texIsCompiling(filePath)) {
-        printf("Already compiling: %s\n", filePath);
+int texCompile(const char *dirPath, const char *fileName, const TexConfig *config) {
+    if (texIsCompiling(fileName)) {
+        printf("Already compiling: %s\n", fileName);
         return 0;
     }
 
-    char dirPath[PATH_MAX];
-    strncpy(dirPath, filePath, sizeof(dirPath));
-    char *slash = strrchr(dirPath, '/');
-    const char *fileName = filePath;
+    pid_t pid = fork();
+    if (pid == 0) {
+        if (chdir(dirPath) != 0) exit(1);
 
-    if (slash) {
-        *slash = '\0';
-        fileName = slash + 1;
-    } else {
-        strcpy(dirPath, ".");
+        char *args[10];
+        int i = 0;
+        args[i++] = "latexmk";
+
+        char engineArg[64];
+        snprintf(engineArg, sizeof(engineArg), "-%s", config->engine);
+        args[i++] = engineArg;
+
+        if (config->continuous) args[i++] = "-pvc";
+        if (config->nonstop) args[i++] = "-interaction=nonstopmode";
+
+        args[i++] = (char *)fileName;
+        args[i++] = NULL;
+
+        int devnull = open("/dev/null", O_WRONLY);
+        if (devnull != -1) {
+            dup2(devnull, STDOUT_FILENO);
+            dup2(devnull, STDERR_FILENO);
+            close(devnull);
+        }
+
+        execvp("latexmk", args);
+        exit(1);
+    } else if (pid > 0) {
+        int status;
+        waitpid(pid, &status, 0);
+        return WIFEXITED(status) ? WEXITSTATUS(status) : 1;
     }
-
-    char cmd[2048];
-    snprintf(cmd, sizeof(cmd),
-        "cd '%s' && %s latexmk -%s %s %s '%s' > /dev/null 2>&1 %s",
-        dirPath,
-        config->background ? "nohup" : "",
-        config->engine,
-        config->continuous ? "-pvc" : "",
-        config->nonstop ? "-interaction=nonstopmode" : "",
-        fileName,
-        config->background ? "&" : "");
-
-    return system(cmd);
+    return 1;
 }
 
-int texCompileToSvg(const char *filePath, const char *outputDir) {
-    char dirPath[PATH_MAX];
-    strncpy(dirPath, filePath, sizeof(dirPath));
-    char *slash = strrchr(dirPath, '/');
-    const char *fileName = filePath;
-
-    if (slash) {
-        *slash = '\0';
-        fileName = slash + 1;
-    } else {
-        strcpy(dirPath, ".");
-    }
-
+int texCompileToSvg(const char *dirPath, const char *fileName, const char *outputDir) {
     char baseName[256];
     strncpy(baseName, fileName, sizeof(baseName));
     baseName[sizeof(baseName) - 1] = '\0';
     char *dot = strrchr(baseName, '.');
-    if (dot) {
-        *dot = '\0';
-    }
+    if (dot) *dot = '\0';
 
     char cmd[2048];
-
     snprintf(cmd, sizeof(cmd), "mkdir -p '%s'", outputDir);
+    system(cmd);
+
+    snprintf(cmd, sizeof(cmd), "rm -f '%s/%s.svg'", outputDir, baseName);
     system(cmd);
 
     snprintf(cmd, sizeof(cmd),
         "cd '%s' && "
         "{ cp '%s.aux' '%s_web.aux' 2>/dev/null || true; } && "
         "latex -interaction=nonstopmode -jobname='%s_web' '\\def\\isweb{}\\input{%s}' >> /dev/null 2>&1",
-        dirPath, baseName, baseName, baseName, fileName, baseName);
+        dirPath, baseName, baseName, baseName, fileName);
 
     int status = system(cmd);
-    if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
-        fprintf(stderr, "Error: latex DVI compilation failed for %s.\n", fileName, baseName);
-        return 1;
-    }
+    if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) return 1;
 
     snprintf(cmd, sizeof(cmd),
         "cd '%s' && dvisvgm --font-format=woff2 --exact '%s_web.dvi' -o '%s/%s.svg' >> /dev/null 2>&1",
-        dirPath, baseName, outputDir, baseName, baseName);
+        dirPath, baseName, outputDir, baseName);
 
     status = system(cmd);
-    if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
-        fprintf(stderr, "Error: dvisvgm conversion failed for %s.\n", baseName, baseName);
-        return 1;
-    }
-
-    return 0;
+    return (!WIFEXITED(status) || WEXITSTATUS(status) != 0) ? 1 : 0;
 }
 
 static int unlinkCallback(const char *fpath, const struct stat *sb, int typeflag, struct FTW *ftwbuf) {
     if (typeflag == FTW_F) {
         const char *fileName = fpath + ftwbuf->base;
-
         if (fnmatch("* [0-9].*", fileName, 0) == 0) { unlink(fpath); return 0; }
 
-        size_t numExts = sizeof(cleanExtensions) / sizeof(cleanExtensions[0]);
         size_t nameLen = strlen(fileName);
+        size_t numExts = sizeof(cleanExtensions) / sizeof(cleanExtensions[0]);
 
         for (size_t i = 0; i < numExts; i++) {
             size_t extLen = strlen(cleanExtensions[i]);
@@ -134,18 +118,12 @@ static int unlinkCallback(const char *fpath, const struct stat *sb, int typeflag
             }
         }
     }
-
     return 0;
 }
 
 int texCleanAux(const char *dirPath) {
     int flags = FTW_PHYS;
-
-    if (nftw(dirPath, unlinkCallback, 20, flags) == -1) {
-        perror("Error traversing directory");
-        return 1;
-    }
-
+    if (nftw(dirPath, unlinkCallback, 20, flags) == -1) return 1;
     return 0;
 }
 

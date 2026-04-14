@@ -10,7 +10,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     pattern = "*.tex",
     callback = function(ev)
         if ev.file:match('/_attic/notes/') then return end
-        vim.fn.jobstart({ "texManager", "-b", ev.file }, { detach = true })
+        vim.fn.jobstart({ "texManager", ev.file }, { detach = true })
     end,
 })
 

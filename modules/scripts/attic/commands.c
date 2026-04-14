@@ -353,22 +353,21 @@ void rebuildNotes(void) {
 
         pid = fork();
         if (pid == 0) {
-            char texPath[PATH_MAX];
-            snprintf(texPath, sizeof(texPath), "%s/%05d/%05d.tex", atticDir, i, i);
+            char dirPath[PATH_MAX];
+            char fileName[64];
+            snprintf(dirPath, sizeof(dirPath), "%s/%05d", atticDir, i);
+            snprintf(fileName, sizeof(fileName), "%05d.tex", i);
 
             TexConfig config;
             texInitConfig(&config);
-            config.background = false;
-            config.continuous = false;
             config.nonstop = true;
 
-            int status = texCompile(texPath, &config);
+            int status = texCompile(dirPath, fileName, &config);
             int exitCode = WIFEXITED(status) ? WEXITSTATUS(status) : 1;
 
             if (exitCode == 0) {
                 const char *webOutDir = "/Users/zhao/iCloud/Projects/_web/notes";
-                int svgStatus = texCompileToSvg(texPath, webOutDir);
-
+                int svgStatus = texCompileToSvg(dirPath, fileName, webOutDir);
                 exitCode = svgStatus;
             }
 
