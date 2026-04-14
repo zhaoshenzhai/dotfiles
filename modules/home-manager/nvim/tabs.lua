@@ -63,7 +63,7 @@ end, { silent = true, nowait = true })
 
 -- Tab navigation
 for i = 1, 9 do
-    vim.keymap.set({'n', 'i'}, '<C-' .. i .. '>', '<Cmd>' .. i .. 'gt<CR>', { silent = true })
+    vim.keymap.set({'n', 'i'}, '<C-' .. i .. '>', '<Cmd>' .. i .. 'tabnext<CR>', { silent = true })
     vim.keymap.set({'n', 'i'}, '<C-S-' .. i .. '>', function()
         local current = vim.fn.tabpagenr()
         local target = i

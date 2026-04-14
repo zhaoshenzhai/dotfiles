@@ -363,7 +363,16 @@ void rebuildNotes(void) {
             config.nonstop = true;
 
             int status = texCompile(texPath, &config);
-            exit(WIFEXITED(status) ? WEXITSTATUS(status) : 1);
+            int exitCode = WIFEXITED(status) ? WEXITSTATUS(status) : 1;
+
+            if (exitCode == 0) {
+                const char *webOutDir = "/Users/zhao/iCloud/Projects/_web/notes";
+                int svgStatus = texCompileToSvg(texPath, webOutDir);
+
+                exitCode = svgStatus;
+            }
+
+            exit(exitCode);
         } else if (pid > 0) {
             for (int j = 0; j < MAX_JOBS; j++) {
                 if (jobs[j].pid == 0) {

@@ -15,5 +15,6 @@ typedef struct {
 void ensureTexPath();
 void texInitConfig(TexConfig *config);
 int texCompile(const char *filePath, const TexConfig *config);
+int texCompileToSvg(const char *filePath, const char *outputDir);
 bool texIsCompiling(const char *filePath);
 int texCleanAux(const char *dirPath);

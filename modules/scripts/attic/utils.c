@@ -94,6 +94,7 @@ int isCompiling(int id) {
 }
 
 void compileNote(int id) {
+    const char *webOutDir = "/Users/zhao/iCloud/Projects/_web/notes";
     char texPath[PATH_MAX];
     snprintf(texPath, sizeof(texPath), "%s/%05d/%05d.tex", atticDir, id, id);
 
@@ -102,6 +103,7 @@ void compileNote(int id) {
     config.background = true;
 
     texCompile(texPath, &config);
+    texCompileToSvg(texPath, webOutDir);
 }
 
 void extracIDs(const char *str, int *arr, int *count) {

@@ -11,7 +11,8 @@
 static const char *cleanExtensions[] = {
     ".aux", ".fls", ".log", ".blg", ".fdb_latexmk",
     ".bbl", ".bbl-SAVE-ERROR", ".bcf", ".bcf-SAVE-ERROR",
-    ".xdv", ".xml", ".run.xml", ".synctex.gz", ".synctex(busy)"
+    ".xdv", ".xml", ".run.xml", ".synctex.gz", ".synctex(busy)",
+    ".dvi", ".out.ps"
 };
 
 void texInitConfig(TexConfig *config) {
@@ -63,6 +64,63 @@ int texCompile(const char *filePath, const TexConfig *config) {
         config->background ? "&" : "");
 
     return system(cmd);
+}
+
+int texCompileToSvg(const char *filePath, const char *outputDir) {
+    char dirPath[PATH_MAX];
+    strncpy(dirPath, filePath, sizeof(dirPath));
+    char *slash = strrchr(dirPath, '/');
+    const char *fileName = filePath;
+
+    if (slash) {
+        *slash = '\0';
+        fileName = slash + 1;
+    } else {
+        strcpy(dirPath, ".");
+    }
+
+    char baseName[256];
+    strncpy(baseName, fileName, sizeof(baseName));
+    baseName[sizeof(baseName) - 1] = '\0';
+    char *dot = strrchr(baseName, '.');
+    if (dot) {
+        *dot = '\0';
+    }
+
+    char cmd[2048];
+
+    // Ensure the target directory exists before running dvisvgm
+    snprintf(cmd, sizeof(cmd), "mkdir -p '%s'", outputDir);
+    system(cmd);
+
+    // 1. Share Common Files & Compile
+    // Added '{ ... || true; }' to ensure a failed copy doesn't halt the chain.
+    // Redirecting all output to a local .log file instead of /dev/null to capture hidden errors.
+    snprintf(cmd, sizeof(cmd),
+        "cd '%s' && "
+        "{ cp '%s.aux' '%s_web.aux' 2>/dev/null || true; } && "
+        "latex -interaction=nonstopmode -jobname='%s_web' '\\def\\isweb{}\\input{%s}' > '%s_web_compile.log' 2>&1",
+        dirPath, baseName, baseName, baseName, fileName, baseName);
+
+    int status = system(cmd);
+    if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
+        fprintf(stderr, "Error: latex DVI compilation failed for %s. Check %s_web_compile.log\n", fileName, baseName);
+        return 1;
+    }
+
+    // 2. Convert DVI to SVG
+    // Outputting dvisvgm errors to the same log
+    snprintf(cmd, sizeof(cmd),
+        "cd '%s' && dvisvgm --font-format=woff2 --exact '%s_web.dvi' -o '%s/%s.svg' >> '%s_web_compile.log' 2>&1",
+        dirPath, baseName, outputDir, baseName, baseName);
+
+    status = system(cmd);
+    if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
+        fprintf(stderr, "Error: dvisvgm conversion failed for %s. Check %s_web_compile.log\n", baseName, baseName);
+        return 1;
+    }
+
+    return 0;
 }
 
 static int unlinkCallback(const char *fpath, const struct stat *sb, int typeflag, struct FTW *ftwbuf) {

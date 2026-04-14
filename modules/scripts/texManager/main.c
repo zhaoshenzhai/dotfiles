@@ -1,25 +1,34 @@
 #include "texManager.h"
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 #include <getopt.h>
 
 int main(int argc, char **argv) {
     TexConfig config;
     texInitConfig(&config);
-    ensureTexPath();
 
     int opt;
     bool cleanMode = false;
+    bool svgMode = false;
+    char outputDir[PATH_MAX] = ".";
 
-    while ((opt = getopt(argc, argv, "bcCe:")) != -1) {
+    while ((opt = getopt(argc, argv, "bcCe:so:")) != -1) {
         switch (opt) {
             case 'b': config.background = true; break;
             case 'c': config.continuous = true; break;
-            case 'e': strncpy(config.engine, optarg, sizeof(config.engine) - 1); config.engine[sizeof(config.engine) - 1] = '\0'; break;
+            case 'e':
+                strncpy(config.engine, optarg, sizeof(config.engine) - 1);
+                config.engine[sizeof(config.engine) - 1] = '\0';
+                break;
             case 'C': cleanMode = true; break;
+            case 's': svgMode = true; break;
+            case 'o':
+                strncpy(outputDir, optarg, sizeof(outputDir) - 1);
+                outputDir[sizeof(outputDir) - 1] = '\0';
+                break;
             default:
-                fprintf(stderr, "Usage: %s [-b background] [-c continuous] [-e engine] [-C clean] <fileOrDir>\n", argv[0]);
+                fprintf(stderr, "Usage: %s [-b background] [-c continuous] [-e engine] [-C clean] [-s svg] [-o outputDir] <fileOrDir>\n", argv[0]);
                 return 1;
         }
     }
@@ -32,10 +41,10 @@ int main(int argc, char **argv) {
     const char *targetPath = argv[optind];
 
     if (cleanMode) {
-        printf("Cleaning auxiliary files in %s\n", targetPath);
         return texCleanAux(targetPath);
+    } else if (svgMode) {
+        return texCompileToSvg(targetPath, outputDir);
     } else {
-        printf("Compiling %s...\n", targetPath);
         return texCompile(targetPath, &config);
     }
 }
