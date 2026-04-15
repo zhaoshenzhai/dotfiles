@@ -1,6 +1,7 @@
 start-at-login = false
 after-startup-command = [
     'exec-and-forget nohup alacritty --daemon > /dev/null 2>&1 &',
+    'exec-and-forget open -g -a Skim',
     'exec-and-forget borders',
     'exec-and-forget sketchybar',
     'exec-and-forget skimUtils --focusDaemon'
@@ -27,7 +28,7 @@ accordion-padding = 0
 
 [mode.main.binding]
     # Terminal and finder
-    cmd-backslash = 'exec-and-forget /bin/bash -c "alacritty msg create-window || alacritty"'
+    cmd-backslash = 'exec-and-forget alacrittyDaemon'
     cmd-shift-backslash = 'exec-and-forget open -a finder'
 
     # Launcher
@@ -42,7 +43,7 @@ accordion-padding = 0
                 "--option" "cursor.style={shape=\"Beam\",blinking=\"On\"}"
                 "-e" "launcher"
             )
-            alacritty msg create-window "${ARGS[@]}" || alacritty "${ARGS[@]}"
+            alacrittyDaemon "${ARGS[@]}"
         ' ''',
         'mode launcher'
     ]
@@ -50,7 +51,7 @@ accordion-padding = 0
     # Vifm
     cmd-e = '''exec-and-forget /bin/bash -c '
         CMD="printf \"\033]0;vifm\007\"; exec vifm ~/ -c \":vsplit\" -c \"windo normal ggvGgA\""
-        alacritty msg create-window -e /bin/bash -c "$CMD" || alacritty -e /bin/bash -c "$CMD"
+        alacrittyDaemon -e /bin/bash -c "$CMD"
     ' '''
 
     # Btop
@@ -62,7 +63,7 @@ accordion-padding = 0
             "--option" "keyboard.bindings=[{key=\"Q\",command={program=\"sh\",args=[\"-c\",\"aerospace close\"]}}]"
             "-e" "btop"
         )
-        alacritty msg create-window "${ARGS[@]}" || alacritty "${ARGS[@]}"
+        alacrittyDaemon "${ARGS[@]}"
     ' '''
 
     # Git
@@ -73,7 +74,7 @@ accordion-padding = 0
             "--option" "window.position={x=425,y=246}"
             "-e" "zsh" "-c" "$HOME/iCloud/Dotfiles/modules/scripts/git.sh"
         )
-        alacritty msg create-window "${ARGS[@]}" || alacritty "${ARGS[@]}"
+        alacrittyDaemon "${ARGS[@]}"
     ' '''
 
     # Attic
@@ -84,7 +85,7 @@ accordion-padding = 0
             "--option" "window.position={x=425,y=246}"
             "-e" "zsh" "-c" "attic"
         )
-        alacritty msg create-window "${ARGS[@]}" || alacritty "${ARGS[@]}"
+        alacrittyDaemon "${ARGS[@]}"
     ' '''
 
     # Applications
@@ -151,11 +152,12 @@ accordion-padding = 0
     cmd-q = 'close'
 
 [mode.launcher.binding]
-    cmd-esc = [ 'close', 'mode main' ]
     cmd-q = [ 'close', 'mode main' ]
-    ctrl-esc = [ 'close', 'mode main' ]
     ctrl-q = [ 'close', 'mode main' ]
-    esc = [ 'close', 'mode main' ]
+
+    cmd-esc = [ 'mode main' ]
+    ctrl-esc = [ 'mode main' ]
+    esc = [ 'mode main' ]
 
 [[on-window-detected]]
     if.app-id = 'org.qutebrowser.qutebrowser'

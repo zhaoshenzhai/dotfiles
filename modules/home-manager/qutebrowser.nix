@@ -1,5 +1,13 @@
 { config, pkgs, lib, ... }:
 let
+    nvimSpawn = pkgs.writeShellScript "nvim-spawn" ''
+        ARGS=(
+            "-e" "nvim"
+            "$1"
+        )
+        ${pkgs.alacritty}/bin/alacritty "''${ARGS[@]}"
+    '';
+
     vifmPicker = pkgs.writeShellScript "vifm-picker" ''
         mkdir -p ~/.cache
         lastdir=$(cat ~/.cache/vifm_picker_dir 2>/dev/null || echo "$HOME")
@@ -18,7 +26,7 @@ let
             "$lastdir"
         )
 
-        ${pkgs.alacritty}/bin/alacritty msg create-window "''${ARGS[@]}" || ${pkgs.alacritty}/bin/alacritty "''${ARGS[@]}"
+        ${pkgs.alacritty}/bin/alacritty "''${ARGS[@]}"
     '';
 
     vifmPickerMulti = pkgs.writeShellScript "vifm-picker-multi" ''
@@ -38,7 +46,7 @@ let
             "$lastdir"
         )
 
-        ${pkgs.alacritty}/bin/alacritty msg create-window "''${ARGS[@]}" || ${pkgs.alacritty}/bin/alacritty "''${ARGS[@]}"
+        ${pkgs.alacritty}/bin/alacritty "''${ARGS[@]}"
     '';
 
     ytMpvSpawn = pkgs.writeShellScript "yt-mpv-spawn" ''
@@ -49,15 +57,7 @@ let
             "-e" "yt-mpv"
             "$1"
         )
-        ${pkgs.alacritty}/bin/alacritty msg create-window "''${ARGS[@]}" || ${pkgs.alacritty}/bin/alacritty "''${ARGS[@]}"
-    '';
-
-    nvimSpawn = pkgs.writeShellScript "nvim-spawn" ''
-        ARGS=(
-            "-e" "nvim"
-            "$1"
-        )
-        ${pkgs.alacritty}/bin/alacritty msg create-window "''${ARGS[@]}" || ${pkgs.alacritty}/bin/alacritty "''${ARGS[@]}"
+        ${pkgs.alacritty}/bin/alacritty msg create-window "''${ARGS[@]}"
     '';
 in {
     programs.qutebrowser = {

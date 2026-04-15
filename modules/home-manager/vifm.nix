@@ -3,7 +3,7 @@
         enable = true;
 
         extraConfig = ''
-            set vicmd=nvim
+            set vicmd='env VIFM_NVIM=1 nvim'
             set syscalls
             set trash
             set history=100

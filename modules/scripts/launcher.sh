@@ -134,7 +134,7 @@ launch() {
         fi
 
         ARGS=("-e" "$nvim_path" "$full_path")
-        alacritty msg create-window "${ARGS[@]}" >/dev/null 2>&1 || nohup alacritty "${ARGS[@]}" >/dev/null 2>&1 &
+        alacrittyDaemon "${ARGS[@]}"
     fi
 }
 quit() {

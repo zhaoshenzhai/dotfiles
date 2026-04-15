@@ -1,6 +1,13 @@
 { pkgs, ... }: let
     scriptsDir = ../scripts;
 
+    alacrittyDaemon = pkgs.writeShellApplication {
+        name = "alacrittyDaemon";
+        runtimeInputs = with pkgs; [ coreutils ];
+        checkPhase = "";
+        text = builtins.readFile "${scriptsDir}/alacrittyDaemon.sh";
+    };
+
     launcher = pkgs.writeShellApplication {
         name = "launcher";
         runtimeInputs = with pkgs; [ fd fzf coreutils gnused gawk gnugrep ];
@@ -63,6 +70,7 @@
 in
 {
     environment.systemPackages = [
+        alacrittyDaemon
         pdfcp
         newLatex
         texManager
