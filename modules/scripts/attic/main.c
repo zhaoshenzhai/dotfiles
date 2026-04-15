@@ -19,11 +19,11 @@ void interactiveMenu() {
         printf("    %s(r): Rebuild notes%s\n", CYAN, NC);
         printf("    %s(g): Open graph view%s\n", CYAN, NC);
 
-        printf("%sSelect operation: [n, a, r, c, g] %s", CYAN, NC);
+        printf("%sSelect operation: [n, a, r, g] %s", CYAN, NC);
         fflush(stdout);
         int cmdNum = getch();
 
-        if (cmdNum == 'n' || cmdNum == 'a' || cmdNum == 'r' || cmdNum == 'c' || cmdNum == 'g') {
+        if (cmdNum == 'n' || cmdNum == 'a' || cmdNum == 'r' || cmdNum == 'g') {
             printf("%c\n\n", cmdNum);
             switch (cmdNum) {
                 case 'n': createNote(""); break;
@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
 
     if (argc > 1) {
         int opt;
-        while ((opt = getopt(argc, argv, "ek:nu:m:arcg")) != -1) {
+        while ((opt = getopt(argc, argv, "ek:nu:m:arg")) != -1) {
             switch (opt) {
                 case 'e': createNote("EMPTY_KEYWORDS"); return 0;
                 case 'k': createNote(optarg); return 0;
