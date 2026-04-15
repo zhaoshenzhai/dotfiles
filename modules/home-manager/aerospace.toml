@@ -59,7 +59,7 @@ accordion-padding = 0
             "--title" "btop"
             "--option" "window.dimensions={columns=110,lines=38}"
             "--option" "window.position={x=425,y=246}"
-            "--option" "keyboard.bindings=[{key=\"Q\",command={program=\"sh\",args=[\"-c\",\"aerospace close --quit-if-last-window\"]}}]"
+            "--option" "keyboard.bindings=[{key=\"Q\",command={program=\"sh\",args=[\"-c\",\"aerospace close\"]}}]"
             "-e" "btop"
         )
         alacritty msg create-window "${ARGS[@]}" || alacritty "${ARGS[@]}"
@@ -147,15 +147,15 @@ accordion-padding = 0
     ]
 
     # Close windows
-    cmd-esc = 'close --quit-if-last-window'
-    cmd-q = 'close --quit-if-last-window'
+    cmd-esc = 'close'
+    cmd-q = 'close'
 
 [mode.launcher.binding]
-    cmd-esc = [ 'close --quit-if-last-window', 'mode main' ]
-    cmd-q = [ 'close --quit-if-last-window', 'mode main' ]
-    ctrl-esc = [ 'close --quit-if-last-window', 'mode main' ]
-    ctrl-q = [ 'close --quit-if-last-window', 'mode main' ]
-    esc = [ 'close --quit-if-last-window', 'mode main' ]
+    cmd-esc = [ 'close', 'mode main' ]
+    cmd-q = [ 'close', 'mode main' ]
+    ctrl-esc = [ 'close', 'mode main' ]
+    ctrl-q = [ 'close', 'mode main' ]
+    esc = [ 'close', 'mode main' ]
 
 [[on-window-detected]]
     if.app-id = 'org.qutebrowser.qutebrowser'

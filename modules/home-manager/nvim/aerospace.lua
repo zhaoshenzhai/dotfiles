@@ -30,6 +30,6 @@ vim.api.nvim_create_autocmd("VimEnter", {
 
 -- Quit via aerospace
 vim.cmd([[
-    cnoreabbrev <expr> q getcmdtype() == ":" && getcmdline() == 'q' ? (tabpagenr('$') > 1 ? 'q' : 'silent !aerospace close --quit-if-last-window') : 'q'
-    cnoreabbrev <expr> wq getcmdtype() == ":" && getcmdline() == 'wq' ? (tabpagenr('$') > 1 ? 'wq' : 'w <bar> silent !aerospace close --quit-if-last-window') : 'wq'
+    cnoreabbrev <expr> q getcmdtype() == ":" && getcmdline() == 'q' ? (tabpagenr('$') > 1 ? 'q' : 'silent !aerospace close') : 'q'
+    cnoreabbrev <expr> wq getcmdtype() == ":" && getcmdline() == 'wq' ? (tabpagenr('$') > 1 ? 'wq' : 'w <bar> silent !aerospace close') : 'wq'
 ]])

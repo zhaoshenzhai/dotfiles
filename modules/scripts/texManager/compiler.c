@@ -138,7 +138,7 @@ int texCompileToSvg(const char *dirPath, const char *fileName, const char *outpu
     if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) return 1;
 
     snprintf(cmd, sizeof(cmd),
-        "cd '%s' && dvisvgm --font-format=woff2 --exact --page=1 '%s_web.dvi' -o '%s.svg' >> /dev/null 2>&1",
+        "cd '%s' && dvisvgm --font-format=woff2 --exact '%s_web.dvi' -o '%s.svg' >> /dev/null 2>&1",
         cacheDir, baseName, baseName);
 
     status = system(cmd);
