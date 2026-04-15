@@ -220,7 +220,6 @@ openRelated() {
     fi
 }
 
-
 recordSkim() {
     local window_id="$1"
     if [ -z "$window_id" ]; then

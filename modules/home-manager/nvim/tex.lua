@@ -13,7 +13,6 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 
 -- Forward sync
 vim.keymap.set('n', '<C-Enter>', function()
-    vim.cmd('write')
     local tex_file = vim.fn.expand('%:p')
     local pdf_file = vim.fn.expand('%:p:r') .. '.pdf'
     local line = vim.fn.line('.')
