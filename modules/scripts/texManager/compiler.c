@@ -36,6 +36,26 @@ int texCompile(const char *dirPath, const char *fileName, const TexConfig *confi
         return 0;
     }
 
+    char baseName[256];
+    strncpy(baseName, fileName, sizeof(baseName));
+    baseName[sizeof(baseName) - 1] = '\0';
+    char *dot = strrchr(baseName, '.');
+    if (dot) *dot = '\0';
+
+    unsigned int dirHash = 5381;
+    for (int i = 0; dirPath[i] != '\0'; i++) {
+        dirHash = ((dirHash << 5) + dirHash) + dirPath[i];
+    }
+
+    char cacheDir[PATH_MAX];
+    const char *home = getenv("HOME");
+
+    snprintf(cacheDir, sizeof(cacheDir), "%s/.cache/texManager/pdf/%u_%s", home ? home : "/tmp", dirHash, baseName);
+
+    char cmd[2048];
+    snprintf(cmd, sizeof(cmd), "mkdir -p '%s'", cacheDir);
+    system(cmd);
+
     pid_t pid = fork();
     if (pid == 0) {
         if (chdir(dirPath) != 0) exit(1);
@@ -50,6 +70,10 @@ int texCompile(const char *dirPath, const char *fileName, const TexConfig *confi
 
         if (config->continuous) args[i++] = "-pvc";
         if (config->nonstop) args[i++] = "-interaction=nonstopmode";
+
+        char outdirArg[PATH_MAX + 32];
+        snprintf(outdirArg, sizeof(outdirArg), "-outdir=%s", cacheDir);
+        args[i++] = outdirArg;
 
         args[i++] = (char *)fileName;
         args[i++] = NULL;
@@ -66,7 +90,15 @@ int texCompile(const char *dirPath, const char *fileName, const TexConfig *confi
     } else if (pid > 0) {
         int status;
         waitpid(pid, &status, 0);
-        return WIFEXITED(status) ? WEXITSTATUS(status) : 1;
+        int exitCode = WIFEXITED(status) ? WEXITSTATUS(status) : 1;
+
+        if (exitCode == 0) {
+            char mvCmd[2048];
+            snprintf(mvCmd, sizeof(mvCmd), "mv -f '%s/%s.pdf' '%s/%s.pdf'", cacheDir, baseName, dirPath, baseName);
+            system(mvCmd);
+        }
+
+        return exitCode;
     }
     return 1;
 }
@@ -78,30 +110,39 @@ int texCompileToSvg(const char *dirPath, const char *fileName, const char *outpu
     char *dot = strrchr(baseName, '.');
     if (dot) *dot = '\0';
 
+    unsigned int dirHash = 5381;
+    for (int i = 0; dirPath[i] != '\0'; i++) {
+        dirHash = ((dirHash << 5) + dirHash) + dirPath[i];
+    }
+
     char cmd[2048];
-    snprintf(cmd, sizeof(cmd), "mkdir -p '%s'", outputDir);
+    char cacheDir[PATH_MAX];
+    const char *home = getenv("HOME");
+
+    snprintf(cacheDir, sizeof(cacheDir), "%s/.cache/texManager/svg/%u_%s", home ? home : "/tmp", dirHash, baseName);
+
+    snprintf(cmd, sizeof(cmd), "mkdir -p '%s' '%s'", outputDir, cacheDir);
     system(cmd);
 
     snprintf(cmd, sizeof(cmd),
         "cd '%s' && "
-        "{ cp '%s.aux' '%s_web.aux' 2>/dev/null || true; } && "
-        "latex -interaction=nonstopmode -jobname='%s_web' '\\def\\isweb{}\\input{%s}' >> /dev/null 2>&1",
-        dirPath, baseName, baseName, baseName, fileName);
+        "latex -interaction=nonstopmode -output-directory='%s' -jobname='%s_web' '\\def\\isweb{}\\input{%s}' >> /dev/null 2>&1",
+        dirPath, cacheDir, baseName, fileName);
 
     int status = system(cmd);
     if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) return 1;
 
     snprintf(cmd, sizeof(cmd),
-        "cd '%s' && dvisvgm --font-format=woff2 --exact '%s_web.dvi' -o '/tmp/%s.svg' >> /dev/null 2>&1",
-        dirPath, baseName, baseName);
+        "cd '%s' && dvisvgm --font-format=woff2 --exact --page=1 '%s_web.dvi' -o '%s.svg' >> /dev/null 2>&1",
+        cacheDir, baseName, baseName);
 
     status = system(cmd);
     if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) return 1;
 
-    snprintf(cmd, sizeof(cmd), "mv -f '/tmp/%s.svg' '%s/%s.svg'", baseName, outputDir, baseName);
+    snprintf(cmd, sizeof(cmd), "mv -f '%s/%s.svg' '%s/%s.svg'", cacheDir, baseName, outputDir, baseName);
     system(cmd);
 
-    return (!WIFEXITED(status) || WEXITSTATUS(status) != 0) ? 1 : 0;
+    return 0;
 }
 
 static int unlinkCallback(const char *fpath, const struct stat *sb, int typeflag, struct FTW *ftwbuf) {

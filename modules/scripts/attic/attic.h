@@ -70,6 +70,5 @@ void createNote(const char *inKeywords);
 void updateMetadata(int id);
 void auditNotes(void);
 void rebuildNotes(void);
-void cleanAttic(void);
 void exportGraph(int silent);
 void launchGraph(void);

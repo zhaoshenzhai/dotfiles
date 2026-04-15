@@ -17,7 +17,6 @@ void interactiveMenu() {
         printf("    %s(n): New note%s\n", CYAN, NC);
         printf("    %s(a): Audit notes%s\n", CYAN, NC);
         printf("    %s(r): Rebuild notes%s\n", CYAN, NC);
-        printf("    %s(c): Clean attic%s\n", CYAN, NC);
         printf("    %s(g): Open graph view%s\n", CYAN, NC);
 
         printf("%sSelect operation: [n, a, r, c, g] %s", CYAN, NC);
@@ -30,7 +29,6 @@ void interactiveMenu() {
                 case 'n': createNote(""); break;
                 case 'a': auditNotes(); break;
                 case 'r': rebuildNotes(); break;
-                case 'c': cleanAttic(); break;
                 case 'g':
                     launchGraph();
                     system("clear");
@@ -64,10 +62,6 @@ int main(int argc, char **argv) {
     snprintf(templateFile, sizeof(templateFile), "%s/iCloud/Dotfiles/modules/scripts/LaTeXTemplate/files/attic.tex", getenv("HOME"));
     snprintf(launcherPath, sizeof(launcherPath), "/etc/profiles/per-user/%s/bin/launcher", getenv("USER"));
 
-    char cleanCmd[1024];
-    snprintf(cleanCmd, sizeof(cleanCmd), "find \"%s\" -type f -name \"* [0-9].*\" -delete", atticDir);
-    system(cleanCmd);
-
     loadMemory();
 
     if (argc > 1) {
@@ -81,7 +75,6 @@ int main(int argc, char **argv) {
                 case 'u': updateMetadata(atoi(optarg)); return 0;
                 case 'a': auditNotes(); return 0;
                 case 'r': rebuildNotes(); return 0;
-                case 'c': cleanAttic(); return 0;
                 case 'g': launchGraph(); return 0;
                 default:
                     fprintf(stderr, "Usage: %s [-n] [-e] [-k keywords] [-m ID] [-u ID] [-a] [-r] [-c] [-g]\n", argv[0]);

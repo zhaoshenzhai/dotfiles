@@ -426,12 +426,6 @@ void rebuildNotes(void) {
     exportGraph(1);
 }
 
-void cleanAttic(void) {
-    if (texCleanAux(atticDir) == 0) { printf("%sCleaned all note directories.%s\n", GREEN, NC); }
-    loadMemory();
-    exportGraph(1);
-}
-
 void exportGraph(int silent) {
     char path[PATH_MAX];
     snprintf(path, sizeof(path), "%s/../graph.json", atticDir);

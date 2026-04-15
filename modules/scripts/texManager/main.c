@@ -7,6 +7,7 @@
 int main(int argc, char **argv) {
     TexConfig config;
     texInitConfig(&config);
+    ensureTexPath();
 
     int opt;
     bool cleanMode = false;

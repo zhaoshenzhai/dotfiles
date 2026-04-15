@@ -98,9 +98,9 @@ int isCompiling(int id) {
 }
 
 void compileNote(int id) {
-    pid_t pid = fork();
+    pid_t main_pid = fork();
 
-    if (pid == 0) {
+    if (main_pid == 0) {
         const char *webOutDir = "/Users/zhao/iCloud/Projects/_web/notes";
         char dirPath[PATH_MAX];
         char fileName[64];
@@ -112,8 +112,22 @@ void compileNote(int id) {
         texInitConfig(&config);
         config.nonstop = true;
 
-        texCompile(dirPath, fileName, &config);
-        texCompileToSvg(dirPath, fileName, webOutDir);
+        pid_t pdf_pid = fork();
+        if (pdf_pid == 0) {
+            texCompile(dirPath, fileName, &config);
+            exit(0);
+        }
+
+        pid_t svg_pid = fork();
+        if (svg_pid == 0) {
+            texCompileToSvg(dirPath, fileName, webOutDir);
+            exit(0);
+        }
+
+        int status;
+        waitpid(pdf_pid, &status, 0);
+        waitpid(svg_pid, &status, 0);
+
         exit(0);
     }
 }
