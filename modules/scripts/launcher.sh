@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+export PATH="/run/current-system/sw/bin:/etc/profiles/per-user/$USER/bin:$HOME/.nix-profile/bin:$PATH"
+[ -f "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ] && . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+
 LOCKFILE="/tmp/launcher.lock"
 CACHE_DIR="$HOME/.cache/launcher"
 CACHE_FILE="$CACHE_DIR/files.txt"
@@ -118,23 +121,19 @@ launch() {
             open -a Skim "$full_path" >/dev/null 2>&1 &
         fi
     else
-        WORKSPACE=$(aerospace list-workspaces --focused)
+        WORKSPACE=$(aerospace list-workspaces --focused | xargs)
         NVIM_WIN_ID=$(aerospace list-windows --workspace "$WORKSPACE" --format "%{window-id}|%{app-name}|%{window-title}" \
-            | awk -F'|' 'tolower($2) ~ /^alacritty/ && tolower($3) ~ /nvim/ {print $1; exit}')
+            | awk -F'|' 'tolower($2) ~ /alacritty/ && (tolower($3) ~ /nvim/ || tolower($3) ~ /vim/) {print $1; exit}')
 
         nvim_path="/etc/profiles/per-user/$USER/bin/nvim"
-        hm_session="$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 
-        if [ -n "$NVIM_WIN_ID" ]; then
-            SOCKET="/tmp/nvim-window-${NVIM_WIN_ID}.sock"
-            if [ -e "$SOCKET" ]; then
-                aerospace focus --window-id "$NVIM_WIN_ID"
-                $nvim_path --server "$SOCKET" --remote-tab "$full_path" >/dev/null 2>&1 &
-                return
-            fi
+        if [ -n "$NVIM_WIN_ID" ] && [ -S "/tmp/nvim-window-${NVIM_WIN_ID}.sock" ]; then
+            aerospace focus --window-id "$NVIM_WIN_ID"
+            $nvim_path --server "/tmp/nvim-window-${NVIM_WIN_ID}.sock" --remote-tab "$full_path" >/dev/null 2>&1 &
+            return
         fi
 
-        exec_cmd="[ -f $hm_session ] && . $hm_session; export FROM_LAUNCHER=1; exec $nvim_path \"$full_path\""
+        exec_cmd="export FROM_LAUNCHER=1; exec $nvim_path \"$full_path\""
         nohup alacritty -e sh -c "$exec_cmd" >/dev/null 2>&1 &
     fi
 }

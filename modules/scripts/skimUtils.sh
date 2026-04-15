@@ -214,6 +214,11 @@ openRelated() {
         PDF_PATH=$(cat "${PDF_PATH}.orig")
     fi
 
+    local SEARCH_STR="Library/Mobile Documents/com~apple~CloudDocs"
+    if [[ "$PDF_PATH" == *"$SEARCH_STR"* ]]; then
+        PDF_PATH="${PDF_PATH/$SEARCH_STR/iCloud}"
+    fi
+
     local TARGET_PATH="${PDF_PATH%.pdf}.$ext"
     if [ -f "$TARGET_PATH" ]; then
         nohup /etc/profiles/per-user/$USER/bin/launcher "$TARGET_PATH" >/dev/null 2>&1 &

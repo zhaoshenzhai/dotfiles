@@ -16,25 +16,9 @@ in {
 
         withPython3 = true;
         extraPython3Packages = ps: [ ps.pynvim ];
-
-        globals = {
-            vimtex_compiler_latexmk = {
-                executable = "${pkgs.texlive.combined.scheme-full}/bin/latexmk";
-                options = [ "-synctex=1" "-interaction=nonstopmode" ];
-            };
-            python3_host_prog = "${myPython}/bin/python3";
-        };
+        globals.python3_host_prog = "${myPython}/bin/python3";
 
         plugins = {
-            vimtex = {
-                enable = true;
-                settings = {
-                    view_method = "skim";
-                    view_general_options = "--synctex-forward @line:@col:@tex @pdf";
-                    view_forward_search_on_start = true;
-                    mappings_enabled = false;
-                };
-            };
             cmp = {
                 enable = true;
                 autoEnableSources = true;
