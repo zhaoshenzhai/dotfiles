@@ -6,11 +6,6 @@
     ];
 
     targets.darwin.defaults."net.sourceforge.skim-app.skim" = {
-        # --- Editor Integration ---
-        SKTeXEditorPreset = "Custom";
-        SKTeXEditorCommand = "${pkgs.neovim-remote}/bin/nvr";
-        SKTeXEditorArguments = "--remote-silent +%line \"%file\"";
-
         # --- File Monitoring & Reloading ---
         SKAutoCheckFileUpdate = true;
         SKAutoReloadFileUpdate = true;
