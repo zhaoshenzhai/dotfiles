@@ -54,6 +54,7 @@ local function load_attic_cache()
     end
     attic_cache = items
 end
+load_attic_cache()
 
 local function check_aref_context(before_cursor)
     local search_pos = 1
@@ -78,13 +79,11 @@ local function check_aref_context(before_cursor)
         end
 
         if first_arg_end ~= -1 and first_arg_end < #before_cursor then
-            -- Check if the character immediately after the first arg closes is the start of the second arg
             if before_cursor:sub(first_arg_end + 1, first_arg_end + 1) == "{" then
                 local second_arg_start = first_arg_end + 1
                 local b_level2 = 1
                 local closed = false
 
-                -- Check if the second argument closes before the cursor position
                 for i = second_arg_start + 1, #before_cursor do
                     local char = before_cursor:sub(i, i)
                     if char == "{" then b_level2 = b_level2 + 1
@@ -130,13 +129,6 @@ end
 
 cmp.register_source('attic', attic_source)
 
--- Initialize Cache and Commands
-load_attic_cache()
-vim.api.nvim_create_user_command('ReloadAttic', function()
-    load_attic_cache()
-    print("Attic cmp cache reloaded!")
-end, {})
-
 -- Contextual Autocomplete Switching
 vim.api.nvim_create_autocmd({"CursorMovedI", "InsertEnter"}, {
     group = attic_group,
@@ -178,6 +170,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     pattern = { "*.tex", "*.key" },
     callback = function(ev)
         if not ev.file:match('/_attic/notes/') then return end
+        load_attic_cache()
 
         local id = vim.fn.expand('%:p:h:t')
         local ext = vim.fn.expand('%:e')
@@ -197,13 +190,6 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 
         local script_path = 'attic'
         vim.fn.jobstart({script_path, "-u", id}, { detach = true })
-
-        if ext == "key" then
-            load_attic_cache()
-            vim.schedule(function()
-                vim.api.nvim_echo({{"Attic: cmp cache reloaded from " .. id .. ".key", "None"}}, false, {})
-            end)
-        end
     end,
 })
 

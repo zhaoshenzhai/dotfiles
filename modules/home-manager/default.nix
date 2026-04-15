@@ -15,8 +15,6 @@
 
     home.packages = with pkgs; [
         aerospace
-        switchaudio-osx
-        blueutil
         (texlive.combine { inherit (texlive) scheme-full latexmk; })
     ];
 
