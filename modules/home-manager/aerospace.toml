@@ -26,43 +26,65 @@ accordion-padding = 0
 
 [mode.main.binding]
     # Terminal and finder
-    cmd-backslash = 'exec-and-forget alacritty'
+    cmd-backslash = 'exec-and-forget /bin/bash -c "alacritty msg create-window || alacritty"'
     cmd-shift-backslash = 'exec-and-forget open -a finder'
-
-    # Vifm
-    cmd-e = """exec-and-forget alacritty \
-        -e /bin/bash -c 'printf "\\033]0;vifm\\007"; \
-        exec vifm ~/ \
-        -c ":vsplit" \
-        -c "windo normal ggvGgA"'"""
 
     # Launcher
     cmd-enter = [
-        'exec-and-forget alacritty --title launcher --config-file ~/.config/alacritty/launcher.toml -e launcher',
+        '''exec-and-forget /bin/bash -c '
+            ARGS=(
+                "--title" "launcher"
+                "--option" "window.dimensions={columns=120,lines=15}"
+                "--option" "window.padding={x=20,y=25}"
+                "--option" "window.position={x=275,y=400}"
+                "--option" "font.offset={x=0,y=12}"
+                "--option" "cursor.style={shape=\"Beam\",blinking=\"On\"}"
+                "-e" "launcher"
+            )
+            alacritty msg create-window "${ARGS[@]}" || alacritty "${ARGS[@]}"
+        ' ''',
         'mode launcher'
     ]
 
+    # Vifm
+    cmd-e = '''exec-and-forget /bin/bash -c '
+        CMD="printf \"\033]0;vifm\007\"; exec vifm ~/ -c \":vsplit\" -c \"windo normal ggvGgA\""
+        alacritty msg create-window -e /bin/bash -c "$CMD" || alacritty -e /bin/bash -c "$CMD"
+    ' '''
+
     # Btop
-    cmd-t = """exec-and-forget alacritty \
-        --config-file ~/.config/alacritty/btop.toml \
-        --title btop \
-        --option "window.dimensions={columns=110,lines=38}" \
-        --option "window.position={x=425,y=246}" \
-        -e btop"""
+    cmd-t = '''exec-and-forget /bin/bash -c '
+        ARGS=(
+            "--title" "btop"
+            "--option" "window.dimensions={columns=110,lines=38}"
+            "--option" "window.position={x=425,y=246}"
+            "--option" "keyboard.bindings=[{key=\"Q\",command={program=\"sh\",args=[\"-c\",\"aerospace close --quit-if-last-window\"]}}]"
+            "-e" "btop"
+        )
+        alacritty msg create-window "${ARGS[@]}" || alacritty "${ARGS[@]}"
+    ' '''
 
     # Git
-    cmd-g = """exec-and-forget alacritty \
-        --title git \
-        --option "window.dimensions={columns=110,lines=38}" \
-        --option "window.position={x=425,y=246}" \
-        -e zsh -c ~/iCloud/Dotfiles/modules/scripts/git.sh"""
+    cmd-g = '''exec-and-forget /bin/bash -c '
+        ARGS=(
+            "--title" "git"
+            "--option" "window.dimensions={columns=110,lines=38}"
+            "--option" "window.position={x=425,y=246}"
+            "-e" "zsh" "-c" "$HOME/iCloud/Dotfiles/modules/scripts/git.sh"
+        )
+        alacritty msg create-window "${ARGS[@]}" || alacritty "${ARGS[@]}"
+    ' '''
 
     # Attic
-    cmd-a = """exec-and-forget alacritty \
-        --title attic \
-        --option "window.dimensions={columns=110,lines=38}" \
-        --option "window.position={x=425,y=246}" \
-        -e zsh -c attic"""
+    cmd-a = '''exec-and-forget /bin/bash -c '
+        ARGS=(
+            "--title" "attic"
+            "--option" "window.dimensions={columns=110,lines=38}"
+            "--option" "window.position={x=425,y=246}"
+            "-e" "zsh" "-c" "attic"
+        )
+        alacritty msg create-window "${ARGS[@]}" || alacritty "${ARGS[@]}"
+    ' '''
 
     # Applications
     cmd-m       = [ 'exec-and-forget open -a messages',    'workspace m' ]

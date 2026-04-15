@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ pkgs, lib, ... }: {
     home.packages = with pkgs; [
         coreutils
         btop
@@ -6,7 +6,7 @@
 
     programs.zsh = {
         enable = true;
-        enableCompletion = true;
+        enableCompletion = false;
         autosuggestion.enable = true;
         syntaxHighlighting.enable = true;
 
@@ -26,7 +26,20 @@
             skim = "open -a Skim";
         };
 
-        initContent = ''
+        initContent = lib.mkBefore ''
+            autoload -Uz compinit
+            ZCOMP="/Users/zhao/.config/zsh/.zcompdump"
+
+            if [[ -f "$ZCOMP" ]]; then
+                compinit -C -d "$ZCOMP"
+            else
+                compinit -d "$ZCOMP"
+            fi
+
+            if [[ ! -f "$ZCOMP.zwc" || "$ZCOMP" -nt "$ZCOMP.zwc" ]]; then
+                zcompile "$ZCOMP" &!
+            fi
+
             bindkey '^[[Z' autosuggest-accept
             bindkey '^k' up-line-or-history
             bindkey '^j' down-line-or-history

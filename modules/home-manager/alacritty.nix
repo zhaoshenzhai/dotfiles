@@ -3,7 +3,7 @@
         enable = true;
 
         settings = {
-            general = { ipc_socket = false; };
+            general = { ipc_socket = true; };
 
             font = {
                 size = 20.0;
@@ -62,12 +62,4 @@
             };
         };
     };
-
-    xdg.configFile."alacritty/btop.toml".text = ''
-        general.import = [ "~/.config/alacritty/alacritty.toml" ]
-
-        [[keyboard.bindings]]
-        key = "Q"
-        command = { program = "sh", args = ["-c", "aerospace close --quit-if-last-window"] }
-    '';
 }
