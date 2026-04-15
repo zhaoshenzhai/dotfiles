@@ -133,8 +133,8 @@ launch() {
             return
         fi
 
-        exec_cmd="exec $nvim_path \"$full_path\""
-        nohup alacritty -e sh -c "$exec_cmd" >/dev/null 2>&1 &
+        ARGS=("-e" "$nvim_path" "$full_path")
+        alacritty msg create-window "${ARGS[@]}" >/dev/null 2>&1 || nohup alacritty "${ARGS[@]}" >/dev/null 2>&1 &
     fi
 }
 quit() {

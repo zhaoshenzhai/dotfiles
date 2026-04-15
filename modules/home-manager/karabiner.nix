@@ -560,32 +560,49 @@
                                         type = "basic";
                                         from = { key_code = "s"; };
                                         to = [
+                                            { key_code = "1"; modifiers = [ "control" "option" "command" ]; }
                                             { key_code = "hyphen"; modifiers = [ "command" "shift" ]; }
-                                            { set_variable = { name = "skim_fit_to_height"; value = 0; }; }
+                                            { set_variable = { name = "skim_horizontal_mode"; value = 0; }; }
+                                            { set_variable = { name = "skim_double_page_mode"; value = 0; }; }
                                         ];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
+                                            { type = "variable_if"; name = "skim_horizontal_mode"; value = 1; }
                                             {
                                                 type = "frontmost_application_if";
                                                 bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
                                             }
                                         ];
                                     }
-                                    { # a -> fit to height & double page
+                                    {
+                                        type = "basic";
+                                        from = { key_code = "s"; };
+                                        to = [
+                                            { key_code = "hyphen"; modifiers = [ "command" "shift" ]; }
+                                        ];
+                                        conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
+                                            { type = "variable_if"; name = "skim_search_mode"; value = 0; }
+                                            { type = "variable_unless"; name = "skim_horizontal_mode"; value = 1; }
+                                            {
+                                                type = "frontmost_application_if";
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                            }
+                                        ];
+                                    }
+                                    { # a -> horizontal scroll & fit to height
                                         type = "basic";
                                         from = { key_code = "a"; };
                                         to = [
                                             { key_code = "3"; modifiers = [ "control" "option" "command" ]; }
                                             { key_code = "hyphen"; modifiers = [ "command" "shift" ]; }
-                                            { key_code = "2"; modifiers = [ "control" "option" "command" ]; }
-                                            { set_variable = { name = "skim_fit_to_height"; value = 1; }; }
-                                            { set_variable = { name = "skim_double_page_mode"; value = 1; }; }
+                                            { set_variable = { name = "skim_horizontal_mode"; value = 1; }; }
+                                            { set_variable = { name = "skim_double_page_mode"; value = 0; }; }
                                         ];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                                             { type = "variable_if"; name = "skim_search_mode"; value = 0; }
-                                            { type = "variable_if"; name = "skim_fit_to_height"; value = 0; }
                                             {
                                                 type = "frontmost_application_if";
                                                 bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
@@ -596,25 +613,9 @@
                                         type = "basic";
                                         from = { key_code = "d"; modifiers = { mandatory = [ ]; }; };
                                         to = [
-                                            { key_code = "2"; modifiers = [ "control" "option" "command" ]; }
-                                            { set_variable = { name = "skim_double_page_mode"; value = 1; }; }
-                                        ];
-                                        conditions = [
-                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
-                                            { type = "variable_if"; name = "skim_search_mode"; value = 0; }
-                                            { type = "variable_unless"; name = "skim_double_page_mode"; value = 1; }
-                                            {
-                                                type = "frontmost_application_if";
-                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
-                                            }
-                                        ];
-                                    }
-                                    {
-                                        type = "basic";
-                                        from = { key_code = "d"; modifiers = { mandatory = [ ]; }; };
-                                        to = [
                                             { key_code = "1"; modifiers = [ "control" "option" "command" ]; }
                                             { set_variable = { name = "skim_double_page_mode"; value = 0; }; }
+                                            { set_variable = { name = "skim_horizontal_mode"; value = 0; }; }
                                         ];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
@@ -626,12 +627,29 @@
                                             }
                                         ];
                                     }
+                                    {
+                                        type = "basic";
+                                        from = { key_code = "d"; modifiers = { mandatory = [ ]; }; };
+                                        to = [
+                                            { key_code = "2"; modifiers = [ "control" "option" "command" ]; }
+                                            { set_variable = { name = "skim_double_page_mode"; value = 1; }; }
+                                            { set_variable = { name = "skim_horizontal_mode"; value = 0; }; }
+                                        ];
+                                        conditions = [
+                                            { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
+                                            { type = "variable_if"; name = "skim_search_mode"; value = 0; }
+                                            { type = "variable_unless"; name = "skim_double_page_mode"; value = 1; }
+                                            {
+                                                type = "frontmost_application_if";
+                                                bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                                            }
+                                        ];
+                                    }
                                     { # = -> zoom in
                                         type = "basic";
                                         from = { key_code = "equal_sign"; };
                                         to = [
                                             { key_code = "equal_sign"; modifiers = [ "command" ]; }
-                                            { set_variable = { name = "skim_fit_to_height"; value = 0; }; }
                                             ];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
@@ -647,7 +665,6 @@
                                         from = { key_code = "hyphen"; };
                                         to = [
                                             { key_code = "hyphen"; modifiers = [ "command" ]; }
-                                            { set_variable = { name = "skim_fit_to_height"; value = 0; }; }
                                         ];
                                         conditions = [
                                             { type = "variable_unless"; name = "spotlight_mode"; value = 1; }

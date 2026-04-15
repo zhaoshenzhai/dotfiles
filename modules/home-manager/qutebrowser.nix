@@ -40,6 +40,25 @@ let
 
         ${pkgs.alacritty}/bin/alacritty msg create-window "''${ARGS[@]}" || ${pkgs.alacritty}/bin/alacritty "''${ARGS[@]}"
     '';
+
+    ytMpvSpawn = pkgs.writeShellScript "yt-mpv-spawn" ''
+        ARGS=(
+            "--title" "ytMpv"
+            "--option" "window.dimensions={columns=110,lines=38}"
+            "--option" "window.position={x=425,y=246}"
+            "-e" "yt-mpv"
+            "$1"
+        )
+        ${pkgs.alacritty}/bin/alacritty msg create-window "''${ARGS[@]}" || ${pkgs.alacritty}/bin/alacritty "''${ARGS[@]}"
+    '';
+
+    nvimSpawn = pkgs.writeShellScript "nvim-spawn" ''
+        ARGS=(
+            "-e" "nvim"
+            "$1"
+        )
+        ${pkgs.alacritty}/bin/alacritty msg create-window "''${ARGS[@]}" || ${pkgs.alacritty}/bin/alacritty "''${ARGS[@]}"
+    '';
 in {
     programs.qutebrowser = {
         enable = true;
@@ -77,7 +96,7 @@ in {
                 statusbar = "bold default_size default_family";
             };
 
-            editor.command = [ "alacritty" "-e" "nvim" "{}" ];
+            editor.command = [ "${nvimSpawn}" "{}" ];
             fileselect.handler = "external";
             fileselect.single_file.command = [ "${vifmPicker}" "{}" ];
             fileselect.multiple_files.command = [ "${vifmPickerMulti}" "{}" ];
@@ -169,11 +188,7 @@ in {
                 "<Ctrl+Return>" = "cmd-set-text -s :open -t";
 
                 "<Ctrl+y>" = "hint links yank";
-                "<Ctrl+m>" = ''hint links spawn ${pkgs.alacritty}/bin/alacritty \
-                                    --title ytMpv \
-                                    --option "window.dimensions={columns=100,lines=35}" \
-                                    --option "window.position={x=525,y=250}" \
-                                    -e yt-mpv {hint-url}'';
+                "<Ctrl+m>" = "hint links spawn ${ytMpvSpawn} {hint-url}";
 
                 "<Ctrl+=>" = "zoom-in";
                 "<Ctrl+->" = "zoom-out";
