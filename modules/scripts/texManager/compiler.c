@@ -60,13 +60,14 @@ int texCompile(const char *dirPath, const char *fileName, const TexConfig *confi
     if (pid == 0) {
         if (chdir(dirPath) != 0) exit(1);
 
-        char *args[10];
+        char *args[12];
         int i = 0;
         args[i++] = "latexmk";
 
         char engineArg[64];
         snprintf(engineArg, sizeof(engineArg), "-%s", config->engine);
         args[i++] = engineArg;
+        args[i++] = "-synctex=1";
 
         if (config->continuous) args[i++] = "-pvc";
         if (config->nonstop) args[i++] = "-interaction=nonstopmode";
@@ -94,7 +95,11 @@ int texCompile(const char *dirPath, const char *fileName, const TexConfig *confi
 
         if (exitCode == 0) {
             char mvCmd[2048];
-            snprintf(mvCmd, sizeof(mvCmd), "mv -f '%s/%s.pdf' '%s/%s.pdf'", cacheDir, baseName, dirPath, baseName);
+            snprintf(mvCmd, sizeof(mvCmd),
+                "mv -f '%s/%s.pdf' '%s/%s.pdf'; "
+                "mv -f '%s/%s.synctex.gz' '%s/%s.synctex.gz' 2>/dev/null",
+                cacheDir, baseName, dirPath, baseName,
+                cacheDir, baseName, dirPath, baseName);
             system(mvCmd);
         }
 

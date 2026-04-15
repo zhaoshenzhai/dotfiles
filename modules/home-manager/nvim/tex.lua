@@ -1,9 +1,6 @@
 local opts = { buffer = true, silent = true }
 local autocompile_group = vim.api.nvim_create_augroup("TexAutoCompile", { clear = true })
 
-vim.keymap.set('n', '<C-S-c>', '<cmd>write<CR><cmd>VimtexCompile<CR>', opts)
-vim.keymap.set('n', '<C-S-v>', '<cmd>write<CR><cmd>VimtexView<CR>', opts)
-
 -- Auto-compile
 vim.api.nvim_create_autocmd("BufWritePost", {
     group = autocompile_group,
@@ -14,14 +11,22 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     end,
 })
 
--- Clean files
-vim.keymap.set('n', '<C-S-d>', function()
-    local target_dir = vim.fn.expand('%:p:h')
-    vim.fn.jobstart({ "texManager", "-C", target_dir })
+-- Forward sync
+vim.keymap.set('n', '<C-Enter>', function()
+    vim.cmd('write')
+    local tex_file = vim.fn.expand('%:p')
+    local pdf_file = vim.fn.expand('%:p:r') .. '.pdf'
+    local line = vim.fn.line('.')
+
+    local displayline = '/Applications/Skim.app/Contents/SharedSupport/displayline'
+
+    if vim.fn.executable(displayline) == 1 then
+        vim.fn.jobstart({ displayline, "-r", tostring(line), pdf_file, tex_file }, { detach = true })
+    end
 end, opts)
 
 -- Open student pdf
-vim.keymap.set('n', '<C-S-s>', function()
+vim.keymap.set('n', '<C-S-Enter>', function()
     vim.cmd('write')
     local f = vim.fn.expand('%:p:r') .. '_Student.pdf'
     if vim.fn.filereadable(f) == 1 then

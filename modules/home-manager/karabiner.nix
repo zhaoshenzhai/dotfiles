@@ -311,9 +311,9 @@
                                             }
                                         ];
                                     }
-                                    { # ctrl+shift+v -> open .tex in nvim
+                                    { # ctrl+enter -> open .tex in nvim
                                         type = "basic";
-                                        from = { key_code = "v"; modifiers = { mandatory = [ "control" "shift" ]; }; };
+                                        from = { key_code = "return_or_enter"; modifiers = { mandatory = [ "control" ]; }; };
                                         to = [{ shell_command = "zsh -c 'skimUtils --openNvim'"; }];
                                         conditions = [
                                             {
