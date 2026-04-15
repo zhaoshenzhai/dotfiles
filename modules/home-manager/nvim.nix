@@ -19,6 +19,15 @@ in {
         globals.python3_host_prog = "${myPython}/bin/python3";
 
         plugins = {
+            vimtex = {
+                enable = true;
+                settings = {
+                    view_enabled = 0;
+                    compiler_enabled = 0;
+                    fold_enabled = 0;
+                    quickfix_enabled = 0;
+                };
+            };
             cmp = {
                 enable = true;
                 autoEnableSources = true;
