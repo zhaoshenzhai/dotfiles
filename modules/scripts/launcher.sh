@@ -133,7 +133,7 @@ launch() {
             return
         fi
 
-        exec_cmd="export FROM_LAUNCHER=1; exec $nvim_path \"$full_path\""
+        exec_cmd="exec $nvim_path \"$full_path\""
         nohup alacritty -e sh -c "$exec_cmd" >/dev/null 2>&1 &
     fi
 }

@@ -17,16 +17,14 @@ vim.api.nvim_create_autocmd({"VimLeave", "VimSuspend"}, {
 -- Dynamically start a server socket based on the Aerospace window ID
 vim.api.nvim_create_autocmd("VimEnter", {
     callback = function()
-        if vim.env.FROM_LAUNCHER == "1" then
-            vim.defer_fn(function()
-                local win_id = vim.fn.system("aerospace list-windows --focused --format '%{window-id}'"):gsub("%s+", "")
-                if win_id ~= "" then
-                    local socket_path = "/tmp/nvim-window-" .. win_id .. ".sock"
-                    os.remove(socket_path)
-                    vim.fn.serverstart(socket_path)
-                end
-            end, 100)
-        end
+        vim.defer_fn(function()
+            local win_id = vim.fn.system("aerospace list-windows --focused --format '%{window-id}'"):gsub("%s+", "")
+            if win_id ~= "" then
+                local socket_path = "/tmp/nvim-window-" .. win_id .. ".sock"
+                os.remove(socket_path)
+                vim.fn.serverstart(socket_path)
+            end
+        end, 100)
     end,
 })
 
