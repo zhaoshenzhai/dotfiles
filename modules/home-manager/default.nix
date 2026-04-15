@@ -18,8 +18,6 @@
         switchaudio-osx
         blueutil
         (texlive.combine { inherit (texlive) scheme-full latexmk; })
-
-        dosbox-staging
     ];
 
     imports = [
