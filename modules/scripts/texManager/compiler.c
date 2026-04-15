@@ -12,7 +12,7 @@
 static const char *cleanExtensions[] = {
     ".aux", ".fls", ".log", ".blg", ".fdb_latexmk",
     ".bbl", ".bbl-SAVE-ERROR", ".bcf", ".bcf-SAVE-ERROR",
-    ".xdv", ".xml", ".run.xml", ".synctex.gz", ".synctex(busy)",
+    ".xdv", ".xml", ".run.xml", ".synctex(busy)",
     ".dvi", ".out.ps"
 };
 
