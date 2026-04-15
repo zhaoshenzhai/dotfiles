@@ -3,34 +3,42 @@ let
     vifmPicker = pkgs.writeShellScript "vifm-picker" ''
         mkdir -p ~/.cache
         lastdir=$(cat ~/.cache/vifm_picker_dir 2>/dev/null || echo "$HOME")
-        ${pkgs.alacritty}/bin/alacritty \
-            --title vifm-float \
-            --option "window.dimensions={columns=110,lines=38}" \
-            --option "window.position={x=425,y=246}" \
-            --option "window.opacity=0.9" \
-            -e "${pkgs.vifm}/bin/vifm" \
-            -c ":only" \
-            -c ":set nodotfiles | filter Applications|Desktop|Documents|Library|Movies|Music|Pictures | :only" \
-            -c 'autocmd DirEnter * !echo "%d" > ~/.cache/vifm_picker_dir &' \
-            -c 'nnoremap l <cr>' \
-            "--choose-files" "$1" \
+
+        ARGS=(
+            "--title" "vifm-float"
+            "--option" "window.dimensions={columns=110,lines=38}"
+            "--option" "window.position={x=425,y=246}"
+            "--option" "window.opacity=0.9"
+            "-e" "${pkgs.vifm}/bin/vifm"
+            "-c" ":only"
+            "-c" ":set nodotfiles | filter Applications|Desktop|Documents|Library|Movies|Music|Pictures | :only"
+            "-c" 'autocmd DirEnter * !echo "%d" > ~/.cache/vifm_picker_dir &'
+            "-c" 'nnoremap l <cr>'
+            "--choose-files" "$1"
             "$lastdir"
+        )
+
+        ${pkgs.alacritty}/bin/alacritty msg create-window "''${ARGS[@]}" || ${pkgs.alacritty}/bin/alacritty "''${ARGS[@]}"
     '';
 
     vifmPickerMulti = pkgs.writeShellScript "vifm-picker-multi" ''
         mkdir -p ~/.cache
         lastdir=$(cat ~/.cache/vifm_picker_dir 2>/dev/null || echo "$HOME")
-        ${pkgs.alacritty}/bin/alacritty \
-            --title vifm-float \
-            --option "window.dimensions={columns=110,lines=38}" \
-            --option "window.position={x=425,y=246}" \
-            --option "window.opacity=0.9" \
-            -e "${pkgs.vifm}/bin/vifm" \
-            -c ":set nodotfiles | filter Applications|Desktop|Documents|Library|Movies|Music|Pictures | :only" \
-            -c 'autocmd DirEnter * !echo "%d" > ~/.cache/vifm_picker_dir &' \
-            -c 'nnoremap l <cr>' \
-            "--choose-files" "$1" \
+
+        ARGS=(
+            "--title" "vifm-float"
+            "--option" "window.dimensions={columns=110,lines=38}"
+            "--option" "window.position={x=425,y=246}"
+            "--option" "window.opacity=0.9"
+            "-e" "${pkgs.vifm}/bin/vifm"
+            "-c" ":set nodotfiles | filter Applications|Desktop|Documents|Library|Movies|Music|Pictures | :only"
+            "-c" 'autocmd DirEnter * !echo "%d" > ~/.cache/vifm_picker_dir &'
+            "-c" 'nnoremap l <cr>'
+            "--choose-files" "$1"
             "$lastdir"
+        )
+
+        ${pkgs.alacritty}/bin/alacritty msg create-window "''${ARGS[@]}" || ${pkgs.alacritty}/bin/alacritty "''${ARGS[@]}"
     '';
 in {
     programs.qutebrowser = {
