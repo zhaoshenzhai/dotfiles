@@ -131,7 +131,8 @@ int texCompileToSvg(const char *dirPath, const char *fileName, const char *outpu
 
     snprintf(cmd, sizeof(cmd),
         "cd '%s' && "
-        "latex -interaction=nonstopmode -output-directory='%s' -jobname='%s_web' '\\def\\isweb{}\\input{%s}' >> /dev/null 2>&1",
+        "latexmk -dvi -interaction=nonstopmode -outdir='%s' -jobname='%s_web' "
+        "-latex='latex %%O \"\\def\\isweb{}\\input{%%S}\"' '%s' >> /dev/null 2>&1",
         dirPath, cacheDir, baseName, fileName);
 
     int status = system(cmd);
