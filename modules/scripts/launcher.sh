@@ -120,7 +120,7 @@ launch() {
     else
         WORKSPACE=$(aerospace list-workspaces --focused)
         NVIM_WIN_ID=$(aerospace list-windows --workspace "$WORKSPACE" --format "%{window-id}|%{app-name}|%{window-title}" \
-            | awk -F'|' 'tolower($2) == "alacritty" && $3 == "nvim" {print $1; exit}')
+            | awk -F'|' 'tolower($2) ~ /^alacritty/ && tolower($3) ~ /nvim/ {print $1; exit}')
 
         nvim_path="/etc/profiles/per-user/$USER/bin/nvim"
         hm_session="$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
