@@ -31,10 +31,7 @@ bool texIsCompiling(const char *fileName) {
 }
 
 int texCompile(const char *dirPath, const char *fileName, const TexConfig *config) {
-    if (texIsCompiling(fileName)) {
-        printf("Already compiling: %s\n", fileName);
-        return 0;
-    }
+    if (texIsCompiling(fileName)) return 0;
 
     char baseName[256];
     strncpy(baseName, fileName, sizeof(baseName));
@@ -132,7 +129,7 @@ int texCompileToSvg(const char *dirPath, const char *fileName, const char *outpu
     snprintf(cmd, sizeof(cmd),
         "cd '%s' && "
         "latexmk -dvi -interaction=nonstopmode -outdir='%s' -jobname='%s_web' "
-        "-latex='latex %%O \"\\def\\isweb{}\\input{%%S}\"' '%s' >> /dev/null 2>&1",
+        "-latex='latex %%O \"\\def\\isweb{}\\input{%%S}\"' '%s'",
         dirPath, cacheDir, baseName, fileName);
 
     int status = system(cmd);

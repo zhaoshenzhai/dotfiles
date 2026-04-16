@@ -53,6 +53,7 @@ int cmp_int(const void *a, const void *b);
 int dedupe(int *arr, int count);
 void formatLinks(int *ids, int count, char *outBuf);
 int isCompiling(int id);
+int compileNoteSync(int id);
 void compileNote(int id);
 void extracIDs(const char *str, int *arr, int *count);
 unsigned int hashString(const char *str);

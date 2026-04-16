@@ -280,8 +280,7 @@ void rebuildNotes(void) {
     printf("%sRebuilding notes...%s\n", BLUE, NC);
 
     int runningJobs = 0, totalProcessed = 0, totalRebuilt = 0, totalFailed = 0;
-    int *failedIds = NULL;
-
+    int *failedIds = safeMalloc(totalNotes * sizeof(int));
     int totalLines = 0;
 
     typedef struct { pid_t pid; int id; int row; } RebuildJob;
@@ -307,10 +306,9 @@ void rebuildNotes(void) {
                     unlink(bp); \
                     totalRebuilt++; \
                 } else { \
-                    printf("%sNote %05d failed to compile!%s", RED, jobs[j].id, NC); \
+                    printf("%sNote %05d failed!%s", RED, jobs[j].id, NC); \
                     if (access(bp, F_OK) == 0) rename(bp, dp); else unlink(dp); \
                     failedIds[totalFailed++] = jobs[j].id; \
-                    jobs[j].row = -1; \
                 } \
                 \
                 if (diff > 0) printf("\033[%dB", diff); \
@@ -318,6 +316,7 @@ void rebuildNotes(void) {
                 fflush(stdout); \
                 \
                 jobs[j].pid = 0; \
+                jobs[j].row = -1; \
                 runningJobs--; \
                 break; \
             } \
@@ -353,24 +352,7 @@ void rebuildNotes(void) {
 
         pid = fork();
         if (pid == 0) {
-            char dirPath[PATH_MAX];
-            char fileName[64];
-            snprintf(dirPath, sizeof(dirPath), "%s/%05d", atticDir, i);
-            snprintf(fileName, sizeof(fileName), "%05d.tex", i);
-
-            TexConfig config;
-            texInitConfig(&config);
-            config.nonstop = true;
-
-            int status = texCompile(dirPath, fileName, &config);
-            int exitCode = WIFEXITED(status) ? WEXITSTATUS(status) : 1;
-
-            if (exitCode == 0) {
-                const char *webOutDir = "/Users/zhao/iCloud/Projects/_web/attic/notes";
-                int svgStatus = texCompileToSvg(dirPath, fileName, webOutDir);
-                exitCode = svgStatus;
-            }
-
+            int exitCode = compileNoteSync(i);
             exit(exitCode);
         } else if (pid > 0) {
             for (int j = 0; j < MAX_JOBS; j++) {
@@ -379,9 +361,11 @@ void rebuildNotes(void) {
                     jobs[j].id = i;
 
                     if (jobs[j].row == -1) {
-                        if (totalLines > 0) printf("\n");
-                        jobs[j].row = totalLines;
-                        totalLines++;
+                        jobs[j].row = j;
+                        while (totalLines <= j) {
+                            if (totalLines > 0) printf("\n");
+                            totalLines++;
+                        }
                     }
 
                     int diff = (totalLines > 0 ? totalLines - 1 : 0) - jobs[j].row;

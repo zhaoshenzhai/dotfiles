@@ -97,38 +97,42 @@ int isCompiling(int id) {
     return texIsCompiling(fileName) ? 1 : 0;
 }
 
+int compileNoteSync(int id) {
+    const char *webOutDir = "/Users/zhao/iCloud/Projects/_web/attic/notes";
+    char dirPath[PATH_MAX];
+    char fileName[64];
+
+    snprintf(dirPath, sizeof(dirPath), "%s/%05d", atticDir, id);
+    snprintf(fileName, sizeof(fileName), "%05d.tex", id);
+
+    TexConfig config;
+    texInitConfig(&config);
+    config.nonstop = true;
+
+    pid_t pdf_pid = fork();
+    if (pdf_pid == 0) {
+        exit(texCompile(dirPath, fileName, &config));
+    }
+
+    pid_t svg_pid = fork();
+    if (svg_pid == 0) {
+        exit(texCompileToSvg(dirPath, fileName, webOutDir));
+    }
+
+    int pdf_status, svg_status;
+    waitpid(pdf_pid, &pdf_status, 0);
+    waitpid(svg_pid, &svg_status, 0);
+
+    int pdf_exit = WIFEXITED(pdf_status) ? WEXITSTATUS(pdf_status) : 1;
+    int svg_exit = WIFEXITED(svg_status) ? WEXITSTATUS(svg_status) : 1;
+
+    return (pdf_exit == 0 && svg_exit == 0) ? 0 : 1;
+}
+
 void compileNote(int id) {
     pid_t main_pid = fork();
-
     if (main_pid == 0) {
-        const char *webOutDir = "/Users/zhao/iCloud/Projects/_web/attic/notes";
-        char dirPath[PATH_MAX];
-        char fileName[64];
-
-        snprintf(dirPath, sizeof(dirPath), "%s/%05d", atticDir, id);
-        snprintf(fileName, sizeof(fileName), "%05d.tex", id);
-
-        TexConfig config;
-        texInitConfig(&config);
-        config.nonstop = true;
-
-        pid_t pdf_pid = fork();
-        if (pdf_pid == 0) {
-            texCompile(dirPath, fileName, &config);
-            exit(0);
-        }
-
-        pid_t svg_pid = fork();
-        if (svg_pid == 0) {
-            texCompileToSvg(dirPath, fileName, webOutDir);
-            exit(0);
-        }
-
-        int status;
-        waitpid(pdf_pid, &status, 0);
-        waitpid(svg_pid, &status, 0);
-
-        exit(0);
+        exit(compileNoteSync(id));
     }
 }
 

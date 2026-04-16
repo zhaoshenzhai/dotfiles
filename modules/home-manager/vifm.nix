@@ -38,7 +38,7 @@
             nnoremap <C-d> :!texManager -C %d &<cr>
 
             filetype *.pdf open -a Skim %c &
-            filetype *.jpg,*.jpeg,*.png,*.gif open %c &
+            filetype *.jpg,*.jpeg,*.png,*.gif,*.svg open %c &
 
             cabbrev q !aerospace close
             cabbrev wq !aerospace close
