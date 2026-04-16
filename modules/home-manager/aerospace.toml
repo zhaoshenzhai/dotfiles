@@ -1,6 +1,6 @@
 start-at-login = false
 after-startup-command = [
-    'exec-and-forget nohup alacritty --daemon > /dev/null 2>&1 &',
+    'exec-and-forget nohup alacritty --daemon --socket /tmp/alacritty.sock > /dev/null 2>&1 &',
     'exec-and-forget open -g -a Skim',
     'exec-and-forget borders',
     'exec-and-forget sketchybar',
