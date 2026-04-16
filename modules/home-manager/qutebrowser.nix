@@ -57,7 +57,7 @@ let
             "-e" "yt-mpv"
             "$1"
         )
-        ${pkgs.alacritty}/bin/alacritty msg create-window "''${ARGS[@]}"
+        ${pkgs.alacritty}/bin/alacritty "''${ARGS[@]}"
     '';
 in {
     programs.qutebrowser = {
@@ -199,8 +199,8 @@ in {
                 "<Ctrl+j>" = "tab-prev";
                 "<Ctrl+k>" = "tab-next";
                 "<Ctrl+w>" = "tab-close";
-                "<Ctrl+u>" = "cmd-repeat 20 scroll up";
-                "<Ctrl+d>" = "cmd-repeat 20 scroll down";
+                "<Ctrl+u>" = "undo";
+                "<Ctrl+d>" = "tab-clone";
 
                 "<Ctrl+1>" = "tab-select 1";
                 "<Ctrl+2>" = "tab-select 2";
@@ -211,6 +211,16 @@ in {
                 "<Ctrl+7>" = "tab-select 7";
                 "<Ctrl+8>" = "tab-select 8";
                 "<Ctrl+9>" = "tab-select 9";
+
+                "g1" = "tab-move 1";
+                "g2" = "tab-move 2";
+                "g3" = "tab-move 3";
+                "g4" = "tab-move 4";
+                "g5" = "tab-move 5";
+                "g6" = "tab-move 6";
+                "g7" = "tab-move 7";
+                "g8" = "tab-move 8";
+                "g9" = "tab-move 9";
 
                 "<Ctrl+s>" = "spawn open -a Safari {url}";
                 "<Ctrl+Shift+s>" = "hint links spawn open -a Safari {hint-url}";
