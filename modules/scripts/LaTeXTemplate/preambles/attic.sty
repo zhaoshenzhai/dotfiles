@@ -22,15 +22,10 @@
 }
 
 \newcommand{\mywave}{\bgroup\markoverwith{\usebox{\mywavebox}}\ULon}
+\newcommand{\squig}[2]{\begingroup\hypersetup{hidelinks}\href{#1}{\mywave{#2}}\endgroup}
 
 \ifdefined\isweb
-    \newcommand{\squig}[2]{%
-        \special{dvisvgm:raw <a href="#1" target="_top" style="cursor: pointer;">}%
-        \mywave{#2}%
-        \special{dvisvgm:raw </a>}%
-    }
-    \newcommand{\aref}[2]{\squig{/notes/#2/#2.svg}{#1}}
+    \newcommand{\aref}[2]{\squig{../?note=#2}{#1}}
 \else
-    \newcommand{\squig}[2]{\begingroup\hypersetup{hidelinks}\href{#1}{\mywave{#2}}\endgroup}
     \newcommand{\aref}[2]{\squig{../../notes/#2/#2.pdf}{#1}}
 \fi
