@@ -48,7 +48,8 @@ updateCache() {
         fd --type f --hidden --exclude .git --exclude '*.old' \
             --exclude '*.png' --exclude '*.jpg' --exclude '*.tar.gz' --exclude '*.zip' . \
             "Documents" "Dotfiles" "Projects"
-        fd --type f --hidden --no-ignore --extension pdf --exclude .git --exclude '*.old' . \
+
+        fd --type f --hidden --follow --no-ignore -e pdf -e html --exclude .git --exclude '*.old' . \
             "Documents" "Dotfiles" "Projects"
     } | grep -vE '^Projects/_attic/notes/.*\.(tex|key|dat)$' | awk '!seen[$0]++' | while read -r line; do
         format "$line"
