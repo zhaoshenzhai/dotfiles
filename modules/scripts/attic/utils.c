@@ -101,7 +101,7 @@ void compileNote(int id) {
     pid_t main_pid = fork();
 
     if (main_pid == 0) {
-        const char *webOutDir = "/Users/zhao/iCloud/Projects/_web/notes";
+        const char *webOutDir = "/Users/zhao/iCloud/Projects/_web/attic/notes";
         char dirPath[PATH_MAX];
         char fileName[64];
 

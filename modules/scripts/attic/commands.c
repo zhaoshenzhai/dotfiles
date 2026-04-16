@@ -366,7 +366,7 @@ void rebuildNotes(void) {
             int exitCode = WIFEXITED(status) ? WEXITSTATUS(status) : 1;
 
             if (exitCode == 0) {
-                const char *webOutDir = "/Users/zhao/iCloud/Projects/_web/notes";
+                const char *webOutDir = "/Users/zhao/iCloud/Projects/_web/attic/notes";
                 int svgStatus = texCompileToSvg(dirPath, fileName, webOutDir);
                 exitCode = svgStatus;
             }
