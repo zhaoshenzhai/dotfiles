@@ -6,8 +6,9 @@
 \fancyhead[RO, LE]{\scriptsize\thepage}
 \fancyhead[C]{\scriptsize\MakeUppercase{Zhaoshen Zhai / The Attic}}
 
+\providecommand{\notename}{\jobname}
 \AtBeginDocument{
-    \IfFileExists{\jobname.dat}{\input{\jobname.dat}}{\footnotesize\color{gray}\ttfamily[Metadata pending...]\vspace{1em}}
+    \IfFileExists{\notename.dat}{\input{\notename.dat}}{\footnotesize\color{gray}\ttfamily[Metadata pending...]\vspace{1em}}
 }
 
 \usepackage[normalem]{ulem}

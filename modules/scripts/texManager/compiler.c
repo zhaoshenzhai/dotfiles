@@ -128,9 +128,9 @@ int texCompileToSvg(const char *dirPath, const char *fileName, const char *outpu
 
     snprintf(cmd, sizeof(cmd),
         "cd '%s' && "
-        "latexmk -dvi -interaction=nonstopmode -outdir='%s' -jobname='%s_web' "
-        "-latex='latex %%O \"\\def\\isweb{}\\input{%%S}\"' '%s'",
-        dirPath, cacheDir, baseName, fileName);
+        "latexmk -g -dvi -interaction=nonstopmode -outdir='%s' -jobname='%s_web' "
+        "-latex='latex %%O \"\\def\\isweb{}\\def\\notename{%s}\\input{%%S}\"' '%s' >> /dev/null 2>&1",
+        dirPath, cacheDir, baseName, baseName, fileName);
 
     int status = system(cmd);
     if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) return 1;
