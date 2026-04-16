@@ -67,6 +67,11 @@
         mkdir -p $out/bin
         $CC -O3 ${scriptsDir}/texManager/main.c ${scriptsDir}/texManager/compiler.c -o $out/bin/texManager
     '';
+
+    skimTab = pkgs.runCommandCC "skimTab" {} ''
+        mkdir -p $out/bin
+        $CC -O3 ${scriptsDir}/skimUtils/skimTab.c -framework ApplicationServices -o $out/bin/skimTab
+    '';
 in
 {
     environment.systemPackages = [
@@ -78,5 +83,6 @@ in
         launcher
         attic
         centerWindow
+        skimTab
     ];
 }
