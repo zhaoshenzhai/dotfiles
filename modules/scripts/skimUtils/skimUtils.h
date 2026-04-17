@@ -21,6 +21,7 @@ NSString *ResolveCanonicalDocumentPath(NSString *rawPath);
 
 // Commands
 int switchTab(int tabIndex);
+int moveTab(int targetTab);
 int duplicateTab(void);
 int openRelated(NSString *extension);
 int cleanDuplicates(void);

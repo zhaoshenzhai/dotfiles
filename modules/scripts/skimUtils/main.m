@@ -20,6 +20,13 @@ int main(int argc, const char * argv[]) {
             return switchTab(targetTab);
         }
 
+        if ([command isEqualToString:@"moveTab"]) {
+            if (argc != 3) { fprintf(stderr, "Usage: %s moveTab <1-9>\n", argv[0]); return 1; }
+            int targetTab = atoi(argv[2]);
+            if (targetTab < 1 || targetTab > 9) return 1;
+            return moveTab(targetTab);
+        }
+
         if ([command isEqualToString:@"openRelated"]) {
             if (argc != 3) { fprintf(stderr, "Usage: %s openRelated <extension>\n", argv[0]); return 1; }
             NSString *ext = [NSString stringWithUTF8String:argv[2]];

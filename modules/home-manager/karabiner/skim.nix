@@ -524,11 +524,23 @@
                 }
             ];
         }
-    ] ++ (builtins.genList (i:
-        { # ctrl+1 through ctrl+9 -> switch tabs
+    ]    ++ (builtins.genList (i: { # ctrl+1 through ctrl+9 -> switch tabs
             type = "basic";
             from = { key_code = toString (i + 1); modifiers = { mandatory = [ "control" ]; }; };
             to = [ { shell_command = "zsh -c 'skimUtils switchTab ${toString (i + 1)}'"; } ];
+            conditions = [
+                { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
+                { type = "variable_if"; name = "skim_search_mode"; value = 0; }
+                {
+                    type = "frontmost_application_if";
+                    bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                }
+            ];
+        }
+    ) 9) ++ (builtins.genList (i: { # ctrl+shift+1 through ctrl+shift+9 -> move tabs
+            type = "basic";
+            from = { key_code = toString (i + 1); modifiers = { mandatory = [ "control" "shift" ]; }; };
+            to = [ { shell_command = "zsh -c 'skimUtils moveTab ${toString (i + 1)}'"; } ];
             conditions = [
                 { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                 { type = "variable_if"; name = "skim_search_mode"; value = 0; }

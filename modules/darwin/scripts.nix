@@ -29,20 +29,6 @@
         text = builtins.readFile "${scriptsDir}/newLaTeX.sh";
     };
 
-    skimUtils = pkgs.runCommandCC "skimUtils" {} ''
-        mkdir -p $out/bin
-        $CC -O3 -fobjc-arc \
-            ${scriptsDir}/skimUtils/main.m ${scriptsDir}/skimUtils/utils.m \
-            ${scriptsDir}/skimUtils/search.m \
-            ${scriptsDir}/skimUtils/switchTab.m \
-            ${scriptsDir}/skimUtils/openRelated.m \
-            ${scriptsDir}/skimUtils/duplicateTab.m \
-            ${scriptsDir}/skimUtils/cleanDuplicates.m \
-            ${scriptsDir}/skimUtils/reopenLastClosed.m \
-            -framework Cocoa -framework ScriptingBridge \
-            -o $out/bin/skimUtils
-    '';
-
     centerWindow = pkgs.runCommandCC "centerWindow" {} ''
         mkdir -p $out/bin
         $CC -O3 ${scriptsDir}/centerWindow.m -framework Cocoa -o $out/bin/centerWindow
@@ -51,6 +37,21 @@
     texManager = pkgs.runCommandCC "texManager" {} ''
         mkdir -p $out/bin
         $CC -O3 ${scriptsDir}/texManager/main.c ${scriptsDir}/texManager/compiler.c -o $out/bin/texManager
+    '';
+
+    skimUtils = pkgs.runCommandCC "skimUtils" {} ''
+        mkdir -p $out/bin
+        $CC -O3 -fobjc-arc \
+            ${scriptsDir}/skimUtils/main.m ${scriptsDir}/skimUtils/utils.m \
+            ${scriptsDir}/skimUtils/search.m \
+            ${scriptsDir}/skimUtils/moveTab.m \
+            ${scriptsDir}/skimUtils/switchTab.m \
+            ${scriptsDir}/skimUtils/openRelated.m \
+            ${scriptsDir}/skimUtils/duplicateTab.m \
+            ${scriptsDir}/skimUtils/cleanDuplicates.m \
+            ${scriptsDir}/skimUtils/reopenLastClosed.m \
+            -framework Cocoa -framework ScriptingBridge \
+            -o $out/bin/skimUtils
     '';
 
     attic = pkgs.runCommandCC "attic" {
