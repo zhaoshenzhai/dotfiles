@@ -54,10 +54,6 @@ int moveTab(int targetTab) {
                     CGPoint startPoint = CGPointMake(currentPos.x + currentSize.width / 2.0, currentPos.y + currentSize.height / 2.0);
                     CGPoint endPoint = CGPointMake(targetPos.x + targetSize.width / 2.0, targetPos.y + targetSize.height / 2.0);
 
-                    CGEventRef tempEvent = CGEventCreate(NULL);
-                    CGPoint originalMouseLocation = CGEventGetLocation(tempEvent);
-                    CFRelease(tempEvent);
-
                     CGEventSourceRef source = CGEventSourceCreate(kCGEventSourceStateHIDSystemState);
 
                     CGEventRef mouseMove = CGEventCreateMouseEvent(source, kCGEventMouseMoved, startPoint, kCGMouseButtonLeft);
@@ -73,14 +69,10 @@ int moveTab(int targetTab) {
                     usleep(30000);
                     CGEventPost(kCGHIDEventTap, mouseUp);
 
-                    CGEventRef restoreEvent = CGEventCreateMouseEvent(source, kCGEventMouseMoved, originalMouseLocation, kCGMouseButtonLeft);
-                    CGEventPost(kCGHIDEventTap, restoreEvent);
-
                     CFRelease(mouseMove);
                     CFRelease(mouseDown);
                     CFRelease(mouseDrag);
                     CFRelease(mouseUp);
-                    CFRelease(restoreEvent);
                     CFRelease(source);
                 }
 
