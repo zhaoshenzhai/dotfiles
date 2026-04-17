@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-templatePath=~/iCloud/Dotfiles/modules/scripts/LaTeXTemplate
+templatePath=~/iCloud/Dotfiles/modules/LaTeXTemplate
 fileName=""
 fileType=""
 title=""

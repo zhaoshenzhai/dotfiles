@@ -64,7 +64,7 @@ void* latexWorkerThread(void* arg) {
             char symlinkCmd[2048];
             const char* home = getenv("HOME");
             snprintf(symlinkCmd, sizeof(symlinkCmd),
-                "ln -sf \"%s/iCloud/Dotfiles/modules/scripts/LaTeXTemplate/macros.sty\" \"%s/macros.sty\"", home ? home : "/tmp", cacheDir);
+                "ln -sf \"%s/iCloud/Dotfiles/modules/LaTeXTemplate/macros.sty\" \"%s/macros.sty\"", home ? home : "/tmp", cacheDir);
             system(symlinkCmd);
 
             char texPath[1024], cmd[2048];
