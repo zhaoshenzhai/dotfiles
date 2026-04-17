@@ -22,6 +22,54 @@ void RunLauncher(NSString *targetPath) {
     [task launch];
 }
 
+AXUIElementRef GetFirstChildWithRole(AXUIElementRef parent, CFStringRef role) {
+    CFTypeRef children = NULL;
+    if (AXUIElementCopyAttributeValue(parent, kAXChildrenAttribute, &children) != kAXErrorSuccess) return NULL;
+
+    AXUIElementRef found = NULL;
+    CFIndex count = CFArrayGetCount((CFArrayRef)children);
+    for (CFIndex i = 0; i < count; i++) {
+        AXUIElementRef child = (AXUIElementRef)CFArrayGetValueAtIndex((CFArrayRef)children, i);
+        CFTypeRef childRole = NULL;
+        if (AXUIElementCopyAttributeValue(child, kAXRoleAttribute, &childRole) == kAXErrorSuccess) {
+            if (CFStringCompare((CFStringRef)childRole, role, 0) == kCFCompareEqualTo) {
+                found = (AXUIElementRef)CFRetain(child);
+                CFRelease(childRole);
+                break;
+            }
+            CFRelease(childRole);
+        }
+    }
+    CFRelease(children);
+    return found;
+}
+
+AXUIElementRef GetSubmenu(AXUIElementRef element) {
+    return GetFirstChildWithRole(element, kAXMenuRole);
+}
+
+AXUIElementRef FindChildWithTitle(AXUIElementRef parent, NSString *title) {
+    CFTypeRef children = NULL;
+    if (AXUIElementCopyAttributeValue(parent, kAXChildrenAttribute, &children) != kAXErrorSuccess) return NULL;
+
+    AXUIElementRef found = NULL;
+    CFIndex count = CFArrayGetCount((CFArrayRef)children);
+    for (CFIndex i = 0; i < count; i++) {
+        AXUIElementRef child = (AXUIElementRef)CFArrayGetValueAtIndex((CFArrayRef)children, i);
+        CFTypeRef childTitle = NULL;
+        if (AXUIElementCopyAttributeValue(child, kAXTitleAttribute, &childTitle) == kAXErrorSuccess) {
+            if ([(__bridge NSString *)childTitle isEqualToString:title]) {
+                found = (AXUIElementRef)CFRetain(child);
+                CFRelease(childTitle);
+                break;
+            }
+            CFRelease(childTitle);
+        }
+    }
+    CFRelease(children);
+    return found;
+}
+
 NSString *GetDocumentPathOfFrontmostApp(void) {
     NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
     NSRunningApplication *frontApp = [workspace frontmostApplication];

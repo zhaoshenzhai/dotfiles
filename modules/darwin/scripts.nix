@@ -32,10 +32,12 @@
     skimUtils = pkgs.runCommandCC "skimUtils" {} ''
         mkdir -p $out/bin
         $CC -O3 -fobjc-arc \
-            ${scriptsDir}/skimUtils/main.m \
-            ${scriptsDir}/skimUtils/utils.m \
-            ${scriptsDir}/skimUtils/switchTab.m ${scriptsDir}/skimUtils/openRelated.m \
-            ${scriptsDir}/skimUtils/duplicateTab.m ${scriptsDir}/skimUtils/cleanDuplicates.m \
+            ${scriptsDir}/skimUtils/main.m ${scriptsDir}/skimUtils/utils.m \
+            ${scriptsDir}/skimUtils/switchTab.m \
+            ${scriptsDir}/skimUtils/openRelated.m \
+            ${scriptsDir}/skimUtils/duplicateTab.m \
+            ${scriptsDir}/skimUtils/cleanDuplicates.m \
+            ${scriptsDir}/skimUtils/reopenLastClosed.m \
             -framework Cocoa -framework ScriptingBridge \
             -o $out/bin/skimUtils
     '';
