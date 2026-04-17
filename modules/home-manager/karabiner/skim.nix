@@ -236,9 +236,9 @@
                 }
             ];
         }
-        { # ctrl+shift+k -> open .key in nvim
+        { # ctrl+shift+enter -> open .key in nvim
             type = "basic";
-            from = { key_code = "k"; modifiers = { mandatory = [ "control" "shift" ]; }; };
+            from = { key_code = "return_or_enter"; modifiers = { mandatory = [ "control" "shift" ]; }; };
             to = [{ shell_command = "zsh -c 'skimUtils openRelated key'"; }];
             conditions = [
                 {
