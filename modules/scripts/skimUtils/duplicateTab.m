@@ -7,49 +7,68 @@ int duplicateTab(void) {
         if (!skim || ![skim isRunning]) return 0;
 
         NSArray *documents = [skim valueForKey:@"documents"];
-        if (!documents || documents.count == 0) return 0;
+        NSUInteger originalDocCount = documents.count;
+        if (!documents || originalDocCount == 0) return 0;
 
-        id frontDoc = documents.firstObject;
-        NSString *docPath = [frontDoc valueForKey:@"path"];
+        id originalDoc = documents.firstObject;
+        NSString *docPath = nil;
+        @try { docPath = [originalDoc valueForKey:@"path"]; } @catch(NSException*e){}
 
-        // Use pathUtils helper instead of manual .orig check
+        if (!docPath || [docPath isKindOfClass:[NSNull class]]) return 0;
+
+        // Extract Page Index
+        NSNumber *pageIndex = nil;
+        @try { pageIndex = [[originalDoc valueForKey:@"currentPage"] valueForKey:@"index"]; } @catch(NSException*e){}
+
+        // Extract Window ID for new tab detection
+        NSNumber *originalWindowId = nil;
+        @try {
+            id activeWindow = [originalDoc valueForKey:@"activeWindow"];
+            originalWindowId = [activeWindow valueForKey:@"id"];
+        } @catch(NSException*e){}
+
+        // Launch Duplicate
         NSString *launchPath = ResolveCanonicalDocumentPath(docPath);
-        if (!launchPath) return 0;
-
-        id currentPage = [frontDoc valueForKey:@"currentPage"];
-        NSNumber *pageIndex = [currentPage valueForKey:@"index"];
-
         RunLauncher(launchPath);
 
+        // Synchronous State Sync (50ms polling loop)
         if (pageIndex && [pageIndex integerValue] > 0) {
-            pid_t pid = fork();
-            if (pid == 0) {
-                SBApplication *bgSkim = [SBApplication applicationWithBundleIdentifier:@"net.sourceforge.skim-app.skim"];
-                int retries = 25;
-                NSInteger targetIdx = [pageIndex integerValue];
+            int retries = 60; // 3 second timeout
+            NSInteger targetIdx = [pageIndex integerValue];
 
-                while (retries > 0) {
-                    usleep(50000);
-                    NSArray *docs = [bgSkim valueForKey:@"documents"];
-                    if (docs.count > 0) {
-                        id currentFrontDoc = docs.firstObject;
-                        NSString *currentPath = [currentFrontDoc valueForKey:@"path"];
+            while (retries > 0) {
+                usleep(50000);
 
-                        if (currentPath && ![currentPath isEqualToString:docPath]) {
-                            NSArray *pages = [currentFrontDoc valueForKey:@"pages"];
-                            if (targetIdx <= pages.count) {
-                                id targetPage = [pages objectAtIndex:(targetIdx - 1)];
-                                [currentFrontDoc setValue:targetPage forKey:@"currentPage"];
-                            }
-                            break;
-                        }
+                SBApplication *currentSkim = GetSkimSBApp();
+                NSArray *docs = [currentSkim valueForKey:@"documents"];
+
+                // Detect new tab: Either the overall document count increased,
+                // OR the active window ID changed (if opened in a separate window).
+                BOOL isNewTab = NO;
+                if (docs.count > originalDocCount) {
+                    isNewTab = YES;
+                } else if (docs.count > 0 && originalWindowId) {
+                    NSNumber *frontWindowId = nil;
+                    @try { frontWindowId = [[docs.firstObject valueForKey:@"activeWindow"] valueForKey:@"id"]; } @catch(NSException*e){}
+                    if (frontWindowId && ![frontWindowId isEqualToNumber:originalWindowId]) {
+                        isNewTab = YES;
                     }
-                    retries--;
                 }
-                exit(0);
-            } else if (pid < 0) {
-                fprintf(stderr, "Fork failed\n");
-                return 1;
+
+                if (isNewTab && docs.count > 0) {
+                    id frontDoc = docs.firstObject;
+
+                    // Apply Page Only
+                    @try {
+                        NSArray *pages = [frontDoc valueForKey:@"pages"];
+                        if (targetIdx > 0 && targetIdx <= pages.count) {
+                            [frontDoc setValue:pages[targetIdx - 1] forKey:@"currentPage"];
+                        }
+                    } @catch(NSException*e){}
+
+                    break;
+                }
+                retries--;
             }
         }
     }

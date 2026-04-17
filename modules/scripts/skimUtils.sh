@@ -158,27 +158,6 @@ enforceSkim() {
     fi
 }
 
-exportAtticFile() {
-    local FRONT_BUNDLE=$(osascript -e 'id of application (path to frontmost application as text)' 2>/dev/null)
-    local PDF_PATH=$(osascript -e "tell application id \"$FRONT_BUNDLE\" to get path of document of window 1" 2>/dev/null)
-
-    if [ -z "$PDF_PATH" ] || [ "$PDF_PATH" == "missing value" ]; then
-        exit 0
-    fi
-
-    if [[ "$PDF_PATH" == */tmp/skim_pdfs/* ]] && [ -f "${PDF_PATH}.orig" ]; then
-        PDF_PATH=$(cat "${PDF_PATH}.orig")
-    fi
-
-    local TEX_PATH="${PDF_PATH%.pdf}.tex"
-    if [ -z "$TEX_PATH" ]; then
-        exit 0
-    fi
-
-    cp -f "$PDF_PATH" "/Users/zhao/Downloads/"
-    cp -f "$TEX_PATH" "/Users/zhao/Downloads/"
-}
-
 # Main
 case "${1:-}" in
     --switchFocus)
@@ -197,12 +176,8 @@ case "${1:-}" in
         enforceSkim
         exit 0
         ;;
-    --exportAtticFile)
-        exportAtticFile
-        exit 0
-        ;;
     *)
-        echo "Usage: $(basename "$0") [--switchFocus <dir> | --focusDaemon | --recordSkim <id> | --enforceSkim | --exportAtticFile]"
+        echo "Usage: $(basename "$0") [--switchFocus <dir> | --focusDaemon | --recordSkim <id> | --enforceSkim]"
         exit 1
         ;;
 esac

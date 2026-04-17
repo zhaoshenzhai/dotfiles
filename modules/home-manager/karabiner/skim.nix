@@ -247,21 +247,6 @@
                 }
             ];
         }
-        { # ctrl+shift+e -> export attic file
-            type = "basic";
-            from = { key_code = "e"; modifiers = { mandatory = [ "control" "shift" ]; }; };
-            to = [
-                { shell_command = "zsh -c 'skimUtils --exportAtticFile &'"; }
-            ];
-            conditions = [
-                { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
-                { type = "variable_if"; name = "skim_search_mode"; value = 0; }
-                {
-                    type = "frontmost_application_if";
-                    bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
-                }
-            ];
-        }
         { # ctrl+d -> duplicate tab
             type = "basic";
             from = { key_code = "d"; modifiers = { mandatory = [ "control" ]; }; };
@@ -292,24 +277,7 @@
             type = "basic";
             from = { key_code = "slash"; };
             to = [
-                {
-                    shell_command = ''
-                        osascript <<'EOF'
-                        tell application "Skim"
-                            try
-                                tell front document
-                                    set selection to {character 1 of text of current page}
-                                end tell
-                            end try
-                        end tell
-                        tell application "System Events"
-                            tell process "Skim"
-                                keystroke "f" using {command down, option down}
-                            end tell
-                        end tell
-                        EOF
-                    '';
-                }
+                { shell_command = "zsh -c 'skimUtils search start'"; }
                 { set_variable = { name = "skim_search_mode"; value = 1; }; }
                 { set_variable = { name = "skim_search_sequence"; value = 0; }; }
             ];
@@ -378,24 +346,7 @@
             type = "basic";
             from = { key_code = "n"; modifiers = { mandatory = [ ]; }; };
             to = [
-                {
-                    shell_command = ''
-                        osascript <<'EOF'
-                        tell application "Skim"
-                            try
-                                tell front document
-                                    set selection to {character 1 of text of current page}
-                                end tell
-                            end try
-                        end tell
-                        tell application "System Events"
-                            tell process "Skim"
-                                keystroke "g" using {command down, option down}
-                            end tell
-                        end tell
-                        EOF
-                    '';
-                }
+                { shell_command = "zsh -c 'skimUtils search next'"; }
                 { set_variable = { name = "skim_search_sequence"; value = 1; }; }
             ];
             conditions = [
@@ -426,24 +377,7 @@
             type = "basic";
             from = { key_code = "n"; modifiers = { mandatory = [ "shift" ]; }; };
             to = [
-                {
-                    shell_command = ''
-                        osascript <<'EOF'
-                        tell application "Skim"
-                            try
-                                tell front document
-                                    set selection to {character 1 of text of current page}
-                                end tell
-                            end try
-                        end tell
-                        tell application "System Events"
-                            tell process "Skim"
-                                keystroke "h" using {command down, option down}
-                            end tell
-                        end tell
-                        EOF
-                    '';
-                }
+                { shell_command = "zsh -c 'skimUtils search prev'"; }
                 { set_variable = { name = "skim_search_sequence"; value = 1; }; }
             ];
             conditions = [

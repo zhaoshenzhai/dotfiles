@@ -18,3 +18,4 @@ int duplicateTab(void);
 int openRelated(NSString *extension);
 int cleanDuplicates(void);
 int reopenLastClosed(void);
+int skimSearch(NSString *action);

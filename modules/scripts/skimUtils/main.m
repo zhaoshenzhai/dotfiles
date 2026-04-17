@@ -19,6 +19,11 @@ int main(int argc, const char * argv[]) {
             NSString *ext = [NSString stringWithUTF8String:argv[2]];
             return openRelated(ext);
         }
+        else if ([command isEqualToString:@"search"]) {
+            if (argc != 3) { fprintf(stderr, "Usage: %s search <start|next|prev>\n", argv[0]); return 1; }
+            NSString *action = [NSString stringWithUTF8String:argv[2]];
+            return skimSearch(action);
+        }
         else { fprintf(stderr, "Unknown command: %s\n", argv[1]); return 1; }
     }
     return 0;

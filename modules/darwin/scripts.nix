@@ -33,6 +33,7 @@
         mkdir -p $out/bin
         $CC -O3 -fobjc-arc \
             ${scriptsDir}/skimUtils/main.m ${scriptsDir}/skimUtils/utils.m \
+            ${scriptsDir}/skimUtils/search.m \
             ${scriptsDir}/skimUtils/switchTab.m \
             ${scriptsDir}/skimUtils/openRelated.m \
             ${scriptsDir}/skimUtils/duplicateTab.m \
