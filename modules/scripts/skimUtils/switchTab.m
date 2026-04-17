@@ -1,14 +1,7 @@
 #import "skimUtils.h"
 
 int switchTab(int targetTab) {
-    NSArray *apps = [NSRunningApplication runningApplicationsWithBundleIdentifier:@"net.sourceforge.skim-app.skim"];
-    pid_t pid = 0;
-    for (NSRunningApplication *app in apps) {
-        if (app.activationPolicy == NSApplicationActivationPolicyRegular) {
-            pid = app.processIdentifier;
-            break;
-        }
-    }
+    pid_t pid = GetSkimPID();
     if (pid == 0) return 1;
 
     AXUIElementRef skimApp = AXUIElementCreateApplication(pid);

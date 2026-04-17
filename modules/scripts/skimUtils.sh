@@ -123,57 +123,6 @@ focusDaemon() {
     done
 }
 
-cleanSkimState() {
-    local current_workspace=$(aerospace list-workspaces --focused)
-    local skim_memory_file="/tmp/aerospace_skim_tabs/workspace_${current_workspace}.txt"
-
-    if [ -f "$skim_memory_file" ]; then
-        local saved_id=$(cat "$skim_memory_file")
-        if ! aerospace list-windows --all --format "%{window-id}" | grep -q "^${saved_id}$"; then
-            rm -f "$skim_memory_file"
-        fi
-    fi
-
-    if [ -d "/tmp/skim_pdfs" ]; then
-        local current_time=$(date +%s)
-        for dir in /tmp/skim_pdfs/*/; do
-            if [ -d "$dir" ]; then
-                local dir_timestamp=$(basename "$dir")
-                if [[ "$dir_timestamp" =~ ^[0-9]+$ ]]; then
-                    local age_in_seconds=$((current_time - dir_timestamp))
-                    if (( age_in_seconds > 86400 )); then
-                        rm -rf "$dir"
-                    fi
-                fi
-            fi
-        done
-    fi
-}
-
-openRelated() {
-    local ext="$1"
-    local FRONT_BUNDLE=$(osascript -e 'id of application (path to frontmost application as text)' 2>/dev/null)
-    local PDF_PATH=$(osascript -e "tell application id \"$FRONT_BUNDLE\" to get path of document of window 1" 2>/dev/null)
-
-    if [ -z "$PDF_PATH" ] || [ "$PDF_PATH" == "missing value" ]; then
-        exit 0
-    fi
-
-    if [[ "$PDF_PATH" == */tmp/skim_pdfs/* ]] && [ -f "${PDF_PATH}.orig" ]; then
-        PDF_PATH=$(cat "${PDF_PATH}.orig")
-    fi
-
-    local SEARCH_STR="Library/Mobile Documents/com~apple~CloudDocs"
-    if [[ "$PDF_PATH" == *"$SEARCH_STR"* ]]; then
-        PDF_PATH="${PDF_PATH/$SEARCH_STR/iCloud}"
-    fi
-
-    local TARGET_PATH="${PDF_PATH%.pdf}.$ext"
-    if [ -f "$TARGET_PATH" ]; then
-        nohup /etc/profiles/per-user/$USER/bin/launcher "$TARGET_PATH" >/dev/null 2>&1 &
-    fi
-}
-
 recordSkim() {
     local window_id="$1"
     if [ -z "$window_id" ]; then
@@ -240,10 +189,6 @@ case "${1:-}" in
         focusDaemon
         exit 0
         ;;
-    --cleanSkimState)
-        cleanSkimState
-        exit 0
-        ;;
     --recordSkim)
         recordSkim "$2"
         exit 0
@@ -257,7 +202,7 @@ case "${1:-}" in
         exit 0
         ;;
     *)
-        echo "Usage: $(basename "$0") [--switchFocus <dir> | --focusDaemon | --cleanSkimState | --recordSkim <id> | --enforceSkim | --exportAtticFile]"
+        echo "Usage: $(basename "$0") [--switchFocus <dir> | --focusDaemon | --recordSkim <id> | --enforceSkim | --exportAtticFile]"
         exit 1
         ;;
 esac

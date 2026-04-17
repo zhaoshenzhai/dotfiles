@@ -9,17 +9,20 @@ int main(int argc, const char * argv[]) {
 
         NSString *command = [NSString stringWithUTF8String:argv[1]];
 
-        if ([command isEqualToString:@"tab"]) {
+        if ([command isEqualToString:@"switchTab"]) {
             if (argc != 3) {
-                fprintf(stderr, "Usage: %s tab <1-9>\n", argv[0]);
+                fprintf(stderr, "Usage: %s switchTab <1-9>\n", argv[0]);
                 return 1;
             }
             int targetTab = atoi(argv[2]);
             if (targetTab < 1 || targetTab > 9) return 1;
             return switchTab(targetTab);
         }
-        else if ([command isEqualToString:@"duplicate"]) {
+        else if ([command isEqualToString:@"duplicateTab"]) {
             return duplicateTab();
+        }
+        else if ([command isEqualToString:@"cleanDuplicates"]) {
+            return cleanDuplicates();
         }
         else if ([command isEqualToString:@"openRelated"]) {
             if (argc != 3) {
