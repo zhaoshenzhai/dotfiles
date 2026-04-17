@@ -33,8 +33,11 @@
         mkdir -p $out/bin
         $CC -O3 -fobjc-arc \
             ${scriptsDir}/skimUtils/main.m \
-            ${scriptsDir}/skimUtils/skimTab.m \
+            ${scriptsDir}/skimUtils/skimAppUtils.m \
+            ${scriptsDir}/skimUtils/pathUtils.m \
+            ${scriptsDir}/skimUtils/switchTab.m \
             ${scriptsDir}/skimUtils/duplicateTab.m \
+            ${scriptsDir}/skimUtils/openRelated.m \
             -framework Cocoa -framework ScriptingBridge \
             -o $out/bin/skimUtils
     '';

@@ -95,8 +95,8 @@ in {
             "lua/tabs.lua".source      = ./nvim/tabs.lua;
             "lua/aerospace.lua".source = ./nvim/aerospace.lua;
             "lua/attic.lua".source     = ./nvim/attic.lua;
-            "ftplugin/tex.lua".source  = ./nvim/tex.lua;
-            "ftplugin/c.lua".source    = ./nvim/c.lua;
+            "lua/c.lua".source         = ./nvim/c.lua;
+            "lua/tex.lua".source       = ./nvim/tex.lua;
         } // snippetExtraFiles;
 
         extraConfigLua = ''
@@ -107,6 +107,8 @@ in {
             require('tabs')
             require('aerospace')
             require('attic')
+            require('tex')
+            require('c')
         '';
     };
 }

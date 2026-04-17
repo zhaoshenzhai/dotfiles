@@ -1,9 +1,12 @@
-#ifndef skimUtils_h
-#define skimUtils_h
+#import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
+#import <ScriptingBridge/ScriptingBridge.h>
 
-#import <Cocoa/Cocoa.h>
+pid_t GetSkimPID(void);
+AXUIElementRef GetFocusedWindowForPID(pid_t pid);
+NSString *GetDocumentPathOfFrontmostApp(void);
+NSString *ResolveCanonicalDocumentPath(NSString *rawPath);
 
-int switchTab(int targetTab);
+int switchTab(int tabIndex);
 int duplicateTab(void);
-
-#endif
+int openRelated(NSString *extension);

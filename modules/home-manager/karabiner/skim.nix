@@ -244,7 +244,7 @@
         { # ctrl+enter -> open .tex in nvim
             type = "basic";
             from = { key_code = "return_or_enter"; modifiers = { mandatory = [ "control" ]; }; };
-            to = [{ shell_command = "zsh -c 'skimUtils --openNvim'"; }];
+            to = [{ shell_command = "zsh -c 'skimUtils openRelated tex'"; }];
             conditions = [
                 {
                     type = "frontmost_application_if";
@@ -255,7 +255,7 @@
         { # ctrl+shift+k -> open .key in nvim
             type = "basic";
             from = { key_code = "k"; modifiers = { mandatory = [ "control" "shift" ]; }; };
-            to = [{ shell_command = "zsh -c 'skimUtils --openKey'"; }];
+            to = [{ shell_command = "zsh -c 'skimUtils openRelated key'"; }];
             conditions = [
                 {
                     type = "frontmost_application_if";

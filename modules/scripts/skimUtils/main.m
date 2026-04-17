@@ -4,9 +4,6 @@ int main(int argc, const char * argv[]) {
     @autoreleasepool {
         if (argc < 2) {
             fprintf(stderr, "Usage: %s <command> [args...]\n", argv[0]);
-            fprintf(stderr, "Commands:\n");
-            fprintf(stderr, "  tab <1-9>\n");
-            fprintf(stderr, "  duplicate\n");
             return 1;
         }
 
@@ -23,6 +20,14 @@ int main(int argc, const char * argv[]) {
         }
         else if ([command isEqualToString:@"duplicate"]) {
             return duplicateTab();
+        }
+        else if ([command isEqualToString:@"openRelated"]) {
+            if (argc != 3) {
+                fprintf(stderr, "Usage: %s openRelated <extension>\n", argv[0]);
+                return 1;
+            }
+            NSString *ext = [NSString stringWithUTF8String:argv[2]];
+            return openRelated(ext);
         }
         else {
             fprintf(stderr, "Unknown command: %s\n", argv[1]);

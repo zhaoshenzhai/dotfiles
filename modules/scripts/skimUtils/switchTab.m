@@ -1,7 +1,6 @@
 #import "skimUtils.h"
 
 int switchTab(int targetTab) {
-    // 1. Resolve PID
     NSArray *apps = [NSRunningApplication runningApplicationsWithBundleIdentifier:@"net.sourceforge.skim-app.skim"];
     pid_t pid = 0;
     for (NSRunningApplication *app in apps) {
@@ -12,11 +11,9 @@ int switchTab(int targetTab) {
     }
     if (pid == 0) return 1;
 
-    // 2. Connect to App
     AXUIElementRef skimApp = AXUIElementCreateApplication(pid);
     if (!skimApp) return 1;
 
-    // 3. Traverse and Click
     CFTypeRef window = NULL;
     if (AXUIElementCopyAttributeValue(skimApp, kAXMainWindowAttribute, &window) == kAXErrorSuccess) {
         CFTypeRef children = NULL;
@@ -24,7 +21,6 @@ int switchTab(int targetTab) {
             AXUIElementRef tabGroup = NULL;
             CFIndex count = CFArrayGetCount((CFArrayRef)children);
 
-            // Find the Tab Group
             for (CFIndex i = 0; i < count; i++) {
                 AXUIElementRef child = (AXUIElementRef)CFArrayGetValueAtIndex((CFArrayRef)children, i);
                 CFTypeRef role = NULL;
@@ -37,7 +33,6 @@ int switchTab(int targetTab) {
                 if (tabGroup) break;
             }
 
-            // Find and click the target Radio Button
             if (tabGroup) {
                 CFTypeRef tabs = NULL;
                 if (AXUIElementCopyAttributeValue(tabGroup, kAXChildrenAttribute, &tabs) == kAXErrorSuccess) {

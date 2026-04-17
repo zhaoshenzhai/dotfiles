@@ -150,57 +150,6 @@ cleanSkimState() {
     fi
 }
 
-duplicateTab() {
-    local result=$(osascript -e '
-        tell application "Skim"
-            if (count of documents) > 0 then
-                try
-                    set docPath to path of document 1
-                    set currPage to index of current page of document 1
-                    return docPath & "|" & currPage
-                on error
-                    return "|"
-                end try
-            else
-                return "|"
-            end if
-        end tell
-    ' 2>/dev/null)
-
-    local doc_path="${result%|*}"
-    local curr_page="${result#*|}"
-
-    if [ -z "$doc_path" ] || [ "$doc_path" == "missing value" ]; then
-        exit 0
-    fi
-
-    local launch_path="$doc_path"
-    if [[ "$doc_path" == */tmp/skim_pdfs/* ]] && [ -f "${doc_path}.orig" ]; then
-        launch_path=$(cat "${doc_path}.orig")
-    fi
-
-    nohup /etc/profiles/per-user/$USER/bin/launcher "$launch_path" >/dev/null 2>&1 &
-
-    if [[ -n "$curr_page" && "$curr_page" =~ ^[0-9]+$ ]]; then
-        osascript -e "
-            tell application \"Skim\"
-                set retries to 25
-                repeat while retries > 0
-                    delay 0.05
-                    try
-                        set frontDoc to document 1
-                        if (path of frontDoc) is not \"$doc_path\" then
-                            set current page of frontDoc to page $curr_page of frontDoc
-                            exit repeat
-                        end if
-                    end try
-                    set retries to retries - 1
-                end repeat
-            end tell
-        " & disown
-    fi
-}
-
 openRelated() {
     local ext="$1"
     local FRONT_BUNDLE=$(osascript -e 'id of application (path to frontmost application as text)' 2>/dev/null)
@@ -295,18 +244,6 @@ case "${1:-}" in
         cleanSkimState
         exit 0
         ;;
-    --duplicateTab)
-        duplicateTab
-        exit 0
-        ;;
-    --openNvim|--openTex)
-        openRelated "tex"
-        exit 0
-        ;;
-    --openKey)
-        openRelated "key"
-        exit 0
-        ;;
     --recordSkim)
         recordSkim "$2"
         exit 0
@@ -320,7 +257,7 @@ case "${1:-}" in
         exit 0
         ;;
     *)
-        echo "Usage: $(basename "$0") [--switchFocus <dir> | --focusDaemon | --cleanSkimState | --duplicateTab | --openNvim | --openTex | --openKey | --recordSkim <id> | --enforceSkim | --exportAtticFile]"
+        echo "Usage: $(basename "$0") [--switchFocus <dir> | --focusDaemon | --cleanSkimState | --recordSkim <id> | --enforceSkim | --exportAtticFile]"
         exit 1
         ;;
 esac

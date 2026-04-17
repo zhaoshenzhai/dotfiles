@@ -15,12 +15,12 @@ local c_group = vim.api.nvim_create_augroup("c_folds", { clear = true })
 
 vim.api.nvim_create_autocmd({"FileType", "BufWinEnter"}, {
     group = c_group,
-    pattern = {"*.c", "*.h"},
+    pattern = {"*.c", "*.h", "*.m"},
     command = "setlocal foldmethod=expr foldexpr=v:lua.CFold() foldlevel=0"
 })
 
 vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {
     group = c_group,
-    pattern = {"*.c", "*.h"},
+    pattern = {"*.c", "*.h", "*.m"},
     command = "let &l:foldexpr = &l:foldexpr"
 })
