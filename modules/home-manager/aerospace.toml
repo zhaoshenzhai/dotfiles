@@ -228,5 +228,9 @@ accordion-padding = 0
     run = 'layout floating'
 
 [[on-window-detected]]
+    if.window-title-regex-substring = 'alacritty-float'
+    run = 'layout floating'
+
+[[on-window-detected]]
     if.window-title-regex-substring = 'vifm-float'
     run = 'layout floating'

@@ -38,7 +38,7 @@ void clamp_brightness_poc() {
         CIFilter *preTint = [CIFilter filterWithName:@"CIColorMatrix"];
         [preTint setValue:[CIVector vectorWithX:0.90 Y:0.0 Z:0.0 W:0.0] forKey:@"inputRVector"];
         [preTint setValue:[CIVector vectorWithX:0.0 Y:0.90 Z:0.0 W:0.0] forKey:@"inputGVector"];
-        [preTint setValue:[CIVector vectorWithX:0.0 Y:0.0 Z:0.80 W:0.0] forKey:@"inputBVector"];
+        [preTint setValue:[CIVector vectorWithX:0.0 Y:0.0 Z:0.85 W:0.0] forKey:@"inputBVector"];
         [preTint setValue:[CIVector vectorWithX:0.0 Y:0.0 Z:0.0 W:1.0] forKey:@"inputAVector"];
 
         CIFilter *toneCurve = [CIFilter filterWithName:@"CIToneCurve"];
@@ -46,7 +46,7 @@ void clamp_brightness_poc() {
         [toneCurve setValue:[CIVector vectorWithX:0.25 Y:0.25] forKey:@"inputPoint1"];
         [toneCurve setValue:[CIVector vectorWithX:0.50 Y:0.20] forKey:@"inputPoint2"];
         [toneCurve setValue:[CIVector vectorWithX:0.75 Y:0.10] forKey:@"inputPoint3"];
-        [toneCurve setValue:[CIVector vectorWithX:1.00 Y:0.05] forKey:@"inputPoint4"];
+        [toneCurve setValue:[CIVector vectorWithX:1.00 Y:0.10] forKey:@"inputPoint4"];
 
         filterView.layer.backgroundFilters = @[preTint, toneCurve];
         [blurView addSubview:filterView];

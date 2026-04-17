@@ -16,6 +16,7 @@ void handler(env env) {
 
     if (title[0] != '\0' && strcasecmp(info, "alacritty") == 0) {
         if (strcmp(title, "launcher") == 0) { return; }
+        else if (strcmp(title, "alacritty-float") == 0) { info = "alacritty"; }
         else if (strcmp(title, "vifm") == 0) { info = "vifm"; }
         else if (strcmp(title, "vifm-float") == 0) { info = "vifm"; }
         else if (strcmp(title, "attic") == 0) { info = "attic"; }
