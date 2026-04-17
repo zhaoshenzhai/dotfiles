@@ -79,12 +79,12 @@ in
 {
     environment.systemPackages = [
         alacrittyDaemon
+        launcher
         pdfcp
         newLatex
+        centerWindow
         texManager
         skimUtils
-        launcher
         attic
-        centerWindow
     ];
 }

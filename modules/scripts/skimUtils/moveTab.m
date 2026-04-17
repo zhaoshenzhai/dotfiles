@@ -20,10 +20,8 @@ int moveTab(int targetTab) {
             if (targetTab < 1 || targetTab > tabCount) goto cleanup;
 
             AXUIElementRef currentTabRef = NULL;
-            // Arrays are 0-indexed, so targetTab 1 is index 0
             AXUIElementRef targetTabRef = (AXUIElementRef)CFArrayGetValueAtIndex((CFArrayRef)tabs, targetTab - 1);
 
-            // Find the currently selected tab (the one with value == 1)
             for (CFIndex i = 0; i < tabCount; i++) {
                 AXUIElementRef child = (AXUIElementRef)CFArrayGetValueAtIndex((CFArrayRef)tabs, i);
                 CFTypeRef value = NULL;
@@ -43,7 +41,6 @@ int moveTab(int targetTab) {
                 CGPoint currentPos, targetPos;
                 CGSize currentSize, targetSize;
 
-                // Extract screen coordinates and sizes
                 if (AXUIElementCopyAttributeValue(currentTabRef, kAXPositionAttribute, &currentPosVal) == kAXErrorSuccess &&
                     AXUIElementCopyAttributeValue(currentTabRef, kAXSizeAttribute, &currentSizeVal) == kAXErrorSuccess &&
                     AXUIElementCopyAttributeValue(targetTabRef, kAXPositionAttribute, &targetPosVal) == kAXErrorSuccess &&
@@ -54,11 +51,13 @@ int moveTab(int targetTab) {
                     AXValueGetValue((AXValueRef)targetPosVal, kAXValueCGPointType, &targetPos);
                     AXValueGetValue((AXValueRef)targetSizeVal, kAXValueCGSizeType, &targetSize);
 
-                    // Calculate the dead-center of both tabs
                     CGPoint startPoint = CGPointMake(currentPos.x + currentSize.width / 2.0, currentPos.y + currentSize.height / 2.0);
                     CGPoint endPoint = CGPointMake(targetPos.x + targetSize.width / 2.0, targetPos.y + targetSize.height / 2.0);
 
-                    // Perform high-speed CoreGraphics Mouse Drag
+                    CGEventRef tempEvent = CGEventCreate(NULL);
+                    CGPoint originalMouseLocation = CGEventGetLocation(tempEvent);
+                    CFRelease(tempEvent);
+
                     CGEventSourceRef source = CGEventSourceCreate(kCGEventSourceStateHIDSystemState);
 
                     CGEventRef mouseMove = CGEventCreateMouseEvent(source, kCGEventMouseMoved, startPoint, kCGMouseButtonLeft);
@@ -66,19 +65,22 @@ int moveTab(int targetTab) {
                     CGEventRef mouseDrag = CGEventCreateMouseEvent(source, kCGEventLeftMouseDragged, endPoint, kCGMouseButtonLeft);
                     CGEventRef mouseUp = CGEventCreateMouseEvent(source, kCGEventLeftMouseUp, endPoint, kCGMouseButtonLeft);
 
-                    // Post events with micro-delays to ensure the macOS UI thread registers the drag
                     CGEventPost(kCGHIDEventTap, mouseMove);
-                    usleep(5000); // 5ms
+                    usleep(5000);
                     CGEventPost(kCGHIDEventTap, mouseDown);
-                    usleep(30000); // 30ms
+                    usleep(30000);
                     CGEventPost(kCGHIDEventTap, mouseDrag);
-                    usleep(30000); // 30ms
+                    usleep(30000);
                     CGEventPost(kCGHIDEventTap, mouseUp);
+
+                    CGEventRef restoreEvent = CGEventCreateMouseEvent(source, kCGEventMouseMoved, originalMouseLocation, kCGMouseButtonLeft);
+                    CGEventPost(kCGHIDEventTap, restoreEvent);
 
                     CFRelease(mouseMove);
                     CFRelease(mouseDown);
                     CFRelease(mouseDrag);
                     CFRelease(mouseUp);
+                    CFRelease(restoreEvent);
                     CFRelease(source);
                 }
 
