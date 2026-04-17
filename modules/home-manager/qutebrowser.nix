@@ -22,7 +22,7 @@ let
             "$lastdir"
         )
 
-        alacrittyDaemon "''${ARGS[@]}"
+        alacritty "''${ARGS[@]}"
     '';
 
     vifmPickerMulti = pkgs.writeShellScript "vifm-picker-multi" ''
@@ -41,7 +41,7 @@ let
             "$lastdir"
         )
 
-        alacrittyDaemon "''${ARGS[@]}"
+        alacritty "''${ARGS[@]}"
     '';
 
     ytMpvSpawn = pkgs.writeShellScript "yt-mpv-spawn" ''

@@ -33,6 +33,32 @@ vim.keymap.set('n', '<C-S-Enter>', function()
     end
 end, opts)
 
+-- Math zone for snippets
+_G.in_mathzone = function()
+    local has_ts, ts = pcall(require, 'vim.treesitter')
+    if not has_ts then return 0 end
+
+    local buf = vim.api.nvim_get_current_buf()
+    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+    row = row - 1
+
+    if vim.fn.mode():match('^i') and col > 0 then
+        col = col - 1
+    end
+
+    local node = ts.get_node({ bufnr = buf, pos = {row, col} })
+
+    while node do
+        local type = node:type()
+        if type == 'inline_formula' or type == 'displayed_equation' or type == 'math_environment' then
+            return 1
+        end
+        node = node:parent()
+    end
+
+    return 0
+end
+
 -- Fold questions/exercises and solutions
 _G.TexFold = function()
     local lnum = vim.v.lnum

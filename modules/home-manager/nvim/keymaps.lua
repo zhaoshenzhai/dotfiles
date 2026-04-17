@@ -17,16 +17,11 @@ vim.keymap.set('x', 'am', 'F$of$', opts)
 vim.keymap.set('o', 'am', ':normal vam<CR>', opts)
 
 -- Screen movement
-_G.ScreenMovement = function(movement)
-    if vim.wo.wrap then
-        return "g" .. movement
-    else
-        return movement
-    end
-end
+local expr_opts = { silent = true, expr = true }
+vim.keymap.set({'n', 'o', 'x'}, 'j', "v:count == 0 ? 'gj' : 'j'", expr_opts)
+vim.keymap.set({'n', 'o', 'x'}, 'k', "v:count == 0 ? 'gk' : 'k'", expr_opts)
 
-vim.keymap.set({'n', 'o'}, 'j', "v:lua.ScreenMovement('j')", expr_opts)
-vim.keymap.set({'n', 'o'}, 'k', "v:lua.ScreenMovement('k')", expr_opts)
-vim.keymap.set({'n', 'o'}, '0', "v:lua.ScreenMovement('0')", expr_opts)
-vim.keymap.set({'n', 'o'}, '^', "v:lua.ScreenMovement('^')", expr_opts)
-vim.keymap.set({'n', 'o'}, '$', "v:lua.ScreenMovement('$')", expr_opts)
+local opts = { silent = true }
+vim.keymap.set({'n', 'o', 'x'}, '0', 'g0', opts)
+vim.keymap.set({'n', 'o', 'x'}, '^', 'g^', opts)
+vim.keymap.set({'n', 'o', 'x'}, '$', 'g$', opts)

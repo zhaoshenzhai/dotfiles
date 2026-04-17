@@ -99,7 +99,7 @@ accordion-padding = 0
     cmd-p = 'exec-and-forget screencapture ~/Downloads/Screenshot_$(date +%Y_%m_%d_%H%M%S).png'
 
     # Skim
-    cmd-shift-e = 'exec-and-forget skimUtils --enforceSkim'
+    # cmd-shift-e = 'exec-and-forget skimUtils --enforceSkim'
 
     # Workspace/window focus
     # cmd-j = 'exec-and-forget skimUtils --switchFocus down'
@@ -203,9 +203,9 @@ accordion-padding = 0
     if.app-id = 'org.pqrs.Karabiner-EventViewer'
     run = 'layout floating'
 
-[[on-window-detected]]
-    if.app-id = 'net.sourceforge.skim-app.skim'
-    run = ['exec-and-forget skimUtils --recordSkim $AEROSPACE_WINDOW_ID']
+# [[on-window-detected]]
+#     if.app-id = 'net.sourceforge.skim-app.skim'
+#     run = ['exec-and-forget skimUtils --recordSkim $AEROSPACE_WINDOW_ID']
 
 [[on-window-detected]]
     if.window-title-regex-substring = 'git'
