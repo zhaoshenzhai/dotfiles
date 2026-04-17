@@ -70,7 +70,7 @@
 
     skimTab = pkgs.runCommandCC "skimTab" {} ''
         mkdir -p $out/bin
-        $CC -O3 ${scriptsDir}/skimUtils/skimTab.c -framework ApplicationServices -o $out/bin/skimTab
+        $CC -O3 ${scriptsDir}/skimUtils/skimTab.m -framework Cocoa -o $out/bin/skimTab
     '';
 in
 {

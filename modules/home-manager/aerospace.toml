@@ -148,7 +148,6 @@ accordion-padding = 0
     ]
 
     # Close windows
-    cmd-esc = 'close'
     cmd-q = 'close'
 
 [mode.launcher.binding]
