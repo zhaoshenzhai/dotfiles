@@ -120,37 +120,3 @@ NSString *ResolveCanonicalDocumentPath(NSString *rawPath) {
 
     return resolvedPath;
 }
-
-// NSString *GetCurrentAerospaceWorkspace(void) {
-//     NSTask *task = [[NSTask alloc] init];
-//     [task setLaunchPath:@"/bin/sh"];
-//     [task setArguments:@[@"-c", @"export PATH=\"/opt/homebrew/bin:/usr/local/bin:$PATH\"; aerospace list-workspaces --focused"]];
-//
-//     NSPipe *pipe = [NSPipe pipe];
-//     [task setStandardOutput:pipe];
-//     [task setStandardError:[NSFileHandle fileHandleWithNullDevice]];
-//
-//     @try {
-//         [task launch];
-//         [task waitUntilExit];
-//         NSData *data = [[pipe fileHandleForReading] readDataToEndOfFile];
-//         return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-//     } @catch (NSException *e) {
-//         return nil;
-//     }
-// }
-
-// AXUIElementRef GetFocusedWindowForPID(pid_t pid) {
-//     if (pid == 0) return NULL;
-//
-//     AXUIElementRef appElement = AXUIElementCreateApplication(pid);
-//     AXUIElementRef focusedWindow = NULL;
-//
-//     AXError error = AXUIElementCopyAttributeValue(appElement, kAXFocusedWindowAttribute, (CFTypeRef *)&focusedWindow);
-//     CFRelease(appElement);
-//
-//     if (error == kAXErrorSuccess) {
-//         return focusedWindow;
-//     }
-//     return NULL;
-// }
