@@ -1,13 +1,5 @@
 { pkgs, ... }: let
     scriptsDir = ../scripts;
-
-    alacrittyDaemon = pkgs.writeShellApplication {
-        name = "alacrittyDaemon";
-        runtimeInputs = with pkgs; [ coreutils ];
-        checkPhase = "";
-        text = builtins.readFile "${scriptsDir}/alacrittyDaemon.sh";
-    };
-
     launcher = pkgs.writeShellApplication {
         name = "launcher";
         runtimeInputs = with pkgs; [ fd fzf coreutils gnused gawk gnugrep ];
@@ -75,6 +67,22 @@
             -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL \
             -o $out/bin/attic-graph
     '';
+
+    alacrittyRecolor = pkgs.runCommandCC "alacrittyRecolor" {} ''
+        mkdir -p $out/lib
+        $CC -O3 -dynamiclib -framework Cocoa -framework QuartzCore -framework CoreImage \
+            ${scriptsDir}/alacritty/recolor.m -o $out/lib/alacrittyRecolor.dylib
+    '';
+
+    alacrittyDaemon = pkgs.writeShellApplication {
+        name = "alacrittyDaemon";
+        runtimeInputs = with pkgs; [ coreutils ];
+        checkPhase = "";
+        text = ''
+            export DYLD_INSERT_LIBRARIES="${alacrittyRecolor}/lib/alacrittyRecolor.dylib"
+            ${builtins.readFile "${scriptsDir}/alacritty/daemon.sh"}
+        '';
+    };
 in
 {
     environment.systemPackages = [
