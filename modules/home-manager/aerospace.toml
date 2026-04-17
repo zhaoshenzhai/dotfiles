@@ -28,7 +28,7 @@ accordion-padding = 0
 
 [mode.main.binding]
     # Terminal and finder
-    cmd-backslash = 'exec-and-forget alacrittyDaemon'
+    cmd-backslash = 'exec-and-forget ghostty'
     cmd-shift-backslash = 'exec-and-forget open -a finder'
 
     # Launcher

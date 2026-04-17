@@ -14,6 +14,7 @@
     };
 
     home.packages = with pkgs; [
+        ghostty-bin
         aerospace
         (texlive.combine { inherit (texlive) scheme-full latexmk; })
     ];
@@ -35,5 +36,6 @@
 
     xdg.configFile = {
         "aerospace/aerospace.toml".source = ./aerospace.toml;
+        "ghostty/config".source = ./ghostty.conf;
     };
 }
