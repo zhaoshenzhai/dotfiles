@@ -19,7 +19,12 @@ void RunLauncher(NSString *targetPath) {
     [task setStandardOutput:[NSFileHandle fileHandleWithNullDevice]];
     [task setStandardError:[NSFileHandle fileHandleWithNullDevice]];
 
-    [task launch];
+    if (@available(macOS 10.13, *)) {
+        NSError *error = nil;
+        [task launchAndReturnError:&error];
+    } else {
+        [task launch];
+    }
 }
 
 AXUIElementRef GetFirstChildWithRole(AXUIElementRef parent, CFStringRef role) {
@@ -28,16 +33,16 @@ AXUIElementRef GetFirstChildWithRole(AXUIElementRef parent, CFStringRef role) {
 
     AXUIElementRef found = NULL;
     CFIndex count = CFArrayGetCount((CFArrayRef)children);
+
     for (CFIndex i = 0; i < count; i++) {
         AXUIElementRef child = (AXUIElementRef)CFArrayGetValueAtIndex((CFArrayRef)children, i);
         CFTypeRef childRole = NULL;
         if (AXUIElementCopyAttributeValue(child, kAXRoleAttribute, &childRole) == kAXErrorSuccess) {
             if (CFStringCompare((CFStringRef)childRole, role, 0) == kCFCompareEqualTo) {
                 found = (AXUIElementRef)CFRetain(child);
-                CFRelease(childRole);
-                break;
             }
             CFRelease(childRole);
+            if (found) break;
         }
     }
     CFRelease(children);
@@ -54,16 +59,16 @@ AXUIElementRef FindChildWithTitle(AXUIElementRef parent, NSString *title) {
 
     AXUIElementRef found = NULL;
     CFIndex count = CFArrayGetCount((CFArrayRef)children);
+
     for (CFIndex i = 0; i < count; i++) {
         AXUIElementRef child = (AXUIElementRef)CFArrayGetValueAtIndex((CFArrayRef)children, i);
         CFTypeRef childTitle = NULL;
         if (AXUIElementCopyAttributeValue(child, kAXTitleAttribute, &childTitle) == kAXErrorSuccess) {
             if ([(__bridge NSString *)childTitle isEqualToString:title]) {
                 found = (AXUIElementRef)CFRetain(child);
-                CFRelease(childTitle);
-                break;
             }
             CFRelease(childTitle);
+            if (found) break;
         }
     }
     CFRelease(children);
@@ -73,7 +78,6 @@ AXUIElementRef FindChildWithTitle(AXUIElementRef parent, NSString *title) {
 NSString *GetDocumentPathOfFrontmostApp(void) {
     NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
     NSRunningApplication *frontApp = [workspace frontmostApplication];
-
     if (!frontApp) return nil;
 
     SBApplication *app = [SBApplication applicationWithProcessIdentifier:frontApp.processIdentifier];
@@ -82,41 +86,53 @@ NSString *GetDocumentPathOfFrontmostApp(void) {
     @try {
         SBElementArray *documents = [app valueForKey:@"documents"];
         if (documents && documents.count > 0) {
-            id doc = [documents objectAtIndex:0];
-            return [doc valueForKey:@"path"];
+            return [[documents objectAtIndex:0] valueForKey:@"path"];
         }
-    } @catch (NSException *e) {
-        return nil;
-    }
+    } @catch (NSException *e) { return nil; }
 
     return nil;
 }
 
 NSString *ResolveCanonicalDocumentPath(NSString *rawPath) {
     if (!rawPath || [rawPath isEqualToString:@"missing value"]) return nil;
-
     NSString *resolvedPath = rawPath;
 
-    if ([rawPath containsString:@"/tmp/skim_pdfs/"]) {
+    if ([rawPath hasPrefix:@"/tmp/skim_pdfs/"]) {
         NSString *origPathFile = [rawPath stringByAppendingString:@".orig"];
         NSFileManager *fm = [NSFileManager defaultManager];
 
         if ([fm fileExistsAtPath:origPathFile]) {
-            NSError *error = nil;
-            NSString *origContent = [NSString stringWithContentsOfFile:origPathFile
-                                                              encoding:NSUTF8StringEncoding
-                                                                 error:&error];
+            NSString *origContent = [NSString stringWithContentsOfFile:origPathFile encoding:NSUTF8StringEncoding error:nil];
             if (origContent) {
                 resolvedPath = [origContent stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
             }
         }
     }
 
-    // Resolve iCloud symlink expansions
     NSString *iCloudSearch = @"Library/Mobile Documents/com~apple~CloudDocs";
     if ([resolvedPath containsString:iCloudSearch]) {
         resolvedPath = [resolvedPath stringByReplacingOccurrencesOfString:iCloudSearch withString:@"iCloud"];
     }
 
     return resolvedPath;
+}
+
+void PostKeystrokeToPID(pid_t pid, CGKeyCode keyCode, CGEventFlags flags) {
+    if (pid == 0) return;
+
+    CGEventSourceRef source = CGEventSourceCreate(kCGEventSourceStatePrivate);
+    CGEventRef keyDown = CGEventCreateKeyboardEvent(source, keyCode, true);
+    CGEventRef keyUp = CGEventCreateKeyboardEvent(source, keyCode, false);
+
+    if (flags != 0) {
+        CGEventSetFlags(keyDown, flags);
+        CGEventSetFlags(keyUp, flags);
+    }
+
+    CGEventPostToPid(pid, keyDown);
+    CGEventPostToPid(pid, keyUp);
+
+    CFRelease(keyDown);
+    CFRelease(keyUp);
+    CFRelease(source);
 }

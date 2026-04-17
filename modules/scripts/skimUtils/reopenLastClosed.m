@@ -1,40 +1,46 @@
 #import "skimUtils.h"
 
 int reopenLastClosed(void) {
-    pid_t pid = GetSkimPID();
-    if (pid == 0) return 1;
+    @autoreleasepool {
+        pid_t pid = GetSkimPID();
+        if (pid == 0) return 1;
 
-    AXUIElementRef skimApp = AXUIElementCreateApplication(pid);
-    AXUIElementRef menuBar = NULL;
-    AXUIElementCopyAttributeValue(skimApp, kAXMenuBarAttribute, (CFTypeRef *)&menuBar);
+        AXUIElementRef skimApp = AXUIElementCreateApplication(pid);
+        AXUIElementRef menuBar = NULL;
+        AXUIElementRef fileMenuItem = NULL;
+        AXUIElementRef fileMenu = NULL;
+        AXUIElementRef openRecentItem = NULL;
+        AXUIElementRef recentMenu = NULL;
+        CFTypeRef items = NULL;
 
-    if (menuBar) {
-        AXUIElementRef fileMenuItem = FindChildWithTitle(menuBar, @"File");
-        if (fileMenuItem) {
-            AXUIElementRef fileMenu = GetSubmenu(fileMenuItem);
-            if (fileMenu) {
-                AXUIElementRef openRecentItem = FindChildWithTitle(fileMenu, @"Open Recent");
-                if (openRecentItem) {
-                    AXUIElementRef recentMenu = GetSubmenu(openRecentItem);
-                    if (recentMenu) {
-                        CFTypeRef items = NULL;
-                        if (AXUIElementCopyAttributeValue(recentMenu, kAXChildrenAttribute, &items) == kAXErrorSuccess) {
-                            if (CFArrayGetCount((CFArrayRef)items) > 0) {
-                                // Trigger the first item (most recently closed)
-                                AXUIElementPerformAction((AXUIElementRef)CFArrayGetValueAtIndex((CFArrayRef)items, 0), kAXPressAction);
-                            }
-                            CFRelease(items);
-                        }
-                        CFRelease(recentMenu);
-                    }
-                    CFRelease(openRecentItem);
-                }
-                CFRelease(fileMenu);
+        if (AXUIElementCopyAttributeValue(skimApp, kAXMenuBarAttribute, (CFTypeRef *)&menuBar) != kAXErrorSuccess) goto cleanup;
+
+        fileMenuItem = FindChildWithTitle(menuBar, @"File");
+        if (!fileMenuItem) goto cleanup;
+
+        fileMenu = GetSubmenu(fileMenuItem);
+        if (!fileMenu) goto cleanup;
+
+        openRecentItem = FindChildWithTitle(fileMenu, @"Open Recent");
+        if (!openRecentItem) goto cleanup;
+
+        recentMenu = GetSubmenu(openRecentItem);
+        if (!recentMenu) goto cleanup;
+
+        if (AXUIElementCopyAttributeValue(recentMenu, kAXChildrenAttribute, &items) == kAXErrorSuccess) {
+            if (CFArrayGetCount((CFArrayRef)items) > 0) {
+                AXUIElementPerformAction((AXUIElementRef)CFArrayGetValueAtIndex((CFArrayRef)items, 0), kAXPressAction);
             }
-            CFRelease(fileMenuItem);
         }
-        CFRelease(menuBar);
+
+    cleanup:
+        if (items) CFRelease(items);
+        if (recentMenu) CFRelease(recentMenu);
+        if (openRecentItem) CFRelease(openRecentItem);
+        if (fileMenu) CFRelease(fileMenu);
+        if (fileMenuItem) CFRelease(fileMenuItem);
+        if (menuBar) CFRelease(menuBar);
+        if (skimApp) CFRelease(skimApp);
     }
-    CFRelease(skimApp);
     return 0;
 }
