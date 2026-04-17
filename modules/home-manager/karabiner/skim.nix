@@ -277,6 +277,7 @@
             type = "basic";
             from = { key_code = "slash"; };
             to = [
+                { key_code = "f"; modifiers = [ "command" "option" ]; }
                 { shell_command = "zsh -c 'skimUtils search start'"; }
                 { set_variable = { name = "skim_search_mode"; value = 1; }; }
                 { set_variable = { name = "skim_search_sequence"; value = 0; }; }
