@@ -38,7 +38,7 @@ switchFocus() {
 
             if [ -z "$target_skim" ]; then
                 target_skim=$(aerospace list-windows --workspace focused --format "%{window-id}|%{app-bundle-id}" \
-                    | grep -E "net\.sourceforge\.skim-app\.skim(attic)?" | head -n 1 | cut -d'|' -f1 || true)
+                    | grep -E "net\.sourceforge\.skim-app\.skim" | head -n 1 | cut -d'|' -f1 || true)
             fi
 
             if [ -n "$target_skim" ]; then

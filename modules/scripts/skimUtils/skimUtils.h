@@ -27,3 +27,6 @@ int openRelated(NSString *extension);
 int cleanDuplicates(void);
 int reopenLastClosed(void);
 int skimSearch(NSString *action);
+int switchFocus(NSString *direction);
+int recordSkim(NSString *windowId);
+int enforceSkim(void);

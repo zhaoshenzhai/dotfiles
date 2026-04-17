@@ -1,10 +1,7 @@
 { config, pkgs, lib, ... }:
 let
     nvimSpawn = pkgs.writeShellScript "nvim-spawn" ''
-        ARGS=(
-            "-e" "nvim"
-            "$1"
-        )
+        ARGS=( "-e" "nvim" "$1")
         ${pkgs.alacritty}/bin/alacritty "''${ARGS[@]}"
     '';
 
@@ -16,7 +13,6 @@ let
             "--title" "vifm-float"
             "--option" "window.dimensions={columns=110,lines=38}"
             "--option" "window.position={x=425,y=246}"
-            "--option" "window.opacity=0.9"
             "-e" "${pkgs.vifm}/bin/vifm"
             "-c" ":only"
             "-c" ":set nodotfiles | filter Applications|Desktop|Documents|Library|Movies|Music|Pictures | :only"
@@ -26,7 +22,7 @@ let
             "$lastdir"
         )
 
-        ${pkgs.alacritty}/bin/alacritty "''${ARGS[@]}"
+        alacrittyDaemon "''${ARGS[@]}"
     '';
 
     vifmPickerMulti = pkgs.writeShellScript "vifm-picker-multi" ''
@@ -37,7 +33,6 @@ let
             "--title" "vifm-float"
             "--option" "window.dimensions={columns=110,lines=38}"
             "--option" "window.position={x=425,y=246}"
-            "--option" "window.opacity=0.9"
             "-e" "${pkgs.vifm}/bin/vifm"
             "-c" ":set nodotfiles | filter Applications|Desktop|Documents|Library|Movies|Music|Pictures | :only"
             "-c" 'autocmd DirEnter * !echo "%d" > ~/.cache/vifm_picker_dir &'
@@ -46,7 +41,7 @@ let
             "$lastdir"
         )
 
-        ${pkgs.alacritty}/bin/alacritty "''${ARGS[@]}"
+        alacrittyDaemon "''${ARGS[@]}"
     '';
 
     ytMpvSpawn = pkgs.writeShellScript "yt-mpv-spawn" ''
@@ -57,7 +52,7 @@ let
             "-e" "yt-mpv"
             "$1"
         )
-        ${pkgs.alacritty}/bin/alacritty "''${ARGS[@]}"
+        alacrittyDaemon "''${ARGS[@]}"
     '';
 in {
     programs.qutebrowser = {

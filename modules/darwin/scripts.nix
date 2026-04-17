@@ -38,6 +38,7 @@
             ${scriptsDir}/skimUtils/search.m \
             ${scriptsDir}/skimUtils/moveTab.m \
             ${scriptsDir}/skimUtils/switchTab.m \
+            ${scriptsDir}/skimUtils/switchFocus.m \
             ${scriptsDir}/skimUtils/openRelated.m \
             ${scriptsDir}/skimUtils/duplicateTab.m \
             ${scriptsDir}/skimUtils/cleanDuplicates.m \
