@@ -1,11 +1,6 @@
-// skimTab.m
-#import <Cocoa/Cocoa.h>
+#import "skimUtils.h"
 
-int main(int argc, const char * argv[]) {
-    if (argc != 2) return 1;
-    int targetTab = atoi(argv[1]);
-    if (targetTab < 1 || targetTab > 9) return 1;
-
+int switchTab(int targetTab) {
     // 1. Resolve PID
     NSArray *apps = [NSRunningApplication runningApplicationsWithBundleIdentifier:@"net.sourceforge.skim-app.skim"];
     pid_t pid = 0;
@@ -55,7 +50,6 @@ int main(int argc, const char * argv[]) {
                         if (AXUIElementCopyAttributeValue(child, kAXRoleAttribute, &role) == kAXErrorSuccess) {
                             if (CFStringCompare((CFStringRef)role, kAXRadioButtonRole, 0) == kCFCompareEqualTo) {
                                 if (radioIndex == targetTab) {
-                                    // Found the target tab, execute press
                                     AXUIElementPerformAction(child, kAXPressAction);
                                     CFRelease(role);
                                     break;

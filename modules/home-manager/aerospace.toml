@@ -105,8 +105,10 @@ accordion-padding = 0
     cmd-shift-e = 'exec-and-forget skimUtils --enforceSkim'
 
     # Workspace/window focus
-    cmd-j = 'exec-and-forget skimUtils --switchFocus down'
-    cmd-k = 'exec-and-forget skimUtils --switchFocus up'
+    # cmd-j = 'exec-and-forget skimUtils --switchFocus down'
+    # cmd-k = 'exec-and-forget skimUtils --switchFocus up'
+    cmd-j = 'focus down'
+    cmd-k = 'focus up'
     cmd-h = 'focus left'
     cmd-l = 'focus right'
     cmd-1 = 'workspace 1'

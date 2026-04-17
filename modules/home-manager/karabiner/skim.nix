@@ -281,7 +281,7 @@
         { # ctrl+d -> duplicate tab
             type = "basic";
             from = { key_code = "d"; modifiers = { mandatory = [ "control" ]; }; };
-            to = [{ shell_command = "zsh -c 'skimUtils --duplicateTab'"; }];
+            to = [{ shell_command = "zsh -c 'skimUtils duplicate'"; }];
             conditions = [
                 { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                 { type = "variable_if"; name = "skim_search_mode"; value = 0; }
@@ -609,7 +609,7 @@
         { # ctrl+1 through ctrl+9 -> switch tabs
             type = "basic";
             from = { key_code = toString (i + 1); modifiers = { mandatory = [ "control" ]; }; };
-            to = [ { shell_command = "zsh -c 'skimTab ${toString (i + 1)}'"; } ];
+            to = [ { shell_command = "zsh -c 'skimUtils tab ${toString (i + 1)}'"; } ];
             conditions = [
                 { type = "variable_unless"; name = "spotlight_mode"; value = 1; }
                 { type = "variable_if"; name = "skim_search_mode"; value = 0; }

@@ -29,12 +29,25 @@
         text = builtins.readFile "${scriptsDir}/newLaTeX.sh";
     };
 
-    skimUtils = pkgs.writeShellApplication {
-        name = "skimUtils";
-        runtimeInputs = with pkgs; [ coreutils ];
-        checkPhase = "";
-        text = builtins.readFile "${scriptsDir}/skimUtils.sh";
-    };
+    skimUtils = pkgs.runCommandCC "skimUtils" {} ''
+        mkdir -p $out/bin
+        $CC -O3 -fobjc-arc \
+            ${scriptsDir}/skimUtils/main.m \
+            ${scriptsDir}/skimUtils/skimTab.m \
+            ${scriptsDir}/skimUtils/duplicateTab.m \
+            -framework Cocoa -framework ScriptingBridge \
+            -o $out/bin/skimUtils
+    '';
+
+    centerWindow = pkgs.runCommandCC "centerWindow" {} ''
+        mkdir -p $out/bin
+        $CC -O3 ${scriptsDir}/centerWindow.m -framework Cocoa -o $out/bin/centerWindow
+    '';
+
+    texManager = pkgs.runCommandCC "texManager" {} ''
+        mkdir -p $out/bin
+        $CC -O3 ${scriptsDir}/texManager/main.c ${scriptsDir}/texManager/compiler.c -o $out/bin/texManager
+    '';
 
     attic = pkgs.runCommandCC "attic" {
         buildInputs = with pkgs; [
@@ -57,21 +70,6 @@
             -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL \
             -o $out/bin/attic-graph
     '';
-
-    centerWindow = pkgs.runCommandCC "centerWindow" {} ''
-        mkdir -p $out/bin
-        $CC -O3 ${scriptsDir}/centerWindow.m -framework Cocoa -o $out/bin/centerWindow
-    '';
-
-    texManager = pkgs.runCommandCC "texManager" {} ''
-        mkdir -p $out/bin
-        $CC -O3 ${scriptsDir}/texManager/main.c ${scriptsDir}/texManager/compiler.c -o $out/bin/texManager
-    '';
-
-    skimTab = pkgs.runCommandCC "skimTab" {} ''
-        mkdir -p $out/bin
-        $CC -O3 ${scriptsDir}/skimUtils/skimTab.m -framework Cocoa -o $out/bin/skimTab
-    '';
 in
 {
     environment.systemPackages = [
@@ -83,6 +81,5 @@ in
         launcher
         attic
         centerWindow
-        skimTab
     ];
 }
