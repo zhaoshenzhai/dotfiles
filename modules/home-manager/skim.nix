@@ -47,8 +47,8 @@
         SKAutoCropBoxMarginWidth = 1;
 
         # --- Colors & Margins ---
-        SKWhitePoint = [ 0.99 0.995 1.0 0.95 ];
-        SKBackgroundColor = [ 0.95 0.95 0.95 1.0 ];
+        SKWhitePoint = [ 1.0 1.0 1.0 1.0 ];
+        SKBackgroundColor = [ 1.0 1.0 1.0 1.0 ];
         SKPageMargins = [ 0.0 0.0 ];
 
         # --- Default Display Settings ---

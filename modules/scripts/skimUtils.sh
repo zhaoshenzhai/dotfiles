@@ -66,63 +66,6 @@ switchFocus() {
     fi
 }
 
-focusDaemon() {
-    local PIPE="/tmp/skim_focus_pipe"
-    rm -f "$PIPE"
-    mkfifo "$PIPE"
-
-    local ORIGINAL_COLOR="0"
-    local PREV_APP=""
-    local ENABLED=0
-
-    local BUNDLE_SKIM="net.sourceforge.skim-app.skim"
-
-    while true; do
-        if read -r PAYLOAD < "$PIPE"; then
-            [ -z "$PAYLOAD" ] && continue
-
-            if [ "$PAYLOAD" == "TOGGLE_STATE" ]; then
-                if [ "$ENABLED" -eq 1 ]; then
-                    ENABLED=0
-                else
-                    ENABLED=1
-                fi
-                continue
-            elif [ "$PAYLOAD" == "DISABLE_STATE" ]; then
-                ENABLED=0
-                continue
-            fi
-
-            local FOCUSED_APP="$PAYLOAD"
-
-            if [ "$FOCUSED_APP" != "$PREV_APP" ]; then
-                if [ "$ENABLED" -eq 1 ]; then
-                    if [[ "$PREV_APP" == "Skim" ]] && [[ "$FOCUSED_APP" != "Skim" ]]; then
-                        ORIGINAL_COLOR=$(defaults read "$BUNDLE_SKIM" SKInvertColorsInDarkMode 2>/dev/null || echo 0)
-
-                        if [ "$ORIGINAL_COLOR" != "1" ]; then
-                            defaults write "$BUNDLE_SKIM" SKInvertColorsInDarkMode -bool true
-                        fi
-                    fi
-
-                    if [[ "$FOCUSED_APP" == "Skim" ]] && [[ "$PREV_APP" != "Skim" ]]; then
-                        local CURRENT=$(defaults read "$BUNDLE_SKIM" SKInvertColorsInDarkMode 2>/dev/null || echo 0)
-                        if [ "$CURRENT" != "$ORIGINAL_COLOR" ]; then
-                            if [ "$ORIGINAL_COLOR" == "1" ]; then
-                                defaults write "$BUNDLE_SKIM" SKInvertColorsInDarkMode -bool true
-                            else
-                                defaults write "$BUNDLE_SKIM" SKInvertColorsInDarkMode -bool false
-                            fi
-                        fi
-                    fi
-                fi
-
-                PREV_APP="$FOCUSED_APP"
-            fi
-        fi
-    done
-}
-
 recordSkim() {
     local window_id="$1"
     if [ -z "$window_id" ]; then

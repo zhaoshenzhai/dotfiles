@@ -38,7 +38,7 @@ void clamp_brightness_poc() {
         CIFilter *preTint = [CIFilter filterWithName:@"CIColorMatrix"];
         [preTint setValue:[CIVector vectorWithX:0.95 Y:0.0 Z:0.0 W:0.0] forKey:@"inputRVector"];
         [preTint setValue:[CIVector vectorWithX:0.0 Y:0.90 Z:0.0 W:0.0] forKey:@"inputGVector"];
-        [preTint setValue:[CIVector vectorWithX:0.0 Y:0.0 Z:0.80 W:0.0] forKey:@"inputBVector"];
+        [preTint setValue:[CIVector vectorWithX:0.0 Y:0.0 Z:0.85 W:0.0] forKey:@"inputBVector"];
         [preTint setValue:[CIVector vectorWithX:0.0 Y:0.0 Z:0.0 W:1.0] forKey:@"inputAVector"];
 
         CIFilter *toneCurve = [CIFilter filterWithName:@"CIToneCurve"];

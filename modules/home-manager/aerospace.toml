@@ -3,12 +3,10 @@ after-startup-command = [
     'exec-and-forget nohup alacritty --daemon --socket /tmp/alacritty.sock > /dev/null 2>&1 &',
     'exec-and-forget open -g -a Skim',
     'exec-and-forget borders',
-    'exec-and-forget sketchybar',
-    'exec-and-forget skimUtils --focusDaemon'
+    'exec-and-forget sketchybar'
 ]
 
 on-focus-changed = [
-    'exec-and-forget /bin/bash -c "echo \"$(aerospace list-windows --focused --format %{app-name} 2>/dev/null)\" > /tmp/skim_focus_pipe"',
     'exec-and-forget /bin/bash -c "sketchybar --trigger aerospace_custom_app_switched INFO=\"$(aerospace list-windows --focused --format %{app-name} 2>/dev/null)\" TITLE=\"$(aerospace list-windows --focused --format %{window-title} 2>/dev/null)\""'
 ]
 
@@ -101,7 +99,6 @@ accordion-padding = 0
     cmd-p = 'exec-and-forget screencapture ~/Downloads/Screenshot_$(date +%Y_%m_%d_%H%M%S).png'
 
     # Skim
-    cmd-r       = 'exec-and-forget /bin/bash -c "echo TOGGLE_STATE > /tmp/skim_focus_pipe"'
     cmd-shift-e = 'exec-and-forget skimUtils --enforceSkim'
 
     # Workspace/window focus
@@ -140,13 +137,11 @@ accordion-padding = 0
     cmd-f           = 'layout v_accordion v_tiles'
     cmd-shift-f     = 'macos-native-fullscreen'
     cmd-shift-space = [ 'layout floating tiling', 'exec-and-forget /run/current-system/sw/bin/centerWindow' ]
-    cmd-tab         = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next'
 
     # Refresh workspace
     cmd-shift-r = [
         'layout v_tiles',
-        'flatten-workspace-tree',
-        'exec-and-forget /bin/bash -c "echo DISABLE_STATE > /tmp/skim_focus_pipe"'
+        'flatten-workspace-tree'
     ]
 
     # Close windows
