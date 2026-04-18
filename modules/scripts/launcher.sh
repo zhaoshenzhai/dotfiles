@@ -45,11 +45,11 @@ updateCache() {
     cd "$BASE_DIR" || exit 1
 
     {
-        fd --type f --hidden --exclude .git --exclude '*.old' \
+        fd -L --type f --hidden --exclude .git --exclude '*.old' \
             --exclude '*.png' --exclude '*.jpg' --exclude '*.tar.gz' --exclude '*.zip' . \
             "Documents" "Dotfiles" "Projects"
 
-        fd --type f --hidden --follow --no-ignore -e pdf -e html --exclude .git --exclude '*.old' . \
+        fd -L --type f --hidden --no-ignore -e pdf -e html --exclude .git --exclude '*.old' . \
             "Documents" "Dotfiles" "Projects"
     } | grep -vE '^Projects/_attic/notes/.*\.(tex|key|dat)$' | awk '!seen[$0]++' | while read -r line; do
         format "$line"
@@ -170,7 +170,13 @@ if [[ "${1:-}" == "--update" ]]; then
 elif [[ -n "${1:-}" && -f "$1" ]]; then
     abs_path="${1/#\~/$HOME}"
     REAL_ICLOUD="$HOME/Library/Mobile Documents/com~apple~CloudDocs"
-    abs_path="${abs_path/$REAL_ICLOUD/$BASE_DIR}"
+    SYMLINK_ICLOUD="$HOME/iCloud"
+
+    if [[ "$abs_path" == "$SYMLINK_ICLOUD"* ]]; then
+        abs_path="${abs_path/$SYMLINK_ICLOUD/$BASE_DIR}"
+    elif [[ "$abs_path" == "$REAL_ICLOUD"* ]]; then
+        abs_path="${abs_path/$REAL_ICLOUD/$BASE_DIR}"
+    fi
 
     if [[ "$abs_path" != /* ]]; then
         abs_path="$PWD/$abs_path"

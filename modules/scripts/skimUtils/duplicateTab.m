@@ -12,21 +12,20 @@ int duplicateTab(void) {
         id originalDoc = documents.firstObject;
 
         NSString *docPath = nil;
-        @try {
-            docPath = [originalDoc valueForKey:@"path"];
-        } @catch(NSException *e) {}
-
+        @try { docPath = [originalDoc valueForKey:@"path"]; } @catch(NSException *e) {}
         if (!docPath || [docPath isKindOfClass:[NSNull class]]) return 0;
 
-        NSNumber *pageIndex = nil;
-        @try {
-            pageIndex = [[originalDoc valueForKey:@"currentPage"] valueForKey:@"index"];
-        } @catch(NSException *e) {}
+        NSString *origFilePath = [docPath stringByAppendingString:@".orig"];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:origFilePath]) {
+            NSError *readError = nil;
+            NSString *origContent = [NSString stringWithContentsOfFile:origFilePath encoding:NSUTF8StringEncoding error:&readError];
+            if (origContent) {
+                docPath = [origContent stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            }
+        }
 
-        NSNumber *originalWindowId = nil;
-        @try {
-            originalWindowId = [[originalDoc valueForKey:@"activeWindow"] valueForKey:@"id"];
-        } @catch(NSException *e) {}
+        NSNumber *pageIndex = nil;
+        @try { pageIndex = [[originalDoc valueForKey:@"currentPage"] valueForKey:@"index"]; } @catch(NSException *e) {}
 
         NSString *launchPath = ResolveCanonicalDocumentPath(docPath);
         RunLauncher(launchPath);
@@ -40,22 +39,8 @@ int duplicateTab(void) {
 
                 SBApplication *currentSkim = GetSkimSBApp();
                 NSArray *docs = [currentSkim valueForKey:@"documents"];
-                BOOL isNewTab = NO;
 
                 if (docs.count > originalDocCount) {
-                    isNewTab = YES;
-                } else if (docs.count > 0 && originalWindowId) {
-                    NSNumber *frontWindowId = nil;
-                    @try {
-                        frontWindowId = [[docs.firstObject valueForKey:@"activeWindow"] valueForKey:@"id"];
-                    } @catch(NSException*e){}
-
-                    if (frontWindowId && ![frontWindowId isEqualToNumber:originalWindowId]) {
-                        isNewTab = YES;
-                    }
-                }
-
-                if (isNewTab && docs.count > 0) {
                     @try {
                         id frontDoc = docs.firstObject;
                         NSArray *pages = [frontDoc valueForKey:@"pages"];
