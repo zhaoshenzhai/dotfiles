@@ -1,44 +1,141 @@
+#import <spawn.h>
+#import <sys/wait.h>
+#import <sys/mman.h>
+#import <fcntl.h>
+#import <unistd.h>
 #import "skimUtils.h"
+
+extern char **environ; // Needed for posix_spawnp
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Constants
 // ─────────────────────────────────────────────────────────────────────────────
 
 static NSString *const kSkimBundleID = @"net.sourceforge.skim-app.skim";
-static NSString *const kMemoryDir    = @"/tmp/aerospace_skim_tabs";
+static const char *const kAerospacePath = "/etc/profiles/per-user/zhao/bin/aerospace";
+#define SHM_SIZE 1024
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Aerospace helpers
+// Posix Spawn Helpers (Bypassing NSTask)
 // ─────────────────────────────────────────────────────────────────────────────
 
-static NSString *AerospaceOutput(NSArray<NSString *> *args) {
-    NSTask *task    = [[NSTask alloc] init];
-    task.launchPath = @"/usr/bin/env";
-    task.arguments  = [@[@"aerospace"] arrayByAddingObjectsFromArray:args];
+static int AerospaceRun(NSArray<NSString *> *argsArray) {
+    int argc = (int)argsArray.count + 1;
+    char **argv = malloc((argc + 1) * sizeof(char *));
+    argv[0] = strdup("aerospace");
+    for (int i = 0; i < argsArray.count; i++) {
+        argv[i + 1] = strdup(argsArray[i].UTF8String);
+    }
+    argv[argc] = NULL;
 
-    NSPipe *pipe        = [NSPipe pipe];
-    task.standardOutput = pipe;
-    task.standardError  = [NSFileHandle fileHandleWithNullDevice];
+    pid_t pid;
+    posix_spawn_file_actions_t actions;
+    posix_spawn_file_actions_init(&actions);
 
-    NSError *err = nil;
-    if (![task launchAndReturnError:&err]) return @"";
-    [task waitUntilExit];
+    // Suppress stdout/stderr
+    posix_spawn_file_actions_addopen(&actions, STDOUT_FILENO, "/dev/null", O_WRONLY, 0);
+    posix_spawn_file_actions_addopen(&actions, STDERR_FILENO, "/dev/null", O_WRONLY, 0);
 
-    NSData *data = [pipe.fileHandleForReading readDataToEndOfFile];
-    NSString *out = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    return out ? [out stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] : @"";
+    if (posix_spawn(&pid, kAerospacePath, &actions, NULL, argv, environ) == 0) {
+        waitpid(pid, NULL, 0);
+    }
+
+    posix_spawn_file_actions_destroy(&actions);
+    for (int i = 0; i < argc; i++) free(argv[i]);
+    free(argv);
+    return 0;
 }
 
-static int AerospaceRun(NSArray<NSString *> *args) {
-    NSTask *task    = [[NSTask alloc] init];
-    task.launchPath = @"/usr/bin/env";
-    task.arguments  = [@[@"aerospace"] arrayByAddingObjectsFromArray:args];
-    task.standardOutput = [NSFileHandle fileHandleWithNullDevice];
-    task.standardError  = [NSFileHandle fileHandleWithNullDevice];
+static NSString *AerospaceOutput(NSArray<NSString *> *argsArray) {
+    int pipefd[2];
+    if (pipe(pipefd) != 0) return @"";
 
-    NSError *err = nil;
-    if ([task launchAndReturnError:&err]) [task waitUntilExit];
-    return 0;
+    int argc = (int)argsArray.count + 1;
+    char **argv = malloc((argc + 1) * sizeof(char *));
+    argv[0] = strdup("aerospace");
+    for (int i = 0; i < argsArray.count; i++) {
+        argv[i + 1] = strdup(argsArray[i].UTF8String);
+    }
+    argv[argc] = NULL;
+
+    pid_t pid;
+    posix_spawn_file_actions_t actions;
+    posix_spawn_file_actions_init(&actions);
+
+    // Bind stdout to pipe write-end
+    posix_spawn_file_actions_adddup2(&actions, pipefd[1], STDOUT_FILENO);
+    posix_spawn_file_actions_addclose(&actions, pipefd[0]);
+
+    if (posix_spawn(&pid, kAerospacePath, &actions, NULL, argv, environ) != 0) {
+        posix_spawn_file_actions_destroy(&actions);
+        close(pipefd[0]); close(pipefd[1]);
+        for (int i = 0; i < argc; i++) free(argv[i]);
+        free(argv);
+        return @"";
+    }
+
+    posix_spawn_file_actions_destroy(&actions);
+    close(pipefd[1]); // Close write end in parent immediately
+
+    NSMutableData *data = [[NSMutableData alloc] initWithCapacity:1024];
+    char buffer[1024];
+    ssize_t bytesRead;
+
+    // Read stdout pipe
+    while ((bytesRead = read(pipefd[0], buffer, sizeof(buffer))) > 0) {
+        [data appendBytes:buffer length:bytesRead];
+    }
+    close(pipefd[0]);
+    waitpid(pid, NULL, 0);
+
+    for (int i = 0; i < argc; i++) free(argv[i]);
+    free(argv);
+
+    NSString *outStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    return outStr ? [outStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] : @"";
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// POSIX Shared Memory State (Bypassing Disk I/O)
+// ─────────────────────────────────────────────────────────────────────────────
+
+static void SaveSkimTitle(NSString *title, pid_t alacrittyPID) {
+    if (!title.length) return;
+    char shm_name[64];
+    snprintf(shm_name, sizeof(shm_name), "/aerospace_skim_%d", alacrittyPID);
+
+    // O_CREAT creates it if missing, O_RDWR for read/write
+    int fd = shm_open(shm_name, O_CREAT | O_RDWR, 0666);
+    if (fd == -1) return;
+
+    ftruncate(fd, SHM_SIZE);
+    char *mem = mmap(NULL, SHM_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+
+    if (mem != MAP_FAILED) {
+        strncpy(mem, title.UTF8String, SHM_SIZE - 1);
+        mem[SHM_SIZE - 1] = '\0';
+        munmap(mem, SHM_SIZE);
+    }
+    close(fd);
+}
+
+static NSString *LoadSkimTitle(pid_t alacrittyPID) {
+    char shm_name[64];
+    snprintf(shm_name, sizeof(shm_name), "/aerospace_skim_%d", alacrittyPID);
+
+    int fd = shm_open(shm_name, O_RDONLY, 0666);
+    if (fd == -1) return @""; // Doesn't exist yet
+
+    char *mem = mmap(NULL, SHM_SIZE, PROT_READ, MAP_SHARED, fd, 0);
+    NSString *result = @"";
+
+    if (mem != MAP_FAILED) {
+        result = [NSString stringWithUTF8String:mem];
+        munmap(mem, SHM_SIZE);
+    }
+    close(fd);
+
+    return [result stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -67,7 +164,6 @@ static WorkspaceInfo GetWorkspaceInfo(void) {
         NSArray<NSString *> *p = [line componentsSeparatedByString:@"|"];
         if (p.count < 4) continue;
 
-        // Case-insensitive prefix check avoids allocating a new lowercase string
         if ([p[0] rangeOfString:@"alacritty" options:NSCaseInsensitiveSearch|NSAnchoredSearch].location != NSNotFound) {
             info.alacrittyCount++;
             if (info.alacrittyCount == 1) {
@@ -82,7 +178,7 @@ static WorkspaceInfo GetWorkspaceInfo(void) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// AX & Memory helpers
+// AX Window Parsing
 // ─────────────────────────────────────────────────────────────────────────────
 
 static CFArrayRef CopyAXWindows(pid_t pid) {
@@ -106,33 +202,11 @@ static NSString *AXWindowTitle(AXUIElementRef win) {
     return title;
 }
 
-static NSString *MemoryFilePath(pid_t alacrittyPID) {
-    return [NSString stringWithFormat:@"%@/skim_%d.txt", kMemoryDir, alacrittyPID];
-}
-
-static void SaveSkimTitle(NSString *title, pid_t alacrittyPID) {
-    if (!title.length) return;
-    [[NSFileManager defaultManager] createDirectoryAtPath:kMemoryDir
-                              withIntermediateDirectories:YES attributes:nil error:nil];
-    [title writeToFile:MemoryFilePath(alacrittyPID) atomically:YES encoding:NSUTF8StringEncoding error:nil];
-}
-
-static NSString *LoadSkimTitle(pid_t alacrittyPID) {
-    NSString *raw = [NSString stringWithContentsOfFile:MemoryFilePath(alacrittyPID) encoding:NSUTF8StringEncoding error:nil];
-    return [raw stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Focus execution
-// ─────────────────────────────────────────────────────────────────────────────
-
 static void FocusSkimWindow(NSRunningApplication *skim, NSString *savedTitle) {
     CFArrayRef wins = CopyAXWindows(skim.processIdentifier);
     if (!wins) { [skim activateWithOptions:0]; return; }
 
     CFIndex count = CFArrayGetCount(wins);
-
-    // Quick exit: If Skim only has 0 or 1 window, no need to iterate or match titles.
     if (count <= 1) {
         [skim activateWithOptions:0];
         CFRelease(wins);
@@ -208,6 +282,5 @@ int switchFocus(NSString *direction) {
     }
 
     // Fallback: Normal Aerospace Tiling
-    // Handles multi-Alacritty workspaces, up from Alacritty, down from Skim, etc.
     return AerospaceRun(@[@"focus", direction]);
 }
