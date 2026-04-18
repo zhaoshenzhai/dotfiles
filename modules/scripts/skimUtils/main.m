@@ -9,7 +9,6 @@ int main(int argc, const char * argv[]) {
 
         NSString *command = [NSString stringWithUTF8String:argv[1]];
 
-        if ([command isEqualToString:@"recordSkim"]) return recordSkim();
         if ([command isEqualToString:@"duplicateTab"]) return duplicateTab();
         if ([command isEqualToString:@"cleanDuplicates"]) return cleanDuplicates();
         if ([command isEqualToString:@"reopenLastClosed"]) return reopenLastClosed();

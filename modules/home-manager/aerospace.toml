@@ -184,10 +184,6 @@ accordion-padding = 0
     if.app-id = 'org.pqrs.Karabiner-Elements.Settings'
     run = 'layout floating'
 
-# [[on-window-detected]]
-#     if.app-id = 'net.sourceforge.skim-app.skim'
-#     run = ['exec-and-forget skimUtils recordSkim $AEROSPACE_WINDOW_ID']
-
 [[on-window-detected]]
     if.window-title-regex-substring = 'git'
     run = 'layout floating'

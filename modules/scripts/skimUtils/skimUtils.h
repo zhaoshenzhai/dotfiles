@@ -28,4 +28,3 @@ int cleanDuplicates(void);
 int reopenLastClosed(void);
 int skimSearch(NSString *action);
 int switchFocus(NSString *direction);
-int recordSkim();

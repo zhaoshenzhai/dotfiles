@@ -56,16 +56,18 @@ static int AerospaceRun(NSArray<NSString *> *args) {
 // ─────────────────────────────────────────────────────────────────────────────
 
 typedef struct {
-    NSInteger               alacrittyCount;
-    NSMutableArray<NSString *> *alacrittyTitles;  // AX window titles, for matching
-    NSInteger               skimCount;
+    NSInteger alacrittyCount;
+    pid_t     alacrittyPID;
+    int       alacrittyWinID;
+    NSInteger skimCount;
 } WorkspaceInfo;
 
 static WorkspaceInfo GetWorkspaceInfo(void) {
-    WorkspaceInfo info = { 0, [NSMutableArray array], 0 };
+    WorkspaceInfo info = { 0, 0, 0, 0 };
 
+    // Request app-pid and window-id directly from Aerospace
     NSString *raw = AerospaceOutput(@[@"list-windows", @"--workspace", @"focused",
-                                      @"--format", @"%{app-name}|%{window-title}|%{app-bundle-id}"]);
+                                      @"--format", @"%{app-name}|%{app-bundle-id}|%{app-pid}|%{window-id}"]);
     if (!raw.length) return info;
 
     NSCharacterSet *ws = [NSCharacterSet whitespaceAndNewlineCharacterSet];
@@ -74,15 +76,20 @@ static WorkspaceInfo GetWorkspaceInfo(void) {
         if (!trimmed.length) continue;
 
         NSArray<NSString *> *p = [trimmed componentsSeparatedByString:@"|"];
-        if (p.count < 3) continue;
+        if (p.count < 4) continue;
 
         NSString *appName  = p[0].lowercaseString;
-        NSString *title    = p[1];
-        NSString *bundleID = p[2];
+        NSString *bundleID = p[1];
+        pid_t    pid       = [p[2] intValue];
+        int      winID     = [p[3] intValue];
 
         if ([appName hasPrefix:@"alacritty"]) {
             info.alacrittyCount++;
-            [info.alacrittyTitles addObject:title];
+            if (info.alacrittyCount == 1) {
+                // Pin the exact PID and Window ID of the Alacritty in this workspace
+                info.alacrittyPID = pid;
+                info.alacrittyWinID = winID;
+            }
         } else if ([bundleID isEqualToString:kSkimBundleID]) {
             info.skimCount++;
         }
@@ -208,35 +215,6 @@ static void FocusSkimWindow(NSRunningApplication *skim, NSString *savedTitle) {
     CFRelease(wins);
 }
 
-/// Focus the Alacritty window whose AX title matches workspaceTitle.
-/// workspaceTitle comes from GetWorkspaceInfo and pins us to the correct
-/// workspace window, even if Alacritty has windows in other workspaces.
-/// Falls back to the first window if no title match.
-static void FocusAlacrittyWindow(NSRunningApplication *alacritty, NSString *workspaceTitle) {
-    CFArrayRef wins = CopyAXWindows(alacritty.processIdentifier);
-    if (!wins) { [alacritty activateWithOptions:0]; return; }
-
-    CFIndex        count    = CFArrayGetCount(wins);
-    AXUIElementRef target   = NULL;
-    AXUIElementRef fallback = NULL;
-
-    for (CFIndex i = 0; i < count; i++) {
-        AXUIElementRef win = (AXUIElementRef)CFArrayGetValueAtIndex(wins, i);
-        if (!fallback) fallback = win;
-
-        if (workspaceTitle.length) {
-            NSString *t = AXWindowTitle(win);
-            if (t && [t isEqualToString:workspaceTitle]) { target = win; break; }
-        }
-    }
-
-    AXUIElementRef chosen = target ?: fallback;
-    if (chosen) RaiseAndActivate(chosen, alacritty);
-    else        [alacritty activateWithOptions:0];
-
-    CFRelease(wins);
-}
-
 // ─────────────────────────────────────────────────────────────────────────────
 // switchFocus
 // ─────────────────────────────────────────────────────────────────────────────
@@ -296,46 +274,25 @@ int switchFocus(NSString *direction) {
         // aerospace will land on the adjacent (bottom) one. (Issue 2 + 3 fix)
         if (info.alacrittyCount != 1) return AerospaceRun(@[@"focus", direction]);
 
-        // direction == "up" + exactly 1 Alacritty in workspace → jump to it
-        NSRunningApplication *alacritty = FindAlacritty();
-        if (!alacritty) return AerospaceRun(@[@"focus", direction]);
-
-        // Persist the title of the Skim window we're leaving
         AXUIElementRef focusedWin = GetFocusedWindowForPID(front.processIdentifier);
         if (focusedWin) {
             NSString *title = AXWindowTitle(focusedWin);
-            if (title) SaveSkimTitle(title, alacritty.processIdentifier);
+            // Save against the exact PID of the Alacritty instance in *this* workspace
+            if (title && info.alacrittyPID > 0) {
+                SaveSkimTitle(title, info.alacrittyPID);
+            }
             CFRelease(focusedWin);
         }
 
         // Use the workspace title to target the correct Alacritty AX window,
         // avoiding windows from other workspaces. (Issue 3 fix)
-        NSString *workspaceAlacrittyTitle = info.alacrittyTitles.firstObject;
-        FocusAlacrittyWindow(alacritty, workspaceAlacrittyTitle);
-        return 0;
+        if (info.alacrittyWinID > 0) {
+            NSString *winIDStr = [NSString stringWithFormat:@"%d", info.alacrittyWinID];
+            return AerospaceRun(@[@"focus", @"--window-id", winIDStr]);
+        }
+
+        return AerospaceRun(@[@"focus", direction]);
     }
 
-    return 0;
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// recordSkim
-//
-// Called by aerospace's on-window-detected hook. The aerospace window-id is
-// ignored; we ask AX which Skim window is currently frontmost and record it.
-// ─────────────────────────────────────────────────────────────────────────────
-
-int recordSkim() {
-    NSRunningApplication *skim      = FindSkim();
-    NSRunningApplication *alacritty = FindAlacritty();
-    if (!skim || !alacritty) return 1;
-
-    AXUIElementRef focusedWin = GetFocusedWindowForPID(skim.processIdentifier);
-    if (!focusedWin) return 1;
-
-    NSString *title = AXWindowTitle(focusedWin);
-    CFRelease(focusedWin);
-
-    if (title) SaveSkimTitle(title, alacritty.processIdentifier);
     return 0;
 }
