@@ -82,45 +82,18 @@ recordSkim() {
     fi
 }
 
-enforceSkim() {
-    local alacritty_count=$(aerospace list-windows --workspace focused --format "%{app-name}" \
-        | awk 'tolower($0) ~ /^alacritty/ {c++} END {print c+0}')
-    local alacritty_nvim_count=$(aerospace list-windows --workspace focused --format "%{app-name}|%{window-title}" \
-        | awk -F'|' 'tolower($1) ~ /^alacritty/ && tolower($2) ~ /nvim/ {c++} END {print c+0}')
-    local skim_count=$(aerospace list-windows --workspace focused --format "%{app-bundle-id}" \
-        | awk '/net\.sourceforge\.skim-app\.skim/ {c++} END {print c+0}')
-
-    if [ "$alacritty_count" -eq 1 ] && [ "$alacritty_nvim_count" -eq 1 ] && [ "$skim_count" -ge 1 ]; then
-        local alacritty_id=$(aerospace list-windows --workspace focused --format "%{window-id}|%{app-name}" \
-            | grep -i "|Alacritty" | cut -d'|' -f1 || true)
-
-        aerospace focus --window-id "$alacritty_id"
-        aerospace layout v_accordion
-        aerospace move up
-        aerospace focus --window-id "$alacritty_id"
-    fi
-}
-
 # Main
 case "${1:-}" in
     --switchFocus)
         switchFocus "$2"
         exit 0
         ;;
-    --focusDaemon)
-        focusDaemon
-        exit 0
-        ;;
     --recordSkim)
         recordSkim "$2"
         exit 0
         ;;
-    --enforceSkim)
-        enforceSkim
-        exit 0
-        ;;
     *)
-        echo "Usage: $(basename "$0") [--switchFocus <dir> | --focusDaemon | --recordSkim <id> | --enforceSkim]"
+        echo "Usage: $(basename "$0") [--switchFocus <dir> | --recordSkim <id>]"
         exit 1
         ;;
 esac

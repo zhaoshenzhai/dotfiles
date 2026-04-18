@@ -1,128 +1,191 @@
 #import "skimUtils.h"
 
-// High-speed wrapper for AeroSpace CLI
-static NSString *Aero(NSArray *args) {
-    NSTask *task = [[NSTask alloc] init];
-    // Nix-darwin standard path
-    [task setLaunchPath:@"/run/current-system/sw/bin/aerospace"];
-    [task setArguments:args];
+static NSString *const kMemoryDir    = @"/tmp/aerospace_skim_tabs";
+static NSString *const kSkimBundleID = @"net.sourceforge.skim-app.skim";
+static NSString *const kAlacritty    = @"alacritty";
 
-    NSPipe *pipe = [NSPipe pipe];
-    [task setStandardOutput:pipe];
-    [task setStandardError:[NSFileHandle fileHandleWithNullDevice]];
+/// Run `aerospace <args>` and return trimmed stdout, or @"" on failure.
+static NSString *Aerospace(NSArray<NSString *> *args) {
+    NSTask *task    = [[NSTask alloc] init];
+    task.launchPath = @"/usr/bin/env";
+    task.arguments  = [@[@"aerospace"] arrayByAddingObjectsFromArray:args];
 
-    if (@available(macOS 10.13, *)) {
-        [task launchAndReturnError:nil];
-    } else {
-        [task launch];
-    }
+    NSPipe *pipe        = [NSPipe pipe];
+    task.standardOutput = pipe;
+    task.standardError  = [NSFileHandle fileHandleWithNullDevice];
 
-    NSData *data = [[pipe fileHandleForReading] readDataToEndOfFile];
+    NSError *err = nil;
+    if (![task launchAndReturnError:&err]) return @"";
     [task waitUntilExit];
 
-    return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]
-            stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSData   *data = [pipe.fileHandleForReading readDataToEndOfFile];
+    NSString *out  = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    return out ? [out stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] : @"";
 }
 
-static NSString *GetSkimMemoryPath(void) {
-    NSString *ws = Aero(@[@"list-workspaces", @"--focused"]);
-    if (!ws || ws.length == 0) return nil;
+/// Run `aerospace <args>`, discarding output (fire-and-wait).
+static void AerospaceRun(NSArray<NSString *> *args) {
+    NSTask *task    = [[NSTask alloc] init];
+    task.launchPath = @"/usr/bin/env";
+    task.arguments  = [@[@"aerospace"] arrayByAddingObjectsFromArray:args];
 
-    NSString *dir = @"/tmp/aerospace_skim_tabs";
-    [[NSFileManager defaultManager] createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:nil];
-    return [dir stringByAppendingFormat:@"/workspace_%@.txt", ws];
+    task.standardOutput = [NSFileHandle fileHandleWithNullDevice];
+    task.standardError  = [NSFileHandle fileHandleWithNullDevice];
+
+    NSError *err = nil;
+    if ([task launchAndReturnError:&err]) [task waitUntilExit];
 }
 
-int recordSkim(NSString *windowId) {
-    NSString *path = GetSkimMemoryPath();
-    if (path && windowId) {
-        [windowId writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:nil];
+/// Split `str` on newlines, drop blank lines, return trimmed lines.
+static NSArray<NSString *> *Lines(NSString *str) {
+    NSArray<NSString *> *raw = [str componentsSeparatedByString:@"\n"];
+    NSMutableArray<NSString *> *result = [NSMutableArray arrayWithCapacity:raw.count];
+    NSCharacterSet *ws = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+    for (NSString *line in raw) {
+        NSString *t = [line stringByTrimmingCharactersInSet:ws];
+        if (t.length) [result addObject:t];
     }
-    return 0;
+    return result;
+}
+
+/// Split `line` on `|`, returning parts (never nil elements).
+static NSArray<NSString *> *Split(NSString *line) {
+    return [line componentsSeparatedByString:@"|"];
+}
+
+/// Return the memory-file path for the given workspace.
+static NSString *MemoryFile(NSString *workspace) {
+    return [NSString stringWithFormat:@"%@/workspace_%@.txt", kMemoryDir, workspace];
+}
+
+/// Ensure the memory directory exists.
+static void EnsureMemoryDir(void) {
+    [[NSFileManager defaultManager] createDirectoryAtPath:kMemoryDir withIntermediateDirectories:YES attributes:nil error:nil];
+}
+
+/// Read a saved window-id from disk; returns nil if missing or empty.
+static NSString *ReadMemoryFile(NSString *path) {
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) return nil;
+    NSString *content = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+    NSString *trimmed = [content stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    return trimmed.length ? trimmed : nil;
+}
+
+/// Write `windowId` to `path`.
+static BOOL WriteMemoryFile(NSString *path, NSString *windowId) {
+    NSError *err = nil;
+    [windowId writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&err];
+    return err == nil;
 }
 
 int switchFocus(NSString *direction) {
-    @autoreleasepool {
-        // One-shot fetch of all window data to minimize process forking
-        NSString *raw = Aero(@[@"list-windows", @"--workspace", @"focused", @"--format", @"%{window-id}|%{app-bundle-id}|%{window-title}"]);
-        NSArray *lines = [raw componentsSeparatedByString:@"\n"];
 
-        NSString *focusedId = Aero(@[@"list-windows", @"--focused", @"--format", @"%{window-id}"]);
-        NSString *focusedBundle = Aero(@[@"list-windows", @"--focused", @"--format", @"%{app-bundle-id}"]);
+    // ── 1. Current workspace (1 call) ────────────────────────────────────────
+    NSString *workspace = Aerospace(@[@"list-workspaces", @"--focused"]);
+    if (!workspace.length) return 1;
 
-        NSString *alacrittyId = nil;
-        BOOL hasNvim = NO;
-        int skimCount = 0;
+    EnsureMemoryDir();
+    NSString *memFile = MemoryFile(workspace);
 
-        for (NSString *line in lines) {
-            NSArray *p = [line componentsSeparatedByString:@"|"];
-            if (p.count < 3) continue;
+    // ── 2. All windows in the focused workspace (1 call, combined format) ────
+    //    Format: <window-id>|<app-name>|<window-title>|<app-bundle-id>
+    NSArray<NSString *> *allWindows =
+        Lines(Aerospace(@[@"list-windows", @"--workspace", @"focused",
+                          @"--format", @"%{window-id}|%{app-name}|%{window-title}|%{app-bundle-id}"]));
 
-            if ([p[1] containsString:@"alacritty"]) {
-                alacrittyId = p[0];
-                if ([[p[2] lowercaseString] containsString:@"nvim"]) hasNvim = YES;
-            }
-            if ([p[1] isEqualToString:@"net.sourceforge.skim-app.skim"]) skimCount++;
+    NSInteger alacrittyCount     = 0;
+    NSInteger alacrittyNvimCount = 0;
+    NSMutableArray<NSString *> *skimWindowIDs = [NSMutableArray array];
+
+    for (NSString *line in allWindows) {
+        NSArray<NSString *> *p = Split(line);
+        if (p.count < 4) continue;
+
+        NSString *appName  = p[1].lowercaseString;
+        NSString *title    = p[2].lowercaseString;
+        NSString *bundleID = p[3];
+
+        if ([appName hasPrefix:kAlacritty]) {
+            alacrittyCount++;
+            if ([title containsString:@"nvim"]) alacrittyNvimCount++;
         }
 
-        // Logic for the Nvim + Skim "IDE" layout
-        if (alacrittyId && hasNvim && skimCount >= 1) {
-            if ([focusedBundle isEqualToString:@"net.sourceforge.skim-app.skim"]) {
-                recordSkim(focusedId);
-                if ([direction isEqualToString:@"up"]) {
-                    Aero(@[@"focus", @"--window-id", alacrittyId]);
-                    return 0;
-                }
-            } else if ([focusedBundle.lowercaseString containsString:@"alacritty"]) {
-                if ([direction isEqualToString:@"down"]) {
-                    NSString *mem = [NSString stringWithContentsOfFile:GetSkimMemoryPath() encoding:NSUTF8StringEncoding error:nil];
-                    NSString *target = (mem && [raw containsString:mem]) ? mem : nil;
-
-                    if (!target) {
-                        for (NSString *l in lines) {
-                            if ([l containsString:@"net.sourceforge.skim-app.skim"]) {
-                                target = [[l componentsSeparatedByString:@"|"] firstObject];
-                                break;
-                            }
-                        }
-                    }
-                    if (target) Aero(@[@"focus", @"--window-id", target]);
-                    return 0;
-                }
-            }
+        if ([bundleID isEqualToString:kSkimBundleID]) {
+            [skimWindowIDs addObject:p[0]]; // window-id
         }
-
-        // Standard fallback
-        Aero(@[@"focus", direction]);
     }
+
+    NSInteger skimCount = skimWindowIDs.count;
+
+    // ── 3. Guard: conditions not met → normal aerospace focus ─────────────────
+    if (alacrittyCount != 1 || alacrittyNvimCount != 1 || skimCount <= 1) {
+        AerospaceRun(@[@"focus", direction]);
+        return 0;
+    }
+
+    // ── 4. Focused window (1 call, combined format) ───────────────────────────
+    //    Format: <window-id>|<app-name>|<app-bundle-id>
+    NSString *focusedRaw = Aerospace(@[@"list-windows", @"--focused", @"--format", @"%{window-id}|%{app-name}|%{app-bundle-id}"]);
+
+    NSArray<NSString *> *fp = Split(focusedRaw);
+    if (fp.count < 3) return 1;
+
+    NSString *currentID     = fp[0];
+    NSString *currentApp    = fp[1].lowercaseString;
+    NSString *currentBundle = fp[2];
+
+    // ── 5a. Focused window is Alacritty ──────────────────────────────────────
+    if ([currentApp hasPrefix:kAlacritty]) {
+        if ([direction isEqualToString:@"up"]) {
+            return 0; // already at the top
+        }
+
+        // direction == "down" → focus remembered (or first) Skim window
+        NSString *targetSkim = nil;
+
+        NSString *savedID = ReadMemoryFile(memFile);
+        if (savedID && [skimWindowIDs containsObject:savedID]) {
+            targetSkim = savedID;
+        }
+
+        if (!targetSkim) targetSkim = skimWindowIDs.firstObject;
+
+        if (targetSkim) AerospaceRun(@[@"focus", @"--window-id", targetSkim]);
+        return 0;
+    }
+
+    // ── 5b. Focused window is Skim ───────────────────────────────────────────
+    if ([currentBundle isEqualToString:kSkimBundleID]) {
+        // Always persist the currently-focused Skim tab
+        WriteMemoryFile(memFile, currentID);
+
+        if ([direction isEqualToString:@"down"]) {
+            return 0; // already at the bottom
+        }
+
+        // direction == "up" → focus the single Alacritty window
+        for (NSString *line in allWindows) {
+            NSArray<NSString *> *p = Split(line);
+            if (p.count >= 2 && [p[1].lowercaseString hasPrefix:kAlacritty]) {
+                AerospaceRun(@[@"focus", @"--window-id", p[0]]);
+                break;
+            }
+        }
+        return 0;
+    }
+
+    // ── 5c. Some other app is focused → normal aerospace focus ────────────────
+    AerospaceRun(@[@"focus", direction]);
     return 0;
 }
 
-int enforceSkim(void) {
-    @autoreleasepool {
-        // Reuse the same logic to grab the Alacritty ID and check for Nvim/Skim presence
-        NSString *raw = Aero(@[@"list-windows", @"--workspace", @"focused", @"--format", @"%{window-id}|%{app-bundle-id}|%{window-title}"]);
-        NSArray *lines = [raw componentsSeparatedByString:@"\n"];
+int recordSkim(NSString *windowId) {
+    if (!windowId.length) return 1;
 
-        NSString *alacrittyId = nil;
-        BOOL nvim = NO; int skim = 0;
+    // 1 call: current workspace
+    NSString *workspace = Aerospace(@[@"list-workspaces", @"--focused"]);
+    if (!workspace.length) return 1;
 
-        for (NSString *line in lines) {
-            NSArray *p = [line componentsSeparatedByString:@"|"];
-            if (p.count < 3) continue;
-            if ([p[1] containsString:@"alacritty"]) {
-                alacrittyId = p[0];
-                if ([[p[2] lowercaseString] containsString:@"nvim"]) nvim = YES;
-            }
-            if ([p[1] isEqualToString:@"net.sourceforge.skim-app.skim"]) skim++;
-        }
-
-        if (alacrittyId && nvim && skim >= 1) {
-            Aero(@[@"focus", @"--window-id", alacrittyId]);
-            Aero(@[@"layout", @"v_accordion"]);
-            Aero(@[@"move", @"up"]);
-            Aero(@[@"focus", @"--window-id", alacrittyId]);
-        }
-    }
-    return 0;
+    EnsureMemoryDir();
+    return WriteMemoryFile(MemoryFile(workspace), windowId) ? 0 : 1;
 }

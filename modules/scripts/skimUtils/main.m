@@ -12,7 +12,6 @@ int main(int argc, const char * argv[]) {
         if ([command isEqualToString:@"duplicateTab"]) return duplicateTab();
         if ([command isEqualToString:@"cleanDuplicates"]) return cleanDuplicates();
         if ([command isEqualToString:@"reopenLastClosed"]) return reopenLastClosed();
-        if ([command isEqualToString:@"enforceSkim"]) return enforceSkim();
 
         if ([command isEqualToString:@"recordSkim"]) {
             if (argc < 3) return 1;
