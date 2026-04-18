@@ -5,19 +5,18 @@
 #import <unistd.h>
 #import "skimUtils.h"
 
-extern char **environ; // Needed for posix_spawnp
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Constants
-// ─────────────────────────────────────────────────────────────────────────────
+extern char **environ;
 
 static NSString *const kSkimBundleID = @"net.sourceforge.skim-app.skim";
 static const char *const kAerospacePath = "/etc/profiles/per-user/zhao/bin/aerospace";
 #define SHM_SIZE 1024
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Posix Spawn Helpers (Bypassing NSTask)
-// ─────────────────────────────────────────────────────────────────────────────
+typedef struct {
+    NSInteger alacrittyCount;
+    pid_t     alacrittyPID;
+    int       alacrittyWinID;
+    NSInteger skimCount;
+} WorkspaceInfo;
 
 static int AerospaceRun(NSArray<NSString *> *argsArray) {
     int argc = (int)argsArray.count + 1;
@@ -32,7 +31,6 @@ static int AerospaceRun(NSArray<NSString *> *argsArray) {
     posix_spawn_file_actions_t actions;
     posix_spawn_file_actions_init(&actions);
 
-    // Suppress stdout/stderr
     posix_spawn_file_actions_addopen(&actions, STDOUT_FILENO, "/dev/null", O_WRONLY, 0);
     posix_spawn_file_actions_addopen(&actions, STDERR_FILENO, "/dev/null", O_WRONLY, 0);
 
@@ -62,7 +60,6 @@ static NSString *AerospaceOutput(NSArray<NSString *> *argsArray) {
     posix_spawn_file_actions_t actions;
     posix_spawn_file_actions_init(&actions);
 
-    // Bind stdout to pipe write-end
     posix_spawn_file_actions_adddup2(&actions, pipefd[1], STDOUT_FILENO);
     posix_spawn_file_actions_addclose(&actions, pipefd[0]);
 
@@ -75,13 +72,12 @@ static NSString *AerospaceOutput(NSArray<NSString *> *argsArray) {
     }
 
     posix_spawn_file_actions_destroy(&actions);
-    close(pipefd[1]); // Close write end in parent immediately
+    close(pipefd[1]);
 
     NSMutableData *data = [[NSMutableData alloc] initWithCapacity:1024];
     char buffer[1024];
     ssize_t bytesRead;
 
-    // Read stdout pipe
     while ((bytesRead = read(pipefd[0], buffer, sizeof(buffer))) > 0) {
         [data appendBytes:buffer length:bytesRead];
     }
@@ -95,16 +91,11 @@ static NSString *AerospaceOutput(NSArray<NSString *> *argsArray) {
     return outStr ? [outStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] : @"";
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// POSIX Shared Memory State (Bypassing Disk I/O)
-// ─────────────────────────────────────────────────────────────────────────────
-
 static void SaveSkimTitle(NSString *title, pid_t alacrittyPID) {
     if (!title.length) return;
     char shm_name[64];
     snprintf(shm_name, sizeof(shm_name), "/aerospace_skim_%d", alacrittyPID);
 
-    // O_CREAT creates it if missing, O_RDWR for read/write
     int fd = shm_open(shm_name, O_CREAT | O_RDWR, 0666);
     if (fd == -1) return;
 
@@ -124,7 +115,7 @@ static NSString *LoadSkimTitle(pid_t alacrittyPID) {
     snprintf(shm_name, sizeof(shm_name), "/aerospace_skim_%d", alacrittyPID);
 
     int fd = shm_open(shm_name, O_RDONLY, 0666);
-    if (fd == -1) return @""; // Doesn't exist yet
+    if (fd == -1) return @"";
 
     char *mem = mmap(NULL, SHM_SIZE, PROT_READ, MAP_SHARED, fd, 0);
     NSString *result = @"";
@@ -137,17 +128,6 @@ static NSString *LoadSkimTitle(pid_t alacrittyPID) {
 
     return [result stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Workspace info
-// ─────────────────────────────────────────────────────────────────────────────
-
-typedef struct {
-    NSInteger alacrittyCount;
-    pid_t     alacrittyPID;
-    int       alacrittyWinID;
-    NSInteger skimCount;
-} WorkspaceInfo;
 
 static WorkspaceInfo GetWorkspaceInfo(void) {
     WorkspaceInfo info = { 0, 0, 0, 0 };
@@ -176,10 +156,6 @@ static WorkspaceInfo GetWorkspaceInfo(void) {
     }
     return info;
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// AX Window Parsing
-// ─────────────────────────────────────────────────────────────────────────────
 
 static CFArrayRef CopyAXWindows(pid_t pid) {
     AXUIElementRef appElem = AXUIElementCreateApplication(pid);
@@ -246,10 +222,6 @@ static void FocusSkimWindow(NSRunningApplication *skim, NSString *savedTitle) {
     CFRelease(wins);
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Main switchFocus Routing
-// ─────────────────────────────────────────────────────────────────────────────
-
 int switchFocus(NSString *direction) {
     NSRunningApplication *front = [NSWorkspace sharedWorkspace].frontmostApplication;
     BOOL isAlacritty = [front.localizedName.lowercaseString hasPrefix:@"alacritty"];
@@ -259,7 +231,6 @@ int switchFocus(NSString *direction) {
 
     WorkspaceInfo info = GetWorkspaceInfo();
 
-    // Condition 1: Alacritty -> Skim (Downwards)
     if (isAlacritty && [direction isEqualToString:@"down"] && info.alacrittyCount == 1 && info.skimCount > 0) {
         NSRunningApplication *skim = [NSRunningApplication runningApplicationsWithBundleIdentifier:kSkimBundleID].firstObject;
         if (skim) {
@@ -268,7 +239,6 @@ int switchFocus(NSString *direction) {
         }
     }
 
-    // Condition 2: Skim -> Alacritty (Upwards)
     if (isSkim && [direction isEqualToString:@"up"] && info.alacrittyCount == 1 && info.alacrittyWinID > 0) {
         AXUIElementRef focusedWin = GetFocusedWindowForPID(front.processIdentifier);
         if (focusedWin) {
@@ -281,6 +251,5 @@ int switchFocus(NSString *direction) {
         return AerospaceRun(@[@"focus", @"--window-id", winIDStr]);
     }
 
-    // Fallback: Normal Aerospace Tiling
     return AerospaceRun(@[@"focus", direction]);
 }
