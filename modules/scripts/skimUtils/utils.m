@@ -117,6 +117,19 @@ NSString *ResolveCanonicalDocumentPath(NSString *rawPath) {
     return resolvedPath;
 }
 
+AXUIElementRef GetFocusedWindowForPID(pid_t pid) {
+    if (pid == 0) return NULL;
+    AXUIElementRef app = AXUIElementCreateApplication(pid);
+    CFTypeRef val      = NULL;
+    AXUIElementRef result = NULL;
+    if (AXUIElementCopyAttributeValue(app, kAXFocusedWindowAttribute, &val) == kAXErrorSuccess) {
+        result = (AXUIElementRef)CFRetain(val);
+        CFRelease(val);
+    }
+    CFRelease(app);
+    return result;
+}
+
 void PostKeystrokeToPID(pid_t pid, CGKeyCode keyCode, CGEventFlags flags) {
     if (pid == 0) return;
 

@@ -9,14 +9,10 @@ int main(int argc, const char * argv[]) {
 
         NSString *command = [NSString stringWithUTF8String:argv[1]];
 
+        if ([command isEqualToString:@"recordSkim"]) return recordSkim();
         if ([command isEqualToString:@"duplicateTab"]) return duplicateTab();
         if ([command isEqualToString:@"cleanDuplicates"]) return cleanDuplicates();
         if ([command isEqualToString:@"reopenLastClosed"]) return reopenLastClosed();
-
-        if ([command isEqualToString:@"recordSkim"]) {
-            if (argc < 3) return 1;
-            return recordSkim([NSString stringWithUTF8String:argv[2]]);
-        }
 
         if ([command isEqualToString:@"switchTab"]) {
             if (argc != 3) { fprintf(stderr, "Usage: %s switchTab <1-9>\n", argv[0]); return 1; }
