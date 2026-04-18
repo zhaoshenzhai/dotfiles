@@ -1,12 +1,13 @@
 local cmp = require('cmp')
 
 local opts = { buffer = true, silent = true }
-local autocompile_group = vim.api.nvim_create_augroup("TexAutoCompile", { clear = true })
+local tex_compile_group = vim.api.nvim_create_augroup("TexAutoCompile", { clear = true })
 local tex_cmp_group = vim.api.nvim_create_augroup("TexRefCiteGroup", { clear = true })
+local tex_keymap_group = vim.api.nvim_create_augroup("TexKeymaps", { clear = true })
 
 -- Auto-compile
 vim.api.nvim_create_autocmd("BufWritePost", {
-    group = autocompile_group,
+    group = tex_compile_group,
     pattern = "*.tex",
     callback = function(ev)
         if ev.file:match('/_attic/notes/') then return end
@@ -14,27 +15,36 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     end,
 })
 
--- Forward sync
-vim.keymap.set('n', '<C-Enter>', function()
-    local tex_file = vim.fn.expand('%:p')
-    local pdf_file = vim.fn.expand('%:p:r') .. '.pdf'
-    local line = vim.fn.line('.')
+-- Open corresponding pdf
+vim.api.nvim_create_autocmd("FileType", {
+    group = tex_keymap_group,
+    pattern = "tex",
+    callback = function()
+        local opts = { buffer = true, silent = true }
 
-    local displayline = '/Applications/Skim.app/Contents/SharedSupport/displayline'
+        -- Forward sync
+        vim.keymap.set('n', '<C-Enter>', function()
+            local tex_file = vim.fn.expand('%:p')
+            local pdf_file = vim.fn.fnamemodify(tex_file, ':r') .. '.pdf'
+            local line = vim.fn.line('.')
 
-    if vim.fn.executable(displayline) == 1 then
-        vim.fn.jobstart({ displayline, "-r", tostring(line), pdf_file, tex_file }, { detach = true })
+            local displayline = '/Applications/Skim.app/Contents/SharedSupport/displayline'
+
+            if vim.fn.executable(displayline) == 1 then
+                vim.fn.jobstart({ displayline, "-r", tostring(line), pdf_file, tex_file }, { detach = true })
+            end
+        end, opts)
+
+        -- Open student pdf
+        vim.keymap.set('n', '<C-S-Enter>', function()
+            vim.cmd('write')
+            local f = vim.fn.expand('%:p:r') .. '_Student.pdf'
+            if vim.fn.filereadable(f) == 1 then
+                vim.fn.jobstart({ "open", "-a", "Skim", f }, {detach=true})
+            end
+        end, opts)
     end
-end, opts)
-
--- Open student pdf
-vim.keymap.set('n', '<C-S-Enter>', function()
-    vim.cmd('write')
-    local f = vim.fn.expand('%:p:r') .. '_Student.pdf'
-    if vim.fn.filereadable(f) == 1 then
-        vim.fn.jobstart({ "open", "-a", "Skim", f }, {detach=true})
-    end
-end, opts)
+})
 
 -- Math zone for snippets
 _G.in_mathzone = function()
