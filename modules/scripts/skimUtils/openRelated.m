@@ -1,4 +1,5 @@
 #import "skimUtils.h"
+#import <unistd.h>
 
 int openRelated(NSString *extension) {
     @autoreleasepool {
@@ -8,9 +9,7 @@ int openRelated(NSString *extension) {
         NSString *canonicalPath = ResolveCanonicalDocumentPath(rawPath);
         NSString *targetPath = [[canonicalPath stringByDeletingPathExtension] stringByAppendingPathExtension:extension];
 
-        if ([[NSFileManager defaultManager] fileExistsAtPath:targetPath]) {
-            RunLauncher(targetPath);
-        }
+        if (access(targetPath.UTF8String, F_OK) == 0) RunLauncher(targetPath);
     }
     return 0;
 }

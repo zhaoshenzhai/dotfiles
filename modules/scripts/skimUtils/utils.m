@@ -1,4 +1,9 @@
 #import "skimUtils.h"
+#import <spawn.h>
+#import <unistd.h>
+#import <fcntl.h>
+
+extern char **environ;
 
 pid_t GetSkimPID(void) {
     NSArray<NSRunningApplication *> *apps = [NSRunningApplication runningApplicationsWithBundleIdentifier:@"net.sourceforge.skim-app.skim"];
@@ -11,20 +16,19 @@ SBApplication *GetSkimSBApp(void) {
 
 void RunLauncher(NSString *targetPath) {
     if (!targetPath) return;
-    NSString *launcherPath = [NSString stringWithFormat:@"/etc/profiles/per-user/%@/bin/launcher", NSUserName()];
+    const char *launcherPath = "/etc/profiles/per-user/zhao/bin/launcher";
 
-    NSTask *task = [[NSTask alloc] init];
-    [task setLaunchPath:launcherPath];
-    [task setArguments:@[targetPath]];
-    [task setStandardOutput:[NSFileHandle fileHandleWithNullDevice]];
-    [task setStandardError:[NSFileHandle fileHandleWithNullDevice]];
+    pid_t pid;
+    posix_spawn_file_actions_t actions;
+    posix_spawn_file_actions_init(&actions);
 
-    if (@available(macOS 10.13, *)) {
-        NSError *error = nil;
-        [task launchAndReturnError:&error];
-    } else {
-        [task launch];
-    }
+    posix_spawn_file_actions_addopen(&actions, STDOUT_FILENO, "/dev/null", O_WRONLY, 0);
+    posix_spawn_file_actions_addopen(&actions, STDERR_FILENO, "/dev/null", O_WRONLY, 0);
+
+    const char *argv[] = {"launcher", targetPath.UTF8String, NULL};
+
+    posix_spawn(&pid, launcherPath, &actions, NULL, (char *const *)argv, environ);
+    posix_spawn_file_actions_destroy(&actions);
 }
 
 AXUIElementRef GetFirstChildWithRole(AXUIElementRef parent, CFStringRef role) {
@@ -76,21 +80,26 @@ AXUIElementRef FindChildWithTitle(AXUIElementRef parent, NSString *title) {
 }
 
 NSString *GetDocumentPathOfFrontmostApp(void) {
-    NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
-    NSRunningApplication *frontApp = [workspace frontmostApplication];
-    if (!frontApp) return nil;
+    pid_t pid = GetSkimPID();
+    if (pid == 0) return nil;
 
-    SBApplication *app = [SBApplication applicationWithProcessIdentifier:frontApp.processIdentifier];
-    if (!app) return nil;
+    AXUIElementRef app = AXUIElementCreateApplication(pid);
+    AXUIElementRef frontWindow = NULL;
+    NSString *path = nil;
 
-    @try {
-        SBElementArray *documents = [app valueForKey:@"documents"];
-        if (documents && documents.count > 0) {
-            return [[documents objectAtIndex:0] valueForKey:@"path"];
+    if (AXUIElementCopyAttributeValue(app, kAXFocusedWindowAttribute, (CFTypeRef *)&frontWindow) == kAXErrorSuccess) {
+        CFTypeRef documentVal = NULL;
+        if (AXUIElementCopyAttributeValue(frontWindow, kAXDocumentAttribute, &documentVal) == kAXErrorSuccess) {
+            NSString *urlStr = (__bridge NSString *)documentVal;
+            if ([urlStr hasPrefix:@"file://"]) {
+                path = [[NSURL URLWithString:urlStr] path];
+            }
+            CFRelease(documentVal);
         }
-    } @catch (NSException *e) { return nil; }
-
-    return nil;
+        CFRelease(frontWindow);
+    }
+    CFRelease(app);
+    return path;
 }
 
 NSString *ResolveCanonicalDocumentPath(NSString *rawPath) {
