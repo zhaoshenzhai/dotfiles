@@ -199,8 +199,16 @@ static NSString *SelectFiles(void) {
     if ([[NSFileManager defaultManager] fileExistsAtPath:recentFile]) {
         NSString *recentStr = [NSString stringWithContentsOfFile:recentFile encoding:NSUTF8StringEncoding error:nil];
         if (recentStr.length > 0) {
-            [combined appendString:recentStr];
-            if (![recentStr hasSuffix:@"\n"]) [combined appendString:@"\n"];
+            NSArray *lines = [recentStr componentsSeparatedByString:@"\n"];
+            for (NSString *line in lines) {
+                if (line.length == 0) continue;
+
+                if ([line containsString:@"\t"]) {
+                    [combined appendFormat:@"%@\n", line];
+                } else {
+                    [combined appendFormat:@"%@\n", FormatFilePath(line)];
+                }
+            }
         }
     }
     if ([[NSFileManager defaultManager] fileExistsAtPath:cacheFile]) {
