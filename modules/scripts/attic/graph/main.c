@@ -46,24 +46,6 @@ void initializeWindow() {
         ((void (*)(id, SEL, long))objc_msgSend)(window, sel_registerName("setTitleVisibility:"), 1);
         long style = ((long (*)(id, SEL))objc_msgSend)(window, sel_registerName("styleMask"));
         ((void (*)(id, SEL, long))objc_msgSend)(window, sel_registerName("setStyleMask:"), style | (1 << 15));
-
-        id contentView = ((id (*)(id, SEL))objc_msgSend)(window, sel_registerName("contentView"));
-        id superview = ((id (*)(id, SEL))objc_msgSend)(contentView, sel_registerName("superview"));
-
-        struct CG_Point { double x; double y; };
-        struct CG_Size { double width; double height; };
-        struct NS_Rect { struct CG_Point origin; struct CG_Size size; };
-        struct NS_Rect frame = { {0, 0}, {screenWidth, screenHeight} };
-
-        id visualEffectView = ((id (*)(id, SEL))objc_msgSend)((id)objc_getClass("NSVisualEffectView"), sel_registerName("alloc"));
-        visualEffectView = ((id (*)(id, SEL, struct NS_Rect))objc_msgSend)(visualEffectView, sel_registerName("initWithFrame:"), frame);
-
-        ((void (*)(id, SEL, long))objc_msgSend)(visualEffectView, sel_registerName("setAutoresizingMask:"), 18);
-        ((void (*)(id, SEL, long))objc_msgSend)(visualEffectView, sel_registerName("setMaterial:"), 13);
-        ((void (*)(id, SEL, long))objc_msgSend)(visualEffectView, sel_registerName("setState:"), 1);
-        ((void (*)(id, SEL, long))objc_msgSend)(visualEffectView, sel_registerName("setBlendingMode:"), 0);
-
-        ((void (*)(id, SEL, id, long, id))objc_msgSend)(superview, sel_registerName("addSubview:positioned:relativeTo:"), visualEffectView, -1, contentView);
     }
 }
 

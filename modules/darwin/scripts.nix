@@ -1,5 +1,6 @@
 { pkgs, ... }: let
     scriptsDir = ../scripts;
+
     launcher = pkgs.writeShellApplication {
         name = "launcher";
         runtimeInputs = with pkgs; [ fd fzf coreutils gnused gawk gnugrep ];
@@ -23,7 +24,7 @@
 
     centerWindow = pkgs.runCommandCC "centerWindow" {} ''
         mkdir -p $out/bin
-        $CC -O3 ${scriptsDir}/centerWindow.m -framework Cocoa -o $out/bin/centerWindow
+        $CC -O3 ${scriptsDir}/window/centering.m -framework Cocoa -o $out/bin/centerWindow
     '';
 
     texManager = pkgs.runCommandCC "texManager" {} ''
@@ -64,15 +65,17 @@
 
         FONT=$(find ${pkgs.cm_unicode} -type f \( -iname "cmunrm.ttf" -o -iname "cmunrm.otf" \) | head -n 1)
 
-        $CC -O3 ${scriptsDir}/attic/graph/*.c -lraylib -lcjson -lpthread -DFONT_PATH="\"$FONT\"" \
-            -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL \
+        $CC -O3 -fobjc-arc ${scriptsDir}/attic/graph/*.c ${scriptsDir}/window/transparency.m \
+            -lraylib -lcjson -lpthread -DFONT_PATH="\"$FONT\"" \
+            -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT \
+            -framework OpenGL -framework QuartzCore -framework CoreImage \
             -o $out/bin/attic-graph
     '';
 
-    alacrittyRecolor = pkgs.runCommandCC "alacrittyRecolor" {} ''
+    transparentWindow = pkgs.runCommandCC "transparentWindow" {} ''
         mkdir -p $out/lib
         $CC -O3 -dynamiclib -framework Cocoa -framework QuartzCore -framework CoreImage \
-            ${scriptsDir}/alacritty/recolor.m -o $out/lib/alacrittyRecolor.dylib
+            ${scriptsDir}/window/transparency.m -o $out/lib/transparentWindow.dylib
     '';
 
     alacrittyDaemon = pkgs.writeShellApplication {
@@ -80,8 +83,8 @@
         runtimeInputs = with pkgs; [ coreutils ];
         checkPhase = "";
         text = ''
-            export DYLD_INSERT_LIBRARIES="${alacrittyRecolor}/lib/alacrittyRecolor.dylib"
-            ${builtins.readFile "${scriptsDir}/alacritty/daemon.sh"}
+            export DYLD_INSERT_LIBRARIES="${transparentWindow}/lib/transparentWindow.dylib"
+            ${builtins.readFile "${scriptsDir}/daemon.sh"}
         '';
     };
 in
