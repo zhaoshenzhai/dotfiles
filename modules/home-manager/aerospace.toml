@@ -58,7 +58,6 @@ accordion-padding = 0
             "--title" "btop"
             "--option" "window.dimensions={columns=110,lines=38}"
             "--option" "window.position={x=425,y=246}"
-            "--option" "keyboard.bindings=[{key=\"Q\",command={program=\"sh\",args=[\"-c\",\"aerospace close\"]}}]"
             "-e" "btop"
         )
         alacrittyDaemon "${ARGS[@]}"
