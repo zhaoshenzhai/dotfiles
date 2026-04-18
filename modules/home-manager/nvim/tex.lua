@@ -225,7 +225,7 @@ end
 local ref_source = {}
 function ref_source:is_available() return vim.bo.filetype == "tex" end
 function ref_source:get_trigger_characters() return { '{', ',' } end
-function ref_source:get_keyword_pattern() return [=[[^}{, \t]\+]=] end
+function ref_source:get_keyword_pattern() return [=[[^}{,]\+]=] end
 function ref_source:complete(request, callback)
     local line = request.context.cursor_before_line
     local is_ref, _, _ = check_ref_cite_context(line)
@@ -241,7 +241,7 @@ cmp.register_source('tex_ref', ref_source)
 local cite_source = {}
 function cite_source:is_available() return vim.bo.filetype == "tex" end
 function cite_source:get_trigger_characters() return { '{', ',' } end
-function cite_source:get_keyword_pattern() return [=[[^}{, \t]\+]=] end
+function cite_source:get_keyword_pattern() return [=[[^}{,]\+]=] end
 function cite_source:complete(request, callback)
     local line = request.context.cursor_before_line
     local _, is_cite, _ = check_ref_cite_context(line)
