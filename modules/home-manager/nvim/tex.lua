@@ -90,7 +90,10 @@ local tex_group = vim.api.nvim_create_augroup("tex_folds", { clear = true })
 vim.api.nvim_create_autocmd({"FileType", "BufWinEnter"}, {
     group = tex_group,
     pattern = "*.tex",
-    command = "setlocal foldmethod=expr foldexpr=v:lua.TexFold() foldlevel=0"
+    callback = function()
+        vim.cmd("setlocal foldmethod=expr foldexpr=v:lua.TexFold() foldlevel=0")
+        vim.opt_local.indentkeys:remove({"0{", "0}", "{", "}"})
+    end
 })
 
 vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {
