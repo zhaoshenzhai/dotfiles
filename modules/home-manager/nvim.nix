@@ -91,27 +91,27 @@ in {
         extraPlugins = with pkgs.vimPlugins; [ ultisnips ];
 
         extraFiles = {
-            "lua/options.lua".source   = ./nvim/options.lua;
+            "lua/c.lua".source         = ./nvim/c.lua;
             "lua/ui.lua".source        = ./nvim/ui.lua;
+            "lua/tex.lua".source       = ./nvim/tex.lua;
+            "lua/tabs.lua".source      = ./nvim/tabs.lua;
+            "lua/attic.lua".source     = ./nvim/attic.lua;
+            "lua/options.lua".source   = ./nvim/options.lua;
             "lua/keymaps.lua".source   = ./nvim/keymaps.lua;
             "lua/autocmds.lua".source  = ./nvim/autocmds.lua;
-            "lua/tabs.lua".source      = ./nvim/tabs.lua;
             "lua/aerospace.lua".source = ./nvim/aerospace.lua;
-            "lua/c.lua".source         = ./nvim/c.lua;
-            "lua/tex.lua".source       = ./nvim/tex.lua;
-            "lua/attic.lua".source     = ./nvim/attic.lua;
         } // snippetExtraFiles;
 
         extraConfigLua = ''
-            require('options')
+            require('c')
             require('ui')
+            require('tex')
+            require('tabs')
+            require('attic')
+            require('options')
             require('keymaps')
             require('autocmds')
-            require('tabs')
             require('aerospace')
-            require('c')
-            require('attic')
-            require('tex')
         '';
     };
 }
