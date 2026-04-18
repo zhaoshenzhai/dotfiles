@@ -6,39 +6,31 @@
             general = { ipc_socket = true; };
 
             font = {
-                size = 20.0;
-                normal = {
-                    family = "Courier Prime";
-                    style = "Regular";
-                };
-                bold = {
-                    family = "Courier Prime";
-                    style = "Bold";
-                };
-                italic = {
-                    family = "Courier Prime";
-                    style = "Italic";
-                };
+                size   = 20.0;
+                normal = { family = "Courier Prime"; style = "Regular"; };
+                bold   = { family = "Courier Prime"; style = "Bold";    };
+                italic = { family = "Courier Prime"; style = "Italic";  };
             };
 
             window = {
-                padding = { x = 10; y = 25; };
-                decorations = "transparent";
+                dimensions      = { columns = 110; lines =  38; };
+                position        = {       x = 425;     y = 246; };
+                padding         = {       x =  10;     y =  25; };
+
+                decorations     = "transparent";
                 dynamic_padding = false;
-                dynamic_title = true;
-                opacity = 0.0;
-                blur = false;
-                option_as_alt = "Both";
+                dynamic_title   = true;
+                option_as_alt   = "Both";
+
+                opacity         = 0.0;
+                blur            = false;
             };
 
             selection.save_to_clipboard = true;
             bell.duration = 0;
 
             colors = {
-                primary = {
-                    background = "#111111";
-                    foreground = "#abb2bf";
-                };
+                primary = { background = "#111111"; foreground = "#abb2bf"; };
                 normal = {
                     black   = "#111111";
                     red     = "#e06c75";

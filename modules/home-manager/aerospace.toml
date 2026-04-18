@@ -7,10 +7,10 @@ after-startup-command = [
 ]
 
 on-focus-changed = [
-    'exec-and-forget /bin/bash -c "sketchybar --trigger aerospace_custom_app_switched INFO=\"$(aerospace list-windows --focused --format %{app-name} 2>/dev/null)\" TITLE=\"$(aerospace list-windows --focused --format %{window-title} 2>/dev/null)\""'
+    'exec-and-forget zsh -c "sketchybar --trigger aerospace_custom_app_switched INFO=\"$(aerospace list-windows --focused --format %{app-name} 2>/dev/null)\" TITLE=\"$(aerospace list-windows --focused --format %{window-title} 2>/dev/null)\""'
 ]
 
-exec-on-workspace-change = [ '/bin/bash', '-c',
+exec-on-workspace-change = [ 'zsh', '-c',
     'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
 ]
 
@@ -31,7 +31,7 @@ accordion-padding = 0
 
     # Launcher
     cmd-enter = [
-        '''exec-and-forget /bin/bash -c '
+        '''exec-and-forget zsh -c '
             ARGS=(
                 "--title" "launcher"
                 "--option" "window.dimensions={columns=120,lines=15}"
@@ -47,41 +47,26 @@ accordion-padding = 0
     ]
 
     # Vifm
-    cmd-e = '''exec-and-forget /bin/bash -c '
+    cmd-e = '''exec-and-forget zsh -c '
         CMD="printf \"\033]0;vifm\007\"; exec vifm ~/ -c \":vsplit\" -c \"windo normal ggvGgA\""
-        alacrittyDaemon -e /bin/bash -c "$CMD"
+        alacrittyDaemon -e zsh -c "$CMD"
     ' '''
 
     # Btop
-    cmd-t = '''exec-and-forget /bin/bash -c '
-        ARGS=(
-            "--title" "btop"
-            "--option" "window.dimensions={columns=110,lines=38}"
-            "--option" "window.position={x=425,y=246}"
-            "-e" "btop"
-        )
+    cmd-t = '''exec-and-forget zsh -c '
+        ARGS=( "--title" "btop" "-e" "btop")
         alacrittyDaemon "${ARGS[@]}"
     ' '''
 
     # Git
-    cmd-g = '''exec-and-forget /bin/bash -c '
-        ARGS=(
-            "--title" "git"
-            "--option" "window.dimensions={columns=110,lines=38}"
-            "--option" "window.position={x=425,y=246}"
-            "-e" "zsh" "-c" "$HOME/iCloud/Dotfiles/modules/scripts/git.sh"
-        )
+    cmd-g = '''exec-and-forget zsh -c '
+        ARGS=( "--title" "git" "-e" "zsh" "-c" "$HOME/iCloud/Dotfiles/modules/scripts/git.sh")
         alacrittyDaemon "${ARGS[@]}"
     ' '''
 
     # Attic
-    cmd-a = '''exec-and-forget /bin/bash -c '
-        ARGS=(
-            "--title" "attic"
-            "--option" "window.dimensions={columns=110,lines=38}"
-            "--option" "window.position={x=425,y=246}"
-            "-e" "zsh" "-c" "attic"
-        )
+    cmd-a = '''exec-and-forget zsh -c '
+        ARGS=( "--title" "attic" "-e" "zsh" "-c" "attic")
         alacrittyDaemon "${ARGS[@]}"
     ' '''
 
