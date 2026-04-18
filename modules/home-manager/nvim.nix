@@ -75,7 +75,26 @@ in {
                     };
                     sections = {
                         lualine_a = [ "mode" ];
-                        lualine_b = [ { __unkeyed-1 = "filename"; path = 3; } ];
+                        lualine_b = [
+                            {
+                                __unkeyed-1 = "filename";
+                                path = 3;
+                                fmt = {
+                                    __raw = ''
+                                        function(str)
+                                            local real_icloud = "~/Library/Mobile Documents/com~apple~CloudDocs"
+                                            local symlink_icloud = "~/iCloud"
+
+                                            if string.find(str, real_icloud, 1, true) == 1 then
+                                                return symlink_icloud .. string.sub(str, string.len(real_icloud) + 1)
+                                            end
+
+                                            return str
+                                        end
+                                    '';
+                                };
+                            }
+                        ];
                         lualine_c = { __raw = "{}"; };
                         lualine_x = { __raw = "{}"; };
                         lualine_y = [ "location" ];
