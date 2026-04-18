@@ -26,14 +26,11 @@
         ./skim.nix
         ./borders.nix
         ./starship.nix
-        ./launcher.nix
         ./alacritty.nix
         ./karabiner.nix
         ./sketchybar.nix
         ./qutebrowser.nix
     ];
 
-    xdg.configFile = {
-        "aerospace/aerospace.toml".source = ./aerospace.toml;
-    };
+    xdg.configFile = { "aerospace/aerospace.toml".source = ./aerospace.toml; };
 }

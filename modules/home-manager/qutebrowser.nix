@@ -4,8 +4,7 @@ let
 
     transparentWindow = pkgs.runCommandCC "transparentWindow" {} ''
         mkdir -p $out/lib
-        $CC -O3 -dynamiclib -framework Cocoa -framework QuartzCore -framework CoreImage \
-            ${scriptsDir}/window/transparency.m -o $out/lib/transparentWindow.dylib
+        $CC -O3 -dynamiclib -framework Cocoa -framework QuartzCore -framework CoreImage ${scriptsDir}/window/transparency.m -o $out/lib/transparentWindow.dylib
     '';
 
     nvimSpawn = pkgs.writeShellScript "nvim-spawn" ''

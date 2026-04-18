@@ -16,7 +16,7 @@ SBApplication *GetSkimSBApp(void) {
 
 void RunLauncher(NSString *targetPath) {
     if (!targetPath) return;
-    const char *launcherPath = "/etc/profiles/per-user/zhao/bin/launcher";
+    const char *launcherPath = "/run/current-system/sw/bin/launcher";
 
     pid_t pid;
     posix_spawn_file_actions_t actions;

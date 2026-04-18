@@ -1,26 +1,16 @@
 { pkgs, ... }: let
     scriptsDir = ../scripts;
 
-    launcher = pkgs.writeShellApplication {
-        name = "launcher";
-        runtimeInputs = with pkgs; [ fd fzf coreutils gnused gawk gnugrep ];
-        checkPhase = "";
-        text = builtins.readFile "${scriptsDir}/launcher.sh";
-    };
+    transparentWindow = pkgs.runCommandCC "transparentWindow" {} ''
+        mkdir -p $out/lib
+        $CC -O3 -dynamiclib -framework Cocoa -framework QuartzCore -framework CoreImage ${scriptsDir}/window/transparency.m -o $out/lib/transparentWindow.dylib
+    '';
 
-    pdfcp = pkgs.writeShellApplication {
-        name = "pdfcp";
-        runtimeInputs = with pkgs; [ ghostscript coreutils gnused gawk ];
-        checkPhase = "";
-        text = builtins.readFile "${scriptsDir}/pdfcp.sh";
-    };
-
-    newLatex = pkgs.writeShellApplication {
-        name = "newLatex";
-        runtimeInputs = with pkgs; [ coreutils gnused ];
-        checkPhase = "";
-        text = builtins.readFile "${scriptsDir}/newLaTeX.sh";
-    };
+    launcher = pkgs.runCommandCC "launcher" {} ''
+        mkdir -p $out/bin
+        $CC -O3 -fobjc-arc -DFD_PATH="\"${pkgs.fd}/bin/fd\"" -DFZF_PATH="\"${pkgs.fzf}/bin/fzf\"" \
+            ${scriptsDir}/launcher.m -framework Foundation -framework AppKit -o $out/bin/launcher
+    '';
 
     centerWindow = pkgs.runCommandCC "centerWindow" {} ''
         mkdir -p $out/bin
@@ -48,13 +38,7 @@
             -o $out/bin/skimUtils
     '';
 
-    attic = pkgs.runCommandCC "attic" {
-        buildInputs = with pkgs; [
-            raylib
-            cjson
-            cm_unicode
-        ];
-    } ''
+    attic = pkgs.runCommandCC "attic" { buildInputs = with pkgs; [ raylib cjson cm_unicode ]; } ''
         mkdir -p $out/bin
 
         $CC -O3 -I${scriptsDir}/texManager \
@@ -72,11 +56,19 @@
             -o $out/bin/attic-graph
     '';
 
-    transparentWindow = pkgs.runCommandCC "transparentWindow" {} ''
-        mkdir -p $out/lib
-        $CC -O3 -dynamiclib -framework Cocoa -framework QuartzCore -framework CoreImage \
-            ${scriptsDir}/window/transparency.m -o $out/lib/transparentWindow.dylib
-    '';
+    pdfcp = pkgs.writeShellApplication {
+        name = "pdfcp";
+        runtimeInputs = with pkgs; [ ghostscript coreutils gnused gawk ];
+        checkPhase = "";
+        text = builtins.readFile "${scriptsDir}/pdfcp.sh";
+    };
+
+    newLatex = pkgs.writeShellApplication {
+        name = "newLatex";
+        runtimeInputs = with pkgs; [ coreutils gnused ];
+        checkPhase = "";
+        text = builtins.readFile "${scriptsDir}/newLaTeX.sh";
+    };
 
     alacrittyDaemon = pkgs.writeShellApplication {
         name = "alacrittyDaemon";
@@ -90,13 +82,13 @@
 in
 {
     environment.systemPackages = [
-        alacrittyDaemon
         launcher
-        pdfcp
-        newLatex
         centerWindow
         texManager
         skimUtils
         attic
+        pdfcp
+        newLatex
+        alacrittyDaemon
     ];
 }
