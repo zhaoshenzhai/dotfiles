@@ -55,7 +55,7 @@ static void injectIfNeeded(NSWindow *window) {
     NSVisualEffectView *trueBlurLayer = [[NSVisualEffectView alloc] initWithFrame:themeFrame.bounds];
     trueBlurLayer.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
     trueBlurLayer.blendingMode = NSVisualEffectBlendingModeBehindWindow;
-    trueBlurLayer.material = NSVisualEffectMaterialPopover;
+    trueBlurLayer.material = NSVisualEffectMaterialHUDWindow;
     trueBlurLayer.state = NSVisualEffectStateActive;
     trueBlurLayer.alphaValue = 1.0;
 
