@@ -26,6 +26,7 @@ static void injectIfNeeded(NSWindow *window) {
     window.backgroundColor = [NSColor clearColor];
 
     NSView *themeFrame = window.contentView.superview;
+
     NSVisualEffectView *blurView = [[NSVisualEffectView alloc] initWithFrame:themeFrame.bounds];
     blurView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
     blurView.blendingMode = NSVisualEffectBlendingModeBehindWindow;
@@ -50,6 +51,15 @@ static void injectIfNeeded(NSWindow *window) {
     filterView.layer.backgroundFilters = @[toneCurve];
     [blurView addSubview:filterView];
     [themeFrame addSubview:blurView positioned:NSWindowBelow relativeTo:nil];
+
+    NSVisualEffectView *trueBlurLayer = [[NSVisualEffectView alloc] initWithFrame:themeFrame.bounds];
+    trueBlurLayer.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+    trueBlurLayer.blendingMode = NSVisualEffectBlendingModeBehindWindow;
+    trueBlurLayer.material = NSVisualEffectMaterialPopover;
+    trueBlurLayer.state = NSVisualEffectStateActive;
+    trueBlurLayer.alphaValue = 1.0;
+
+    [themeFrame addSubview:trueBlurLayer positioned:NSWindowBelow relativeTo:blurView];
 }
 
 static void updateAlphas(void) {

@@ -27,7 +27,7 @@
                 dynamic_padding = false;
                 dynamic_title = true;
                 opacity = 0.0;
-                blur = true;
+                blur = false;
                 option_as_alt = "Both";
             };
 
