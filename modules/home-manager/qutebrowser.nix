@@ -1,8 +1,15 @@
 { config, pkgs, lib, ... }:
 let
+    scriptsDir = ../scripts;
+    alacrittyRecolor = pkgs.runCommandCC "alacrittyRecolor" {} ''
+        mkdir -p $out/lib
+        $CC -O3 -dynamiclib -framework Cocoa -framework QuartzCore -framework CoreImage \
+            ${scriptsDir}/alacritty/recolor.m -o $out/lib/alacrittyRecolor.dylib
+    '';
+
     nvimSpawn = pkgs.writeShellScript "nvim-spawn" ''
         ARGS=( "-e" "nvim" "$1")
-        ${pkgs.alacritty}/bin/alacritty "''${ARGS[@]}"
+        alacrittyDaemon "''${ARGS[@]}"
     '';
 
     vifmPicker = pkgs.writeShellScript "vifm-picker" ''
@@ -21,7 +28,7 @@ let
             "--choose-files" "$1"
             "$lastdir"
         )
-
+        export DYLD_INSERT_LIBRARIES="${alacrittyRecolor}/lib/alacrittyRecolor.dylib"
         alacritty "''${ARGS[@]}"
     '';
 
@@ -40,7 +47,7 @@ let
             "--choose-files" "$1"
             "$lastdir"
         )
-
+        export DYLD_INSERT_LIBRARIES="${alacrittyRecolor}/lib/alacrittyRecolor.dylib"
         alacritty "''${ARGS[@]}"
     '';
 
