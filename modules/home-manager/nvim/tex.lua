@@ -122,88 +122,54 @@ end
 
 local function get_bib_entries()
     local items = {}
-    local bib_files = {}
-    local seen_bibs = {}
     local seen_keys = {}
-    local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
     local current_dir = vim.fn.expand('%:p:h')
 
-    local function add_bib_file(path)
-        if vim.fn.filereadable(path) == 1 and not seen_bibs[path] then
-            table.insert(bib_files, path)
-            seen_bibs[path] = true
+    local bib_path = current_dir .. '/refs.bib'
+    if vim.fn.filereadable(bib_path) == 0 then
+        bib_path = vim.fn.resolve(current_dir .. '/../../latex/refs.bib')
+        if vim.fn.filereadable(bib_path) == 0 then
+            return items
         end
     end
 
-    for _, line in ipairs(lines) do
-        local match = line:match('\\input%s*{([^}]+%.bib)}')
-                   or line:match('\\bibliography%s*{([^}]+)}')
-                   or line:match('\\addbibresource%s*{([^}]+)}')
+    local bib_lines = vim.fn.readfile(bib_path)
+    local c_key, c_author, c_title = nil, "Unknown Author", "Unknown Title"
 
-        if match then
-            for b in match:gmatch("([^,]+)") do
-                local b_name = b:gsub("^%s*", ""):gsub("%s*$", "")
-                if not b_name:match('%.bib$') then b_name = b_name .. '.bib' end
+    local function save_entry()
+        if c_key and not seen_keys[c_key] then
+            seen_keys[c_key] = true
+            local display = c_author .. " - " .. c_title
+            display = display:gsub("[{}]", ""):gsub("%s+", " ")
 
-                local full_path = vim.fn.resolve(current_dir .. '/' .. b_name)
-                add_bib_file(full_path)
-            end
+            table.insert(items, {
+                label = display,
+                filterText = c_key .. " " .. display,
+                insertText = c_key,
+                kind = 14
+            })
         end
     end
 
-    if #bib_files == 0 then
-        local dirs_to_check = {
-            current_dir,
-            vim.fn.fnamemodify(current_dir, ':h'),
-            vim.fn.fnamemodify(current_dir, ':h:h')
-        }
-        for _, d in ipairs(dirs_to_check) do
-            local all_bibs = vim.fn.globpath(d, '*.bib', 0, 1)
-            for _, b in ipairs(all_bibs) do
-                add_bib_file(b)
-            end
+    for _, line in ipairs(bib_lines) do
+        local key, rest = line:match('@%a+%s*{%s*([^,]+),(.*)')
+        if key then
+            save_entry()
+            c_key = key
+            c_author = "Unknown Author"
+            c_title = "Unknown Title"
+            line = rest or ""
+        end
+
+        if c_key and line and line ~= "" then
+            local author = line:match('[aA]uthor%s*=%s*[{"]?(.*)')
+            if author then c_author = author:gsub('[}"]+,?%s*$', '') end
+
+            local title = line:match('[tT]itle%s*=%s*[{"]?(.*)')
+            if title then c_title = title:gsub('[}"]+,?%s*$', '') end
         end
     end
-
-    for _, bib_path in ipairs(bib_files) do
-        local bib_lines = vim.fn.readfile(bib_path)
-        local c_key, c_author, c_title = nil, "Unknown Author", "Unknown Title"
-
-        local function save_entry()
-            if c_key and not seen_keys[c_key] then
-                seen_keys[c_key] = true
-                local display = c_author .. " - " .. c_title
-                display = display:gsub("[{}]", ""):gsub("%s+", " ")
-
-                table.insert(items, {
-                    label = display,
-                    filterText = c_key .. " " .. display,
-                    insertText = c_key,
-                    kind = 14,
-                })
-            end
-        end
-
-        for _, line in ipairs(bib_lines) do
-            local key, rest = line:match('@%a+%s*{%s*([^,]+),(.*)')
-            if key then
-                save_entry()
-                c_key = key
-                c_author = "Unknown Author"
-                c_title = "Unknown Title"
-                line = rest or ""
-            end
-
-            if c_key and line and line ~= "" then
-                local author = line:match('[aA]uthor%s*=%s*[{"]?(.*)')
-                if author then c_author = author:gsub('[}"]+,?%s*$', '') end
-
-                local title = line:match('[tT]itle%s*=%s*[{"]?(.*)')
-                if title then c_title = title:gsub('[}"]+,?%s*$', '') end
-            end
-        end
-        save_entry()
-    end
+    save_entry()
 
     return items
 end
@@ -285,7 +251,7 @@ end
 
 cmp.register_source('tex_cite', cite_source)
 
--- Contextual Autocomplete Trigger
+-- Contextual Autocomplete Switching
 vim.api.nvim_create_autocmd({"CursorMovedI", "InsertEnter"}, {
     group = tex_cmp_group,
     pattern = "*.tex",
