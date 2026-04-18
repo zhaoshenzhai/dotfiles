@@ -43,8 +43,8 @@ in {
                     };
                     sources = [
                         { name = "ultisnips"; }
+                        { name = "tex"; }
                         { name = "attic"; }
-                        { name = "omni"; }
                         { name = "buffer"; }
                         { name = "path"; }
                     ];
@@ -97,9 +97,9 @@ in {
             "lua/autocmds.lua".source  = ./nvim/autocmds.lua;
             "lua/tabs.lua".source      = ./nvim/tabs.lua;
             "lua/aerospace.lua".source = ./nvim/aerospace.lua;
-            "lua/attic.lua".source     = ./nvim/attic.lua;
             "lua/c.lua".source         = ./nvim/c.lua;
             "lua/tex.lua".source       = ./nvim/tex.lua;
+            "lua/attic.lua".source     = ./nvim/attic.lua;
         } // snippetExtraFiles;
 
         extraConfigLua = ''
@@ -109,9 +109,9 @@ in {
             require('autocmds')
             require('tabs')
             require('aerospace')
+            require('c')
             require('attic')
             require('tex')
-            require('c')
         '';
     };
 }

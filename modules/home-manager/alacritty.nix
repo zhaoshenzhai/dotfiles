@@ -26,7 +26,7 @@
                 decorations = "transparent";
                 dynamic_padding = false;
                 dynamic_title = true;
-                opacity = 0.3;
+                opacity = 0.0;
                 blur = true;
                 option_as_alt = "Both";
             };

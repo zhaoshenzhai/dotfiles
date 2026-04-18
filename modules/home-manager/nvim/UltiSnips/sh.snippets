@@ -11,7 +11,7 @@ if [[ ${1:bool condition} ]]; then
 fi
 endsnippet
 
-snippet whileline "loop through multiline variable" 
+snippet whileline "loop through multiline variable"
 while IFS= read -r ${1:line}; do
 	echo -e "${YELLOW}$$1${NC}"
 	$0

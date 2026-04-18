@@ -1,9 +1,12 @@
 # Math
 global !p
 def math():
-	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
+    try:
+        return int(vim.eval('v:lua.in_mathzone()')) == 1
+    except:
+        return False
 def notMath():
-	return vim.eval('vimtex#syntax#in_mathzone()') != '1'
+    return not math()
 endglobal
 
 # General

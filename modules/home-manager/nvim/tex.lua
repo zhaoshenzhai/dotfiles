@@ -1,5 +1,8 @@
+local cmp = require('cmp')
+
 local opts = { buffer = true, silent = true }
 local autocompile_group = vim.api.nvim_create_augroup("TexAutoCompile", { clear = true })
+local tex_cmp_group = vim.api.nvim_create_augroup("TexRefCiteGroup", { clear = true })
 
 -- Auto-compile
 vim.api.nvim_create_autocmd("BufWritePost", {
@@ -94,4 +97,218 @@ vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {
     group = tex_group,
     pattern = "*.tex",
     command = "let &l:foldexpr = &l:foldexpr"
+})
+
+local function get_labels()
+    local items = {}
+    local seen = {}
+
+    local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+
+    for _, line in ipairs(lines) do
+        for label in line:gmatch('\\label%s*{([^}]+)}') do
+            if not seen[label] then
+                seen[label] = true
+                table.insert(items, {
+                    label = label,
+                    kind = 18,
+                })
+            end
+        end
+    end
+
+    return items
+end
+
+local function get_bib_entries()
+    local items = {}
+    local bib_files = {}
+    local seen_bibs = {}
+    local seen_keys = {}
+    local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+    local current_dir = vim.fn.expand('%:p:h')
+
+    local function add_bib_file(path)
+        if vim.fn.filereadable(path) == 1 and not seen_bibs[path] then
+            table.insert(bib_files, path)
+            seen_bibs[path] = true
+        end
+    end
+
+    for _, line in ipairs(lines) do
+        local match = line:match('\\input%s*{([^}]+%.bib)}')
+                   or line:match('\\bibliography%s*{([^}]+)}')
+                   or line:match('\\addbibresource%s*{([^}]+)}')
+
+        if match then
+            for b in match:gmatch("([^,]+)") do
+                local b_name = b:gsub("^%s*", ""):gsub("%s*$", "")
+                if not b_name:match('%.bib$') then b_name = b_name .. '.bib' end
+
+                local full_path = vim.fn.resolve(current_dir .. '/' .. b_name)
+                add_bib_file(full_path)
+            end
+        end
+    end
+
+    if #bib_files == 0 then
+        local dirs_to_check = {
+            current_dir,
+            vim.fn.fnamemodify(current_dir, ':h'),
+            vim.fn.fnamemodify(current_dir, ':h:h')
+        }
+        for _, d in ipairs(dirs_to_check) do
+            local all_bibs = vim.fn.globpath(d, '*.bib', 0, 1)
+            for _, b in ipairs(all_bibs) do
+                add_bib_file(b)
+            end
+        end
+    end
+
+    for _, bib_path in ipairs(bib_files) do
+        local bib_lines = vim.fn.readfile(bib_path)
+        local c_key, c_author, c_title = nil, "Unknown Author", "Unknown Title"
+
+        local function save_entry()
+            if c_key and not seen_keys[c_key] then
+                seen_keys[c_key] = true
+                local display = c_author .. " - " .. c_title
+                display = display:gsub("[{}]", ""):gsub("%s+", " ")
+
+                table.insert(items, {
+                    label = display,
+                    filterText = c_key .. " " .. display,
+                    insertText = c_key,
+                    kind = 14,
+                })
+            end
+        end
+
+        for _, line in ipairs(bib_lines) do
+            local key, rest = line:match('@%a+%s*{%s*([^,]+),(.*)')
+            if key then
+                save_entry()
+                c_key = key
+                c_author = "Unknown Author"
+                c_title = "Unknown Title"
+                line = rest or ""
+            end
+
+            if c_key and line and line ~= "" then
+                local author = line:match('[aA]uthor%s*=%s*[{"]?(.*)')
+                if author then c_author = author:gsub('[}"]+,?%s*$', '') end
+
+                local title = line:match('[tT]itle%s*=%s*[{"]?(.*)')
+                if title then c_title = title:gsub('[}"]+,?%s*$', '') end
+            end
+        end
+        save_entry()
+    end
+
+    return items
+end
+
+local function check_ref_cite_context(before_cursor)
+    local search_pos = 1
+    local is_ref = false
+    local is_cite = false
+    local just_entered = false
+
+    while true do
+        local s_ref, e_ref = before_cursor:find("\\[a%-zA%-Z]*ref%*?%s*{", search_pos)
+        local s_cite, e_cite = before_cursor:find("\\[a%-zA%-Z]*cite[a%-zA%-Z]*%*?%s*{", search_pos)
+        local s_cite2, e_cite2 = before_cursor:find("\\[a%-zA%-Z]*cite[a%-zA%-Z]*%*?%s*%[.-%]%s*{", search_pos)
+
+        local start_pos, end_pos, cmd_type
+        if s_ref and (not start_pos or s_ref < start_pos) then start_pos, end_pos, cmd_type = s_ref, e_ref, "ref" end
+        if s_cite and (not start_pos or s_cite < start_pos) then start_pos, end_pos, cmd_type = s_cite, e_cite, "cite" end
+        if s_cite2 and (not start_pos or s_cite2 < start_pos) then start_pos, end_pos, cmd_type = s_cite2, e_cite2, "cite" end
+
+        if not start_pos then break end
+
+        local brace_level = 1
+        local closed = false
+
+        for i = end_pos + 1, #before_cursor do
+            local char = before_cursor:sub(i, i)
+            if char == "{" then brace_level = brace_level + 1
+            elseif char == "}" then brace_level = brace_level - 1 end
+
+            if brace_level == 0 then
+                closed = true
+                search_pos = i + 1
+                break
+            end
+        end
+
+        if not closed then
+            is_ref = (cmd_type == "ref")
+            is_cite = (cmd_type == "cite")
+            just_entered = (end_pos == #before_cursor)
+            break
+        end
+    end
+
+    return is_ref, is_cite, just_entered
+end
+
+-- Autocomplete Setup
+local ref_source = {}
+function ref_source:is_available() return vim.bo.filetype == "tex" end
+function ref_source:get_trigger_characters() return { '{', ',' } end
+function ref_source:get_keyword_pattern() return [=[[^}{, \t]\+]=] end
+function ref_source:complete(request, callback)
+    local line = request.context.cursor_before_line
+    local is_ref, _, _ = check_ref_cite_context(line)
+    if is_ref then
+        callback({ items = get_labels(), isIncomplete = false })
+    else
+        callback({ items = {}, isIncomplete = false })
+    end
+end
+
+cmp.register_source('tex_ref', ref_source)
+
+local cite_source = {}
+function cite_source:is_available() return vim.bo.filetype == "tex" end
+function cite_source:get_trigger_characters() return { '{', ',' } end
+function cite_source:get_keyword_pattern() return [=[[^}{, \t]\+]=] end
+function cite_source:complete(request, callback)
+    local line = request.context.cursor_before_line
+    local _, is_cite, _ = check_ref_cite_context(line)
+    if is_cite then
+        callback({ items = get_bib_entries(), isIncomplete = false })
+    else
+        callback({ items = {}, isIncomplete = false })
+    end
+end
+
+cmp.register_source('tex_cite', cite_source)
+
+-- Contextual Autocomplete Trigger
+vim.api.nvim_create_autocmd({"CursorMovedI", "InsertEnter"}, {
+    group = tex_cmp_group,
+    pattern = "*.tex",
+    callback = function()
+        local col = vim.fn.col('.')
+        local line = vim.fn.getline('.')
+        local before_cursor = string.sub(line, 1, col - 1)
+
+        local is_ref, is_cite, just_entered = check_ref_cite_context(before_cursor)
+
+        if (is_ref or is_cite) and just_entered then
+            cmp.complete()
+        else
+            cmp.setup.buffer({
+                sources = {
+                    { name = 'tex_ref' },
+                    { name = 'tex_cite' },
+                    { name = 'attic' },
+                    { name = 'omni' },
+                    { name = 'buffer' },
+                    { name = 'path' }
+                }
+            })
+        end
+    end
 })
