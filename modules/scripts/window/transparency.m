@@ -2,9 +2,15 @@
 #import <QuartzCore/QuartzCore.h>
 #import <CoreImage/CoreImage.h>
 
+typedef int CGSConnectionID;
+extern CGSConnectionID CGSMainConnectionID(void);
+extern CGError CGSSetWindowBackgroundBlurRadius(CGSConnectionID cid, NSInteger wid, int radius);
+
 // ==========================================
 // === GLOBAL TUNING PARAMETERS ===
 // ==========================================
+
+static const CGFloat BLUR_RADIUS = 30;
 
 // 1. The Cutoff: What is considered "Bright"?
 static const float G_CUTOFF_LUMA = 0.07;
@@ -15,15 +21,18 @@ static const float G_BLACK_LUMA = 0.008;
 // 3. Saturation Boost:
 static const float G_SAT_BOOST = 3.00;
 
-// 4. Effect Intensity (The fixed filter opacity):
-// 0.0 means no effect (standard macOS blur). 1.0 means full Black crush.
-// We bake this directly into the color math so Core Animation cannot ignore it.
+// 4. NEW: Obsidian Tint (Blueish-Black overlay for bright backgrounds)
+// Since white PDFs have no color to boost, we inject a custom blue hue.
+static const float G_TINT_R = 0.15; // Red channel ratio
+static const float G_TINT_G = 0.28; // Green channel ratio
+static const float G_TINT_B = 0.35; // Blue channel ratio (highest for a deep blue)
+static const float G_TINT_WEIGHT = 0.5; // How strongly to apply this tint (0.0 to 1.0)
+
+// 5. Effect Intensity (The fixed filter opacity):
 static const float G_EFFECT_INTENSITY = 1.0;
 
-// 5. Overall Window Transparency:
-// Controls how "see-through" the entire terminal window is.
-// 1.0 is standard blur. 0.8 makes the terminal more physically transparent to the desktop.
-static const float G_WINDOW_TRANSPARENCY = 1.00;
+// 6. Overall Window Transparency:
+static const float G_WINDOW_TRANSPARENCY = 0.9;
 
 // ==========================================
 
@@ -44,11 +53,13 @@ static NSData *generateBlackLUT(void) {
                 float luma = r * 0.2126 + g * 0.7152 + b * 0.0722;
                 float targetLuma = luma;
                 float currentSatBoost = 1.0;
+                int isCrushed = 0;
 
                 // The Hard Cutoff Logic
                 if (luma > G_CUTOFF_LUMA) {
                     targetLuma = G_BLACK_LUMA;
                     currentSatBoost = G_SAT_BOOST;
+                    isCrushed = 1; // Flag that we triggered the cutoff
                 }
 
                 // Scale RGB
@@ -57,14 +68,21 @@ static NSData *generateBlackLUT(void) {
                 float outG = g * factor;
                 float outB = b * factor;
 
-                // Apply Saturation Boost
+                // NEW: Inject the custom hue if we crushed a bright background
+                if (isCrushed) {
+                    // We blend the natural crushed color with our target tint, scaled to match the darkness
+                    outR = (outR * (1.0 - G_TINT_WEIGHT)) + (G_TINT_R * targetLuma * G_TINT_WEIGHT);
+                    outG = (outG * (1.0 - G_TINT_WEIGHT)) + (G_TINT_G * targetLuma * G_TINT_WEIGHT);
+                    outB = (outB * (1.0 - G_TINT_WEIGHT)) + (G_TINT_B * targetLuma * G_TINT_WEIGHT);
+                }
+
+                // Apply Saturation Boost (this will also boost the new blue tint!)
                 float newLuma = outR * 0.2126 + outG * 0.7152 + outB * 0.0722;
                 outR = newLuma + (outR - newLuma) * currentSatBoost;
                 outG = newLuma + (outG - newLuma) * currentSatBoost;
                 outB = newLuma + (outB - newLuma) * currentSatBoost;
 
-                // THE FIX: Apply the Effect Intensity mathematically
-                // We linearly mix the original pixel (r,g,b) with our customized pixel (outR, outG, outB)
+                // Apply the Effect Intensity mathematically
                 outR = r + (outR - r) * G_EFFECT_INTENSITY;
                 outG = g + (outG - g) * G_EFFECT_INTENSITY;
                 outB = b + (outB - b) * G_EFFECT_INTENSITY;
@@ -72,7 +90,7 @@ static NSData *generateBlackLUT(void) {
                 cubeData[offset++] = MIN(MAX(outR, 0.0), 1.0);
                 cubeData[offset++] = MIN(MAX(outG, 0.0), 1.0);
                 cubeData[offset++] = MIN(MAX(outB, 0.0), 1.0);
-                cubeData[offset++] = 1.0f; // Alpha remains 1.0, transparency is handled by the View
+                cubeData[offset++] = 1.0f;
             }
         }
     }
@@ -95,9 +113,10 @@ static void injectIfNeeded(NSWindow *window) {
     window.opaque = NO;
     window.backgroundColor = [NSColor clearColor];
 
+    CGSSetWindowBackgroundBlurRadius(CGSMainConnectionID(), [window windowNumber], BLUR_RADIUS);
+
     NSView *themeFrame = window.contentView.superview;
 
-    // Base Blur Layer handles the physical window transparency
     NSVisualEffectView *mainBlurEffect = [[NSVisualEffectView alloc] initWithFrame:themeFrame.bounds];
     mainBlurEffect.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
     mainBlurEffect.blendingMode = NSVisualEffectBlendingModeBehindWindow;
@@ -105,15 +124,14 @@ static void injectIfNeeded(NSWindow *window) {
     mainBlurEffect.state = NSVisualEffectStateActive;
     mainBlurEffect.appearance = [NSAppearance appearanceNamed:NSAppearanceNameVibrantDark];
     mainBlurEffect.identifier = @"mainBlurEffect";
-    mainBlurEffect.alphaValue = G_WINDOW_TRANSPARENCY; // Fixed window transparency control
+    mainBlurEffect.alphaValue = G_WINDOW_TRANSPARENCY;
 
-    // Filter Layer handles the color grading
     NSView *filterView = [[NSView alloc] initWithFrame:mainBlurEffect.bounds];
     filterView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
     filterView.wantsLayer = YES;
     filterView.layer.backgroundColor = [[NSColor clearColor] CGColor];
     filterView.identifier = @"filterView";
-    filterView.alphaValue = 1.0; // Left at 1.0 because the C-loop handles effect intensity
+    filterView.alphaValue = 1.0;
 
     CIFilter *cubeFilter = [CIFilter filterWithName:@"CIColorCube"];
     [cubeFilter setValue:@(16) forKey:@"inputCubeDimension"];
