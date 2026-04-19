@@ -7,7 +7,7 @@ extern CGSConnectionID CGSMainConnectionID(void);
 extern CGError CGSSetWindowBackgroundBlurRadius(CGSConnectionID cid, NSInteger wid, int radius);
 
 static const CGFloat BASE_ALPHA  = 0.95;
-static const CGFloat BLUR_RADIUS = 20;
+static const CGFloat BLUR_RADIUS = 12;
 
 static const CGFloat CURVE_PT0_X = 0.00; static const CGFloat CURVE_PT0_Y = 0.00;
 static const CGFloat CURVE_PT1_X = 0.25; static const CGFloat CURVE_PT1_Y = 0.20;
@@ -29,28 +29,32 @@ static void injectIfNeeded(NSWindow *window) {
     window.opaque          = NO;
     window.backgroundColor = NSColor.clearColor;
 
+    // 1. The Hardware Blur (Flawless)
     CGSSetWindowBackgroundBlurRadius(CGSMainConnectionID(), [window windowNumber], BLUR_RADIUS);
 
     NSView *themeFrame = window.contentView.superview;
 
-    NSView *filterView = [[NSView alloc] initWithFrame:filterView.bounds];
-    filterView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
-    filterView.wantsLayer = YES;
-    filterView.layer.backgroundColor = [[NSColor clearColor] CGColor];
+    // 2. The Indestructible Black Layer
+    // This dynamically crushes bright backgrounds and leaves dark backgrounds dark.
+    NSView *blackView = [[NSView alloc] initWithFrame:themeFrame.bounds];
+    blackView.autoresizingMask      = NSViewWidthSizable | NSViewHeightSizable;
+    blackView.wantsLayer            = YES;
+    blackView.layer.backgroundColor = [[NSColor blackColor] CGColor];
+    blackView.layer.opacity         = 0.9; // Tweak this between 0.70 and 0.95 to match your ideal curve
+    blackView.identifier            = @"DynamicBlackLayer";
 
-    CIFilter *toneCurve = [CIFilter filterWithName:@"CIToneCurve"];
-    [toneCurve setValue:[CIVector vectorWithX:CURVE_PT0_X Y:CURVE_PT0_Y] forKey:@"inputPoint0"];
-    [toneCurve setValue:[CIVector vectorWithX:CURVE_PT1_X Y:CURVE_PT1_Y] forKey:@"inputPoint1"];
-    [toneCurve setValue:[CIVector vectorWithX:CURVE_PT2_X Y:CURVE_PT2_Y] forKey:@"inputPoint2"];
-    [toneCurve setValue:[CIVector vectorWithX:CURVE_PT3_X Y:CURVE_PT3_Y] forKey:@"inputPoint3"];
-    [toneCurve setValue:[CIVector vectorWithX:CURVE_PT4_X Y:CURVE_PT4_Y] forKey:@"inputPoint4"];
+    // Positioned securely behind your terminal content
+    [themeFrame addSubview:blackView positioned:NSWindowBelow relativeTo:nil];
 
+    // 3. The Glass Layer
     NSGlassEffectView *glassView = [[NSGlassEffectView alloc] initWithFrame:themeFrame.bounds];
     glassView.autoresizingMask   = NSViewWidthSizable | NSViewHeightSizable;
     glassView.style              = NSGlassEffectViewStyleClear;
     glassView.alphaValue         = BASE_ALPHA;
     glassView.identifier         = @"LiquidGlassView";
-    [themeFrame addSubview:glassView positioned:NSWindowAbove relativeTo:toneCurve];
+
+    // Stacked precisely on top of the black layer
+    [themeFrame addSubview:glassView positioned:NSWindowAbove relativeTo:blackView];
 }
 
 static void updateAlphas(void) {
