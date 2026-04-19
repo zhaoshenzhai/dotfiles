@@ -2,12 +2,16 @@
 #import <QuartzCore/QuartzCore.h>
 #import <CoreImage/CoreImage.h>
 
+// ─── Undocumented WindowServer APIs ──────────────────────────────────────────
+typedef int CGSConnectionID;
+extern CGSConnectionID CGSMainConnectionID(void);
+extern CGError CGSSetWindowBackgroundBlurRadius(CGSConnectionID cid, NSInteger wid, int radius);
+
 static const CGFloat BASE_ALPHA  = 0.95;
+static const CGFloat BLUR_RADIUS = 20;
 
 static const CGFloat INPUT_LUMAS[]      = {0.00, 0.25, 0.50, 0.75, 1.00};
-static const CGFloat TARGET_OPACITIES[] = {0.92, 0.93, 0.94, 0.95, 0.96};
-
-// ─── View lookup ─────────────────────────────────────────────────────────────
+static const CGFloat TARGET_OPACITIES[] = {0.30, 0.30, 0.30, 0.30, 0.30};
 
 static NSView *findTagged(NSWindow *w, NSString *tag) {
     if (!w.contentView || !w.contentView.superview) return nil;
@@ -16,14 +20,14 @@ static NSView *findTagged(NSWindow *w, NSString *tag) {
     return nil;
 }
 
-// ─── Injection ───────────────────────────────────────────────────────────────
-
 static void injectIfNeeded(NSWindow *window) {
     if (findTagged(window, @"LiquidGlassView")) return;
     if (!window.contentView || !window.contentView.superview) return;
 
     window.opaque          = NO;
     window.backgroundColor = NSColor.clearColor;
+
+    CGSSetWindowBackgroundBlurRadius(CGSMainConnectionID(), [window windowNumber], BLUR_RADIUS);
 
     NSView *themeFrame = window.contentView.superview;
 
@@ -40,10 +44,8 @@ static void injectIfNeeded(NSWindow *window) {
     glassView.style              = NSGlassEffectViewStyleClear;
     glassView.alphaValue         = BASE_ALPHA;
     glassView.identifier         = @"LiquidGlassView";
-    [themeFrame addSubview:glassView positioned:NSWindowBelow relativeTo:nil];
+    [themeFrame addSubview:glassView positioned:NSWindowAbove relativeTo:blackView];
 }
-
-// ─── Dynamic Filters ─────────────────────────────────────────────────────────
 
 static void applyDynamicFilters(NSView *blackView, NSInteger overlapCount) {
     CIFilter *toneCurve = [CIFilter filterWithName:@"CIToneCurve"];
@@ -79,8 +81,6 @@ static void updateAlphas(void) {
         if (blackView) applyDynamicFilters(blackView, n);
     }
 }
-
-// ─── Entry point ─────────────────────────────────────────────────────────────
 
 __attribute__((constructor))
 void recolor(void) {
