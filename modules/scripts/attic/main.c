@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
 
     snprintf(atticDir, sizeof(atticDir), "%s/iCloud/Projects/_attic/notes", getenv("HOME"));
     snprintf(templateFile, sizeof(templateFile), "%s/iCloud/Dotfiles/modules/LaTeXTemplate/files/attic.tex", getenv("HOME"));
-    snprintf(launcherPath, sizeof(launcherPath), "/etc/profiles/per-user/%s/bin/launcher", getenv("USER"));
+    snprintf(launcherPath, sizeof(launcherPath), "/run/current-system/sw/bin/launcher");
 
     loadMemory();
 
