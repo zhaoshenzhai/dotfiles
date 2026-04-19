@@ -1,9 +1,12 @@
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/QuartzCore.h>
+#import <CoreImage/CoreImage.h>
 
 static const CGFloat BASE_ALPHA = 0.95;
+static const CGFloat BLUR_RADIUS = 100;
 
-// ─── View lookup ─────────────────────────────────────────────────────────────
+static const CGFloat INPUT_LUMAS[]      = {0.00, 0.25, 0.50, 0.75, 1.00};
+static const CGFloat TARGET_OPACITIES[] = {0.92, 0.93, 0.94, 0.95, 0.96};
 
 static NSView *findTagged(NSWindow *w, NSString *tag) {
     if (!w.contentView || !w.contentView.superview) return nil;
@@ -11,8 +14,6 @@ static NSView *findTagged(NSWindow *w, NSString *tag) {
         if ([v.identifier isEqualToString:tag]) return v;
     return nil;
 }
-
-// ─── Injection ───────────────────────────────────────────────────────────────
 
 static void injectIfNeeded(NSWindow *window) {
     if (findTagged(window, @"LiquidGlassView")) return;
@@ -23,38 +24,43 @@ static void injectIfNeeded(NSWindow *window) {
 
     NSView *themeFrame = window.contentView.superview;
 
-    // Black obsidian layer — always off in dark mode preview.
-    // Opacity stays at 0.0; re-enable SCKit luminance sampling when ready.
     NSView *blackView = [[NSView alloc] initWithFrame:themeFrame.bounds];
     blackView.autoresizingMask      = NSViewWidthSizable | NSViewHeightSizable;
     blackView.wantsLayer            = YES;
-    blackView.layer.backgroundColor = [NSColor.blackColor CGColor];
-    blackView.layer.opacity         = 0.6;
+    blackView.layer.backgroundColor = [[NSColor clearColor] CGColor];
     blackView.identifier            = @"ObsidianBlackView";
     [themeFrame addSubview:blackView positioned:NSWindowBelow relativeTo:nil];
 
-    // Liquid Glass on top.
-    if (@available(macOS 26.0, *)) {
-        NSGlassEffectView *glassView = [[NSGlassEffectView alloc] initWithFrame:themeFrame.bounds];
-        glassView.autoresizingMask   = NSViewWidthSizable | NSViewHeightSizable;
-        glassView.style              = NSGlassEffectViewStyleClear;
-        glassView.alphaValue         = BASE_ALPHA;
-        glassView.identifier         = @"LiquidGlassView";
-        [themeFrame addSubview:glassView positioned:NSWindowBelow relativeTo:nil];
-    } else {
-        NSVisualEffectView *fallback = [[NSVisualEffectView alloc] initWithFrame:themeFrame.bounds];
-        fallback.autoresizingMask    = NSViewWidthSizable | NSViewHeightSizable;
-        fallback.blendingMode        = NSVisualEffectBlendingModeBehindWindow;
-        fallback.material            = NSVisualEffectMaterialHUDWindow;
-        fallback.state               = NSVisualEffectStateActive;
-        fallback.appearance          = [NSAppearance appearanceNamed:NSAppearanceNameVibrantDark];
-        fallback.alphaValue          = BASE_ALPHA;
-        fallback.identifier          = @"LiquidGlassView";
-        [themeFrame addSubview:fallback positioned:NSWindowBelow relativeTo:nil];
-    }
+    NSGlassEffectView *glassView = [[NSGlassEffectView alloc] initWithFrame:themeFrame.bounds];
+    glassView.autoresizingMask   = NSViewWidthSizable | NSViewHeightSizable;
+    glassView.style              = NSGlassEffectViewStyleClear;
+    glassView.alphaValue         = BASE_ALPHA;
+    glassView.identifier         = @"LiquidGlassView";
+    [themeFrame addSubview:glassView positioned:NSWindowBelow relativeTo:nil];
 }
 
-// ─── Overlap alpha correction ─────────────────────────────────────────────────
+static void applyDynamicToneCurve(NSView *blackView, NSInteger overlapCount) {
+    CIFilter *toneCurve = [CIFilter filterWithName:@"CIToneCurve"];
+
+    for (int i = 0; i < 5; i++) {
+        CGFloat L = INPUT_LUMAS[i];
+        CGFloat targetAlpha = TARGET_OPACITIES[i];
+
+        // Output luminance = L * (1 - targetAlpha)^(1/N)
+        CGFloat multiplier = pow(1.0 - targetAlpha, 1.0 / (CGFloat)overlapCount);
+        CGFloat outputY = L * multiplier;
+
+        NSString *key = [NSString stringWithFormat:@"inputPoint%d", i];
+        [toneCurve setValue:[CIVector vectorWithX:L Y:outputY] forKey:key];
+    }
+
+    // blackView.layer.backgroundFilters = @[toneCurve];
+
+    CIFilter *blurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
+    [blurFilter setValue:@(BLUR_RADIUS) forKey:kCIInputRadiusKey];
+
+    blackView.layer.backgroundFilters = @[blurFilter, toneCurve];
+}
 
 static void updateAlphas(void) {
     NSMutableArray<NSWindow *> *tracked = [NSMutableArray array];
@@ -67,12 +73,13 @@ static void updateAlphas(void) {
         for (NSWindow *other in tracked)
             if (other != w && NSIntersectsRect(w.frame, other.frame)) n++;
 
-        CGFloat a = 1.0 - pow(1.0 - BASE_ALPHA, 1.0 / (CGFloat)n);
-        findTagged(w, @"LiquidGlassView").alphaValue = a;
+        CGFloat glassAlpha = 1.0 - pow(1.0 - BASE_ALPHA, 1.0 / (CGFloat)n);
+        findTagged(w, @"LiquidGlassView").alphaValue = glassAlpha;
+
+        NSView *blackView = findTagged(w, @"ObsidianBlackView");
+        if (blackView) applyDynamicToneCurve(blackView, n);
     }
 }
-
-// ─── Entry point ─────────────────────────────────────────────────────────────
 
 __attribute__((constructor))
 void recolor(void) {
