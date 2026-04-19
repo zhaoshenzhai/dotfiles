@@ -6,19 +6,19 @@ typedef int CGSConnectionID;
 extern CGSConnectionID CGSMainConnectionID(void);
 extern CGError CGSSetWindowBackgroundBlurRadius(CGSConnectionID cid, NSInteger wid, int radius);
 
-static const CGFloat BLUR_RADIUS = 30;
+static const CGFloat BLUR_RADIUS = 10;
 
-static const float G_CUTOFF_LUMA = 0.07;
-static const float G_BLACK_LUMA = 0.008;
-static const float G_SAT_BOOST = 3.00;
+static const CGFloat G_CUTOFF_LUMA = 0.07;
+static const CGFloat G_BLACK_LUMA = 0.008;
+static const CGFloat G_SAT_BOOST = 3.00;
 
-static const float G_TINT_R = 0.15;
-static const float G_TINT_G = 0.28;
-static const float G_TINT_B = 0.35;
-static const float G_TINT_WEIGHT = 0.5;
+static const CGFloat G_TINT_R = 0.15;
+static const CGFloat G_TINT_G = 0.28;
+static const CGFloat G_TINT_B = 0.35;
+static const CGFloat G_TINT_WEIGHT = 0.5;
 
-static const float G_EFFECT_INTENSITY = 1.0;
-static const float G_WINDOW_TRANSPARENCY = 0.9;
+static const CGFloat G_EFFECT_INTENSITY = 1.0;
+static const CGFloat G_WINDOW_TRANSPARENCY = 0.9;
 
 static NSData *generateBlackLUT(void) {
     NSInteger dimension = 16;
@@ -118,6 +118,13 @@ static void injectIfNeeded(NSWindow *window) {
 
     [themeFrame addSubview:mainBlurEffect positioned:NSWindowBelow relativeTo:nil];
     [mainBlurEffect addSubview:filterView];
+
+    NSGlassEffectView *glassView = [[NSGlassEffectView alloc] initWithFrame:themeFrame.bounds];
+    glassView.autoresizingMask   = NSViewWidthSizable | NSViewHeightSizable;
+    glassView.style              = NSGlassEffectViewStyleClear;
+    glassView.alphaValue         = 0.95;
+    glassView.identifier         = @"LiquidGlassView";
+    [themeFrame addSubview:glassView positioned:NSWindowBelow relativeTo:nil];
 }
 
 __attribute__((constructor))
