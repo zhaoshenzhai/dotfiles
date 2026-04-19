@@ -1,30 +1,8 @@
-{ pkgs, lib, ... }:
-let
-    skimTheme = pkgs.stdenv.mkDerivation {
-        name = "skim-theme";
-        src = ../scripts/window;
-        buildInputs = [ pkgs.darwin.apple_sdk.frameworks.Cocoa ];
-        buildPhase = ''
-            clang -dynamiclib -framework Cocoa -o libskimtheme.dylib skim.m
-        '';
-        installPhase = ''
-            mkdir -p $out/lib
-            cp libskimtheme.dylib $out/lib/
-        '';
-    };
-in
-{
+{ pkgs, lib, ... }: {
     home.packages = with pkgs; [
         ocamlPackages.cpdf
         pdftk
         poppler-utils
-        (writeShellScriptBin "skim" ''
-            #!/usr/bin/env zsh
-            export CG_PDF_VERBOSE=1
-            export DYLD_INSERT_LIBRARIES="${skimTheme}/lib/libskimtheme.dylib"
-            mkdir -p ~/.local/state
-            exec /Applications/Skim.app/Contents/MacOS/Skim "$@" 2> ~/.local/state/skim_cg_error.log
-        '')
     ];
 
     targets.darwin.defaults."net.sourceforge.skim-app.skim" = {
