@@ -5,10 +5,10 @@
 static const CGFloat CURVE_PT0_X = 0.00; static const CGFloat CURVE_PT0_Y = 0.00;
 static const CGFloat CURVE_PT1_X = 0.25; static const CGFloat CURVE_PT1_Y = 0.20;
 static const CGFloat CURVE_PT2_X = 0.50; static const CGFloat CURVE_PT2_Y = 0.15;
-static const CGFloat CURVE_PT3_X = 0.75; static const CGFloat CURVE_PT3_Y = 0.05;
+static const CGFloat CURVE_PT3_X = 0.75; static const CGFloat CURVE_PT3_Y = 0.00;
 static const CGFloat CURVE_PT4_X = 1.00; static const CGFloat CURVE_PT4_Y = 0.00;
 
-static const CGFloat BASE_ALPHA = 0.90;
+static const CGFloat BASE_ALPHA = 0.60;
 
 static NSVisualEffectView *blurViewForWindow(NSWindow *w) {
     if (!w.contentView || !w.contentView.superview) return nil;
@@ -23,7 +23,7 @@ static void injectIfNeeded(NSWindow *window) {
     if (!window.contentView || !window.contentView.superview) return;
 
     window.opaque = NO;
-    window.backgroundColor = [NSColor blackColor];
+    window.backgroundColor = [NSColor clearColor];
 
     NSView *themeFrame = window.contentView.superview;
 
@@ -39,7 +39,7 @@ static void injectIfNeeded(NSWindow *window) {
     NSView *filterView = [[NSView alloc] initWithFrame:blurView.bounds];
     filterView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
     filterView.wantsLayer = YES;
-    filterView.layer.backgroundColor = [[NSColor clearColor] CGColor];
+    filterView.layer.backgroundColor = [[NSColor blackColor] CGColor];
 
     CIFilter *toneCurve = [CIFilter filterWithName:@"CIToneCurve"];
     [toneCurve setValue:[CIVector vectorWithX:CURVE_PT0_X Y:CURVE_PT0_Y] forKey:@"inputPoint0"];
@@ -74,7 +74,7 @@ static void updateAlphas(void) {
             if (other != w && NSIntersectsRect(w.frame, other.frame))
                 n++;
 
-        CGFloat a = 1.0 - pow(1.0 - BASE_ALPHA, 1.0 / (CGFloat)n);
+        CGFloat a = 1.0 - pow(1.0 - currentBaseAlpha, 1.0 / (CGFloat)n);
         blurViewForWindow(w).alphaValue = a;
     }
 }

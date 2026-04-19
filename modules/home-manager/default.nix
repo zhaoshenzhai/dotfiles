@@ -14,7 +14,6 @@
     };
 
     home.packages = with pkgs; [
-        apple-sdk_26
         aerospace
         (texlive.combine { inherit (texlive) scheme-full latexmk; })
     ];
