@@ -6,36 +6,19 @@ typedef int CGSConnectionID;
 extern CGSConnectionID CGSMainConnectionID(void);
 extern CGError CGSSetWindowBackgroundBlurRadius(CGSConnectionID cid, NSInteger wid, int radius);
 
-// ==========================================
-// === GLOBAL TUNING PARAMETERS ===
-// ==========================================
-
 static const CGFloat BLUR_RADIUS = 30;
 
-// 1. The Cutoff: What is considered "Bright"?
 static const float G_CUTOFF_LUMA = 0.07;
-
-// 2. The Black Target: How dark should the white PDF become?
 static const float G_BLACK_LUMA = 0.008;
-
-// 3. Saturation Boost:
 static const float G_SAT_BOOST = 3.00;
 
-// 4. NEW: Obsidian Tint (Blueish-Black overlay for bright backgrounds)
-// Since white PDFs have no color to boost, we inject a custom blue hue.
-static const float G_TINT_R = 0.15; // Red channel ratio
-static const float G_TINT_G = 0.28; // Green channel ratio
-static const float G_TINT_B = 0.35; // Blue channel ratio (highest for a deep blue)
-static const float G_TINT_WEIGHT = 0.5; // How strongly to apply this tint (0.0 to 1.0)
+static const float G_TINT_R = 0.15;
+static const float G_TINT_G = 0.28;
+static const float G_TINT_B = 0.35;
+static const float G_TINT_WEIGHT = 0.5;
 
-// 5. Effect Intensity (The fixed filter opacity):
 static const float G_EFFECT_INTENSITY = 1.0;
-
-// 6. Overall Window Transparency:
 static const float G_WINDOW_TRANSPARENCY = 0.9;
-
-// ==========================================
-
 
 static NSData *generateBlackLUT(void) {
     NSInteger dimension = 16;
@@ -43,46 +26,40 @@ static NSData *generateBlackLUT(void) {
     float *cubeData = (float *)malloc(totalElements * sizeof(float));
 
     int offset = 0;
-    for (int z = 0; z < dimension; z++) {       // Blue
+    for (int z = 0; z < dimension; z++) {
         float b = (float)z / (dimension - 1);
-        for (int y = 0; y < dimension; y++) {   // Green
+        for (int y = 0; y < dimension; y++) {
             float g = (float)y / (dimension - 1);
-            for (int x = 0; x < dimension; x++) { // Red
+            for (int x = 0; x < dimension; x++) {
                 float r = (float)x / (dimension - 1);
 
                 float luma = r * 0.2126 + g * 0.7152 + b * 0.0722;
                 float targetLuma = luma;
                 float currentSatBoost = 1.0;
-                int isCrushed = 0;
+                int isLight = 0;
 
-                // The Hard Cutoff Logic
                 if (luma > G_CUTOFF_LUMA) {
                     targetLuma = G_BLACK_LUMA;
                     currentSatBoost = G_SAT_BOOST;
-                    isCrushed = 1; // Flag that we triggered the cutoff
+                    isLight = 1;
                 }
 
-                // Scale RGB
                 float factor = luma > 0.001 ? targetLuma / luma : 1.0;
                 float outR = r * factor;
                 float outG = g * factor;
                 float outB = b * factor;
 
-                // NEW: Inject the custom hue if we crushed a bright background
-                if (isCrushed) {
-                    // We blend the natural crushed color with our target tint, scaled to match the darkness
+                if (isLight) {
                     outR = (outR * (1.0 - G_TINT_WEIGHT)) + (G_TINT_R * targetLuma * G_TINT_WEIGHT);
                     outG = (outG * (1.0 - G_TINT_WEIGHT)) + (G_TINT_G * targetLuma * G_TINT_WEIGHT);
                     outB = (outB * (1.0 - G_TINT_WEIGHT)) + (G_TINT_B * targetLuma * G_TINT_WEIGHT);
                 }
 
-                // Apply Saturation Boost (this will also boost the new blue tint!)
                 float newLuma = outR * 0.2126 + outG * 0.7152 + outB * 0.0722;
                 outR = newLuma + (outR - newLuma) * currentSatBoost;
                 outG = newLuma + (outG - newLuma) * currentSatBoost;
                 outB = newLuma + (outB - newLuma) * currentSatBoost;
 
-                // Apply the Effect Intensity mathematically
                 outR = r + (outR - r) * G_EFFECT_INTENSITY;
                 outG = g + (outG - g) * G_EFFECT_INTENSITY;
                 outB = b + (outB - b) * G_EFFECT_INTENSITY;
