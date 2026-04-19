@@ -6,11 +6,11 @@ typedef int CGSConnectionID;
 extern CGSConnectionID CGSMainConnectionID(void);
 extern CGError CGSSetWindowBackgroundBlurRadius(CGSConnectionID cid, NSInteger wid, int radius);
 
-static const CGFloat BLUR_RADIUS = 20;
+static const CGFloat BLUR_RADIUS = 0;
 
 // --- GLOBAL OPACITY SETTINGS ---
-static const CGFloat MIN_ALPHA = 0.0; // Base opacity for dark backgrounds
-static const CGFloat MAX_ALPHA = 0.9; // Peak opacity for bright backgrounds
+static const CGFloat MIN_ALPHA = 1; // Base opacity for dark backgrounds
+static const CGFloat MAX_ALPHA = 1; // Peak opacity for bright backgrounds
 
 // static const CGFloat CURVE_PT0_X = 0.00; static const CGFloat CURVE_PT0_Y = 0.00;
 // static const CGFloat CURVE_PT1_X = 0.25; static const CGFloat CURVE_PT1_Y = 0.25;
@@ -18,7 +18,7 @@ static const CGFloat MAX_ALPHA = 0.9; // Peak opacity for bright backgrounds
 // static const CGFloat CURVE_PT3_X = 0.75; static const CGFloat CURVE_PT3_Y = 0.00;
 // static const CGFloat CURVE_PT4_X = 1.00; static const CGFloat CURVE_PT4_Y = 0.00;
 static const CGFloat CURVE_PT0_X = 0.00; static const CGFloat CURVE_PT0_Y = 0.00;
-static const CGFloat CURVE_PT1_X = 0.25; static const CGFloat CURVE_PT1_Y = 0.00;
+static const CGFloat CURVE_PT1_X = 0.25; static const CGFloat CURVE_PT1_Y = 0.20;
 static const CGFloat CURVE_PT2_X = 0.50; static const CGFloat CURVE_PT2_Y = 0.00;
 static const CGFloat CURVE_PT3_X = 0.75; static const CGFloat CURVE_PT3_Y = 0.00;
 static const CGFloat CURVE_PT4_X = 1.00; static const CGFloat CURVE_PT4_Y = 0.00;
@@ -139,6 +139,8 @@ static void injectIfNeeded(NSWindow *window) {
     window.opaque = NO;
     window.backgroundColor = [NSColor clearColor];
 
+    CGSSetWindowBackgroundBlurRadius(CGSMainConnectionID(), [window windowNumber], BLUR_RADIUS);
+
     NSView *themeFrame = window.contentView.superview;
 
     NSVisualEffectView *mainBlurEffect = [[NSVisualEffectView alloc] initWithFrame:themeFrame.bounds];
@@ -156,11 +158,28 @@ static void injectIfNeeded(NSWindow *window) {
     filterView.layer.backgroundColor = [[NSColor clearColor] CGColor];
     filterView.identifier = @"filterView";
 
-    // Generate the unified XPC-safe hardware LUT
+    CIFilter *toneCurve = [CIFilter filterWithName:@"CIToneCurve"];
+    [toneCurve setValue:[CIVector vectorWithX:CURVE_PT0_X Y:CURVE_PT0_Y] forKey:@"inputPoint0"];
+    [toneCurve setValue:[CIVector vectorWithX:CURVE_PT1_X Y:CURVE_PT1_Y] forKey:@"inputPoint1"];
+    [toneCurve setValue:[CIVector vectorWithX:CURVE_PT2_X Y:CURVE_PT2_Y] forKey:@"inputPoint2"];
+    [toneCurve setValue:[CIVector vectorWithX:CURVE_PT3_X Y:CURVE_PT3_Y] forKey:@"inputPoint3"];
+    [toneCurve setValue:[CIVector vectorWithX:CURVE_PT4_X Y:CURVE_PT4_Y] forKey:@"inputPoint4"];
+
+    CIFilter *opacityCurve = [CIFilter filterWithName:@"CIColorMatrix"];
+    CGFloat alphaDiff = MAX_ALPHA - MIN_ALPHA;
+    [opacityCurve setValue:[CIVector vectorWithX:1 Y:0 Z:0 W:0] forKey:@"inputRVector"];
+    [opacityCurve setValue:[CIVector vectorWithX:0 Y:1 Z:0 W:0] forKey:@"inputGVector"];
+    [opacityCurve setValue:[CIVector vectorWithX:0 Y:0 Z:1 W:0] forKey:@"inputBVector"];
+    // [opacityCurve setValue:[CIVector vectorWithX:alphaDiff Y:alphaDiff Z:alphaDiff W:0.0] forKey:@"inputAVector"];
+    [opacityCurve setValue:[CIVector vectorWithX:0.2126 * alphaDiff Y:0.7152 * alphaDiff Z:0.0722 * alphaDiff W:0.0] forKey:@"inputAVector"];
+    [opacityCurve setValue:[CIVector vectorWithX:0 Y:0 Z:0 W:MIN_ALPHA] forKey:@"inputBiasVector"];
+
     CIFilter *combinedFilter = createCombinedCubeFilter(MIN_ALPHA, MAX_ALPHA);
 
-    // Apply the single filter
+    // filterView.layer.backgroundFilters = @[toneCurve, combinedFilter];
+    // filterView.layer.backgroundFilters = @[opacityCurve, toneCurve];
     filterView.layer.backgroundFilters = @[combinedFilter];
+    // filterView.layer.backgroundFilters = @[toneCurve];
 
     [themeFrame addSubview:mainBlurEffect positioned:NSWindowBelow relativeTo:nil];
     [mainBlurEffect addSubview:filterView];
@@ -180,6 +199,7 @@ static void updateAlphas(void) {
 
         CGFloat adjustedMin = 1.0 - pow(1.0 - MIN_ALPHA, 1.0 / (CGFloat)n);
         CGFloat adjustedMax = 1.0 - pow(1.0 - MAX_ALPHA, 1.0 / (CGFloat)n);
+        CGFloat adjustedDiff = adjustedMax - adjustedMin;
 
         NSVisualEffectView *mainBlurEffect = getEffectWindow(w);
         if (!mainBlurEffect) continue;
@@ -192,12 +212,16 @@ static void updateAlphas(void) {
             }
         }
 
-        if (filterView) {
-            // Generate a fresh LUT with the newly calculated overlap alpha parameters
-            CIFilter *combinedFilter = createCombinedCubeFilter(adjustedMin, adjustedMax);
+        if (filterView && filterView.layer.backgroundFilters.count >= 2) {
+            NSArray *filters = filterView.layer.backgroundFilters;
 
-            // Overwrite the background array with the new LUT
-            filterView.layer.backgroundFilters = @[combinedFilter];
+            // Because opacityCurve is now first, we pull from index 0
+            CIFilter *opacityCurve = filters[0];
+
+            [opacityCurve setValue:[CIVector vectorWithX:0.2126 * adjustedDiff Y:0.7152 * adjustedDiff Z:0.0722 * adjustedDiff W:0.0] forKey:@"inputAVector"];
+            [opacityCurve setValue:[CIVector vectorWithX:0 Y:0 Z:0 W:adjustedMin] forKey:@"inputBiasVector"];
+
+            filterView.layer.backgroundFilters = filters;
         }
     }
 }
@@ -207,6 +231,6 @@ void recolor() {
     [NSTimer scheduledTimerWithTimeInterval:0.1 repeats:YES block:^(NSTimer *_) {
         for (NSWindow *w in [NSApp windows])
             if (w.isVisible) injectIfNeeded(w);
-        updateAlphas();
+        // updateAlphas();
     }];
 }
