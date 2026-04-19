@@ -7,28 +7,28 @@
 // ==========================================
 
 // 1. The Cutoff: What is considered "Bright"?
-static const float G_CUTOFF_LUMA = 0.08;
+static const float G_CUTOFF_LUMA = 0.07;
 
-// 2. The Obsidian Target: How dark should the white PDF become?
-static const float G_OBSIDIAN_LUMA = 0.01;
+// 2. The Black Target: How dark should the white PDF become?
+static const float G_BLACK_LUMA = 0.008;
 
 // 3. Saturation Boost:
-static const float G_SAT_BOOST = 2.00;
+static const float G_SAT_BOOST = 3.00;
 
 // 4. Effect Intensity (The fixed filter opacity):
-// 0.0 means no effect (standard macOS blur). 1.0 means full Obsidian crush.
+// 0.0 means no effect (standard macOS blur). 1.0 means full Black crush.
 // We bake this directly into the color math so Core Animation cannot ignore it.
-static const float G_EFFECT_INTENSITY = 0.9;
+static const float G_EFFECT_INTENSITY = 1.0;
 
 // 5. Overall Window Transparency:
 // Controls how "see-through" the entire terminal window is.
 // 1.0 is standard blur. 0.8 makes the terminal more physically transparent to the desktop.
-static const float G_WINDOW_TRANSPARENCY = 0.99;
+static const float G_WINDOW_TRANSPARENCY = 1.00;
 
 // ==========================================
 
 
-static NSData *generateObsidianLUT(void) {
+static NSData *generateBlackLUT(void) {
     NSInteger dimension = 16;
     NSUInteger totalElements = dimension * dimension * dimension * 4;
     float *cubeData = (float *)malloc(totalElements * sizeof(float));
@@ -47,7 +47,7 @@ static NSData *generateObsidianLUT(void) {
 
                 // The Hard Cutoff Logic
                 if (luma > G_CUTOFF_LUMA) {
-                    targetLuma = G_OBSIDIAN_LUMA;
+                    targetLuma = G_BLACK_LUMA;
                     currentSatBoost = G_SAT_BOOST;
                 }
 
@@ -117,7 +117,7 @@ static void injectIfNeeded(NSWindow *window) {
 
     CIFilter *cubeFilter = [CIFilter filterWithName:@"CIColorCube"];
     [cubeFilter setValue:@(16) forKey:@"inputCubeDimension"];
-    [cubeFilter setValue:generateObsidianLUT() forKey:@"inputCubeData"];
+    [cubeFilter setValue:generateBlackLUT() forKey:@"inputCubeData"];
 
     filterView.layer.backgroundFilters = @[cubeFilter];
 
