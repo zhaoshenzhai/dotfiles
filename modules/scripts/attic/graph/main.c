@@ -68,7 +68,7 @@ void openNote(const char* id) {
     if (!home) home = "";
 
     snprintf(command, sizeof(command),
-        "/etc/profiles/per-user/zhao/bin/launcher \"%s/iCloud/Projects/_attic/notes/%s/%s.pdf\" &", home, id, id);
+        "/run/current-system/sw/bin/launcher \"%s/iCloud/Projects/_attic/notes/%s/%s.pdf\" &", home, id, id);
 
     system(command);
     quit();
