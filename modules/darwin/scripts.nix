@@ -1,9 +1,9 @@
 { pkgs, ... }: let
     scriptsDir = ../scripts;
 
-    transparentWindow = pkgs.runCommandCC "transparentWindow" {} ''
+    transparentWindow = pkgs.runCommandCC "transparentWindow" { buildInputs = with pkgs; [ apple-sdk_26 ]; } ''
         mkdir -p $out/lib
-        $CC -O3 -dynamiclib -framework Cocoa -framework QuartzCore -framework CoreImage ${scriptsDir}/window/transparency.m -o $out/lib/transparentWindow.dylib
+        $CC -O3 -mmacosx-version-min=26.0 -dynamiclib -framework Cocoa -framework ScreenCaptureKit -framework CoreMedia -framework QuartzCore -framework CoreImage ${scriptsDir}/window/transparency.m -o $out/lib/transparentWindow.dylib
     '';
 
     launcher = pkgs.runCommandCC "launcher" {} ''
@@ -38,10 +38,10 @@
             -o $out/bin/skimUtils
     '';
 
-    attic = pkgs.runCommandCC "attic" { buildInputs = with pkgs; [ raylib cjson cm_unicode ]; } ''
+    attic = pkgs.runCommandCC "attic" { buildInputs = with pkgs; [ raylib cjson cm_unicode apple-sdk_26 ]; } ''
         mkdir -p $out/bin
 
-        $CC -O3 -I${scriptsDir}/texManager \
+        $CC -O3 -mmacosx-version-min=26.0 -I${scriptsDir}/texManager \
             ${scriptsDir}/attic/main.c ${scriptsDir}/attic/commands.c \
             ${scriptsDir}/attic/memory.c ${scriptsDir}/attic/utils.c \
             ${scriptsDir}/texManager/compiler.c \
@@ -49,9 +49,9 @@
 
         FONT=$(find ${pkgs.cm_unicode} -type f \( -iname "cmunrm.ttf" -o -iname "cmunrm.otf" \) | head -n 1)
 
-        $CC -O3 -fobjc-arc ${scriptsDir}/attic/graph/*.c ${scriptsDir}/window/transparency.m \
+        $CC -O3 -mmacosx-version-min=26.0 -fobjc-arc ${scriptsDir}/attic/graph/*.c ${scriptsDir}/window/transparency.m \
             -lraylib -lcjson -lpthread -DFONT_PATH="\"$FONT\"" \
-            -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT \
+            -framework ScreenCaptureKit -framework CoreMedia -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT \
             -framework OpenGL -framework QuartzCore -framework CoreImage \
             -o $out/bin/attic-graph
     '';
