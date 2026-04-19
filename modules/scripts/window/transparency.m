@@ -118,13 +118,6 @@ static void injectIfNeeded(NSWindow *window) {
 
     [themeFrame addSubview:mainBlurEffect positioned:NSWindowBelow relativeTo:nil];
     [mainBlurEffect addSubview:filterView];
-
-    NSGlassEffectView *glassView = [[NSGlassEffectView alloc] initWithFrame:themeFrame.bounds];
-    glassView.autoresizingMask   = NSViewWidthSizable | NSViewHeightSizable;
-    glassView.style              = NSGlassEffectViewStyleClear;
-    glassView.alphaValue         = 0.95;
-    glassView.identifier         = @"LiquidGlassView";
-    [themeFrame addSubview:glassView positioned:NSWindowBelow relativeTo:nil];
 }
 
 __attribute__((constructor))
