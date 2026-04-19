@@ -40,26 +40,27 @@ static void injectIfNeeded(NSWindow *window) {
 }
 
 static void applyDynamicToneCurve(NSView *blackView, NSInteger overlapCount) {
+    // CIAffineClamp extends edge pixels infinitely before the blur samples them,
+    // preventing the dark vignette that CIGaussianBlur produces at layer edges.
+    CIFilter *clamp = [CIFilter filterWithName:@"CIAffineClamp"];
+    [clamp setValue:[NSAffineTransform transform] forKey:kCIInputTransformKey];
+
+    CIFilter *blur = [CIFilter filterWithName:@"CIGaussianBlur"];
+    [blur setValue:@(BLUR_RADIUS) forKey:kCIInputRadiusKey];
+
     CIFilter *toneCurve = [CIFilter filterWithName:@"CIToneCurve"];
-
     for (int i = 0; i < 5; i++) {
-        CGFloat L = INPUT_LUMAS[i];
+        CGFloat L           = INPUT_LUMAS[i];
         CGFloat targetAlpha = TARGET_OPACITIES[i];
-
-        // Output luminance = L * (1 - targetAlpha)^(1/N)
-        CGFloat multiplier = pow(1.0 - targetAlpha, 1.0 / (CGFloat)overlapCount);
-        CGFloat outputY = L * multiplier;
-
+        CGFloat multiplier  = pow(1.0 - targetAlpha, 1.0 / (CGFloat)overlapCount);
+        CGFloat outputY     = L * multiplier;
         NSString *key = [NSString stringWithFormat:@"inputPoint%d", i];
         [toneCurve setValue:[CIVector vectorWithX:L Y:outputY] forKey:key];
     }
 
-    // blackView.layer.backgroundFilters = @[toneCurve];
-
-    CIFilter *blurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
-    [blurFilter setValue:@(BLUR_RADIUS) forKey:kCIInputRadiusKey];
-
-    blackView.layer.backgroundFilters = @[blurFilter, toneCurve];
+    // Order: clamp → blur → tone curve.
+    // The clamp must come first so the blur never samples outside real pixels.
+    blackView.layer.backgroundFilters = @[clamp, blur, toneCurve];
 }
 
 static void updateAlphas(void) {
