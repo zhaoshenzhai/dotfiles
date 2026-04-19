@@ -20,79 +20,78 @@ static const CGFloat G_TINT_WEIGHT = 0.5;
 static const CGFloat G_EFFECT_INTENSITY = 1.0;
 static const CGFloat G_WINDOW_TRANSPARENCY = 0.9;
 
-static NSData *generateBlackLUT(void) {
-    NSInteger dimension = 16;
-    NSUInteger totalElements = dimension * dimension * dimension * 4;
-    float *cubeData = (float *)malloc(totalElements * sizeof(float));
+static NSData *getBlackLUT(void) {
+    static NSData *lut = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSInteger dimension = 16;
+        NSUInteger totalElements = dimension * dimension * dimension * 4;
+        float *cubeData = (float *)malloc(totalElements * sizeof(float));
 
-    int offset = 0;
-    for (int z = 0; z < dimension; z++) {
-        float b = (float)z / (dimension - 1);
-        for (int y = 0; y < dimension; y++) {
-            float g = (float)y / (dimension - 1);
-            for (int x = 0; x < dimension; x++) {
-                float r = (float)x / (dimension - 1);
+        int offset = 0;
+        for (int z = 0; z < dimension; z++) {
+            float b = (float)z / (dimension - 1);
+            for (int y = 0; y < dimension; y++) {
+                float g = (float)y / (dimension - 1);
+                for (int x = 0; x < dimension; x++) {
+                    float r = (float)x / (dimension - 1);
 
-                float luma = r * 0.2126 + g * 0.7152 + b * 0.0722;
-                float targetLuma = luma;
-                float currentSatBoost = 1.0;
-                int isLight = 0;
+                    float luma = r * 0.2126f + g * 0.7152f + b * 0.0722f;
+                    float targetLuma = luma;
+                    float currentSatBoost = 1.0f;
+                    int isLight = 0;
 
-                if (luma > G_CUTOFF_LUMA) {
-                    targetLuma = G_BLACK_LUMA;
-                    currentSatBoost = G_SAT_BOOST;
-                    isLight = 1;
+                    if (luma > G_CUTOFF_LUMA) {
+                        targetLuma = G_BLACK_LUMA;
+                        currentSatBoost = G_SAT_BOOST;
+                        isLight = 1;
+                    }
+
+                    float factor = luma > 0.001f ? targetLuma / luma : 1.0f;
+                    float outR = r * factor;
+                    float outG = g * factor;
+                    float outB = b * factor;
+
+                    if (isLight) {
+                        outR = (outR * (1.0f - G_TINT_WEIGHT)) + (G_TINT_R * targetLuma * G_TINT_WEIGHT);
+                        outG = (outG * (1.0f - G_TINT_WEIGHT)) + (G_TINT_G * targetLuma * G_TINT_WEIGHT);
+                        outB = (outB * (1.0f - G_TINT_WEIGHT)) + (G_TINT_B * targetLuma * G_TINT_WEIGHT);
+                    }
+
+                    float newLuma = outR * 0.2126f + outG * 0.7152f + outB * 0.0722f;
+                    outR = newLuma + (outR - newLuma) * currentSatBoost;
+                    outG = newLuma + (outG - newLuma) * currentSatBoost;
+                    outB = newLuma + (outB - newLuma) * currentSatBoost;
+
+                    outR = r + (outR - r) * G_EFFECT_INTENSITY;
+                    outG = g + (outG - g) * G_EFFECT_INTENSITY;
+                    outB = b + (outB - b) * G_EFFECT_INTENSITY;
+
+                    cubeData[offset++] = MIN(MAX(outR, 0.0f), 1.0f);
+                    cubeData[offset++] = MIN(MAX(outG, 0.0f), 1.0f);
+                    cubeData[offset++] = MIN(MAX(outB, 0.0f), 1.0f);
+                    cubeData[offset++] = 1.0f;
                 }
-
-                float factor = luma > 0.001 ? targetLuma / luma : 1.0;
-                float outR = r * factor;
-                float outG = g * factor;
-                float outB = b * factor;
-
-                if (isLight) {
-                    outR = (outR * (1.0 - G_TINT_WEIGHT)) + (G_TINT_R * targetLuma * G_TINT_WEIGHT);
-                    outG = (outG * (1.0 - G_TINT_WEIGHT)) + (G_TINT_G * targetLuma * G_TINT_WEIGHT);
-                    outB = (outB * (1.0 - G_TINT_WEIGHT)) + (G_TINT_B * targetLuma * G_TINT_WEIGHT);
-                }
-
-                float newLuma = outR * 0.2126 + outG * 0.7152 + outB * 0.0722;
-                outR = newLuma + (outR - newLuma) * currentSatBoost;
-                outG = newLuma + (outG - newLuma) * currentSatBoost;
-                outB = newLuma + (outB - newLuma) * currentSatBoost;
-
-                outR = r + (outR - r) * G_EFFECT_INTENSITY;
-                outG = g + (outG - g) * G_EFFECT_INTENSITY;
-                outB = b + (outB - b) * G_EFFECT_INTENSITY;
-
-                cubeData[offset++] = MIN(MAX(outR, 0.0), 1.0);
-                cubeData[offset++] = MIN(MAX(outG, 0.0), 1.0);
-                cubeData[offset++] = MIN(MAX(outB, 0.0), 1.0);
-                cubeData[offset++] = 1.0f;
             }
         }
-    }
 
-    return [NSData dataWithBytesNoCopy:cubeData length:totalElements * sizeof(float) freeWhenDone:YES];
+        lut = [NSData dataWithBytesNoCopy:cubeData length:totalElements * sizeof(float) freeWhenDone:YES];
+    });
+    return lut;
 }
 
-static NSVisualEffectView *getEffectWindow(NSWindow *window) {
-    if (!window.contentView || !window.contentView.superview) return nil;
-    for (NSView *subview in window.contentView.superview.subviews)
-        if ([subview.identifier isEqualToString:@"mainBlurEffect"])
-            return (NSVisualEffectView *)subview;
-    return nil;
-}
-
-static void injectIfNeeded(NSWindow *window) {
+static void injectIfNeeded(NSWindow *window, CGSConnectionID cid) {
     if (!window.contentView || !window.contentView.superview) return;
-    if (getEffectWindow(window)) return;
+
+    NSView *themeFrame = window.contentView.superview;
+
+    for (NSView *subview in themeFrame.subviews)
+        if ([subview.identifier isEqualToString:@"mainBlurEffect"]) return;
 
     window.opaque = NO;
     window.backgroundColor = [NSColor clearColor];
 
-    CGSSetWindowBackgroundBlurRadius(CGSMainConnectionID(), [window windowNumber], BLUR_RADIUS);
-
-    NSView *themeFrame = window.contentView.superview;
+    CGSSetWindowBackgroundBlurRadius(cid, [window windowNumber], BLUR_RADIUS);
 
     NSVisualEffectView *mainBlurEffect = [[NSVisualEffectView alloc] initWithFrame:themeFrame.bounds];
     mainBlurEffect.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
@@ -112,7 +111,7 @@ static void injectIfNeeded(NSWindow *window) {
 
     CIFilter *cubeFilter = [CIFilter filterWithName:@"CIColorCube"];
     [cubeFilter setValue:@(16) forKey:@"inputCubeDimension"];
-    [cubeFilter setValue:generateBlackLUT() forKey:@"inputCubeData"];
+    [cubeFilter setValue:getBlackLUT() forKey:@"inputCubeData"];
 
     filterView.layer.backgroundFilters = @[cubeFilter];
 
@@ -122,8 +121,10 @@ static void injectIfNeeded(NSWindow *window) {
 
 __attribute__((constructor))
 void recolor() {
+    CGSConnectionID cid = CGSMainConnectionID();
+
     [NSTimer scheduledTimerWithTimeInterval:0.1 repeats:YES block:^(NSTimer *_) {
         for (NSWindow *w in [NSApp windows])
-            if (w.isVisible) injectIfNeeded(w);
+            if (w.isVisible) injectIfNeeded(w, cid);
     }];
 }
