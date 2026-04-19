@@ -6,7 +6,7 @@ typedef int CGSConnectionID;
 extern CGSConnectionID CGSMainConnectionID(void);
 extern CGError CGSSetWindowBackgroundBlurRadius(CGSConnectionID cid, NSInteger wid, int radius);
 
-static const CGFloat BLUR_RADIUS = 10;
+static const CGFloat BLUR_RADIUS = 25;
 
 static const CGFloat G_CUTOFF_LUMA = 0.07;
 static const CGFloat G_BLACK_LUMA = 0.008;
