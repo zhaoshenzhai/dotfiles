@@ -12,8 +12,6 @@ Vector2 worldMouse;
 
 const int fps = 120;
 int framesCounter = 0;
-bool isQuitting = false;
-
 const int screenWidth = 1285;
 const int screenHeight = 905;
 const int xPos = 212;
@@ -49,13 +47,6 @@ void initializeWindow() {
     }
 }
 
-void quit() {
-    if (!isQuitting) {
-        isQuitting = true;
-        exit(0);
-    }
-}
-
 void openNote(const char* id) {
     const char* home = getenv("HOME");
     if (!home) home = "";
@@ -65,12 +56,10 @@ void openNote(const char* id) {
         RunLauncher(targetPath);
     }
 
-    quit();
+    exit(0);
 }
 
 void getInput(int *draggedNodeIndex, bool *isPanning, double *lastClickTime, int *lastClickedNode) {
-    if (IsKeyPressed(KEY_Q) && !isQuitting) { quit(); }
-
     // Camera movement
     float moveStep = 15.0f / camera.zoom;
     if (IsKeyDown(KEY_H) && !IsKeyDown(KEY_LEFT_CONTROL)) camera.target.x -= moveStep;
