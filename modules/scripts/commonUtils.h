@@ -27,7 +27,7 @@ AXUIElementRef _Nullable GetSubmenu(AXUIElementRef element);
 
 // -- File and Directory Utilities
 void EnsureSystemPath(void);
-unsigned int DJB2Hash(const char *str);
+unsigned int HashString(const char *str);
 bool IsProcessRunning(const char *pattern);
 int EnsureDirectoryExists(const char *path);
 int MoveFile(const char *src, const char *dst);

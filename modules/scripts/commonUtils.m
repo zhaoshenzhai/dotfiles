@@ -119,7 +119,7 @@ void EnsureSystemPath(void) {
     setenv("PATH", newPath, 1);
 }
 
-unsigned int DJB2Hash(const char *str) {
+unsigned int HashString(const char *str) {
     unsigned int hash = 5381;
     int c;
     while ((c = *str++)) hash = ((hash << 5) + hash) + c;

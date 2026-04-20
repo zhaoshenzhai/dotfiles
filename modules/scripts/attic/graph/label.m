@@ -14,7 +14,7 @@ pthread_mutex_t queueMutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t queueCond = PTHREAD_COND_INITIALIZER;
 
 void getCachePaths(const char* latex, unsigned int* hashOut, char* cacheDirOut, char* pngPathOut) {
-    unsigned int h = DJB2Hash(latex); // <-- Replaced custom hash
+    unsigned int h = HashString(latex);
     if (hashOut) *hashOut = h;
 
     const char* home = getenv("HOME");

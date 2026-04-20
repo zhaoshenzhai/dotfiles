@@ -138,7 +138,7 @@ void updateMetadata(int id) {
     char cachePath[PATH_MAX];
     const char* home = getenv("HOME");
     if (home) {
-        unsigned int h = DJB2Hash(SAFE_STR(notes[id].keys));
+        unsigned int h = HashString(SAFE_STR(notes[id].keys));
         snprintf(cachePath, sizeof(cachePath), "%s/.cache/attic/labels/%u.png", home, h);
         unlink(cachePath);
     }

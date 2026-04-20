@@ -32,7 +32,7 @@ int texCompile(const char *dirPath, const char *fileName, const TexConfig *confi
     char *dot = strrchr(baseName, '.');
     if (dot) *dot = '\0';
 
-    unsigned int dirHash = DJB2Hash(dirPath);
+    unsigned int dirHash = HashString(dirPath);
 
     char cacheDir[PATH_MAX];
     const char *home = getenv("HOME");
