@@ -6,10 +6,8 @@
 #include <string.h>
 #include <ctype.h>
 #include <dirent.h>
-#include <unistd.h>
 #include <termios.h>
 #include <sys/stat.h>
-#include <sys/wait.h>
 #include <time.h>
 #include <getopt.h>
 #include <limits.h>

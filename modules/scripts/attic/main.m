@@ -1,4 +1,3 @@
-#include "texManager.h"
 #include "attic.h"
 
 void promptExit() {
@@ -7,7 +6,7 @@ void promptExit() {
     int c = getch();
 
     if (c == 'Y' || c == 'y' || c == '\n') { system("clear"); return; }
-    AerospaceRun(@[@"close", @"--quit-if-last-window"]);
+    AerospaceRun(@[@"close"]);
     exit(0);
 }
 
@@ -47,7 +46,7 @@ void interactiveMenu() {
             }
             if (cmdNum != 'g') { promptExit(); }
         } else if (cmdNum == 'q') {
-            AerospaceRun(@[@"close", @"--quit-if-last-window"]);
+            AerospaceRun(@[@"close"]);
             exit(0);
         } else {
             system("clear");

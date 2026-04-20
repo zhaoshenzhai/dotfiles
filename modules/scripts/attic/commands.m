@@ -1,4 +1,3 @@
-#include "texManager.h"
 #include "attic.h"
 
 int generateMetadata(int id) {

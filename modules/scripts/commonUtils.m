@@ -1,12 +1,13 @@
 #import "commonUtils.h"
-#import <spawn.h>
 #import <sys/wait.h>
-#import <fcntl.h>
 #import <unistd.h>
+#import <spawn.h>
+#import <fcntl.h>
 
 extern char **environ;
 
 NSString *const kBaseDir = @"/Users/zhao/iCloud";
+NSString *const kLaTeXTemplateDir = @"%/Users/zhao/iCloud/Dotfiles/modules/LaTeXTemplate";
 NSString *const kAerospacePath = @"/etc/profiles/per-user/zhao/bin/aerospace";
 NSString *const kNvimPath = @"/etc/profiles/per-user/zhao/bin/nvim";
 NSString *const kLauncherPath = @"/run/current-system/sw/bin/launcher";
