@@ -1,3 +1,4 @@
+#include "commonUtils.h"
 #include "texManager.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,7 +8,7 @@
 int main(int argc, char **argv) {
     TexConfig config;
     texInitConfig(&config);
-    ensureTexPath();
+    EnsureSystemPath();
 
     int opt;
     bool cleanMode = false;

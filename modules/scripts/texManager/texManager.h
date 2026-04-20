@@ -11,9 +11,7 @@ typedef struct {
     char buildDir[PATH_MAX];
 } TexConfig;
 
-void ensureTexPath();
 void texInitConfig(TexConfig *config);
 int texCompile(const char *dirPath, const char *fileName, const TexConfig *config);
 int texCompileToSvg(const char *dirPath, const char *fileName, const char *outputDir);
-bool texIsCompiling(const char *fileName);
 int texCleanAux(const char *dirPath);

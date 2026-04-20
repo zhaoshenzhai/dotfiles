@@ -13,15 +13,8 @@ RenderJob renderQueue[CACHE_SIZE];
 pthread_mutex_t queueMutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t queueCond = PTHREAD_COND_INITIALIZER;
 
-unsigned int HashString(const char *str) {
-    unsigned int hash = 5381;
-    int c;
-    while ((c = *str++)) hash = ((hash << 5) + hash) + c;
-    return hash;
-}
-
 void getCachePaths(const char* latex, unsigned int* hashOut, char* cacheDirOut, char* pngPathOut) {
-    unsigned int h = HashString(latex);
+    unsigned int h = DJB2Hash(latex); // <-- Replaced custom hash
     if (hashOut) *hashOut = h;
 
     const char* home = getenv("HOME");
@@ -57,15 +50,15 @@ void* latexWorkerThread(void* arg) {
         getCachePaths(currentLatex, &h, cacheDir, pngPath);
 
         if (access(pngPath, F_OK) != 0) {
-            char mkdirCmd[1024];
-            snprintf(mkdirCmd, sizeof(mkdirCmd), "mkdir -p \"%s\"", cacheDir);
-            system(mkdirCmd);
+            EnsureDirectoryExists(cacheDir);
 
-            char symlinkCmd[2048];
-            const char* home = getenv("HOME");
-            snprintf(symlinkCmd, sizeof(symlinkCmd),
-                "ln -sf \"%s/iCloud/Dotfiles/modules/LaTeXTemplate/macros.sty\" \"%s/macros.sty\"", home ? home : "/tmp", cacheDir);
-            system(symlinkCmd);
+            @autoreleasepool {
+                NSString *nsHome = [NSString stringWithUTF8String:(getenv("HOME") ? getenv("HOME") : "/tmp")];
+                NSString *src = [NSString stringWithFormat:@"%@/iCloud/Dotfiles/modules/LaTeXTemplate/macros.sty", nsHome];
+                NSString *dst = [NSString stringWithFormat:@"%s/macros.sty", cacheDir];
+                [[NSFileManager defaultManager] removeItemAtPath:dst error:nil];
+                [[NSFileManager defaultManager] createSymbolicLinkAtPath:dst withDestinationPath:src error:nil];
+            }
 
             char texPath[1024], cmd[2048];
             snprintf(texPath, sizeof(texPath), "%s/%u.tex", cacheDir, h);
@@ -82,18 +75,21 @@ void* latexWorkerThread(void* arg) {
             char tempPngPath[1024];
             snprintf(tempPngPath, sizeof(tempPngPath), "%s/%u_tmp.png", cacheDir, h);
 
-            snprintf(cmd, sizeof(cmd),
-                "zsh -l -c \"cd \\\"%s\\\" && latex -interaction=nonstopmode %u.tex && "
-                "dvipng -bg Transparent -D 300 -o \\\"%s\\\" %u.dvi\" > /dev/null 2>&1",
-                cacheDir, h, tempPngPath, h);
+            int status = -1;
+            @autoreleasepool {
+                NSString *script = [NSString stringWithFormat:@"cd \"%s\" && latex -interaction=nonstopmode %u.tex && dvipng -bg Transparent -D 300 -o \"%s\" %u.dvi", cacheDir, h, tempPngPath, h];
+                status = RunCommandWait(@"/bin/zsh", @[@"-l", @"-c", script]);
 
-            int status = system(cmd);
-            if (status == 0) { rename(tempPngPath, pngPath); }
+                if (status == 0) {
+                    MoveFile(tempPngPath, pngPath);
+                }
+            }
 
-            char cleanupCmd[1024];
-            snprintf(cleanupCmd, sizeof(cleanupCmd), "rm -f \"%s/%u.tex\" \"%s/%u.dvi\" \"%s/%u.aux\" \"%s/%u.log\"",
-                     cacheDir, h, cacheDir, h, cacheDir, h, cacheDir, h);
-            system(cleanupCmd);
+            char fpath[1024];
+            snprintf(fpath, sizeof(fpath), "%s/%u.tex", cacheDir, h); unlink(fpath);
+            snprintf(fpath, sizeof(fpath), "%s/%u.dvi", cacheDir, h); unlink(fpath);
+            snprintf(fpath, sizeof(fpath), "%s/%u.aux", cacheDir, h); unlink(fpath);
+            snprintf(fpath, sizeof(fpath), "%s/%u.log", cacheDir, h); unlink(fpath);
 
             pthread_mutex_lock(&queueMutex);
             renderQueue[jobIndex].state = (status == 0) ? 3 : 4;

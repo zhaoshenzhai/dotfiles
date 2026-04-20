@@ -1,5 +1,5 @@
-#include "attic.h"
 #include "texManager.h"
+#include "attic.h"
 
 char atticDir[PATH_MAX];
 char templateFile[PATH_MAX];
@@ -92,9 +92,9 @@ void formatLinks(int *ids, int count, char *outBuf) {
 }
 
 int isCompiling(int id) {
-    char fileName[64];
-    snprintf(fileName, sizeof(fileName), "%05d.tex", id);
-    return texIsCompiling(fileName) ? 1 : 0;
+    char pattern[512];
+    snprintf(pattern, sizeof(pattern), "[l]atexmk.*%05d.tex", id);
+    return IsProcessRunning(pattern) ? 1 : 0;
 }
 
 int compileNoteSync(int id) {
@@ -149,13 +149,6 @@ void extracIDs(const char *str, int *arr, int *count) {
         }
         ptr++;
     }
-}
-
-unsigned int hashString(const char *str) {
-    unsigned int hash = 5381;
-    int c;
-    while ((c = *str++)) hash = ((hash << 5) + hash) + c;
-    return hash;
 }
 
 int compareModDateDesc(const void *a, const void *b) {

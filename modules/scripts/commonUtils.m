@@ -108,7 +108,58 @@ void RunCommandDetached(NSString *cmdPath, NSArray<NSString *> *argsArray) {
     FreeArgv(argv, argc);
 }
 
+// -- File and Directory Utilities
+
+void EnsureSystemPath(void) {
+    const char *currentPath = getenv("PATH");
+    char newPath[8192];
+    snprintf(newPath, sizeof(newPath),
+        "/run/current-system/sw/bin:/etc/profiles/per-user/%s/bin:%s/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/opt/homebrew/bin:/usr/local/bin:%s",
+        getenv("USER"), getenv("HOME"), currentPath ? currentPath : "");
+    setenv("PATH", newPath, 1);
+}
+
+unsigned int DJB2Hash(const char *str) {
+    unsigned int hash = 5381;
+    int c;
+    while ((c = *str++)) hash = ((hash << 5) + hash) + c;
+    return hash;
+}
+
+int EnsureDirectoryExists(const char *path) {
+    @autoreleasepool {
+        NSString *nsPath = [NSString stringWithUTF8String:path];
+        NSError *error = nil;
+        [[NSFileManager defaultManager] createDirectoryAtPath:nsPath
+                                  withIntermediateDirectories:YES
+                                                   attributes:nil
+                                                        error:&error];
+        return error == nil ? 0 : 1;
+    }
+}
+
+int MoveFile(const char *src, const char *dst) {
+    @autoreleasepool {
+        NSString *nsSrc = [NSString stringWithUTF8String:src];
+        NSString *nsDst = [NSString stringWithUTF8String:dst];
+        NSFileManager *fm = [NSFileManager defaultManager];
+
+        [fm removeItemAtPath:nsDst error:nil]; // Equivalent to mv -f
+        return [fm moveItemAtPath:nsSrc toPath:nsDst error:nil] ? 0 : 1;
+    }
+}
+
 // --- Process and Accessibility Utilities ---
+
+bool IsProcessRunning(const char *pattern) {
+    @autoreleasepool {
+        NSString *cmd = @"/usr/bin/pgrep";
+        NSArray *args = @[@"-f", [NSString stringWithUTF8String:pattern]];
+        // Leverages posix_spawn internally, avoiding shell overhead
+        int status = RunCommandWait(cmd, args);
+        return (status == 0);
+    }
+}
 
 AXUIElementRef GetFocusedWindowForPID(pid_t pid) {
     if (pid == 0) return NULL;

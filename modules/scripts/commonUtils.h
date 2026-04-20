@@ -1,6 +1,9 @@
+#pragma once
+
 #import <ApplicationServices/ApplicationServices.h>
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
+#include <stdbool.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,6 +24,13 @@ NSString * _Nullable AXWindowTitle(AXUIElementRef win);
 AXUIElementRef _Nullable FindChildWithTitle(AXUIElementRef parent, NSString *title);
 AXUIElementRef _Nullable GetFirstChildWithRole(AXUIElementRef parent, CFStringRef role);
 AXUIElementRef _Nullable GetSubmenu(AXUIElementRef element);
+
+// -- File and Directory Utilities
+void EnsureSystemPath(void);
+unsigned int DJB2Hash(const char *str);
+bool IsProcessRunning(const char *pattern);
+int EnsureDirectoryExists(const char *path);
+int MoveFile(const char *src, const char *dst);
 
 // --- Input Simulation ---
 void PostKeystrokeToPID(pid_t pid, CGKeyCode keyCode, CGEventFlags flags);

@@ -1,5 +1,5 @@
+#include "../texManager/texManager.h"
 #include "attic.h"
-#include "texManager.h"
 
 void promptExit() {
     printf("\n%sPress [Y] to return, exiting otherwise...%s ", CYAN, NC);
@@ -7,7 +7,7 @@ void promptExit() {
     int c = getch();
 
     if (c == 'Y' || c == 'y' || c == '\n') { system("clear"); return; }
-    system("aerospace close --quit-if-last-window 2>/dev/null");
+    AerospaceRun(@[@"close", @"--quit-if-last-window"]);
     exit(0);
 }
 
@@ -47,7 +47,7 @@ void interactiveMenu() {
             }
             if (cmdNum != 'g') { promptExit(); }
         } else if (cmdNum == 'q') {
-            system("aerospace close --quit-if-last-window 2>/dev/null");
+            AerospaceRun(@[@"close", @"--quit-if-last-window"]);
             exit(0);
         } else {
             system("clear");
@@ -56,7 +56,8 @@ void interactiveMenu() {
 }
 
 int main(int argc, char **argv) {
-    ensureTexPath();
+    // Replaced ensureTexPath() with the centralized utility
+    EnsureSystemPath();
 
     snprintf(atticDir, sizeof(atticDir), "%s/iCloud/Projects/_attic/notes", getenv("HOME"));
     snprintf(templateFile, sizeof(templateFile), "%s/iCloud/Dotfiles/modules/LaTeXTemplate/files/attic.tex", getenv("HOME"));

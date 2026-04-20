@@ -1,3 +1,5 @@
+#pragma once
+
 #import <ScriptingBridge/ScriptingBridge.h>
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>

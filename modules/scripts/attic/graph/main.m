@@ -40,7 +40,7 @@ void initializeWindow() {
 
     camera = (Camera2D){ .target = {screenWidth/2.0f, screenHeight/2.0f}, .offset = {screenWidth/2.0f, screenHeight/2.0f}, .zoom = 1.0f };
 
-    id window = (id)GetWindowHandle();
+    id window = (__bridge id)GetWindowHandle();
     if (window) {
         ((void (*)(id, SEL, bool))objc_msgSend)(window, sel_registerName("setTitlebarAppearsTransparent:"), true);
         ((void (*)(id, SEL, long))objc_msgSend)(window, sel_registerName("setTitleVisibility:"), 1);
@@ -51,26 +51,21 @@ void initializeWindow() {
 
 void quit() {
     if (!isQuitting) {
-        pid_t pid = fork();
-        if (pid == 0) {
-            freopen("/dev/null", "w", stdout);
-            freopen("/dev/null", "w", stderr);
-
-            execlp("aerospace", "aerospace", "close", "--quit-if-last-window", NULL);
-            exit(1);
-        }
+        isQuitting = true;
+        AerospaceRun(@[@"close"]);
+        exit(0);
     }
 }
 
 void openNote(const char* id) {
-    char command[2048];
     const char* home = getenv("HOME");
     if (!home) home = "";
 
-    snprintf(command, sizeof(command),
-        "/run/current-system/sw/bin/launcher \"%s/iCloud/Projects/_attic/notes/%s/%s.pdf\" &", home, id, id);
+    @autoreleasepool {
+        NSString *targetPath = [NSString stringWithFormat:@"%s/iCloud/Projects/_attic/notes/%s/%s.pdf", home, id, id];
+        RunLauncher(targetPath);
+    }
 
-    system(command);
     quit();
 }
 

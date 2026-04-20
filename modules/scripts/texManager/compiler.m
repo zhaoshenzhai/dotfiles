@@ -1,13 +1,11 @@
 #define _DARWIN_C_SOURCE
+#include "commonUtils.h"
 #include "texManager.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-#include <sys/wait.h>
 #include <ftw.h>
 #include <fnmatch.h>
-#include <fcntl.h>
 
 static const char *cleanExtensions[] = {
     ".aux", ".fls", ".log", ".blg", ".fdb_latexmk",
@@ -23,15 +21,10 @@ void texInitConfig(TexConfig *config) {
     strcpy(config->engine, "pdf");
 }
 
-bool texIsCompiling(const char *fileName) {
-    char cmd[512];
-    snprintf(cmd, sizeof(cmd), "pgrep -f '[l]atexmk.*%s' > /dev/null 2>&1", fileName);
-    int status = system(cmd);
-    return (WIFEXITED(status) && WEXITSTATUS(status) == 0);
-}
-
 int texCompile(const char *dirPath, const char *fileName, const TexConfig *config) {
-    if (texIsCompiling(fileName)) return 0;
+    char pattern[512];
+    snprintf(pattern, sizeof(pattern), "[l]atexmk.*%s", fileName);
+    if (IsProcessRunning(pattern)) return 0;
 
     char baseName[256];
     strncpy(baseName, fileName, sizeof(baseName));
@@ -39,19 +32,13 @@ int texCompile(const char *dirPath, const char *fileName, const TexConfig *confi
     char *dot = strrchr(baseName, '.');
     if (dot) *dot = '\0';
 
-    unsigned int dirHash = 5381;
-    for (int i = 0; dirPath[i] != '\0'; i++) {
-        dirHash = ((dirHash << 5) + dirHash) + dirPath[i];
-    }
+    unsigned int dirHash = DJB2Hash(dirPath);
 
     char cacheDir[PATH_MAX];
     const char *home = getenv("HOME");
-
     snprintf(cacheDir, sizeof(cacheDir), "%s/.cache/texManager/pdf/%u_%s", home ? home : "/tmp", dirHash, baseName);
 
-    char cmd[2048];
-    snprintf(cmd, sizeof(cmd), "mkdir -p '%s'", cacheDir);
-    system(cmd);
+    EnsureDirectoryExists(cacheDir);
 
     pid_t pid = fork();
     if (pid == 0) {
@@ -91,13 +78,15 @@ int texCompile(const char *dirPath, const char *fileName, const TexConfig *confi
         int exitCode = WIFEXITED(status) ? WEXITSTATUS(status) : 1;
 
         if (exitCode == 0) {
-            char mvCmd[2048];
-            snprintf(mvCmd, sizeof(mvCmd),
-                "mv -f '%s/%s.pdf' '%s/%s.pdf'; "
-                "mv -f '%s/%s.synctex.gz' '%s/%s.synctex.gz' 2>/dev/null",
-                cacheDir, baseName, dirPath, baseName,
-                cacheDir, baseName, dirPath, baseName);
-            system(mvCmd);
+            char srcFile[PATH_MAX], dstFile[PATH_MAX];
+
+            snprintf(srcFile, sizeof(srcFile), "%s/%s.pdf", cacheDir, baseName);
+            snprintf(dstFile, sizeof(dstFile), "%s/%s.pdf", dirPath, baseName);
+            MoveFile(srcFile, dstFile);
+
+            snprintf(srcFile, sizeof(srcFile), "%s/%s.synctex.gz", cacheDir, baseName);
+            snprintf(dstFile, sizeof(dstFile), "%s/%s.synctex.gz", dirPath, baseName);
+            MoveFile(srcFile, dstFile);
         }
 
         return exitCode;
@@ -112,19 +101,15 @@ int texCompileToSvg(const char *dirPath, const char *fileName, const char *outpu
     char *dot = strrchr(baseName, '.');
     if (dot) *dot = '\0';
 
-    unsigned int dirHash = 5381;
-    for (int i = 0; dirPath[i] != '\0'; i++) {
-        dirHash = ((dirHash << 5) + dirHash) + dirPath[i];
-    }
+    unsigned int dirHash = DJB2Hash(dirPath);
 
     char cmd[2048];
     char cacheDir[PATH_MAX];
     const char *home = getenv("HOME");
-
     snprintf(cacheDir, sizeof(cacheDir), "%s/.cache/texManager/svg/%u_%s", home ? home : "/tmp", dirHash, baseName);
 
-    snprintf(cmd, sizeof(cmd), "mkdir -p '%s' '%s'", outputDir, cacheDir);
-    system(cmd);
+    EnsureDirectoryExists(outputDir);
+    EnsureDirectoryExists(cacheDir);
 
     snprintf(cmd, sizeof(cmd),
         "cd '%s' && "
@@ -171,13 +156,4 @@ int texCleanAux(const char *dirPath) {
     int flags = FTW_PHYS;
     if (nftw(dirPath, unlinkCallback, 20, flags) == -1) return 1;
     return 0;
-}
-
-void ensureTexPath() {
-    const char *currentPath = getenv("PATH");
-    char newPath[8192];
-    snprintf(newPath, sizeof(newPath),
-        "/run/current-system/sw/bin:/etc/profiles/per-user/%s/bin:%s/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/opt/homebrew/bin:/usr/local/bin:%s",
-        getenv("USER"), getenv("HOME"), currentPath ? currentPath : "");
-    setenv("PATH", newPath, 1);
 }

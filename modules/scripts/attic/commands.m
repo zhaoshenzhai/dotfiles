@@ -1,5 +1,5 @@
+#include "../texManager/texManager.h"
 #include "attic.h"
-#include "texManager.h"
 
 int generateMetadata(int id) {
     if (id >= noteCapacity || !notes[id].active) {
@@ -63,9 +63,7 @@ int generateMetadata(int id) {
 }
 
 void createNote(const char *inKeywords) {
-    char cmd[2048];
-    snprintf(cmd, sizeof(cmd), "mkdir -p \"%s\"", atticDir);
-    system(cmd);
+    EnsureDirectoryExists(atticDir);
 
     int id;
     char path[PATH_MAX];
@@ -76,9 +74,13 @@ void createNote(const char *inKeywords) {
         if (access(path, F_OK) != 0) break;
     }
 
-    mkdir(path, 0755);
-    snprintf(cmd, sizeof(cmd), "cp \"%s\" \"%s/%05d.tex\"", templateFile, path, id);
-    system(cmd);
+    EnsureDirectoryExists(path);
+
+    @autoreleasepool {
+        NSString *nsTemplate = [NSString stringWithUTF8String:templateFile];
+        NSString *nsDest = [NSString stringWithFormat:@"%s/%05d.tex", path, id];
+        [[NSFileManager defaultManager] copyItemAtPath:nsTemplate toPath:nsDest error:nil];
+    }
 
     char keywords[256] = "";
     if (strcmp(inKeywords, "EMPTY_KEYWORDS") == 0) {
@@ -112,13 +114,19 @@ void createNote(const char *inKeywords) {
     generateMetadata(id);
     exportGraph(1);
 
-    snprintf(cmd, sizeof(cmd), "%s --update &", launcherPath);
-    system(cmd);
+    @autoreleasepool {
+        NSString *nsLauncher = [NSString stringWithUTF8String:launcherPath];
+        RunCommandDetached(nsLauncher, @[@"--update"]);
+    }
+
     compileNote(id);
 
     if (isInteractive) {
-        snprintf(cmd, sizeof(cmd), "nohup %s \"%s/%05d/%05d.tex\" >/dev/null 2>&1 &", launcherPath, atticDir, id, id);
-        system(cmd);
+        @autoreleasepool {
+            NSString *nsLauncher = [NSString stringWithUTF8String:launcherPath];
+            NSString *nsTarget = [NSString stringWithFormat:@"%s/%05d/%05d.tex", atticDir, id, id];
+            RunCommandDetached(nsLauncher, @[nsTarget]);
+        }
         usleep(100000);
         exit(0);
     }
@@ -130,7 +138,7 @@ void updateMetadata(int id) {
     char cachePath[PATH_MAX];
     const char* home = getenv("HOME");
     if (home) {
-        unsigned int h = hashString(SAFE_STR(notes[id].keys));
+        unsigned int h = DJB2Hash(SAFE_STR(notes[id].keys));
         snprintf(cachePath, sizeof(cachePath), "%s/.cache/attic/labels/%u.png", home, h);
         unlink(cachePath);
     }
@@ -462,9 +470,11 @@ void exportGraph(int silent) {
 void launchGraph(void) {
     exportGraph(1);
     char cmd[PATH_MAX + 128];
+    // Keeping bash execution here since 'exec -a' is a shell builtin used to rename the process
     snprintf(cmd, sizeof(cmd), "cd '%s/..' && nohup bash -c 'exec -a attic attic-graph' > /dev/null 2>&1 &", atticDir);
     system(cmd);
 
-    system("osascript -e 'tell application \"System Events\" to set visible of front process to false'");
+    // Replaced system("osascript...") with native execution
+    RunCommandWait(@"/usr/bin/osascript", @[@"-e", @"tell application \"System Events\" to set visible of front process to false"]);
     exit(0);
 }

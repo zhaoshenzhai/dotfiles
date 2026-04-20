@@ -1,5 +1,6 @@
 #pragma once
 
+#import "commonUtils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -56,7 +57,6 @@ int isCompiling(int id);
 int compileNoteSync(int id);
 void compileNote(int id);
 void extracIDs(const char *str, int *arr, int *count);
-unsigned int hashString(const char *str);
 void ensureNoteCapacity(int maxID);
 int compareModDateDesc(const void *a, const void *b);
 

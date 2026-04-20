@@ -6,20 +6,27 @@
         $CC -O3 -dynamiclib -framework Cocoa -framework ScreenCaptureKit -framework CoreMedia -framework QuartzCore -framework CoreImage ${scriptsDir}/window/transparency.m -o $out/lib/transparentWindow.dylib
     '';
 
-    launcher = pkgs.runCommandCC "launcher" {} ''
-        mkdir -p $out/bin
-        $CC -O3 -fobjc-arc -I${scriptsDir} -DFD_PATH="\"${pkgs.fd}/bin/fd\"" -DFZF_PATH="\"${pkgs.fzf}/bin/fzf\"" \
-            ${scriptsDir}/launcher.m ${scriptsDir}/commonUtils.m -framework Foundation -framework AppKit -o $out/bin/launcher
-    '';
-
     centerWindow = pkgs.runCommandCC "centerWindow" {} ''
         mkdir -p $out/bin
         $CC -O3 ${scriptsDir}/window/centering.m -framework Cocoa -o $out/bin/centerWindow
     '';
 
+    launcher = pkgs.runCommandCC "launcher" {} ''
+        mkdir -p $out/bin
+        $CC -O3 -fobjc-arc -I${scriptsDir} -DFD_PATH="\"${pkgs.fd}/bin/fd\"" -DFZF_PATH="\"${pkgs.fzf}/bin/fzf\"" \
+            ${scriptsDir}/launcher.m ${scriptsDir}/commonUtils.m \
+            -framework Foundation -framework AppKit -framework ApplicationServices \
+            -o $out/bin/launcher
+    '';
+
     texManager = pkgs.runCommandCC "texManager" {} ''
         mkdir -p $out/bin
-        $CC -O3 ${scriptsDir}/texManager/main.c ${scriptsDir}/texManager/compiler.c -o $out/bin/texManager
+        $CC -O3 -fobjc-arc -I${scriptsDir} \
+            ${scriptsDir}/texManager/main.m \
+            ${scriptsDir}/texManager/compiler.m \
+            ${scriptsDir}/commonUtils.m \
+            -framework Foundation -framework AppKit -framework ApplicationServices \
+            -o $out/bin/texManager
     '';
 
     skimUtils = pkgs.runCommandCC "skimUtils" {} ''
@@ -35,25 +42,27 @@
             ${scriptsDir}/skimUtils/duplicateTab.m \
             ${scriptsDir}/skimUtils/cleanDuplicates.m \
             ${scriptsDir}/skimUtils/reopenLastClosed.m \
-            -framework Cocoa -framework ScriptingBridge \
+            -framework Cocoa -framework ScriptingBridge -framework ApplicationServices \
             -o $out/bin/skimUtils
     '';
 
     attic = pkgs.runCommandCC "attic" { buildInputs = with pkgs; [ raylib cjson cm_unicode ]; } ''
         mkdir -p $out/bin
 
-        $CC -O3 -I${scriptsDir}/texManager \
-            ${scriptsDir}/attic/main.c ${scriptsDir}/attic/commands.c \
-            ${scriptsDir}/attic/memory.c ${scriptsDir}/attic/utils.c \
-            ${scriptsDir}/texManager/compiler.c \
+        $CC -O3 -fobjc-arc -I${scriptsDir}/texManager -I${scriptsDir} \
+            ${scriptsDir}/attic/main.m ${scriptsDir}/attic/commands.m \
+            ${scriptsDir}/attic/memory.m ${scriptsDir}/attic/utils.m \
+            ${scriptsDir}/texManager/compiler.m \
+            ${scriptsDir}/commonUtils.m \
+            -framework Foundation -framework AppKit -framework ApplicationServices \
             -o $out/bin/attic
 
         FONT=$(find ${pkgs.cm_unicode} -type f \( -iname "cmunrm.ttf" -o -iname "cmunrm.otf" \) | head -n 1)
 
-        $CC -O3 -fobjc-arc ${scriptsDir}/attic/graph/*.c ${scriptsDir}/window/transparency.m \
+        $CC -O3 -fobjc-arc -I${scriptsDir} ${scriptsDir}/attic/graph/*.m ${scriptsDir}/window/transparency.m ${scriptsDir}/commonUtils.m \
             -lraylib -lcjson -lpthread -DFONT_PATH="\"$FONT\"" \
             -framework ScreenCaptureKit -framework CoreMedia -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT \
-            -framework OpenGL -framework QuartzCore -framework CoreImage \
+            -framework OpenGL -framework QuartzCore -framework CoreImage -framework ApplicationServices \
             -o $out/bin/attic-graph
     '';
 
