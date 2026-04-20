@@ -51,6 +51,33 @@ static NSString *FormatFilePath(NSString *filePath) {
 static void UpdateCache(void) {
     [[NSFileManager defaultManager] changeCurrentDirectoryPath:kBaseDir];
 
+    NSString *recentFile = [kCacheDir stringByAppendingPathComponent:@"recent.txt"];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:recentFile]) {
+        NSString *recentStr = [NSString stringWithContentsOfFile:recentFile encoding:NSUTF8StringEncoding error:nil];
+        if (recentStr.length > 0) {
+            NSArray *lines = [recentStr componentsSeparatedByString:@"\n"];
+            NSMutableArray *validRecentLines = [NSMutableArray arrayWithCapacity:lines.count];
+
+            for (NSString *line in lines) {
+                if (line.length == 0) continue;
+
+                NSArray *parts = [line componentsSeparatedByString:@"\t"];
+                NSString *relPath = parts.lastObject;
+
+                NSString *fullPath = [kBaseDir stringByAppendingPathComponent:relPath];
+                if ([[NSFileManager defaultManager] fileExistsAtPath:fullPath]) {
+                    [validRecentLines addObject:line];
+                }
+            }
+
+            NSString *newRecent = @"";
+            if (validRecentLines.count > 0) {
+                newRecent = [[validRecentLines componentsJoinedByString:@"\n"] stringByAppendingString:@"\n"];
+            }
+            [newRecent writeToFile:recentFile atomically:YES encoding:NSUTF8StringEncoding error:nil];
+        }
+    }
+
     NSArray *fdArgs = @[@"-L", @"--type", @"f", @"--hidden", @"--no-ignore",
                         @"--exclude", @".git", @"--exclude", @"*.old", @"--exclude", @"*.png", @"--exclude", @"*.jpg",
                         @"--exclude", @"*.tar.gz", @"--exclude", @"*.zip", @"--exclude", @"*.synctex.gz",
@@ -151,7 +178,7 @@ static void Launch(NSString *selected) {
         if (exists) {
             NSString *timestamp = [NSString stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970]];
             NSString *uniqueDir = [@"/tmp/skim_pdfs" stringByAppendingPathComponent:timestamp];
-            [[NSFileManager defaultManager] createDirectoryAtPath:uniqueDir withIntermediateDirectories:YES attributes:nil error:nil];
+            EnsureDirectoryExists(uniqueDir.UTF8String);
 
             NSString *copyPath = [uniqueDir stringByAppendingPathComponent:filename];
             [[NSFileManager defaultManager] copyItemAtPath:fullPath toPath:copyPath error:nil];
@@ -241,7 +268,7 @@ static void QuitAndCloseLauncher(BOOL didLaunch) {
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
-        [[NSFileManager defaultManager] createDirectoryAtPath:kCacheDir withIntermediateDirectories:YES attributes:nil error:nil];
+        EnsureDirectoryExists(kCacheDir.UTF8String);
 
         if (argc > 1) {
             NSString *arg = [NSString stringWithUTF8String:argv[1]];
@@ -258,14 +285,8 @@ int main(int argc, const char * argv[]) {
 
             absPath = [absPath stringByStandardizingPath];
 
-            NSString *home = NSHomeDirectory();
-            NSString *realICloud = [home stringByAppendingPathComponent:@"Library/Mobile Documents/com~apple~CloudDocs"];
-            NSString *symlinkICloud = [home stringByAppendingPathComponent:@"iCloud"];
-
-            if ([absPath hasPrefix:realICloud]) {
-                absPath = [absPath stringByReplacingOccurrencesOfString:realICloud withString:kBaseDir options:0 range:NSMakeRange(0, realICloud.length)];
-            } else if ([absPath hasPrefix:symlinkICloud]) {
-                absPath = [absPath stringByReplacingOccurrencesOfString:symlinkICloud withString:kBaseDir options:0 range:NSMakeRange(0, symlinkICloud.length)];
+            if ([absPath hasPrefix:kRealICloudDir]) {
+                absPath = [absPath stringByReplacingOccurrencesOfString:kRealICloudDir withString:kBaseDir options:0 range:NSMakeRange(0, kRealICloudDir.length)];
             }
 
             if ([absPath hasPrefix:kBaseDir]) {

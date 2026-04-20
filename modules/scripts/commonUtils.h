@@ -7,6 +7,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 extern NSString *const kBaseDir;
+extern NSString *const kRealICloudDir;
 extern NSString *const kLaTeXTemplateDir;
 extern NSString *const kAerospacePath;
 extern NSString *const kNvimPath;
