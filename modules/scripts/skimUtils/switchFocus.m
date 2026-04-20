@@ -1,14 +1,8 @@
-#import <spawn.h>
-#import <sys/wait.h>
-#import <sys/mman.h>
-#import <fcntl.h>
-#import <unistd.h>
+#import "commonUtils.h"
 #import "skimUtils.h"
-
-extern char **environ;
+#import <sys/mman.h>
 
 static NSString *const kSkimBundleID = @"net.sourceforge.skim-app.skim";
-static const char *const kAerospacePath = "/etc/profiles/per-user/zhao/bin/aerospace";
 #define SHM_SIZE 1024
 
 typedef struct {
@@ -17,79 +11,6 @@ typedef struct {
     int       alacrittyWinID;
     NSInteger skimCount;
 } WorkspaceInfo;
-
-static int AerospaceRun(NSArray<NSString *> *argsArray) {
-    int argc = (int)argsArray.count + 1;
-    char **argv = malloc((argc + 1) * sizeof(char *));
-    argv[0] = strdup("aerospace");
-    for (int i = 0; i < argsArray.count; i++) {
-        argv[i + 1] = strdup(argsArray[i].UTF8String);
-    }
-    argv[argc] = NULL;
-
-    pid_t pid;
-    posix_spawn_file_actions_t actions;
-    posix_spawn_file_actions_init(&actions);
-
-    posix_spawn_file_actions_addopen(&actions, STDOUT_FILENO, "/dev/null", O_WRONLY, 0);
-    posix_spawn_file_actions_addopen(&actions, STDERR_FILENO, "/dev/null", O_WRONLY, 0);
-
-    if (posix_spawn(&pid, kAerospacePath, &actions, NULL, argv, environ) == 0) {
-        waitpid(pid, NULL, 0);
-    }
-
-    posix_spawn_file_actions_destroy(&actions);
-    for (int i = 0; i < argc; i++) free(argv[i]);
-    free(argv);
-    return 0;
-}
-
-static NSString *AerospaceOutput(NSArray<NSString *> *argsArray) {
-    int pipefd[2];
-    if (pipe(pipefd) != 0) return @"";
-
-    int argc = (int)argsArray.count + 1;
-    char **argv = malloc((argc + 1) * sizeof(char *));
-    argv[0] = strdup("aerospace");
-    for (int i = 0; i < argsArray.count; i++) {
-        argv[i + 1] = strdup(argsArray[i].UTF8String);
-    }
-    argv[argc] = NULL;
-
-    pid_t pid;
-    posix_spawn_file_actions_t actions;
-    posix_spawn_file_actions_init(&actions);
-
-    posix_spawn_file_actions_adddup2(&actions, pipefd[1], STDOUT_FILENO);
-    posix_spawn_file_actions_addclose(&actions, pipefd[0]);
-
-    if (posix_spawn(&pid, kAerospacePath, &actions, NULL, argv, environ) != 0) {
-        posix_spawn_file_actions_destroy(&actions);
-        close(pipefd[0]); close(pipefd[1]);
-        for (int i = 0; i < argc; i++) free(argv[i]);
-        free(argv);
-        return @"";
-    }
-
-    posix_spawn_file_actions_destroy(&actions);
-    close(pipefd[1]);
-
-    NSMutableData *data = [[NSMutableData alloc] initWithCapacity:1024];
-    char buffer[1024];
-    ssize_t bytesRead;
-
-    while ((bytesRead = read(pipefd[0], buffer, sizeof(buffer))) > 0) {
-        [data appendBytes:buffer length:bytesRead];
-    }
-    close(pipefd[0]);
-    waitpid(pid, NULL, 0);
-
-    for (int i = 0; i < argc; i++) free(argv[i]);
-    free(argv);
-
-    NSString *outStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    return outStr ? [outStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] : @"";
-}
 
 static void SaveSkimTitle(NSString *title, pid_t alacrittyPID) {
     if (!title.length) return;

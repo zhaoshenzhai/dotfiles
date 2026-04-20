@@ -24,7 +24,8 @@
 
     skimUtils = pkgs.runCommandCC "skimUtils" {} ''
         mkdir -p $out/bin
-        $CC -O3 -fobjc-arc \
+        $CC -O3 -fobjc-arc -I${scriptsDir} \
+            ${scriptsDir}/commonUtils.m \
             ${scriptsDir}/skimUtils/main.m ${scriptsDir}/skimUtils/utils.m \
             ${scriptsDir}/skimUtils/search.m \
             ${scriptsDir}/skimUtils/moveTab.m \
