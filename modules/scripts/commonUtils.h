@@ -12,30 +12,43 @@ extern NSString *const kAerospacePath;
 extern NSString *const kNvimPath;
 extern NSString *const kLauncherPath;
 
-// --- Command Execution ---
+// --- Command execution ---
 int RunCommandWait(NSString *cmdPath, NSArray<NSString *> *argsArray);
 NSString *RunCommandOutput(NSString *cmdPath, NSArray<NSString *> *argsArray);
 void RunCommandDetached(NSString *cmdPath, NSArray<NSString *> *argsArray);
 
-// --- Process and Accessibility Utilities ---
+// --- Process and accessibility utilities ---
 AXUIElementRef _Nullable GetFocusedWindowForPID(pid_t pid);
 CFArrayRef _Nullable CopyAXWindows(pid_t pid);
 NSString * _Nullable AXWindowTitle(AXUIElementRef win);
 AXUIElementRef _Nullable FindChildWithTitle(AXUIElementRef parent, NSString *title);
 AXUIElementRef _Nullable GetFirstChildWithRole(AXUIElementRef parent, CFStringRef role);
 AXUIElementRef _Nullable GetSubmenu(AXUIElementRef element);
-
-// -- File and Directory Utilities
-void EnsureSystemPath(void);
-unsigned int HashString(const char *str);
-bool IsProcessRunning(const char *pattern);
-int EnsureDirectoryExists(const char *path);
-int MoveFile(const char *src, const char *dst);
-
-// --- Input Simulation ---
 void PostKeystrokeToPID(pid_t pid, CGKeyCode keyCode, CGEventFlags flags);
 
-// --- Aerospace and Launcher Execution ---
+// --- Generic C utilities ---
+int GetCh(void);
+int CompareInt(const void *a, const void *b);
+int DedupeIntArray(int *arr, int count);
+void TrimEnd(char *str);
+void *SafeMalloc(size_t size);
+void *SafeRealloc(void *p, size_t size);
+unsigned int HashString(const char *str);
+void EnsureSystemPath(void);
+int EnsureDirectoryExists(const char *path);
+bool IsProcessRunning(const char *pattern);
+int MoveFile(const char *src, const char *dst);
+
+// --- Generic dynamic array reallocator macro ---
+#define ENSURE_ARRAY_CAPACITY(ptr, count, cap, type, default_cap) \
+do { \
+    if ((count) >= (cap)) { \
+        (cap) = (cap) == 0 ? (default_cap) : (cap) * 2; \
+        (ptr) = (type *)SafeRealloc((ptr), (cap) * sizeof(type)); \
+    } \
+} while(0)
+
+// --- Aerospace and launcher execution ---
 static inline int AerospaceRun(NSArray<NSString *> *args) {
     return RunCommandWait(kAerospacePath, args);
 }

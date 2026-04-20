@@ -3,7 +3,7 @@
 void promptExit() {
     printf("\n%sPress [Y] to return, exiting otherwise...%s ", CYAN, NC);
     fflush(stdout);
-    int c = getch();
+    int c = GetCh();
 
     if (c == 'Y' || c == 'y' || c == '\n') { system("clear"); return; }
     AerospaceRun(@[@"close"]);
@@ -20,7 +20,7 @@ void interactiveMenu() {
 
         printf("%sSelect operation: [n, a, r, g] %s", CYAN, NC);
         fflush(stdout);
-        int cmdNum = getch();
+        int cmdNum = GetCh();
 
         if (cmdNum == 'n' || cmdNum == 'a' || cmdNum == 'r' || cmdNum == 'g') {
             printf("%c\n\n", cmdNum);
@@ -35,8 +35,8 @@ void interactiveMenu() {
                     fflush(stdout);
 
                     while (1) {
-                        int c = getch();
-                        if (c == '\033') { if (getch() == '[') { if (getch() == 'I') break; } } else if (c == '\n' || c == ' ') { break; }
+                        int c = GetCh();
+                        if (c == '\033') { if (GetCh() == '[') { if (GetCh() == 'I') break; } } else if (c == '\n' || c == ' ') { break; }
                     }
 
                     printf("\033[?1004l\033[?25h");

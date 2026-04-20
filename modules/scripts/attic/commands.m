@@ -78,8 +78,7 @@ void createNote(const char *inKeywords) {
     EnsureDirectoryExists(path);
 
     @autoreleasepool {
-        NSString *cleanTemplateDir = [kLaTeXTemplateDir stringByReplacingOccurrencesOfString:@"%" withString:@""];
-        NSString *nsTemplate = [cleanTemplateDir stringByAppendingPathComponent:@"files/attic.tex"];
+        NSString *nsTemplate = [kLaTeXTemplateDir stringByAppendingPathComponent:@"files/attic.tex"];
         NSString *nsDest = [NSString stringWithFormat:@"%s/%05d.tex", path, id];
         [[NSFileManager defaultManager] copyItemAtPath:nsTemplate toPath:nsDest error:nil];
     }
@@ -92,7 +91,7 @@ void createNote(const char *inKeywords) {
         printf("Note %05d created automatically.\n", id);
     } else {
         printf("%sEnter keywords for note %05d: %s", PURPLE, id, NC);
-        if (fgets(keywords, sizeof(keywords), stdin)) { trimEnd(keywords); }
+        if (fgets(keywords, sizeof(keywords), stdin)) { TrimEnd(keywords); }
     }
 
     char cleanKeys[512] = "";
@@ -146,12 +145,12 @@ void updateMetadata(int id) {
     int oldIds[1000];
     int oldCount = 0;
     extracIDs(SAFE_STR(notes[id].metaRefsRaw), oldIds, &oldCount);
-    oldCount = dedupe(oldIds, oldCount);
+    oldCount = DedupeIntArray(oldIds, oldCount);
 
     int newIds[1000];
     int newCount = notes[id].outCount;
     for (int i = 0; i < newCount; i++) newIds[i] = notes[id].outLinks[i].targetID;
-    newCount = dedupe(newIds, newCount);
+    newCount = DedupeIntArray(newIds, newCount);
 
     int linksChanged = 0;
     if (oldCount != newCount) {
@@ -176,7 +175,7 @@ void updateMetadata(int id) {
         for (int i = 0; i < oldCount; i++) combinedRefs[combinedCount++] = oldIds[i];
         for (int i = 0; i < newCount; i++) combinedRefs[combinedCount++] = newIds[i];
 
-        int uniqueCount = dedupe(combinedRefs, combinedCount);
+        int uniqueCount = DedupeIntArray(combinedRefs, combinedCount);
 
         for (int i = 0; i < uniqueCount; i++) {
             int refId = combinedRefs[i];
@@ -288,7 +287,7 @@ void rebuildNotes(void) {
     printf("%sRebuilding notes...%s\n", BLUE, NC);
 
     int runningJobs = 0, totalProcessed = 0, totalRebuilt = 0, totalFailed = 0;
-    int *failedIds = safeMalloc(totalNotes * sizeof(int));
+    int *failedIds = SafeMalloc(totalNotes * sizeof(int));
     int totalLines = 0;
 
     typedef struct { pid_t pid; int id; int row; } RebuildJob;

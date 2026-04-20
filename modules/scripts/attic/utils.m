@@ -7,24 +7,6 @@ int isInteractive = 0;
 Note *notes = NULL;
 int noteCapacity = 0;
 
-void* safeMalloc(size_t size) {
-    void* p = malloc(size);
-    if (!p && size > 0) {
-        fprintf(stderr, "%sError: Out of memory (malloc failed)%s\n", RED, NC);
-        exit(1);
-    }
-    return p;
-}
-
-void* safeRealloc(void* p, size_t size) {
-    void* newP = realloc(p, size);
-    if (!newP && size > 0) {
-        fprintf(stderr, "%sError: Out of memory (realloc failed)%s\n", RED, NC);
-        exit(1);
-    }
-    return newP;
-}
-
 void ensureNoteCapacity(int maxID) {
     if (maxID >= noteCapacity) {
         int oldCap = noteCapacity;
@@ -32,55 +14,14 @@ void ensureNoteCapacity(int maxID) {
         if (noteCapacity < oldCap * 2) noteCapacity = oldCap * 2;
         if (noteCapacity < 128) noteCapacity = 128;
 
-        notes = (Note*)safeRealloc(notes, noteCapacity * sizeof(Note));
+        notes = (Note*)SafeRealloc(notes, noteCapacity * sizeof(Note));
         memset(notes + oldCap, 0, (noteCapacity - oldCap) * sizeof(Note));
     }
 }
 
-int getch(void) {
-    struct termios oldattr, newattr;
-    int ch;
-    tcgetattr(STDIN_FILENO, &oldattr);
-    newattr = oldattr;
-    newattr.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
-    ch = getchar();
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
-    return ch;
-}
-
-void trimEnd(char *str) {
-    int len = strlen(str);
-    while (len > 0 && (isspace(str[len - 1]) || str[len - 1] == '\\')) {
-        str[len - 1] = '\0';
-        len--;
-    }
-}
-
-int cmp_int(const void *a, const void *b) {
-    return (*(int *)a - *(int *)b);
-}
-
-int dedupe(int *arr, int count) {
-    if (count == 0) return 0;
-    static bool seen[100000];
-    memset(seen, 0, sizeof(seen));
-
-    int j = 0;
-    for (int i = 0; i < count; i++) {
-        if (arr[i] >= 0 && arr[i] < 100000) {
-            if (!seen[arr[i]]) {
-                seen[arr[i]] = true;
-                arr[j++] = arr[i];
-            }
-        }
-    }
-    return j;
-}
-
 void formatLinks(int *ids, int count, char *outBuf) {
     outBuf[0] = '\0';
-    int uniqueCount = dedupe(ids, count);
+    int uniqueCount = DedupeIntArray(ids, count);
     for (int i = 0; i < uniqueCount; i++) {
         if (i > 0) strcat(outBuf, ", ");
         char temp[32];

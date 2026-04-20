@@ -1,14 +1,5 @@
 #include "graph.h"
 
-#define ENSURE_CAPACITY(ptr, count, cap, type, default_cap) \
-do { \
-    if ((count) >= (cap)) { \
-        (cap) = (cap) == 0 ? (default_cap) : (cap) * 2; \
-        (ptr) = realloc((ptr), (cap) * sizeof(type)); \
-        if (!(ptr)) { fprintf(stderr, "Out of memory\n"); exit(1); } \
-    } \
-} while(0)
-
 Node *graphNodes = NULL;
 Edge *graphEdges = NULL;
 
@@ -38,7 +29,7 @@ void initializeGraph(const char* filename, int screenWidth, int screenHeight) {
     nodeCount = 0;
 
     cJSON_ArrayForEach(nodeItem, nodesArray) {
-        ENSURE_CAPACITY(graphNodes, nodeCount, nodeCapacity, Node, 128);
+        ENSURE_ARRAY_CAPACITY(graphNodes, nodeCount, nodeCapacity, Node, 128);
 
         cJSON* idObj = cJSON_GetObjectItemCaseSensitive(nodeItem, "id");
         cJSON* labelObj = cJSON_GetObjectItemCaseSensitive(nodeItem, "label");
@@ -54,7 +45,7 @@ void initializeGraph(const char* filename, int screenWidth, int screenHeight) {
             graphNodes[nodeCount].degree = 0;
 
             if (graphNodes[nodeCount].labelTexture.id == 0 && !graphNodes[nodeCount].hasLatexError) {
-                ENSURE_CAPACITY(pendingNodes, pendingCount, pendingCapacity, int, 128);
+                ENSURE_ARRAY_CAPACITY(pendingNodes, pendingCount, pendingCapacity, int, 128);
                 pendingNodes[pendingCount++] = nodeCount;
             }
 
@@ -70,7 +61,7 @@ void initializeGraph(const char* filename, int screenWidth, int screenHeight) {
     edgeCount = 0;
 
     cJSON_ArrayForEach(edgeItem, edgesArray) {
-        ENSURE_CAPACITY(graphEdges, edgeCount, edgeCapacity, Edge, 256);
+        ENSURE_ARRAY_CAPACITY(graphEdges, edgeCount, edgeCapacity, Edge, 256);
 
         cJSON* srcObj = cJSON_GetObjectItemCaseSensitive(edgeItem, "source");
         cJSON* tgtObj = cJSON_GetObjectItemCaseSensitive(edgeItem, "target");

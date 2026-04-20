@@ -43,12 +43,6 @@ extern int isInteractive;
 extern Note *notes;
 extern int noteCapacity;
 
-void* safeMalloc(size_t size);
-void* safeRealloc(void* p, size_t size);
-int getch(void);
-void trimEnd(char *str);
-int cmp_int(const void *a, const void *b);
-int dedupe(int *arr, int count);
 void formatLinks(int *ids, int count, char *outBuf);
 int isCompiling(int id);
 int compileNoteSync(int id);

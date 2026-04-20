@@ -1,5 +1,23 @@
 #include "attic.h"
 
+void addOutLink(int src, int target, int lineNumber) {
+    ENSURE_ARRAY_CAPACITY(notes[src].outLinks, notes[src].outCount, notes[src].outCapacity, OutLink, 8);
+    notes[src].outLinks[notes[src].outCount++] = (OutLink){target, lineNumber};
+}
+
+void addInLink(int target, int src) {
+    ENSURE_ARRAY_CAPACITY(notes[target].inLinks, notes[target].inCount, notes[target].inCapacity, int, 8);
+    notes[target].inLinks[notes[target].inCount++] = src;
+}
+
+void addTodo(int id, int lineNumber, const char *text) {
+    ENSURE_ARRAY_CAPACITY(notes[id].todos, notes[id].todoCount, notes[id].todoCapacity, Todo, 4);
+    while (isspace(*text)) text++;
+    char *textCopy = strdup(text);
+    TrimEnd(textCopy);
+    notes[id].todos[notes[id].todoCount++] = (Todo){textCopy, lineNumber};
+}
+
 void freeMemory(void) {
     for (int i = 0; i < noteCapacity; i++) {
         if (notes[i].outLinks) { free(notes[i].outLinks); notes[i].outLinks = NULL; }
@@ -14,33 +32,6 @@ void freeMemory(void) {
         notes[i].inCount = notes[i].inCapacity = 0;
         notes[i].todoCount = notes[i].todoCapacity = 0;
     }
-}
-
-void addOutLink(int src, int target, int lineNumber) {
-    if (notes[src].outCount >= notes[src].outCapacity) {
-        notes[src].outCapacity = notes[src].outCapacity == 0 ? 8 : notes[src].outCapacity * 2;
-        notes[src].outLinks = (OutLink*)safeRealloc(notes[src].outLinks, notes[src].outCapacity * sizeof(OutLink));
-    }
-    notes[src].outLinks[notes[src].outCount++] = (OutLink){target, lineNumber};
-}
-
-void addInLink(int target, int src) {
-    if (notes[target].inCount >= notes[target].inCapacity) {
-        notes[target].inCapacity = notes[target].inCapacity == 0 ? 8 : notes[target].inCapacity * 2;
-        notes[target].inLinks = safeRealloc(notes[target].inLinks, notes[target].inCapacity * sizeof(int));
-    }
-    notes[target].inLinks[notes[target].inCount++] = src;
-}
-
-void addTodo(int id, int lineNumber, const char *text) {
-    if (notes[id].todoCount >= notes[id].todoCapacity) {
-        notes[id].todoCapacity = notes[id].todoCapacity == 0 ? 4 : notes[id].todoCapacity * 2;
-        notes[id].todos = safeRealloc(notes[id].todos, notes[id].todoCapacity * sizeof(Todo));
-    }
-    while (isspace(*text)) text++;
-    char *textCopy = strdup(text);
-    trimEnd(textCopy);
-    notes[id].todos[notes[id].todoCount++] = (Todo){textCopy, lineNumber};
 }
 
 void loadMemory(void) {
@@ -66,7 +57,7 @@ void loadMemory(void) {
             if (fkey) {
                 char tempKeys[1024] = "";
                 if (fgets(tempKeys, sizeof(tempKeys), fkey)) {
-                    trimEnd(tempKeys);
+                    TrimEnd(tempKeys);
                     notes[id].keys = strdup(tempKeys);
                 }
                 fclose(fkey);
@@ -81,11 +72,11 @@ void loadMemory(void) {
                     while (isspace(*start)) start++;
                     if (strncmp(start, "Last modified:", 14) == 0) {
                         sscanf(start + 14, " %63[^\n]", notes[id].modDate);
-                        trimEnd(notes[id].modDate);
+                        TrimEnd(notes[id].modDate);
                     } else if (strncmp(start, "References:", 11) == 0) {
-                        trimEnd(start); notes[id].metaRefsRaw = strdup(start);
+                        TrimEnd(start); notes[id].metaRefsRaw = strdup(start);
                     } else if (strncmp(start, "Referenced in:", 14) == 0) {
-                        trimEnd(start); notes[id].metaRefInRaw = strdup(start);
+                        TrimEnd(start); notes[id].metaRefInRaw = strdup(start);
                     }
                 }
                 fclose(fdat);

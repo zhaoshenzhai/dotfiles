@@ -53,8 +53,7 @@ void* latexWorkerThread(void* arg) {
             EnsureDirectoryExists(cacheDir);
 
             @autoreleasepool {
-                NSString *nsHome = [NSString stringWithUTF8String:(getenv("HOME") ? getenv("HOME") : "/tmp")];
-                NSString *src = [NSString stringWithFormat:@"%@/iCloud/Dotfiles/modules/LaTeXTemplate/macros.sty", nsHome];
+                NSString *src = [kLaTeXTemplateDir stringByAppendingPathComponent:@"macros.sty"];
                 NSString *dst = [NSString stringWithFormat:@"%s/macros.sty", cacheDir];
                 [[NSFileManager defaultManager] removeItemAtPath:dst error:nil];
                 [[NSFileManager defaultManager] createSymbolicLinkAtPath:dst withDestinationPath:src error:nil];
