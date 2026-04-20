@@ -78,27 +78,6 @@ static WorkspaceInfo GetWorkspaceInfo(void) {
     return info;
 }
 
-static CFArrayRef CopyAXWindows(pid_t pid) {
-    AXUIElementRef appElem = AXUIElementCreateApplication(pid);
-    CFTypeRef val          = NULL;
-    CFArrayRef result      = NULL;
-
-    if (AXUIElementCopyAttributeValue(appElem, kAXWindowsAttribute, &val) == kAXErrorSuccess) {
-        result = (CFArrayRef)CFRetain(val);
-        CFRelease(val);
-    }
-    CFRelease(appElem);
-    return result;
-}
-
-static NSString *AXWindowTitle(AXUIElementRef win) {
-    CFTypeRef val = NULL;
-    if (AXUIElementCopyAttributeValue(win, kAXTitleAttribute, &val) != kAXErrorSuccess) return nil;
-    NSString *title = [(__bridge NSString *)val copy];
-    CFRelease(val);
-    return title;
-}
-
 static void FocusSkimWindow(NSRunningApplication *skim, NSString *savedTitle) {
     CFArrayRef wins = CopyAXWindows(skim.processIdentifier);
     if (!wins) { [skim activateWithOptions:0]; return; }

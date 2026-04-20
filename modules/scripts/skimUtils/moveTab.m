@@ -1,3 +1,4 @@
+#import "commonUtils.h"
 #import "skimUtils.h"
 
 int moveTab(int targetTab) {
@@ -28,34 +29,33 @@ int moveTab(int targetTab) {
                 if (AXUIElementCopyAttributeValue(child, kAXValueAttribute, &value) == kAXErrorSuccess) {
                     if ([(__bridge NSNumber *)value intValue] == 1) {
                         currentTabRef = child;
-                        CFRelease(value);
                         break;
                     }
-                    CFRelease(value);
                 }
+                if (value) CFRelease(value);
             }
 
             if (currentTabRef && currentTabRef != targetTabRef) {
                 CFTypeRef currentPosVal = NULL, currentSizeVal = NULL;
                 CFTypeRef targetPosVal = NULL, targetSizeVal = NULL;
-                CGPoint currentPos, targetPos;
-                CGSize currentSize, targetSize;
 
                 if (AXUIElementCopyAttributeValue(currentTabRef, kAXPositionAttribute, &currentPosVal) == kAXErrorSuccess &&
                     AXUIElementCopyAttributeValue(currentTabRef, kAXSizeAttribute, &currentSizeVal) == kAXErrorSuccess &&
                     AXUIElementCopyAttributeValue(targetTabRef, kAXPositionAttribute, &targetPosVal) == kAXErrorSuccess &&
                     AXUIElementCopyAttributeValue(targetTabRef, kAXSizeAttribute, &targetSizeVal) == kAXErrorSuccess) {
 
+                    CGPoint currentPos, targetPos;
+                    CGSize currentSize, targetSize;
+
                     AXValueGetValue((AXValueRef)currentPosVal, kAXValueCGPointType, &currentPos);
                     AXValueGetValue((AXValueRef)currentSizeVal, kAXValueCGSizeType, &currentSize);
                     AXValueGetValue((AXValueRef)targetPosVal, kAXValueCGPointType, &targetPos);
                     AXValueGetValue((AXValueRef)targetSizeVal, kAXValueCGSizeType, &targetSize);
 
-                    CGPoint startPoint = CGPointMake(currentPos.x + currentSize.width / 2.0, currentPos.y + currentSize.height / 2.0);
-                    CGPoint endPoint = CGPointMake(targetPos.x + targetSize.width / 2.0, targetPos.y + targetSize.height / 2.0);
+                    CGPoint startPoint = CGPointMake(currentPos.x + currentSize.width / 2, currentPos.y + currentSize.height / 2);
+                    CGPoint endPoint = CGPointMake(targetPos.x + targetSize.width / 2, targetPos.y + targetSize.height / 2);
 
                     CGEventSourceRef source = CGEventSourceCreate(kCGEventSourceStateHIDSystemState);
-
                     CGEventRef mouseMove = CGEventCreateMouseEvent(source, kCGEventMouseMoved, startPoint, kCGMouseButtonLeft);
                     CGEventRef mouseDown = CGEventCreateMouseEvent(source, kCGEventLeftMouseDown, startPoint, kCGMouseButtonLeft);
                     CGEventRef mouseDrag = CGEventCreateMouseEvent(source, kCGEventLeftMouseDragged, endPoint, kCGMouseButtonLeft);

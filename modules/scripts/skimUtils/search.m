@@ -1,3 +1,4 @@
+#import "commonUtils.h"
 #import "skimUtils.h"
 
 int skimSearch(NSString *action) {
