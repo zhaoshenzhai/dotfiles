@@ -8,8 +8,8 @@
 
     launcher = pkgs.runCommandCC "launcher" {} ''
         mkdir -p $out/bin
-        $CC -O3 -fobjc-arc -DFD_PATH="\"${pkgs.fd}/bin/fd\"" -DFZF_PATH="\"${pkgs.fzf}/bin/fzf\"" \
-            ${scriptsDir}/launcher.m -framework Foundation -framework AppKit -o $out/bin/launcher
+        $CC -O3 -fobjc-arc -I${scriptsDir} -DFD_PATH="\"${pkgs.fd}/bin/fd\"" -DFZF_PATH="\"${pkgs.fzf}/bin/fzf\"" \
+            ${scriptsDir}/launcher.m ${scriptsDir}/commonUtils.m -framework Foundation -framework AppKit -o $out/bin/launcher
     '';
 
     centerWindow = pkgs.runCommandCC "centerWindow" {} ''
