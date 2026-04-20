@@ -144,7 +144,7 @@ int MoveFile(const char *src, const char *dst) {
         NSString *nsDst = [NSString stringWithUTF8String:dst];
         NSFileManager *fm = [NSFileManager defaultManager];
 
-        [fm removeItemAtPath:nsDst error:nil]; // Equivalent to mv -f
+        [fm removeItemAtPath:nsDst error:nil];
         return [fm moveItemAtPath:nsSrc toPath:nsDst error:nil] ? 0 : 1;
     }
 }
@@ -155,7 +155,6 @@ bool IsProcessRunning(const char *pattern) {
     @autoreleasepool {
         NSString *cmd = @"/usr/bin/pgrep";
         NSArray *args = @[@"-f", [NSString stringWithUTF8String:pattern]];
-        // Leverages posix_spawn internally, avoiding shell overhead
         int status = RunCommandWait(cmd, args);
         return (status == 0);
     }

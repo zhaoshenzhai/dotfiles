@@ -1,4 +1,4 @@
-#include "../texManager/texManager.h"
+#include "texManager.h"
 #include "attic.h"
 
 void promptExit() {
@@ -56,7 +56,6 @@ void interactiveMenu() {
 }
 
 int main(int argc, char **argv) {
-    // Replaced ensureTexPath() with the centralized utility
     EnsureSystemPath();
 
     snprintf(atticDir, sizeof(atticDir), "%s/iCloud/Projects/_attic/notes", getenv("HOME"));
