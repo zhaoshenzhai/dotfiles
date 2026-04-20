@@ -101,7 +101,7 @@ int texCompileToSvg(const char *dirPath, const char *fileName, const char *outpu
     char *dot = strrchr(baseName, '.');
     if (dot) *dot = '\0';
 
-    unsigned int dirHash = DJB2Hash(dirPath);
+    unsigned int dirHash = HashString(dirPath);
 
     char cmd[2048];
     char cacheDir[PATH_MAX];

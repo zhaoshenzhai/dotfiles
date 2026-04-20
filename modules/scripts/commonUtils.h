@@ -3,7 +3,6 @@
 #import <ApplicationServices/ApplicationServices.h>
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
-#include <stdbool.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
