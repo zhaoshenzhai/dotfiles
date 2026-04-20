@@ -1,5 +1,7 @@
 #include "attic.h"
 
+extern char **environ;
+
 int generateMetadata(int id) {
     if (id >= noteCapacity || !notes[id].active) {
         printf("%sError: Note %05d does not exist.%s\n", RED, id, NC);
@@ -356,35 +358,56 @@ void rebuildNotes(void) {
             }
         }
 
-        pid = fork();
-        if (pid == 0) {
-            int exitCode = compileNoteSync(i);
-            exit(exitCode);
-        } else if (pid > 0) {
-            for (int j = 0; j < MAX_JOBS; j++) {
-                if (jobs[j].pid == 0) {
-                    jobs[j].pid = pid;
-                    jobs[j].id = i;
+        @autoreleasepool {
+            NSString *atticExe = [[NSProcessInfo processInfo] arguments].firstObject;
+            NSString *idStr = [NSString stringWithFormat:@"%d", i];
 
-                    if (jobs[j].row == -1) {
-                        jobs[j].row = j;
-                        while (totalLines <= j) {
-                            if (totalLines > 0) printf("\n");
-                            totalLines++;
+            char *argv_cmd[] = {
+                strdup(atticExe.UTF8String),
+                strdup("-c"),
+                strdup(idStr.UTF8String),
+                NULL
+            };
+
+            posix_spawn_file_actions_t actions;
+            posix_spawn_file_actions_init(&actions);
+            posix_spawn_file_actions_addopen(&actions, STDOUT_FILENO, "/dev/null", O_WRONLY, 0);
+            posix_spawn_file_actions_addopen(&actions, STDERR_FILENO, "/dev/null", O_WRONLY, 0);
+
+            int spawn_err = posix_spawnp(&pid, atticExe.UTF8String, &actions, NULL, argv_cmd, environ);
+
+            posix_spawn_file_actions_destroy(&actions);
+            free(argv_cmd[0]); free(argv_cmd[1]); free(argv_cmd[2]);
+
+            if (spawn_err == 0) {
+                for (int j = 0; j < MAX_JOBS; j++) {
+                    if (jobs[j].pid == 0) {
+                        jobs[j].pid = pid;
+                        jobs[j].id = i;
+
+                        if (jobs[j].row == -1) {
+                            jobs[j].row = j;
+                            while (totalLines <= j) {
+                                if (totalLines > 0) printf("\n");
+                                totalLines++;
+                            }
                         }
+
+                        int diff = (totalLines > 0 ? totalLines - 1 : 0) - jobs[j].row;
+                        if (diff > 0) printf("\033[%dA", diff);
+                        printf("\r\033[2K%sRebuilding %05d (%d/%d)...%s", YELLOW, i, totalProcessed, totalNotes, NC);
+                        if (diff > 0) printf("\033[%dB", diff);
+                        printf("\r");
+                        fflush(stdout);
+
+                        break;
                     }
-
-                    int diff = (totalLines > 0 ? totalLines - 1 : 0) - jobs[j].row;
-                    if (diff > 0) printf("\033[%dA", diff);
-                    printf("\r\033[2K%sRebuilding %05d (%d/%d)...%s", YELLOW, i, totalProcessed, totalNotes, NC);
-                    if (diff > 0) printf("\033[%dB", diff);
-                    printf("\r");
-                    fflush(stdout);
-
-                    break;
                 }
+                runningJobs++;
+            } else {
+                printf("%sFailed to spawn compile process for %05d!%s\n", RED, i, NC);
+                failedIds[totalFailed++] = i;
             }
-            runningJobs++;
         }
     }
 

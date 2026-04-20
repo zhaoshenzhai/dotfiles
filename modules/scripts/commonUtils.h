@@ -4,6 +4,8 @@
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 extern NSString *const kBaseDir;
 extern NSString *const kLaTeXTemplateDir;
 extern NSString *const kAerospacePath;
@@ -44,3 +46,5 @@ static inline NSString *AerospaceOutput(NSArray<NSString *> *args) {
 static inline void RunLauncher(NSString *targetPath) {
     if (targetPath) RunCommandDetached(kLauncherPath, @[targetPath]);
 }
+
+NS_ASSUME_NONNULL_END

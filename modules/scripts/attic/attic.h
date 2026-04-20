@@ -1,6 +1,7 @@
 #pragma once
 
 #import "commonUtils.h"
+#include <spawn.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

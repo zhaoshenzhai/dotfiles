@@ -40,58 +40,32 @@ int texCompile(const char *dirPath, const char *fileName, const TexConfig *confi
 
     EnsureDirectoryExists(cacheDir);
 
-    pid_t pid = fork();
-    if (pid == 0) {
-        if (chdir(dirPath) != 0) exit(1);
+    char cmd[2048];
+    snprintf(cmd, sizeof(cmd),
+        "cd '%s' && latexmk -%s -synctex=1 %s %s -outdir='%s' '%s' >> /dev/null 2>&1",
+        dirPath,
+        config->engine,
+        config->continuous ? "-pvc" : "",
+        config->nonstop ? "-interaction=nonstopmode" : "",
+        cacheDir,
+        fileName);
 
-        char *args[12];
-        int i = 0;
-        args[i++] = "latexmk";
+    int status = system(cmd);
+    int exitCode = WIFEXITED(status) ? WEXITSTATUS(status) : 1;
 
-        char engineArg[64];
-        snprintf(engineArg, sizeof(engineArg), "-%s", config->engine);
-        args[i++] = engineArg;
-        args[i++] = "-synctex=1";
+    if (exitCode == 0) {
+        char srcFile[PATH_MAX], dstFile[PATH_MAX];
 
-        if (config->continuous) args[i++] = "-pvc";
-        if (config->nonstop) args[i++] = "-interaction=nonstopmode";
+        snprintf(srcFile, sizeof(srcFile), "%s/%s.pdf", cacheDir, baseName);
+        snprintf(dstFile, sizeof(dstFile), "%s/%s.pdf", dirPath, baseName);
+        MoveFile(srcFile, dstFile);
 
-        char outdirArg[PATH_MAX + 32];
-        snprintf(outdirArg, sizeof(outdirArg), "-outdir=%s", cacheDir);
-        args[i++] = outdirArg;
-
-        args[i++] = (char *)fileName;
-        args[i++] = NULL;
-
-        int devnull = open("/dev/null", O_WRONLY);
-        if (devnull != -1) {
-            dup2(devnull, STDOUT_FILENO);
-            dup2(devnull, STDERR_FILENO);
-            close(devnull);
-        }
-
-        execvp("latexmk", args);
-        exit(1);
-    } else if (pid > 0) {
-        int status;
-        waitpid(pid, &status, 0);
-        int exitCode = WIFEXITED(status) ? WEXITSTATUS(status) : 1;
-
-        if (exitCode == 0) {
-            char srcFile[PATH_MAX], dstFile[PATH_MAX];
-
-            snprintf(srcFile, sizeof(srcFile), "%s/%s.pdf", cacheDir, baseName);
-            snprintf(dstFile, sizeof(dstFile), "%s/%s.pdf", dirPath, baseName);
-            MoveFile(srcFile, dstFile);
-
-            snprintf(srcFile, sizeof(srcFile), "%s/%s.synctex.gz", cacheDir, baseName);
-            snprintf(dstFile, sizeof(dstFile), "%s/%s.synctex.gz", dirPath, baseName);
-            MoveFile(srcFile, dstFile);
-        }
-
-        return exitCode;
+        snprintf(srcFile, sizeof(srcFile), "%s/%s.synctex.gz", cacheDir, baseName);
+        snprintf(dstFile, sizeof(dstFile), "%s/%s.synctex.gz", dirPath, baseName);
+        MoveFile(srcFile, dstFile);
     }
-    return 1;
+
+    return exitCode;
 }
 
 int texCompileToSvg(const char *dirPath, const char *fileName, const char *outputDir) {

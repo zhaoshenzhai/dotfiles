@@ -56,23 +56,26 @@ void interactiveMenu() {
 
 int main(int argc, char **argv) {
     EnsureSystemPath();
+
     snprintf(atticDir, sizeof(atticDir), "%s/Projects/_attic/notes", kBaseDir.UTF8String);
+
     loadMemory();
 
     if (argc > 1) {
         int opt;
-        while ((opt = getopt(argc, argv, "ek:nu:m:arg")) != -1) {
+        while ((opt = getopt(argc, argv, "ek:nu:m:c:arg")) != -1) {
             switch (opt) {
                 case 'e': createNote("EMPTY_KEYWORDS"); return 0;
                 case 'k': createNote(optarg); return 0;
                 case 'n': createNote(""); return 0;
                 case 'm': generateMetadata(atoi(optarg)); return 0;
                 case 'u': updateMetadata(atoi(optarg)); return 0;
+                case 'c': return compileNoteSync(atoi(optarg));
                 case 'a': auditNotes(); return 0;
                 case 'r': rebuildNotes(); return 0;
                 case 'g': launchGraph(); return 0;
                 default:
-                    fprintf(stderr, "Usage: %s [-n] [-e] [-k keywords] [-m ID] [-u ID] [-a] [-r] [-c] [-g]\n", argv[0]);
+                    fprintf(stderr, "Usage: %s [-n] [-e] [-k keywords] [-m ID] [-u ID] [-c ID] [-a] [-r] [-g]\n", argv[0]);
                     return 1;
             }
         }

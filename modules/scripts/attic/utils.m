@@ -96,8 +96,8 @@ int isCompiling(int id) {
 }
 
 int compileNoteSync(int id) {
-    NSString *webOutDirStr = [NSString stringWithFormat:@"%@/Projects/_web/attic/notes", kBaseDir];
-    const char *webOutDir = webOutDirStr.UTF8String;
+    char webOutDir[PATH_MAX];
+    snprintf(webOutDir, sizeof(webOutDir), "%s/Projects/_web/attic/notes", kBaseDir.UTF8String);
 
     char dirPath[PATH_MAX];
     char fileName[64];
@@ -109,30 +109,34 @@ int compileNoteSync(int id) {
     texInitConfig(&config);
     config.nonstop = true;
 
-    pid_t pdf_pid = fork();
-    if (pdf_pid == 0) {
-        exit(texCompile(dirPath, fileName, &config));
-    }
+    __block int pdf_exit = 1;
+    __block int svg_exit = 1;
 
-    pid_t svg_pid = fork();
-    if (svg_pid == 0) {
-        exit(texCompileToSvg(dirPath, fileName, webOutDir));
-    }
+    char *ptrWebOutDir = webOutDir;
+    char *ptrDirPath = dirPath;
+    char *ptrFileName = fileName;
+    TexConfig *ptrConfig = &config;
 
-    int pdf_status, svg_status;
-    waitpid(pdf_pid, &pdf_status, 0);
-    waitpid(svg_pid, &svg_status, 0);
+    dispatch_group_t group = dispatch_group_create();
 
-    int pdf_exit = WIFEXITED(pdf_status) ? WEXITSTATUS(pdf_status) : 1;
-    int svg_exit = WIFEXITED(svg_status) ? WEXITSTATUS(svg_status) : 1;
+    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        pdf_exit = texCompile(ptrDirPath, ptrFileName, ptrConfig);
+    });
+
+    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        svg_exit = texCompileToSvg(ptrDirPath, ptrFileName, ptrWebOutDir);
+    });
+
+    dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
 
     return (pdf_exit == 0 && svg_exit == 0) ? 0 : 1;
 }
 
 void compileNote(int id) {
-    pid_t main_pid = fork();
-    if (main_pid == 0) {
-        exit(compileNoteSync(id));
+    @autoreleasepool {
+        NSString *atticExe = [[NSProcessInfo processInfo] arguments].firstObject;
+        NSString *idStr = [NSString stringWithFormat:@"%d", id];
+        RunCommandDetached(atticExe, @[@"-c", idStr]);
     }
 }
 
