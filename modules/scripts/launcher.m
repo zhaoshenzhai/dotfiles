@@ -37,7 +37,7 @@ static NSString *FormatFilePath(NSString *filePath) {
         NSArray *components = [filePath componentsSeparatedByString:@"/"];
         if (components.count >= 4) {
             NSString *idStr = components[3];
-            NSString *keywordsPath = [NSString stringWithFormat:@"%@/Projects/_attic/notes/%@/%@.key", kCommonBaseDir, idStr, idStr];
+            NSString *keywordsPath = [NSString stringWithFormat:@"%@/Projects/_attic/notes/%@/%@.key", kBaseDir, idStr, idStr];
 
             if ([[NSFileManager defaultManager] fileExistsAtPath:keywordsPath]) {
                 NSError *err;
@@ -53,7 +53,7 @@ static NSString *FormatFilePath(NSString *filePath) {
 }
 
 static void UpdateCache(void) {
-    [[NSFileManager defaultManager] changeCurrentDirectoryPath:kCommonBaseDir];
+    [[NSFileManager defaultManager] changeCurrentDirectoryPath:kBaseDir];
 
     NSArray *fdArgs = @[@"-L", @"--type", @"f", @"--hidden", @"--no-ignore",
                         @"--exclude", @".git", @"--exclude", @"*.old", @"--exclude", @"*.png", @"--exclude", @"*.jpg",
@@ -137,12 +137,12 @@ static void Launch(NSString *selected) {
     if (parts.count < 2) return;
 
     NSString *relPath = parts[1];
-    NSString *fullPath = [kCommonBaseDir stringByAppendingPathComponent:relPath];
+    NSString *fullPath = [kBaseDir stringByAppendingPathComponent:relPath];
 
     if ([fullPath hasSuffix:@".pdf"]) {
         NSString *filename = fullPath.lastPathComponent;
 
-        NSString *skims = RunCommandOutput(kCommonAerospacePath, @[@"list-windows", @"--all", @"--format", @"%{app-name}|%{window-title}"]);
+        NSString *skims = RunCommandOutput(kAerospacePath, @[@"list-windows", @"--all", @"--format", @"%{app-name}|%{window-title}"]);
         BOOL exists = NO;
         for (NSString *line in [skims componentsSeparatedByString:@"\n"]) {
             if ([line hasPrefix:@"Skim|"] && [line containsString:filename]) {
@@ -181,7 +181,7 @@ static void Launch(NSString *selected) {
 
     } else {
         NSString *workspace = AerospaceOutput(@[@"list-workspaces", @"--focused"]);
-        NSString *winQuery = RunCommandOutput(kCommonAerospacePath, @[@"list-windows", @"--workspace", workspace, @"--format", @"%{window-id}|%{app-name}|%{window-title}"]);
+        NSString *winQuery = RunCommandOutput(kAerospacePath, @[@"list-windows", @"--workspace", workspace, @"--format", @"%{window-id}|%{app-name}|%{window-title}"]);
 
         NSString *nvimWinID = nil;
 
@@ -203,18 +203,18 @@ static void Launch(NSString *selected) {
 
             if (access(sockPath.UTF8String, F_OK) == 0) {
                 AerospaceRun(@[@"focus", @"--window-id", nvimWinID]);
-                RunCommandDetached(kCommonNvimPath, @[@"--server", sockPath, @"--remote-tab", fullPath]);
+                RunCommandDetached(kNvimPath, @[@"--server", sockPath, @"--remote-tab", fullPath]);
                 return;
             }
         }
 
-        RunCommandDetached(@"/run/current-system/sw/bin/alacrittyDaemon", @[@"-e", kCommonNvimPath, fullPath]);
+        RunCommandDetached(@"/run/current-system/sw/bin/alacrittyDaemon", @[@"-e", kNvimPath, fullPath]);
     }
 }
 
 static void QuitAndCloseLauncher(BOOL didLaunch) {
     NSString *launcherID = nil;
-    NSString *wins = RunCommandOutput(kCommonAerospacePath, @[@"list-windows", @"--all", @"--format", @"%{window-id}|%{window-title}"]);
+    NSString *wins = RunCommandOutput(kAerospacePath, @[@"list-windows", @"--all", @"--format", @"%{window-id}|%{window-title}"]);
 
     for (NSString *line in [wins componentsSeparatedByString:@"\n"]) {
         NSArray *p = [line componentsSeparatedByString:@"|"];
@@ -230,7 +230,7 @@ static void QuitAndCloseLauncher(BOOL didLaunch) {
         NSString *ws = AerospaceOutput(@[@"list-workspaces", @"--focused"]);
         for (int i = 0; i < 15; i++) {
             usleep(100000);
-            NSString *wsWins = RunCommandOutput(kCommonAerospacePath, @[@"list-windows", @"--workspace", ws]);
+            NSString *wsWins = RunCommandOutput(kAerospacePath, @[@"list-windows", @"--workspace", ws]);
             NSArray *lines = [wsWins componentsSeparatedByString:@"\n"];
             int count = 0;
             for (NSString *l in lines) if (l.length > 0) count++;
@@ -267,13 +267,13 @@ int main(int argc, const char * argv[]) {
             NSString *symlinkICloud = [home stringByAppendingPathComponent:@"iCloud"];
 
             if ([absPath hasPrefix:realICloud]) {
-                absPath = [absPath stringByReplacingOccurrencesOfString:realICloud withString:kCommonBaseDir options:0 range:NSMakeRange(0, realICloud.length)];
+                absPath = [absPath stringByReplacingOccurrencesOfString:realICloud withString:kBaseDir options:0 range:NSMakeRange(0, realICloud.length)];
             } else if ([absPath hasPrefix:symlinkICloud]) {
-                absPath = [absPath stringByReplacingOccurrencesOfString:symlinkICloud withString:kCommonBaseDir options:0 range:NSMakeRange(0, symlinkICloud.length)];
+                absPath = [absPath stringByReplacingOccurrencesOfString:symlinkICloud withString:kBaseDir options:0 range:NSMakeRange(0, symlinkICloud.length)];
             }
 
-            if ([absPath hasPrefix:kCommonBaseDir]) {
-                NSString *relPath = [absPath substringFromIndex:kCommonBaseDir.length];
+            if ([absPath hasPrefix:kBaseDir]) {
+                NSString *relPath = [absPath substringFromIndex:kBaseDir.length];
                 if ([relPath hasPrefix:@"/"]) {
                     relPath = [relPath substringFromIndex:1];
                 }

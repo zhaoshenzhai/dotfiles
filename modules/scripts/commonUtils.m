@@ -6,10 +6,10 @@
 
 extern char **environ;
 
-NSString *const kCommonBaseDir = @"/Users/zhao/iCloud";
-NSString *const kCommonAerospacePath = @"/etc/profiles/per-user/zhao/bin/aerospace";
-NSString *const kCommonNvimPath = @"/etc/profiles/per-user/zhao/bin/nvim";
-NSString *const kCommonLauncherPath = @"/run/current-system/sw/bin/launcher";
+NSString *const kBaseDir = @"/Users/zhao/iCloud";
+NSString *const kAerospacePath = @"/etc/profiles/per-user/zhao/bin/aerospace";
+NSString *const kNvimPath = @"/etc/profiles/per-user/zhao/bin/nvim";
+NSString *const kLauncherPath = @"/run/current-system/sw/bin/launcher";
 
 static char **CreateArgv(NSString *cmdPath, NSArray<NSString *> *argsArray, int *outArgc) {
     int argc = (int)argsArray.count + 1;
