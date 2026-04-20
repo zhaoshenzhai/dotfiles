@@ -23,7 +23,7 @@ void texInitConfig(TexConfig *config) {
 
 int texCompile(const char *dirPath, const char *fileName, const TexConfig *config) {
     char pattern[512];
-    snprintf(pattern, sizeof(pattern), "[l]atexmk.*%s", fileName);
+    snprintf(pattern, sizeof(pattern), "[l]atexmk.*-%s.*%s", config->engine, fileName);
     if (IsProcessRunning(pattern)) return 0;
 
     char baseName[256];
