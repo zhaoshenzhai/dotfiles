@@ -56,11 +56,7 @@ void interactiveMenu() {
 
 int main(int argc, char **argv) {
     EnsureSystemPath();
-
-    snprintf(atticDir, sizeof(atticDir), "%s/iCloud/Projects/_attic/notes", getenv("HOME"));
-    snprintf(templateFile, sizeof(templateFile), "%s/iCloud/Dotfiles/modules/LaTeXTemplate/files/attic.tex", getenv("HOME"));
-    snprintf(launcherPath, sizeof(launcherPath), "/run/current-system/sw/bin/launcher");
-
+    snprintf(atticDir, sizeof(atticDir), "%s/Projects/_attic/notes", kBaseDir.UTF8String);
     loadMemory();
 
     if (argc > 1) {

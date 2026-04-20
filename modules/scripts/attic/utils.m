@@ -2,8 +2,6 @@
 #include "attic.h"
 
 char atticDir[PATH_MAX];
-char templateFile[PATH_MAX];
-char launcherPath[PATH_MAX];
 int isInteractive = 0;
 
 Note *notes = NULL;
@@ -98,7 +96,9 @@ int isCompiling(int id) {
 }
 
 int compileNoteSync(int id) {
-    const char *webOutDir = "/Users/zhao/iCloud/Projects/_web/attic/notes";
+    NSString *webOutDirStr = [NSString stringWithFormat:@"%@/Projects/_web/attic/notes", kBaseDir];
+    const char *webOutDir = webOutDirStr.UTF8String;
+
     char dirPath[PATH_MAX];
     char fileName[64];
 

@@ -37,8 +37,6 @@ typedef struct {
 } Note;
 
 extern char atticDir[PATH_MAX];
-extern char templateFile[PATH_MAX];
-extern char launcherPath[PATH_MAX];
 extern int isInteractive;
 
 extern Note *notes;

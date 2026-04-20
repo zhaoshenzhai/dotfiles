@@ -76,7 +76,8 @@ void createNote(const char *inKeywords) {
     EnsureDirectoryExists(path);
 
     @autoreleasepool {
-        NSString *nsTemplate = [NSString stringWithUTF8String:templateFile];
+        NSString *cleanTemplateDir = [kLaTeXTemplateDir stringByReplacingOccurrencesOfString:@"%" withString:@""];
+        NSString *nsTemplate = [cleanTemplateDir stringByAppendingPathComponent:@"files/attic.tex"];
         NSString *nsDest = [NSString stringWithFormat:@"%s/%05d.tex", path, id];
         [[NSFileManager defaultManager] copyItemAtPath:nsTemplate toPath:nsDest error:nil];
     }
@@ -114,17 +115,15 @@ void createNote(const char *inKeywords) {
     exportGraph(1);
 
     @autoreleasepool {
-        NSString *nsLauncher = [NSString stringWithUTF8String:launcherPath];
-        RunCommandDetached(nsLauncher, @[@"--update"]);
+        RunLauncher(@"--update");
     }
 
     compileNote(id);
 
     if (isInteractive) {
         @autoreleasepool {
-            NSString *nsLauncher = [NSString stringWithUTF8String:launcherPath];
             NSString *nsTarget = [NSString stringWithFormat:@"%s/%05d/%05d.tex", atticDir, id, id];
-            RunCommandDetached(nsLauncher, @[nsTarget]);
+            RunLauncher(nsTarget);
         }
         usleep(100000);
         exit(0);
@@ -469,11 +468,9 @@ void exportGraph(int silent) {
 void launchGraph(void) {
     exportGraph(1);
     char cmd[PATH_MAX + 128];
-    // Keeping bash execution here since 'exec -a' is a shell builtin used to rename the process
     snprintf(cmd, sizeof(cmd), "cd '%s/..' && nohup bash -c 'exec -a attic attic-graph' > /dev/null 2>&1 &", atticDir);
     system(cmd);
 
-    // Replaced system("osascript...") with native execution
     RunCommandWait(@"/usr/bin/osascript", @[@"-e", @"tell application \"System Events\" to set visible of front process to false"]);
     exit(0);
 }
