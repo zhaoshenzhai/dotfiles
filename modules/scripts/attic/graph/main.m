@@ -52,7 +52,6 @@ void initializeWindow() {
 void quit() {
     if (!isQuitting) {
         isQuitting = true;
-        AerospaceRun(@[@"close"]);
         exit(0);
     }
 }

@@ -1,8 +1,4 @@
 #import "commonUtils.h"
-#import <AppKit/AppKit.h>
-#import <unistd.h>
-
-extern char **environ;
 
 static NSString *const kFdPath = @FD_PATH;
 static NSString *const kFzfPath = @FZF_PATH;
