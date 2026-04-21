@@ -15,6 +15,7 @@
 
     home.packages = with pkgs; [
         aerospace
+        fastfetch
         (texlive.combine { inherit (texlive) scheme-full latexmk; })
     ];
 
