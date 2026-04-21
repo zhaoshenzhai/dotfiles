@@ -34,6 +34,22 @@
             ${scriptsDir}/commonUtils/*.m ${scriptsDir}/skimUtils/*.m -o $out/bin/skimUtils
     '';
 
+    pdfcp = pkgs.runCommandCC "pdfcp" {} ''
+        mkdir -p $out/bin
+        $CC -O3 -fobjc-arc -framework ApplicationServices -framework Foundation -framework AppKit \
+            -I${scriptsDir} -I${scriptsDir}/commonUtils \
+            ${scriptsDir}/commonUtils/*.m ${scriptsDir}/pdfcp.m -o $out/bin/pdfcp
+    '';
+
+    alacrittyDaemon = pkgs.runCommandCC "alacrittyDaemon" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
+        mkdir -p $out/bin
+        $CC -O3 -fobjc-arc -framework ApplicationServices -framework Foundation -framework AppKit \
+            -I${scriptsDir} -I${scriptsDir}/commonUtils \
+            ${scriptsDir}/commonUtils/*.m ${scriptsDir}/window/alacrittyDaemon.m -o $out/bin/.alacrittyDaemon-unwrapped
+        makeWrapper $out/bin/.alacrittyDaemon-unwrapped $out/bin/alacrittyDaemon \
+            --set DYLD_INSERT_LIBRARIES "${transparentWindow}/lib/transparentWindow.dylib"
+    '';
+
     attic = pkgs.runCommandCC "attic" { buildInputs = with pkgs; [ raylib cjson cm_unicode ]; } ''
         mkdir -p $out/bin
         $CC -O3 -fobjc-arc -framework ApplicationServices -framework Foundation -framework AppKit \
@@ -48,30 +64,6 @@
             ${scriptsDir}/commonUtils/*.m ${scriptsDir}/window/transparency.m ${scriptsDir}/attic/graph/*.m \
             -o $out/bin/attic-graph
     '';
-
-    pdfcp = pkgs.writeShellApplication {
-        name = "pdfcp";
-        runtimeInputs = with pkgs; [ ghostscript coreutils gnused gawk ];
-        checkPhase = "";
-        text = builtins.readFile "${scriptsDir}/pdfcp.sh";
-    };
-
-    newLatex = pkgs.writeShellApplication {
-        name = "newLatex";
-        runtimeInputs = with pkgs; [ coreutils gnused ];
-        checkPhase = "";
-        text = builtins.readFile "${scriptsDir}/newLaTeX.sh";
-    };
-
-    alacrittyDaemon = pkgs.writeShellApplication {
-        name = "alacrittyDaemon";
-        runtimeInputs = with pkgs; [ coreutils ];
-        checkPhase = "";
-        text = ''
-            export DYLD_INSERT_LIBRARIES="${transparentWindow}/lib/transparentWindow.dylib"
-            ${builtins.readFile "${scriptsDir}/daemon.sh"}
-        '';
-    };
 in
 {
     environment.systemPackages = [
@@ -81,7 +73,6 @@ in
         skimUtils
         attic
         pdfcp
-        newLatex
         alacrittyDaemon
     ];
 }

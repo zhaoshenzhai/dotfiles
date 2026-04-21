@@ -74,20 +74,15 @@ in {
         settings = {
             url.start_pages = [ "https://google.com" ];
             url.default_page = "https://google.com";
-            "auto_save.session" = false;
-            "qt.args" = [
-                "disable-gpu-driver-bug-workarounds"
-                "enable-native-gpu-memory-buffers"
-                "num-raster-threads=4"
-            ];
 
-            statusbar.show = "always";
             tabs.show = "multiple";
             tabs.favicons.scale = 0.9;
             tabs.indicator.width = 0;
             tabs.max_width = 350;
+
             zoom.default = "100%";
             scrolling.smooth = true;
+            statusbar.show = "always";
 
             fonts = {
                 default_family = "Courier Prime";

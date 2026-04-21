@@ -6,6 +6,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+// --- Colors ---
 #define RED "\x1b[31m"
 #define GREEN "\x1b[32m"
 #define YELLOW "\x1b[33m"
@@ -14,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define CYAN "\x1b[36m"
 #define NC "\x1b[0m"
 
+// --- Directories and paths ---
 extern NSString *const kBaseDir;
 extern NSString *const kRealICloudDir;
 extern NSString *const kLaTeXTemplateDir;

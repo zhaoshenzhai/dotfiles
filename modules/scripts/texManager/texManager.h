@@ -15,3 +15,4 @@ void texInitConfig(TexConfig *config);
 int texCompile(const char *dirPath, const char *fileName, const TexConfig *config);
 int texCompileToSvg(const char *dirPath, const char *fileName, const char *outputDir);
 int texCleanAux(const char *dirPath);
+int texNew(int argc, char **argv);
