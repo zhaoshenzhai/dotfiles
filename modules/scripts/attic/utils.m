@@ -21,11 +21,26 @@ void ensureNoteCapacity(int maxID) {
 
 void formatLinks(int *ids, int count, char *outBuf) {
     outBuf[0] = '\0';
-    int uniqueCount = DedupeIntArray(ids, count);
+    if (count <= 0) return;
+
+    int unique[count];
+    int uniqueCount = 0;
+
+    for (int i = 0; i < count; i++) {
+        int exists = 0;
+        for (int j = 0; j < uniqueCount; j++) {
+            if (unique[j] == ids[i]) {
+                exists = 1;
+                break;
+            }
+        }
+        if (!exists) unique[uniqueCount++] = ids[i];
+    }
+
     for (int i = 0; i < uniqueCount; i++) {
         if (i > 0) strcat(outBuf, ", ");
         char temp[32];
-        snprintf(temp, sizeof(temp), "\\aref{%05d}{%05d}", ids[i], ids[i]);
+        snprintf(temp, sizeof(temp), "\\aref{%05d}{%05d}", unique[i], unique[i]);
         strcat(outBuf, temp);
     }
 }

@@ -1,4 +1,5 @@
 #include "attic.h"
+#include <spawn.h>
 
 extern char **environ;
 

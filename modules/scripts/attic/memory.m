@@ -1,4 +1,5 @@
 #include "attic.h"
+#include <dirent.h>
 
 void addOutLink(int src, int target, int lineNumber) {
     ENSURE_ARRAY_CAPACITY(notes[src].outLinks, notes[src].outCount, notes[src].outCapacity, OutLink, 8);

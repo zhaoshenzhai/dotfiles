@@ -1,30 +1,10 @@
 #pragma once
 
 #import "commonUtils.h"
-#include <spawn.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-#include <dirent.h>
-#include <termios.h>
-#include <sys/stat.h>
-#include <time.h>
-#include <getopt.h>
 #include <limits.h>
-#include <libproc.h>
-#include <errno.h>
 
 #define SAFE_STR(s) ((s) ? (s) : "")
 #define MAX_JOBS 5
-
-#define RED "\x1b[31m"
-#define GREEN "\x1b[32m"
-#define YELLOW "\x1b[33m"
-#define BLUE "\x1b[34m"
-#define PURPLE "\x1b[35m"
-#define CYAN "\x1b[36m"
-#define NC "\x1b[0m"
 
 typedef struct { int targetID; int lineNumber; } OutLink;
 typedef struct { char *text; int lineNumber; } Todo;
@@ -34,7 +14,7 @@ typedef struct {
 
     OutLink *outLinks; int outCount;  int outCapacity;
     int *inLinks;      int inCount;   int inCapacity;
-    Todo *todos;        int todoCount; int todoCapacity;
+    Todo *todos;       int todoCount; int todoCapacity;
 } Note;
 
 extern char atticDir[PATH_MAX];
