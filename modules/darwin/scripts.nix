@@ -66,13 +66,12 @@
             -o $out/bin/attic-graph
     '';
 
-    pdfcp = pkgs.runCommandCC "pdfcp" {} ''
-        mkdir -p $out/bin
-        $CC -O3 -fobjc-arc -DGS_PATH="\"${pkgs.ghostscript}/bin/gs\"" \
-            -framework ApplicationServices -framework Foundation -framework AppKit \
-            -I${scriptsDir} -I${scriptsDir}/commonUtils \
-            ${scriptsDir}/commonUtils/*.m ${scriptsDir}/pdfcp.m -o $out/bin/pdfcp
-    '';
+    pdfcp = pkgs.writeShellApplication {
+        name = "pdfcp";
+        runtimeInputs = with pkgs; [ ghostscript coreutils gnused gawk ];
+        checkPhase = "";
+        text = builtins.readFile "${scriptsDir}/pdfcp.sh";
+    };
 in
 {
     environment.systemPackages = [
