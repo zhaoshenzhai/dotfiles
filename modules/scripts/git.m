@@ -114,6 +114,7 @@ static bool HandleDiffPrompt(void) {
     if (diffChoice == 'q' || diffChoice == 'Q') {
         return false;
     } else if (diffChoice != 'n' && diffChoice != 'N') {
+        printf("\n");
         RunCommandWait(@"/usr/bin/env", @[@"git", @"add", @"."]);
         RunInteractive(@"/usr/bin/env", @[@"git", @"--no-pager", @"-c", @"color.diff=always", @"diff", @"--staged"]);
     }
@@ -136,7 +137,7 @@ static bool HandleCommitPrompt(void) {
 static void HandleRemoval(void) {
     char inputBuf[1024];
     while (true) {
-        printf("%sRemove files? [N/(string)]%s ", PURPLE, NC);
+        printf("\n%sRemove files? [N/(string)]%s ", PURPLE, NC);
         fflush(stdout);
         if (!fgets(inputBuf, sizeof(inputBuf), stdin)) break;
         TrimEnd(inputBuf);
