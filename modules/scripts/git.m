@@ -1,26 +1,16 @@
 #import "commonUtils.h"
 #include <unistd.h>
 
-// ---------------------------------------------------------
-// 0. Attic-Style Flow Control
-// ---------------------------------------------------------
 static bool PromptExitOrReturn(void) {
     printf("\n%sPress [Y] to return, exiting otherwise...%s ", CYAN, NC);
     fflush(stdout);
     int c = GetCh();
 
-    if (c == 'Y' || c == 'y' || c == '\n' || c == '\r') {
-        system("clear");
-        return true;
-    }
+    if (c == 'Y' || c == 'y' || c == '\n' || c == '\r') { system("clear"); return true; }
     return false;
 }
 
-// ---------------------------------------------------------
-// 1. Interactive Repository Resolution
-// ---------------------------------------------------------
 static NSString *ResolveRepositoryInteractive(NSArray<NSString *> *repoNames, NSArray<NSString *> *repoPaths) {
-    // 1. ALWAYS show the main menu first
     printf("%sRepositories:%s\n", CYAN, NC);
     for (NSUInteger i = 0; i < repoNames.count; i++) {
         printf("    %s(%lu): %s%s\n", CYAN, i + 1, [repoNames[i] UTF8String], NC);
@@ -30,7 +20,6 @@ static NSString *ResolveRepositoryInteractive(NSArray<NSString *> *repoNames, NS
 
     int cmdNum = GetCh();
 
-    // If user pressed 1-4, execute immediately
     if (cmdNum >= '1' && cmdNum <= '4') {
         printf("%c\n\n", cmdNum);
         return repoPaths[cmdNum - '1'];
@@ -41,7 +30,6 @@ static NSString *ResolveRepositoryInteractive(NSArray<NSString *> *repoNames, NS
         exit(0);
     }
 
-    // 2. User pressed Enter (or an unmapped key). Scan for changes.
     printf("\n");
     NSMutableArray *changedIndices = [NSMutableArray array];
     NSFileManager *fm = [NSFileManager defaultManager];
@@ -89,10 +77,8 @@ static NSString *ResolveRepositoryInteractive(NSArray<NSString *> *repoNames, NS
     }
 }
 
-// ---------------------------------------------------------
-// 2. Pre-Flight Cleanup
-// ---------------------------------------------------------
 static void CleanupIgnoredFiles(void) {
+    printf("\n");
     NSString *ignoredOut = RunCommandOutput(@"/usr/bin/env", @[@"git", @"ls-files", @"-i", @"-c", @"--exclude-from=.gitignore"]);
     ignoredOut = [ignoredOut stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
@@ -106,9 +92,6 @@ static void CleanupIgnoredFiles(void) {
     }
 }
 
-// ---------------------------------------------------------
-// 3. Status Checkers
-// ---------------------------------------------------------
 static void ShowStatus(void) {
     RunInteractive(@"/usr/bin/env", @[@"git", @"-c", @"color.status=always", @"status"]);
 }
@@ -118,11 +101,8 @@ static bool HasChangesToCommit(void) {
     return ![statusCheck containsString:@"nothing to commit"];
 }
 
-// ---------------------------------------------------------
-// 4. Interactive Flow Controls
-// ---------------------------------------------------------
 static bool HandleDiffPrompt(void) {
-    printf("\n%sShow diff? [Y/n/q]%s ", PURPLE, NC);
+    printf("%s\nShow diff? [Y/n/q]%s ", PURPLE, NC);
     fflush(stdout);
     int diffChoice = GetCh();
     printf("%c\n", diffChoice == '\r' || diffChoice == '\n' ? 'Y' : diffChoice);
@@ -131,21 +111,18 @@ static bool HandleDiffPrompt(void) {
         return false;
     } else if (diffChoice != 'n' && diffChoice != 'N') {
         printf("\n");
-        // Add --no-pager right after git to bypass `less` and prevent the SIGTTIN freeze
         RunInteractive(@"/usr/bin/env", @[@"git", @"--no-pager", @"-c", @"color.diff=always", @"diff"]);
     }
     return true;
 }
 
 static bool HandleCommitPrompt(void) {
-    printf("%sCommit? [Y/n]%s ", PURPLE, NC);
+    printf("%s\nCommit? [Y/n/q]%s ", PURPLE, NC);
     fflush(stdout);
     int commitChoice = GetCh();
     printf("%c\n", commitChoice == '\r' || commitChoice == '\n' ? 'Y' : commitChoice);
 
-    if (commitChoice == 'n' || commitChoice == 'N') {
-        return false;
-    }
+    if (commitChoice == 'q' || commitChoice == 'Q' || commitChoice == 'n' || commitChoice == 'N') return false;
 
     RunCommandWait(@"/usr/bin/env", @[@"git", @"add", @"."]);
     printf("\n");
@@ -177,7 +154,7 @@ static void HandleInteractiveRemoval(void) {
     }
 }
 
-static void DoCommit(void) {
+static void Commit(void) {
     char msgBuf[4096];
     while (true) {
         printf("\n%sMessage:%s ", PURPLE, NC);
@@ -193,7 +170,7 @@ static void DoCommit(void) {
     printf("\n");
 }
 
-static void DoPush(void) {
+static void Push(void) {
     int attempt = 1;
     while (true) {
         NSTask *task = [[NSTask alloc] init];
@@ -232,9 +209,6 @@ static void DoPush(void) {
     }
 }
 
-// ---------------------------------------------------------
-// Main Execution
-// ---------------------------------------------------------
 int main(int argc, char **argv) {
     @autoreleasepool {
         EnsureSystemPath();
@@ -247,71 +221,39 @@ int main(int argc, char **argv) {
             @"/Users/zhao/iCloud/Projects/_web"
         ];
 
-        // 1. Check for explicit flag (-r)
-        NSString *explicitRepoPath = nil;
-        for (int i = 1; i < argc; i++) {
-            if (strcmp(argv[i], "-r") == 0 && i + 1 < argc) {
-                NSString *specifiedRepo = [NSString stringWithUTF8String:argv[i+1]];
-                NSUInteger idx = [repoNames indexOfObject:specifiedRepo];
-                if (idx != NSNotFound) {
-                    explicitRepoPath = repoPaths[idx];
-                } else {
-                    fprintf(stderr, "Repository not found.\n");
-                    return 1;
-                }
-                break;
-            }
-        }
-
-        // 2. Main Workflow Loop
         while (true) {
-            NSString *targetPath = explicitRepoPath;
-            bool isInteractive = (explicitRepoPath == nil);
+            NSString *targetPath = ResolveRepositoryInteractive(repoNames, repoPaths);
 
             if (!targetPath) {
-                targetPath = ResolveRepositoryInteractive(repoNames, repoPaths);
-                if (!targetPath) {
-                    // No changes found during a global scan
-                    if (PromptExitOrReturn()) continue;
-                    break;
-                }
+                if (PromptExitOrReturn()) continue;
+                break;
             }
 
             [[NSFileManager defaultManager] changeCurrentDirectoryPath:targetPath];
 
-            if (isInteractive) {
-                printf("\n");
-            }
-
             CleanupIgnoredFiles();
             ShowStatus();
 
-            // Handle clean repositories
             if (!HasChangesToCommit()) {
-                if (isInteractive && PromptExitOrReturn()) continue;
+                if (PromptExitOrReturn()) continue;
                 break;
             }
 
-            // Diff Flow
             if (!HandleDiffPrompt()) {
-                if (isInteractive && PromptExitOrReturn()) continue;
+                if (PromptExitOrReturn()) continue;
                 break;
             }
 
-            // Commit Flow
             if (!HandleCommitPrompt()) {
-                if (isInteractive && PromptExitOrReturn()) continue;
+                if (PromptExitOrReturn()) continue;
                 break;
             }
 
             HandleInteractiveRemoval();
-            DoCommit();
-            DoPush();
+            Commit();
+            Push();
 
-            // Loop back after a successful workflow if in interactive mode
-            if (isInteractive && PromptExitOrReturn()) {
-                continue;
-            }
+            if (PromptExitOrReturn()) continue;
             break;
         }
     }
