@@ -56,7 +56,6 @@ static NSString *ResolveRepositoryInteractive(NSArray<NSString *> *repoNames, NS
 
     // 3. Handle scan results
     if (changedIndices.count == 0) {
-        printf("No changes in any repository.\n");
         return nil; // Signal main loop to prompt return
     } else if (changedIndices.count == 1) {
         NSUInteger idx = [changedIndices[0] unsignedIntegerValue];
@@ -123,7 +122,7 @@ static bool HasChangesToCommit(void) {
 // 4. Interactive Flow Controls
 // ---------------------------------------------------------
 static bool HandleDiffPrompt(void) {
-    printf("%sShow diff? [Y/n/q]%s ", PURPLE, NC);
+    printf("\n%sShow diff? [Y/n/q]%s ", PURPLE, NC);
     fflush(stdout);
     int diffChoice = GetCh();
     printf("%c\n", diffChoice == '\r' || diffChoice == '\n' ? 'Y' : diffChoice);
@@ -132,7 +131,8 @@ static bool HandleDiffPrompt(void) {
         return false;
     } else if (diffChoice != 'n' && diffChoice != 'N') {
         printf("\n");
-        RunInteractive(@"/usr/bin/env", @[@"git", @"-c", @"color.diff=always", @"diff"]);
+        // Add --no-pager right after git to bypass `less` and prevent the SIGTTIN freeze
+        RunInteractive(@"/usr/bin/env", @[@"git", @"--no-pager", @"-c", @"color.diff=always", @"diff"]);
     }
     return true;
 }
