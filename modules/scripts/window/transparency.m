@@ -83,15 +83,13 @@ static NSData *getBlackLUT(void) {
 static void injectIfNeeded(NSWindow *window, CGSConnectionID cid) {
     if (!window.contentView || !window.contentView.superview) return;
 
-    NSView *themeFrame = window.contentView.superview;
-
-    for (NSView *subview in themeFrame.subviews)
-        if ([subview.identifier isEqualToString:@"mainBlurEffect"]) return;
-
     window.opaque = NO;
     window.backgroundColor = [NSColor clearColor];
-
     CGSSetWindowBackgroundBlurRadius(cid, [window windowNumber], BLUR_RADIUS);
+
+    NSView *themeFrame = window.contentView.superview;
+    for (NSView *subview in themeFrame.subviews)
+        if ([subview.identifier isEqualToString:@"mainBlurEffect"]) return;
 
     NSVisualEffectView *mainBlurEffect = [[NSVisualEffectView alloc] initWithFrame:themeFrame.bounds];
     mainBlurEffect.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
