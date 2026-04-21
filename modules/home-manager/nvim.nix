@@ -39,7 +39,6 @@ in {
                         "<C-Space>" = "cmp.mapping.complete()";
                     };
                     sources = [
-                        { name = "ultisnips"; }
                         { name = "tex"; }
                         { name = "attic"; }
                         { name = "buffer"; }
