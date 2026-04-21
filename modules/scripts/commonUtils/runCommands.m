@@ -97,3 +97,14 @@ void RunCommandDetached(NSString *cmdPath, NSArray<NSString *> *argsArray) {
     posix_spawn_file_actions_destroy(&actions);
     FreeArgv(argv, argc);
 }
+
+int RunInteractive(NSString *cmdPath, NSArray<NSString *> *argsArray) {
+    @autoreleasepool {
+        NSTask *task = [[NSTask alloc] init];
+        task.executableURL = [NSURL fileURLWithPath:cmdPath];
+        task.arguments = argsArray;
+        [task launch];
+        [task waitUntilExit];
+        return [task terminationStatus];
+    }
+}

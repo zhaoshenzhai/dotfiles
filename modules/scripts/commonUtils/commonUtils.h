@@ -27,6 +27,7 @@ extern NSString *const kLauncherPath;
 int RunCommandWait(NSString *cmdPath, NSArray<NSString *> *argsArray);
 NSString *RunCommandOutput(NSString *cmdPath, NSArray<NSString *> *argsArray);
 void RunCommandDetached(NSString *cmdPath, NSArray<NSString *> *argsArray);
+int RunInteractive(NSString *cmdPath, NSArray<NSString *> *argsArray);
 
 // --- Process and accessibility utilities ---
 AXUIElementRef _Nullable GetFocusedWindowForPID(pid_t pid);

@@ -7,17 +7,18 @@
         ${scriptsDir}/window/transparency.m -o $out/lib/transparentWindow.dylib
     '';
 
+    alacrittyDaemon = pkgs.runCommandCC "alacrittyDaemon" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
+        mkdir -p $out/bin
+        $CC -O3 -fobjc-arc -framework ApplicationServices -framework Foundation -framework AppKit \
+            -I${scriptsDir} -I${scriptsDir}/commonUtils \
+            ${scriptsDir}/commonUtils/*.m ${scriptsDir}/window/alacrittyDaemon.m -o $out/bin/.alacrittyDaemon-unwrapped
+        makeWrapper $out/bin/.alacrittyDaemon-unwrapped $out/bin/alacrittyDaemon \
+            --set DYLD_INSERT_LIBRARIES "${transparentWindow}/lib/transparentWindow.dylib"
+    '';
+
     centerWindow = pkgs.runCommandCC "centerWindow" {} ''
         mkdir -p $out/bin
         $CC -O3 -framework Cocoa ${scriptsDir}/window/centering.m -o $out/bin/centerWindow
-    '';
-
-    launcher = pkgs.runCommandCC "launcher" {} ''
-        mkdir -p $out/bin
-        $CC -O3 -fobjc-arc -DFD_PATH="\"${pkgs.fd}/bin/fd\"" -DFZF_PATH="\"${pkgs.fzf}/bin/fzf\"" \
-            -framework ApplicationServices -framework Foundation -framework AppKit \
-            -I${scriptsDir} -I${scriptsDir}/commonUtils \
-            ${scriptsDir}/commonUtils/*.m ${scriptsDir}/launcher.m -o $out/bin/launcher
     '';
 
     texManager = pkgs.runCommandCC "texManager" {} ''
@@ -27,6 +28,13 @@
             ${scriptsDir}/commonUtils/*.m ${scriptsDir}/texManager/*.m -o $out/bin/texManager
     '';
 
+    gitCommit = pkgs.runCommandCC "gitCommit" {} ''
+        mkdir -p $out/bin
+        $CC -O3 -fobjc-arc -framework ApplicationServices -framework Foundation -framework AppKit \
+            -I${scriptsDir} -I${scriptsDir}/commonUtils \
+            ${scriptsDir}/commonUtils/*.m ${scriptsDir}/git.m -o $out/bin/gitCommit
+    '';
+
     skimUtils = pkgs.runCommandCC "skimUtils" {} ''
         mkdir -p $out/bin
         $CC -O3 -fobjc-arc -framework ApplicationServices -framework ScriptingBridge -framework Cocoa \
@@ -34,20 +42,12 @@
             ${scriptsDir}/commonUtils/*.m ${scriptsDir}/skimUtils/*.m -o $out/bin/skimUtils
     '';
 
-    pdfcp = pkgs.runCommandCC "pdfcp" {} ''
+    launcher = pkgs.runCommandCC "launcher" {} ''
         mkdir -p $out/bin
-        $CC -O3 -fobjc-arc -framework ApplicationServices -framework Foundation -framework AppKit \
+        $CC -O3 -fobjc-arc -DFD_PATH="\"${pkgs.fd}/bin/fd\"" -DFZF_PATH="\"${pkgs.fzf}/bin/fzf\"" \
+            -framework ApplicationServices -framework Foundation -framework AppKit \
             -I${scriptsDir} -I${scriptsDir}/commonUtils \
-            ${scriptsDir}/commonUtils/*.m ${scriptsDir}/pdfcp.m -o $out/bin/pdfcp
-    '';
-
-    alacrittyDaemon = pkgs.runCommandCC "alacrittyDaemon" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
-        mkdir -p $out/bin
-        $CC -O3 -fobjc-arc -framework ApplicationServices -framework Foundation -framework AppKit \
-            -I${scriptsDir} -I${scriptsDir}/commonUtils \
-            ${scriptsDir}/commonUtils/*.m ${scriptsDir}/window/alacrittyDaemon.m -o $out/bin/.alacrittyDaemon-unwrapped
-        makeWrapper $out/bin/.alacrittyDaemon-unwrapped $out/bin/alacrittyDaemon \
-            --set DYLD_INSERT_LIBRARIES "${transparentWindow}/lib/transparentWindow.dylib"
+            ${scriptsDir}/commonUtils/*.m ${scriptsDir}/launcher.m -o $out/bin/launcher
     '';
 
     attic = pkgs.runCommandCC "attic" { buildInputs = with pkgs; [ raylib cjson cm_unicode ]; } ''
@@ -64,15 +64,23 @@
             ${scriptsDir}/commonUtils/*.m ${scriptsDir}/window/transparency.m ${scriptsDir}/attic/graph/*.m \
             -o $out/bin/attic-graph
     '';
+
+    pdfcp = pkgs.runCommandCC "pdfcp" {} ''
+        mkdir -p $out/bin
+        $CC -O3 -fobjc-arc -framework ApplicationServices -framework Foundation -framework AppKit \
+            -I${scriptsDir} -I${scriptsDir}/commonUtils \
+            ${scriptsDir}/commonUtils/*.m ${scriptsDir}/pdfcp.m -o $out/bin/pdfcp
+    '';
 in
 {
     environment.systemPackages = [
-        launcher
+        alacrittyDaemon
         centerWindow
         texManager
+        gitCommit
         skimUtils
+        launcher
         attic
         pdfcp
-        alacrittyDaemon
     ];
 }
