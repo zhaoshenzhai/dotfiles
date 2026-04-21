@@ -1,16 +1,9 @@
 #import "commonUtils.h"
-#import <Foundation/Foundation.h>
 #include <unistd.h>
 
-static const NSUInteger repoCount = 4;
 static NSString * const repoNames[] = { @"Courses", @"Dotfiles", @"Projects", @"Website" };
-static NSString * const repoPaths[] = {
-    @"/Users/zhao/iCloud/University/Courses",
-    @"/Users/zhao/iCloud/Dotfiles",
-    @"/Users/zhao/iCloud/Projects",
-    @"/Users/zhao/iCloud/Projects/_web"
-};
-
+static const NSUInteger repoCount = sizeof(repoNames) / sizeof(repoNames[0]);
+static NSString *repoPaths[sizeof(repoNames) / sizeof(repoNames[0])];
 
 static bool PromptExitOrReturn(void) {
     printf("\n%sPress [Y] to return, exiting otherwise...%s ", CYAN, NC);
@@ -54,7 +47,6 @@ static NSString *ResolveRepository(void) {
     }
 
     if (changedIndices.count == 0) {
-        printf("No changes in any repository.\n");
         return nil;
     } else if (changedIndices.count == 1) {
         NSUInteger idx = [changedIndices[0] unsignedIntegerValue];
@@ -80,7 +72,7 @@ static NSString *ResolveRepository(void) {
 
         int subChoiceIndex = subCmd - '1';
         if ([changedIndices containsObject:@(subChoiceIndex)]) {
-            printf("%c\n\n", subCmd);
+            printf("%c\n", subCmd);
             return repoPaths[subChoiceIndex];
         } else {
             system("clear");
@@ -89,7 +81,6 @@ static NSString *ResolveRepository(void) {
 }
 
 static void CleanupIgnoredFiles(void) {
-    printf("\n");
     NSString *ignoredOut = RunCommandOutput(@"/usr/bin/env", @[@"git", @"ls-files", @"-i", @"-c", @"--exclude-from=.gitignore"]);
     ignoredOut = [ignoredOut stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
@@ -104,7 +95,9 @@ static void CleanupIgnoredFiles(void) {
 }
 
 static void ShowStatus(void) {
-    RunInteractive(@"/usr/bin/env", @[@"git", @"-c", @"color.status=always", @"status"]);
+    NSString *statusOutput = RunCommandOutput(@"/usr/bin/env", @[@"git", @"-c", @"color.status=always", @"status"]);
+    statusOutput = [statusOutput stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    printf("\n%s\n", [statusOutput UTF8String]);
 }
 
 static bool HasChangesToCommit(void) {
@@ -113,7 +106,7 @@ static bool HasChangesToCommit(void) {
 }
 
 static bool HandleDiffPrompt(void) {
-    printf("%s\nShow diff? [Y/n/q]%s ", PURPLE, NC);
+    printf("\n%sShow diff? [Y/n/q]%s ", PURPLE, NC);
     fflush(stdout);
     int diffChoice = GetCh();
     printf("%c\n", diffChoice == '\r' || diffChoice == '\n' ? 'Y' : diffChoice);
@@ -121,24 +114,21 @@ static bool HandleDiffPrompt(void) {
     if (diffChoice == 'q' || diffChoice == 'Q') {
         return false;
     } else if (diffChoice != 'n' && diffChoice != 'N') {
-        printf("\n");
-        RunInteractive(@"/usr/bin/env", @[@"git", @"--no-pager", @"-c", @"color.diff=always", @"diff"]);
+        RunCommandWait(@"/usr/bin/env", @[@"git", @"add", @"."]);
+        RunInteractive(@"/usr/bin/env", @[@"git", @"--no-pager", @"-c", @"color.diff=always", @"diff", @"--staged"]);
     }
     return true;
 }
 
 static bool HandleCommitPrompt(void) {
-    printf("%s\nCommit? [Y/n]%s ", PURPLE, NC);
+    printf("\n%sCommit? [Y/n]%s ", PURPLE, NC);
     fflush(stdout);
     int commitChoice = GetCh();
     printf("%c\n", commitChoice == '\r' || commitChoice == '\n' ? 'Y' : commitChoice);
 
-    if (commitChoice == 'n' || commitChoice == 'N') {
-        return false;
-    }
+    if (commitChoice == 'q' || commitChoice == 'Q' || commitChoice == 'n' || commitChoice == 'N') return false;
 
     RunCommandWait(@"/usr/bin/env", @[@"git", @"add", @"."]);
-    printf("\n");
     ShowStatus();
     return true;
 }
@@ -162,16 +152,20 @@ static void HandleRemoval(void) {
         }
 
         RunCommandWait(@"/usr/bin/env", restoreArgs);
-        printf("\n");
         ShowStatus();
     }
 }
 
 static void Commit(void) {
     char msgBuf[4096];
+    bool first = true;
+
     while (true) {
-        printf("\n%sMessage:%s ", PURPLE, NC);
+        if (first) { printf("\n"); first = false; }
+
+        printf("%sMessage:%s ", PURPLE, NC);
         fflush(stdout);
+
         if (fgets(msgBuf, sizeof(msgBuf), stdin)) {
             TrimEnd(msgBuf);
             if (strlen(msgBuf) > 0) break;
@@ -224,35 +218,24 @@ static void Push(void) {
 
 int main(int argc, char **argv) {
     @autoreleasepool {
+        repoPaths[0] = [kBaseDir stringByAppendingPathComponent:@"University/Courses"];
+        repoPaths[1] = [kBaseDir stringByAppendingPathComponent:@"Dotfiles"];
+        repoPaths[2] = [kBaseDir stringByAppendingPathComponent:@"Projects"];
+        repoPaths[3] = [kBaseDir stringByAppendingPathComponent:@"Projects/_web"];
+
         EnsureSystemPath();
 
         while (true) {
             NSString *targetPath = ResolveRepository();
-
-            if (!targetPath) {
-                if (PromptExitOrReturn()) continue;
-                break;
-            }
-
+            if (!targetPath) { if (PromptExitOrReturn()) { continue; } break; }
             [[NSFileManager defaultManager] changeCurrentDirectoryPath:targetPath];
 
             CleanupIgnoredFiles();
             ShowStatus();
 
-            if (!HasChangesToCommit()) {
-                if (PromptExitOrReturn()) continue;
-                break;
-            }
-
-            if (!HandleDiffPrompt()) {
-                if (PromptExitOrReturn()) continue;
-                break;
-            }
-
-            if (!HandleCommitPrompt()) {
-                if (PromptExitOrReturn()) continue;
-                break;
-            }
+            if (!HasChangesToCommit()) { if (PromptExitOrReturn()) { continue; } break; }
+            if (!HandleDiffPrompt())   { if (PromptExitOrReturn()) { continue; } break; }
+            if (!HandleCommitPrompt()) { if (PromptExitOrReturn()) { continue; } break; }
 
             HandleRemoval();
             Commit();
