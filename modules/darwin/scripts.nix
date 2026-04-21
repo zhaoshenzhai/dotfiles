@@ -7,14 +7,15 @@
         ${scriptsDir}/window/transparency.m -o $out/lib/transparentWindow.dylib
     '';
 
-    alacrittyDaemon = pkgs.runCommandCC "alacrittyDaemon" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
-        mkdir -p $out/bin
-        $CC -O3 -fobjc-arc -framework ApplicationServices -framework Foundation -framework AppKit \
-            -I${scriptsDir} -I${scriptsDir}/commonUtils \
-            ${scriptsDir}/commonUtils/*.m ${scriptsDir}/window/alacrittyDaemon.m -o $out/bin/.alacrittyDaemon-unwrapped
-        makeWrapper $out/bin/.alacrittyDaemon-unwrapped $out/bin/alacrittyDaemon \
-            --set DYLD_INSERT_LIBRARIES "${transparentWindow}/lib/transparentWindow.dylib"
-    '';
+    alacrittyDaemon = pkgs.writeShellApplication {
+        name = "alacrittyDaemon";
+        runtimeInputs = with pkgs; [ coreutils ];
+        checkPhase = "";
+        text = ''
+            export DYLD_INSERT_LIBRARIES="${transparentWindow}/lib/transparentWindow.dylib"
+            ${builtins.readFile "${scriptsDir}/window/alacrittyDaemon.sh"}
+        '';
+    };
 
     centerWindow = pkgs.runCommandCC "centerWindow" {} ''
         mkdir -p $out/bin
@@ -67,7 +68,8 @@
 
     pdfcp = pkgs.runCommandCC "pdfcp" {} ''
         mkdir -p $out/bin
-        $CC -O3 -fobjc-arc -framework ApplicationServices -framework Foundation -framework AppKit \
+        $CC -O3 -fobjc-arc -DGS_PATH="\"${pkgs.ghostscript}/bin/gs\"" \
+            -framework ApplicationServices -framework Foundation -framework AppKit \
             -I${scriptsDir} -I${scriptsDir}/commonUtils \
             ${scriptsDir}/commonUtils/*.m ${scriptsDir}/pdfcp.m -o $out/bin/pdfcp
     '';

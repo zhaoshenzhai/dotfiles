@@ -26,7 +26,28 @@ int main(int argc, const char * argv[]) {
                     file
                 ];
 
-                RunCommandWait(@"/usr/bin/env", [@[@"gs"] arrayByAddingObjectsFromArray:gsArgs]);
+                // Direct NSTask execution ensures synchronous blocking and captures launch failures.
+                NSTask *task = [[NSTask alloc] init];
+                [task setLaunchPath:@"/usr/bin/env"];
+                [task setArguments:[@[@"gs"] arrayByAddingObjectsFromArray:gsArgs]];
+
+                NSError *taskError = nil;
+                BOOL launched = [task launchAndReturnError:&taskError];
+
+                // If gs isn't found (e.g., Nix bin path missing in window manager environment)
+                if (!launched) {
+                    printf("\033[0K\r%s[Error] Failed to launch gs: %s%s\n", RED, taskError.localizedDescription.UTF8String, NC);
+                    continue;
+                }
+
+                [task waitUntilExit];
+
+                // Catch Ghostscript-level processing errors
+                if (task.terminationStatus != 0) {
+                    printf("\033[0K\r%s[Error] Ghostscript failed with status %d%s\n", RED, task.terminationStatus, NC);
+                    [fm removeItemAtPath:tmpFile error:nil];
+                    continue;
+                }
 
                 NSDictionary *oldAttrs = [fm attributesOfItemAtPath:file error:nil];
                 NSDictionary *newAttrs = [fm attributesOfItemAtPath:tmpFile error:nil];
@@ -47,6 +68,8 @@ int main(int argc, const char * argv[]) {
 
                     NSString *bakFile = [[file stringByDeletingLastPathComponent] stringByAppendingPathComponent:[NSString stringWithFormat:@"bak_%@", [file lastPathComponent]]];
 
+                    // Fix: Ensure the old backup is destroyed before copying to prevent a silent fail.
+                    [fm removeItemAtPath:bakFile error:nil];
                     [fm copyItemAtPath:file toPath:bakFile error:nil];
                     [fm removeItemAtPath:file error:nil];
                     [fm moveItemAtPath:tmpFile toPath:file error:nil];
