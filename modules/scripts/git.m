@@ -1,5 +1,16 @@
 #import "commonUtils.h"
+#import <Foundation/Foundation.h>
 #include <unistd.h>
+
+static const NSUInteger repoCount = 4;
+static NSString * const repoNames[] = { @"Courses", @"Dotfiles", @"Projects", @"Website" };
+static NSString * const repoPaths[] = {
+    @"/Users/zhao/iCloud/University/Courses",
+    @"/Users/zhao/iCloud/Dotfiles",
+    @"/Users/zhao/iCloud/Projects",
+    @"/Users/zhao/iCloud/Projects/_web"
+};
+
 
 static bool PromptExitOrReturn(void) {
     printf("\n%sPress [Y] to return, exiting otherwise...%s ", CYAN, NC);
@@ -7,12 +18,12 @@ static bool PromptExitOrReturn(void) {
     int c = GetCh();
 
     if (c == 'Y' || c == 'y' || c == '\n' || c == '\r') { system("clear"); return true; }
-    return false;
+    exit(0);
 }
 
-static NSString *ResolveRepositoryInteractive(NSArray<NSString *> *repoNames, NSArray<NSString *> *repoPaths) {
+static NSString *ResolveRepository(void) {
     printf("%sRepositories:%s\n", CYAN, NC);
-    for (NSUInteger i = 0; i < repoNames.count; i++) {
+    for (NSUInteger i = 0; i < repoCount; i++) {
         printf("    %s(%lu): %s%s\n", CYAN, i + 1, [repoNames[i] UTF8String], NC);
     }
     printf("\n%sSelect repository: [1-4]%s ", CYAN, NC);
@@ -21,20 +32,20 @@ static NSString *ResolveRepositoryInteractive(NSArray<NSString *> *repoNames, NS
     int cmdNum = GetCh();
 
     if (cmdNum >= '1' && cmdNum <= '4') {
-        printf("%c\n\n", cmdNum);
+        printf("%c\n", cmdNum);
         return repoPaths[cmdNum - '1'];
     }
 
     if (cmdNum == 'q' || cmdNum == 'Q') {
         printf("q\n");
-        exit(0);
+        PromptExitOrReturn();
     }
 
     printf("\n");
-    NSMutableArray *changedIndices = [NSMutableArray array];
+    NSMutableArray<NSNumber *> *changedIndices = [NSMutableArray array];
     NSFileManager *fm = [NSFileManager defaultManager];
 
-    for (NSUInteger i = 0; i < repoNames.count; i++) {
+    for (NSUInteger i = 0; i < repoCount; i++) {
         [fm changeCurrentDirectoryPath:repoPaths[i]];
         NSString *status = RunCommandOutput(@"/usr/bin/env", @[@"git", @"status", @"--porcelain"]);
         if (status.length > 0) {
@@ -42,16 +53,16 @@ static NSString *ResolveRepositoryInteractive(NSArray<NSString *> *repoNames, NS
         }
     }
 
-    // 3. Handle scan results
     if (changedIndices.count == 0) {
-        return nil; // Signal main loop to prompt return
+        printf("No changes in any repository.\n");
+        return nil;
     } else if (changedIndices.count == 1) {
         NSUInteger idx = [changedIndices[0] unsignedIntegerValue];
         return repoPaths[idx];
     }
 
-    // 4. Multiple changes detected. Show sub-menu of ONLY changed repos.
     while (true) {
+        system("clear");
         printf("%sChanged repositories:%s\n", CYAN, NC);
         for (NSNumber *idxNum in changedIndices) {
             NSUInteger i = [idxNum unsignedIntegerValue];
@@ -64,7 +75,7 @@ static NSString *ResolveRepositoryInteractive(NSArray<NSString *> *repoNames, NS
 
         if (subCmd == 'q' || subCmd == 'Q') {
             printf("q\n");
-            exit(0);
+            PromptExitOrReturn();
         }
 
         int subChoiceIndex = subCmd - '1';
@@ -117,12 +128,14 @@ static bool HandleDiffPrompt(void) {
 }
 
 static bool HandleCommitPrompt(void) {
-    printf("%s\nCommit? [Y/n/q]%s ", PURPLE, NC);
+    printf("%s\nCommit? [Y/n]%s ", PURPLE, NC);
     fflush(stdout);
     int commitChoice = GetCh();
     printf("%c\n", commitChoice == '\r' || commitChoice == '\n' ? 'Y' : commitChoice);
 
-    if (commitChoice == 'q' || commitChoice == 'Q' || commitChoice == 'n' || commitChoice == 'N') return false;
+    if (commitChoice == 'n' || commitChoice == 'N') {
+        return false;
+    }
 
     RunCommandWait(@"/usr/bin/env", @[@"git", @"add", @"."]);
     printf("\n");
@@ -130,7 +143,7 @@ static bool HandleCommitPrompt(void) {
     return true;
 }
 
-static void HandleInteractiveRemoval(void) {
+static void HandleRemoval(void) {
     char inputBuf[1024];
     while (true) {
         printf("%sRemove files? [N/(string)]%s ", PURPLE, NC);
@@ -213,16 +226,8 @@ int main(int argc, char **argv) {
     @autoreleasepool {
         EnsureSystemPath();
 
-        NSArray<NSString *> *repoNames = @[@"Courses", @"Dotfiles", @"Projects", @"Website"];
-        NSArray<NSString *> *repoPaths = @[
-            @"/Users/zhao/iCloud/University/Courses",
-            @"/Users/zhao/iCloud/Dotfiles",
-            @"/Users/zhao/iCloud/Projects",
-            @"/Users/zhao/iCloud/Projects/_web"
-        ];
-
         while (true) {
-            NSString *targetPath = ResolveRepositoryInteractive(repoNames, repoPaths);
+            NSString *targetPath = ResolveRepository();
 
             if (!targetPath) {
                 if (PromptExitOrReturn()) continue;
@@ -249,7 +254,7 @@ int main(int argc, char **argv) {
                 break;
             }
 
-            HandleInteractiveRemoval();
+            HandleRemoval();
             Commit();
             Push();
 
