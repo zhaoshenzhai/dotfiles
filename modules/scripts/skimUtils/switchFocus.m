@@ -1,6 +1,5 @@
 #import "commonUtils.h"
 #import "skimUtils.h"
-#import <sys/mman.h>
 
 static NSString *const kSkimBundleID = @"net.sourceforge.skim-app.skim";
 #define SHM_SIZE 1024
@@ -17,7 +16,7 @@ static void SaveSkimTitle(NSString *title, pid_t alacrittyPID) {
     char shm_name[64];
     snprintf(shm_name, sizeof(shm_name), "/aerospace_skim_%d", alacrittyPID);
 
-    int fd = shm_open(shm_name, O_CREAT | O_RDWR, 0666);
+    int fd = shm_open(shm_name, O_CREAT | O_RDWR | O_TRUNC, 0666);
     if (fd == -1) return;
 
     ftruncate(fd, SHM_SIZE);
@@ -45,78 +44,81 @@ static NSString *LoadSkimTitle(pid_t alacrittyPID) {
         result = [NSString stringWithUTF8String:mem];
         munmap(mem, SHM_SIZE);
     }
-    close(fd);
 
+    close(fd);
+    shm_unlink(shm_name);
     return [result stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
 static WorkspaceInfo GetWorkspaceInfo(void) {
     WorkspaceInfo info = { 0, 0, 0, 0 };
-
     NSString *raw = AerospaceOutput(@[@"list-windows", @"--workspace", @"focused",
                                       @"--format", @"%{app-name}|%{app-bundle-id}|%{app-pid}|%{window-id}"]);
     if (!raw.length) return info;
 
-    NSArray<NSString *> *lines = [raw componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    char *rawInfo = strdup(raw.UTF8String);
+    if (!rawInfo) return info;
 
-    for (NSString *line in lines) {
-        if (!line.length) continue;
+    char *lineSavePtr = NULL;
+    char *tokenSavePtr = NULL;
 
-        NSArray<NSString *> *p = [line componentsSeparatedByString:@"|"];
-        if (p.count < 4) continue;
+    char *line = strtok_r(rawInfo, "\n", &lineSavePtr);
+    while (line != NULL) {
+        char *appName   = strtok_r(line, "|", &tokenSavePtr);
+        char *bundleID  = strtok_r(NULL, "|", &tokenSavePtr);
+        char *appPIDStr = strtok_r(NULL, "|", &tokenSavePtr);
+        char *winIDStr  = strtok_r(NULL, "|", &tokenSavePtr);
 
-        if ([p[0] rangeOfString:@"alacritty" options:NSCaseInsensitiveSearch|NSAnchoredSearch].location != NSNotFound) {
-            info.alacrittyCount++;
-            if (info.alacrittyCount == 1) {
-                info.alacrittyPID = [p[2] intValue];
-                info.alacrittyWinID = [p[3] intValue];
+        if (appName && bundleID && appPIDStr && winIDStr) {
+            if (strcasestr(appName, "alacritty")) {
+                info.alacrittyCount++;
+                if (info.alacrittyCount == 1) {
+                    info.alacrittyPID = atoi(appPIDStr);
+                    info.alacrittyWinID = atoi(winIDStr);
+                }
+            } else if (strcmp(bundleID, "net.sourceforge.skim-app.skim") == 0) {
+                info.skimCount++;
             }
-        } else if ([p[1] isEqualToString:kSkimBundleID]) {
-            info.skimCount++;
         }
+
+        line = strtok_r(NULL, "\n", &lineSavePtr);
     }
+
+    free(rawInfo);
     return info;
 }
 
 static void FocusSkimWindow(NSRunningApplication *skim, NSString *savedTitle) {
+    [skim activateWithOptions:NSApplicationActivateAllWindows];
+
+    if (!savedTitle || savedTitle.length == 0) return;
+
     CFArrayRef wins = CopyAXWindows(skim.processIdentifier);
-    if (!wins) { [skim activateWithOptions:0]; return; }
+    if (!wins) return;
 
     CFIndex count = CFArrayGetCount(wins);
     if (count <= 1) {
-        [skim activateWithOptions:0];
         CFRelease(wins);
         return;
     }
 
-    AXUIElementRef target   = NULL;
-    AXUIElementRef fallback = NULL;
-
     for (CFIndex i = 0; i < count; i++) {
         AXUIElementRef win = (AXUIElementRef)CFArrayGetValueAtIndex(wins, i);
+        NSString *t = AXWindowTitle(win);
 
-        CFTypeRef minimisedVal = NULL;
-        BOOL isMin = NO;
-        if (AXUIElementCopyAttributeValue(win, kAXMinimizedAttribute, &minimisedVal) == kAXErrorSuccess) {
-            isMin = [(__bridge NSNumber *)minimisedVal boolValue];
-            CFRelease(minimisedVal);
+        if (t && [t isEqualToString:savedTitle]) {
+            CFTypeRef minimisedVal = NULL;
+            BOOL isMin = NO;
+            if (AXUIElementCopyAttributeValue(win, kAXMinimizedAttribute, &minimisedVal) == kAXErrorSuccess) {
+                isMin = [(__bridge NSNumber *)minimisedVal boolValue];
+                if (minimisedVal) CFRelease(minimisedVal);
+            }
+
+            if (!isMin) {
+                AXUIElementPerformAction(win, kAXRaiseAction);
+                break;
+            }
         }
-        if (isMin) continue;
-
-        if (!fallback) fallback = win;
-
-        if (savedTitle.length) {
-            NSString *t = AXWindowTitle(win);
-            if (t && [t isEqualToString:savedTitle]) { target = win; break; }
-        }
-    }
-
-    AXUIElementRef chosen = target ?: fallback;
-    if (chosen) {
-        AXUIElementPerformAction(chosen, kAXRaiseAction);
-        [skim activateWithOptions:0];
-    } else {
-        [skim activateWithOptions:0];
     }
 
     CFRelease(wins);
