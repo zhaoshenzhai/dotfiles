@@ -28,7 +28,7 @@ let
             "$lastdir"
         )
         export DYLD_INSERT_LIBRARIES="${transparentWindow}/lib/transparentWindow.dylib"
-        alacritty "''${ARGS[@]}"
+        /etc/profiles/per-user/zhao/bin/alacritty "''${ARGS[@]}"
     '';
 
     vifmPickerMulti = pkgs.writeShellScript "vifm-picker-multi" ''
@@ -47,7 +47,7 @@ let
             "$lastdir"
         )
         export DYLD_INSERT_LIBRARIES="${transparentWindow}/lib/transparentWindow.dylib"
-        alacritty "''${ARGS[@]}"
+        /etc/profiles/per-user/zhao/bin/alacritty "''${ARGS[@]}"
     '';
 
     ytMpvSpawn = pkgs.writeShellScript "yt-mpv-spawn" ''
