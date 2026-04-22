@@ -11,6 +11,7 @@ static bool PromptExitOrReturn(void) {
     int c = GetCh();
 
     if (c == 'Y' || c == 'y' || c == '\n' || c == '\r') { system("clear"); return true; }
+    AerospaceRun(@[@"close"]);
     exit(0);
 }
 
@@ -246,5 +247,7 @@ int main(int argc, char **argv) {
             break;
         }
     }
+
+    AerospaceRun(@[@"close"]);
     return 0;
 }
