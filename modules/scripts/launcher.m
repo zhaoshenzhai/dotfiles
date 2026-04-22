@@ -4,7 +4,7 @@ static NSString *const kFdPath = @FD_PATH;
 static NSString *const kFzfPath = @FZF_PATH;
 static NSString *const kCacheDir = @"/Users/zhao/.cache/launcher";
 
-static const char *excludedPatterns[] = { ".git", "*.old", "*.png", "*.jpg", "*.tar.gz", "*.zip", "*.synctex.gz" };
+static const char *excludedPatterns[] = { ".git", "*.old", "*.png", "*.jpg", "*.tar.gz", "*.zip", "*.synctex.gz", "*.svg" };
 
 static void UpdateRecentFiles(NSString *selected) {
     if ([selected containsString:@"Projects/_attic/notes/"] &&
