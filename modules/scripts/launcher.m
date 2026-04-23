@@ -202,7 +202,7 @@ static void Launch(NSString *selected) {
     }
 }
 
-static void QuitAndCloseLauncher(BOOL didLaunch) {
+static void QuitAndCloseLauncher() {
     NSString *wins = AerospaceOutput(@[@"list-windows", @"--all", @"--format", @"%{window-id}|%{window-title}"]);
     NSString *launcherID = nil;
 
@@ -216,11 +216,8 @@ static void QuitAndCloseLauncher(BOOL didLaunch) {
 
     if (!launcherID) exit(0);
 
-    if (didLaunch) {
-        AerospaceRun(@[@"move-node-to-workspace", @"--window-id", launcherID, @"0"]);
-        usleep(500000);
-    }
-
+    AerospaceRun(@[@"move-node-to-workspace", @"--window-id", launcherID, @"0"]);
+    usleep(500000);
     AerospaceRun(@[@"close", @"--window-id", launcherID]);
     exit(0);
 }
@@ -250,10 +247,9 @@ int main(int argc, const char * argv[]) {
             if ([absPath hasPrefix:kBaseDir] && [[NSFileManager defaultManager] fileExistsAtPath:absPath]) {
                 NSString *relPath = [absPath substringFromIndex:kBaseDir.length + ([absPath characterAtIndex:kBaseDir.length] == '/' ? 1 : 0)];
                 Launch(FormatFilePath(relPath));
-                QuitAndCloseLauncher(YES);
-                return 0;
             }
-            QuitAndCloseLauncher(NO);
+
+            QuitAndCloseLauncher();
             return 0;
         }
 
@@ -267,10 +263,9 @@ int main(int argc, const char * argv[]) {
         if (selected.length > 0) {
             UpdateRecentFiles(selected);
             Launch(selected);
-            QuitAndCloseLauncher(YES);
-        } else {
-            QuitAndCloseLauncher(NO);
         }
+
+        QuitAndCloseLauncher();
     }
     return 0;
 }

@@ -22,6 +22,13 @@
         $CC -O3 -framework Cocoa ${scriptsDir}/window/centering.m -o $out/bin/centerWindow
     '';
 
+    closeWindow = pkgs.runCommandCC "closeWindow" {} ''
+        mkdir -p $out/bin
+        $CC -O3 -fobjc-arc -framework ApplicationServices -framework Foundation -framework AppKit \
+            -I${scriptsDir} -I${scriptsDir}/commonUtils \
+            ${scriptsDir}/commonUtils/*.m ${scriptsDir}/window/closeWindow.m -o $out/bin/closeWindow
+    '';
+
     texManager = pkgs.runCommandCC "texManager" {} ''
         mkdir -p $out/bin
         $CC -O3 -fobjc-arc -framework ApplicationServices -framework Foundation -framework AppKit \
@@ -77,6 +84,7 @@ in
     environment.systemPackages = [
         alacrittyDaemon
         centerWindow
+        closeWindow
         texManager
         gitCommit
         skimUtils

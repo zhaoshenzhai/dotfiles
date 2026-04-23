@@ -29,6 +29,12 @@ NSString *RunCommandOutput(NSString *cmdPath, NSArray<NSString *> *argsArray);
 void RunCommandDetached(NSString *cmdPath, NSArray<NSString *> *argsArray);
 int RunInteractive(NSString *cmdPath, NSArray<NSString *> *argsArray);
 
+// --- Aerospace and launcher execution ---
+int AerospaceRun(NSArray<NSString *> *args);
+NSString *AerospaceOutput(NSArray<NSString *> *args);
+void RunLauncher(NSString *targetPath);
+void CloseWindow(NSString *windowID);
+
 // --- Process and accessibility utilities ---
 AXUIElementRef _Nullable GetFocusedWindowForPID(pid_t pid);
 CFArrayRef _Nullable CopyAXWindows(pid_t pid);
@@ -59,17 +65,5 @@ do { \
         (ptr) = (type *)SafeRealloc((ptr), (cap) * sizeof(type)); \
     } \
 } while(0)
-
-// --- Aerospace and launcher execution ---
-static inline int AerospaceRun(NSArray<NSString *> *args) {
-    return RunCommandWait(kAerospacePath, args);
-}
-static inline NSString *AerospaceOutput(NSArray<NSString *> *args) {
-    NSString *outStr = RunCommandOutput(kAerospacePath, args);
-    return [outStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-}
-static inline void RunLauncher(NSString *targetPath) {
-    if (targetPath) RunCommandDetached(kLauncherPath, @[targetPath]);
-}
 
 NS_ASSUME_NONNULL_END

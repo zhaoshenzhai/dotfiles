@@ -108,3 +108,24 @@ int RunInteractive(NSString *cmdPath, NSArray<NSString *> *argsArray) {
         return [task terminationStatus];
     }
 }
+
+int AerospaceRun(NSArray<NSString *> *args) {
+    return RunCommandWait(kAerospacePath, args);
+}
+
+NSString *AerospaceOutput(NSArray<NSString *> *args) {
+    NSString *outStr = RunCommandOutput(kAerospacePath, args);
+    return [outStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
+void RunLauncher(NSString *targetPath) {
+    if (targetPath) RunCommandDetached(kLauncherPath, @[targetPath]);
+}
+
+void CloseWindow(NSString *windowID) {
+    if (!windowID || windowID.length == 0) exit(1);
+    AerospaceRun(@[@"move-node-to-workspace", @"--window-id", windowID, @"0"]);
+    usleep(500000);
+    AerospaceRun(@[@"close", @"--window-id", windowID]);
+}
+
