@@ -215,7 +215,7 @@ static void QuitAndCloseLauncher() {
     }
 
     if (!launcherID) exit(0);
-    AerospaceClose(launcherID);
+    AerospaceClose();
 }
 
 int main(int argc, const char * argv[]) {

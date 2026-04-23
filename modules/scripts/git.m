@@ -11,8 +11,7 @@ static bool PromptExitOrReturn(void) {
     int c = GetCh();
 
     if (c == 'Y' || c == 'y' || c == '\n' || c == '\r') { system("clear"); return true; }
-    AerospaceRun(@[@"close"]);
-    exit(0);
+    AerospaceClose();
 }
 
 static NSString *ResolveRepository(void) {
@@ -248,6 +247,6 @@ int main(int argc, char **argv) {
         }
     }
 
-    AerospaceRun(@[@"close"]);
+    AerospaceClose();
     return 0;
 }

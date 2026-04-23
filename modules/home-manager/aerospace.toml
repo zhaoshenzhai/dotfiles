@@ -52,23 +52,9 @@ accordion-padding = 0
         alacrittyDaemon -e zsh -c "$CMD"
     ' '''
 
-    # Btop
-    cmd-t = '''exec-and-forget zsh -c '
-        ARGS=( "--title" "btop" "-e" "btop")
-        alacrittyDaemon "${ARGS[@]}"
-    ' '''
-
-    # Git
-    cmd-g = '''exec-and-forget zsh -c '
-        ARGS=( "--title" "git" "-e" "gitCommit")
-        alacrittyDaemon "${ARGS[@]}"
-    ' '''
-
-    # Attic
-    cmd-a = '''exec-and-forget zsh -c '
-        ARGS=( "--title" "attic" "-e" "zsh" "-c" "attic")
-        alacrittyDaemon "${ARGS[@]}"
-    ' '''
+    cmd-t = 'exec-and-forget alacrittyDaemon --title "btop"  -e btop'
+    cmd-g = 'exec-and-forget alacrittyDaemon --title "git"   -e gitCommit'
+    cmd-a = 'exec-and-forget alacrittyDaemon --title "attic" -e attic'
 
     # Applications
     cmd-m       = [ 'exec-and-forget open -a messages',    'workspace m' ]
@@ -113,14 +99,14 @@ accordion-padding = 0
     cmd-shift-9 = 'move-node-to-workspace 9'
 
     # Workspace/window management
-    cmd-q           = 'exec-and-forget closeWindow $AEROSPACE_FOCUSED_WINDOW'
+    cmd-q           = 'exec-and-forget closeWindow'
     cmd-f           = 'layout v_accordion v_tiles'
     cmd-shift-f     = 'macos-native-fullscreen'
     cmd-shift-r     = [ 'layout v_tiles', 'flatten-workspace-tree' ]
     cmd-shift-space = [ 'layout floating tiling', 'exec-and-forget centerWindow' ]
 
 [mode.launcher.binding]
-    cmd-q    = [ 'exec-and-forget closeWindow $AEROSPACE_FOCUSED_WINDOW', 'mode main' ]
+    cmd-q    = [ 'exec-and-forget closeWindow', 'mode main' ]
     cmd-esc  = [ 'mode main' ]
     ctrl-esc = [ 'mode main' ]
     esc      = [ 'mode main' ]

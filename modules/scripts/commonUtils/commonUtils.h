@@ -32,7 +32,7 @@ int RunInteractive(NSString *cmdPath, NSArray<NSString *> *argsArray);
 // --- Aerospace and launcher execution ---
 int AerospaceRun(NSArray<NSString *> *args);
 NSString *AerospaceOutput(NSArray<NSString *> *args);
-void AerospaceClose(NSString *windowID);
+void AerospaceClose();
 void RunLauncher(NSString *targetPath);
 
 // --- Process and accessibility utilities ---
