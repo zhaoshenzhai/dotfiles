@@ -215,11 +215,7 @@ static void QuitAndCloseLauncher() {
     }
 
     if (!launcherID) exit(0);
-
-    AerospaceRun(@[@"move-node-to-workspace", @"--window-id", launcherID, @"0"]);
-    usleep(500000);
-    AerospaceRun(@[@"close", @"--window-id", launcherID]);
-    exit(0);
+    AerospaceClose(launcherID);
 }
 
 int main(int argc, const char * argv[]) {

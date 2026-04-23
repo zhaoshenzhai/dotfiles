@@ -122,7 +122,7 @@ void RunLauncher(NSString *targetPath) {
     if (targetPath) RunCommandDetached(kLauncherPath, @[targetPath]);
 }
 
-void CloseWindow(NSString *windowID) {
+void AerospaceClose(NSString *windowID) {
     if (!windowID || windowID.length == 0) exit(1);
     AerospaceRun(@[@"move-node-to-workspace", @"--window-id", windowID, @"0"]);
     usleep(500000);
