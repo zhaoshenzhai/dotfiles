@@ -118,17 +118,12 @@ NSString *AerospaceOutput(NSArray<NSString *> *args) {
     return [outStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
-void AerospaceClose() {
-    AerospaceRun(@[@"move-node-to-workspace", @"0"]);
-    usleep(500000);
+void AerospaceClose(NSString *windowID) {
+    if (!windowID || windowID.length == 0) return;
 
-    NSString *ghostIDs = AerospaceOutput(@[@"list-windows", @"--workspace", @"0", @"--format", @"%{window-id}"]);
-    for (NSString *line in [ghostIDs componentsSeparatedByString:@"\n"]) {
-        NSString *trimmedID = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        if (trimmedID.length > 0) {
-            AerospaceRun(@[@"close", @"--window-id", trimmedID, @"--quit-if-last-window"]);
-        }
-    }
+    AerospaceRun(@[@"move-node-to-workspace", @"--window-id", windowID, @"0"]);
+    usleep(500000);
+    AerospaceRun(@[@"close", @"--window-id", windowID]);
 }
 
 void RunLauncher(NSString *targetPath) {
