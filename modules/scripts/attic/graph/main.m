@@ -203,13 +203,6 @@ void draw() {
     EndDrawing();
 }
 
-void closeWindow() {
-    freeGraphMemory();
-    freeLabelsMemory();
-    UnloadFont(font);
-    CloseWindow();
-}
-
 int main(void) {
     initializeWindow();
     initializeLabels();
@@ -229,6 +222,9 @@ int main(void) {
         draw();
     }
 
-    closeWindow();
+    freeGraphMemory();
+    freeLabelsMemory();
+    UnloadFont(font);
+    CloseWindow();
     return 0;
 }
