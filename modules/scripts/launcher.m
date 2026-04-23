@@ -217,13 +217,10 @@ static void QuitAndCloseLauncher(BOOL didLaunch) {
     if (!launcherID) exit(0);
 
     if (didLaunch) {
-        NSString *ws = AerospaceOutput(@[@"list-workspaces", @"--focused"]);
-        for (int i = 0; i < 15; i++) {
-            usleep(100000);
-            NSString *wsWins = AerospaceOutput(@[@"list-windows", @"--workspace", ws]);
-            if ([[wsWins componentsSeparatedByString:@"\n"] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length > 0"]].count > 1) break;
-        }
+        AerospaceRun(@[@"move-node-to-workspace", @"--window-id", launcherID, @"0"]);
+        usleep(500000);
     }
+
     AerospaceRun(@[@"close", @"--window-id", launcherID]);
     exit(0);
 }
