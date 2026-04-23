@@ -243,11 +243,10 @@ int main(int argc, char **argv) {
             Commit();
             Push();
 
-            if (PromptExitOrReturn()) continue;
-            break;
+            if (PromptExitOrReturn()) { continue; } break;
         }
     }
 
     AerospaceClose(nil);
-    exit(0);
+    return 0;
 }

@@ -6,7 +6,7 @@ void promptExit() {
     int c = GetCh();
 
     if (c == 'Y' || c == 'y' || c == '\n') { system("clear"); return; }
-    AerospaceRun(@[@"close"]);
+    AerospaceClose(nil);
     exit(0);
 }
 
@@ -46,7 +46,7 @@ void interactiveMenu() {
             }
             if (cmdNum != 'g') { promptExit(); }
         } else if (cmdNum == 'q') {
-            AerospaceRun(@[@"close"]);
+            AerospaceClose(nil);
             exit(0);
         } else {
             system("clear");

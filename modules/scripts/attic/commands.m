@@ -127,7 +127,8 @@ void createNote(const char *inKeywords) {
             NSString *nsTarget = [NSString stringWithFormat:@"%s/%05d/%05d.tex", atticDir, id, id];
             RunLauncher(nsTarget);
         }
-        usleep(100000);
+        // usleep(100000);
+        AerospaceClose(nil);
         exit(0);
     }
 }
@@ -494,6 +495,6 @@ void launchGraph(void) {
     snprintf(cmd, sizeof(cmd), "cd '%s/..' && nohup bash -c 'exec -a attic attic-graph' > /dev/null 2>&1 &", atticDir);
     system(cmd);
 
-    RunCommandWait(@"/usr/bin/osascript", @[@"-e", @"tell application \"System Events\" to set visible of front process to false"]);
+    AerospaceClose(nil);
     exit(0);
 }
