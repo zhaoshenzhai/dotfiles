@@ -14,10 +14,11 @@ static inline const char* get_icon_for_app(const char* app) {
     if (strcmp(app, "Discord")          == 0) return ":discord:";
     if (strcmp(app, "zoom.us")          == 0) return ":zoom:";
     if (strcmp(app, "attic")            == 0) return ":calibre:";
+    if (strcmp(app, "puppy")            == 0) return ":bruno:";
     if (strcmp(app, "Skim")             == 0) return ":book:";
     if (strcmp(app, "vifm")             == 0) return ":home:";
     if (strcmp(app, "nvim")             == 0) return ":neovim:";
-    if (strcmp(app, "btop")             == 0) return ":statistics:";
+    if (strcmp(app, "btop")             == 0) return ":activity_monitor:";
     if (strcmp(app, "git")              == 0) return ":git_hub:";
     if (strcmp(app, "mpv")              == 0) return ":mpv:";
 

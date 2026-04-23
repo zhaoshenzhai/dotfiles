@@ -126,7 +126,7 @@ void AerospaceClose(NSString *windowID) {
     }
 
     NSString *remainingWindows = AerospaceOutput(@[@"list-windows", @"--workspace", @"focused", @"--format", @"%{window-id}"]);
-    if (remainingWindows.length == 0) RunCommandWait(@"/usr/bin/open", @[@"-a", @"Skim"]);
+    if (remainingWindows.length == 0) RunCommandWait(@"/usr/bin/open", @[@"-a", @"puppy"]);
 
     usleep(500000);
 

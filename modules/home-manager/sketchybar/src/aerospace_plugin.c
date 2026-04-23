@@ -93,6 +93,7 @@ void handler(env env) {
             }
 
             if (strcasecmp(app_name, "attic-graph") == 0) { app_name = "attic"; }
+            if (strcmp(window_title, "puppy") == 0) { app_name = "puppy"; }
 
             for (int i = 0; i < ws_count; i++) {
                 if (strcmp(ws_list[i].name, ws_name) == 0) {

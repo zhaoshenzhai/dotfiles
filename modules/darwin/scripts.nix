@@ -79,6 +79,12 @@
         checkPhase = "";
         text = builtins.readFile "${scriptsDir}/pdfcp.sh";
     };
+
+    puppy = pkgs.runCommandCC "puppy" {} ''
+        mkdir -p $out/Applications/puppy.app/Contents/MacOS
+        cp ${scriptsDir}/window/puppy.plist $out/Applications/puppy.app/Contents/Info.plist
+        $CC -O3 -fobjc-arc -framework Cocoa ${scriptsDir}/window/puppy.m -o $out/Applications/puppy.app/Contents/MacOS/puppy
+    '';
 in
 {
     environment.systemPackages = [
@@ -91,5 +97,6 @@ in
         launcher
         attic
         pdfcp
+        puppy
     ];
 }
