@@ -26,6 +26,7 @@ void handler(env env) {
     }
 
     if (title[0] != '\0' && strcasecmp(info, "attic-graph") == 0) { info = "attic"; }
+    if (title[0] != '\0' && strcasecmp(info, "puppy") == 0) { info = "puppy"; }
 
     const char* icon = get_icon_for_app(info);
 
