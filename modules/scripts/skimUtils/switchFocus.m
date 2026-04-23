@@ -91,35 +91,23 @@ static void FocusSkimWindow(NSRunningApplication *skim, NSString *savedTitle) {
 
     if (!savedTitle || savedTitle.length == 0) return;
 
-    CFArrayRef wins = CopyAXWindows(skim.processIdentifier);
-    if (!wins) return;
+    AXUIElementRef app = AXUIElementCreateApplication(skim.processIdentifier);
+    if (!app) return;
 
-    CFIndex count = CFArrayGetCount(wins);
-    if (count <= 1) {
-        CFRelease(wins);
-        return;
-    }
+    AXUIElementRef win = FindChildWithTitle(app, savedTitle);
 
-    for (CFIndex i = 0; i < count; i++) {
-        AXUIElementRef win = (AXUIElementRef)CFArrayGetValueAtIndex(wins, i);
-        NSString *t = AXWindowTitle(win);
-
-        if (t && [t isEqualToString:savedTitle]) {
-            CFTypeRef minimisedVal = NULL;
-            BOOL isMin = NO;
-            if (AXUIElementCopyAttributeValue(win, kAXMinimizedAttribute, &minimisedVal) == kAXErrorSuccess) {
-                isMin = [(__bridge NSNumber *)minimisedVal boolValue];
-                if (minimisedVal) CFRelease(minimisedVal);
-            }
-
-            if (!isMin) {
-                AXUIElementPerformAction(win, kAXRaiseAction);
-                break;
-            }
+    if (win) {
+        CFTypeRef minimisedVal = NULL;
+        BOOL isMin = NO;
+        if (AXUIElementCopyAttributeValue(win, kAXMinimizedAttribute, &minimisedVal) == kAXErrorSuccess) {
+            isMin = [(__bridge NSNumber *)minimisedVal boolValue];
+            if (minimisedVal) CFRelease(minimisedVal);
         }
-    }
 
-    CFRelease(wins);
+        if (!isMin) AXUIElementPerformAction(win, kAXRaiseAction);
+        CFRelease(win);
+    }
+    CFRelease(app);
 }
 
 int switchFocus(NSString *direction) {
@@ -166,7 +154,6 @@ int switchFocus(NSString *direction) {
         }
 
         int targetWinID = [LoadFromSHM(alaShmKey) intValue];
-
         if (targetWinID <= 0 && info.alacrittyWinID > 0) targetWinID = info.alacrittyWinID;
 
         if (targetWinID > 0) {
