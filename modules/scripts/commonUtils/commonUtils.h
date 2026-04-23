@@ -32,8 +32,8 @@ int RunInteractive(NSString *cmdPath, NSArray<NSString *> *argsArray);
 // --- Aerospace and launcher execution ---
 int AerospaceRun(NSArray<NSString *> *args);
 NSString *AerospaceOutput(NSArray<NSString *> *args);
+void AerospaceClose(NSString *windowID);
 void RunLauncher(NSString *targetPath);
-void CloseWindow(NSString *windowID);
 
 // --- Process and accessibility utilities ---
 AXUIElementRef _Nullable GetFocusedWindowForPID(pid_t pid);

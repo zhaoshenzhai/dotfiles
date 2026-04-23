@@ -3,10 +3,21 @@
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         EnsureSystemPath();
-        if (argc < 2) return 1;
+        NSString *windowID = nil;
 
-        NSString *windowID = [NSString stringWithUTF8String:argv[1]];
-        CloseWindow(windowID);
+        if (argc >= 2) {
+            windowID = [NSString stringWithUTF8String:argv[1]];
+        } else {
+            NSString *focusedID = AerospaceOutput(@[@"list-windows", @"--focused", @"--format", @"%{window-id}"]);
+            windowID = [focusedID stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        }
+
+        if (!windowID || windowID.length == 0) {
+            fprintf(stderr, "Error: Could not determine a target window ID to close.\n");
+            return 1;
+        }
+
+        AerospaceClose(windowID);
     }
     return 0;
 }

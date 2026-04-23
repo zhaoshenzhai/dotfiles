@@ -120,9 +120,7 @@ accordion-padding = 0
     cmd-shift-space = [ 'layout floating tiling', 'exec-and-forget centerWindow' ]
 
 [mode.launcher.binding]
-    cmd-q  = [ 'exec-and-forget closeWindow $AEROSPACE_FOCUSED_WINDOW', 'mode main' ]
-    ctrl-q = [ 'exec-and-forget closeWindow $AEROSPACE_FOCUSED_WINDOW', 'mode main' ]
-
+    cmd-q    = [ 'exec-and-forget closeWindow $AEROSPACE_FOCUSED_WINDOW', 'mode main' ]
     cmd-esc  = [ 'mode main' ]
     ctrl-esc = [ 'mode main' ]
     esc      = [ 'mode main' ]
