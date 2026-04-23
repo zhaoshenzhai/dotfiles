@@ -1,4 +1,3 @@
-#include "commonUtils.h"
 #include "graph.h"
 #include <unistd.h>
 #include <objc/objc.h>
@@ -57,7 +56,6 @@ void openNote(const char* id) {
         RunLauncher(targetPath);
     }
 
-    AerospaceClose(nil);
     exit(0);
 }
 

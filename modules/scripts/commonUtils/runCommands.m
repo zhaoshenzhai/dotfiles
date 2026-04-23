@@ -131,7 +131,7 @@ void AerospaceClose(NSString *windowID) {
     for (NSString *line in [ghostIDs componentsSeparatedByString:@"\n"]) {
         NSString *trimmedID = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         if (trimmedID.length > 0) {
-            AerospaceRun(@[@"close", @"--window-id", trimmedID, @"--quit-if-last-window"]);
+            AerospaceRun(@[@"close", @"--window-id", trimmedID]);
         }
     }
 }
