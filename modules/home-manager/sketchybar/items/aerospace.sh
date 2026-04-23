@@ -25,4 +25,4 @@ sketchybar --add item aerospace_listener left                                   
            --set aerospace_listener drawing="off"                                                  \
                                     updates="on"                                                   \
                                     mach_helper="aerospace_plugin_mach"                            \
-           --subscribe aerospace_listener aerospace_workspace_change aerospace_custom_app_switched
+           --subscribe aerospace_listener aerospace_custom_app_switched

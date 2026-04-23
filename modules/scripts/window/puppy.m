@@ -1,4 +1,4 @@
-#import <Cocoa/Cocoa.h>
+#include <Cocoa/Cocoa.h>
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 @end
@@ -18,7 +18,7 @@
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         NSApplication *app = [NSApplication sharedApplication];
-        app.activationPolicy = NSApplicationActivationPolicyRegular;
+        app.activationPolicy = NSApplicationActivationPolicyAccessory;
 
         AppDelegate *delegate = [[AppDelegate alloc] init];
         app.delegate = delegate;

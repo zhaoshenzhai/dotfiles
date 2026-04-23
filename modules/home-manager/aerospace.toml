@@ -10,10 +10,6 @@ on-focus-changed = [
     'exec-and-forget zsh -c "sketchybar --trigger aerospace_custom_app_switched INFO=\"$(aerospace list-windows --focused --format %{app-name} 2>/dev/null)\" TITLE=\"$(aerospace list-windows --focused --format %{window-title} 2>/dev/null)\""'
 ]
 
-exec-on-workspace-change = [ 'zsh', '-c',
-    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-]
-
 accordion-padding = 0
 
 [gaps]
