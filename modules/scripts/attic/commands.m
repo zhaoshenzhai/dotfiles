@@ -93,7 +93,7 @@ void createNote(const char *inKeywords) {
         printf("Note %05d created automatically.\n", id);
     } else {
         char prompt[256];
-        snprintf(prompt, sizeof(prompt), "\x01%s\x02Enter keywords for note %05d: \x01%s\x02", PURPLE, id, NC);
+        snprintf(prompt, sizeof(prompt), "\001%s\002Enter keywords for note %05d: \001%s\002", PURPLE, id, NC);
 
         char *input = readline(prompt);
         if (input) {

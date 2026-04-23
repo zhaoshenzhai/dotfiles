@@ -139,11 +139,10 @@ static bool HandleCommitPrompt(void) {
 static void HandleRemoval(void) {
     while (true) {
         char prompt[256];
-        // Wrap color macros in \x01 and \x02
-        snprintf(prompt, sizeof(prompt), "\n\x01%s\x02Remove files? [N/(string)]\x01%s\x02 ", PURPLE, NC);
+        snprintf(prompt, sizeof(prompt), "\n\001%s\002Remove files? [N/(string)]\001%s\002 ", PURPLE, NC);
 
         char *inputBuf = readline(prompt);
-        if (!inputBuf) break; // Handles EOF/Ctrl+D
+        if (!inputBuf) break;
 
         TrimEnd(inputBuf);
 
@@ -172,7 +171,7 @@ static void Commit(void) {
         if (first) { printf("\n"); first = false; }
 
         char prompt[256];
-        snprintf(prompt, sizeof(prompt), "\x01%s\x02Message:\x01%s\x02 ", PURPLE, NC);
+        snprintf(prompt, sizeof(prompt), "\001%s\002Message:\001%s\002 ", PURPLE, NC);
 
         msgBuf = readline(prompt);
 
@@ -180,11 +179,10 @@ static void Commit(void) {
             TrimEnd(msgBuf);
             if (strlen(msgBuf) > 0) break;
 
-            // Free and prompt again if empty
             free(msgBuf);
             msgBuf = NULL;
         } else {
-            break; // EOF
+            break;
         }
     }
 
@@ -216,7 +214,7 @@ static void Push(void) {
 
         if ([errStr containsString:@"fatal"]) {
             char prompt[256];
-            snprintf(prompt, sizeof(prompt), "\n\x01%s\x02Attempt %d: Authentication failed. Please enter your PAT:\x01%s\x02 ", RED, attempt, NC);
+            snprintf(prompt, sizeof(prompt), "\n\001%s\002Attempt %d: Authentication failed. Please enter your PAT:\001%s\002 ", RED, attempt, NC);
 
             char *patBuf = readline(prompt);
             if (patBuf) {
