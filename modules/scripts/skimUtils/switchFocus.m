@@ -5,23 +5,18 @@ static NSString *const kSkimBundleID = @"net.sourceforge.skim-app.skim";
 #define SHM_SIZE 1024
 
 typedef struct {
-    BOOL  skimPresent;
-    int   firstNonSkimWinID;
+    BOOL skimPresent;
+    int  firstNonSkimWinID;
 } WorkspaceInfo;
 
 static NSString *GetFocusedWorkspace(void) {
-    NSString *ws = AerospaceOutput(@[@"list-workspaces", @"--focused"]);
-    return [ws stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    return AerospaceOutput(@[@"list-workspaces", @"--focused"]);
 }
 
 static const char *WorkspaceSHMName(NSString *workspace) {
     if (!workspace.length) return NULL;
-    NSMutableString *safe = [workspace mutableCopy];
-    NSCharacterSet *allowed = [NSCharacterSet alphanumericCharacterSet];
-    for (NSUInteger i = 0; i < safe.length; i++) {
-        if (![allowed characterIsMember:[safe characterAtIndex:i]])
-            [safe replaceCharactersInRange:NSMakeRange(i, 1) withString:@"_"];
-    }
+    NSCharacterSet *nonAlnum = [[NSCharacterSet alphanumericCharacterSet] invertedSet];
+    NSString *safe = [[workspace componentsSeparatedByCharactersInSet:nonAlnum] componentsJoinedByString:@"_"];
     return [NSString stringWithFormat:@"/aerospace_skim_%@", safe].UTF8String;
 }
 
@@ -57,34 +52,23 @@ static NSString *LoadSkimTitle(NSString *workspace) {
 }
 
 static WorkspaceInfo GetWorkspaceInfo(void) {
-    WorkspaceInfo info = { NO, -1 };
+    __block WorkspaceInfo info = { NO, -1 };
     NSString *raw = AerospaceOutput(@[@"list-windows", @"--workspace", @"focused", @"--format", @"%{app-bundle-id}|%{window-id}"]);
     if (!raw.length) return info;
 
-    char *rawInfo = strdup(raw.UTF8String);
-    if (!rawInfo) return info;
+    [raw enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
+        NSArray<NSString *> *parts = [line componentsSeparatedByString:@"|"];
+        if (parts.count < 2) return;
 
-    char *lineSavePtr  = NULL;
-    char *tokenSavePtr = NULL;
-
-    char *line = strtok_r(rawInfo, "\n", &lineSavePtr);
-    while (line != NULL) {
-        char *bundleID = strtok_r(line, "|", &tokenSavePtr);
-        char *winIDStr = strtok_r(NULL, "|", &tokenSavePtr);
-
-        if (bundleID && winIDStr) {
-            if (strcmp(bundleID, "net.sourceforge.skim-app.skim") == 0) {
-                info.skimPresent = YES;
-            } else if (info.firstNonSkimWinID == -1) {
-                info.firstNonSkimWinID = atoi(winIDStr);
-            }
+        if ([parts[0] isEqualToString:kSkimBundleID]) {
+            info.skimPresent = YES;
+        } else if (info.firstNonSkimWinID == -1) {
+            info.firstNonSkimWinID = parts[1].intValue;
         }
 
-        if (info.skimPresent && info.firstNonSkimWinID != -1) break;
-        line = strtok_r(NULL, "\n", &lineSavePtr);
-    }
+        if (info.skimPresent && info.firstNonSkimWinID != -1) *stop = YES;
+    }];
 
-    free(rawInfo);
     return info;
 }
 
@@ -137,10 +121,8 @@ int switchFocus(NSString *direction) {
     BOOL isSkim = [front.bundleIdentifier isEqualToString:kSkimBundleID];
 
     if (isSkim && [direction isEqualToString:@"down"]) return 0;
-    if (!isSkim && ![direction isEqualToString:@"down"] && ![direction isEqualToString:@"up"]) {
+    if (!isSkim && ![direction isEqualToString:@"down"] && ![direction isEqualToString:@"up"])
         return AerospaceRun(@[@"focus", direction]);
-    }
-
 
     WorkspaceInfo info = GetWorkspaceInfo();
 
@@ -148,23 +130,18 @@ int switchFocus(NSString *direction) {
         NSRunningApplication *skim =
             [NSRunningApplication runningApplicationsWithBundleIdentifier:kSkimBundleID].firstObject;
         if (skim) {
-            NSString *workspace  = GetFocusedWorkspace();
-            NSString *savedTitle = LoadSkimTitle(workspace);
-            FocusSkimWindow(skim, savedTitle);
+            FocusSkimWindow(skim, LoadSkimTitle(GetFocusedWorkspace()));
             return 0;
         }
     }
 
     if (isSkim && [direction isEqualToString:@"up"] && info.firstNonSkimWinID != -1) {
-        NSString *workspace   = GetFocusedWorkspace();
         AXUIElementRef focused = GetFocusedWindowForPID(front.processIdentifier);
         if (focused) {
-            NSString *title = AXWindowTitle(focused);
-            SaveSkimTitle(title ?: @"", workspace);
+            SaveSkimTitle(AXWindowTitle(focused) ?: @"", GetFocusedWorkspace());
             CFRelease(focused);
         }
-        NSString *winIDStr = [NSString stringWithFormat:@"%d", info.firstNonSkimWinID];
-        return AerospaceRun(@[@"focus", @"--window-id", winIDStr]);
+        return AerospaceRun(@[@"focus", @"--window-id", [NSString stringWithFormat:@"%d", info.firstNonSkimWinID]]);
     }
 
     return AerospaceRun(@[@"focus", direction]);
