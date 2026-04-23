@@ -127,7 +127,6 @@ void createNote(const char *inKeywords) {
             NSString *nsTarget = [NSString stringWithFormat:@"%s/%05d/%05d.tex", atticDir, id, id];
             RunLauncher(nsTarget);
         }
-        // usleep(100000);
         AerospaceClose(nil);
         exit(0);
     }
