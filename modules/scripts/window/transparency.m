@@ -1,6 +1,6 @@
-#import <Cocoa/Cocoa.h>
-#import <QuartzCore/QuartzCore.h>
-#import <CoreImage/CoreImage.h>
+#include <Cocoa/Cocoa.h>
+#include <QuartzCore/QuartzCore.h>
+#include <CoreImage/CoreImage.h>
 
 typedef int CGSConnectionID;
 extern CGSConnectionID CGSMainConnectionID(void);

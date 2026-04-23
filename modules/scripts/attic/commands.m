@@ -1,4 +1,5 @@
-#include "attic.h"
+#import "attic.h"
+#include <readline/readline.h>
 #include <spawn.h>
 
 extern char **environ;
@@ -91,8 +92,15 @@ void createNote(const char *inKeywords) {
         strncpy(keywords, inKeywords, sizeof(keywords)-1);
         printf("Note %05d created automatically.\n", id);
     } else {
-        printf("%sEnter keywords for note %05d: %s", PURPLE, id, NC);
-        if (fgets(keywords, sizeof(keywords), stdin)) { TrimEnd(keywords); }
+        char prompt[256];
+        snprintf(prompt, sizeof(prompt), "\x01%s\x02Enter keywords for note %05d: \x01%s\x02", PURPLE, id, NC);
+
+        char *input = readline(prompt);
+        if (input) {
+            strncpy(keywords, input, sizeof(keywords)-1);
+            TrimEnd(keywords);
+            free(input);
+        }
     }
 
     char cleanKeys[512] = "";

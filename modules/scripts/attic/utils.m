@@ -1,5 +1,5 @@
-#include "texManager.h"
-#include "attic.h"
+#import "texManager.h"
+#import "attic.h"
 
 char atticDir[PATH_MAX];
 int isInteractive = 0;

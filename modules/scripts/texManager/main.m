@@ -1,7 +1,6 @@
 #import "commonUtils.h"
 #import "texManager.h"
-#import <Foundation/Foundation.h>
-#import <getopt.h>
+#include <getopt.h>
 
 void help(char *name) {
     fprintf(stderr, "Usage: %s [-c continuous] [-e engine] [-C clean] [-s svg] [-o outputDir] <fileOrDir>\n", name);

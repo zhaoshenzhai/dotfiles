@@ -1,5 +1,5 @@
 #import "commonUtils.h"
-#import <spawn.h>
+#include <spawn.h>
 
 extern char **environ;
 

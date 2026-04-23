@@ -1,8 +1,8 @@
 #pragma once
 
-#import <ScriptingBridge/ScriptingBridge.h>
-#import <Foundation/Foundation.h>
-#import <AppKit/AppKit.h>
+#include <ScriptingBridge/ScriptingBridge.h>
+#include <Foundation/Foundation.h>
+#include <AppKit/AppKit.h>
 
 // --- System and App Process Utilities ---
 pid_t GetSkimPID(void);

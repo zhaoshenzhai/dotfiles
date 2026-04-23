@@ -1,4 +1,4 @@
-#include "graph.h"
+#import "graph.h"
 
 float k = 10.0f;
 float repulsion = 1000.0f;

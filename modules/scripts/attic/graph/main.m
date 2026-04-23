@@ -1,4 +1,4 @@
-#include "graph.h"
+#import "graph.h"
 #include <unistd.h>
 #include <objc/objc.h>
 #include <objc/message.h>

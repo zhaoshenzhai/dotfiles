@@ -1,4 +1,5 @@
 #import "commonUtils.h"
+#include <readline/readline.h>
 #include <unistd.h>
 
 static NSString * const repoNames[] = { @"Courses", @"Dotfiles", @"Projects", @"Website" };
@@ -136,16 +137,21 @@ static bool HandleCommitPrompt(void) {
 }
 
 static void HandleRemoval(void) {
-    char inputBuf[1024];
     while (true) {
-        printf("\n%sRemove files? [N/(string)]%s ", PURPLE, NC);
-        fflush(stdout);
-        if (!fgets(inputBuf, sizeof(inputBuf), stdin)) break;
+        char prompt[256];
+        // Wrap color macros in \x01 and \x02
+        snprintf(prompt, sizeof(prompt), "\n\x01%s\x02Remove files? [N/(string)]\x01%s\x02 ", PURPLE, NC);
+
+        char *inputBuf = readline(prompt);
+        if (!inputBuf) break; // Handles EOF/Ctrl+D
+
         TrimEnd(inputBuf);
 
-        if (strlen(inputBuf) == 0 || strcasecmp(inputBuf, "n") == 0) break;
+        if (strlen(inputBuf) == 0 || strcasecmp(inputBuf, "n") == 0) { free(inputBuf); break; }
 
         NSString *inputStr = [NSString stringWithUTF8String:inputBuf];
+        free(inputBuf);
+
         NSArray *filesToRemove = [inputStr componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         NSMutableArray *restoreArgs = [NSMutableArray arrayWithObjects:@"git", @"restore", @"--staged", nil];
 
@@ -159,24 +165,35 @@ static void HandleRemoval(void) {
 }
 
 static void Commit(void) {
-    char msgBuf[4096];
+    char *msgBuf = NULL;
     bool first = true;
 
     while (true) {
         if (first) { printf("\n"); first = false; }
 
-        printf("%sMessage:%s ", PURPLE, NC);
-        fflush(stdout);
+        char prompt[256];
+        snprintf(prompt, sizeof(prompt), "\x01%s\x02Message:\x01%s\x02 ", PURPLE, NC);
 
-        if (fgets(msgBuf, sizeof(msgBuf), stdin)) {
+        msgBuf = readline(prompt);
+
+        if (msgBuf) {
             TrimEnd(msgBuf);
             if (strlen(msgBuf) > 0) break;
+
+            // Free and prompt again if empty
+            free(msgBuf);
+            msgBuf = NULL;
+        } else {
+            break; // EOF
         }
     }
 
-    printf("\n");
-    RunInteractive(@"/usr/bin/env", @[@"git", @"commit", @"-m", [NSString stringWithUTF8String:msgBuf]]);
-    printf("\n");
+    if (msgBuf) {
+        printf("\n");
+        RunInteractive(@"/usr/bin/env", @[@"git", @"commit", @"-m", [NSString stringWithUTF8String:msgBuf]]);
+        printf("\n");
+        free(msgBuf);
+    }
 }
 
 static void Push(void) {
@@ -198,11 +215,11 @@ static void Push(void) {
         if (errStr.length > 0) printf("%s", [errStr UTF8String]);
 
         if ([errStr containsString:@"fatal"]) {
-            printf("\n%sAttempt %d: Authentication failed. Please enter your PAT:%s ", RED, attempt, NC);
-            fflush(stdout);
+            char prompt[256];
+            snprintf(prompt, sizeof(prompt), "\n\x01%s\x02Attempt %d: Authentication failed. Please enter your PAT:\x01%s\x02 ", RED, attempt, NC);
 
-            char patBuf[1024];
-            if (fgets(patBuf, sizeof(patBuf), stdin)) {
+            char *patBuf = readline(prompt);
+            if (patBuf) {
                 TrimEnd(patBuf);
                 if (strlen(patBuf) > 0) {
                     RunCommandWait(@"/usr/bin/env", @[@"git", @"config", @"--global", @"credential.helper", @"store"]);
@@ -210,6 +227,7 @@ static void Push(void) {
                     NSString *credPath = [NSHomeDirectory() stringByAppendingPathComponent:@".git-credentials"];
                     [credStr writeToFile:credPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
                 }
+                free(patBuf);
             }
             attempt++;
         } else {

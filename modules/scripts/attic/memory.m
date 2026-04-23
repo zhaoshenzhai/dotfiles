@@ -1,4 +1,4 @@
-#include "attic.h"
+#import "attic.h"
 #include <dirent.h>
 
 void addOutLink(int src, int target, int lineNumber) {

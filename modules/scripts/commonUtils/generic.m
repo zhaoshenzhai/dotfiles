@@ -1,5 +1,5 @@
 #import "commonUtils.h"
-#import <termios.h>
+#include <termios.h>
 
 int GetCh(void) {
     struct termios oldattr, newattr;

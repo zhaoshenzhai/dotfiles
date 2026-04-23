@@ -1,4 +1,4 @@
-#include "graph.h"
+#import "graph.h"
 
 Node *graphNodes = NULL;
 Edge *graphEdges = NULL;

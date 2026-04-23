@@ -1,8 +1,8 @@
 #pragma once
 
-#import <ApplicationServices/ApplicationServices.h>
-#import <Foundation/Foundation.h>
-#import <AppKit/AppKit.h>
+#include <ApplicationServices/ApplicationServices.h>
+#include <Foundation/Foundation.h>
+#include <AppKit/AppKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

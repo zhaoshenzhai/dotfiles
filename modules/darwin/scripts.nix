@@ -36,9 +36,9 @@
             ${scriptsDir}/commonUtils/*.m ${scriptsDir}/texManager/*.m -o $out/bin/texManager
     '';
 
-    gitCommit = pkgs.runCommandCC "gitCommit" {} ''
+    gitCommit = pkgs.runCommandCC "gitCommit" { buildInputs = with pkgs; [ readline ]; } ''
         mkdir -p $out/bin
-        $CC -O3 -fobjc-arc -framework ApplicationServices -framework Foundation -framework AppKit \
+        $CC -O3 -fobjc-arc -framework ApplicationServices -framework Foundation -framework AppKit -lreadline \
             -I${scriptsDir} -I${scriptsDir}/commonUtils \
             ${scriptsDir}/commonUtils/*.m ${scriptsDir}/git.m -o $out/bin/gitCommit
     '';
@@ -58,9 +58,9 @@
             ${scriptsDir}/commonUtils/*.m ${scriptsDir}/launcher.m -o $out/bin/launcher
     '';
 
-    attic = pkgs.runCommandCC "attic" { buildInputs = with pkgs; [ raylib cjson cm_unicode ]; } ''
+    attic = pkgs.runCommandCC "attic" { buildInputs = with pkgs; [ raylib cjson cm_unicode readline ]; } ''
         mkdir -p $out/bin
-        $CC -O3 -fobjc-arc -framework ApplicationServices -framework Foundation -framework AppKit \
+        $CC -O3 -fobjc-arc -framework ApplicationServices -framework Foundation -framework AppKit -lreadline \
             -I${scriptsDir} -I${scriptsDir}/commonUtils -I${scriptsDir}/texManager \
             ${scriptsDir}/commonUtils/*.m ${scriptsDir}/texManager/compiler.m ${scriptsDir}/attic/*.m -o $out/bin/attic
 

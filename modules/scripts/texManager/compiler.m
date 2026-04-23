@@ -1,6 +1,6 @@
 #import "texManager.h"
 #import "commonUtils.h"
-#import <Foundation/Foundation.h>
+#include <Foundation/Foundation.h>
 
 static NSArray<NSString *> *GetCleanExtensions(void) {
     return @[

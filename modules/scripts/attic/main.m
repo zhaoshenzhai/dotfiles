@@ -1,4 +1,4 @@
-#include "attic.h"
+#import "attic.h"
 
 void promptExit() {
     printf("\n%sPress [Y] to return, exiting otherwise...%s ", CYAN, NC);

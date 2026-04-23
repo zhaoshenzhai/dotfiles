@@ -1,6 +1,6 @@
 #import "commonUtils.h"
 #import "texManager.h"
-#import <getopt.h>
+#include <getopt.h>
 
 static void FixDate(NSString **month, NSString **date, NSString **mod) {
     if (!*month || !*date) return;

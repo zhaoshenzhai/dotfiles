@@ -1,4 +1,4 @@
-#include "graph.h"
+#import "graph.h"
 
 void assignNodeColors(void) {
     bool *visited = calloc(nodeCount, sizeof(bool));
