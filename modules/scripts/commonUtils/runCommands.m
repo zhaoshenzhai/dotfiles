@@ -125,6 +125,9 @@ void AerospaceClose(NSString *windowID) {
         AerospaceRun(@[@"move-node-to-workspace", @"0"]);
     }
 
+    NSString *remainingWindows = AerospaceOutput(@[@"list-windows", @"--workspace", @"focused", @"--format", @"%{window-id}"]);
+    if (remainingWindows.length == 0) RunCommandWait(@"/usr/bin/open", @[@"-a", @"Skim"]);
+
     usleep(500000);
 
     NSString *ghostIDs = AerospaceOutput(@[@"list-windows", @"--workspace", @"0", @"--format", @"%{window-id}"]);
