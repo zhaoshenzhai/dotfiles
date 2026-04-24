@@ -15,7 +15,6 @@
 
     home.packages = with pkgs; [
         aerospace
-        fastfetch
         (texlive.combine { inherit (texlive) scheme-full latexmk; })
     ];
 
@@ -29,6 +28,7 @@
         ./starship.nix
         ./alacritty.nix
         ./karabiner.nix
+        ./fastfetch.nix
         ./sketchybar.nix
         ./qutebrowser.nix
     ];

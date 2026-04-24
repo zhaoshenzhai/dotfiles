@@ -27,6 +27,8 @@
         };
 
         initContent = lib.mkBefore ''
+            fastfetch
+
             autoload -Uz compinit
             ZCOMP="/Users/zhao/.config/zsh/.zcompdump"
 
@@ -54,6 +56,21 @@
             export BLUE='\033[0;34m'
             export RED='\033[0;31m'
             export NC='\033[0m'
+
+            (
+                update_cache() {
+                    local module=$1
+                    local file=~/.cache/fastfetch/$2
+                    fastfetch --config none --structure "$module" --logo none | sed 's/^[^:]*: //' > "$file.tmp"
+                    mv "$file.tmp" "$file"
+                }
+
+                update_cache packages myPackages
+                update_cache shell myShell
+                update_cache editor myEditor
+                update_cache wm myWM
+                update_cache weather myWeather
+            ) &!
         '';
     };
 }
