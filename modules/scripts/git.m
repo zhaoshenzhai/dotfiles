@@ -42,7 +42,7 @@ static NSString *ResolveRepository(void) {
 
     for (NSUInteger i = 0; i < repoCount; i++) {
         [fm changeCurrentDirectoryPath:repoPaths[i]];
-        NSString *status = RunCommandOutput(@"/usr/bin/env", @[@"git", @"status", @"--porcelain"]);
+        NSString *status = RunCommandOutput(@"/usr/bin/env", @[@"git", @"status", @"--porcelain", @"--", @":!attic/notes/*.svg"]);
         if (status.length > 0) {
             [changedIndices addObject:@(i)];
         }
@@ -97,14 +97,40 @@ static void CleanupIgnoredFiles(void) {
 }
 
 static void ShowStatus(void) {
-    NSString *statusOutput = RunCommandOutput(@"/usr/bin/env", @[@"git", @"-c", @"color.status=always", @"status"]);
+    NSString *statusOutput = RunCommandOutput(@"/usr/bin/env",
+            @[@"git", @"-c", @"color.status=always", @"status", @"--", @":!attic/notes/*.svg"]);
     statusOutput = [statusOutput stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     printf("\n%s\n", [statusOutput UTF8String]);
 }
 
 static bool HasChangesToCommit(void) {
-    NSString *statusCheck = RunCommandOutput(@"/usr/bin/env", @[@"git", @"status"]);
-    return ![statusCheck containsString:@"nothing to commit"];
+    NSString *statusCheck = RunCommandOutput(@"/usr/bin/env", @[@"git", @"status", @"--porcelain", @"--", @":!attic/notes/*.svg"]);
+    return statusCheck.length > 0;
+}
+
+static void HandleSilentWebUpdates(NSString *webPath) {
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSString *currentDir = [fm currentDirectoryPath];
+    [fm changeCurrentDirectoryPath:webPath];
+
+    RunCommandWait(@"/usr/bin/env", @[@"git", @"add", @"--all", @"attic/notes/*.svg"]);
+
+    NSString *statusOutput = RunCommandOutput(@"/usr/bin/env", @[@"git", @"status", @"--porcelain", @"--staged"]);
+    statusOutput = [statusOutput stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+
+    if (statusOutput.length > 0) {
+        RunCommandWait(@"/usr/bin/env", @[@"git", @"commit", @"-m", @"Updated attic notes"]);
+
+        NSTask *task = [[NSTask alloc] init];
+        task.executableURL = [NSURL fileURLWithPath:@"/usr/bin/env"];
+        task.arguments = @[@"git", @"push"];
+        task.standardOutput = [NSFileHandle fileHandleWithNullDevice];
+        task.standardError = [NSFileHandle fileHandleWithNullDevice];
+        [task launch];
+        [task waitUntilExit];
+    }
+
+    [fm changeCurrentDirectoryPath:currentDir];
 }
 
 static bool HandleDiffPrompt(void) {
@@ -117,7 +143,7 @@ static bool HandleDiffPrompt(void) {
         return false;
     } else if (diffChoice != 'n' && diffChoice != 'N') {
         printf("\n");
-        RunCommandWait(@"/usr/bin/env", @[@"git", @"add", @"."]);
+        RunCommandWait(@"/usr/bin/env", @[@"git", @"add", @".", @":!attic/notes/*.svg"]);
         RunInteractive(@"/usr/bin/env", @[@"git", @"--no-pager", @"-c", @"color.diff=always", @"diff", @"--staged"]);
     }
     return true;
@@ -131,7 +157,7 @@ static bool HandleCommitPrompt(void) {
 
     if (commitChoice == 'q' || commitChoice == 'Q' || commitChoice == 'n' || commitChoice == 'N') return false;
 
-    RunCommandWait(@"/usr/bin/env", @[@"git", @"add", @"."]);
+    RunCommandWait(@"/usr/bin/env", @[@"git", @"add", @".", @":!attic/notes/*.svg"]);
     ShowStatus();
     return true;
 }
@@ -258,6 +284,8 @@ int main(int argc, char **argv) {
             HandleRemoval();
             Commit();
             Push();
+
+            if ([targetPath hasSuffix:@"Projects"]) HandleSilentWebUpdates(repoPaths[3]);
 
             if (PromptExitOrReturn()) { continue; } break;
         }
