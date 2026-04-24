@@ -39,7 +39,7 @@ void loadMemory(void) {
     freeMemory();
     if (notes) { memset(notes, 0, noteCapacity * sizeof(Note)); }
 
-    DIR *dir = opendir(atticDir);
+    DIR *dir = opendir(kAtticPath.UTF8String);
     if (!dir) return;
 
     struct dirent *entry;
@@ -50,10 +50,10 @@ void loadMemory(void) {
             notes[id].active = 1;
 
             char path[PATH_MAX];
-            snprintf(path, sizeof(path), "%s/%05d/%05d.pdf", atticDir, id, id);
+            snprintf(path, sizeof(path), "%s/%05d/%05d.pdf", kAtticPath.UTF8String, id, id);
             notes[id].hasPdf = (access(path, F_OK) == 0);
 
-            snprintf(path, sizeof(path), "%s/%05d/%05d.key", atticDir, id, id);
+            snprintf(path, sizeof(path), "%s/%05d/%05d.key", kAtticPath.UTF8String, id, id);
             FILE *fkey = fopen(path, "r");
             if (fkey) {
                 char tempKeys[1024] = "";
@@ -64,7 +64,7 @@ void loadMemory(void) {
                 fclose(fkey);
             }
 
-            snprintf(path, sizeof(path), "%s/%05d/%05d.dat", atticDir, id, id);
+            snprintf(path, sizeof(path), "%s/%05d/%05d.dat", kAtticPath.UTF8String, id, id);
             FILE *fdat = fopen(path, "r");
             if (fdat) {
                 char line[4096];
@@ -90,7 +90,7 @@ void loadMemory(void) {
         if (!notes[i].active) continue;
 
         char path[PATH_MAX];
-        snprintf(path, sizeof(path), "%s/%05d/%05d.tex", atticDir, i, i);
+        snprintf(path, sizeof(path), "%s/%05d/%05d.tex", kAtticPath.UTF8String, i, i);
         FILE *ftex = fopen(path, "r");
         if (!ftex) continue;
 

@@ -39,7 +39,7 @@ int generateMetadata(int id) {
         modDate, SAFE_STR(notes[id].keys), refs, refIn);
 
     char datPath[PATH_MAX];
-    snprintf(datPath, sizeof(datPath), "%s/%05d/%05d.dat", atticDir, id, id);
+    snprintf(datPath, sizeof(datPath), "%s/%05d/%05d.dat", kAtticPath.UTF8String, id, id);
 
     int needsWrite = 1;
     FILE *fcheck = fopen(datPath, "r");
@@ -66,14 +66,14 @@ int generateMetadata(int id) {
 }
 
 void createNote(const char *inKeywords) {
-    EnsureDirectoryExists(atticDir);
+    EnsureDirectoryExists(kAtticPath.UTF8String);
 
     int id;
     char path[PATH_MAX];
     srand(time(NULL));
     while (1) {
         id = rand() % 100000;
-        snprintf(path, sizeof(path), "%s/%05d", atticDir, id);
+        snprintf(path, sizeof(path), "%s/%05d", kAtticPath.UTF8String, id);
         if (access(path, F_OK) != 0) break;
     }
 
@@ -116,7 +116,7 @@ void createNote(const char *inKeywords) {
         finalKeys[k++] = cleanKeys[i];
     }
 
-    snprintf(path, sizeof(path), "%s/%05d/%05d.key", atticDir, id, id);
+    snprintf(path, sizeof(path), "%s/%05d/%05d.key", kAtticPath.UTF8String, id, id);
     FILE *fkey = fopen(path, "w");
     if (fkey) { fputs(finalKeys, fkey); fputs("\n", fkey); fclose(fkey); }
 
@@ -132,7 +132,7 @@ void createNote(const char *inKeywords) {
 
     if (isInteractive) {
         @autoreleasepool {
-            NSString *nsTarget = [NSString stringWithFormat:@"%s/%05d/%05d.tex", atticDir, id, id];
+            NSString *nsTarget = [NSString stringWithFormat:@"%s/%05d/%05d.tex", kAtticPath.UTF8String, id, id];
             RunLauncher(nsTarget);
         }
         AerospaceClose(nil);
@@ -312,8 +312,8 @@ void rebuildNotes(void) {
         for (int j = 0; j < MAX_JOBS; j++) { \
             if (jobs[j].pid == (p)) { \
                 char dp[PATH_MAX], bp[PATH_MAX]; \
-                snprintf(dp, sizeof(dp), "%s/%05d/%05d.dat", atticDir, jobs[j].id, jobs[j].id); \
-                snprintf(bp, sizeof(bp), "%s/%05d/%05d.dat.bak", atticDir, jobs[j].id, jobs[j].id); \
+                snprintf(dp, sizeof(dp), "%s/%05d/%05d.dat", kAtticPath.UTF8String, jobs[j].id, jobs[j].id); \
+                snprintf(bp, sizeof(bp), "%s/%05d/%05d.dat.bak", kAtticPath.UTF8String, jobs[j].id, jobs[j].id); \
                 \
                 int diff = (totalLines > 0 ? totalLines - 1 : 0) - jobs[j].row; \
                 if (diff > 0) printf("\033[%dA", diff); \
@@ -348,8 +348,8 @@ void rebuildNotes(void) {
         if (isCompiling(i)) { continue; }
 
         char dp[PATH_MAX], bp[PATH_MAX];
-        snprintf(dp, sizeof(dp), "%s/%05d/%05d.dat", atticDir, i, i);
-        snprintf(bp, sizeof(bp), "%s/%05d/%05d.dat.bak", atticDir, i, i);
+        snprintf(dp, sizeof(dp), "%s/%05d/%05d.dat", kAtticPath.UTF8String, i, i);
+        snprintf(bp, sizeof(bp), "%s/%05d/%05d.dat.bak", kAtticPath.UTF8String, i, i);
         rename(dp, bp);
 
         generateMetadata(i);
@@ -450,7 +450,7 @@ void rebuildNotes(void) {
 
 void exportGraph(int silent) {
     char path[PATH_MAX];
-    snprintf(path, sizeof(path), "%s/../graph.json", atticDir);
+    snprintf(path, sizeof(path), "%s/../graph.json", kAtticPath.UTF8String);
 
     FILE *f = fopen(path, "w");
     if (!f) {
@@ -500,7 +500,7 @@ void exportGraph(int silent) {
 void launchGraph(void) {
     exportGraph(1);
     char cmd[PATH_MAX + 128];
-    snprintf(cmd, sizeof(cmd), "cd '%s/..' && nohup bash -c 'exec -a attic attic-graph' > /dev/null 2>&1 &", atticDir);
+    snprintf(cmd, sizeof(cmd), "cd '%s/..' && nohup bash -c 'exec -a attic attic-graph' > /dev/null 2>&1 &", kAtticPath.UTF8String);
     system(cmd);
 
     AerospaceClose(nil);

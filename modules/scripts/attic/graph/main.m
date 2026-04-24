@@ -52,7 +52,7 @@ void openNote(const char* id) {
     if (!home) home = "";
 
     @autoreleasepool {
-        NSString *targetPath = [NSString stringWithFormat:@"%s/iCloud/Projects/_attic/notes/%s/%s.pdf", home, id, id];
+        NSString *targetPath = [NSString stringWithFormat:@"%s/%s/%s.pdf", kAtticPath.UTF8String, id, id];
         RunLauncher(targetPath);
     }
 
@@ -206,7 +206,11 @@ void draw() {
 int main(void) {
     initializeWindow();
     initializeLabels();
-    initializeGraph("graph.json", screenWidth, screenHeight);
+
+    @autoreleasepool {
+        NSString *graphPath = [NSString stringWithFormat:@"%s/../graph.json", kAtticPath.UTF8String];
+        initializeGraph(graphPath.UTF8String, screenWidth, screenHeight);
+    }
 
     int draggedNodeIndex = -1;
     bool isPanning = false;

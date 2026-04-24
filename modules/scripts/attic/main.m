@@ -56,9 +56,6 @@ void interactiveMenu() {
 
 int main(int argc, char **argv) {
     EnsureSystemPath();
-
-    snprintf(atticDir, sizeof(atticDir), "%s/Projects/_attic/notes", kBaseDir.UTF8String);
-
     loadMemory();
 
     if (argc > 1) {

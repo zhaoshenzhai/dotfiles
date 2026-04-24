@@ -17,11 +17,9 @@ typedef struct {
     Todo *todos;       int todoCount; int todoCapacity;
 } Note;
 
-extern char atticDir[PATH_MAX];
-extern int isInteractive;
-
 extern Note *notes;
 extern int noteCapacity;
+extern int isInteractive;
 
 void formatLinks(int *ids, int count, char *outBuf);
 int isCompiling(int id);

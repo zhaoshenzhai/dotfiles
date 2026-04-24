@@ -22,6 +22,8 @@ extern NSString *const kLaTeXTemplateDir;
 extern NSString *const kAerospacePath;
 extern NSString *const kNvimPath;
 extern NSString *const kLauncherPath;
+extern NSString *const kAtticPath;
+extern NSString *const kWebAtticPath;
 
 // --- Command execution ---
 int RunCommandWait(NSString *cmdPath, NSArray<NSString *> *argsArray);

@@ -2,11 +2,9 @@
 #import "attic.h"
 #include <dirent.h>
 
-char atticDir[PATH_MAX];
-int isInteractive = 0;
-
 Note *notes = NULL;
 int noteCapacity = 0;
+int isInteractive = 0;
 
 void ensureNoteCapacity(int maxID) {
     if (maxID >= noteCapacity) {
@@ -53,13 +51,10 @@ int isCompiling(int id) {
 }
 
 int compileNoteSync(int id) {
-    char webOutDir[PATH_MAX];
-    snprintf(webOutDir, sizeof(webOutDir), "%s/Projects/_web/attic/notes", kBaseDir.UTF8String);
-
     char dirPath[PATH_MAX];
     char fileName[64];
 
-    snprintf(dirPath, sizeof(dirPath), "%s/%05d", atticDir, id);
+    snprintf(dirPath, sizeof(dirPath), "%s/%05d", kAtticPath.UTF8String, id);
     snprintf(fileName, sizeof(fileName), "%05d.tex", id);
 
     TexConfig config;
@@ -69,7 +64,7 @@ int compileNoteSync(int id) {
     __block int pdf_exit = 1;
     __block int svg_exit = 1;
 
-    char *ptrWebOutDir = webOutDir;
+    char *ptrWebOutDir = (char *)kWebAtticPath.UTF8String;
     char *ptrDirPath = dirPath;
     char *ptrFileName = fileName;
     TexConfig *ptrConfig = &config;
@@ -122,9 +117,7 @@ int compareModDateDesc(const void *a, const void *b) {
 }
 
 void cleanOrphanedSVGs(void) {
-    char webOutDir[PATH_MAX];
-    snprintf(webOutDir, sizeof(webOutDir), "%s/Projects/_web/attic/notes", kBaseDir.UTF8String);
-
+    const char *webOutDir = kWebAtticPath.UTF8String;
     DIR *dir = opendir(webOutDir);
     if (!dir) return;
 
