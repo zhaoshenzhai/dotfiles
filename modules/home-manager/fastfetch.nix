@@ -21,7 +21,7 @@
                         host = "magenta";
                     };
                 }
-                "separator"
+                "break"
                 "os"
                 "host"
                 "cpu"
