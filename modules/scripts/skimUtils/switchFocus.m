@@ -121,14 +121,12 @@ int switchFocus(NSString *direction) {
     BOOL isSkim = [front.bundleIdentifier isEqualToString:kSkimBundleID];
 
     if (isSkim && [direction isEqualToString:@"down"]) return 0;
-    if (!isSkim && ![direction isEqualToString:@"down"] && ![direction isEqualToString:@"up"])
-        return AerospaceRun(@[@"focus", direction]);
+    if (!isSkim && ![direction isEqualToString:@"down"] && ![direction isEqualToString:@"up"]) return AerospaceRun(@[@"focus", direction]);
 
     WorkspaceInfo info = GetWorkspaceInfo();
 
     if (!isSkim && [direction isEqualToString:@"down"] && info.skimPresent) {
-        NSRunningApplication *skim =
-            [NSRunningApplication runningApplicationsWithBundleIdentifier:kSkimBundleID].firstObject;
+        NSRunningApplication *skim = [NSRunningApplication runningApplicationsWithBundleIdentifier:kSkimBundleID].firstObject;
         if (skim) {
             FocusSkimWindow(skim, LoadSkimTitle(GetFocusedWorkspace()));
             return 0;
