@@ -27,6 +27,10 @@
         };
 
         initContent = lib.mkBefore ''
+            if [[ -t 0 ]]; then
+                stty -echo 2>/dev/null
+            fi
+
             fastfetch
 
             autoload -Uz compinit
@@ -36,10 +40,6 @@
                 compinit -C -d "$ZCOMP"
             else
                 compinit -d "$ZCOMP"
-            fi
-
-            if [[ ! -f "$ZCOMP.zwc" || "$ZCOMP" -nt "$ZCOMP.zwc" ]]; then
-                zcompile "$ZCOMP" &!
             fi
 
             bindkey '^[[Z' autosuggest-accept
@@ -72,6 +72,35 @@
                 update_cache editor myEditor
                 update_cache weather myWeather
             ) &!
+
+            autoload -Uz add-zle-hook-widget
+            function _restore_tty_echo() {
+                if [[ -t 0 ]]; then
+                    stty echo 2>/dev/null
+                fi
+                add-zle-hook-widget -d line-init _restore_tty_echo
+            }
+            add-zle-hook-widget line-init _restore_tty_echo
+        '';
+    };
+
+    home.activation = {
+        zcompileCache = lib.hm.dag.entryAfter ["writeBoundary"] ''
+            $DRY_RUN_CMD ${pkgs.zsh}/bin/zsh -c '
+                ZDIR="/Users/zhao/.config/zsh"
+
+                if [[ -f "$ZDIR/.zshenv" ]]; then
+                    zcompile -M "$ZDIR/.zshenv"
+                fi
+
+                if [[ -f "$ZDIR/.zshrc" ]]; then
+                    zcompile -M "$ZDIR/.zshrc"
+                fi
+
+                if [[ -f "$ZDIR/.zcompdump" ]]; then
+                    zcompile -M "$ZDIR/.zcompdump"
+                fi
+            '
         '';
     };
 }

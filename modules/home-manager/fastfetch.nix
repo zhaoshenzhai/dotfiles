@@ -8,13 +8,19 @@
             display = {
                 separator = " ➜ ";
                 color = {
-                    keys = "magenta";
-                    title = "cyan";
+                    keys = "green";
                 };
             };
 
             modules = [
-                "title"
+                {
+                    type = "title";
+                    color = {
+                        user = "cyan";
+                        at = "white";
+                        host = "magenta";
+                    };
+                }
                 "separator"
                 "os"
                 "host"
@@ -27,8 +33,7 @@
                 { type = "command"; key = "Shell";    text = "cat ~/.cache/fastfetch/myShell    2>/dev/null || echo 'Pending...'"; }
                 { type = "command"; key = "Editor";   text = "cat ~/.cache/fastfetch/myEditor   2>/dev/null || echo 'Pending...'"; }
                 { type = "command"; key = "Weather";  text = "cat ~/.cache/fastfetch/myWeather  2>/dev/null || echo 'Pending...'"; }
-                "break"
-                "colors"
+                "media"
             ];
         };
     };
