@@ -65,10 +65,11 @@
                     mv "$file.tmp" "$file"
                 }
 
+                update_cache wm myWM
                 update_cache packages myPackages
+                update_cache terminal myTerminal
                 update_cache shell myShell
                 update_cache editor myEditor
-                update_cache wm myWM
                 update_cache weather myWeather
             ) &!
         '';
