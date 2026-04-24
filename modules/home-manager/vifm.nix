@@ -16,6 +16,7 @@
             set dotfiles
             set ignorecase
             set statusline=" "
+            set mouse=c
 
             set viewcolumns=-{name}..,6{size},12{mtime}
             set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,phistory,fhistory,dirstack,registers,bookmarks,tabs
