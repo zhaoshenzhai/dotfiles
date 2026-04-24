@@ -3,7 +3,7 @@
         enable = true;
         enableZshIntegration = true;
         settings = {
-            format = "$directory$line_break$username$hostname$character";
+            format = "\${custom.dir}$username$hostname$character";
 
             username = {
                 show_always = true;
@@ -24,6 +24,13 @@
                 truncation_length = 20;
                 truncation_symbol = "…/";
                 read_only = " 🔒";
+                format = "[$path]($style)[$read_only]($read_only_style)";
+            };
+
+            custom.dir = {
+                command = "starship module directory";
+                when = "[ \"$PWD\" != \"$HOME\" ]";
+                format = "$output\n";
             };
 
             character = {

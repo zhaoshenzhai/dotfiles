@@ -44,3 +44,4 @@ void auditNotes(void);
 void rebuildNotes(void);
 void exportGraph(int silent);
 void launchGraph(void);
+void cleanOrphanedSVGs(void);
