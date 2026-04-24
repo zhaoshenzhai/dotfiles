@@ -203,6 +203,7 @@ void updateMetadata(int id) {
 
 void auditNotes(void) {
     loadMemory();
+    cleanOrphanedSVGs();
     printf("%sVerifying links, missing PDFs, and scanning for TODOs...%s\n", BLUE, NC);
     int broken = 0, todos = 0, desync = 0, missingPdfs = 0;
 

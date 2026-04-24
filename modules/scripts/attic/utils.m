@@ -1,5 +1,6 @@
 #import "texManager.h"
 #import "attic.h"
+#include <dirent.h>
 
 char atticDir[PATH_MAX];
 int isInteractive = 0;
@@ -118,4 +119,33 @@ int compareModDateDesc(const void *a, const void *b) {
     int cmp = strcmp(notes[idB].modDate, notes[idA].modDate);
     if (cmp != 0) { return cmp; }
     return idB - idA;
+}
+
+void cleanOrphanedSVGs(void) {
+    char webOutDir[PATH_MAX];
+    snprintf(webOutDir, sizeof(webOutDir), "%s/Projects/_web/attic/notes", kBaseDir.UTF8String);
+
+    DIR *dir = opendir(webOutDir);
+    if (!dir) return;
+
+    struct dirent *entry;
+    int deletedCount = 0;
+
+    while ((entry = readdir(dir)) != NULL) {
+        if (entry->d_type == DT_REG && strstr(entry->d_name, ".svg") != NULL) {
+            int id, page;
+            if (sscanf(entry->d_name, "%d-%d.svg", &id, &page) == 2) {
+                if (id >= noteCapacity || !notes[id].active) {
+                    char fullPath[PATH_MAX];
+                    snprintf(fullPath, sizeof(fullPath), "%s/%s", webOutDir, entry->d_name);
+                    if (unlink(fullPath) == 0) {
+                        deletedCount++;
+                    }
+                }
+            }
+        }
+    }
+    closedir(dir);
+
+    if (deletedCount > 0) printf("%sCleaned up %d orphaned SVG(s) from web notes.%s\n", BLUE, deletedCount, NC);
 }
