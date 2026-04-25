@@ -68,7 +68,7 @@
                 {
                     type = "command";
                     key = "Media";
-                    text = "cat ~/.cache/fastfetch/myMedia 2>/dev/null | sed 's/.*- //g' | sed 's/ (.*)//g' | awk '{ if (length($0) > 35) print substr($0, 1, 32) \"...\"; else print $0 }' || echo 'Pending...'";
+                    text = "cat ~/.cache/fastfetch/myMedia 2>/dev/null | sed 's/ ([^)]*)$//' | awk -F ' - ' '{ a=$1; t=$2; if(length(a)>15) a=substr(a,1,12)\"...\"; if(length(t)>17) t=substr(t,1,14)\"...\"; if(NF>1) print a \" - \" t; else print substr($0,1,32)\"...\" }' || echo 'Pending...'";
                 }
             ];
         };
