@@ -1,16 +1,9 @@
-{ config, pkgs, ... }:
-
-{
+{ config, pkgs, ... }: {
     programs.fastfetch = {
         enable = true;
 
         settings = {
-            display = {
-                separator = " ➜ ";
-                color = {
-                    keys = "green";
-                };
-            };
+            display = { separator = " ➜ "; color = { keys = "green"; }; };
 
             modules = [
                 { type = "title"; color = { user = "cyan"; at = "white"; host = "magenta"; }; }
