@@ -22,6 +22,11 @@
                 "uptime"
                 {
                     type = "command";
+                    key = "Monitor";
+                    text = "cat ~/.cache/fastfetch/myMonitor 2>/dev/null | sed 's/ -.*//g' || echo 'Pending...'";
+                }
+                {
+                    type = "command";
                     key = "Window manager";
                     text = "cat ~/.cache/fastfetch/myWM 2>/dev/null | grep -o 'AeroSpace [^)]*' || echo 'Pending...'";
                 }
@@ -42,6 +47,11 @@
                 }
                 {
                     type = "command";
+                    key = "Font";
+                    text = "cat ~/.cache/fastfetch/myFont 2>/dev/null | sed 's/Menlo/Courier Prime/g' || echo 'Pending...'";
+                }
+                {
+                    type = "command";
                     key = "Shell";
                     text = "cat ~/.cache/fastfetch/myShell 2>/dev/null || echo 'Pending...'";
                 }
@@ -58,7 +68,7 @@
                 {
                     type = "command";
                     key = "Media";
-                    text = "cat ~/.cache/fastfetch/myMedia 2>/dev/null | awk '{ if (length($0) > 35) print substr($0, 1, 32) \"...\"; else print $0 }' || echo 'Pending...'";
+                    text = "cat ~/.cache/fastfetch/myMedia 2>/dev/null | sed 's/.*- //g' | sed 's/ (.*)//g' | awk '{ if (length($0) > 35) print substr($0, 1, 32) \"...\"; else print $0 }' || echo 'Pending...'";
                 }
             ];
         };

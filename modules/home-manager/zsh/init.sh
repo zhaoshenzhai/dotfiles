@@ -1,6 +1,6 @@
 export CLR_LINES_UP=15
 export CLR_COLUMN=80
-export CLR_WIDTH=90
+export CLR_WIDTH=120
 export CLR_GREEN=$'\e[0;32m'
 export CLR_RESET=$'\e[0m'
 
@@ -11,15 +11,23 @@ hideTTY() {
 }
 
 restoreTTY() {
-    autoload -Uz add-zle-hook-widget
-    function _restore_tty_echo() {
+    restoreEcho() {
         if [[ -t 0 ]]; then
             stty echo 2>/dev/null
-            printf "\e[?25h"
         fi
-        add-zle-hook-widget -d line-init _restore_tty_echo
+        autoload -Uz add-zle-hook-widget
+        add-zle-hook-widget -d line-init restoreEcho
     }
-    add-zle-hook-widget line-init _restore_tty_echo
+
+    restoreCursor() {
+        printf "\e[?25h"
+        autoload -Uz add-zsh-hook
+        add-zsh-hook -d precmd restoreCursor
+    }
+
+    autoload -Uz add-zle-hook-widget add-zsh-hook
+    add-zle-hook-widget line-init restoreEcho
+    add-zsh-hook precmd restoreCursor
 }
 
 setupCompletions() {
@@ -89,9 +97,11 @@ updateFetch() {
         mv "$target.tmp" "$target"
     }
 
+    cacheFF "monitor" "myMonitor"
     cacheFF "wm" "myWM"
     cacheFF "packages" "myPackages"
     cacheFF "terminal" "myTerminal"
+    cacheFF "terminalfont" "myFont"
     cacheFF "shell" "myShell"
     cacheFF "editor" "myEditor"
     cacheFF "weather" "myWeather"
