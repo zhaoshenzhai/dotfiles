@@ -72,7 +72,7 @@ updateCalendar() {
         printf "${CLR_GREEN}Events${CLR_RESET} ➜\n"
         icalbuddy -f -n -nc -li 6 -ps "/ » /" -npn \
             -eep "url,location,notes,attendees" \
-            -ec "Canadian Holidays,United States holidays" \
+            -ec "Canadian Holidays,United States holidays,zhaoshen.zhai@gmail.com" \
             eventsFrom:now to:today+100 2>/dev/null | \
             awk -v l="$CLR_WIDTH" '{ if (length($0) > l) print substr($0, 1, l-3) "..."; else print $0 }'
 
