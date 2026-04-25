@@ -30,17 +30,6 @@ restoreTTY() {
     add-zsh-hook precmd restoreCursor
 }
 
-setupCompletions() {
-    autoload -Uz compinit
-    local zcompdump="/Users/zhao/.config/zsh/.zcompdump"
-
-    if [[ -f "$zcompdump" ]]; then
-        compinit -C -d "$zcompdump"
-    else
-        compinit -d "$zcompdump"
-    fi
-}
-
 setupKeybinds() {
     bindkey '^[[Z' autosuggest-accept
     bindkey '^k' up-line-or-history
@@ -48,6 +37,17 @@ setupKeybinds() {
     bindkey '^h' backward-char
     bindkey '^l' forward-char
     bindkey '^x' delete-char
+}
+
+setupCompletions() {
+    autoload -Uz compinit
+    local zcompdump="$HOME/.config/zsh/.zcompdump"
+
+    if [[ -f "$zcompdump" ]]; then
+        compinit -C -d "$zcompdump"
+    else
+        compinit -d "$zcompdump"
+    fi
 }
 
 renderCalendar() {
@@ -69,21 +69,14 @@ renderCalendar() {
 }
 
 redrawDashboard() {
-    if [[ -f "$HOME/.cache/fastfetch/.first_prompt" ]]; then
+    if [[ -f "$HOME/.cache/fastfetch/.first_prompt" ]] && [[ -f "$HOME/.cache/fastfetch/frame_final" ]]; then
         local DASHBOARD_LINES=18
 
-        printf "\e[?25l"
-        printf "\e7"
-        printf "\e[%dA\e[1G" "$DASHBOARD_LINES"
+        printf "\e[?25l\e7\e[%dA\e[1G" "$DASHBOARD_LINES"
 
-        fastfetch
+        cat "$HOME/.cache/fastfetch/frame_final"
 
-        if [[ -z "$VIFM_FLOAT" ]]; then
-            renderCalendar
-        fi
-
-        printf "\e8"
-        printf "\e[?25h"
+        printf "\e8\e[?25h"
     fi
 }
 
@@ -92,7 +85,7 @@ updateCalendar() {
     local final_file="$HOME/.cache/fastfetch/myCalendar"
 
     {
-        printf "${CLR_GREEN}Events${CLR_RESET} ➜\n"
+        printf "%sEvents%s ➜\n" "$CLR_GREEN" "$CLR_RESET"
         icalbuddy -f -n -nc -li 6 -ps "/ » /" -npn \
             -eep "url,location,notes,attendees" \
             -ec "Canadian Holidays,United States holidays,zhaoshen.zhai@gmail.com" \
@@ -101,11 +94,11 @@ updateCalendar() {
 
         printf "\n"
 
-        printf "${CLR_GREEN}Reminders${CLR_RESET} ➜\n"
+        printf "%sReminders%s ➜\n" "$CLR_GREEN" "$CLR_RESET"
         icalbuddy -li 6 uncompletedTasks | sed 's/ (Reminders)//g' 2>/dev/null | \
             awk -v l="$CLR_WIDTH" '{ if (length($0) > l) print substr($0, 1, l-3) "..."; else print $0 }'
 
-        printf "${CLR_RESET}"
+        printf "%s" "$CLR_RESET"
     } > "$tmp_file"
 
     mv "$tmp_file" "$final_file"
@@ -147,12 +140,23 @@ updateFetch() {
 updateAsync() {
     updateFetch
     updateCalendar
+
+    fastfetch --pipe false | awk '{printf "%s\033[K\n", $0}' > "$HOME/.cache/fastfetch/frame_ff.tmp"
+
+    if [[ -z "$VIFM_FLOAT" ]]; then
+        renderCalendar > "$HOME/.cache/fastfetch/frame_cal.tmp"
+    else
+        > "$HOME/.cache/fastfetch/frame_cal.tmp"
+    fi
+
+    cat "$HOME/.cache/fastfetch/frame_ff.tmp" "$HOME/.cache/fastfetch/frame_cal.tmp" > "$HOME/.cache/fastfetch/frame_final.tmp"
+    mv "$HOME/.cache/fastfetch/frame_final.tmp" "$HOME/.cache/fastfetch/frame_final"
+
     kill -USR1 "$1" 2>/dev/null
 }
 
 main() {
     zle -N redrawDashboardWidget redrawDashboard
-
     TRAPUSR1() {
         if zle; then
             zle redrawDashboardWidget
@@ -160,10 +164,14 @@ main() {
     }
 
     hideTTY
-    fastfetch
 
-    if [[ -z "$VIFM_FLOAT" ]]; then
-        renderCalendar
+    if [[ -f "$HOME/.cache/fastfetch/frame_final" ]]; then
+        cat "$HOME/.cache/fastfetch/frame_final"
+    else
+        fastfetch | awk '{printf "%s\033[K\n", $0}'
+        if [[ -z "$VIFM_FLOAT" ]]; then
+            renderCalendar
+        fi
     fi
 
     setupCompletions

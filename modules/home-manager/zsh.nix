@@ -17,6 +17,7 @@
                 stty -echo 2>/dev/null
             fi
         '';
+
         initContent = lib.mkBefore (builtins.readFile ./zsh/init.sh);
     };
 }
