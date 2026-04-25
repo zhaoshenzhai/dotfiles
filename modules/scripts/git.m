@@ -119,26 +119,21 @@ static void HandleSilentWebUpdates(NSString *webPath) {
     if (svgStatus.length > 0) {
         RunCommandWait(@"/usr/bin/env", @[@"git", @"add", @"--all", @"--", @"attic/notes/*.svg"]);
 
-        NSString *stagedStatus = RunCommandOutput(@"/usr/bin/env", @[@"git", @"status", @"--porcelain", @"--staged"]);
-        stagedStatus = [stagedStatus stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        NSTask *commitTask = [[NSTask alloc] init];
+        commitTask.executableURL = [NSURL fileURLWithPath:@"/usr/bin/env"];
+        commitTask.arguments = @[@"git", @"commit", @"-m", @"Updated attic notes"];
+        commitTask.standardOutput = [NSFileHandle fileHandleWithNullDevice];
+        commitTask.standardError = [NSFileHandle fileHandleWithNullDevice];
+        [commitTask launch];
+        [commitTask waitUntilExit];
 
-        if (stagedStatus.length > 0) {
-            NSTask *commitTask = [[NSTask alloc] init];
-            commitTask.executableURL = [NSURL fileURLWithPath:@"/usr/bin/env"];
-            commitTask.arguments = @[@"git", @"commit", @"-m", @"Updated attic notes"];
-            commitTask.standardOutput = [NSFileHandle fileHandleWithNullDevice];
-            commitTask.standardError = [NSFileHandle fileHandleWithNullDevice];
-            [commitTask launch];
-            [commitTask waitUntilExit];
-
-            NSTask *pushTask = [[NSTask alloc] init];
-            pushTask.executableURL = [NSURL fileURLWithPath:@"/usr/bin/env"];
-            pushTask.arguments = @[@"git", @"push"];
-            pushTask.standardOutput = [NSFileHandle fileHandleWithNullDevice];
-            pushTask.standardError = [NSFileHandle fileHandleWithNullDevice];
-            [pushTask launch];
-            [pushTask waitUntilExit];
-        }
+        NSTask *pushTask = [[NSTask alloc] init];
+        pushTask.executableURL = [NSURL fileURLWithPath:@"/usr/bin/env"];
+        pushTask.arguments = @[@"git", @"push"];
+        pushTask.standardOutput = [NSFileHandle fileHandleWithNullDevice];
+        pushTask.standardError = [NSFileHandle fileHandleWithNullDevice];
+        [pushTask launch];
+        [pushTask waitUntilExit];
     }
 
     [fm changeCurrentDirectoryPath:currentDir];
