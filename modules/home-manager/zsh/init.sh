@@ -50,7 +50,7 @@ setupKeybinds() {
     bindkey '^x' delete-char
 }
 
-positionCalendar() {
+renderCalendar() {
     local cal_file="$HOME/.cache/fastfetch/myCalendar"
     if [[ -f "$cal_file" ]]; then
         printf "\e[s"
@@ -90,27 +90,38 @@ updateCalendar() {
 }
 
 updateFetch() {
-    cacheFF() {
-        local module=$1
-        local target="$HOME/.cache/fastfetch/$2"
-        fastfetch --config none --structure "$module" --logo none | sed 's/^[^:]*: //' > "$target.tmp"
+    fetchRaw() {
+        fastfetch --config none --structure "$1" --logo none | sed 's/^[^:]*: //'
+    }
+
+    writeCache() {
+        local target="$HOME/.cache/fastfetch/$1"
+        cat > "$target.tmp"
         mv "$target.tmp" "$target"
     }
 
-    cacheFF "monitor" "myMonitor"
-    cacheFF "wm" "myWM"
-    cacheFF "packages" "myPackages"
-    cacheFF "terminal" "myTerminal"
-    cacheFF "terminalfont" "myFont"
-    cacheFF "shell" "myShell"
-    cacheFF "editor" "myEditor"
-    cacheFF "weather" "myWeather"
-    cacheFF "media" "myMedia"
+    local pkgs_raw
+    pkgs_raw=$(fetchRaw "packages")
+    echo "$pkgs_raw" | sed -E 's/nix-//g; s/, [0-9]+ \(brew[^)]*\)//g' | sed 's/default/user/g' | writeCache "myNix"
+    echo "$pkgs_raw" | sed -E 's/.*, ([0-9]+ \(brew\)), ([0-9]+) \(brew-cask\)/\1, \2 (cask)/' | writeCache "myBrew"
+
+    fetchRaw "monitor" | sed 's/ -.*//g' | writeCache "myMonitor"
+    fetchRaw "wm" | grep -o 'AeroSpace [^)]*' | writeCache "myWM"
+    fetchRaw "terminal" | writeCache "myTerminal"
+    fetchRaw "terminalfont" | sed 's/Menlo/Courier Prime/g' | writeCache "myFont"
+    fetchRaw "shell" | writeCache "myShell"
+    fetchRaw "editor" | writeCache "myEditor"
+    fetchRaw "weather" | sed 's/ (.*)//g' | writeCache "myWeather"
+    fetchRaw "media" | sed 's/ ([^)]*)$//' | awk -F ' - ' '{ a=$1; t=$2; if(length(a)>15) a=substr(a,1,12)"..."; if(length(t)>17) t=substr(t,1,14)"..."; if(NF>1) print a " - " t; else print substr($0,1,32)"..." }' | writeCache "myMedia"
 }
 
 hideTTY
 fastfetch
-positionCalendar
+
+if [[ -z "$VIFM_FLOAT" ]]; then
+    renderCalendar
+fi
+
 setupCompletions
 setupKeybinds
 restoreTTY
