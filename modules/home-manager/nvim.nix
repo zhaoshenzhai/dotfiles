@@ -107,6 +107,7 @@ in {
 
         extraFiles = {
             "lua/c.lua".source         = ./nvim/c.lua;
+            "lua/sh.lua".source        = ./nvim/sh.lua;
             "lua/ui.lua".source        = ./nvim/ui.lua;
             "lua/tex.lua".source       = ./nvim/tex.lua;
             "lua/tabs.lua".source      = ./nvim/tabs.lua;
@@ -119,6 +120,7 @@ in {
 
         extraConfigLua = ''
             require('c')
+            require('sh')
             require('ui')
             require('tex')
             require('tabs')

@@ -1,6 +1,10 @@
-export FF_LINES_UP=16
-export FF_COLUMN=80
-export FF_WIDTH=60
+export FF_LINES_UP=17
+export FF_COLUMN=78
+export FF_WIDTH=90
+export CLR_GREEN=$'\e[0;32m'
+export CLR_RESET=$'\e[0m'
+export CLR_ULINE=$'\e[4m'
+export CLR_NO_ULINE=$'\e[24m'
 
 hideTTY() {
     if [[ -t 0 ]]; then
@@ -54,9 +58,30 @@ positionCalendar() {
 }
 
 updateCalendar() {
-    env -u DYLD_INSERT_LIBRARIES icalBuddy -sc -b "• " -ab "❗️ " eventsToday uncompletedTasks 2>/dev/null | \
-        fold -w ${FF_WIDTH} -s > ~/.cache/fastfetch/myCalendar.tmp
-    mv ~/.cache/fastfetch/myCalendar.tmp ~/.cache/fastfetch/myCalendar
+    local tmp_file="$HOME/.cache/fastfetch/myCalendar.tmp"
+    local final_file="$HOME/.cache/fastfetch/myCalendar"
+
+    # 1. Events: Future only, Green, Limit 4, replace ':' with '➜'
+    printf "${CLR_ULINE}Events:${CLR_NO_ULINE}\n" > "$tmp_file"
+    # 'eventsFrom:now' ensures no past events are shown
+    icalbuddy -f -nrd -nc -ss "" -lim 4 eventsFrom:now to:today+7 2>/dev/null | \
+        sed "s/: / ➜ /" | \
+        sed "s/^/${CLR_GREEN}/" | \
+        fold -w ${FF_WIDTH} -s >> "$tmp_file"
+
+    printf "\n${CLR_ULINE}Reminders:${CLR_NO_ULINE}\n" >> "$tmp_file"
+    # 2. Reminders: Green, replace ':' with '➜'
+    # Note: icalbuddy automatically pulls list names (Tinkering/Courses)
+    # into the parentheses if they are categorized in the Reminders app.
+    icalbuddy -f -nrd -ss "" uncompletedTasks 2>/dev/null | \
+        sed "s/: / ➜ /" | \
+        sed "s/^/${CLR_GREEN}/" | \
+        fold -w ${FF_WIDTH} -s >> "$tmp_file"
+
+    # Append reset code to stop green bleeding into the rest of the terminal
+    printf "${CLR_RESET}" >> "$tmp_file"
+
+    mv "$tmp_file" "$final_file"
 }
 
 updateFetch() {
@@ -79,6 +104,6 @@ fastfetch
 positionCalendar
 setupCompletions
 setupKeybinds
-updateFetch &!
-updateCalendar &!
 restoreTTY
+
+(updateFetch; updateCalendar) &!
