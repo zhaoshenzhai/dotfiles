@@ -69,13 +69,14 @@ renderCalendar() {
 }
 
 redrawDashboard() {
-    if [[ -f "$HOME/.cache/fastfetch/.first_prompt" ]] && [[ -f "$HOME/.cache/fastfetch/frame_final" ]]; then
+    local frame_file="$HOME/.cache/fastfetch/frame_full"
+    [[ -n "$VIFM_FLOAT" ]] && frame_file="$HOME/.cache/fastfetch/frame_float"
+
+    if [[ -f "$HOME/.cache/fastfetch/.first_prompt" ]] && [[ -f "$frame_file" ]]; then
         local DASHBOARD_LINES=18
 
         printf "\e[?25l\e7\e[%dA\e[1G" "$DASHBOARD_LINES"
-
-        cat "$HOME/.cache/fastfetch/frame_final"
-
+        cat "$frame_file"
         printf "\e8\e[?25h"
     fi
 }
@@ -141,16 +142,14 @@ updateAsync() {
     updateFetch
     updateCalendar
 
-    fastfetch --pipe false | awk '{printf "%s\033[K\n", $0}' > "$HOME/.cache/fastfetch/frame_ff.tmp"
+    fastfetch --pipe false | awk '{printf "%s\033[K\n", $0}' > "$HOME/.cache/fastfetch/frame_float.tmp"
 
-    if [[ -z "$VIFM_FLOAT" ]]; then
-        renderCalendar > "$HOME/.cache/fastfetch/frame_cal.tmp"
-    else
-        > "$HOME/.cache/fastfetch/frame_cal.tmp"
-    fi
+    renderCalendar > "$HOME/.cache/fastfetch/frame_cal.tmp"
 
-    cat "$HOME/.cache/fastfetch/frame_ff.tmp" "$HOME/.cache/fastfetch/frame_cal.tmp" > "$HOME/.cache/fastfetch/frame_final.tmp"
-    mv "$HOME/.cache/fastfetch/frame_final.tmp" "$HOME/.cache/fastfetch/frame_final"
+    cat "$HOME/.cache/fastfetch/frame_float.tmp" "$HOME/.cache/fastfetch/frame_cal.tmp" > "$HOME/.cache/fastfetch/frame_full.tmp"
+
+    mv "$HOME/.cache/fastfetch/frame_full.tmp" "$HOME/.cache/fastfetch/frame_full"
+    mv "$HOME/.cache/fastfetch/frame_float.tmp" "$HOME/.cache/fastfetch/frame_float"
 
     kill -USR1 "$1" 2>/dev/null
 }
@@ -165,8 +164,11 @@ main() {
 
     hideTTY
 
-    if [[ -f "$HOME/.cache/fastfetch/frame_final" ]]; then
-        cat "$HOME/.cache/fastfetch/frame_final"
+    local frame_file="$HOME/.cache/fastfetch/frame_full"
+    [[ -n "$VIFM_FLOAT" ]] && frame_file="$HOME/.cache/fastfetch/frame_float"
+
+    if [[ -f "$frame_file" ]]; then
+        cat "$frame_file"
     else
         fastfetch | awk '{printf "%s\033[K\n", $0}'
         if [[ -z "$VIFM_FLOAT" ]]; then
