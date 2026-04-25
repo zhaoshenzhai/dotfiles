@@ -53,15 +53,37 @@ setupKeybinds() {
 renderCalendar() {
     local cal_file="$HOME/.cache/fastfetch/myCalendar"
     if [[ -f "$cal_file" ]]; then
-        printf "\e[s"
-        printf "\e[${CLR_LINES_UP}A"
+        printf "\e[%dA" "$CLR_LINES_UP"
 
+        local lines_printed=0
         while IFS= read -r line; do
-            # Appended \e[K clears the rest of the line to prevent lingering old text
-            printf "\e[${CLR_COLUMN}G\e[K%s\n" "$line"
+            printf "\e[%dG\e[K%s\n" "$CLR_COLUMN" "$line"
+            ((lines_printed++))
         done < "$cal_file"
 
-        printf "\e[u"
+        local remaining=$(( CLR_LINES_UP - lines_printed ))
+        if (( remaining > 0 )); then
+            printf "\e[%dB" "$remaining"
+        fi
+    fi
+}
+
+redrawDashboard() {
+    if [[ -f "$HOME/.cache/fastfetch/.first_prompt" ]]; then
+        local DASHBOARD_LINES=18
+
+        printf "\e[?25l"
+        printf "\e7"
+        printf "\e[%dA\e[1G" "$DASHBOARD_LINES"
+
+        fastfetch
+
+        if [[ -z "$VIFM_FLOAT" ]]; then
+            renderCalendar
+        fi
+
+        printf "\e8"
+        printf "\e[?25h"
     fi
 }
 
@@ -96,7 +118,6 @@ updateFetch() {
 
     writeCache() {
         local target="$HOME/.cache/fastfetch/$1"
-        # Append ANSI Clear-to-EOL (\033[K) so shorter cached strings overwrite fully
         awk '{printf "%s\033[K\n", $0}' > "$target.tmp"
         mv "$target.tmp" "$target"
     }
@@ -123,30 +144,34 @@ updateFetch() {
     fetchRaw "media" | sed 's/ ([^)]*)$//' | awk -F ' - ' '{ a=$1; t=$2; if(length(a)>15) a=substr(a,1,12)"..."; if(length(t)>17) t=substr(t,1,14)"..."; if(NF>1) print a " - " t; else print substr($0,1,32)"..." }' | writeCache "myMedia"
 }
 
-updateAndRedraw() {
+updateAsync() {
     updateFetch
     updateCalendar
-
-    if [[ -f "$HOME/.cache/fastfetch/.first_prompt" ]]; then
-        {
-            local DASHBOARD_LINES=18
-
-            printf "\e[%dA" "$DASHBOARD_LINES"
-            printf "\e[1G"
-
-            fastfetch
-
-            if [[ -z "$VIFM_FLOAT" ]]; then
-                renderCalendar
-            fi
-
-            printf "\e[1B\e[14G"
-        } > /dev/tty
-    fi
+    kill -USR1 "$1" 2>/dev/null
 }
 
-postHook() {
+main() {
+    zle -N redrawDashboardWidget redrawDashboard
+
+    TRAPUSR1() {
+        if zle; then
+            zle redrawDashboardWidget
+        fi
+    }
+
+    hideTTY
+    fastfetch
+
+    if [[ -z "$VIFM_FLOAT" ]]; then
+        renderCalendar
+    fi
+
+    setupCompletions
+    setupKeybinds
+    restoreTTY
+
     touch "$HOME/.cache/fastfetch/.first_prompt"
+
     autoload -Uz add-zsh-hook
     disableRedraw() {
         rm -f "$HOME/.cache/fastfetch/.first_prompt"
@@ -154,17 +179,7 @@ postHook() {
     }
     add-zsh-hook preexec disableRedraw
 
-    ( updateAndRedraw ) &!
+    ( updateAsync $$ ) &!
 }
 
-hideTTY
-fastfetch
-
-if [[ -z "$VIFM_FLOAT" ]]; then
-    renderCalendar
-fi
-
-setupCompletions
-setupKeybinds
-restoreTTY
-postHook
+main
