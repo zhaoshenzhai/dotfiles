@@ -134,10 +134,10 @@ updateFetch() {
     writeCache "myTerminal" "$(extract "Terminal")"
     writeCache "myShell"    "$(extract "Shell")"
     writeCache "myEditor"   "$(extract "Editor")"
-    writeCache "myMonitor"  "$(extract "Monitor"      | sed 's/ -.*//g')"
-    writeCache "myWM"       "$(extract "WM"           | grep -o 'AeroSpace [^)]*')"
-    writeCache "myFont"     "$(extract "TerminalFont" | sed 's/Menlo/Courier Prime/g')"
-    writeCache "myWeather"  "$(extract "Weather"      | sed 's/ (.*)//g')"
+    writeCache "myMonitor"  "$(extract "Monitor (Color LCD)" | sed 's/ -.*//g')"
+    writeCache "myWM"       "$(extract "WM"                  | grep -o 'AeroSpace [^)]*')"
+    writeCache "myFont"     "$(extract "Terminal Font"       | sed 's/Menlo/Courier Prime/g')"
+    writeCache "myWeather"  "$(extract "Weather"             | sed 's/ (.*)//g')"
 
     writeCache "myMedia"    "$(extract "Media" | sed 's/ ([^)]*)$//' | awk -F ' - ' '{ a=$1; t=$2; if(length(a)>15) a=substr(a,1,12)"..."; if(length(t)>17) t=substr(t,1,14)"..."; if(NF>1) print a " - " t; else print substr($0,1,32)"..." }')"
 }
