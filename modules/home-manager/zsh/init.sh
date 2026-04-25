@@ -55,16 +55,17 @@ renderCalendar() {
     if [[ -f "$cal_file" ]]; then
         printf "\e[%dA" "$CLR_LINES_UP"
 
-        local lines_printed=0
-        while IFS= read -r line; do
-            printf "\e[%dG\e[K%s\n" "$CLR_COLUMN" "$line"
-            ((lines_printed++))
-        done < "$cal_file"
-
-        local remaining=$(( CLR_LINES_UP - lines_printed ))
-        if (( remaining > 0 )); then
-            printf "\e[%dB" "$remaining"
-        fi
+        awk -v col="$CLR_COLUMN" -v lines_up="$CLR_LINES_UP" '
+            {
+                printf "\033[%dG\033[K%s\n", col, $0
+            }
+            END {
+                remaining = lines_up - NR
+                if (remaining > 0) {
+                    printf "\033[%dB", remaining
+                }
+            }
+        ' "$cal_file"
     fi
 }
 
@@ -82,7 +83,7 @@ redrawDashboard() {
 }
 
 updateCalendar() {
-    local tmp_file="$HOME/.cache/fastfetch/myCalendar.tmp"
+    local tmp_file="$HOME/.cache/fastfetch/myCalendar.$$.tmp"
     local final_file="$HOME/.cache/fastfetch/myCalendar"
 
     {
@@ -106,50 +107,54 @@ updateCalendar() {
 }
 
 updateFetch() {
-    fetchRaw() {
-        fastfetch --config none --structure "$1" --logo none | sed 's/^[^:]*: //'
-    }
+    local cache_dir="$HOME/.cache/fastfetch"
 
     writeCache() {
-        local target="$HOME/.cache/fastfetch/$1"
-        awk '{printf "%s\033[K\n", $0}' > "$target.tmp"
-        mv "$target.tmp" "$target"
+        printf "%s\033[K\n" "$2" > "$cache_dir/$1.$$.tmp"
+        mv "$cache_dir/$1.$$.tmp" "$cache_dir/$1"
+    }
+
+    local raw_data
+    raw_data=$(fastfetch --config none --structure Packages:OS:Host:CPU:Kernel:Uptime:Terminal:Shell:Editor:Monitor:WM:TerminalFont:Weather:Media --logo none)
+
+    extract() {
+        echo "$raw_data" | grep "^$1:" | sed "s/^$1: //"
     }
 
     local pkgs_raw
-    pkgs_raw=$(fetchRaw "packages")
-    echo "$pkgs_raw" | sed -E 's/nix-//g; s/, [0-9]+ \(brew[^)]*\)//g' | sed 's/default/user/g' | writeCache "myNix"
-    echo "$pkgs_raw" | sed -E 's/.*, ([0-9]+ \(brew\)), ([0-9]+) \(brew-cask\)/\1, \2 (cask)/' | writeCache "myBrew"
+    pkgs_raw=$(extract "Packages")
+    writeCache "myNix" "$(echo "$pkgs_raw" | sed -E 's/nix-//g; s/, [0-9]+ \(brew[^)]*\)//g' | sed 's/default/user/g')"
+    writeCache "myBrew" "$(echo "$pkgs_raw" | sed -E 's/.*, ([0-9]+ \(brew\)), ([0-9]+) \(brew-cask\)/\1, \2 (cask)/')"
 
-    fetchRaw "os"       | writeCache "myOS"
-    fetchRaw "host"     | writeCache "myHost"
-    fetchRaw "cpu"      | writeCache "myCPU"
-    fetchRaw "kernel"   | writeCache "myKernel"
-    fetchRaw "uptime"   | writeCache "myUptime"
-    fetchRaw "terminal" | writeCache "myTerminal"
-    fetchRaw "shell"    | writeCache "myShell"
-    fetchRaw "editor"   | writeCache "myEditor"
+    writeCache "myOS"       "$(extract "OS")"
+    writeCache "myHost"     "$(extract "Host")"
+    writeCache "myCPU"      "$(extract "CPU")"
+    writeCache "myKernel"   "$(extract "Kernel")"
+    writeCache "myUptime"   "$(extract "Uptime")"
+    writeCache "myTerminal" "$(extract "Terminal")"
+    writeCache "myShell"    "$(extract "Shell")"
+    writeCache "myEditor"   "$(extract "Editor")"
+    writeCache "myMonitor"  "$(extract "Monitor"      | sed 's/ -.*//g')"
+    writeCache "myWM"       "$(extract "WM"           | grep -o 'AeroSpace [^)]*')"
+    writeCache "myFont"     "$(extract "TerminalFont" | sed 's/Menlo/Courier Prime/g')"
+    writeCache "myWeather"  "$(extract "Weather"      | sed 's/ (.*)//g')"
 
-    fetchRaw "monitor"      | sed 's/ -.*//g'               | writeCache "myMonitor"
-    fetchRaw "wm"           | grep -o 'AeroSpace [^)]*'     | writeCache "myWM"
-    fetchRaw "terminalfont" | sed 's/Menlo/Courier Prime/g' | writeCache "myFont"
-    fetchRaw "weather"      | sed 's/ (.*)//g'              | writeCache "myWeather"
-
-    fetchRaw "media" | sed 's/ ([^)]*)$//' | awk -F ' - ' '{ a=$1; t=$2; if(length(a)>15) a=substr(a,1,12)"..."; if(length(t)>17) t=substr(t,1,14)"..."; if(NF>1) print a " - " t; else print substr($0,1,32)"..." }' | writeCache "myMedia"
+    writeCache "myMedia"    "$(extract "Media" | sed 's/ ([^)]*)$//' | awk -F ' - ' '{ a=$1; t=$2; if(length(a)>15) a=substr(a,1,12)"..."; if(length(t)>17) t=substr(t,1,14)"..."; if(NF>1) print a " - " t; else print substr($0,1,32)"..." }')"
 }
 
 updateAsync() {
     updateFetch
     updateCalendar
 
-    fastfetch --pipe false | awk '{printf "%s\033[K\n", $0}' > "$HOME/.cache/fastfetch/frame_float.tmp"
+    fastfetch --pipe false | awk '{printf "%s\033[K\n", $0}' > "$HOME/.cache/fastfetch/frame_float.$$.tmp"
+    renderCalendar > "$HOME/.cache/fastfetch/frame_cal.$$.tmp"
 
-    renderCalendar > "$HOME/.cache/fastfetch/frame_cal.tmp"
+    cat "$HOME/.cache/fastfetch/frame_float.$$.tmp" "$HOME/.cache/fastfetch/frame_cal.$$.tmp" > "$HOME/.cache/fastfetch/frame_full.$$.tmp"
 
-    cat "$HOME/.cache/fastfetch/frame_float.tmp" "$HOME/.cache/fastfetch/frame_cal.tmp" > "$HOME/.cache/fastfetch/frame_full.tmp"
+    mv "$HOME/.cache/fastfetch/frame_full.$$.tmp" "$HOME/.cache/fastfetch/frame_full"
+    mv "$HOME/.cache/fastfetch/frame_float.$$.tmp" "$HOME/.cache/fastfetch/frame_float"
 
-    mv "$HOME/.cache/fastfetch/frame_full.tmp" "$HOME/.cache/fastfetch/frame_full"
-    mv "$HOME/.cache/fastfetch/frame_float.tmp" "$HOME/.cache/fastfetch/frame_float"
+    rm -f "$HOME/.cache/fastfetch/frame_cal.$$.tmp"
 
     kill -USR1 "$1" 2>/dev/null
 }
