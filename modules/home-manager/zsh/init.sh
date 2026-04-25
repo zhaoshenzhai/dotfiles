@@ -1,8 +1,8 @@
-export CLR_LINES_UP=15
-export CLR_COLUMN=80
-export CLR_WIDTH=120
-export CLR_GREEN=$'\e[0;32m'
-export CLR_RESET=$'\e[0m'
+CLR_LINES_UP=15
+CLR_COLUMN=80
+CLR_WIDTH=120
+CLR_GREEN=$'\e[0;32m'
+CLR_RESET=$'\e[0m'
 
 hideTTY() {
     if [[ -t 0 ]]; then
