@@ -113,21 +113,32 @@ static void HandleSilentWebUpdates(NSString *webPath) {
     NSString *currentDir = [fm currentDirectoryPath];
     [fm changeCurrentDirectoryPath:webPath];
 
-    RunCommandWait(@"/usr/bin/env", @[@"git", @"add", @"--all", @"attic/notes/*.svg"]);
+    NSString *svgStatus = RunCommandOutput(@"/usr/bin/env", @[@"git", @"status", @"--porcelain", @"--", @"attic/notes/*.svg"]);
+    svgStatus = [svgStatus stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
-    NSString *statusOutput = RunCommandOutput(@"/usr/bin/env", @[@"git", @"status", @"--porcelain", @"--staged"]);
-    statusOutput = [statusOutput stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if (svgStatus.length > 0) {
+        RunCommandWait(@"/usr/bin/env", @[@"git", @"add", @"--all", @"--", @"attic/notes/*.svg"]);
 
-    if (statusOutput.length > 0) {
-        RunCommandWait(@"/usr/bin/env", @[@"git", @"commit", @"-m", @"Updated attic notes"]);
+        NSString *stagedStatus = RunCommandOutput(@"/usr/bin/env", @[@"git", @"status", @"--porcelain", @"--staged"]);
+        stagedStatus = [stagedStatus stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
-        NSTask *task = [[NSTask alloc] init];
-        task.executableURL = [NSURL fileURLWithPath:@"/usr/bin/env"];
-        task.arguments = @[@"git", @"push"];
-        task.standardOutput = [NSFileHandle fileHandleWithNullDevice];
-        task.standardError = [NSFileHandle fileHandleWithNullDevice];
-        [task launch];
-        [task waitUntilExit];
+        if (stagedStatus.length > 0) {
+            NSTask *commitTask = [[NSTask alloc] init];
+            commitTask.executableURL = [NSURL fileURLWithPath:@"/usr/bin/env"];
+            commitTask.arguments = @[@"git", @"commit", @"-m", @"Updated attic notes"];
+            commitTask.standardOutput = [NSFileHandle fileHandleWithNullDevice];
+            commitTask.standardError = [NSFileHandle fileHandleWithNullDevice];
+            [commitTask launch];
+            [commitTask waitUntilExit];
+
+            NSTask *pushTask = [[NSTask alloc] init];
+            pushTask.executableURL = [NSURL fileURLWithPath:@"/usr/bin/env"];
+            pushTask.arguments = @[@"git", @"push"];
+            pushTask.standardOutput = [NSFileHandle fileHandleWithNullDevice];
+            pushTask.standardError = [NSFileHandle fileHandleWithNullDevice];
+            [pushTask launch];
+            [pushTask waitUntilExit];
+        }
     }
 
     [fm changeCurrentDirectoryPath:currentDir];
