@@ -70,7 +70,6 @@
                 update_cache terminal myTerminal
                 update_cache shell myShell
                 update_cache editor myEditor
-                update_cache weather myWeather
             ) &!
 
             autoload -Uz add-zle-hook-widget

@@ -13,14 +13,7 @@
             };
 
             modules = [
-                {
-                    type = "title";
-                    color = {
-                        user = "cyan";
-                        at = "white";
-                        host = "magenta";
-                    };
-                }
+                { type = "title"; color = { user = "cyan"; at = "white"; host = "magenta"; }; }
                 "break"
                 "os"
                 "host"
@@ -32,7 +25,6 @@
                 { type = "command"; key = "Terminal"; text = "cat ~/.cache/fastfetch/myTerminal 2>/dev/null || echo 'Pending...'"; }
                 { type = "command"; key = "Shell";    text = "cat ~/.cache/fastfetch/myShell    2>/dev/null || echo 'Pending...'"; }
                 { type = "command"; key = "Editor";   text = "cat ~/.cache/fastfetch/myEditor   2>/dev/null || echo 'Pending...'"; }
-                { type = "command"; key = "Weather";  text = "cat ~/.cache/fastfetch/myWeather  2>/dev/null || echo 'Pending...'"; }
                 "media"
             ];
         };
