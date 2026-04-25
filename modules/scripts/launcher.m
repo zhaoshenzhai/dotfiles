@@ -1,4 +1,5 @@
 #import "commonUtils.h"
+#include <signal.h>
 
 static NSString *const kFdPath = @FD_PATH;
 static NSString *const kFzfPath = @FZF_PATH;
@@ -46,6 +47,38 @@ static NSString *FormatFilePath(NSString *filePath) {
         }
     }
     return [NSString stringWithFormat:@"%@\t%@", filePath, filePath];
+}
+
+static void WriteFzfInputFile(void) {
+    NSString *cacheFile = [kCacheDir stringByAppendingPathComponent:@"files.txt"];
+    NSString *recentFile = [kCacheDir stringByAppendingPathComponent:@"recent.txt"];
+    NSMutableString *combined = [NSMutableString string];
+    NSMutableSet *seen = [NSMutableSet set];
+
+    if ([[NSFileManager defaultManager] fileExistsAtPath:recentFile]) {
+        NSString *recentStr = [NSString stringWithContentsOfFile:recentFile encoding:NSUTF8StringEncoding error:nil];
+        for (NSString *line in [recentStr componentsSeparatedByString:@"\n"]) {
+            if (line.length == 0) continue;
+            NSString *formatted = [line containsString:@"\t"] ? line : FormatFilePath(line);
+            if (![seen containsObject:formatted]) {
+                [seen addObject:formatted];
+                [combined appendFormat:@"%@\n", formatted];
+            }
+        }
+    }
+    if ([[NSFileManager defaultManager] fileExistsAtPath:cacheFile]) {
+        NSString *cacheStr = [NSString stringWithContentsOfFile:cacheFile encoding:NSUTF8StringEncoding error:nil];
+        for (NSString *line in [cacheStr componentsSeparatedByString:@"\n"]) {
+            if (line.length == 0) continue;
+            if (![seen containsObject:line]) {
+                [seen addObject:line];
+                [combined appendFormat:@"%@\n", line];
+            }
+        }
+    }
+
+    NSString *tmpList = @"/tmp/launcher_fzf_in.txt";
+    [combined writeToFile:tmpList atomically:YES encoding:NSUTF8StringEncoding error:nil];
 }
 
 static void UpdateCache(void) {
@@ -102,33 +135,24 @@ static void UpdateCache(void) {
 
     NSString *cacheFile = [kCacheDir stringByAppendingPathComponent:@"files.txt"];
     [cacheOutput writeToFile:cacheFile atomically:YES encoding:NSUTF8StringEncoding error:nil];
+
+    WriteFzfInputFile();
+
+    NSString *sockPath = @"/tmp/launcher_fzf.sock";
+    if ([[NSFileManager defaultManager] fileExistsAtPath:sockPath]) {
+        NSString *curlCmd = [NSString stringWithFormat:@"curl --silent --unix-socket %@ -X POST -d 'reload(cat /tmp/launcher_fzf_in.txt)' http://localhost/ &", sockPath];
+        system(curlCmd.UTF8String);
+    }
 }
 
 static NSString *SelectFiles(void) {
-    NSString *cacheFile = [kCacheDir stringByAppendingPathComponent:@"files.txt"];
-    NSString *recentFile = [kCacheDir stringByAppendingPathComponent:@"recent.txt"];
-    NSMutableString *combined = [NSMutableString string];
+    WriteFzfInputFile();
 
-    if ([[NSFileManager defaultManager] fileExistsAtPath:recentFile]) {
-        NSString *recentStr = [NSString stringWithContentsOfFile:recentFile encoding:NSUTF8StringEncoding error:nil];
-        for (NSString *line in [recentStr componentsSeparatedByString:@"\n"]) {
-            if (line.length == 0) continue;
-            [combined appendFormat:@"%@\n", [line containsString:@"\t"] ? line : FormatFilePath(line)];
-        }
-    }
-    if ([[NSFileManager defaultManager] fileExistsAtPath:cacheFile]) {
-        NSString *cacheStr = [NSString stringWithContentsOfFile:cacheFile encoding:NSUTF8StringEncoding error:nil];
-        if (cacheStr.length > 0) {
-            [combined appendString:cacheStr];
-            if (![cacheStr hasSuffix:@"\n"]) [combined appendString:@"\n"];
-        }
-    }
-
-    NSString *tmpList = @"/tmp/launcher_fzf_in.txt";
-    [combined writeToFile:tmpList atomically:YES encoding:NSUTF8StringEncoding error:nil];
     setenv("FZF_DEFAULT_OPTS", "--color='bg+:-1,gutter:-1,pointer:#98c379'", 1);
+    unlink("/tmp/launcher_fzf.sock");
 
-    NSString *fzfCmd = [NSString stringWithFormat:@"cat %@ | awk '!seen[$0]++' | %@ --reverse --info=hidden --delimiter '\t' --with-nth 1 --tiebreak=index --pointer='➜'", tmpList, kFzfPath];
+    NSString *fzfArgs = @"--reverse --info=hidden --delimiter \"\\t\" --with-nth 1 --tiebreak=index --pointer=\"➜\" --listen=/tmp/launcher_fzf.sock";
+    NSString *fzfCmd = [NSString stringWithFormat:@"%@ %@ < /tmp/launcher_fzf_in.txt", kFzfPath, fzfArgs];
 
     FILE *fp = popen(fzfCmd.UTF8String, "r");
     if (!fp) return @"";
@@ -140,6 +164,8 @@ static NSString *SelectFiles(void) {
         selected = [NSString stringWithUTF8String:path];
     }
     pclose(fp);
+
+    unlink("/tmp/launcher_fzf.sock");
     return selected;
 }
 
