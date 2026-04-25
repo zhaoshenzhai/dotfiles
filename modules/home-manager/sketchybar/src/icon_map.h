@@ -30,6 +30,7 @@ static inline const char* get_icon_for_app(const char* app) {
     if (strcmp(app, "Calculator")       == 0) return ":calculator:";
     if (strcmp(app, "SF Symbols")       == 0) return ":sf_symbols:";
     if (strcmp(app, "Reminders")        == 0) return ":reminders:";
+    if (strcmp(app, "FaceTime")         == 0) return ":face_time:";
     if (strcmp(app, "Spotlight")        == 0) return ":spotlight:";
     if (strcmp(app, "Goodnotes")        == 0) return ":goodnotes:";
     if (strcmp(app, "Passwords")        == 0) return ":passwords:";

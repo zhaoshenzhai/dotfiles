@@ -97,5 +97,7 @@
             "skim"
             "zoom"
         ];
+
+        brews = [ "ical-buddy" ];
     };
 }
