@@ -57,7 +57,8 @@ renderCalendar() {
         printf "\e[${CLR_LINES_UP}A"
 
         while IFS= read -r line; do
-            printf "\e[${CLR_COLUMN}G%s\n" "$line"
+            # Appended \e[K clears the rest of the line to prevent lingering old text
+            printf "\e[${CLR_COLUMN}G\e[K%s\n" "$line"
         done < "$cal_file"
 
         printf "\e[u"
@@ -86,7 +87,6 @@ updateCalendar() {
     } > "$tmp_file"
 
     mv "$tmp_file" "$final_file"
-
 }
 
 updateFetch() {
@@ -96,7 +96,8 @@ updateFetch() {
 
     writeCache() {
         local target="$HOME/.cache/fastfetch/$1"
-        cat > "$target.tmp"
+        # Append ANSI Clear-to-EOL (\033[K) so shorter cached strings overwrite fully
+        awk '{printf "%s\033[K\n", $0}' > "$target.tmp"
         mv "$target.tmp" "$target"
     }
 
@@ -122,6 +123,40 @@ updateFetch() {
     fetchRaw "media" | sed 's/ ([^)]*)$//' | awk -F ' - ' '{ a=$1; t=$2; if(length(a)>15) a=substr(a,1,12)"..."; if(length(t)>17) t=substr(t,1,14)"..."; if(NF>1) print a " - " t; else print substr($0,1,32)"..." }' | writeCache "myMedia"
 }
 
+updateAndRedraw() {
+    updateFetch
+    updateCalendar
+
+    if [[ -f "$HOME/.cache/fastfetch/.first_prompt" ]]; then
+        {
+            local DASHBOARD_LINES=18
+
+            printf "\e[%dA" "$DASHBOARD_LINES"
+            printf "\e[1G"
+
+            fastfetch
+
+            if [[ -z "$VIFM_FLOAT" ]]; then
+                renderCalendar
+            fi
+
+            printf "\e[1B\e[14G"
+        } > /dev/tty
+    fi
+}
+
+postHook() {
+    touch "$HOME/.cache/fastfetch/.first_prompt"
+    autoload -Uz add-zsh-hook
+    disableRedraw() {
+        rm -f "$HOME/.cache/fastfetch/.first_prompt"
+        add-zsh-hook -d preexec disableRedraw
+    }
+    add-zsh-hook preexec disableRedraw
+
+    ( updateAndRedraw ) &!
+}
+
 hideTTY
 fastfetch
 
@@ -132,5 +167,4 @@ fi
 setupCompletions
 setupKeybinds
 restoreTTY
-
-(updateFetch; updateCalendar) &!
+postHook
