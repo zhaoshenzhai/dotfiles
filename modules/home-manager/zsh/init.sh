@@ -1,14 +1,12 @@
-export FF_LINES_UP=17
-export FF_COLUMN=78
-export FF_WIDTH=90
+export CLR_LINES_UP=15
+export CLR_COLUMN=80
+export CLR_WIDTH=90
 export CLR_GREEN=$'\e[0;32m'
 export CLR_RESET=$'\e[0m'
-export CLR_ULINE=$'\e[4m'
-export CLR_NO_ULINE=$'\e[24m'
 
 hideTTY() {
     if [[ -t 0 ]]; then
-        stty -echo 2>/dev/null
+        printf "\e[?25l"
     fi
 }
 
@@ -17,6 +15,7 @@ restoreTTY() {
     function _restore_tty_echo() {
         if [[ -t 0 ]]; then
             stty echo 2>/dev/null
+            printf "\e[?25h"
         fi
         add-zle-hook-widget -d line-init _restore_tty_echo
     }
@@ -47,10 +46,10 @@ positionCalendar() {
     local cal_file="$HOME/.cache/fastfetch/myCalendar"
     if [[ -f "$cal_file" ]]; then
         printf "\e[s"
-        printf "\e[${FF_LINES_UP}A"
+        printf "\e[${CLR_LINES_UP}A"
 
         while IFS= read -r line; do
-            printf "\e[${FF_COLUMN}G%s\n" "$line"
+            printf "\e[${CLR_COLUMN}G%s\n" "$line"
         done < "$cal_file"
 
         printf "\e[u"
@@ -61,27 +60,25 @@ updateCalendar() {
     local tmp_file="$HOME/.cache/fastfetch/myCalendar.tmp"
     local final_file="$HOME/.cache/fastfetch/myCalendar"
 
-    # 1. Events: Future only, Green, Limit 4, replace ':' with '➜'
-    printf "${CLR_ULINE}Events:${CLR_NO_ULINE}\n" > "$tmp_file"
-    # 'eventsFrom:now' ensures no past events are shown
-    icalbuddy -f -nrd -nc -ss "" -lim 4 eventsFrom:now to:today+7 2>/dev/null | \
-        sed "s/: / ➜ /" | \
-        sed "s/^/${CLR_GREEN}/" | \
-        fold -w ${FF_WIDTH} -s >> "$tmp_file"
+    {
+        printf "${CLR_GREEN}Events${CLR_RESET} ➜\n"
+        icalbuddy -f -n -nc -li 6 -ps "/ » /" -npn \
+            -eep "url,location,notes,attendees" \
+            -ec "Canadian Holidays,United States holidays" \
+            eventsFrom:now to:today+100 2>/dev/null | \
+            awk -v l="$CLR_WIDTH" '{ if (length($0) > l) print substr($0, 1, l-3) "..."; else print $0 }'
 
-    printf "\n${CLR_ULINE}Reminders:${CLR_NO_ULINE}\n" >> "$tmp_file"
-    # 2. Reminders: Green, replace ':' with '➜'
-    # Note: icalbuddy automatically pulls list names (Tinkering/Courses)
-    # into the parentheses if they are categorized in the Reminders app.
-    icalbuddy -f -nrd -ss "" uncompletedTasks 2>/dev/null | \
-        sed "s/: / ➜ /" | \
-        sed "s/^/${CLR_GREEN}/" | \
-        fold -w ${FF_WIDTH} -s >> "$tmp_file"
+        printf "\n"
 
-    # Append reset code to stop green bleeding into the rest of the terminal
-    printf "${CLR_RESET}" >> "$tmp_file"
+        printf "${CLR_GREEN}Reminders${CLR_RESET} ➜\n"
+        icalbuddy -li 6 uncompletedTasks | sed 's/ (Reminders)//g' 2>/dev/null | \
+            awk -v l="$CLR_WIDTH" '{ if (length($0) > l) print substr($0, 1, l-3) "..."; else print $0 }'
+
+        printf "${CLR_RESET}"
+    } > "$tmp_file"
 
     mv "$tmp_file" "$final_file"
+
 }
 
 updateFetch() {
@@ -97,6 +94,8 @@ updateFetch() {
     cacheFF "terminal" "myTerminal"
     cacheFF "shell" "myShell"
     cacheFF "editor" "myEditor"
+    cacheFF "weather" "myWeather"
+    cacheFF "media" "myMedia"
 }
 
 hideTTY
