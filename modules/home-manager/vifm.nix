@@ -33,7 +33,7 @@
             map f '
             nnoremap l :file<cr><cr>
             nnoremap <C-t> :!alacrittyDaemon --working-directory %d &<cr>
-            nnoremap <C-s> :!alacrittyDaemon --title alacritty-float --option "window.dimensions={columns=110,lines=38}" --option "window.position={x=425,y=246}" --working-directory %d &<cr>
+            nnoremap <C-s> :!alacrittyDaemon --title alacritty-float --option "window.dimensions={columns=110,lines=38}" --option "window.position={x=425,y=246}" --env VIFM_FLOAT=1 --working-directory %d &<cr>
 
             nnoremap <C-c> :!pdfcp *.pdf >/dev/null 2>&1 &
             nnoremap <C-d> :!texManager -C %d &<cr>

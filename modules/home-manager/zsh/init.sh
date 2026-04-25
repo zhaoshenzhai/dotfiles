@@ -105,13 +105,20 @@ updateFetch() {
     echo "$pkgs_raw" | sed -E 's/nix-//g; s/, [0-9]+ \(brew[^)]*\)//g' | sed 's/default/user/g' | writeCache "myNix"
     echo "$pkgs_raw" | sed -E 's/.*, ([0-9]+ \(brew\)), ([0-9]+) \(brew-cask\)/\1, \2 (cask)/' | writeCache "myBrew"
 
-    fetchRaw "monitor" | sed 's/ -.*//g' | writeCache "myMonitor"
-    fetchRaw "wm" | grep -o 'AeroSpace [^)]*' | writeCache "myWM"
+    fetchRaw "os"       | writeCache "myOS"
+    fetchRaw "host"     | writeCache "myHost"
+    fetchRaw "cpu"      | writeCache "myCPU"
+    fetchRaw "kernel"   | writeCache "myKernel"
+    fetchRaw "uptime"   | writeCache "myUptime"
     fetchRaw "terminal" | writeCache "myTerminal"
+    fetchRaw "shell"    | writeCache "myShell"
+    fetchRaw "editor"   | writeCache "myEditor"
+
+    fetchRaw "monitor"      | sed 's/ -.*//g'               | writeCache "myMonitor"
+    fetchRaw "wm"           | grep -o 'AeroSpace [^)]*'     | writeCache "myWM"
     fetchRaw "terminalfont" | sed 's/Menlo/Courier Prime/g' | writeCache "myFont"
-    fetchRaw "shell" | writeCache "myShell"
-    fetchRaw "editor" | writeCache "myEditor"
-    fetchRaw "weather" | sed 's/ (.*)//g' | writeCache "myWeather"
+    fetchRaw "weather"      | sed 's/ (.*)//g'              | writeCache "myWeather"
+
     fetchRaw "media" | sed 's/ ([^)]*)$//' | awk -F ' - ' '{ a=$1; t=$2; if(length(a)>15) a=substr(a,1,12)"..."; if(length(t)>17) t=substr(t,1,14)"..."; if(NF>1) print a " - " t; else print substr($0,1,32)"..." }' | writeCache "myMedia"
 }
 

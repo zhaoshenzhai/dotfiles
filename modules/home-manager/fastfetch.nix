@@ -15,11 +15,11 @@
             modules = [
                 { type = "title"; color = { user = "cyan"; at = "white"; host = "magenta"; }; }
                 "break"
-                "os"
-                "host"
-                "cpu"
-                "kernel"
-                "uptime"
+                { type = "command"; key = "OS";             text = "cat ~/.cache/fastfetch/myOS       2>/dev/null || echo 'Pending...'"; }
+                { type = "command"; key = "Host";           text = "cat ~/.cache/fastfetch/myHost     2>/dev/null || echo 'Pending...'"; }
+                { type = "command"; key = "CPU";            text = "cat ~/.cache/fastfetch/myCPU      2>/dev/null || echo 'Pending...'"; }
+                { type = "command"; key = "Kernel";         text = "cat ~/.cache/fastfetch/myKernel   2>/dev/null || echo 'Pending...'"; }
+                { type = "command"; key = "Uptime";         text = "cat ~/.cache/fastfetch/myUptime   2>/dev/null || echo 'Pending...'"; }
                 { type = "command"; key = "Monitor";        text = "cat ~/.cache/fastfetch/myMonitor  2>/dev/null || echo 'Pending...'"; }
                 { type = "command"; key = "Window manager"; text = "cat ~/.cache/fastfetch/myWM       2>/dev/null || echo 'Pending...'"; }
                 { type = "command"; key = "Nix packages";   text = "cat ~/.cache/fastfetch/myNix      2>/dev/null || echo 'Pending...'"; }
