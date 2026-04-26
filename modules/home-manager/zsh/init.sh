@@ -123,8 +123,8 @@ updateFetch() {
 
     local pkgs_raw
     pkgs_raw=$(extract "Packages")
-    writeCache "myNix" "$(echo "$pkgs_raw" | sed -E 's/nix-//g; s/, [0-9]+ \(brew[^)]*\)//g' | sed 's/default/user/g')"
-    writeCache "myBrew" "$(echo "$pkgs_raw" | sed -E 's/.*, ([0-9]+ \(brew\)), ([0-9]+) \(brew-cask\)/\1, \2 (cask)/')"
+    writeCache "myNix" "$(echo "$pkgs_raw" | sed -E 's/[0-9]+ \(brew[^)]*\), //g; s/nix-//g; s/default/user/g')"
+    writeCache "myBrew" "$(echo "$pkgs_raw" | sed -E 's/, [0-9]+ \(nix-[^)]*\)//g; s/brew-cask/cask/g')"
 
     writeCache "myOS"       "$(extract "OS")"
     writeCache "myHost"     "$(extract "Host")"
