@@ -58,7 +58,8 @@ let
             "-e" "yt-mpv"
             "$1"
         )
-        alacrittyDaemon "''${ARGS[@]}"
+        export DYLD_INSERT_LIBRARIES="${transparentWindow}/lib/transparentWindow.dylib"
+        /etc/profiles/per-user/zhao/bin/alacritty "''${ARGS[@]}"
     '';
 in {
     programs.qutebrowser = {
