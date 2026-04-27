@@ -7,6 +7,7 @@ int main(int argc, const char * argv[]) {
         if ([command isEqualToString:@"search"]) return skimSearch([NSString stringWithUTF8String:argv[2]]);
         if ([command isEqualToString:@"moveTab"]) return moveTab(atoi(argv[2]));
         if ([command isEqualToString:@"switchTab"]) return switchTab(atoi(argv[2]));
+        if ([command isEqualToString:@"exportTex"]) return exportTex();
         if ([command isEqualToString:@"switchFocus"]) return switchFocus([NSString stringWithUTF8String:argv[2]]);
         if ([command isEqualToString:@"openRelated"]) return openRelated([NSString stringWithUTF8String:argv[2]]);
         if ([command isEqualToString:@"duplicateTab"]) return duplicateTab();

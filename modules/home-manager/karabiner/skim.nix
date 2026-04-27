@@ -247,6 +247,17 @@
                 }
             ];
         }
+        { # ctrl+shift+e -> open tex from attic
+            type = "basic";
+            from = { key_code = "e"; modifiers = { mandatory = [ "control" "shift" ]; }; };
+            to = [{ shell_command = "zsh -c 'skimUtils exportTex'"; }];
+            conditions = [
+                {
+                    type = "frontmost_application_if";
+                    bundle_identifiers = [ "^net\\.sourceforge\\.skim-app\\.skim$" ];
+                }
+            ];
+        }
         { # ctrl+d -> duplicate tab
             type = "basic";
             from = { key_code = "d"; modifiers = { mandatory = [ "control" ]; }; };
