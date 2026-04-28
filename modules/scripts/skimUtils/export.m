@@ -29,9 +29,8 @@ int exportTex(void) {
         NSString *noteID = [[docPath lastPathComponent] stringByDeletingPathExtension];
         if (!noteID || noteID.length == 0) return 0;
 
-        NSString *homeDir = NSHomeDirectory();
-        NSString *sourcePath = [NSString stringWithFormat:@"%@/Projects/_attic/notes/%@/%@.tex", homeDir, noteID, noteID];
-        NSString *destPath = [NSString stringWithFormat:@"%@/Downloads/%@.tex", homeDir, noteID];
+        NSString *sourcePath = [NSString stringWithFormat:@"%@/Projects/_attic/notes/%@/%@.tex", kBaseDir, noteID, noteID];
+        NSString *destPath = [NSString stringWithFormat:@"%@/Downloads/%@.tex", NSHomeDirectory(), noteID];
 
         if ([fm fileExistsAtPath:sourcePath]) {
             if ([fm fileExistsAtPath:destPath]) {
