@@ -25,7 +25,7 @@
 
 \ifdefined\isweb
     \newcommand{\squig}[2]{%
-        \special{dvisvgm:raw <a href="../?note=#1" target="_top" style="cursor: pointer;">}\mywave{#2}\special{dvisvgm:raw </a>}
+        \special{dvisvgm:raw <a href="../?note=#1" target="_top" style="cursor: pointer;">}\mywave{#2}\special{dvisvgm:raw </a>}%
     }
     \newcommand{\aref}[2]{\squig{#2}{#1}}
 \else
