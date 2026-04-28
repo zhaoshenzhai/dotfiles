@@ -4,6 +4,16 @@ CLR_WIDTH=120
 CLR_GREEN=$'\e[0;32m'
 CLR_RESET=$'\e[0m'
 
+setupColors() {
+    export YELLOW='\033[0;33m'
+    export PURPLE='\033[0;35m'
+    export GREEN='\033[0;32m'
+    export CYAN='\033[0;36m'
+    export BLUE='\033[0;34m'
+    export RED='\033[0;31m'
+    export NC='\033[0m'
+}
+
 hideTTY() {
     if [[ -t 0 ]]; then
         printf "\e[?25l"
@@ -183,6 +193,7 @@ main() {
 
     setupCompletions
     setupKeybinds
+    setupColors
     restoreTTY
 
     touch "$HOME/.cache/fastfetch/.first_prompt"
