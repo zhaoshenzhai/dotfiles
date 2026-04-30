@@ -86,6 +86,8 @@ redrawDashboard() {
     if [[ -f "$HOME/.cache/fastfetch/.first_prompt" ]] && [[ -f "$frame_file" ]]; then
         local DASHBOARD_LINES=18
 
+        [[ "$PWD" != "$HOME" ]] && DASHBOARD_LINES=19
+
         printf "\e[?25l\e7\e[%dA\e[1G" "$DASHBOARD_LINES"
         cat "$frame_file"
         printf "\e8\e[?25h"
