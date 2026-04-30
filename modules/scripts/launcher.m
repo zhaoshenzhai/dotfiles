@@ -20,9 +20,16 @@ static void UpdateRecentFiles(NSString *selected) {
     NSMutableArray *newLines = [NSMutableArray arrayWithCapacity:100];
     [newLines addObject:selected];
 
+    NSString *selectedRawPath = [selected componentsSeparatedByString:@"\t"].lastObject;
+
     for (NSString *line in lines) {
         if (newLines.count >= 100) break;
-        if (line.length > 0 && ![line isEqualToString:selected]) [newLines addObject:line];
+        if (line.length > 0) {
+            NSString *lineRawPath = [line componentsSeparatedByString:@"\t"].lastObject;
+            if (![lineRawPath isEqualToString:selectedRawPath]) {
+                [newLines addObject:line];
+            }
+        }
     }
 
     NSString *newContent = [[newLines componentsJoinedByString:@"\n"] stringByAppendingString:@"\n"];
@@ -94,8 +101,10 @@ static void UpdateCache(void) {
             for (NSString *line in lines) {
                 if (line.length == 0) continue;
                 NSArray *parts = [line componentsSeparatedByString:@"\t"];
-                if ([[NSFileManager defaultManager] fileExistsAtPath:[kBaseDir stringByAppendingPathComponent:parts.lastObject]]) {
-                    [validRecentLines addObject:line];
+                NSString *rawPath = parts.lastObject;
+
+                if ([[NSFileManager defaultManager] fileExistsAtPath:[kBaseDir stringByAppendingPathComponent:rawPath]]) {
+                    [validRecentLines addObject:FormatFilePath(rawPath)];
                 }
             }
 
