@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
             }
         }
 
-        if (optind >= argc) help(argv[0]); return 1;
+        if (optind >= argc) { help(argv[0]); return 1; }
 
         NSString *targetPath = [NSString stringWithUTF8String:argv[optind]];
         NSString *dirPath = [targetPath stringByDeletingLastPathComponent];
