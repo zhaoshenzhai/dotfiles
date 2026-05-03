@@ -37,7 +37,7 @@ let
             --demuxer-thread=yes
     '';
 in {
-    home.packages = [ pkgs.yt-dlp ytMpv ];
+    home.packages = [ pkgs.yt-dlp pkgs.ffmpeg ytMpv ];
 
     programs.mpv = {
         enable = true;
